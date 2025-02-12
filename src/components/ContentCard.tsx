@@ -5,7 +5,7 @@ import { FC } from 'react'
 interface ContentCardProps {
   title: string;
   type: 'Technical' | 'Persona';
-  path: 'persona' | 'industry' | 'algorithm';
+  path: string;
   slug: string;
   description?: string;
 }
@@ -14,7 +14,7 @@ const ContentCard: FC<ContentCardProps> = ({ title, type, path, slug, descriptio
   return (
     <Link 
       href={`/paths/${path}/${slug}`}
-      className="block bg-gray-900 rounded-xl border border-gray-800 shadow-lg hover:border-gray-700 transition-all duration-300"
+      className="block bg-gray-900 rounded-xl border border-gray-800 hover:border-copper transition-all duration-300"
     >
       <div className="aspect-[3/2] bg-gray-800 flex items-center justify-center">
         <span className="text-gray-400">{title}</span>
@@ -23,7 +23,7 @@ const ContentCard: FC<ContentCardProps> = ({ title, type, path, slug, descriptio
         <div className="mb-1.5">
           <span className={`inline-block px-1.5 py-0.5 rounded-full text-[10px] 
             ${type === 'Technical' 
-              ? 'bg-blue-900 text-blue-200' 
+              ? 'bg-copper/20 text-copper-light' 
               : 'bg-green-900 text-green-200'
             }`}
           >

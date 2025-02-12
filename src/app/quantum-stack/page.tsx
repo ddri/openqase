@@ -1,144 +1,190 @@
 // src/app/quantum-stack/page.tsx
 'use client'
-import { useState } from 'react'
 
-interface StackLayer {
-  id: string;
-  title: string;
-  description: string;
-  content: string;
+import { useState } from 'react'
+import { Card } from '@/components/ui/card'
+import CardPixelPattern from '@/components/CardPixelPattern'
+
+interface StackItem {
+  id: string
+  title: string
+  description: string
+  details: {
+    overview: string
+    examples?: string[]
+    additionalInfo?: string
+  }
 }
 
-const stackLayers: StackLayer[] = [
+const stackItems: StackItem[] = [
   {
     id: 'language',
     title: 'Language',
     description: 'Quantum Programming Languages',
-    content: `Quantum programming languages are specifically designed to express quantum algorithms and operations. 
-    Common examples include:
-    • Qiskit (IBM)
-    • Q# (Microsoft)
-    • Cirq (Google)
-    • Forest (Rigetti)
-    
-    These languages provide the syntax and structures needed to write quantum programs, including operations 
-    like superposition, entanglement, and quantum gates.`
+    details: {
+      overview: 'Quantum programming languages are specifically designed to express quantum algorithms and operations.',
+      examples: [
+        'Qiskit (IBM)',
+        'Q# (Microsoft)',
+        'Cirq (Google)',
+        'Forest (Rigetti)'
+      ],
+      additionalInfo: 'These languages provide the syntax and structures needed to write quantum programs, including operations like superposition, entanglement, and quantum gates.'
+    }
   },
   {
     id: 'sdk',
     title: 'SDK',
     description: 'Software Development Kits',
-    content: `Software Development Kits (SDKs) provide the tools and libraries needed to develop quantum applications.
-    They include:
-    • Circuit design tools
-    • Simulation capabilities
-    • Hardware interface layers
-    • Debugging utilities
-    • Performance optimization tools`
+    details: {
+      overview: 'Software Development Kits provide the tools and libraries needed to develop quantum applications.',
+      examples: [
+        'Qiskit SDK',
+        'Azure Quantum SDK',
+        'Cirq SDK',
+        'Forest SDK'
+      ],
+      additionalInfo: 'These SDKs include tools for circuit design, simulation capabilities, and hardware interfaces.'
+    }
   },
   {
     id: 'framework',
     title: 'Framework',
     description: 'Quantum Computing Frameworks',
-    content: `Frameworks provide the structure and tools for building quantum applications. They handle:
-    • Circuit optimization
-    • Hardware abstraction
-    • Resource management
-    • Error mitigation
-    • Integration with classical computing systems`
+    details: {
+      overview: 'Quantum frameworks provide the structure and tools for building quantum applications.',
+      examples: [
+        'Qiskit Runtime',
+        'Q# Runtime',
+        'Cirq Framework',
+        'PyQuil'
+      ],
+      additionalInfo: 'Frameworks handle circuit optimization, hardware abstraction, and integration with classical systems.'
+    }
   },
   {
     id: 'compiler',
     title: 'Compiler',
     description: 'Quantum Circuit Compilation',
-    content: `Quantum compilers translate high-level quantum programs into low-level quantum circuits.
-    Key functions include:
-    • Gate decomposition
-    • Circuit optimization
-    • Hardware-specific optimization
-    • Mapping to physical qubits
-    • Timing and control signal generation`
+    details: {
+      overview: 'Quantum compilers translate high-level quantum programs into low-level quantum circuits.',
+      examples: [
+        'Qiskit Terra',
+        'Quilc',
+        'Cirq Compiler',
+        'Q# Compiler'
+      ],
+      additionalInfo: 'Compilers handle gate decomposition, circuit optimization, and mapping to physical qubits.'
+    }
   },
   {
     id: 'error-correction',
     title: 'Error Correction',
     description: 'Quantum Error Correction',
-    content: `Error correction is crucial for reliable quantum computation. This layer handles:
-    • Detection and correction of qubit errors
-    • Surface codes and other error correction schemes
-    • Fault-tolerant quantum computation
-    • Error rate reduction
-    • Quantum state preservation`
+    details: {
+      overview: 'Error correction is crucial for reliable quantum computation.',
+      examples: [
+        'Surface Codes',
+        'Stabilizer Codes',
+        'Topological Codes',
+        'Color Codes'
+      ],
+      additionalInfo: 'These techniques detect and correct qubit errors to maintain quantum state coherence.'
+    }
   },
   {
     id: 'physics',
     title: 'Physics Package',
     description: 'Quantum Hardware Interface',
-    content: `The physics package interfaces with the quantum hardware:
-    • Control signal generation
-    • Qubit manipulation
-    • Measurement and readout
-    • Hardware calibration
-    • Environmental control`
+    details: {
+      overview: 'The physics package interfaces directly with the quantum hardware.',
+      examples: [
+        'Control Systems',
+        'Signal Processing',
+        'Qubit Control',
+        'Readout Systems'
+      ],
+      additionalInfo: 'This layer handles the physical control and measurement of quantum states.'
+    }
   },
   {
     id: 'measurement',
     title: 'Measurement',
     description: 'Quantum State Measurement',
-    content: `Measurement systems handle the final readout of quantum states:
-    • State detection
-    • Signal amplification
-    • Data collection
-    • Result interpretation
-    • Classical post-processing`
+    details: {
+      overview: 'Measurement systems handle the final readout of quantum states.',
+      examples: [
+        'State Detection',
+        'Signal Amplification',
+        'Data Collection',
+        'Classical Post-processing'
+      ],
+      additionalInfo: 'These systems convert quantum information into classical results.'
+    }
   }
 ]
 
 export default function QuantumStack() {
-  const [selectedLayer, setSelectedLayer] = useState<StackLayer>(stackLayers[0])
+  const [selectedItem, setSelectedItem] = useState<StackItem>(stackItems[0])
 
   return (
     <main className="min-h-screen bg-[#0C0C0D] p-8">
       <div className="max-w-7xl mx-auto">
-        <h1 className="text-4xl font-bold mb-4 text-gray-100">Quantum Stack</h1>
-        <p className="text-gray-400 mb-8">Understanding the quantum computing technology stack</p>
-        
+        <h1 className="text-4xl font-bold text-white mb-4">Quantum Stack</h1>
+        <p className="text-gray-400 mb-12">Understanding the quantum computing technology stack</p>
+
         <div className="grid grid-cols-12 gap-8">
-          {/* Left Column - Stack Visualization */}
-          <div className="col-span-5">
-            <div className="bg-gray-900 p-6 rounded-2xl border border-gray-800">
-              <div className="space-y-3">
-                {stackLayers.map((layer) => (
+          {/* Left Column - Stack Navigation */}
+          <div className="col-span-4">
+            <Card className="bg-[#1A1A1D] border-gray-800 p-4">
+              <div className="space-y-2">
+                {stackItems.map((item) => (
                   <button
-                    key={layer.id}
-                    onClick={() => setSelectedLayer(layer)}
-                    className={`w-full p-4 rounded-xl transition-all duration-300 text-left
-                      ${selectedLayer.id === layer.id 
-                        ? 'bg-blue-900 text-blue-100' 
-                        : 'bg-gray-800 text-gray-300 hover:bg-gray-700'}`}
+                    key={item.id}
+                    onClick={() => setSelectedItem(item)}
+                    className={`w-full p-4 rounded-lg text-left transition-all duration-300
+                      ${selectedItem.id === item.id 
+                        ? 'bg-copper/20 text-white border border-copper/40' 
+                        : 'bg-gray-900/50 text-gray-400 hover:bg-gray-900 hover:text-gray-300 border border-transparent'
+                      }`}
                   >
-                    {layer.title}
+                    {item.title}
                   </button>
                 ))}
               </div>
-            </div>
+            </Card>
           </div>
 
           {/* Right Column - Content */}
-          <div className="col-span-7">
-            <div className="bg-gray-900 p-8 rounded-2xl border border-gray-800">
-              <h2 className="text-2xl font-bold text-gray-100 mb-2">
-                {selectedLayer.title}
+          <div className="col-span-8">
+            <Card className="bg-[#1A1A1D] border-gray-800 p-6">
+              <h2 className="text-2xl font-bold text-white mb-2">
+                {selectedItem.title}
               </h2>
-              <h3 className="text-lg text-gray-400 mb-6">
-                {selectedLayer.description}
+              <h3 className="text-lg text-copper mb-4">
+                {selectedItem.description}
               </h3>
-              <div className="prose prose-invert max-w-none">
-                <p className="text-gray-300 whitespace-pre-line">
-                  {selectedLayer.content}
+              <div className="space-y-4">
+                <p className="text-gray-300">
+                  {selectedItem.details.overview}
                 </p>
+                {selectedItem.details.examples && (
+                  <div className="mt-4">
+                    <h4 className="text-white font-semibold mb-2">Common examples:</h4>
+                    <ul className="list-disc list-inside space-y-1">
+                      {selectedItem.details.examples.map((example) => (
+                        <li key={example} className="text-gray-300">{example}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+                {selectedItem.details.additionalInfo && (
+                  <p className="text-gray-300 mt-4">
+                    {selectedItem.details.additionalInfo}
+                  </p>
+                )}
               </div>
-            </div>
+            </Card>
           </div>
         </div>
       </div>

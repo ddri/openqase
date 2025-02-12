@@ -5,10 +5,10 @@ import { Algorithm, CaseStudy } from '@/types'
 
 // Updated interface to match Next.js Page Props
 interface AlgorithmProfileProps {
-  params: {
+  params: Promise<{
     slug: string
-  }
-  searchParams?: { [key: string]: string | string[] | undefined }
+  }>
+  searchParams?: Promise<{ [key: string]: string | string[] | undefined }>
 }
 
 async function getAlgorithmData(slug: string): Promise<Algorithm> {
@@ -55,11 +55,10 @@ async function getRelatedCaseStudies(ids: string[]): Promise<CaseStudy[]> {
 }
 
 // Metadata generation for SEO
-export async function generateMetadata({ 
-  params 
-}: AlgorithmProfileProps): Promise<Metadata> {
+export async function generateMetadata(props: AlgorithmProfileProps): Promise<Metadata> {
+  const params = await props.params;
   const algorithm = await getAlgorithmData(params.slug)
-  
+
   return {
     title: `${algorithm.title} | OpenQase Quantum Algorithms`,
     description: algorithm.description,
@@ -77,7 +76,8 @@ export async function generateMetadata({
   }
 }
 
-export default async function AlgorithmProfile({ params, searchParams }: AlgorithmProfileProps) {
+export default async function AlgorithmProfile(props: AlgorithmProfileProps) {
+  const params = await props.params;
   const algorithm = await getAlgorithmData(params.slug)
   const caseStudies = await getRelatedCaseStudies(algorithm.relatedCaseStudies)
 

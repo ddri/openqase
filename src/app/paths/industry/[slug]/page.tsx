@@ -4,9 +4,9 @@ import { notFound } from 'next/navigation'
 import type { Industry, CaseStudy } from '@/lib/types'
 
 interface IndustryProfileProps {
-  params: {
+  params: Promise<{
     slug: string
-  }
+  }>
 }
 
 // This would typically come from your database
@@ -52,9 +52,10 @@ async function getRelatedCaseStudies(ids: string[]): Promise<CaseStudy[]> {
   }))
 }
 
-export default async function IndustryProfile({ params }: IndustryProfileProps) {
+export default async function IndustryProfile(props: IndustryProfileProps) {
+  const params = await props.params;
   const industry = await getIndustryData(params.slug)
-  
+
   if (!industry) {
     notFound()
   }

@@ -1,15 +1,18 @@
 // src/app/paths/algorithm/[slug]/page.tsx
 import Link from 'next/link'
+import { Metadata } from 'next'
 import { Algorithm, CaseStudy } from '@/types'
 
+// Updated interface to match Next.js Page Props
 interface AlgorithmProfileProps {
   params: {
     slug: string
   }
+  searchParams?: { [key: string]: string | string[] | undefined }
 }
 
 async function getAlgorithmData(slug: string): Promise<Algorithm> {
-  // Placeholder data
+  // Placeholder data - in real implementation, this would fetch from a database
   return {
     id: '1',
     title: 'Shor\'s Algorithm',
@@ -34,7 +37,7 @@ async function getAlgorithmData(slug: string): Promise<Algorithm> {
 }
 
 async function getRelatedCaseStudies(ids: string[]): Promise<CaseStudy[]> {
-  // Placeholder data
+  // Placeholder data - in real implementation, this would fetch from a database
   return ids.map(id => ({
     id,
     title: 'Case Study Example',
@@ -51,7 +54,30 @@ async function getRelatedCaseStudies(ids: string[]): Promise<CaseStudy[]> {
   }))
 }
 
-export default async function AlgorithmProfile({ params }: AlgorithmProfileProps) {
+// Metadata generation for SEO
+export async function generateMetadata({ 
+  params 
+}: AlgorithmProfileProps): Promise<Metadata> {
+  const algorithm = await getAlgorithmData(params.slug)
+  
+  return {
+    title: `${algorithm.title} | OpenQase Quantum Algorithms`,
+    description: algorithm.description,
+    keywords: [
+      'quantum algorithm',
+      algorithm.title.toLowerCase(),
+      ...algorithm.applications
+    ],
+    openGraph: {
+      title: `${algorithm.title} | OpenQase`,
+      description: algorithm.description,
+      type: 'article',
+      url: `/paths/algorithm/${algorithm.slug}`
+    }
+  }
+}
+
+export default async function AlgorithmProfile({ params, searchParams }: AlgorithmProfileProps) {
   const algorithm = await getAlgorithmData(params.slug)
   const caseStudies = await getRelatedCaseStudies(algorithm.relatedCaseStudies)
 

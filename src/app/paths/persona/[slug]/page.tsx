@@ -3,9 +3,9 @@ import Link from 'next/link'
 import { Persona, CaseStudy } from '@/types'
 
 interface PersonaProfileProps {
-  params: {
+  params: Promise<{
     slug: string
-  }
+  }>
 }
 
 // This would typically come from your database
@@ -43,7 +43,8 @@ async function getRelatedCaseStudies(ids: string[]): Promise<CaseStudy[]> {
   }))
 }
 
-export default async function PersonaProfile({ params }: PersonaProfileProps) {
+export default async function PersonaProfile(props: PersonaProfileProps) {
+  const params = await props.params;
   const persona = await getPersonaData(params.slug)
   const caseStudies = await getRelatedCaseStudies(persona.relatedCaseStudies)
 

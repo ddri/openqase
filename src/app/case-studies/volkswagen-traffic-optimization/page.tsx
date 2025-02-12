@@ -29,7 +29,7 @@ export default function VolkswagenCaseStudy() {
         {/* Header */}
         <div className="mb-12">
           <div className="flex justify-between items-start mb-4">
-            <h1 className="text-4xl font-bold text-white">Volkswagen's Traffic Flow Optimization</h1>
+            <h1 className="text-4xl font-bold text-white">Volkswagen{'&apos;'}s Traffic Flow Optimization</h1>
             <span className="px-3 py-1 rounded-full text-sm bg-blue-900/60 text-blue-200">
               Intermediate
             </span>
@@ -122,7 +122,7 @@ export default function VolkswagenCaseStudy() {
                 <section>
                   <h2 className="text-2xl font-semibold text-white mb-4">Hardware & Infrastructure</h2>
                   <p className="text-gray-300">
-                    The system runs on D-Wave's quantum annealing hardware, integrated with 
+                    The system runs on D-Wave{'&apos;'}s quantum annealing hardware, integrated with 
                     classical preprocessing and post-processing systems for real-world deployment.
                   </p>
                 </section>

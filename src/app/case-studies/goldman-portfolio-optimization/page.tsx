@@ -67,7 +67,7 @@ export default function GoldmanCaseStudy() {
               </p>
               <ul className="list-disc list-inside text-gray-300 mt-4 space-y-2">
                 <li>Formulating portfolio optimization as a quadratic programming problem</li>
-                <li>Implementing QAOA on IBM's quantum hardware</li>
+                <li>Implementing QAOA on IBM{'&apos;'}s quantum hardware</li>
                 <li>Developing hybrid quantum-classical approaches for practical use</li>
                 <li>Creating custom error mitigation techniques</li>
               </ul>

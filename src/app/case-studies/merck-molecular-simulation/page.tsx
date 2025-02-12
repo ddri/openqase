@@ -114,7 +114,7 @@ export default function MerckCaseStudy() {
                 <section>
                   <h2 className="text-2xl font-semibold text-white mb-4">Hardware & Infrastructure</h2>
                   <p className="text-gray-300">
-                    The project utilized IBM's superconducting quantum processors, integrated with 
+                    The project utilized IBM{'&apos;'}s superconducting quantum processors, integrated with 
                     classical high-performance computing infrastructure for pre- and post-processing.
                   </p>
                 </section>

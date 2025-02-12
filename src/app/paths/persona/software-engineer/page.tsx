@@ -145,11 +145,11 @@ export default async function SoftwareEngineerPersona() {
                       Key quantum development frameworks and tools:
                     </p>
                     <ul className="list-disc list-inside space-y-2">
-                      <li>Qiskit - IBM's open-source framework</li>
-                      <li>Cirq - Google's quantum programming framework</li>
-                      <li>Q# - Microsoft's quantum development kit</li>
+                      <li>Qiskit - IBM{'&apos;'}s open-source framework</li>
+                      <li>Cirq - Google{'&apos;'}s quantum programming framework</li>
+                      <li>Q# - Microsoft{'&apos;'}s quantum development kit</li>
                       <li>Pennylane - Cross-platform quantum ML framework</li>
-                      <li>pyQuil - Rigetti's Python framework</li>
+                      <li>pyQuil - Rigetti{'&apos;'}s Python framework</li>
                       <li>Amazon Braket - AWS quantum service SDK</li>
                     </ul>
                   </div>

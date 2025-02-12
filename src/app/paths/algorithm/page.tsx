@@ -2,32 +2,62 @@
 import ContentCard from '@/components/ContentCard'
 import { Algorithm } from '@/types'
 
-const algorithms: Algorithm[] = [
+const algorithms: Array<Pick<Algorithm, 'id' | 'title' | 'slug' | 'type' | 'description'>> = [
   {
     id: '1',
     title: 'Shor\'s Algorithm',
     slug: 'shors-algorithm',
-    type: 'Technical' as const,
-    description: 'Integer factorization and its applications',
-    complexity: 'O(log N)',
-    applications: ['Cryptography', 'Number Theory'],
-    prerequisites: ['Quantum Fourier Transform', 'Modular Arithmetic'],
-    relatedCaseStudies: ['case-1'],
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString()
+    type: 'Technical',
+    description: 'Integer factorization algorithm with applications in cryptography and RSA breaking'
   },
   {
     id: '2',
     title: 'Grover\'s Algorithm',
     slug: 'grovers-algorithm',
-    type: 'Technical' as const,
-    description: 'Quantum search algorithm and database applications',
-    complexity: 'O(√N)',
-    applications: ['Database Search', 'Optimization'],
-    prerequisites: ['Quantum Gates', 'Amplitude Amplification'],
-    relatedCaseStudies: ['case-2'],
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString()
+    type: 'Technical',
+    description: 'Quantum search algorithm for unstructured databases with quadratic speedup'
+  },
+  {
+    id: '3',
+    title: 'VQE',
+    slug: 'vqe',
+    type: 'Technical',
+    description: 'Variational Quantum Eigensolver for molecular simulation and quantum chemistry'
+  },
+  {
+    id: '4',
+    title: 'QAOA',
+    slug: 'qaoa',
+    type: 'Technical',
+    description: 'Quantum Approximate Optimization Algorithm for combinatorial optimization problems'
+  },
+  {
+    id: '5',
+    title: 'HHL Algorithm',
+    slug: 'hhl-algorithm',
+    type: 'Technical',
+    description: 'Quantum algorithm for solving systems of linear equations exponentially faster'
+  },
+  {
+    id: '6',
+    title: 'Quantum Fourier Transform',
+    slug: 'qft',
+    type: 'Technical',
+    description: 'Fundamental quantum transform used in many quantum algorithms'
+  },
+  {
+    id: '7',
+    title: 'Quantum Phase Estimation',
+    slug: 'phase-estimation',
+    type: 'Technical',
+    description: 'Algorithm for estimating the eigenvalues of a unitary operator'
+  },
+  {
+    id: '8',
+    title: 'Quantum Walk',
+    slug: 'quantum-walk',
+    type: 'Technical',
+    description: 'Quantum analog of classical random walks with applications in search'
   }
 ]
 

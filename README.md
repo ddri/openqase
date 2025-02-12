@@ -1,3 +1,9 @@
+
+OpenQase is a curation of quantum computing business case studies. The resource is organised by multiple contexts to showcase case studies, quantum algorithms, and associated research papers relevant to industry or user persona.
+
+
+-----
+
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started

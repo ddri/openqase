@@ -1,3 +1,4 @@
+// tailwind.config.js
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
@@ -6,7 +7,15 @@ module.exports = {
     './src/app/**/*.{js,ts,jsx,tsx,mdx}',
   ],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        copper: {
+          light: '#E6A993', // lighter shade
+          DEFAULT: '#B87E6C', // main copper color
+          dark: '#8B5E4D',   // darker shade
+        }
+      }
+    },
   },
   plugins: [],
 }

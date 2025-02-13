@@ -9,7 +9,7 @@ import { Card } from "@/components/ui/card"
 import { Algorithm, CaseStudy } from '@/content/types'
 
 interface PageProps {
-  params: { slug: string }
+  params: Promise<{ slug: string }>
 }
 
 // Get all possible algorithm slugs for static paths
@@ -53,9 +53,10 @@ async function getRelatedCaseStudies(ids: string[]): Promise<CaseStudy[]> {
 }
 
 // Generate metadata for SEO
-export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+export async function generateMetadata(props: PageProps): Promise<Metadata> {
+  const params = await props.params;
   const algorithm = await getAlgorithm(params.slug)
-  
+
   return {
     title: `${algorithm.title} | OpenQase Quantum Computing`,
     description: algorithm.description,
@@ -67,7 +68,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   }
 }
 
-export default async function AlgorithmPage({ params }: PageProps) {
+export default async function AlgorithmPage(props: PageProps) {
+  const params = await props.params;
   const algorithm = await getAlgorithm(params.slug)
   const caseStudies = await getRelatedCaseStudies(algorithm.relatedCaseStudies)
 

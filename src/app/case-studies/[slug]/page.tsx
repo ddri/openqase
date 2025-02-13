@@ -9,7 +9,7 @@ import { Card } from "@/components/ui/card"
 import { CaseStudy, Algorithm, Persona } from '@/content/types'
 
 interface PageProps {
-  params: { slug: string }
+  params: Promise<{ slug: string }>
 }
 
 // Get all possible case study slugs for static paths
@@ -82,9 +82,10 @@ const getDifficultyStyle = (difficulty: string) => {
 }
 
 // Generate metadata for SEO
-export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+export async function generateMetadata(props: PageProps): Promise<Metadata> {
+  const params = await props.params;
   const caseStudy = await getCaseStudy(params.slug)
-  
+
   return {
     title: `${caseStudy.title} | OpenQase Case Studies`,
     description: caseStudy.description,
@@ -97,13 +98,14 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   }
 }
 
-export default async function CaseStudyPage({ params }: PageProps) {
+export default async function CaseStudyPage(props: PageProps) {
+  const params = await props.params;
   const caseStudy = await getCaseStudy(params.slug)
   const algorithms = await getRelatedAlgorithms(caseStudy.algorithms)
   const personas = await getRelatedPersonas(caseStudy.personas)
 
   return (
-    <main className="min-h-screen bg-[#0C0C0D] p-8">
+    (<main className="min-h-screen bg-[#0C0C0D] p-8">
       <div className="max-w-6xl mx-auto">
         {/* Navigation */}
         <div className="mb-8">
@@ -255,6 +257,6 @@ export default async function CaseStudyPage({ params }: PageProps) {
           </div>
         </div>
       </div>
-    </main>
-  )
+    </main>)
+  );
 }

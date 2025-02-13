@@ -1,46 +1,29 @@
-// src/app/paths/persona/page.tsx
+import { promises as fs } from 'fs'
+import path from 'path'
 import ContentCard from '@/components/ContentCard'
-import { Persona } from '@/types'
+import { Persona } from '@/content/types'
 
-const personas: Array<Pick<Persona, 'id' | 'title' | 'slug' | 'type' | 'description'>> = [
-  {
-    id: '1',
-    title: 'Government Policy Maker',
-    slug: 'government',
-    type: 'Persona',
-    description: 'Understand quantum computing impact on national security, research funding, and policy implications'
-  },
-  {
-    id: '2',
-    title: 'Investment Professional',
-    slug: 'investor',
-    type: 'Persona',
-    description: 'Evaluate quantum computing opportunities, market trends, and investment strategies'
-  },
-  {
-    id: '3',
-    title: 'Software Engineer',
-    slug: 'software-engineer',
-    type: 'Technical',
-    description: 'Learn quantum algorithm implementation, development tools, and programming frameworks'
-  },
-  {
-    id: '4',
-    title: 'Financial Analyst',
-    slug: 'finance',
-    type: 'Technical',
-    description: 'Explore quantum applications in trading, risk analysis, and portfolio optimization'
-  },
-  {
-    id: '5',
-    title: 'Quantum Chemist',
-    slug: 'chemistry',
-    type: 'Technical',
-    description: 'Apply quantum computing to molecular simulation and materials science research'
-  }
-]
+// Load all persona content at build time
+async function getPersonas(): Promise<Persona[]> {
+  const contentDir = path.join(process.cwd(), 'content', 'persona')
+  const files = await fs.readdir(contentDir)
+  
+  const personas = await Promise.all(
+    files
+      .filter(file => file.endsWith('.json'))
+      .map(async file => {
+        const content = await fs.readFile(path.join(contentDir, file), 'utf-8')
+        return JSON.parse(content) as Persona
+      })
+  )
 
-export default function PersonaPath() {
+  // Sort personas by ID to maintain consistent order
+  return personas.sort((a, b) => parseInt(a.id) - parseInt(b.id))
+}
+
+export default async function PersonaPath() {
+  const personas = await getPersonas()
+
   return (
     <main className="min-h-screen bg-[#0C0C0D] p-8">
       <div className="max-w-7xl mx-auto">

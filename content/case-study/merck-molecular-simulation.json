@@ -1,0 +1,27 @@
+{
+    "id": "3",
+    "title": "Merck's Drug Discovery Breakthrough",
+    "slug": "merck-molecular-simulation",
+    "description": "How Merck accelerated drug discovery using quantum computing for molecular simulation.",
+    "content": "Merck leveraged quantum computing to revolutionize their drug discovery process, focusing on molecular dynamics simulation and protein folding prediction to accelerate the identification of promising drug candidates. The project utilized VQE algorithms for accurate molecular simulation, integrated with classical high-performance computing infrastructure.",
+    "personas": ["quantum-chemist", "software-engineer"],
+    "industries": ["pharmaceutical"],
+    "algorithms": ["vqe"],
+    "difficulty": "Advanced",
+    "tags": ["pharmaceutical", "chemistry", "VQE"],
+    "metrics": {
+      "simulationSpeed": "100x",
+      "accuracy": "95%",
+      "timeSaved": "70%",
+      "costReduction": "45%",
+      "candidatesFound": "3x"
+    },
+    "technologies": [
+      "IBM Quantum Hardware",
+      "Qiskit Chemistry",
+      "Custom Simulation Software",
+      "Quantum Machine Learning"
+    ],
+    "createdAt": "2024-02-13T00:00:00Z",
+    "updatedAt": "2024-02-13T00:00:00Z"
+  }

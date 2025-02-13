@@ -1,0 +1,164 @@
+{
+  "id": "3",
+  "title": "Investment Professional",
+  "slug": "investor",
+  "type": "Persona",
+  "description": "Navigate the quantum computing investment landscape, from early-stage startups to established players, understanding market trends and technological milestones.",
+  "role": "Investment and Strategy",
+  "experience": {
+    "required": [
+      "Investment analysis",
+      "Technology sector experience",
+      "Due diligence expertise"
+    ],
+    "beneficial": [
+      "Physics or engineering background",
+      "Startup evaluation experience",
+      "Hardware technology understanding"
+    ]
+  },
+  "learningPath": {
+    "beginnerTopics": [
+      {
+        "name": "Quantum Technology Fundamentals",
+        "skills": [
+          "Basic quantum principles",
+          "Hardware architectures",
+          "Software frameworks"
+        ]
+      },
+      {
+        "name": "Market Landscape",
+        "skills": [
+          "Key players analysis",
+          "Technology roadmaps",
+          "Market segmentation"
+        ]
+      }
+    ],
+    "intermediateTopics": [
+      {
+        "name": "Investment Analysis",
+        "skills": [
+          "Valuation methodologies",
+          "Technical due diligence",
+          "Risk assessment"
+        ]
+      },
+      {
+        "name": "Strategic Planning",
+        "skills": [
+          "Portfolio construction",
+          "Investment timing",
+          "Exit strategies"
+        ]
+      }
+    ],
+    "advancedTopics": [
+      {
+        "name": "Industry Development",
+        "skills": [
+          "Technology commercialization",
+          "Market adoption curves",
+          "Competitive analysis"
+        ]
+      }
+    ]
+  },
+  "investmentFocus": {
+    "sectors": [
+      {
+        "name": "Hardware",
+        "areas": [
+          "Quantum processors",
+          "Control systems",
+          "Error correction"
+        ]
+      },
+      {
+        "name": "Software",
+        "areas": [
+          "Development tools",
+          "Applications",
+          "Optimization solutions"
+        ]
+      },
+      {
+        "name": "Services",
+        "areas": [
+          "Consulting",
+          "Training",
+          "Cloud access"
+        ]
+      }
+    ],
+    "stageFocus": [
+      "Seed stage",
+      "Series A/B",
+      "Growth stage",
+      "Public markets"
+    ]
+  },
+  "evaluationCriteria": [
+    {
+      "category": "Technology",
+      "criteria": [
+        "Technical differentiation",
+        "Scalability potential",
+        "IP portfolio",
+        "Team expertise"
+      ]
+    },
+    {
+      "category": "Market",
+      "criteria": [
+        "Market size",
+        "Growth potential",
+        "Competition analysis",
+        "Adoption barriers"
+      ]
+    },
+    {
+      "category": "Business",
+      "criteria": [
+        "Revenue model",
+        "Cost structure",
+        "Growth strategy",
+        "Exit potential"
+      ]
+    }
+  ],
+  "relevantCaseStudies": [
+    "startup-evaluation",
+    "market-analysis",
+    "hardware-vs-software"
+  ],
+  "keyConsiderations": [
+    {
+      "category": "Technology Risk",
+      "aspects": [
+        "Development timelines",
+        "Technical feasibility",
+        "Competitive advantage"
+      ]
+    },
+    {
+      "category": "Market Risk",
+      "aspects": [
+        "Adoption rate",
+        "Market timing",
+        "Customer readiness"
+      ]
+    },
+    {
+      "category": "Financial Risk",
+      "aspects": [
+        "Capital requirements",
+        "Burn rate",
+        "Revenue potential"
+      ]
+    }
+  ],
+  "createdAt": "2024-02-13T00:00:00Z",
+  "updatedAt": "2024-02-13T00:00:00Z"
+}

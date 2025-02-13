@@ -1,0 +1,90 @@
+{
+    "id": "3",
+    "title": "Variational Quantum Eigensolver (VQE)",
+    "slug": "vqe",
+    "type": "Technical",
+    "description": "A hybrid quantum-classical algorithm designed to find the ground state energy of molecular and chemical systems. VQE combines the power of quantum computers with classical optimization techniques, making it particularly well-suited for near-term quantum devices.",
+    "complexity": "Depends on ansatz and optimization strategy",
+    "yearPublished": 2014,
+    "authors": ["Alberto Peruzzo", "Jarrod McClean", "et al."],
+    "prerequisites": [
+      "Quantum Mechanics Basics",
+      "Linear Algebra",
+      "Classical Optimization Methods",
+      "Quantum Circuit Design",
+      "Understanding of Ansatz Construction"
+    ],
+    "keyComponents": [
+      {
+        "name": "Parameterized Quantum Circuit",
+        "description": "Implements the variational ansatz state preparation"
+      },
+      {
+        "name": "Hamiltonian Decomposition",
+        "description": "Breaks down problem Hamiltonian into measurable terms"
+      },
+      {
+        "name": "Classical Optimizer",
+        "description": "Updates circuit parameters to minimize energy"
+      }
+    ],
+    "workingPrinciple": "VQE works by preparing a trial quantum state using a parameterized circuit, measuring the energy expectation value, and using classical optimization to adjust parameters and find the ground state.",
+    "applications": [
+      {
+        "area": "Quantum Chemistry",
+        "description": "Finding ground state energies of molecules"
+      },
+      {
+        "area": "Materials Science",
+        "description": "Studying electronic structure of materials"
+      },
+      {
+        "area": "Drug Discovery",
+        "description": "Simulating drug-target interactions"
+      },
+      {
+        "area": "Optimization",
+        "description": "Solving combinatorial optimization problems"
+      }
+    ],
+    "limitations": [
+      "Results depend on ansatz quality",
+      "Optimization may find local minima",
+      "Measurement overhead can be significant",
+      "Circuit depth limited by hardware noise"
+    ],
+    "advantages": {
+      "hardware": "Suitable for NISQ devices",
+      "adaptability": "Flexible problem formulation",
+      "hybridNature": "Leverages classical computing power",
+      "errorTolerance": "Some resilience to quantum noise"
+    },
+    "implementation": {
+      "requiredResources": {
+        "qubits": "Problem-dependent",
+        "circuits": ["State preparation", "Energy measurement"],
+        "classicalComputation": "Optimization algorithm"
+      },
+      "steps": [
+        "Design problem Hamiltonian",
+        "Choose variational ansatz",
+        "Prepare trial state",
+        "Measure energy expectation",
+        "Update parameters classically",
+        "Repeat until convergence"
+      ]
+    },
+    "currentResearch": [
+      "Ansatz design optimization",
+      "Error mitigation techniques",
+      "Measurement reduction strategies",
+      "Hardware-efficient implementations"
+    ],
+    "furtherReading": [
+      "Original paper: 'The theory of variational hybrid quantum-classical algorithms'",
+      "Review: 'Quantum Chemistry in the Age of Quantum Computing'",
+      "Qiskit VQE documentation and tutorials"
+    ],
+    "createdAt": "2024-02-13T00:00:00Z",
+    "updatedAt": "2024-02-13T00:00:00Z"
+  }

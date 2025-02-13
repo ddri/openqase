@@ -1,44 +1,25 @@
-// src/app/case-studies/page.tsx
-import { Card } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
+import { promises as fs } from 'fs'
+import path from 'path'
 import Link from 'next/link'
+import { CaseStudy } from '@/content/types'
 
-interface CaseStudy {
-  id: string
-  title: string
-  slug: string
-  description: string
-  tags: string[]
-  difficulty: 'Beginner' | 'Intermediate' | 'Advanced'
+// Load all case studies at build time
+async function getCaseStudies(): Promise<CaseStudy[]> {
+  const contentDir = path.join(process.cwd(), 'content', 'case-study')
+  const files = await fs.readdir(contentDir)
+  
+  const caseStudies = await Promise.all(
+    files
+      .filter(file => file.endsWith('.json'))
+      .map(async file => {
+        const content = await fs.readFile(path.join(contentDir, file), 'utf-8')
+        return JSON.parse(content) as CaseStudy
+      })
+  )
+
+  // Sort case studies by ID to maintain consistent order
+  return caseStudies.sort((a, b) => parseInt(a.id) - parseInt(b.id))
 }
-
-const caseStudies: CaseStudy[] = [
-  {
-    id: '1',
-    title: 'Portfolio Optimization at Goldman Sachs',
-    slug: 'goldman-portfolio-optimization',
-    description: 'How Goldman Sachs implemented quantum algorithms for portfolio optimization, achieving better risk-adjusted returns.',
-    tags: ['finance', 'optimization', 'QAOA'],
-    difficulty: 'Advanced'
-  },
-  {
-    id: '2',
-    title: "Volkswagen's Traffic Flow Optimization",
-    slug: 'volkswagen-traffic-optimization',
-    description: 'Volkswagen\'s implementation of quantum computing for optimizing traffic flow in major cities.',
-    tags: ['automotive', 'optimization', 'smart-cities'],
-    difficulty: 'Intermediate'
-  },
-  {
-    id: '3',
-    title: "Merck's Drug Discovery Breakthrough",
-    slug: 'merck-molecular-simulation',
-    description: 'How Merck accelerated drug discovery using quantum computing for molecular simulation.',
-    tags: ['pharmaceutical', 'chemistry', 'VQE'],
-    difficulty: 'Advanced'
-  }
-  // ... more case studies
-]
 
 const getDifficultyStyle = (difficulty: string) => {
   switch(difficulty) {
@@ -51,7 +32,9 @@ const getDifficultyStyle = (difficulty: string) => {
   }
 }
 
-export default function CaseStudies() {
+export default async function CaseStudies() {
+  const caseStudies = await getCaseStudies()
+
   return (
     <main className="min-h-screen bg-[#0C0C0D] p-8">
       <div className="max-w-6xl mx-auto">

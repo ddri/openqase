@@ -4,7 +4,18 @@ OpenQase is a curation of quantum computing business case studies. The resource 
 
 -----
 
-OpenQase is build on top of a [Next.js](https://nextjs.org) bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+## Development notes
+
+- OpenQase is build on top of a [Next.js](https://nextjs.org) and uses Shadcdn UI componenets. 
+
+- NextJS 15 has breaking changes. New components may need [this async await codemod](https://nextjs.org/docs/app/building-your-application/upgrading/codemods) to fix linter issues.
+
+- Deployment is currently on Vercel (internal [link here](https://vercel.com/ddris-projects/openqase/9XVBdfF5RmdBKR6zCrwrdQ5W4CgK)). 
+
+- Data is currently locally represented. Will likely move to MongoDB Atlas for document storage.
+
+
+
 
 ## Getting Started
 
@@ -22,10 +33,3 @@ bun dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Deploying on Vercel
-
-OpenQase is currently developed to be deployed on the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.

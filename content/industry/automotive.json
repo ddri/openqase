@@ -1,0 +1,20 @@
+{
+    "id": "3",
+    "title": "Automotive",
+    "slug": "automotive",
+    "description": "Applications of quantum computing in automotive industry and smart transportation",
+    "type": "Technical",
+    "sector": "Automotive & Transportation",
+    "keyApplications": [
+      "Traffic Optimization",
+      "Route Planning",
+      "Supply Chain Optimization",
+      "Battery Design",
+      "Autonomous Vehicle Systems"
+    ],
+    "relatedCaseStudies": [
+      "volkswagen-traffic-optimization"
+    ],
+    "createdAt": "2024-02-13T00:00:00Z",
+    "updatedAt": "2024-02-13T00:00:00Z"
+  }

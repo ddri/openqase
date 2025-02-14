@@ -1,67 +1,29 @@
-// src/app/paths/algorithm/page.tsx
+import { promises as fs } from 'fs'
+import path from 'path'
 import ContentCard from '@/components/ContentCard'
-import { Algorithm } from '@/types'
+import { Algorithm } from '@/content/types'
 
-const algorithms: Array<Pick<Algorithm, 'id' | 'title' | 'slug' | 'type' | 'description'>> = [
-  {
-    id: '1',
-    title: 'Shor\'s Algorithm',
-    slug: 'shors-algorithm',
-    type: 'Technical',
-    description: 'Integer factorization algorithm with applications in cryptography and RSA breaking'
-  },
-  {
-    id: '2',
-    title: 'Grover\'s Algorithm',
-    slug: 'grovers-algorithm',
-    type: 'Technical',
-    description: 'Quantum search algorithm for unstructured databases with quadratic speedup'
-  },
-  {
-    id: '3',
-    title: 'VQE',
-    slug: 'vqe',
-    type: 'Technical',
-    description: 'Variational Quantum Eigensolver for molecular simulation and quantum chemistry'
-  },
-  {
-    id: '4',
-    title: 'QAOA',
-    slug: 'qaoa',
-    type: 'Technical',
-    description: 'Quantum Approximate Optimization Algorithm for combinatorial optimization problems'
-  },
-  {
-    id: '5',
-    title: 'HHL Algorithm',
-    slug: 'hhl-algorithm',
-    type: 'Technical',
-    description: 'Quantum algorithm for solving systems of linear equations exponentially faster'
-  },
-  {
-    id: '6',
-    title: 'Quantum Fourier Transform',
-    slug: 'qft',
-    type: 'Technical',
-    description: 'Fundamental quantum transform used in many quantum algorithms'
-  },
-  {
-    id: '7',
-    title: 'Quantum Phase Estimation',
-    slug: 'phase-estimation',
-    type: 'Technical',
-    description: 'Algorithm for estimating the eigenvalues of a unitary operator'
-  },
-  {
-    id: '8',
-    title: 'Quantum Walk',
-    slug: 'quantum-walk',
-    type: 'Technical',
-    description: 'Quantum analog of classical random walks with applications in search'
-  }
-]
+// Load all algorithm content at build time
+async function getAlgorithms(): Promise<Algorithm[]> {
+  const contentDir = path.join(process.cwd(), 'content', 'algorithm')
+  const files = await fs.readdir(contentDir)
+  
+  const algorithms = await Promise.all(
+    files
+      .filter(file => file.endsWith('.json'))
+      .map(async file => {
+        const content = await fs.readFile(path.join(contentDir, file), 'utf-8')
+        return JSON.parse(content) as Algorithm
+      })
+  )
 
-export default function AlgorithmPath() {
+  // Sort algorithms by ID to maintain consistent order
+  return algorithms.sort((a, b) => parseInt(a.id) - parseInt(b.id))
+}
+
+export default async function AlgorithmPath() {
+  const algorithms = await getAlgorithms()
+
   return (
     <main className="min-h-screen bg-[#0C0C0D] p-8">
       <div className="max-w-7xl mx-auto">

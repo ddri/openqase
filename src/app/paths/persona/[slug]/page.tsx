@@ -3,22 +3,29 @@ import path from 'path'
 import Link from 'next/link'
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
-import { Persona, CaseStudy } from '@/content/types'
+import type { Persona, CaseStudy } from '@/types'
 
 interface PageProps {
-  params: Promise<{ slug: string }>
+  params: {
+    slug: string
+  }
 }
 
 // Get all possible persona slugs for static paths
 export async function generateStaticParams() {
-  const contentDir = path.join(process.cwd(), 'content', 'persona')
-  const files = await fs.readdir(contentDir)
-  
-  return files
-    .filter(file => file.endsWith('.json'))
-    .map(file => ({
-      slug: file.replace('.json', '')
-    }))
+  try {
+    const contentDir = path.join(process.cwd(), 'content', 'persona')
+    const files = await fs.readdir(contentDir)
+    
+    return files
+      .filter(file => file.endsWith('.json'))
+      .map(file => ({
+        slug: file.replace('.json', '')
+      }))
+  } catch (error) {
+    console.error('Error generating static params:', error)
+    return []
+  }
 }
 
 // Load persona content
@@ -26,7 +33,7 @@ async function getPersona(slug: string): Promise<Persona> {
   try {
     const filePath = path.join(process.cwd(), 'content', 'persona', `${slug}.json`)
     const content = await fs.readFile(filePath, 'utf-8')
-    return JSON.parse(content)
+    return JSON.parse(content) as Persona
   } catch (error) {
     notFound()
   }
@@ -50,8 +57,7 @@ async function getRelatedCaseStudies(ids: string[]): Promise<CaseStudy[]> {
 }
 
 // Generate metadata for SEO
-export async function generateMetadata(props: PageProps): Promise<Metadata> {
-  const params = await props.params;
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const persona = await getPersona(params.slug)
 
   return {
@@ -66,8 +72,7 @@ export async function generateMetadata(props: PageProps): Promise<Metadata> {
   }
 }
 
-export default async function PersonaPage(props: PageProps) {
-  const params = await props.params;
+export default async function PersonaPage({ params }: PageProps) {
   const persona = await getPersona(params.slug)
   const caseStudies = await getRelatedCaseStudies(persona.relatedCaseStudies)
 
@@ -116,7 +121,7 @@ export default async function PersonaPage(props: PageProps) {
                 <section>
                   <h2 className="text-xl font-semibold text-gray-100 mb-4">Key Areas of Focus</h2>
                   <ul className="list-disc list-inside space-y-2">
-                    {persona.expertise.map((item) => (
+                    {persona.expertise.map((item: string) => (
                       <li key={item} className="text-gray-300">{item}</li>
                     ))}
                   </ul>
@@ -154,7 +159,7 @@ export default async function PersonaPage(props: PageProps) {
                     <h3 className="font-medium text-gray-100 mb-2">{study.title}</h3>
                     <p className="text-sm text-gray-400">{study.description}</p>
                     <div className="mt-3 flex flex-wrap gap-2">
-                      {study.tags.map((tag) => (
+                      {study.tags.map((tag: string) => (
                         <span 
                           key={tag}
                           className="text-[10px] px-1.5 py-0.5 bg-gray-800 text-gray-300 rounded-full"

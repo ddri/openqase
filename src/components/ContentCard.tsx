@@ -1,10 +1,10 @@
-// src/components/ContentCard.tsx
 import Link from 'next/link'
 import { FC } from 'react'
+import type { PersonaType } from '@/types'
 
 interface ContentCardProps {
   title: string;
-  type: 'Technical' | 'Persona';
+  type: PersonaType;
   path: string;
   slug: string;
   description?: string;

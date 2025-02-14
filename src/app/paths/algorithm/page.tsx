@@ -1,24 +1,47 @@
 import { promises as fs } from 'fs'
 import path from 'path'
 import ContentCard from '@/components/ContentCard'
-import { Algorithm } from '@/content/types'
+import type { Algorithm } from '@/types'
 
 // Load all algorithm content at build time
 async function getAlgorithms(): Promise<Algorithm[]> {
-  const contentDir = path.join(process.cwd(), 'content', 'algorithm')
-  const files = await fs.readdir(contentDir)
-  
-  const algorithms = await Promise.all(
-    files
-      .filter(file => file.endsWith('.json'))
-      .map(async file => {
-        const content = await fs.readFile(path.join(contentDir, file), 'utf-8')
-        return JSON.parse(content) as Algorithm
-      })
-  )
+  try {
+    const contentDir = path.join(process.cwd(), 'content', 'algorithm')
+    const files = await fs.readdir(contentDir)
+    
+    const algorithms = await Promise.all(
+      files
+        .filter(file => file.endsWith('.json'))
+        .map(async file => {
+          const content = await fs.readFile(path.join(contentDir, file), 'utf-8')
+          return JSON.parse(content) as Algorithm
+        })
+    )
 
-  // Sort algorithms by ID to maintain consistent order
-  return algorithms.sort((a, b) => parseInt(a.id) - parseInt(b.id))
+    // Sort algorithms by ID to maintain consistent order
+    return algorithms.sort((a, b) => parseInt(a.id) - parseInt(b.id))
+  } catch (error) {
+    // Fallback data in case the file system isn't available
+    const fallbackAlgorithms: Array<Pick<Algorithm, 'id' | 'title' | 'slug' | 'type' | 'description'>> = [
+      {
+        id: '1',
+        title: 'Shor\'s Algorithm',
+        slug: 'shors-algorithm',
+        type: 'Technical',
+        description: 'Integer factorization algorithm with applications in cryptography and RSA breaking'
+      },
+      {
+        id: '2',
+        title: 'Grover\'s Algorithm',
+        slug: 'grovers-algorithm',
+        type: 'Technical',
+        description: 'Quantum search algorithm for unstructured databases with quadratic speedup'
+      },
+      // ... other algorithms
+    ]
+    
+    return fallbackAlgorithms as Algorithm[]
+  }
 }
 
 export default async function AlgorithmPath() {

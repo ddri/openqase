@@ -8,9 +8,9 @@ import path from 'path'
 import type { Algorithm, CaseStudy } from '@/types'
 
 interface PageProps {
-  params: {
+  params: Promise<{
     slug: string
-  }
+  }>
 }
 
 // Load content at build time
@@ -37,9 +37,10 @@ async function getRelatedCaseStudies(ids: string[]): Promise<CaseStudy[]> {
   return caseStudies.filter((study): study is CaseStudy => study !== null)
 }
 
-export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+export async function generateMetadata(props: PageProps): Promise<Metadata> {
+  const params = await props.params;
   const algorithm = await getAlgorithmContent(params.slug)
-  
+
   return {
     title: `${algorithm.title} | OpenQase Quantum Computing`,
     description: algorithm.description,
@@ -52,7 +53,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   }
 }
 
-export default async function AlgorithmPage({ params }: PageProps) {
+export default async function AlgorithmPage(props: PageProps) {
+  const params = await props.params;
   const algorithm = await getAlgorithmContent(params.slug)
   const caseStudies = await getRelatedCaseStudies(algorithm.relatedCaseStudies)
 

@@ -1,0 +1,142 @@
+{
+  "id": "1",
+  "title": "Software Engineer",
+  "slug": "software-engineer",
+  "type": "Technical",
+  "description": "Learn how to develop quantum applications, implement algorithms, and use quantum development frameworks to build the next generation of quantum software.",
+  "role": "Software Development",
+  "experience": {
+    "required": [
+      "Classical programming experience",
+      "Understanding of linear algebra",
+      "Basic quantum computing concepts"
+    ],
+    "beneficial": [
+      "Python programming",
+      "Algorithm design",
+      "Cloud computing",
+      "Machine learning basics"
+    ]
+  },
+  "learningPath": {
+    "beginnerTopics": [
+      {
+        "name": "Quantum Computing Basics",
+        "skills": [
+          "Quantum states and superposition",
+          "Quantum gates and circuits",
+          "Measurement in quantum computing"
+        ]
+      },
+      {
+        "name": "Development Environment",
+        "skills": [
+          "Setting up Qiskit",
+          "Using quantum simulators",
+          "Basic quantum circuits"
+        ]
+      }
+    ],
+    "intermediateTopics": [
+      {
+        "name": "Quantum Algorithms",
+        "skills": [
+          "Understanding QAOA",
+          "Implementing VQE",
+          "Quantum error correction"
+        ]
+      },
+      {
+        "name": "Framework Proficiency",
+        "skills": [
+          "Advanced Qiskit features",
+          "Circuit optimization",
+          "Hardware-specific considerations"
+        ]
+      }
+    ],
+    "advancedTopics": [
+      {
+        "name": "Application Development",
+        "skills": [
+          "Full-stack quantum applications",
+          "Hybrid quantum-classical systems",
+          "Performance optimization"
+        ]
+      }
+    ]
+  },
+  "tools": {
+    "primaryFrameworks": [
+      {
+        "name": "Qiskit",
+        "provider": "IBM",
+        "description": "Open-source framework for quantum computing"
+      },
+      {
+        "name": "Cirq",
+        "provider": "Google",
+        "description": "Python framework for NISQ computers"
+      },
+      {
+        "name": "Q#",
+        "provider": "Microsoft",
+        "description": "Quantum programming language and development kit"
+      }
+    ],
+    "developmentTools": [
+      "Quantum simulators",
+      "Circuit composers",
+      "Debugging tools",
+      "Performance analyzers"
+    ]
+  },
+  "careerOpportunities": [
+    "Quantum Software Developer",
+    "Quantum Algorithm Engineer",
+    "Quantum Applications Architect",
+    "Full-stack Quantum Developer"
+  ],
+  "relevantCaseStudies": [
+    "algorithm-implementation",
+    "hybrid-architecture",
+    "error-mitigation"
+  ],
+  "industryConnections": [
+    "Technology companies",
+    "Research institutions",
+    "Financial services",
+    "Healthcare and pharmaceuticals"
+  ],
+  "keySkillsToAcquire": [
+    {
+      "category": "Programming",
+      "skills": [
+        "Quantum circuit design",
+        "Algorithm implementation",
+        "Error mitigation techniques",
+        "Performance optimization"
+      ]
+    },
+    {
+      "category": "Theory",
+      "skills": [
+        "Quantum algorithms",
+        "Quantum error correction",
+        "Circuit optimization",
+        "Quantum-classical interfaces"
+      ]
+    },
+    {
+      "category": "Tools",
+      "skills": [
+        "Quantum frameworks",
+        "Development environments",
+        "Testing methodologies",
+        "Deployment strategies"
+      ]
+    }
+  ],
+  "createdAt": "2024-02-13T00:00:00Z",
+  "updatedAt": "2024-02-13T00:00:00Z"
+}

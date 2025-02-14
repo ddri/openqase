@@ -6,9 +6,9 @@ import { notFound } from 'next/navigation'
 import type { Persona, CaseStudy } from '@/types'
 
 interface PageProps {
-  params: {
+  params: Promise<{
     slug: string
-  }
+  }>
 }
 
 // Get all possible persona slugs for static paths
@@ -57,7 +57,8 @@ async function getRelatedCaseStudies(ids: string[]): Promise<CaseStudy[]> {
 }
 
 // Generate metadata for SEO
-export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+export async function generateMetadata(props: PageProps): Promise<Metadata> {
+  const params = await props.params;
   const persona = await getPersona(params.slug)
 
   return {
@@ -72,7 +73,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   }
 }
 
-export default async function PersonaPage({ params }: PageProps) {
+export default async function PersonaPage(props: PageProps) {
+  const params = await props.params;
   const persona = await getPersona(params.slug)
   const caseStudies = await getRelatedCaseStudies(persona.relatedCaseStudies)
 

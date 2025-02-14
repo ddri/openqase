@@ -5,9 +5,9 @@ import { Card } from "@/components/ui/card"
 import type { CaseStudy } from '@/types'
 
 interface PageProps {
-  params: {
+  params: Promise<{
     slug: string
-  }
+  }>
 }
 
 async function getCaseStudy(slug: string): Promise<CaseStudy | null> {
@@ -45,7 +45,8 @@ const getDifficultyStyle = (difficulty: CaseStudy['difficulty']): string => {
   }
 }
 
-export default async function CaseStudyPage({ params }: PageProps) {
+export default async function CaseStudyPage(props: PageProps) {
+  const params = await props.params;
   const caseStudy = await getCaseStudy(params.slug)
 
   if (!caseStudy) {

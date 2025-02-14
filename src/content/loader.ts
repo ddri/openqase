@@ -1,21 +1,13 @@
+// content/loader.ts
 import { promises as fs } from 'fs';
 import path from 'path';
-import type { BaseContent, ContentType, Persona, Industry, Algorithm, CaseStudy } from '@/types';
+import { BaseContent, ContentType } from './types';
 
 const CONTENT_DIR = path.join(process.cwd(), 'content');
 
-type ContentTypeMap = {
-  'persona': Persona;
-  'industry': Industry;
-  'algorithm': Algorithm;
-  'case-study': CaseStudy;
-}
-
-export async function loadContentByType<T extends ContentType>(
-  type: T
-): Promise<Record<string, ContentTypeMap[T]>> {
+export async function loadContentByType(type: ContentType): Promise<Record<string, BaseContent>> {
   const contentPath = path.join(CONTENT_DIR, type);
-  const contentMap: Record<string, ContentTypeMap[T]> = {};
+  const contentMap: Record<string, BaseContent> = {};
 
   try {
     const files = await fs.readdir(contentPath);
@@ -36,7 +28,12 @@ export async function loadContentByType<T extends ContentType>(
   }
 }
 
-export async function loadAllContent() {
+export async function loadAllContent(): Promise<{
+  personas: Record<string, BaseContent>;
+  industries: Record<string, BaseContent>;
+  algorithms: Record<string, BaseContent>;
+  caseStudies: Record<string, BaseContent>;
+}> {
   const [personas, industries, algorithms, caseStudies] = await Promise.all([
     loadContentByType('persona'),
     loadContentByType('industry'),
@@ -52,10 +49,7 @@ export async function loadAllContent() {
   };
 }
 
-export async function loadContentBySlug<T extends ContentType>(
-  type: T,
-  slug: string
-): Promise<ContentTypeMap[T] | null> {
+export async function loadContentBySlug(type: ContentType, slug: string): Promise<BaseContent | null> {
   const contentMap = await loadContentByType(type);
   return contentMap[slug] || null;
 }

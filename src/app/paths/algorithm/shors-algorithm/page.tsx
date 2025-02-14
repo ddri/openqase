@@ -3,24 +3,24 @@ import type { Metadata } from 'next'
 import { Badge } from "@/components/ui/badge"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Card } from "@/components/ui/card"
-import { readFileSync } from 'fs'
-import path from 'path'
-import { Algorithm, CaseStudy } from '@/content/types'
+import { loadContentBySlug, loadContentByType } from '@/content/loader'
+import type { Algorithm, CaseStudy } from '@/types'
 
 // Load content at build time
-const getAlgorithmContent = (): Algorithm => {
-  const filePath = path.join(process.cwd(), 'content', 'algorithm', 'shors-algorithm.json')
-  const fileContent = readFileSync(filePath, 'utf-8')
-  return JSON.parse(fileContent)
+async function getAlgorithmContent(slug: string): Promise<Algorithm> {
+  const algorithm = await loadContentBySlug('algorithm', slug)
+  if (!algorithm) {
+    throw new Error(`Algorithm ${slug} not found`)
+  }
+  return algorithm as Algorithm
 }
 
 // Load related case studies
-const getRelatedCaseStudies = (ids: string[]): CaseStudy[] => {
-  return ids.map(id => {
-    const filePath = path.join(process.cwd(), 'content', 'case-study', `${id}.json`)
-    const fileContent = readFileSync(filePath, 'utf-8')
-    return JSON.parse(fileContent)
-  })
+async function getRelatedCaseStudies(ids: string[]): Promise<CaseStudy[]> {
+  const caseStudies = await Promise.all(
+    ids.map(async (id) => await loadContentBySlug('case-study', id))
+  )
+  return caseStudies.filter((study): study is CaseStudy => study !== null)
 }
 
 // Generate metadata for the page
@@ -37,9 +37,9 @@ export const metadata: Metadata = {
   ]
 }
 
-export default function ShorsAlgorithm() {
-  const algorithm = getAlgorithmContent()
-  const caseStudies = getRelatedCaseStudies(algorithm.relatedCaseStudies)
+export default async function ShorsAlgorithm() {
+  const algorithm = await getAlgorithmContent('shors-algorithm')
+  const caseStudies = await getRelatedCaseStudies(algorithm.relatedCaseStudies)
 
   return (
     <main className="min-h-screen bg-[#0C0C0D] p-8">
@@ -89,7 +89,7 @@ export default function ShorsAlgorithm() {
                 <section>
                   <h2 className="text-xl font-semibold text-gray-100 mb-4">Prerequisites</h2>
                   <ul className="list-disc list-inside space-y-2">
-                    {algorithm.prerequisites.map((item) => (
+                    {algorithm.prerequisites.map((item: string) => (
                       <li key={item} className="text-gray-300">{item}</li>
                     ))}
                   </ul>
@@ -98,7 +98,7 @@ export default function ShorsAlgorithm() {
                 <section>
                   <h2 className="text-xl font-semibold text-gray-100 mb-4">Applications</h2>
                   <ul className="list-disc list-inside space-y-2">
-                    {algorithm.applications.map((item) => (
+                    {algorithm.applications.map((item: string) => (
                       <li key={item} className="text-gray-300">{item}</li>
                     ))}
                   </ul>
@@ -121,7 +121,7 @@ export default function ShorsAlgorithm() {
                     <h3 className="font-medium text-gray-100 mb-2">{study.title}</h3>
                     <p className="text-sm text-gray-400">{study.description}</p>
                     <div className="mt-3 flex flex-wrap gap-2">
-                      {study.tags.map((tag) => (
+                      {study.tags.map((tag: string) => (
                         <span 
                           key={tag}
                           className="text-[10px] px-1.5 py-0.5 bg-gray-800 text-gray-300 rounded-full"

@@ -1,27 +1,54 @@
-import { promises as fs } from 'fs'
-import path from 'path'
+import { Card } from "@/components/ui/card"
+import { Badge } from "@/components/ui/badge"
 import Link from 'next/link'
-import { CaseStudy } from '@/content/types'
+import type { CaseStudy } from '@/types'
 
-// Load all case studies at build time
-async function getCaseStudies(): Promise<CaseStudy[]> {
-  const contentDir = path.join(process.cwd(), 'content', 'case-study')
-  const files = await fs.readdir(contentDir)
-  
-  const caseStudies = await Promise.all(
-    files
-      .filter(file => file.endsWith('.json'))
-      .map(async file => {
-        const content = await fs.readFile(path.join(contentDir, file), 'utf-8')
-        return JSON.parse(content) as CaseStudy
-      })
-  )
+const caseStudies: CaseStudy[] = [
+  {
+    id: '1',
+    title: 'Portfolio Optimization at Goldman Sachs',
+    slug: 'goldman-portfolio-optimization',
+    description: 'How Goldman Sachs implemented quantum algorithms for portfolio optimization, achieving better risk-adjusted returns.',
+    content: '',
+    personas: ['financial-analyst', 'quant-researcher'],
+    industries: ['finance', 'investment'],
+    algorithms: ['qaoa'],
+    tags: ['finance', 'optimization', 'QAOA'],
+    difficulty: 'Advanced',
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString()
+  },
+  {
+    id: '2',
+    title: "Volkswagen's Traffic Flow Optimization",
+    slug: 'volkswagen-traffic-optimization',
+    description: 'Volkswagen\'s implementation of quantum computing for optimizing traffic flow in major cities.',
+    content: '',
+    personas: ['engineer', 'researcher'],
+    industries: ['automotive', 'smart-cities'],
+    algorithms: ['qaoa'],
+    tags: ['automotive', 'optimization', 'smart-cities'],
+    difficulty: 'Intermediate',
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString()
+  },
+  {
+    id: '3',
+    title: "Merck's Drug Discovery Breakthrough",
+    slug: 'merck-molecular-simulation',
+    description: 'How Merck accelerated drug discovery using quantum computing for molecular simulation.',
+    content: '',
+    personas: ['researcher', 'chemist'],
+    industries: ['pharmaceutical', 'healthcare'],
+    algorithms: ['vqe'],
+    tags: ['pharmaceutical', 'chemistry', 'VQE'],
+    difficulty: 'Advanced',
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString()
+  }
+]
 
-  // Sort case studies by ID to maintain consistent order
-  return caseStudies.sort((a, b) => parseInt(a.id) - parseInt(b.id))
-}
-
-const getDifficultyStyle = (difficulty: string) => {
+const getDifficultyStyle = (difficulty: CaseStudy['difficulty']): string => {
   switch(difficulty) {
     case 'Advanced':
       return 'bg-red-900/60 text-red-200'
@@ -32,9 +59,7 @@ const getDifficultyStyle = (difficulty: string) => {
   }
 }
 
-export default async function CaseStudies() {
-  const caseStudies = await getCaseStudies()
-
+export default function CaseStudies() {
   return (
     <main className="min-h-screen bg-[#0C0C0D] p-8">
       <div className="max-w-6xl mx-auto">

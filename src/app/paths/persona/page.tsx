@@ -1,9 +1,9 @@
+// src/app/paths/persona/page.tsx
 import { promises as fs } from 'fs'
 import path from 'path'
 import ContentCard from '@/components/ContentCard'
-import { Persona } from '@/content/types'
+import type { Persona } from '@/types'
 
-// Load all persona content at build time
 async function getPersonas(): Promise<Persona[]> {
   const contentDir = path.join(process.cwd(), 'content', 'persona')
   const files = await fs.readdir(contentDir)
@@ -17,7 +17,6 @@ async function getPersonas(): Promise<Persona[]> {
       })
   )
 
-  // Sort personas by ID to maintain consistent order
   return personas.sort((a, b) => parseInt(a.id) - parseInt(b.id))
 }
 
@@ -25,10 +24,14 @@ export default async function PersonaPath() {
   const personas = await getPersonas()
 
   return (
-    <main className="min-h-screen bg-[#0C0C0D] p-8">
+    <main className="min-h-screen bg-background p-8">
       <div className="max-w-7xl mx-auto">
-        <h1 className="text-4xl font-bold mb-4 text-gray-100">Persona path</h1>
-        <p className="text-gray-400 mb-8">Find case studies relevant to your role</p>
+        <h1 className="text-4xl font-bold mb-4 text-text-primary">
+          Persona path
+        </h1>
+        <p className="text-text-secondary mb-8">
+          Find case studies relevant to your role
+        </p>
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {personas.map((persona) => (

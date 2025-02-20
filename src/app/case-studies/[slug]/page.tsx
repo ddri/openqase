@@ -1,76 +1,40 @@
-import { promises as fs } from 'fs'
-import path from 'path'
 import Link from 'next/link'
-import type { Metadata } from 'next'
-import { notFound } from 'next/navigation'
 import { Badge } from "@/components/ui/badge"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Card } from "@/components/ui/card"
-import { CaseStudy, Algorithm, Persona } from '@/content/types'
+import type { CaseStudy } from '@/types'
 
 interface PageProps {
-  params: Promise<{ slug: string }>
+  params: Promise<{
+    slug: string
+  }>
 }
 
-// Get all possible case study slugs for static paths
-export async function generateStaticParams() {
-  const contentDir = path.join(process.cwd(), 'content', 'case-study')
-  const files = await fs.readdir(contentDir)
-  
-  return files
-    .filter(file => file.endsWith('.json'))
-    .map(file => ({
-      slug: file.replace('.json', '')
-    }))
-}
-
-// Load case study content
-async function getCaseStudy(slug: string): Promise<CaseStudy> {
-  try {
-    const filePath = path.join(process.cwd(), 'content', 'case-study', `${slug}.json`)
-    const content = await fs.readFile(filePath, 'utf-8')
-    return JSON.parse(content)
-  } catch (error) {
-    notFound()
+async function getCaseStudy(slug: string): Promise<CaseStudy | null> {
+  // This would typically fetch from a database
+  // For now returning mock data matching our CaseStudy type
+  const caseStudies: Record<string, CaseStudy> = {
+    'volkswagen-traffic-optimization': {
+      id: '2',
+      title: "Volkswagen's Traffic Flow Optimization",
+      slug: 'volkswagen-traffic-optimization',
+      description: 'Volkswagen\'s implementation of quantum computing for optimizing traffic flow in major cities.',
+      content: 'Full case study content...',
+      personas: ['engineer', 'researcher'],
+      industries: ['automotive', 'smart-cities'],
+      algorithms: ['qaoa'],
+      tags: ['automotive', 'optimization', 'smart-cities'],
+      difficulty: 'Intermediate',
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    },
+    // Add other case studies here...
   }
+
+  return caseStudies[slug] || null
 }
 
-// Load related algorithms
-async function getRelatedAlgorithms(ids: string[]): Promise<Algorithm[]> {
-  const algorithms = await Promise.all(
-    ids.map(async (id) => {
-      try {
-        const filePath = path.join(process.cwd(), 'content', 'algorithm', `${id}.json`)
-        const content = await fs.readFile(filePath, 'utf-8')
-        return JSON.parse(content) as Algorithm
-      } catch {
-        return null
-      }
-    })
-  )
-
-  return algorithms.filter((algo): algo is Algorithm => algo !== null)
-}
-
-// Load related personas
-async function getRelatedPersonas(ids: string[]): Promise<Persona[]> {
-  const personas = await Promise.all(
-    ids.map(async (id) => {
-      try {
-        const filePath = path.join(process.cwd(), 'content', 'persona', `${id}.json`)
-        const content = await fs.readFile(filePath, 'utf-8')
-        return JSON.parse(content) as Persona
-      } catch {
-        return null
-      }
-    })
-  )
-
-  return personas.filter((persona): persona is Persona => persona !== null)
-}
-
-// Get difficulty style
-const getDifficultyStyle = (difficulty: string) => {
+const getDifficultyStyle = (difficulty: CaseStudy['difficulty']): string => {
   switch(difficulty) {
     case 'Advanced':
       return 'bg-red-900/60 text-red-200'
@@ -81,31 +45,29 @@ const getDifficultyStyle = (difficulty: string) => {
   }
 }
 
-// Generate metadata for SEO
-export async function generateMetadata(props: PageProps): Promise<Metadata> {
-  const params = await props.params;
-  const caseStudy = await getCaseStudy(params.slug)
-
-  return {
-    title: `${caseStudy.title} | OpenQase Case Studies`,
-    description: caseStudy.description,
-    keywords: [
-      'quantum computing',
-      'case study',
-      ...caseStudy.industries,
-      ...caseStudy.tags
-    ]
-  }
-}
-
 export default async function CaseStudyPage(props: PageProps) {
   const params = await props.params;
   const caseStudy = await getCaseStudy(params.slug)
-  const algorithms = await getRelatedAlgorithms(caseStudy.algorithms)
-  const personas = await getRelatedPersonas(caseStudy.personas)
+
+  if (!caseStudy) {
+    // Handle 404 case
+    return (
+      <main className="min-h-screen bg-[#0C0C0D] p-8">
+        <div className="max-w-6xl mx-auto">
+          <h1 className="text-4xl font-bold text-white mb-4">Case Study Not Found</h1>
+          <Link 
+            href="/case-studies"
+            className="text-gray-400 hover:text-copper transition-colors"
+          >
+            ← Back to Case Studies
+          </Link>
+        </div>
+      </main>
+    )
+  }
 
   return (
-    (<main className="min-h-screen bg-[#0C0C0D] p-8">
+    <main className="min-h-screen bg-[#0C0C0D] p-8">
       <div className="max-w-6xl mx-auto">
         {/* Navigation */}
         <div className="mb-8">
@@ -150,63 +112,24 @@ export default async function CaseStudyPage(props: PageProps) {
               <TabsContent value="overview" className="space-y-6 mt-6">
                 <section>
                   <h2 className="text-2xl font-semibold text-white mb-4">Project Overview</h2>
-                  <p className="text-gray-300">{caseStudy.content}</p>
+                  <p className="text-gray-300">{caseStudy.description}</p>
                 </section>
 
                 <section>
-                  <h2 className="text-2xl font-semibold text-white mb-4">Industry Context</h2>
-                  <div className="space-y-4">
-                    <p className="text-gray-300">
-                      This case study demonstrates quantum computing applications in:
-                    </p>
-                    <ul className="list-disc list-inside text-gray-300 space-y-2">
-                      {caseStudy.industries.map((industry) => (
-                        <li key={industry}>{industry}</li>
-                      ))}
-                    </ul>
-                  </div>
+                  <h2 className="text-2xl font-semibold text-white mb-4">Challenge</h2>
+                  <p className="text-gray-300">
+                    {/* Challenge content would come from caseStudy.content, properly structured */}
+                    Content to be structured from database...
+                  </p>
                 </section>
               </TabsContent>
 
               <TabsContent value="technical" className="space-y-6 mt-6">
-                <section>
-                  <h2 className="text-2xl font-semibold text-white mb-4">Technical Implementation</h2>
-                  <div className="space-y-4">
-                    <Card className="bg-gray-900/50 border-gray-800 p-6">
-                      <h3 className="text-lg font-semibold text-white mb-3">Related Algorithms</h3>
-                      <ul className="list-disc list-inside text-gray-300 space-y-2">
-                        {algorithms.map((algorithm) => (
-                          <li key={algorithm.id}>
-                            <Link 
-                              href={`/paths/algorithm/${algorithm.slug}`}
-                              className="hover:text-copper transition-colors"
-                            >
-                              {algorithm.title}
-                            </Link>
-                          </li>
-                        ))}
-                      </ul>
-                    </Card>
-                  </div>
-                </section>
+                {/* Technical content sections */}
               </TabsContent>
 
               <TabsContent value="impact" className="space-y-6 mt-6">
-                <section>
-                  <h2 className="text-2xl font-semibold text-white mb-4">Results & Impact</h2>
-                  {caseStudy.metrics && (
-                    <div className="grid grid-cols-2 gap-4 mb-6">
-                      {Object.entries(caseStudy.metrics).map(([key, value]) => (
-                        <Card key={key} className="bg-gray-900/50 border-gray-800 p-6">
-                          <h3 className="text-lg font-semibold text-copper mb-2">
-                            {key.split(/(?=[A-Z])/).join(' ')}
-                          </h3>
-                          <p className="text-4xl font-bold text-white">{value}</p>
-                        </Card>
-                      ))}
-                    </div>
-                  )}
-                </section>
+                {/* Impact content sections */}
               </TabsContent>
             </Tabs>
           </div>
@@ -214,36 +137,28 @@ export default async function CaseStudyPage(props: PageProps) {
           {/* Sidebar */}
           <div className="col-span-1">
             <div className="bg-[#1A1A1D] rounded-lg border border-gray-800 p-6 space-y-6 sticky top-8">
-              {caseStudy.technologies && (
-                <div>
-                  <h3 className="text-lg font-semibold text-white mb-2">Technologies Used</h3>
-                  <ul className="space-y-2 text-gray-300">
-                    {caseStudy.technologies.map((tech) => (
-                      <li key={tech}>• {tech}</li>
-                    ))}
-                  </ul>
-                </div>
-              )}
+              <div>
+                <h3 className="text-lg font-semibold text-white mb-2">Related Algorithms</h3>
+                <ul className="space-y-2 text-gray-300">
+                  {caseStudy.algorithms.map(algo => (
+                    <li key={algo}>• {algo}</li>
+                  ))}
+                </ul>
+              </div>
 
               <div>
-                <h3 className="text-lg font-semibold text-white mb-2">Relevant For</h3>
-                <div className="space-y-2">
-                  {personas.map((persona) => (
-                    <Link
-                      key={persona.id}
-                      href={`/paths/persona/${persona.slug}`}
-                      className="block p-2 bg-gray-900 rounded hover:bg-gray-800 transition-colors"
-                    >
-                      <span className="text-gray-300">{persona.title}</span>
-                    </Link>
+                <h3 className="text-lg font-semibold text-white mb-2">Industries</h3>
+                <ul className="space-y-2 text-gray-300">
+                  {caseStudy.industries.map(industry => (
+                    <li key={industry}>• {industry}</li>
                   ))}
-                </div>
+                </ul>
               </div>
 
               <div>
                 <h3 className="text-lg font-semibold text-white mb-2">Related Topics</h3>
                 <div className="flex flex-wrap gap-2">
-                  {caseStudy.tags.map((tag) => (
+                  {caseStudy.tags.map(tag => (
                     <Badge 
                       key={tag}
                       className="bg-gray-900 text-gray-300 hover:bg-gray-800"
@@ -257,6 +172,6 @@ export default async function CaseStudyPage(props: PageProps) {
           </div>
         </div>
       </div>
-    </main>)
-  );
+    </main>
+  )
 }

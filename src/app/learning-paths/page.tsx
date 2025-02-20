@@ -1,12 +1,14 @@
-// src/app/learning-path/page.tsx
+// src/app/learning-paths/page.tsx
 import PathCard from '@/components/PathCard'
 
-export default function LearningPath() {
+export default function LearningPaths() {
   return (
-    <main className="min-h-screen bg-[#0C0C0D] p-8">
+    <main className="min-h-screen bg-background p-8">
       <div className="max-w-7xl mx-auto">
-        <h1 className="text-4xl font-bold text-white mb-4">Learning path</h1>
-        <p className="text-gray-400 mb-12">Choose your path to explore quantum computing case studies</p>
+        <h1 className="text-4xl font-bold text-text-primary mb-4">Learning paths</h1>
+        <p className="text-text-secondary mb-12">
+          Choose your path to explore quantum computing case studies
+        </p>
         
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <PathCard 

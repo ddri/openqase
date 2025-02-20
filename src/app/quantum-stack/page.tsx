@@ -3,18 +3,7 @@
 
 import { useState } from 'react'
 import { Card } from '@/components/ui/card'
-import CardPixelPattern from '@/components/CardPixelPattern'
-
-interface StackItem {
-  id: string
-  title: string
-  description: string
-  details: {
-    overview: string
-    examples?: string[]
-    additionalInfo?: string
-  }
-}
+import type { StackItem } from '@/types'
 
 const stackItems: StackItem[] = [
   {
@@ -128,25 +117,31 @@ export default function QuantumStack() {
   const [selectedItem, setSelectedItem] = useState<StackItem>(stackItems[0])
 
   return (
-    <main className="min-h-screen bg-[#0C0C0D] p-8">
+    <main className="min-h-screen bg-background p-8">
       <div className="max-w-7xl mx-auto">
-        <h1 className="text-4xl font-bold text-white mb-4">Quantum Stack</h1>
-        <p className="text-gray-400 mb-12">Understanding the quantum computing technology stack</p>
+        <h1 className="text-4xl font-bold text-text-primary mb-4">
+          Quantum Stack
+        </h1>
+        <p className="text-text-secondary mb-12">
+          Understanding the quantum computing technology stack
+        </p>
 
         <div className="grid grid-cols-12 gap-8">
           {/* Left Column - Stack Navigation */}
-          <div className="col-span-4">
-            <Card className="bg-[#1A1A1D] border-gray-800 p-4">
+          <div className="col-span-12 md:col-span-4">
+            <Card className="bg-surface-primary border-card-border p-4">
               <div className="space-y-2">
                 {stackItems.map((item) => (
                   <button
                     key={item.id}
                     onClick={() => setSelectedItem(item)}
-                    className={`w-full p-4 rounded-lg text-left transition-all duration-300
+                    className={`
+                      w-full p-4 rounded-lg text-left transition-all duration-300
                       ${selectedItem.id === item.id 
-                        ? 'bg-copper/20 text-white border border-copper/40' 
-                        : 'bg-gray-900/50 text-gray-400 hover:bg-gray-900 hover:text-gray-300 border border-transparent'
-                      }`}
+                        ? 'bg-accent/10 text-text-primary border border-accent/40' 
+                        : 'bg-surface-secondary text-text-secondary hover:bg-accent/5 hover:text-text-primary border border-transparent'
+                      }
+                    `}
                   >
                     {item.title}
                   </button>
@@ -156,30 +151,34 @@ export default function QuantumStack() {
           </div>
 
           {/* Right Column - Content */}
-          <div className="col-span-8">
-            <Card className="bg-[#1A1A1D] border-gray-800 p-6">
-              <h2 className="text-2xl font-bold text-white mb-2">
+          <div className="col-span-12 md:col-span-8">
+            <Card className="bg-surface-primary border-card-border p-6">
+              <h2 className="text-2xl font-bold text-text-primary mb-2">
                 {selectedItem.title}
               </h2>
-              <h3 className="text-lg text-copper mb-4">
+              <h3 className="text-lg text-accent mb-4">
                 {selectedItem.description}
               </h3>
               <div className="space-y-4">
-                <p className="text-gray-300">
+                <p className="text-text-secondary">
                   {selectedItem.details.overview}
                 </p>
                 {selectedItem.details.examples && (
                   <div className="mt-4">
-                    <h4 className="text-white font-semibold mb-2">Common examples:</h4>
+                    <h4 className="text-text-primary font-semibold mb-2">
+                      Common examples:
+                    </h4>
                     <ul className="list-disc list-inside space-y-1">
                       {selectedItem.details.examples.map((example) => (
-                        <li key={example} className="text-gray-300">{example}</li>
+                        <li key={example} className="text-text-secondary">
+                          {example}
+                        </li>
                       ))}
                     </ul>
                   </div>
                 )}
                 {selectedItem.details.additionalInfo && (
-                  <p className="text-gray-300 mt-4">
+                  <p className="text-text-secondary mt-4">
                     {selectedItem.details.additionalInfo}
                   </p>
                 )}

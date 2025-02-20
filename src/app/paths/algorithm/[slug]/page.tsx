@@ -1,38 +1,23 @@
-import { promises as fs } from 'fs'
-import path from 'path'
 import Link from 'next/link'
 import type { Metadata } from 'next'
-import { notFound } from 'next/navigation'
 import { Badge } from "@/components/ui/badge"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Card } from "@/components/ui/card"
-import { Algorithm, CaseStudy } from '@/content/types'
+import { promises as fs } from 'fs'
+import path from 'path'
+import type { Algorithm, CaseStudy } from '@/types'
 
 interface PageProps {
-  params: Promise<{ slug: string }>
+  params: Promise<{
+    slug: string
+  }>
 }
 
-// Get all possible algorithm slugs for static paths
-export async function generateStaticParams() {
-  const contentDir = path.join(process.cwd(), 'content', 'algorithm')
-  const files = await fs.readdir(contentDir)
-  
-  return files
-    .filter(file => file.endsWith('.json'))
-    .map(file => ({
-      slug: file.replace('.json', '')
-    }))
-}
-
-// Load algorithm content
-async function getAlgorithm(slug: string): Promise<Algorithm> {
-  try {
-    const filePath = path.join(process.cwd(), 'content', 'algorithm', `${slug}.json`)
-    const content = await fs.readFile(filePath, 'utf-8')
-    return JSON.parse(content)
-  } catch (error) {
-    notFound()
-  }
+// Load content at build time
+async function getAlgorithmContent(slug: string): Promise<Algorithm> {
+  const filePath = path.join(process.cwd(), 'content', 'algorithm', `${slug}.json`)
+  const fileContent = await fs.readFile(filePath, 'utf-8')
+  return JSON.parse(fileContent)
 }
 
 // Load related case studies
@@ -41,8 +26,8 @@ async function getRelatedCaseStudies(ids: string[]): Promise<CaseStudy[]> {
     ids.map(async (id) => {
       try {
         const filePath = path.join(process.cwd(), 'content', 'case-study', `${id}.json`)
-        const content = await fs.readFile(filePath, 'utf-8')
-        return JSON.parse(content) as CaseStudy
+        const fileContent = await fs.readFile(filePath, 'utf-8')
+        return JSON.parse(fileContent) as CaseStudy
       } catch {
         return null
       }
@@ -52,25 +37,25 @@ async function getRelatedCaseStudies(ids: string[]): Promise<CaseStudy[]> {
   return caseStudies.filter((study): study is CaseStudy => study !== null)
 }
 
-// Generate metadata for SEO
 export async function generateMetadata(props: PageProps): Promise<Metadata> {
   const params = await props.params;
-  const algorithm = await getAlgorithm(params.slug)
+  const algorithm = await getAlgorithmContent(params.slug)
 
   return {
     title: `${algorithm.title} | OpenQase Quantum Computing`,
     description: algorithm.description,
     keywords: [
+      algorithm.title,
       'quantum computing',
-      algorithm.title.toLowerCase(),
-      ...algorithm.applications.map(app => app.toLowerCase())
+      'quantum algorithms',
+      ...algorithm.applications
     ]
   }
 }
 
 export default async function AlgorithmPage(props: PageProps) {
   const params = await props.params;
-  const algorithm = await getAlgorithm(params.slug)
+  const algorithm = await getAlgorithmContent(params.slug)
   const caseStudies = await getRelatedCaseStudies(algorithm.relatedCaseStudies)
 
   return (
@@ -121,7 +106,7 @@ export default async function AlgorithmPage(props: PageProps) {
                 <section>
                   <h2 className="text-xl font-semibold text-gray-100 mb-4">Prerequisites</h2>
                   <ul className="list-disc list-inside space-y-2">
-                    {algorithm.prerequisites.map((item) => (
+                    {algorithm.prerequisites.map((item: string) => (
                       <li key={item} className="text-gray-300">{item}</li>
                     ))}
                   </ul>
@@ -130,7 +115,7 @@ export default async function AlgorithmPage(props: PageProps) {
                 <section>
                   <h2 className="text-xl font-semibold text-gray-100 mb-4">Applications</h2>
                   <ul className="list-disc list-inside space-y-2">
-                    {algorithm.applications.map((item) => (
+                    {algorithm.applications.map((item: string) => (
                       <li key={item} className="text-gray-300">{item}</li>
                     ))}
                   </ul>
@@ -153,7 +138,7 @@ export default async function AlgorithmPage(props: PageProps) {
                     <h3 className="font-medium text-gray-100 mb-2">{study.title}</h3>
                     <p className="text-sm text-gray-400">{study.description}</p>
                     <div className="mt-3 flex flex-wrap gap-2">
-                      {study.tags.map((tag) => (
+                      {study.tags.map((tag: string) => (
                         <span 
                           key={tag}
                           className="text-[10px] px-1.5 py-0.5 bg-gray-800 text-gray-300 rounded-full"

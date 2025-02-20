@@ -1,5 +1,6 @@
-// src/app/page.tsx
+// File: src/app/page.tsx
 import PixelGradient from '@/components/PixelGradient'
+import InteractiveJourney from '@/components/journey/InteractiveJourney'
 
 export default function Home() {
   return (
@@ -18,6 +19,9 @@ export default function Home() {
                 Your comprehensive resource for quantum computing case studies, learning paths, and industry applications.
               </p>
             </div>
+            
+            {/* Journey Diagram */}
+            <InteractiveJourney />
           </div>
         </section>
 

@@ -1,56 +1,47 @@
-// src/components/Navigation.tsx
-import Link from 'next/link'
-import { ThemeSwitcher } from './ThemeSwitcher'
+// File: src/components/Navigation.tsx
+'use client';
 
-export default function Navigation() {
+import React from 'react';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import { cn } from '@/lib/utils';
+
+const Navigation = () => {
+  const pathname = usePathname();
+
+  const navItems = [
+    { label: 'openQase', href: '/' },
+    { label: 'Learning Paths', href: '/learning-paths' },
+    { label: 'Case Studies', href: '/case-studies' },
+    { label: 'Quantum Stack', href: '/quantum-stack' }
+  ];
+
   return (
-    <nav className="border-b border-card-border bg-background/80 backdrop-blur-sm sticky top-0 z-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between h-16">
-          <div className="flex items-center">
-            <Link href="/" className="text-text-primary font-semibold text-lg">
-              openQase
+    <nav className="w-full border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+      <div className="container flex h-16 items-center px-4">
+        <div className="flex gap-6 md:gap-10">
+          {navItems.map((item, index) => (
+            <Link
+              key={item.href}
+              href={item.href}
+              className={cn(
+                'transition-colors hover:text-foreground/80',
+                // First item (openQase) gets different styling
+                index === 0 
+                  ? 'font-bold text-lg'
+                  : 'text-foreground/60',
+                pathname === item.href
+                  ? 'text-foreground'
+                  : 'text-foreground/60',
+              )}
+            >
+              {item.label}
             </Link>
-            
-            <div className="hidden sm:ml-8 sm:flex sm:space-x-6">
-              <Link 
-                href="/learning-path"
-                className="text-text-secondary hover:text-accent transition-colors px-3 py-2"
-              >
-                Learning Path
-              </Link>
-              <Link 
-                href="/paths/persona"
-                className="text-text-secondary hover:text-accent transition-colors px-3 py-2"
-              >
-                Persona
-              </Link>
-              <Link 
-                href="/paths/industry"
-                className="text-text-secondary hover:text-accent transition-colors px-3 py-2"
-              >
-                Industry
-              </Link>
-              <Link 
-                href="/paths/algorithm"
-                className="text-text-secondary hover:text-accent transition-colors px-3 py-2"
-              >
-                Algorithm
-              </Link>
-              <Link 
-                href="/quantum-stack"
-                className="text-text-secondary hover:text-accent transition-colors px-3 py-2"
-              >
-                Quantum Stack
-              </Link>
-            </div>
-          </div>
-          
-          <div className="flex items-center">
-            <ThemeSwitcher />
-          </div>
+          ))}
         </div>
       </div>
     </nav>
-  )
-}
+  );
+};
+
+export default Navigation;

@@ -48,3 +48,15 @@ export interface CaseStudy extends BaseContent {
   difficulty: 'Beginner' | 'Intermediate' | 'Advanced';
   tags: string[];
 }
+
+// Quantum Stack item type
+export interface StackItem {
+  id: string;
+  title: string;
+  description: string;
+  details: {
+    overview: string;
+    examples?: string[];
+    additionalInfo?: string;
+  };
+}

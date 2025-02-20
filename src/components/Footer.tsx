@@ -65,7 +65,7 @@ export default function Footer() {
               </li>
               <li>
                 <Link 
-                  href="https://github.com/your-repo/openqase/blob/main/CONTRIBUTING.md"
+                  href="https://github.com/ddri/openqase/blob/themes/CONTRIBUTING.md"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-text-secondary hover:text-accent transition-colors"

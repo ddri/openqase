@@ -55,7 +55,7 @@ export default function Footer() {
             <ul className="space-y-2">
               <li>
                 <Link 
-                  href="https://github.com/your-repo/openqase"
+                  href="https://github.com/ddri/openqase"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-text-secondary hover:text-accent transition-colors"

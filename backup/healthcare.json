@@ -1,0 +1,20 @@
+{
+    "id": "2",
+    "title": "Healthcare",
+    "slug": "healthcare",
+    "description": "Applications of quantum computing in financial services, from portfolio optimization to risk analysis",
+    "type": "Technical",
+    "sector": "Financial Services",
+    "keyApplications": [
+      "Portfolio Optimization",
+      "Risk Analysis",
+      "Trading Strategy Optimization",
+      "Fraud Detection",
+      "Asset Pricing"
+    ],
+    "relatedCaseStudies": [
+      "goldman-portfolio-optimization"
+    ],
+    "createdAt": "2024-02-13T00:00:00Z",
+    "updatedAt": "2024-02-13T00:00:00Z"
+  }

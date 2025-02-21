@@ -1,0 +1,56 @@
+// lib/mdx.ts
+import { promises as fs } from 'fs';
+import path from 'path';
+import matter from 'gray-matter';
+import { serialize } from 'next-mdx-remote/serialize';
+import remarkGfm from 'remark-gfm';
+import rehypePrismPlus from 'rehype-prism-plus';
+
+export async function getContentBySlug(type: string, slug: string) {
+  const contentDirectory = path.join(process.cwd(), 'content', type);
+  const fullPath = path.join(contentDirectory, `${slug}.mdx`);
+  const fileContents = await fs.readFile(fullPath, 'utf8');
+
+  // Parse the frontmatter and content
+  const { data, content } = matter(fileContents);
+
+  const mdxSource = await serialize(content, {
+    mdxOptions: {
+      remarkPlugins: [remarkGfm],
+      rehypePlugins: [rehypePrismPlus],
+    },
+    scope: data,
+  });
+
+  return {
+    source: mdxSource,
+    frontmatter: data,
+  };
+}
+
+export async function getAllContent(type: string) {
+  const contentDirectory = path.join(process.cwd(), 'content', type);
+  const files = await fs.readdir(contentDirectory);
+
+  const content = await Promise.all(
+    files
+      .filter(file => file.endsWith('.mdx'))
+      .map(async (file) => {
+        const source = await getContentBySlug(type, file.replace(/\.mdx$/, ''));
+        return {
+          slug: file.replace(/\.mdx$/, ''),
+          ...source,
+        };
+      })
+  );
+
+  return content.sort((a, b) => {
+    // Sort by date if available, otherwise by title
+    const dateA = a.frontmatter.lastUpdated;
+    const dateB = b.frontmatter.lastUpdated;
+    if (dateA && dateB) {
+      return new Date(dateB).getTime() - new Date(dateA).getTime();
+    }
+    return a.frontmatter.title.localeCompare(b.frontmatter.title);
+  });
+}

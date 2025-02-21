@@ -12,18 +12,18 @@ export default function LearningPaths() {
         
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <PathCard 
-            title="Persona" 
-            path="persona"
+            title="Personas" 
+            path="personas"
             description="Find case studies relevant to your role and professional background"
           />
           <PathCard 
             title="Industry path" 
-            path="industry"
+            path="industries"
             description="Explore quantum computing applications in your sector"
           />
           <PathCard 
             title="Algorithm path" 
-            path="algorithm"
+            path="algorithms"
             description="Learn about specific quantum algorithms and their implementations"
           />
         </div>

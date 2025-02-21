@@ -30,7 +30,7 @@ const PathDiagram = () => {
         />
 
         {/* Persona Path - Moved left */}
-        <Link href="/paths/persona">
+        <Link href="/paths/personas">
           <rect 
             x="150" 
             y="250"
@@ -54,7 +54,7 @@ const PathDiagram = () => {
         </Link>
 
         {/* Industry Path - Centered */}
-        <Link href="/paths/industry">
+        <Link href="/paths/industries">
           <rect 
             x="550" 
             y="250" 
@@ -78,7 +78,7 @@ const PathDiagram = () => {
         </Link>
 
         {/* Algorithm Path - Moved right */}
-        <Link href="/paths/algorithm">
+        <Link href="/paths/algorithms">
           <rect 
             x="950" 
             y="250" 

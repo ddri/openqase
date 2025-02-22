@@ -1,71 +1,70 @@
-// src/app/paths/algorithm/page.tsx
-import { promises as fs } from 'fs'
-import path from 'path'
-import ContentCard from '@/components/ContentCard'
-import type { Algorithm } from '@/types'
+// src/app/paths/algorithms/page.tsx
+import { promises as fs } from 'fs';
+import path from 'path';
+import matter from 'gray-matter';
+import { Card, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import Link from 'next/link';
 
-async function getAlgorithms(): Promise<Algorithm[]> {
-  try {
-    const contentDir = path.join(process.cwd(), 'content', 'algorithm')
-    const files = await fs.readdir(contentDir)
-    
-    const algorithms = await Promise.all(
-      files
-        .filter(file => file.endsWith('.json'))
-        .map(async file => {
-          const content = await fs.readFile(path.join(contentDir, file), 'utf-8')
-          return JSON.parse(content) as Algorithm
-        })
-    )
+async function getAlgorithms() {
+  const contentDirectory = path.join(process.cwd(), 'content', 'algorithms');
+  const files = await fs.readdir(contentDirectory);
+  
+  const algorithms = await Promise.all(
+    files
+      .filter(file => file.endsWith('.mdx'))
+      .map(async file => {
+        const fullPath = path.join(contentDirectory, file);
+        const fileContents = await fs.readFile(fullPath, 'utf8');
+        const { data } = matter(fileContents);
+        return {
+          ...data,
+          slug: file.replace('.mdx', ''),
+        };
+      })
+  );
 
-    return algorithms.sort((a, b) => parseInt(a.id) - parseInt(b.id))
-  } catch (error) {
-    // Fallback data
-    return [
-      {
-        id: '1',
-        title: 'Shor\'s Algorithm',
-        slug: 'shors-algorithm',
-        type: 'Technical',
-        description: 'Integer factorization algorithm with applications in cryptography and RSA breaking'
-      },
-      {
-        id: '2',
-        title: 'Grover\'s Algorithm',
-        slug: 'grovers-algorithm',
-        type: 'Technical',
-        description: 'Quantum search algorithm for unstructured databases with quadratic speedup'
-      }
-    ] as Algorithm[]
-  }
+  return algorithms;
 }
 
-export default async function AlgorithmPath() {
-  const algorithms = await getAlgorithms()
+export default async function AlgorithmsPage() {
+  const algorithms = await getAlgorithms();
 
   return (
-    <main className="min-h-screen bg-background p-8">
+    <main className="min-h-screen bg-[#0C0C0D] p-8">
       <div className="max-w-7xl mx-auto">
-        <h1 className="text-4xl font-bold mb-4 text-text-primary">
-          Algorithm path
-        </h1>
-        <p className="text-text-secondary mb-8">
-          Learn about specific quantum algorithms
+        <h1 className="text-4xl font-bold text-gray-100 mb-8">Quantum Algorithms</h1>
+        <p className="text-xl text-gray-400 mb-8">
+          Explore quantum algorithms from fundamental protocols to complex applications
         </p>
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {algorithms.map((algorithm) => (
-            <ContentCard
-              key={algorithm.id}
-              title={algorithm.title}
-              type={algorithm.type}
-              path="algorithm"
-              slug={algorithm.slug}
-              description={algorithm.description}
-            />
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {algorithms.map((algorithm: any) => (
+            <Link key={algorithm.slug} href={`/paths/algorithms/${algorithm.slug}`}>
+              <Card className="bg-gray-900 border-gray-800 hover:border-gray-700 transition-all">
+                <CardHeader>
+                  <div className="flex items-center justify-between mb-2">
+                    <Badge>{algorithm.complexity}</Badge>
+                  </div>
+                  <CardTitle className="text-xl mb-2 text-gray-100">
+                    {algorithm.title}
+                  </CardTitle>
+                  <CardDescription className="text-gray-400">
+                    {algorithm.description}
+                  </CardDescription>
+                  <div className="flex flex-wrap gap-2 mt-4">
+                    {algorithm.applications.slice(0, 3).map((app: string) => (
+                      <Badge key={app} variant="outline">
+                        {app}
+                      </Badge>
+                    ))}
+                  </div>
+                </CardHeader>
+              </Card>
+            </Link>
           ))}
         </div>
       </div>
     </main>
-  )
+  );
 }

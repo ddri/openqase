@@ -1,81 +1,128 @@
-// File: src/app/page.tsx
-import PixelGradient from '@/components/PixelGradient'
-import InteractiveJourney from '@/components/journey/InteractiveJourney'
+// src/app/paths/page.tsx
+import { promises as fs } from 'fs';
+import path from 'path';
+import matter from 'gray-matter';
+import { Card, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import Link from 'next/link';
 
-export default function Home() {
-  return (
-    <main className="min-h-screen bg-background relative">
-      <PixelGradient />
-      
-      <div className="relative z-10">
-        {/* Hero Section */}
-        <section className="py-20 px-8">
-          <div className="max-w-7xl mx-auto">
-            <div className="text-center mb-16">
-              <h1 className="text-5xl font-bold text-text-primary mb-6">
-                Welcome to openQase
-              </h1>
-              <p className="text-xl text-text-secondary max-w-3xl mx-auto">
-                Your comprehensive resource for quantum computing case studies, learning paths, and industry applications.
-              </p>
-            </div>
-            
-            {/* Journey Diagram */}
-            <InteractiveJourney />
-          </div>
-        </section>
+async function getContentCounts() {
+  const counts = {
+    personas: 0,
+    industries: 0,
+    algorithms: 0,
+  };
 
-        {/* Features Section */}
-        <section className="py-16 px-8">
-          <div className="max-w-7xl mx-auto">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              {['Learning Paths', 'Case Studies', 'Technology Stack'].map((title) => (
-                <div 
-                  key={title}
-                  className="p-6 bg-card-background backdrop-blur-sm rounded-xl 
-                    border border-card-border hover:border-card-hoverBorder 
-                    hover:bg-card-hoverBackground transition-all duration-300"
-                >
-                  <h3 className="text-xl font-semibold text-text-primary mb-4">
-                    {title}
-                  </h3>
-                  <p className="text-text-secondary">
-                    {getFeatureDescription(title)}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
+  try {
+    const personasDir = path.join(process.cwd(), 'content', 'personas');
+    const industriesDir = path.join(process.cwd(), 'content', 'industries');
+    const algorithmsDir = path.join(process.cwd(), 'content', 'algorithms');
 
-        {/* About Section */}
-        <section className="py-20 px-8">
-          <div className="max-w-7xl mx-auto">
-            <div className="max-w-3xl">
-              <h2 className="text-3xl font-bold text-text-primary mb-6">
-                About openQase
-              </h2>
-              <div className="prose prose-gray max-w-none">
-                <p className="text-text-secondary">
-                  openQase is an open resource platform dedicated to making quantum computing accessible 
-                  and practical for professionals across all industries. We provide curated case studies, 
-                  learning materials, and technical insights to help you understand and apply quantum 
-                  computing in your field.
-                </p>
-              </div>
-            </div>
-          </div>
-        </section>
-      </div>
-    </main>
-  )
+    const [personaFiles, industryFiles, algorithmFiles] = await Promise.all([
+      fs.readdir(personasDir),
+      fs.readdir(industriesDir),
+      fs.readdir(algorithmsDir),
+    ]);
+
+    counts.personas = personaFiles.filter(f => f.endsWith('.mdx')).length;
+    counts.industries = industryFiles.filter(f => f.endsWith('.mdx')).length;
+    counts.algorithms = algorithmFiles.filter(f => f.endsWith('.mdx')).length;
+  } catch (error) {
+    console.error('Error counting content files:', error);
+  }
+
+  return counts;
 }
 
-function getFeatureDescription(title: string): string {
-  const descriptions = {
-    'Learning Paths': 'Explore quantum computing through personalized learning paths tailored to your role and interests.',
-    'Case Studies': 'Discover real-world applications of quantum computing across various industries.',
-    'Technology Stack': 'Understand the complete quantum computing stack from hardware to software.'
-  }
-  return descriptions[title as keyof typeof descriptions]
+export default async function LearningPathsPage() {
+  const counts = await getContentCounts();
+
+  const paths = [
+    {
+      title: "By Persona",
+      description: "Choose your learning path based on your role and experience level",
+      href: "/paths/personas",
+      count: counts.personas,
+      examples: ["Software Engineer", "Financial Analyst", "Research Scientist"],
+      color: "blue"
+    },
+    {
+      title: "By Industry",
+      description: "Explore quantum computing applications in your industry",
+      href: "/paths/industries",
+      count: counts.industries,
+      examples: ["Finance", "Healthcare", "Smart Cities"],
+      color: "green"
+    },
+    {
+      title: "By Algorithm",
+      description: "Learn specific quantum algorithms and their applications",
+      href: "/paths/algorithms",
+      count: counts.algorithms,
+      examples: ["Grover's", "QAOA", "VQE"],
+      color: "purple"
+    }
+  ];
+
+  return (
+    <main className="min-h-screen bg-[#0C0C0D] p-8">
+      <div className="max-w-7xl mx-auto">
+        <div className="text-center mb-16">
+          <h1 className="text-4xl font-bold text-gray-100 mb-6">
+            Choose Your Learning Path
+          </h1>
+          <p className="text-xl text-gray-400 max-w-3xl mx-auto">
+            Explore quantum computing through different perspectives, tailored to your interests and needs
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {paths.map((path) => (
+            <Link key={path.title} href={path.href}>
+              <Card className="bg-gray-900 border-gray-800 hover:border-gray-700 transition-all h-full">
+                <CardHeader>
+                  <div className="flex items-center justify-between mb-4">
+                    <Badge className={`bg-${path.color}-900 text-${path.color}-200`}>
+                      {counts[path.title.toLowerCase().split(' ')[1] as keyof typeof counts]} Paths
+                    </Badge>
+                  </div>
+                  <CardTitle className="text-2xl text-gray-100 mb-4">
+                    {path.title}
+                  </CardTitle>
+                  <CardDescription className="text-gray-400 mb-6">
+                    {path.description}
+                  </CardDescription>
+                  <div className="text-sm text-gray-500">
+                    Examples:
+                    <div className="flex flex-wrap gap-2 mt-2">
+                      {path.examples.map((example) => (
+                        <Badge key={example} variant="outline">
+                          {example}
+                        </Badge>
+                      ))}
+                    </div>
+                  </div>
+                </CardHeader>
+              </Card>
+            </Link>
+          ))}
+        </div>
+
+        <div className="mt-16 p-8 bg-gray-900 border border-gray-800 rounded-lg">
+          <h2 className="text-2xl font-semibold text-gray-100 mb-4">
+            Not Sure Where to Start?
+          </h2>
+          <p className="text-gray-400 mb-6">
+            We recommend starting with the Persona-based learning path to get content tailored to your role and experience level.
+          </p>
+          <Link 
+            href="/paths/personas" 
+            className="inline-block bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg transition-colors"
+          >
+            Explore Personas
+          </Link>
+        </div>
+      </div>
+    </main>
+  );
 }

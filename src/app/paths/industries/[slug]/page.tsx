@@ -8,7 +8,6 @@ import { Badge } from '@/components/ui/badge';
 import { Card } from '@/components/ui/card';
 import Link from 'next/link';
 
-// MDX components with proper styling
 const components = {
   h1: ({ children }: { children: React.ReactNode }) => (
     <h1 className="text-4xl font-bold text-gray-100 mb-6">{children}</h1>
@@ -56,8 +55,15 @@ async function getIndustry(slug: string) {
   }
 }
 
-export default async function IndustryPage({ params }: { params: { slug: string } }) {
-  const industry = await getIndustry(params.slug);
+interface PageProps {
+  params: Promise<{
+    slug: string;
+  }>;
+}
+
+export default async function IndustryPage({ params }: PageProps) {
+  const { slug } = await params;
+  const industry = await getIndustry(slug);
 
   if (!industry) {
     notFound();
@@ -81,10 +87,15 @@ export default async function IndustryPage({ params }: { params: { slug: string 
           {/* Left Column - Industry Card */}
           <div className="col-span-2">
             <Card className="bg-gray-900 border-gray-800">
-              <div className="p-4">
-                <Badge className="mb-2">{frontmatter.type}</Badge>
-                <h2 className="text-sm font-medium text-gray-400">Sector</h2>
-                <p className="text-gray-300">{frontmatter.sector}</p>
+              <div className="aspect-[3/2] bg-gray-800 flex items-center justify-center">
+                <span className="text-gray-400">{frontmatter.title}</span>
+              </div>
+              <div className="p-3">
+                <div className="mb-1.5">
+                  <span className="inline-block px-1.5 py-0.5 rounded-full text-[10px] bg-blue-900 text-blue-200">
+                    {frontmatter.type}
+                  </span>
+                </div>
               </div>
             </Card>
           </div>

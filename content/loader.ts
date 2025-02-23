@@ -3,7 +3,7 @@ import { promises as fs } from 'fs';
 import path from 'path';
 import { cache } from 'react';
 import matter from 'gray-matter';
-import type { BaseContent, ContentType, Persona, Industry, Algorithm, CaseStudy } from '@/types';
+import type { BaseContent, ContentType, Persona, Industry, Algorithm, CaseStudy } from '@/lib/types';
 
 const CONTENT_DIR = path.join(process.cwd(), 'content');
 
@@ -14,11 +14,25 @@ type ContentTypeMap = {
   'case-study': CaseStudy;
 }
 
+// Directory to content type mapping
+const DIR_TO_TYPE: Record<string, ContentType> = {
+  'personas': 'persona',
+  'industries': 'industry',
+  'algorithms': 'algorithm',
+  'case-studies': 'case-study'
+};
+
 // Cache the content loading to improve performance
 export const loadContentByType = cache(async <T extends ContentType>(
   type: T
 ): Promise<Record<string, ContentTypeMap[T]>> => {
-  const contentPath = path.join(CONTENT_DIR, type);
+  // Map content type to directory name
+  const dirName = Object.entries(DIR_TO_TYPE).find(([_, t]) => t === type)?.[0];
+  if (!dirName) {
+    throw new Error(`Invalid content type: ${type}`);
+  }
+
+  const contentPath = path.join(CONTENT_DIR, dirName);
   const contentMap: Record<string, ContentTypeMap[T]> = {};
 
   try {
@@ -32,25 +46,34 @@ export const loadContentByType = cache(async <T extends ContentType>(
         const source = await fs.readFile(filePath, 'utf-8');
         
         // Parse frontmatter and content
-        const { data, content } = matter(source);
+        const { data, content: mdxContent } = matter(source);
+        
+        // Add type if not present
+        if (!data.type) {
+          data.type = type;
+        }
         
         // Compile MDX content
-        const { content: compiledContent } = await compileMDX({
-          source: content,
+        await compileMDX({
+          source: mdxContent,
           options: { parseFrontmatter: true }
         });
 
         // Validate required fields based on content type
         validateContentFields(data, type);
 
+        // Create the content object with the raw MDX content
+        const contentObj = {
+          ...data,
+          type,
+          rawContent: mdxContent,
+          lastModified: new Date(data.lastUpdated).toISOString()
+        };
+
         return {
           slug: data.slug,
-          content: {
-            ...data,
-            content: compiledContent,
-            type,
-            lastModified: new Date(data.lastUpdated).toISOString()
-          }
+          // Cast the content object to the correct type
+          content: contentObj as unknown as ContentTypeMap[T]
         };
       });
 
@@ -58,7 +81,7 @@ export const loadContentByType = cache(async <T extends ContentType>(
     
     // Build the content map
     contents.forEach(({ slug, content }) => {
-      contentMap[slug] = content as ContentTypeMap[T];
+      contentMap[slug] = content;
     });
 
     return contentMap;
@@ -90,7 +113,14 @@ function validateContentFields(data: any, type: ContentType) {
       requiredFields.add('algorithms');
       requiredFields.add('metrics');
       break;
-    // Add other type-specific validations
+    case 'industry':
+      requiredFields.add('sector');
+      requiredFields.add('keyApplications');
+      break;
+    case 'persona':
+      requiredFields.add('role');
+      requiredFields.add('expertise');
+      break;
   }
 
   const missingFields = Array.from(requiredFields)

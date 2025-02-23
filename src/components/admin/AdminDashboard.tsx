@@ -7,14 +7,14 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
 import { Plus, Edit, Save, Trash, Settings2 } from 'lucide-react';
-import type { Persona, Industry, Algorithm, CaseStudy, PersonaType, DifficultyLevel } from '@/types';
+import type { Persona, Industry, Algorithm, CaseStudy, PersonaType, DifficultyLevel } from '@/lib/types';
 
 interface AdminDashboardProps {
   initialContent: {
-    personas: Persona[];
-    industries: Industry[];
-    algorithms: Algorithm[];
-    caseStudies: CaseStudy[];
+    persona: Persona[];
+    industry: Industry[];
+    algorithm: Algorithm[];
+    caseStudy: CaseStudy[];
   };
   onError: (message: string) => void;
 }
@@ -35,10 +35,10 @@ export function AdminDashboard({ initialContent, onError }: AdminDashboardProps)
   const [isEditing, setIsEditing] = useState(false);
 
   // State for all content types
-  const [personas, setPersonas] = useState<Persona[]>(initialContent.personas);
-  const [industries, setIndustries] = useState<Industry[]>(initialContent.industries);
-  const [algorithms, setAlgorithms] = useState<Algorithm[]>(initialContent.algorithms);
-  const [caseStudies, setCaseStudies] = useState<CaseStudy[]>(initialContent.caseStudies);
+  const [personaList, setPersonaList] = useState<Persona[]>(initialContent.persona);
+  const [industryList, setIndustryList] = useState<Industry[]>(initialContent.industry);
+  const [algorithmList, setAlgorithmList] = useState<Algorithm[]>(initialContent.algorithm);
+  const [caseStudyList, setCaseStudyList] = useState<CaseStudy[]>(initialContent.caseStudy);
 
   const createNewItem = (type: 'persona' | 'industry' | 'algorithm' | 'case-study') => {
     const timestamp = new Date().toISOString();
@@ -139,15 +139,15 @@ export function AdminDashboard({ initialContent, onError }: AdminDashboardProps)
       // Update local state based on content type
       switch (selectedItem.type) {
         case 'persona':
-          setPersonas(prev => {
+          setPersonaList(prev => {
             const index = prev.findIndex(p => p.id === savedItem.id);
-            return index >= 0 
+            return index >= 0
               ? prev.map(p => p.id === savedItem.id ? savedItem : p)
               : [...prev, savedItem];
           });
           break;
         case 'industry':
-          setIndustries(prev => {
+          setIndustryList(prev => {
             const index = prev.findIndex(i => i.id === savedItem.id);
             return index >= 0
               ? prev.map(i => i.id === savedItem.id ? savedItem : i)
@@ -155,7 +155,7 @@ export function AdminDashboard({ initialContent, onError }: AdminDashboardProps)
           });
           break;
         case 'algorithm':
-          setAlgorithms(prev => {
+          setAlgorithmList(prev => {
             const index = prev.findIndex(a => a.id === savedItem.id);
             return index >= 0
               ? prev.map(a => a.id === savedItem.id ? savedItem : a)
@@ -163,7 +163,7 @@ export function AdminDashboard({ initialContent, onError }: AdminDashboardProps)
           });
           break;
         case 'case-study':
-          setCaseStudies(prev => {
+          setCaseStudyList(prev => {
             const index = prev.findIndex(c => c.id === savedItem.id);
             return index >= 0
               ? prev.map(c => c.id === savedItem.id ? savedItem : c)
@@ -196,16 +196,16 @@ export function AdminDashboard({ initialContent, onError }: AdminDashboardProps)
       // Update local state based on content type
       switch (selectedItem.type) {
         case 'persona':
-          setPersonas(prev => prev.filter(p => p.id !== selectedItem.item.id));
+          setPersonaList(prev => prev.filter(p => p.id !== selectedItem.item.id));
           break;
         case 'industry':
-          setIndustries(prev => prev.filter(i => i.id !== selectedItem.item.id));
+          setIndustryList(prev => prev.filter(i => i.id !== selectedItem.item.id));
           break;
         case 'algorithm':
-          setAlgorithms(prev => prev.filter(a => a.id !== selectedItem.item.id));
+          setAlgorithmList(prev => prev.filter(a => a.id !== selectedItem.item.id));
           break;
         case 'case-study':
-          setCaseStudies(prev => prev.filter(c => c.id !== selectedItem.item.id));
+          setCaseStudyList(prev => prev.filter(c => c.id !== selectedItem.item.id));
           break;
       }
 
@@ -217,9 +217,9 @@ export function AdminDashboard({ initialContent, onError }: AdminDashboardProps)
   };
 
   const renderContentList = (type: 'persona' | 'industry' | 'algorithm') => {
-    const items = type === 'persona' ? personas :
-                 type === 'industry' ? industries :
-                 algorithms;
+    const items = type === 'persona' ? personaList :
+                 type === 'industry' ? industryList :
+                 algorithmList;
 
     return (
       <Card>
@@ -409,9 +409,9 @@ export function AdminDashboard({ initialContent, onError }: AdminDashboardProps)
               </CardHeader>
               <CardContent>
                 <div className="grid gap-4">
-                  {caseStudies.map(study => (
-                    <div 
-                      key={study.id} 
+                  {caseStudyList.map((study: CaseStudy) => (
+                    <div
+                      key={study.id}
                       className="border rounded p-4 hover:bg-accent/10 cursor-pointer"
                       onClick={() => {
                         setSelectedItem({ type: 'case-study', item: study });
@@ -423,15 +423,15 @@ export function AdminDashboard({ initialContent, onError }: AdminDashboardProps)
                         <Badge>{study.difficulty}</Badge>
                       </div>
                       <div className="flex gap-2">
-                        {study.tags.map(tag => (
+                        {study.tags.map((tag: string) => (
                           <Badge key={tag} variant="outline">{tag}</Badge>
                         ))}
                       </div>
                       <div className="mt-2 text-sm text-gray-500">
                         <div>
-                          Personas: {study.personas.length}
-                          • Industries: {study.industries.length}
-                          • Algorithms: {study.algorithms.length}
+                          Personas: {study.persona.length}
+                          • Industries: {study.industry.length}
+                          • Algorithms: {study.algorithm.length}
                         </div>
                       </div>
                     </div>

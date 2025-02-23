@@ -1,5 +1,10 @@
+// Type definitions
+export type PersonaType = 'Technical' | 'Persona';
+export type DifficultyLevel = 'Beginner' | 'Intermediate' | 'Advanced';
+
 // Base content interface that all content types extend from
 export interface BaseContent {
+  id: string;
   title: string;
   type: ContentType;
   slug: string;
@@ -23,8 +28,8 @@ export interface Application {
 
 // Related content references
 export interface RelatedContent {
-  algorithms?: string[];
-  caseStudies?: string[];
+  algorithm?: string[];
+  caseStudy?: string[];
 }
 
 // Algorithm-specific interface
@@ -38,15 +43,17 @@ export interface Algorithm extends BaseContent {
 
 // Case study specific interface
 export interface CaseStudy extends BaseContent {
-  personas: string[];
-  industries: string[];
-  algorithms: string[];
+  persona: string[];
+  industry: string[];
+  algorithm: string[];
   difficulty: 'Beginner' | 'Intermediate' | 'Advanced';
   tags: string[];
   metrics: {
     [key: string]: string | number;
   };
   technologies: string[];
+  createdAt: string;
+  updatedAt: string;
 }
 
 // Industry specific interface
@@ -66,6 +73,7 @@ export interface Persona extends BaseContent {
   expertise: string[];
   relatedCaseStudies: string[];
   keywords: string[];
+  personaType: PersonaType;
 }
 
 // Type guard functions to check content types
@@ -92,10 +100,10 @@ export type ContentMap<T extends BaseContent> = {
 
 // Type for the complete content store
 export interface ContentStore {
-  algorithms: ContentMap<Algorithm>;
-  caseStudies: ContentMap<CaseStudy>;
-  industries: ContentMap<Industry>;
-  personas: ContentMap<Persona>;
+  algorithm: ContentMap<Algorithm>;
+  caseStudy: ContentMap<CaseStudy>;
+  industry: ContentMap<Industry>;
+  persona: ContentMap<Persona>;
 }
 
 // Validation interfaces

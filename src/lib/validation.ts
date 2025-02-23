@@ -12,10 +12,10 @@ import {
 } from './types';
 
 interface ContentPaths {
-  algorithms: Set<string>;
-  caseStudies: Set<string>;
-  industries: Set<string>;
-  personas: Set<string>;
+  algorithm: Set<string>;
+  caseStudy: Set<string>;
+  industry: Set<string>;
+  persona: Set<string>;
 }
 
 // Cache content paths to avoid repeated filesystem access
@@ -28,14 +28,14 @@ async function getContentPaths(): Promise<ContentPaths> {
 
   const contentDir = path.join(process.cwd(), 'content');
   const paths: ContentPaths = {
-    algorithms: new Set(),
-    caseStudies: new Set(),
-    industries: new Set(),
-    personas: new Set(),
+    algorithm: new Set(),
+    caseStudy: new Set(),
+    industry: new Set(),
+    persona: new Set(),
   };
 
   // Load all content paths
-  for (const type of ['algorithms', 'case-studies', 'industries', 'personas']) {
+  for (const type of ['algorithm', 'case-study', 'industry', 'persona']) {
     const dir = path.join(contentDir, type);
     try {
       const files = await fs.readdir(dir);
@@ -44,7 +44,7 @@ async function getContentPaths(): Promise<ContentPaths> {
         .map(f => f.replace('.mdx', ''));
       
       // Map directory names to content types
-      const key = type === 'case-studies' ? 'caseStudies' : type;
+      const key = type === 'case-study' ? 'caseStudy' : type;
       slugs.forEach(slug => paths[key as keyof ContentPaths].add(slug));
     } catch (error) {
       console.error(`Error reading ${type} directory:`, error);
@@ -61,7 +61,7 @@ async function validateAlgorithm(content: Algorithm, filePath: string): Promise<
 
   // Validate related case studies exist
   for (const study of content.relatedCaseStudies) {
-    if (!paths.caseStudies.has(study)) {
+    if (!paths.caseStudy.has(study)) {
       errors.push({
         path: filePath,
         message: `Referenced case study "${study}" does not exist`
@@ -85,8 +85,8 @@ async function validateCaseStudy(content: CaseStudy, filePath: string): Promise<
   const paths = await getContentPaths();
 
   // Validate referenced content exists
-  for (const persona of content.personas) {
-    if (!paths.personas.has(persona)) {
+  for (const persona of content.persona) {
+    if (!paths.persona.has(persona)) {
       errors.push({
         path: filePath,
         message: `Referenced persona "${persona}" does not exist`
@@ -94,8 +94,8 @@ async function validateCaseStudy(content: CaseStudy, filePath: string): Promise<
     }
   }
 
-  for (const industry of content.industries) {
-    if (!paths.industries.has(industry)) {
+  for (const industry of content.industry) {
+    if (!paths.industry.has(industry)) {
       errors.push({
         path: filePath,
         message: `Referenced industry "${industry}" does not exist`
@@ -103,8 +103,8 @@ async function validateCaseStudy(content: CaseStudy, filePath: string): Promise<
     }
   }
 
-  for (const algorithm of content.algorithms) {
-    if (!paths.algorithms.has(algorithm)) {
+  for (const algorithm of content.algorithm) {
+    if (!paths.algorithm.has(algorithm)) {
       errors.push({
         path: filePath,
         message: `Referenced algorithm "${algorithm}" does not exist`
@@ -129,7 +129,7 @@ async function validateIndustry(content: Industry, filePath: string): Promise<Va
 
   // Validate related case studies
   for (const study of content.relatedCaseStudies) {
-    if (!paths.caseStudies.has(study)) {
+    if (!paths.caseStudy.has(study)) {
       errors.push({
         path: filePath,
         message: `Referenced case study "${study}" does not exist`
@@ -154,7 +154,7 @@ async function validatePersona(content: Persona, filePath: string): Promise<Vali
 
   // Validate related case studies
   for (const study of content.relatedCaseStudies) {
-    if (!paths.caseStudies.has(study)) {
+    if (!paths.caseStudy.has(study)) {
       errors.push({
         path: filePath,
         message: `Referenced case study "${study}" does not exist`
@@ -228,10 +228,10 @@ export async function validateAllContent(): Promise<ValidationResult> {
   contentPathsCache = null;
 
   const contentTypes = {
-    'algorithms': 'algorithm',
-    'case-studies': 'case-study',
-    'industries': 'industry',
-    'personas': 'persona'
+    'algorithm': 'algorithm',
+    'case-study': 'case-study',
+    'industry': 'industry',
+    'persona': 'persona'
   } as const;
 
   for (const [dir, type] of Object.entries(contentTypes)) {

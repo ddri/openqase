@@ -1,8 +1,8 @@
-// src/app/api/admin/algorithms/route.ts
+// src/app/api/admin/algorithm/route.ts
 import { NextResponse } from 'next/server';
 import { promises as fs } from 'fs';
 import path from 'path';
-import type { Algorithm } from '@/types';
+import type { Algorithm } from '@/lib/types';
 
 const CONTENT_DIR = path.join(process.cwd(), 'content', 'algorithm');
 
@@ -13,10 +13,10 @@ function createSlug(title: string): string {
     .replace(/(^-|-$)/g, '');
 }
 
-async function readAlgorithms(): Promise<Algorithm[]> {
+async function readAlgorithmList(): Promise<Algorithm[]> {
   try {
     const files = await fs.readdir(CONTENT_DIR);
-    const algorithms = await Promise.all(
+    const algorithmList = await Promise.all(
       files
         .filter(file => file.endsWith('.json'))
         .map(async file => {
@@ -24,9 +24,9 @@ async function readAlgorithms(): Promise<Algorithm[]> {
           return JSON.parse(content) as Algorithm;
         })
     );
-    return algorithms;
+    return algorithmList;
   } catch (error) {
-    console.error('Error reading algorithms:', error);
+    console.error('Error reading algorithm list:', error);
     return [];
   }
 }
@@ -34,12 +34,12 @@ async function readAlgorithms(): Promise<Algorithm[]> {
 export async function GET() {
   try {
     await fs.mkdir(CONTENT_DIR, { recursive: true });
-    const algorithms = await readAlgorithms();
-    return NextResponse.json(algorithms);
+    const algorithmList = await readAlgorithmList();
+    return NextResponse.json(algorithmList);
   } catch (error) {
-    console.error('Error fetching algorithms:', error);
+    console.error('Error fetching algorithm list:', error);
     return NextResponse.json(
-      { error: 'Failed to fetch algorithms' },
+      { error: 'Failed to fetch algorithm list' },
       { status: 500 }
     );
   }
@@ -62,8 +62,8 @@ export async function POST(request: Request) {
     }
 
     if (!algorithm.id) {
-      const algorithms = await readAlgorithms();
-      const maxId = Math.max(...algorithms.map(a => parseInt(a.id, 10)), 0);
+      const algorithmList = await readAlgorithmList();
+      const maxId = Math.max(...algorithmList.map((a: Algorithm) => parseInt(a.id, 10)), 0);
       algorithm.id = (maxId + 1).toString();
     }
 
@@ -72,14 +72,15 @@ export async function POST(request: Request) {
       id: algorithm.id,
       title: algorithm.title,
       slug: algorithm.slug,
-      type: 'Technical',
+      type: 'algorithm',
       complexity: algorithm.complexity || 'Beginner',
       description: algorithm.description || '',
       applications: algorithm.applications || [],
       prerequisites: algorithm.prerequisites || [],
       relatedCaseStudies: algorithm.relatedCaseStudies || [],
-      createdAt: algorithm.createdAt || now,
-      updatedAt: now
+      keywords: algorithm.keywords || [],
+      lastUpdated: now,
+      rawContent: algorithm.rawContent || ''
     };
 
     await fs.writeFile(

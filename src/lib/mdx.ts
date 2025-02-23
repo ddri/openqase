@@ -5,10 +5,17 @@ import matter from 'gray-matter';
 import { serialize } from 'next-mdx-remote/serialize';
 import remarkGfm from 'remark-gfm';
 import rehypePrismPlus from 'rehype-prism-plus';
-import { BaseFrontmatter, ContentType, MDXContent } from './types';
+import { ContentType } from './types';
 
-export async function getContentBySlug<T extends BaseFrontmatter>(
-  type: ContentType, 
+// MDX content type with serialized source
+export interface MDXContent<T = unknown> {
+  source: any; // MDX source
+  frontmatter: T;
+  slug: string;
+}
+
+export async function getContentBySlug<T>(
+  type: ContentType,
   slug: string
 ): Promise<MDXContent<T>> {
   const contentDirectory = path.join(process.cwd(), 'content', type);
@@ -18,6 +25,7 @@ export async function getContentBySlug<T extends BaseFrontmatter>(
   // Parse the frontmatter and content
   const { data, content } = matter(fileContents);
 
+  // Process MDX content with plugins
   const mdxSource = await serialize(content, {
     mdxOptions: {
       remarkPlugins: [remarkGfm],
@@ -33,7 +41,7 @@ export async function getContentBySlug<T extends BaseFrontmatter>(
   };
 }
 
-export async function getAllContent<T extends BaseFrontmatter>(
+export async function getAllContent<T>(
   type: ContentType
 ): Promise<MDXContent<T>[]> {
   const contentDirectory = path.join(process.cwd(), 'content', type);
@@ -44,7 +52,7 @@ export async function getAllContent<T extends BaseFrontmatter>(
       .filter(file => file.endsWith('.mdx'))
       .map(async (file) => {
         return await getContentBySlug<T>(
-          type, 
+          type,
           file.replace(/\.mdx$/, '')
         );
       })

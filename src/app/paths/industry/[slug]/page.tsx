@@ -1,4 +1,4 @@
-// src/app/paths/industries/[slug]/page.tsx
+// src/app/paths/industry/[slug]/page.tsx
 import { promises as fs } from 'fs';
 import path from 'path';
 import { notFound } from 'next/navigation';
@@ -30,7 +30,7 @@ const components = {
 };
 
 export async function generateStaticParams() {
-  const contentDirectory = path.join(process.cwd(), 'content', 'industries');
+  const contentDirectory = path.join(process.cwd(), 'content', 'industry');
   const files = await fs.readdir(contentDirectory);
   
   return files
@@ -42,7 +42,7 @@ export async function generateStaticParams() {
 
 async function getIndustry(slug: string) {
   try {
-    const filePath = path.join(process.cwd(), 'content', 'industries', `${slug}.mdx`);
+    const filePath = path.join(process.cwd(), 'content', 'industry', `${slug}.mdx`);
     const fileContent = await fs.readFile(filePath, 'utf8');
     const { data, content } = matter(fileContent);
     
@@ -76,7 +76,7 @@ export default async function IndustryPage({ params }: PageProps) {
       <div className="max-w-7xl mx-auto">
         <div className="mb-8">
           <Link 
-            href="/paths/industries"
+            href="/paths/industry"
             className="text-sm text-gray-400 hover:text-gray-300 transition-colors"
           >
             ← Back to Industries
@@ -136,7 +136,7 @@ export default async function IndustryPage({ params }: PageProps) {
                       {frontmatter.relatedCaseStudies.map((study: string) => (
                         <Link 
                           key={study}
-                          href={`/case-studies/${study}`}
+                          href={`/case-study/${study}`}
                           className="block text-gray-400 hover:text-gray-300 transition-colors"
                         >
                           {study}

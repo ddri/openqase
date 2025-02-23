@@ -4,9 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "validate-content": "ts-node content/validate.ts",
-    "verify-content": "node scripts/verify-content.mjs",
-    "build": "next build",
+    "validate": "ts-node scripts/validate-content.ts",
+    "build": "npm run validate && next build",
     "start": "next start",
     "lint": "next lint",
     "type": "module",

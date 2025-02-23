@@ -1,13 +1,12 @@
 // src/app/paths/personas/[slug]/page.tsx
-import { promises as fs } from 'fs';
-import path from 'path';
-import { notFound } from 'next/navigation';
-import matter from 'gray-matter';
-import { MDXRemote } from 'next-mdx-remote/rsc';
+import { getContentBySlug, getAllContent } from '@/lib/mdx';
+import { PersonaFrontmatter, CaseStudyFrontmatter } from '@/lib/types';
 import { Badge } from '@/components/ui/badge';
 import { Card } from '@/components/ui/card';
 import Link from 'next/link';
+import { MDXRemote } from 'next-mdx-remote/rsc';
 
+// Components for MDX
 const components = {
   h1: ({ children }: { children: React.ReactNode }) => (
     <h1 className="text-4xl font-bold text-gray-100 mb-6">{children}</h1>
@@ -15,134 +14,98 @@ const components = {
   h2: ({ children }: { children: React.ReactNode }) => (
     <h2 className="text-2xl font-semibold text-gray-100 mt-8 mb-4">{children}</h2>
   ),
-  h3: ({ children }: { children: React.ReactNode }) => (
-    <h3 className="text-xl font-semibold text-gray-100 mt-6 mb-3">{children}</h3>
-  ),
   p: ({ children }: { children: React.ReactNode }) => (
-    <p className="text-gray-300 mb-4 leading-relaxed">{children}</p>
-  ),
-  ul: ({ children }: { children: React.ReactNode }) => (
-    <ul className="list-disc list-inside space-y-2 text-gray-300 mb-6 ml-4">{children}</ul>
-  ),
-  li: ({ children }: { children: React.ReactNode }) => (
-    <li className="text-gray-300">{children}</li>
+    <p className="text-gray-300 mb-4">{children}</p>
   ),
 };
 
+// Generate static paths
 export async function generateStaticParams() {
-  const contentDirectory = path.join(process.cwd(), 'content', 'personas');
-  const files = await fs.readdir(contentDirectory);
-  
-  return files
-    .filter(file => file.endsWith('.mdx'))
-    .map(file => ({
-      slug: file.replace('.mdx', ''),
-    }));
+  const personas = await getAllContent<PersonaFrontmatter>('personas');
+  return personas.map((persona) => ({
+    slug: persona.slug,
+  }));
 }
 
-async function getPersona(slug: string) {
-  try {
-    const filePath = path.join(process.cwd(), 'content', 'personas', `${slug}.mdx`);
-    const fileContent = await fs.readFile(filePath, 'utf8');
-    const { data, content } = matter(fileContent);
-    
-    return {
-      frontmatter: data,
-      content,
-    };
-  } catch (error) {
-    return null;
-  }
+// Get metadata for the page
+export async function generateMetadata({ params }: { params: { slug: string } }) {
+  const persona = await getContentBySlug<PersonaFrontmatter>('personas', params.slug);
+  
+  return {
+    title: `${persona.frontmatter.title} | OpenQase Quantum Computing`,
+    description: persona.frontmatter.description,
+    keywords: persona.frontmatter.keywords,
+  };
 }
 
 export default async function PersonaPage({ params }: { params: { slug: string } }) {
-  const persona = await getPersona(params.slug);
-
-  if (!persona) {
-    notFound();
-  }
-
-  const { frontmatter, content } = persona;
+  const persona = await getContentBySlug<PersonaFrontmatter>('personas', params.slug);
+  
+  // Get related case studies
+  const caseStudies = await Promise.all(
+    persona.frontmatter.relatedCaseStudies.map(async (studySlug) => {
+      return await getContentBySlug<CaseStudyFrontmatter>('case-studies', studySlug);
+    })
+  );
 
   return (
     <main className="min-h-screen bg-[#0C0C0D] p-8">
       <div className="max-w-7xl mx-auto">
-        <div className="mb-8">
-          <Link 
-            href="/paths/personas"
-            className="text-sm text-gray-400 hover:text-gray-300 transition-colors"
-          >
-            ← Back to Personas
-          </Link>
-        </div>
-
         <div className="grid grid-cols-12 gap-8">
           {/* Left Column - Persona Card */}
           <div className="col-span-2">
             <Card className="bg-gray-900 border-gray-800">
               <div className="aspect-[3/2] bg-gray-800 flex items-center justify-center">
-                <span className="text-gray-400">{frontmatter.title}</span>
+                <span className="text-gray-400">{persona.frontmatter.title}</span>
               </div>
               <div className="p-3">
-                <Badge 
-                  className={frontmatter.type === 'Technical' 
-                    ? 'bg-blue-900 text-blue-200' 
-                    : 'bg-green-900 text-green-200'}
-                >
-                  {frontmatter.type}
+                <Badge className="bg-blue-900 text-blue-200">
+                  {persona.frontmatter.type}
                 </Badge>
               </div>
             </Card>
+            <Link 
+              href="/paths/personas"
+              className="inline-block mt-4 text-sm text-gray-400 hover:text-gray-300"
+            >
+              ← Back to Personas
+            </Link>
           </div>
 
           {/* Main Content */}
           <div className="col-span-7">
             <article className="prose prose-invert max-w-none">
-              <MDXRemote 
-                source={content} 
-                components={components} 
-              />
+              <MDXRemote source={persona.source} components={components} />
             </article>
           </div>
 
-          {/* Right Column - Expertise & Related */}
+          {/* Right Column - Case Studies */}
           <div className="col-span-3">
-            <div className="sticky top-8">
-              <Card className="bg-gray-900 border-gray-800 mb-6">
-                <div className="p-4">
-                  <h3 className="text-lg font-semibold text-gray-100 mb-3">
-                    Key Areas of Expertise
+            <h2 className="text-xl font-semibold text-gray-100 mb-4">
+              Related Case Studies
+            </h2>
+            <div className="space-y-4">
+              {caseStudies.map((study) => (
+                <Link 
+                  key={study.frontmatter.slug}
+                  href={`/case-studies/${study.frontmatter.slug}`}
+                  className="block p-4 bg-gray-900 border border-gray-800 rounded-lg hover:border-gray-700"
+                >
+                  <h3 className="font-medium text-gray-100 mb-2">
+                    {study.frontmatter.title}
                   </h3>
-                  <div className="space-y-2">
-                    {frontmatter.expertise.map((exp: string) => (
-                      <div key={exp} className="text-gray-300">
-                        • {exp}
-                      </div>
+                  <p className="text-sm text-gray-400">
+                    {study.frontmatter.description}
+                  </p>
+                  <div className="mt-3 flex flex-wrap gap-2">
+                    {study.frontmatter.tags.map((tag: string) => (
+                      <Badge key={tag} variant="outline">
+                        {tag}
+                      </Badge>
                     ))}
                   </div>
-                </div>
-              </Card>
-
-              {frontmatter.relatedCaseStudies && frontmatter.relatedCaseStudies.length > 0 && (
-                <Card className="bg-gray-900 border-gray-800">
-                  <div className="p-4">
-                    <h3 className="text-lg font-semibold text-gray-100 mb-3">
-                      Related Case Studies
-                    </h3>
-                    <div className="space-y-2">
-                      {frontmatter.relatedCaseStudies.map((study: string) => (
-                        <Link 
-                          key={study}
-                          href={`/case-studies/${study}`}
-                          className="block text-gray-400 hover:text-gray-300 transition-colors"
-                        >
-                          {study}
-                        </Link>
-                      ))}
-                    </div>
-                  </div>
-                </Card>
-              )}
+                </Link>
+              ))}
             </div>
           </div>
         </div>

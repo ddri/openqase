@@ -1,12 +1,16 @@
-// lib/mdx.ts
+// src/lib/mdx.ts
 import { promises as fs } from 'fs';
 import path from 'path';
 import matter from 'gray-matter';
 import { serialize } from 'next-mdx-remote/serialize';
 import remarkGfm from 'remark-gfm';
 import rehypePrismPlus from 'rehype-prism-plus';
+import { BaseFrontmatter, ContentType, MDXContent } from './types';
 
-export async function getContentBySlug(type: string, slug: string) {
+export async function getContentBySlug<T extends BaseFrontmatter>(
+  type: ContentType, 
+  slug: string
+): Promise<MDXContent<T>> {
   const contentDirectory = path.join(process.cwd(), 'content', type);
   const fullPath = path.join(contentDirectory, `${slug}.mdx`);
   const fileContents = await fs.readFile(fullPath, 'utf8');
@@ -24,11 +28,14 @@ export async function getContentBySlug(type: string, slug: string) {
 
   return {
     source: mdxSource,
-    frontmatter: data,
+    frontmatter: data as T,
+    slug
   };
 }
 
-export async function getAllContent(type: string) {
+export async function getAllContent<T extends BaseFrontmatter>(
+  type: ContentType
+): Promise<MDXContent<T>[]> {
   const contentDirectory = path.join(process.cwd(), 'content', type);
   const files = await fs.readdir(contentDirectory);
 
@@ -36,11 +43,10 @@ export async function getAllContent(type: string) {
     files
       .filter(file => file.endsWith('.mdx'))
       .map(async (file) => {
-        const source = await getContentBySlug(type, file.replace(/\.mdx$/, ''));
-        return {
-          slug: file.replace(/\.mdx$/, ''),
-          ...source,
-        };
+        return await getContentBySlug<T>(
+          type, 
+          file.replace(/\.mdx$/, '')
+        );
       })
   );
 

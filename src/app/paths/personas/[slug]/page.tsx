@@ -1,6 +1,8 @@
-// src/app/paths/personas/[slug]/page.tsx
+'use client';
+
+import React from 'react';
 import { getContentBySlug, getAllContent } from '@/lib/mdx';
-import { PersonaFrontmatter, CaseStudyFrontmatter } from '@/lib/types';
+import { Persona, CaseStudy } from '@/lib/types';
 import { Badge } from '@/components/ui/badge';
 import { Card } from '@/components/ui/card';
 import Link from 'next/link';
@@ -21,7 +23,7 @@ const components = {
 
 // Generate static paths
 export async function generateStaticParams() {
-  const personas = await getAllContent<PersonaFrontmatter>('personas');
+  const personas = await getAllContent<Persona>('persona');
   return personas.map((persona) => ({
     slug: persona.slug,
   }));
@@ -29,7 +31,7 @@ export async function generateStaticParams() {
 
 // Get metadata for the page
 export async function generateMetadata({ params }: { params: { slug: string } }) {
-  const persona = await getContentBySlug<PersonaFrontmatter>('personas', params.slug);
+  const persona = await getContentBySlug<Persona>('persona', params.slug);
   
   return {
     title: `${persona.frontmatter.title} | OpenQase Quantum Computing`,
@@ -39,12 +41,12 @@ export async function generateMetadata({ params }: { params: { slug: string } })
 }
 
 export default async function PersonaPage({ params }: { params: { slug: string } }) {
-  const persona = await getContentBySlug<PersonaFrontmatter>('personas', params.slug);
+  const persona = await getContentBySlug<Persona>('persona', params.slug);
   
   // Get related case studies
   const caseStudies = await Promise.all(
-    persona.frontmatter.relatedCaseStudies.map(async (studySlug) => {
-      return await getContentBySlug<CaseStudyFrontmatter>('case-studies', studySlug);
+    persona.frontmatter.relatedCaseStudies.map(async (studySlug: string) => {
+      return await getContentBySlug<CaseStudy>('case-study', studySlug);
     })
   );
 
@@ -85,7 +87,7 @@ export default async function PersonaPage({ params }: { params: { slug: string }
               Related Case Studies
             </h2>
             <div className="space-y-4">
-              {caseStudies.map((study) => (
+              {caseStudies.map((study: { frontmatter: CaseStudy }) => (
                 <Link 
                   key={study.frontmatter.slug}
                   href={`/case-studies/${study.frontmatter.slug}`}

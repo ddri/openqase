@@ -1,192 +1,139 @@
 // src/app/quantum-stack/page.tsx
-'use client'
+import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
 
-import { useState } from 'react'
-import { Card } from '@/components/ui/card'
-import type { StackItem } from '@/types'
-
-const stackItems: StackItem[] = [
+const stackLayers = [
   {
-    id: 'language',
-    title: 'Language',
-    description: 'Quantum Programming Languages',
-    details: {
-      overview: 'Quantum programming languages are specifically designed to express quantum algorithms and operations.',
-      examples: [
-        'Qiskit (IBM)',
-        'Q# (Microsoft)',
-        'Cirq (Google)',
-        'Forest (Rigetti)'
-      ],
-      additionalInfo: 'These languages provide the syntax and structures needed to write quantum programs, including operations like superposition, entanglement, and quantum gates.'
-    }
+    title: "Applications",
+    description: "Domain-specific quantum applications and use cases",
+    items: [
+      "Optimization Problems",
+      "Machine Learning",
+      "Simulation",
+      "Cryptography"
+    ],
+    color: "blue"
   },
   {
-    id: 'sdk',
-    title: 'SDK',
-    description: 'Software Development Kits',
-    details: {
-      overview: 'Software Development Kits provide the tools and libraries needed to develop quantum applications.',
-      examples: [
-        'Qiskit SDK',
-        'Azure Quantum SDK',
-        'Cirq SDK',
-        'Forest SDK'
-      ],
-      additionalInfo: 'These SDKs include tools for circuit design, simulation capabilities, and hardware interfaces.'
-    }
+    title: "Algorithms",
+    description: "Quantum algorithms and protocols",
+    items: [
+      "Grover's Algorithm",
+      "Shor's Algorithm",
+      "VQE",
+      "QAOA"
+    ],
+    color: "purple"
   },
   {
-    id: 'framework',
-    title: 'Framework',
-    description: 'Quantum Computing Frameworks',
-    details: {
-      overview: 'Quantum frameworks provide the structure and tools for building quantum applications.',
-      examples: [
-        'Qiskit Runtime',
-        'Q# Runtime',
-        'Cirq Framework',
-        'PyQuil'
-      ],
-      additionalInfo: 'Frameworks handle circuit optimization, hardware abstraction, and integration with classical systems.'
-    }
+    title: "Software Development",
+    description: "Development tools and frameworks",
+    items: [
+      "Qiskit",
+      "Cirq",
+      "Q#",
+      "Pennylane"
+    ],
+    color: "green"
   },
   {
-    id: 'compiler',
-    title: 'Compiler',
-    description: 'Quantum Circuit Compilation',
-    details: {
-      overview: 'Quantum compilers translate high-level quantum programs into low-level quantum circuits.',
-      examples: [
-        'Qiskit Terra',
-        'Quilc',
-        'Cirq Compiler',
-        'Q# Compiler'
-      ],
-      additionalInfo: 'Compilers handle gate decomposition, circuit optimization, and mapping to physical qubits.'
-    }
+    title: "Control & Operations",
+    description: "Quantum circuit operations and control systems",
+    items: [
+      "Gates",
+      "Measurement",
+      "Error Correction",
+      "Calibration"
+    ],
+    color: "yellow"
   },
   {
-    id: 'error-correction',
-    title: 'Error Correction',
-    description: 'Quantum Error Correction',
-    details: {
-      overview: 'Error correction is crucial for reliable quantum computation.',
-      examples: [
-        'Surface Codes',
-        'Stabilizer Codes',
-        'Topological Codes',
-        'Color Codes'
-      ],
-      additionalInfo: 'These techniques detect and correct qubit errors to maintain quantum state coherence.'
-    }
-  },
-  {
-    id: 'physics',
-    title: 'Physics Package',
-    description: 'Quantum Hardware Interface',
-    details: {
-      overview: 'The physics package interfaces directly with the quantum hardware.',
-      examples: [
-        'Control Systems',
-        'Signal Processing',
-        'Qubit Control',
-        'Readout Systems'
-      ],
-      additionalInfo: 'This layer handles the physical control and measurement of quantum states.'
-    }
-  },
-  {
-    id: 'measurement',
-    title: 'Measurement',
-    description: 'Quantum State Measurement',
-    details: {
-      overview: 'Measurement systems handle the final readout of quantum states.',
-      examples: [
-        'State Detection',
-        'Signal Amplification',
-        'Data Collection',
-        'Classical Post-processing'
-      ],
-      additionalInfo: 'These systems convert quantum information into classical results.'
-    }
+    title: "Hardware",
+    description: "Physical quantum computing hardware",
+    items: [
+      "Superconducting Qubits",
+      "Ion Traps",
+      "Photonic Systems",
+      "Topological Qubits"
+    ],
+    color: "red"
   }
-]
+];
 
-export default function QuantumStack() {
-  const [selectedItem, setSelectedItem] = useState<StackItem>(stackItems[0])
-
+export default function QuantumStackPage() {
   return (
-    <main className="min-h-screen bg-background p-8">
+    <main className="min-h-screen bg-[#0C0C0D] p-8">
       <div className="max-w-7xl mx-auto">
-        <h1 className="text-4xl font-bold text-text-primary mb-4">
-          Quantum Stack
-        </h1>
-        <p className="text-text-secondary mb-12">
-          Understanding the quantum computing technology stack
-        </p>
+        <div className="text-center mb-16">
+          <h1 className="text-4xl font-bold text-gray-100 mb-6">
+            The Quantum Computing Stack
+          </h1>
+          <p className="text-xl text-gray-400 max-w-3xl mx-auto">
+            Understanding the complete quantum computing technology stack, from hardware to applications
+          </p>
+        </div>
 
-        <div className="grid grid-cols-12 gap-8">
-          {/* Left Column - Stack Navigation */}
-          <div className="col-span-12 md:col-span-4">
-            <Card className="bg-surface-primary border-card-border p-4">
-              <div className="space-y-2">
-                {stackItems.map((item) => (
-                  <button
-                    key={item.id}
-                    onClick={() => setSelectedItem(item)}
-                    className={`
-                      w-full p-4 rounded-lg text-left transition-all duration-300
-                      ${selectedItem.id === item.id 
-                        ? 'bg-accent/10 text-text-primary border border-accent/40' 
-                        : 'bg-surface-secondary text-text-secondary hover:bg-accent/5 hover:text-text-primary border border-transparent'
-                      }
-                    `}
-                  >
-                    {item.title}
-                  </button>
-                ))}
-              </div>
+        <div className="space-y-8">
+          {stackLayers.map((layer, index) => (
+            <Card 
+              key={layer.title}
+              className="bg-gray-900 border-gray-800 hover:border-gray-700 transition-all"
+            >
+              <CardHeader className="p-6">
+                <div className="flex items-center justify-between mb-4">
+                  <Badge className={`bg-${layer.color}-900 text-${layer.color}-200`}>
+                    Layer {stackLayers.length - index}
+                  </Badge>
+                </div>
+                <CardTitle className="text-2xl text-gray-100 mb-2">
+                  {layer.title}
+                </CardTitle>
+                <CardDescription className="text-gray-400">
+                  {layer.description}
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="p-6 pt-0">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {layer.items.map((item) => (
+                    <div 
+                      key={item}
+                      className="p-4 bg-gray-800 rounded-lg border border-gray-700"
+                    >
+                      <h3 className="text-gray-200 font-medium mb-2">{item}</h3>
+                      <p className="text-sm text-gray-400">
+                        Learn more about {item.toLowerCase()} in quantum computing
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
             </Card>
-          </div>
+          ))}
+        </div>
 
-          {/* Right Column - Content */}
-          <div className="col-span-12 md:col-span-8">
-            <Card className="bg-surface-primary border-card-border p-6">
-              <h2 className="text-2xl font-bold text-text-primary mb-2">
-                {selectedItem.title}
-              </h2>
-              <h3 className="text-lg text-accent mb-4">
-                {selectedItem.description}
-              </h3>
-              <div className="space-y-4">
-                <p className="text-text-secondary">
-                  {selectedItem.details.overview}
-                </p>
-                {selectedItem.details.examples && (
-                  <div className="mt-4">
-                    <h4 className="text-text-primary font-semibold mb-2">
-                      Common examples:
-                    </h4>
-                    <ul className="list-disc list-inside space-y-1">
-                      {selectedItem.details.examples.map((example) => (
-                        <li key={example} className="text-text-secondary">
-                          {example}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
-                {selectedItem.details.additionalInfo && (
-                  <p className="text-text-secondary mt-4">
-                    {selectedItem.details.additionalInfo}
-                  </p>
-                )}
-              </div>
-            </Card>
+        <div className="mt-16 p-8 bg-gray-900 border border-gray-800 rounded-lg text-center">
+          <h2 className="text-2xl font-semibold text-gray-100 mb-4">
+            Want to Learn More?
+          </h2>
+          <p className="text-gray-400 mb-6">
+            Check out our learning paths to dive deeper into any aspect of the quantum computing stack.
+          </p>
+          <div className="flex justify-center gap-4">
+            <a 
+              href="/paths/algorithms" 
+              className="inline-block bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg transition-colors"
+            >
+              Explore Algorithms
+            </a>
+            <a 
+              href="/paths" 
+              className="inline-block bg-gray-800 hover:bg-gray-700 text-white px-6 py-3 rounded-lg transition-colors"
+            >
+              View All Paths
+            </a>
           </div>
         </div>
       </div>
     </main>
-  )
+  );
 }

@@ -22,7 +22,7 @@ interface Persona {
 }
 
 const PersonaManager = () => {
-  const [personas, setPersonas] = useState<Persona[]>([]);
+  const [personaList, setPersonaList] = useState<Persona[]>([]);
   const [selectedPersona, setSelectedPersona] = useState<Persona | null>(null);
   const [isEditing, setIsEditing] = useState(false);
   const [newExpertise, setNewExpertise] = useState('');
@@ -54,7 +54,7 @@ const PersonaManager = () => {
       <div className="grid grid-cols-12 gap-6">
         {/* Left sidebar - Persona List */}
         <div className="col-span-4 space-y-4">
-          {personas.map(persona => (
+          {personaList.map(persona => (
             <Card 
               key={persona.id}
               className="cursor-pointer hover:border-blue-500 transition-colors"

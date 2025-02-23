@@ -30,14 +30,14 @@ const PathDiagram = () => {
         />
 
         {/* Persona Path - Moved left */}
-        <Link href="/paths/personas">
-          <rect 
-            x="150" 
+        <Link href="/paths/persona">
+          <rect
+            x="150"
             y="250"
-            width="300" 
-            height="100" 
-            rx="12" 
-            fill="white" 
+            width="300"
+            height="100"
+            rx="12"
+            fill="white"
             stroke="#F4A261"
             strokeWidth="2"
             className="transition-all duration-300 hover:opacity-90"
@@ -54,14 +54,14 @@ const PathDiagram = () => {
         </Link>
 
         {/* Industry Path - Centered */}
-        <Link href="/paths/industries">
-          <rect 
-            x="550" 
-            y="250" 
-            width="300" 
-            height="100" 
-            rx="12" 
-            fill="white" 
+        <Link href="/paths/industry">
+          <rect
+            x="550"
+            y="250"
+            width="300"
+            height="100"
+            rx="12"
+            fill="white"
             stroke="#F4A261"
             strokeWidth="2"
             className="transition-all duration-300 hover:opacity-90"
@@ -78,14 +78,14 @@ const PathDiagram = () => {
         </Link>
 
         {/* Algorithm Path - Moved right */}
-        <Link href="/paths/algorithms">
-          <rect 
-            x="950" 
-            y="250" 
-            width="300" 
-            height="100" 
-            rx="12" 
-            fill="white" 
+        <Link href="/paths/algorithm">
+          <rect
+            x="950"
+            y="250"
+            width="300"
+            height="100"
+            rx="12"
+            fill="white"
             stroke="#F4A261"
             strokeWidth="2"
             className="transition-all duration-300 hover:opacity-90"

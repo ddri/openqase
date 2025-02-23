@@ -11,8 +11,8 @@ const Navigation = () => {
 
   const navItems = [
     { label: 'openQase', href: '/' },
-    { label: 'Learning Paths', href: '/learning-paths' },
-    { label: 'Case Studies', href: '/case-studies' },
+    { label: 'Learning Paths', href: '/paths' },
+    { label: 'Case Studies', href: '/case-study' },
     { label: 'Quantum Stack', href: '/quantum-stack' }
   ];
 

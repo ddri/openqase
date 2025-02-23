@@ -1,8 +1,8 @@
-// src/app/api/admin/case-studies/route.ts
+// src/app/api/admin/case-study/route.ts
 import { NextResponse } from 'next/server';
 import { promises as fs } from 'fs';
 import path from 'path';
-import type { CaseStudy } from '@/types';
+import type { CaseStudy } from '@/lib/types';
 
 const CONTENT_DIR = path.join(process.cwd(), 'content', 'case-study');
 
@@ -13,10 +13,10 @@ function createSlug(title: string): string {
     .replace(/(^-|-$)/g, '');
 }
 
-async function readCaseStudies(): Promise<CaseStudy[]> {
+async function readCaseStudyList(): Promise<CaseStudy[]> {
   try {
     const files = await fs.readdir(CONTENT_DIR);
-    const caseStudies = await Promise.all(
+    const caseStudyList = await Promise.all(
       files
         .filter(file => file.endsWith('.json'))
         .map(async file => {
@@ -24,9 +24,9 @@ async function readCaseStudies(): Promise<CaseStudy[]> {
           return JSON.parse(content) as CaseStudy;
         })
     );
-    return caseStudies;
+    return caseStudyList;
   } catch (error) {
-    console.error('Error reading case studies:', error);
+    console.error('Error reading case study list:', error);
     return [];
   }
 }
@@ -37,7 +37,7 @@ async function validateRelationships(caseStudy: CaseStudy): Promise<string[]> {
   
   try {
     // Check persona references
-    for (const personaId of caseStudy.personas) {
+    for (const personaId of caseStudy.persona) {
       const personaPath = path.join(process.cwd(), 'content', 'persona', `${personaId}.json`);
       try {
         await fs.access(personaPath);
@@ -47,7 +47,7 @@ async function validateRelationships(caseStudy: CaseStudy): Promise<string[]> {
     }
 
     // Check industry references
-    for (const industryId of caseStudy.industries) {
+    for (const industryId of caseStudy.industry) {
       const industryPath = path.join(process.cwd(), 'content', 'industry', `${industryId}.json`);
       try {
         await fs.access(industryPath);
@@ -57,7 +57,7 @@ async function validateRelationships(caseStudy: CaseStudy): Promise<string[]> {
     }
 
     // Check algorithm references
-    for (const algorithmId of caseStudy.algorithms) {
+    for (const algorithmId of caseStudy.algorithm) {
       const algorithmPath = path.join(process.cwd(), 'content', 'algorithm', `${algorithmId}.json`);
       try {
         await fs.access(algorithmPath);
@@ -75,12 +75,12 @@ async function validateRelationships(caseStudy: CaseStudy): Promise<string[]> {
 export async function GET() {
   try {
     await fs.mkdir(CONTENT_DIR, { recursive: true });
-    const caseStudies = await readCaseStudies();
-    return NextResponse.json(caseStudies);
+    const caseStudyList = await readCaseStudyList();
+    return NextResponse.json(caseStudyList);
   } catch (error) {
-    console.error('Error fetching case studies:', error);
+    console.error('Error fetching case study list:', error);
     return NextResponse.json(
-      { error: 'Failed to fetch case studies' },
+      { error: 'Failed to fetch case study list' },
       { status: 500 }
     );
   }
@@ -112,8 +112,8 @@ export async function POST(request: Request) {
     }
 
     if (!caseStudy.id) {
-      const caseStudies = await readCaseStudies();
-      const maxId = Math.max(...caseStudies.map(cs => parseInt(cs.id, 10)), 0);
+      const caseStudyList = await readCaseStudyList();
+      const maxId = Math.max(...caseStudyList.map((cs: CaseStudy) => parseInt(cs.id, 10)), 0);
       caseStudy.id = (maxId + 1).toString();
     }
 
@@ -123,12 +123,16 @@ export async function POST(request: Request) {
       title: caseStudy.title,
       slug: caseStudy.slug,
       description: caseStudy.description || '',
-      content: caseStudy.content || '',
-      personas: caseStudy.personas || [],
-      industries: caseStudy.industries || [],
-      algorithms: caseStudy.algorithms || [],
+      type: 'case-study',
+      persona: caseStudy.persona || [],
+      industry: caseStudy.industry || [],
+      algorithm: caseStudy.algorithm || [],
       difficulty: caseStudy.difficulty || 'Beginner',
       tags: caseStudy.tags || [],
+      metrics: caseStudy.metrics || {},
+      technologies: caseStudy.technologies || [],
+      rawContent: caseStudy.rawContent || '',
+      lastUpdated: now,
       createdAt: caseStudy.createdAt || now,
       updatedAt: now
     };

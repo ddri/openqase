@@ -1,4 +1,4 @@
-// src/app/paths/algorithms/[slug]/page.tsx
+// src/app/paths/algorithm/[slug]/page.tsx
 import { promises as fs } from 'fs';
 import path from 'path';
 import { notFound } from 'next/navigation';
@@ -40,7 +40,7 @@ const components = {
 };
 
 export async function generateStaticParams() {
-  const contentDirectory = path.join(process.cwd(), 'content', 'algorithms');
+  const contentDirectory = path.join(process.cwd(), 'content', 'algorithm');
   const files = await fs.readdir(contentDirectory);
   
   return files
@@ -52,7 +52,7 @@ export async function generateStaticParams() {
 
 async function getAlgorithm(slug: string) {
   try {
-    const filePath = path.join(process.cwd(), 'content', 'algorithms', `${slug}.mdx`);
+    const filePath = path.join(process.cwd(), 'content', 'algorithm', `${slug}.mdx`);
     const fileContent = await fs.readFile(filePath, 'utf8');
     const { data, content } = matter(fileContent);
     
@@ -79,7 +79,7 @@ export default async function AlgorithmPage({ params }: { params: { slug: string
       <div className="max-w-7xl mx-auto">
         <div className="mb-8">
           <Link 
-            href="/paths/algorithms"
+            href="/paths/algorithm"
             className="text-sm text-gray-400 hover:text-gray-300 transition-colors"
           >
             ← Back to Algorithms
@@ -157,7 +157,7 @@ export default async function AlgorithmPage({ params }: { params: { slug: string
                       {frontmatter.relatedCaseStudies.map((study: string) => (
                         <Link 
                           key={study}
-                          href={`/case-studies/${study}`}
+                          href={`/case-study/${study}`}
                           className="block text-gray-400 hover:text-gray-300 transition-colors"
                         >
                           {study}

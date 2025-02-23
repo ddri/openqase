@@ -1,8 +1,8 @@
-// src/app/api/admin/industries/route.ts
+// src/app/api/admin/industry/route.ts
 import { NextResponse } from 'next/server';
 import { promises as fs } from 'fs';
 import path from 'path';
-import type { Industry, PersonaType } from '@/types';
+import type { Industry } from '@/lib/types';
 
 const CONTENT_DIR = path.join(process.cwd(), 'content', 'industry');
 
@@ -15,10 +15,10 @@ function createSlug(title: string): string {
     .replace(/(^-|-$)/g, '');
 }
 
-async function readIndustries(): Promise<Industry[]> {
+async function readIndustryList(): Promise<Industry[]> {
   try {
     const files = await fs.readdir(CONTENT_DIR);
-    const industries = await Promise.all(
+    const industryList = await Promise.all(
       files
         .filter(file => file.endsWith('.json'))
         .map(async file => {
@@ -26,9 +26,9 @@ async function readIndustries(): Promise<Industry[]> {
           return JSON.parse(content) as Industry;
         })
     );
-    return industries;
+    return industryList;
   } catch (error) {
-    console.error('Error reading industries:', error);
+    console.error('Error reading industry list:', error);
     return [];
   }
 }
@@ -36,12 +36,12 @@ async function readIndustries(): Promise<Industry[]> {
 export async function GET() {
   try {
     await fs.mkdir(CONTENT_DIR, { recursive: true });
-    const industries = await readIndustries();
-    return NextResponse.json(industries);
+    const industryList = await readIndustryList();
+    return NextResponse.json(industryList);
   } catch (error) {
-    console.error('Error fetching industries:', error);
+    console.error('Error fetching industry list:', error);
     return NextResponse.json(
-      { error: 'Failed to fetch industries' },
+      { error: 'Failed to fetch industry list' },
       { status: 500 }
     );
   }
@@ -67,15 +67,12 @@ export async function POST(request: Request) {
       title: industryInput.title,
       slug: industryInput.slug || createSlug(industryInput.title),
       description: industryInput.description || '',
-      type: industryInput.type || 'Technical',
+      type: 'industry',
       sector: industryInput.sector || '',
       keyApplications: industryInput.keyApplications || [],
       relatedCaseStudies: industryInput.relatedCaseStudies || [],
-      challenges: industryInput.challenges || [],
-      opportunities: industryInput.opportunities || [],
-      marketSize: industryInput.marketSize,
-      createdAt: industryInput.createdAt || now,
-      updatedAt: now
+      lastUpdated: now,
+      rawContent: industryInput.rawContent || ''
     };
 
     await fs.writeFile(
@@ -110,11 +107,10 @@ export async function PUT(
     // Ensure required arrays exist
     const industry: Industry = {
       ...industryInput as Industry,
-      updatedAt: new Date().toISOString(),
+      lastUpdated: new Date().toISOString(),
       keyApplications: industryInput.keyApplications || [],
       relatedCaseStudies: industryInput.relatedCaseStudies || [],
-      challenges: industryInput.challenges || [],
-      opportunities: industryInput.opportunities || []
+      rawContent: industryInput.rawContent || ''
     };
 
     const existingFiles = await fs.readdir(CONTENT_DIR);

@@ -4,19 +4,19 @@
 import { AdminDashboard } from '@/components/admin/AdminDashboard';
 import { useEffect, useState } from 'react';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import type { Persona, Industry, Algorithm, CaseStudy } from '@/types';
+import type { Persona, Industry, Algorithm, CaseStudy } from '@/lib/types';
 
 export default function AdminPage() {
   const [content, setContent] = useState<{
-    personas: Persona[];
-    industries: Industry[];
-    algorithms: Algorithm[];
-    caseStudies: CaseStudy[];
+    persona: Persona[];
+    industry: Industry[];
+    algorithm: Algorithm[];
+    caseStudy: CaseStudy[];
   }>({
-    personas: [],
-    industries: [],
-    algorithms: [],
-    caseStudies: []
+    persona: [],
+    industry: [],
+    algorithm: [],
+    caseStudy: []
   });
   
   const [error, setError] = useState<string | null>(null);
@@ -26,18 +26,18 @@ export default function AdminPage() {
     // Fetch all content types when the page loads
     const fetchContent = async () => {
       try {
-        const [personas, industries, algorithms, caseStudies] = await Promise.all([
-          fetch('/api/admin/personas').then(res => res.json()),
-          fetch('/api/admin/industries').then(res => res.json()),
-          fetch('/api/admin/algorithms').then(res => res.json()),
-          fetch('/api/admin/case-studies').then(res => res.json())
+        const [personaList, industryList, algorithmList, caseStudyList] = await Promise.all([
+          fetch('/api/admin/persona').then(res => res.json()),
+          fetch('/api/admin/industry').then(res => res.json()),
+          fetch('/api/admin/algorithm').then(res => res.json()),
+          fetch('/api/admin/case-study').then(res => res.json())
         ]);
 
         setContent({
-          personas,
-          industries,
-          algorithms,
-          caseStudies
+          persona: personaList,
+          industry: industryList,
+          algorithm: algorithmList,
+          caseStudy: caseStudyList
         });
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Failed to load content');

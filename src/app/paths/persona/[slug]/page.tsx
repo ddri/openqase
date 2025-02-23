@@ -1,5 +1,3 @@
-'use client';
-
 import React from 'react';
 import { getContentBySlug, getAllContent } from '@/lib/mdx';
 import { Persona, CaseStudy } from '@/lib/types';
@@ -23,15 +21,16 @@ const components = {
 
 // Generate static paths
 export async function generateStaticParams() {
-  const personas = await getAllContent<Persona>('persona');
-  return personas.map((persona) => ({
+  const personaList = await getAllContent<Persona>('persona');
+  return personaList.map((persona) => ({
     slug: persona.slug,
   }));
 }
 
 // Get metadata for the page
 export async function generateMetadata({ params }: { params: { slug: string } }) {
-  const persona = await getContentBySlug<Persona>('persona', params.slug);
+  const { slug } = await params;
+  const persona = await getContentBySlug<Persona>('persona', slug);
   
   return {
     title: `${persona.frontmatter.title} | OpenQase Quantum Computing`,
@@ -41,8 +40,13 @@ export async function generateMetadata({ params }: { params: { slug: string } })
 }
 
 export default async function PersonaPage({ params }: { params: { slug: string } }) {
-  const persona = await getContentBySlug<Persona>('persona', params.slug);
+  const { slug } = await params;
+  const persona = await getContentBySlug<Persona>('persona', slug);
   
+    // Add debug logging
+    console.log('Persona data:', persona);
+    console.log('Related case studies:', persona.frontmatter.relatedCaseStudies);
+    
   // Get related case studies
   const caseStudies = await Promise.all(
     persona.frontmatter.relatedCaseStudies.map(async (studySlug: string) => {
@@ -66,11 +70,11 @@ export default async function PersonaPage({ params }: { params: { slug: string }
                 </Badge>
               </div>
             </Card>
-            <Link 
-              href="/paths/personas"
+            <Link
+              href="/paths/persona"
               className="inline-block mt-4 text-sm text-gray-400 hover:text-gray-300"
             >
-              ← Back to Personas
+              ← Back to Persona
             </Link>
           </div>
 
@@ -87,10 +91,10 @@ export default async function PersonaPage({ params }: { params: { slug: string }
               Related Case Studies
             </h2>
             <div className="space-y-4">
-              {caseStudies.map((study: { frontmatter: CaseStudy }) => (
-                <Link 
-                  key={study.frontmatter.slug}
-                  href={`/case-studies/${study.frontmatter.slug}`}
+              {caseStudies.map((study) => (
+                <Link
+                  key={study.slug}
+                  href={`/case-study/${study.slug}`}
                   className="block p-4 bg-gray-900 border border-gray-800 rounded-lg hover:border-gray-700"
                 >
                   <h3 className="font-medium text-gray-100 mb-2">

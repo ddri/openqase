@@ -1,34 +1,12 @@
-// src/app/paths/algorithms/page.tsx
-import { promises as fs } from 'fs';
-import path from 'path';
-import matter from 'gray-matter';
+// src/app/paths/algorithm/page.tsx
 import { Card, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import Link from 'next/link';
+import { getAllContent } from '@/lib/mdx';
+import type { Algorithm } from '@/lib/types';
 
-async function getAlgorithms() {
-  const contentDirectory = path.join(process.cwd(), 'content', 'algorithms');
-  const files = await fs.readdir(contentDirectory);
-  
-  const algorithms = await Promise.all(
-    files
-      .filter(file => file.endsWith('.mdx'))
-      .map(async file => {
-        const fullPath = path.join(contentDirectory, file);
-        const fileContents = await fs.readFile(fullPath, 'utf8');
-        const { data } = matter(fileContents);
-        return {
-          ...data,
-          slug: file.replace('.mdx', ''),
-        };
-      })
-  );
-
-  return algorithms;
-}
-
-export default async function AlgorithmsPage() {
-  const algorithms = await getAlgorithms();
+export default async function AlgorithmPage() {
+  const algorithmList = await getAllContent<Algorithm>('algorithm');
 
   return (
     <main className="min-h-screen bg-[#0C0C0D] p-8">
@@ -39,21 +17,21 @@ export default async function AlgorithmsPage() {
         </p>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {algorithms.map((algorithm: any) => (
-            <Link key={algorithm.slug} href={`/paths/algorithms/${algorithm.slug}`}>
+          {algorithmList.map((algorithm) => (
+            <Link key={algorithm.slug} href={`/paths/algorithm/${algorithm.slug}`}>
               <Card className="bg-gray-900 border-gray-800 hover:border-gray-700 transition-all">
                 <CardHeader>
                   <div className="flex items-center justify-between mb-2">
-                    <Badge>{algorithm.complexity}</Badge>
+                    <Badge>{algorithm.frontmatter.complexity}</Badge>
                   </div>
                   <CardTitle className="text-xl mb-2 text-gray-100">
-                    {algorithm.title}
+                    {algorithm.frontmatter.title}
                   </CardTitle>
                   <CardDescription className="text-gray-400">
-                    {algorithm.description}
+                    {algorithm.frontmatter.description}
                   </CardDescription>
                   <div className="flex flex-wrap gap-2 mt-4">
-                    {algorithm.applications.slice(0, 3).map((app: string) => (
+                    {algorithm.frontmatter.applications.slice(0, 3).map((app: string) => (
                       <Badge key={app} variant="outline">
                         {app}
                       </Badge>

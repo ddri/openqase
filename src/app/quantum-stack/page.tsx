@@ -120,7 +120,7 @@ export default function QuantumStackPage() {
           </p>
           <div className="flex justify-center gap-4">
             <a 
-              href="/paths/algorithms" 
+              href="/paths/algorithm"
               className="inline-block bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg transition-colors"
             >
               Explore Algorithms

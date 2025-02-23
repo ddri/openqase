@@ -5,6 +5,7 @@ export interface BaseContent {
   slug: string;
   description: string;
   lastUpdated: string;
+  rawContent: string;
 }
 
 // Valid content types

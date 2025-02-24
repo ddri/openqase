@@ -1,0 +1,165 @@
+{
+  "id": "5",
+  "title": "Quantum Chemist",
+  "slug": "quantum-chemist",
+  "type": "Technical",
+  "description": "Apply quantum computing to solve complex molecular simulation problems, discover new materials, and model chemical reactions with unprecedented accuracy.",
+  "role": "Chemistry Research",
+  "experience": {
+    "required": [
+      "Physical chemistry",
+      "Quantum mechanics",
+      "Computational chemistry"
+    ],
+    "beneficial": [
+      "Programming skills",
+      "Linear algebra",
+      "Statistical mechanics"
+    ]
+  },
+  "learningPath": {
+    "beginnerTopics": [
+      {
+        "name": "Quantum Computing Fundamentals",
+        "skills": [
+          "Quantum states",
+          "Circuit model",
+          "Measurement theory"
+        ]
+      },
+      {
+        "name": "Chemistry Applications",
+        "skills": [
+          "Electronic structure",
+          "Molecular modeling",
+          "Energy calculations"
+        ]
+      }
+    ],
+    "intermediateTopics": [
+      {
+        "name": "Algorithm Implementation",
+        "skills": [
+          "VQE implementation",
+          "Error mitigation",
+          "Circuit optimization"
+        ]
+      },
+      {
+        "name": "Simulation Methods",
+        "skills": [
+          "Hamiltonian simulation",
+          "Time evolution",
+          "State preparation"
+        ]
+      }
+    ],
+    "advancedTopics": [
+      {
+        "name": "Advanced Applications",
+        "skills": [
+          "Reaction mechanisms",
+          "Catalyst design",
+          "Material discovery"
+        ]
+      }
+    ]
+  },
+  "researchAreas": {
+    "molecularSimulation": [
+      {
+        "area": "Electronic Structure",
+        "applications": [
+          "Ground state energies",
+          "Excited states",
+          "Molecular properties"
+        ]
+      },
+      {
+        "area": "Chemical Reactions",
+        "applications": [
+          "Reaction pathways",
+          "Transition states",
+          "Rate calculations"
+        ]
+      },
+      {
+        "area": "Materials",
+        "applications": [
+          "Novel materials",
+          "Property prediction",
+          "Structure optimization"
+        ]
+      }
+    ]
+  },
+  "technicalTools": [
+    {
+      "category": "Quantum Software",
+      "tools": [
+        "Qiskit Nature",
+        "OpenFermion",
+        "Q# Chemistry Libraries"
+      ]
+    },
+    {
+      "category": "Classical Tools",
+      "tools": [
+        "Molecular visualization",
+        "Density functional theory",
+        "Statistical analysis"
+      ]
+    }
+  ],
+  "relevantCaseStudies": [
+    "molecular-simulation",
+    "drug-discovery",
+    "catalyst-design"
+  ],
+  "keySkills": [
+    {
+      "category": "Chemistry",
+      "skills": [
+        "Quantum chemistry",
+        "Molecular modeling",
+        "Reaction analysis"
+      ]
+    },
+    {
+      "category": "Computing",
+      "skills": [
+        "Algorithm implementation",
+        "Data analysis",
+        "Scientific programming"
+      ]
+    },
+    {
+      "category": "Research",
+      "skills": [
+        "Literature review",
+        "Experimental design",
+        "Results analysis"
+      ]
+    }
+  ],
+  "industryApplications": [
+    {
+      "category": "Pharmaceutical",
+      "applications": [
+        "Drug discovery",
+        "Protein folding",
+        "Binding affinity"
+      ]
+    },
+    {
+      "category": "Materials",
+      "applications": [
+        "Battery design",
+        "Catalyst optimization",
+        "Novel materials"
+      ]
+    }
+  ],
+  "createdAt": "2024-02-13T00:00:00Z",
+  "updatedAt": "2024-02-13T00:00:00Z"
+}

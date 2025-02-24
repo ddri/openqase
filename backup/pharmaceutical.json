@@ -1,0 +1,20 @@
+{
+    "id": "4",
+    "title": "Pharmaceutical",
+    "slug": "pharmaceutical",
+    "description": "Applications of quantum computing in pharmaceutical research and drug development",
+    "type": "Technical",
+    "sector": "Pharmaceutical & Life Sciences",
+    "keyApplications": [
+      "Drug Discovery",
+      "Molecular Simulation",
+      "Protein Folding",
+      "Drug-Target Interaction",
+      "Clinical Trial Optimization"
+    ],
+    "relatedCaseStudies": [
+      "merck-molecular-simulation"
+    ],
+    "createdAt": "2024-02-13T00:00:00Z",
+    "updatedAt": "2024-02-13T00:00:00Z"
+  }

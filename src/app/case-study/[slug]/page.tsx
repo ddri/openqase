@@ -23,8 +23,15 @@ const components = {
   ),
 };
 
-export default async function CaseStudyPage({ params }: { params: { slug: string } }) {
-  const caseStudy = await getContentBySlug<CaseStudy>('case-study', params.slug);
+interface PageProps {
+  params: Promise<{
+    slug: string;
+  }>;
+}
+
+export default async function CaseStudyPage({ params }: PageProps) {
+  const { slug } = await params;
+  const caseStudy = await getContentBySlug<CaseStudy>('case-study', slug);
 
   if (!caseStudy) {
     notFound();
@@ -66,36 +73,42 @@ export default async function CaseStudyPage({ params }: { params: { slug: string
               <h3 className="font-semibold mb-4">Case Study Details</h3>
               
               <div className="space-y-4">
-                <div>
-                  <h4 className="text-sm font-medium text-muted-foreground">Difficulty</h4>
-                  <Badge>{caseStudy.frontmatter.difficulty}</Badge>
-                </div>
-
-                <div>
-                  <h4 className="text-sm font-medium text-muted-foreground">Technologies</h4>
-                  <div className="flex flex-wrap gap-2 mt-2">
-                    {caseStudy.frontmatter.technologies.map((tech: string) => (
-                      <Badge key={tech} variant="outline">{tech}</Badge>
-                    ))}
+                {caseStudy.frontmatter.difficulty && (
+                  <div>
+                    <h4 className="text-sm font-medium text-muted-foreground">Difficulty</h4>
+                    <Badge>{caseStudy.frontmatter.difficulty}</Badge>
                   </div>
-                </div>
+                )}
 
-                <div>
-                  <h4 className="text-sm font-medium text-muted-foreground">Related Content</h4>
-                  <div className="mt-2 space-y-2">
-                    {caseStudy.frontmatter.persona.map((persona: string) => (
-                      <Link
-                        key={persona}
-                        href={`/paths/persona/${persona}`}
-                        className="block text-sm hover:text-primary"
-                      >
-                        {persona}
-                      </Link>
-                    ))}
+                {caseStudy.frontmatter.technologies?.length > 0 && (
+                  <div>
+                    <h4 className="text-sm font-medium text-muted-foreground">Technologies</h4>
+                    <div className="flex flex-wrap gap-2 mt-2">
+                      {caseStudy.frontmatter.technologies.map((tech: string) => (
+                        <Badge key={tech} variant="outline">{tech}</Badge>
+                      ))}
+                    </div>
                   </div>
-                </div>
+                )}
 
-                {caseStudy.frontmatter.metrics && (
+                {caseStudy.frontmatter.persona?.length > 0 && (
+                  <div>
+                    <h4 className="text-sm font-medium text-muted-foreground">Related Content</h4>
+                    <div className="mt-2 space-y-2">
+                      {caseStudy.frontmatter.persona.map((p: string) => (
+                        <Link
+                          key={p}
+                          href={`/paths/persona/${p}`}
+                          className="block text-sm hover:text-primary"
+                        >
+                          {p}
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {caseStudy.frontmatter.metrics && Object.keys(caseStudy.frontmatter.metrics).length > 0 && (
                   <div>
                     <h4 className="text-sm font-medium text-muted-foreground">Key Metrics</h4>
                     <div className="mt-2 space-y-1">

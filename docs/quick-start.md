@@ -21,6 +21,7 @@ OpenQASE is a Next.js-based educational platform for quantum computing. This gui
 3. **View Documentation**
    - `docs/content-management.md` - Content creation guide
    - `docs/technical-architecture.md` - Technical details
+   - `docs/content-and-routing.md` - Content system details
    - `docs/quick-start.md` - This guide
 
 ## Directory Structure
@@ -28,15 +29,18 @@ OpenQASE is a Next.js-based educational platform for quantum computing. This gui
 ```
 openqase/
 ├── content/              # MDX content files
-│   ├── algorithms/      # Quantum algorithms
-│   ├── case-studies/    # Implementation examples
-│   ├── industries/      # Industry applications
-│   └── personas/        # Role-based learning paths
+│   ├── algorithm/       # Quantum algorithms
+│   ├── case-study/      # Implementation examples
+│   ├── industry/        # Industry applications
+│   └── persona/         # Role-based learning paths
 ├── src/
 │   ├── app/            # Next.js app router pages
 │   │   ├── paths/      # Learning path routes
-│   │   ├── case-studies/# Case study routes
-│   │   └── quantum-stack/# Stack layer routes
+│   │   │   ├── algorithm/
+│   │   │   ├── industry/
+│   │   │   └── persona/
+│   │   ├── case-study/ # Case study routes
+│   │   └── quantum-stack/ # Stack layer routes
 │   ├── components/     # React components
 │   │   ├── ui/        # Base UI components
 │   │   └── journey/   # Learning path components
@@ -72,12 +76,11 @@ openqase/
 
 ## Key Files
 
-- `content/loader.ts` - Content loading and validation system
-- `src/lib/mdx.ts` - MDX processing and compilation
+- `src/lib/mdx.ts` - MDX processing and content loading
 - `src/lib/validation.ts` - Content validation rules
 - `src/lib/types.ts` - TypeScript definitions for content
 
-## Content Creation Example
+## Content Creation Examples
 
 1. **Create Algorithm Content**
    ```mdx
@@ -98,12 +101,31 @@ openqase/
    Content here...
    ```
 
-2. **Run Validation**
+2. **Create Persona Content**
+   ```mdx
+   ---
+   title: "New Persona"
+   type: "persona"
+   slug: "new-persona"
+   description: "Description here"
+   role: "Role Name"
+   expertise: ["skill1", "skill2"]
+   relatedCaseStudies: ["case-study-slug"]
+   keywords: ["keyword1", "keyword2"]
+   personaType: "Technical"
+   lastUpdated: "2024-02-23"
+   ---
+
+   # Persona Content
+   Content here...
+   ```
+
+3. **Run Validation**
    ```bash
    npm run validate
    ```
 
-3. **Test Locally**
+4. **Test Locally**
    ```bash
    npm run dev
    ```
@@ -133,16 +155,19 @@ openqase/
    - Check required frontmatter fields
    - Verify referenced content exists
    - Ensure proper date format
+   - Check personaType for persona content
 
 2. **Build Errors**
    - Run validation first
    - Check content relationships
    - Verify MDX syntax
+   - Ensure frontmatter matches types
 
 3. **Development Server Issues**
    - Clear .next directory
    - Restart development server
    - Check for syntax errors
+   - Verify MDX content format
 
 ### Need Help?
 
@@ -158,15 +183,18 @@ openqase/
    - Keep content focused
    - Use appropriate tags
    - Maintain relationships
+   - Always access data through frontmatter
 
 2. **Development**
    - Test changes locally
    - Run validation often
    - Follow TypeScript types
    - Use existing components
+   - Use lib/mdx.ts for content loading
 
 3. **Deployment**
    - Always run validation
    - Build and test locally
    - Verify all routes work
    - Check relationships
+   - Test content rendering

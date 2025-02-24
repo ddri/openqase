@@ -10,38 +10,56 @@ OpenQASE is a Next.js application that converts MDX content into a static educat
 
 ```mermaid
 graph TD
-    A[MDX Files] --> B[Content Loader]
-    B --> C[MDX Compiler]
+    A[MDX Files] --> B[MDX Loader]
+    B --> C[MDX Processing]
     C --> D[Content Store]
     D --> E[Static Generation]
     
-    subgraph "Content Loader"
+    subgraph "MDX Loader"
     F[Read Files] --> G[Parse Frontmatter]
-    G --> H[Validate Content]
-    H --> I[Create Content Maps]
+    G --> H[Process MDX]
+    H --> I[Return Typed Content]
     end
     
     subgraph "MDX Processing"
-    J[Compile MDX] --> K[Apply Components]
+    J[Apply Plugins] --> K[Apply Components]
     K --> L[Generate HTML]
     end
 ```
 
 #### Implementation Details
 
-1. **Content Loader (`content/loader.ts`)**
-   - Reads MDX files from content directories
+1. **MDX Processing (`src/lib/mdx.ts`)**
+   - Reads and processes MDX files
    - Uses gray-matter for frontmatter parsing
+   - Applies MDX plugins (remarkGfm, rehypePrismPlus)
+   - Returns typed content with frontmatter separation
    - Implements React cache for performance
-   - Creates type-safe content maps
 
-2. **MDX Processing (`src/lib/mdx.ts`)**
-   - Uses next-mdx-remote for compilation
-   - Applies custom components
-   - Handles markdown extensions
-   - Processes code blocks
+```typescript
+// src/lib/mdx.ts
+export async function getContentBySlug<T>(
+  type: ContentType,
+  slug: string
+): Promise<MDXContent<T>> {
+  const { data, content } = matter(fileContents);
+  const mdxSource = await serialize(content, {
+    mdxOptions: {
+      remarkPlugins: [remarkGfm],
+      rehypePlugins: [rehypePrismPlus],
+    },
+    scope: data,
+  });
+  
+  return {
+    source: mdxSource,
+    frontmatter: data as T,
+    slug
+  };
+}
+```
 
-3. **Validation System (`src/lib/validation.ts`)**
+2. **Validation System (`src/lib/validation.ts`)**
    - Validates required fields
    - Checks content relationships
    - Ensures data integrity
@@ -55,7 +73,7 @@ graph LR
     B --> C[Dynamic Routes]
     B --> D[Static Routes]
     
-    C --> E[/[type]/[slug]]
+    C --> E[/paths/[type]/[slug]]
     D --> F[/index]
     
     E --> G[Content Page]
@@ -65,7 +83,7 @@ graph LR
 #### Route Implementation
 
 1. **Dynamic Routes**
-   - `/[type]/[slug]/page.tsx` files
+   - `/paths/[type]/[slug]/page.tsx` files
    - Generated from content at build time
    - Handle individual content pages
    - Include related content
@@ -85,9 +103,9 @@ sequenceDiagram
     participant Static as Static Site
     
     Content->>Build: Load Files
-    Build->>Build: Validate Content
+    Build->>Build: Process MDX
     Build->>Build: Generate Routes
-    Build->>Build: Compile MDX
+    Build->>Build: Apply Components
     Build->>Static: Generate Pages
     Static->>Static: Optimize Assets
 ```
@@ -96,19 +114,25 @@ sequenceDiagram
 
 1. **Content Processing**
    ```typescript
-   // content/loader.ts
-   export const loadContentByType = cache(async <T extends ContentType>(
-     type: T
-   ): Promise<Record<string, ContentTypeMap[T]>> => {
-     // Load and process content
+   // src/lib/mdx.ts
+   export const getAllContent = cache(async <T>(
+     type: ContentType
+   ): Promise<MDXContent<T>[]> => {
+     // Process all content of a type
+     return contentList.sort((a, b) => {
+       // Sort by date/title
+     });
    });
    ```
 
 2. **Route Generation**
    ```typescript
-   // [type]/[slug]/page.tsx
+   // paths/[type]/[slug]/page.tsx
    export async function generateStaticParams() {
-     // Generate routes from content
+     const contentList = await getAllContent<ContentType>(type);
+     return contentList.map(content => ({
+       slug: content.slug
+     }));
    }
    ```
 
@@ -116,8 +140,13 @@ sequenceDiagram
    ```typescript
    // Example page component
    export default async function ContentPage({ params }) {
-     const content = await loadContentBySlug(params.type, params.slug);
-     // Render content with components
+     const content = await getContentBySlug<ContentType>(params.type, params.slug);
+     return (
+       <article>
+         <h1>{content.frontmatter.title}</h1>
+         <MDXRemote source={content.source} components={components} />
+       </article>
+     );
    }
    ```
 
@@ -154,13 +183,13 @@ graph TD
 
 ```mermaid
 graph LR
-    A[Content] --> B[Build]
+    A[MDX Files] --> B[MDX Processing]
     B --> C[Static Site]
     C --> D[CDN]
     D --> E[Browser]
     
     subgraph "Build Process"
-    F[Validate] --> G[Generate]
+    F[Process MDX] --> G[Generate Routes]
     G --> H[Optimize]
     end
 ```
@@ -177,14 +206,14 @@ graph LR
 ### 2. Code Updates
 
 1. Modify components/routes
-2. Update content processing
+2. Update MDX processing
 3. Test with sample content
 4. Validate build process
 
 ## Performance Considerations
 
 1. **Build Optimization**
-   - Parallel content processing
+   - MDX processing with plugins
    - Efficient route generation
    - Asset optimization
 
@@ -201,7 +230,7 @@ graph LR
    - Format verification
 
 2. **Build Process**
-   - Secure content processing
+   - Secure MDX processing
    - Safe component rendering
    - Error handling
 

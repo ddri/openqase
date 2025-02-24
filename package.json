@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "next dev",
     "validate": "ts-node scripts/validate-content.ts",
-    "build": "npm run validate && next build",
+    "build": "next build",
+    "build:validate": "npm run validate && next build",
     "start": "next start",
     "lint": "next lint",
     "type": "module",

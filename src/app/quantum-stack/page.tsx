@@ -1,6 +1,10 @@
 // src/app/quantum-stack/page.tsx
+'use client';
+
+import { useState } from 'react';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { cn } from '@/lib/utils';
 
 const stackLayers = [
   {
@@ -12,7 +16,8 @@ const stackLayers = [
       "Simulation",
       "Cryptography"
     ],
-    color: "blue"
+    content: "Applications form the topmost layer of the quantum computing stack. These are the practical implementations that solve real-world problems. From optimization in logistics and finance to breakthroughs in drug discovery and materials science, quantum applications leverage the unique properties of quantum systems to tackle problems that classical computers struggle with.",
+    layerNumber: 5
   },
   {
     title: "Algorithms",
@@ -23,7 +28,8 @@ const stackLayers = [
       "VQE",
       "QAOA"
     ],
-    color: "purple"
+    content: "Quantum algorithms are the mathematical procedures that harness quantum mechanical effects to solve computational problems. Some algorithms offer exponential speedup over classical methods for specific tasks. This layer bridges the gap between practical applications and the underlying quantum hardware.",
+    layerNumber: 4
   },
   {
     title: "Software Development",
@@ -34,7 +40,8 @@ const stackLayers = [
       "Q#",
       "Pennylane"
     ],
-    color: "green"
+    content: "The software development layer provides the tools and frameworks that developers use to write quantum programs. These frameworks abstract away much of the complexity of quantum operations while providing powerful capabilities for circuit design, optimization, and execution.",
+    layerNumber: 3
   },
   {
     title: "Control & Operations",
@@ -45,7 +52,8 @@ const stackLayers = [
       "Error Correction",
       "Calibration"
     ],
-    color: "yellow"
+    content: "Control and operations manage the precise manipulation of quantum states. This layer handles the translation of quantum algorithms into physical operations, implements error correction protocols, and ensures accurate measurement of quantum states.",
+    layerNumber: 2
   },
   {
     title: "Hardware",
@@ -56,82 +64,98 @@ const stackLayers = [
       "Photonic Systems",
       "Topological Qubits"
     ],
-    color: "red"
+    content: "The hardware layer forms the foundation of quantum computing. It encompasses the physical qubits and their supporting infrastructure. Different hardware approaches each have their own advantages and challenges in maintaining quantum coherence and scaling up to more qubits.",
+    layerNumber: 1
   }
 ];
 
 export default function QuantumStackPage() {
+  const [selectedLayer, setSelectedLayer] = useState(stackLayers[0]);
+
   return (
-    <main className="min-h-screen bg-[#0C0C0D] p-8">
-      <div className="max-w-7xl mx-auto">
-        <div className="text-center mb-16">
-          <h1 className="text-4xl font-bold text-gray-100 mb-6">
-            The Quantum Computing Stack
-          </h1>
-          <p className="text-xl text-gray-400 max-w-3xl mx-auto">
-            Understanding the complete quantum computing technology stack, from hardware to applications
-          </p>
-        </div>
+    <main className="container mx-auto p-8">
+      <div className="text-center mb-16">
+        <h1 className="text-4xl font-bold mb-6">
+          The Quantum Computing Stack
+        </h1>
+        <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+          Understanding the complete quantum computing technology stack, from hardware to applications
+        </p>
+      </div>
 
-        <div className="space-y-8">
-          {stackLayers.map((layer, index) => (
-            <Card 
-              key={layer.title}
-              className="bg-gray-900 border-gray-800 hover:border-gray-700 transition-all"
-            >
-              <CardHeader className="p-6">
-                <div className="flex items-center justify-between mb-4">
-                  <Badge className={`bg-${layer.color}-900 text-${layer.color}-200`}>
-                    Layer {stackLayers.length - index}
-                  </Badge>
-                </div>
-                <CardTitle className="text-2xl text-gray-100 mb-2">
-                  {layer.title}
-                </CardTitle>
-                <CardDescription className="text-gray-400">
-                  {layer.description}
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="p-6 pt-0">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {layer.items.map((item) => (
-                    <div 
-                      key={item}
-                      className="p-4 bg-gray-800 rounded-lg border border-gray-700"
-                    >
-                      <h3 className="text-gray-200 font-medium mb-2">{item}</h3>
-                      <p className="text-sm text-gray-400">
-                        Learn more about {item.toLowerCase()} in quantum computing
-                      </p>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        {/* Left side - Stack visualization */}
+        <div className="relative">
+          {/* Quantum Computer Container */}
+          <div className="bg-accent/5 border-2 border-accent/20 rounded-xl p-6 relative">
+            {/* Decorative elements */}
+            <div className="absolute top-0 left-0 w-full h-8 bg-accent/10 rounded-t-xl" />
+            <div className="absolute bottom-0 left-0 w-full h-12 bg-accent/10 rounded-b-xl" />
+            
+            {/* Side connectors */}
+            <div className="absolute -left-3 top-1/4 w-6 h-12 bg-accent/10 rounded-l-lg" />
+            <div className="absolute -right-3 top-1/3 w-6 h-12 bg-accent/10 rounded-r-lg" />
+            <div className="absolute -left-3 bottom-1/4 w-6 h-12 bg-accent/10 rounded-l-lg" />
+
+            {/* Stack layers */}
+            <div className="space-y-3 relative z-10">
+              {stackLayers.map((layer) => (
+                <Card 
+                  key={layer.title}
+                  className={cn(
+                    "cursor-pointer transition-all transform hover:scale-[1.02]",
+                    selectedLayer.title === layer.title 
+                      ? "border-primary bg-primary/5 shadow-lg" 
+                      : "hover:bg-accent/5"
+                  )}
+                  onClick={() => setSelectedLayer(layer)}
+                >
+                  <CardHeader className="p-4">
+                    <div className="flex items-center justify-between mb-2">
+                      <Badge className="bg-primary/10 text-primary">
+                        Layer {layer.layerNumber}
+                      </Badge>
                     </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-          ))}
+                    <CardTitle className="text-lg">{layer.title}</CardTitle>
+                    <CardDescription className="text-sm text-muted-foreground">
+                      {layer.description}
+                    </CardDescription>
+                  </CardHeader>
+                </Card>
+              ))}
+            </div>
+          </div>
         </div>
 
-        <div className="mt-16 p-8 bg-gray-900 border border-gray-800 rounded-lg text-center">
-          <h2 className="text-2xl font-semibold text-gray-100 mb-4">
-            Want to Learn More?
-          </h2>
-          <p className="text-gray-400 mb-6">
-            Check out our learning paths to dive deeper into any aspect of the quantum computing stack.
-          </p>
-          <div className="flex justify-center gap-4">
-            <a 
-              href="/paths/algorithm"
-              className="inline-block bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg transition-colors"
-            >
-              Explore Algorithms
-            </a>
-            <a 
-              href="/paths" 
-              className="inline-block bg-gray-800 hover:bg-gray-700 text-white px-6 py-3 rounded-lg transition-colors"
-            >
-              View All Paths
-            </a>
-          </div>
+        {/* Right side - Layer details */}
+        <div className="lg:sticky lg:top-8">
+          <Card className="h-full">
+            <CardHeader className="p-6">
+              <Badge className="w-fit mb-4 bg-primary/10 text-primary">
+                Layer {selectedLayer.layerNumber}
+              </Badge>
+              <CardTitle className="text-2xl mb-4">{selectedLayer.title}</CardTitle>
+              <CardDescription className="text-lg text-muted-foreground">
+                {selectedLayer.content}
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="p-6 pt-0">
+              <h3 className="font-semibold mb-4">Key Components</h3>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {selectedLayer.items.map((item) => (
+                  <div 
+                    key={item}
+                    className="p-4 bg-accent/5 rounded-lg border border-accent/10"
+                  >
+                    <h4 className="font-medium mb-2">{item}</h4>
+                    <p className="text-sm text-muted-foreground">
+                      Learn more about {item.toLowerCase()} in quantum computing
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
         </div>
       </div>
     </main>

@@ -7,10 +7,10 @@
 Content is organized in the `/content` directory:
 ```
 content/
-├── algorithms/      # Quantum algorithms
-├── case-studies/    # Implementation examples
-├── industries/      # Industry applications
-└── personas/        # Role-based learning paths
+├── algorithm/      # Quantum algorithms
+├── case-study/     # Implementation examples
+├── industry/       # Industry applications
+└── persona/        # Role-based learning paths
 ```
 
 ### Creating MDX Files
@@ -43,14 +43,17 @@ type: "case-study"
 slug: "unique-slug"
 description: "Brief description"
 difficulty: "Beginner" | "Intermediate" | "Advanced"
-personas: ["persona-slug-1"]
-industries: ["industry-slug-1"]
-algorithms: ["algorithm-slug-1"]
+persona: ["persona-slug-1"]
+industry: ["industry-slug-1"]
+algorithm: ["algorithm-slug-1"]
 metrics: {
   "metric1": "value1",
   "metric2": "value2"
 }
 technologies: ["tech1", "tech2"]
+tags: ["tag1", "tag2"]
+createdAt: "2024-02-23"
+updatedAt: "2024-02-23"
 lastUpdated: "2024-02-23"
 ---
 
@@ -73,6 +76,19 @@ keyApplications: [
   }
 ]
 relatedCaseStudies: ["case-study-slug-1"]
+color: "blue"
+layer: 1
+applications: [
+  {
+    title: "Application 2",
+    description: "Description",
+    examples: ["example3", "example4"]
+  }
+]
+relatedContent: {
+  algorithm: ["algorithm-slug-1"],
+  caseStudy: ["case-study-slug-1"]
+}
 lastUpdated: "2024-02-23"
 ---
 
@@ -90,6 +106,7 @@ role: "Role Name"
 expertise: ["skill1", "skill2"]
 relatedCaseStudies: ["case-study-slug-1"]
 keywords: ["keyword1", "keyword2"]
+personaType: "Technical" | "Persona"
 lastUpdated: "2024-02-23"
 ---
 
@@ -129,10 +146,11 @@ graph TD
 ### Build Time Processing
 
 1. **Content Loading**
-   - `content/loader.ts` reads MDX files
+   - `lib/mdx.ts` reads MDX files
+   - Processes MDX with plugins (remarkGfm, rehypePrismPlus)
    - Parses frontmatter with gray-matter
    - Validates content structure
-   - Creates content maps by type
+   - Returns typed content with frontmatter separation
 
 2. **Static Generation**
    - Next.js generates static pages
@@ -142,11 +160,12 @@ graph TD
 
 ```mermaid
 graph LR
-    A[MDX Content] --> B[Content Loader]
-    B --> C[Validation]
-    C --> D[Content Maps]
-    D --> E[Static Generation]
-    E --> F[Dynamic Routes]
+    A[MDX Content] --> B[MDX Loader]
+    B --> C[MDX Processing]
+    C --> D[Frontmatter]
+    C --> E[Content]
+    D --> F[Static Generation]
+    E --> F
     F --> G[Static Pages]
 ```
 
@@ -155,9 +174,10 @@ graph LR
 The application uses Next.js App Router for page rendering:
 
 1. **Dynamic Routes**
-   - `/app/[content-type]/[slug]/page.tsx` handles individual content
+   - `/app/paths/[content-type]/[slug]/page.tsx` handles individual content
    - Uses `generateStaticParams` for static paths
    - Renders MDX with custom components
+   - Accesses data through frontmatter
 
 2. **Content Relationships**
    - Links between related content
@@ -167,10 +187,10 @@ The application uses Next.js App Router for page rendering:
 ```mermaid
 graph TD
     A[URL Request] --> B{Route Type}
-    B -->|Dynamic| C[Load Content]
-    B -->|Static| D[Serve Page]
-    C --> E[Render MDX]
-    E --> F[Add Components]
+    B -->|Dynamic| C[getContentBySlug]
+    B -->|Static| D[getAllContent]
+    C --> E[MDXRemote]
+    E --> F[Custom Components]
     F --> G[Final Page]
     D --> G
 ```
@@ -179,9 +199,9 @@ graph TD
 
 The application includes API routes for admin functionality:
 
-- `/api/admin/algorithms` - Manage algorithm content
-- `/api/admin/case-studies` - Manage case studies
-- `/api/admin/industries` - Manage industry content
+- `/api/admin/algorithm` - Manage algorithm content
+- `/api/admin/case-study` - Manage case studies
+- `/api/admin/industry` - Manage industry content
 
 These routes are used by the admin interface for content management.
 
@@ -218,6 +238,7 @@ These routes are used by the admin interface for content management.
    - Use consistent date format
    - Verify relationships exist
    - Keep descriptions concise
+   - Always access through frontmatter in components
 
 3. **Content Body**
    - Use proper heading hierarchy
@@ -230,3 +251,4 @@ These routes are used by the admin interface for content management.
    - Validate before committing
    - Review generated pages
    - Check relationships work
+   - Always use getContentBySlug/getAllContent from lib/mdx.ts

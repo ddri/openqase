@@ -66,7 +66,8 @@ async function getAlgorithm(slug: string) {
 }
 
 export default async function AlgorithmPage({ params }: { params: { slug: string } }) {
-  const algorithm = await getAlgorithm(params.slug);
+    const { slug } = await params;
+    const algorithm = await getAlgorithm(slug);  
 
   if (!algorithm) {
     notFound();

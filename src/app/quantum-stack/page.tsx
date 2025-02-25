@@ -88,41 +88,45 @@ export default function QuantumStackPage() {
         <div className="relative">
           {/* Quantum Computer Container */}
           <div className="bg-accent/5 border-2 border-accent/20 rounded-xl p-6 relative">
-            {/* Decorative elements */}
-            <div className="absolute top-0 left-0 w-full h-8 bg-accent/10 rounded-t-xl" />
-            <div className="absolute bottom-0 left-0 w-full h-12 bg-accent/10 rounded-b-xl" />
-            
-            {/* Side connectors */}
-            <div className="absolute -left-3 top-1/4 w-6 h-12 bg-accent/10 rounded-l-lg" />
-            <div className="absolute -right-3 top-1/3 w-6 h-12 bg-accent/10 rounded-r-lg" />
-            <div className="absolute -left-3 bottom-1/4 w-6 h-12 bg-accent/10 rounded-l-lg" />
 
             {/* Stack layers */}
             <div className="space-y-3 relative z-10">
-              {stackLayers.map((layer) => (
-                <Card 
-                  key={layer.title}
-                  className={cn(
-                    "cursor-pointer transition-all transform hover:scale-[1.02]",
-                    selectedLayer.title === layer.title 
-                      ? "border-primary bg-primary/5 shadow-lg" 
-                      : "hover:bg-accent/5"
-                  )}
-                  onClick={() => setSelectedLayer(layer)}
-                >
-                  <CardHeader className="p-4">
-                    <div className="flex items-center justify-between mb-2">
-                      <Badge className="bg-primary/10 text-primary">
-                        Layer {layer.layerNumber}
-                      </Badge>
-                    </div>
-                    <CardTitle className="text-lg">{layer.title}</CardTitle>
-                    <CardDescription className="text-sm text-muted-foreground">
-                      {layer.description}
-                    </CardDescription>
-                  </CardHeader>
-                </Card>
-              ))}
+              {stackLayers.map((layer) => {
+                const isSelected = selectedLayer.title === layer.title;
+                
+                return (
+                  <div key={layer.title} className="relative">
+                    {/* Selection indicator - an orange left border */}
+                    {isSelected && (
+                      <div className="absolute left-0 top-0 bottom-0 w-1 bg-primary rounded-l-lg" />
+                    )}
+                    
+                    <Card 
+                      className={cn(
+                        "cursor-pointer transition-colors",
+                        isSelected
+                          ? "bg-primary/5" // Light background for selected
+                          : "hover:bg-accent/5" // Just subtle hover background
+                      )}
+                      onClick={() => setSelectedLayer(layer)}
+                    >
+                      <CardHeader className="p-4">
+                        <div className="flex items-center justify-between mb-2">
+                          <Badge className={cn(
+                            isSelected ? "bg-primary text-white" : "bg-primary/10 text-primary"
+                          )}>
+                            Layer {layer.layerNumber}
+                          </Badge>
+                        </div>
+                        <CardTitle className="text-lg">{layer.title}</CardTitle>
+                        <CardDescription className="text-sm text-muted-foreground">
+                          {layer.description}
+                        </CardDescription>
+                      </CardHeader>
+                    </Card>
+                  </div>
+                );
+              })}
             </div>
           </div>
         </div>

@@ -9,13 +9,11 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { Palette } from 'lucide-react'
+import { Moon, Sun } from 'lucide-react'
 
 const themes = [
-  { name: 'Light', value: 'light' },
-  { name: 'Dark', value: 'dark' },
-  { name: 'Warm', value: 'warm' },
-  { name: 'Cool', value: 'cool' },
+  { name: 'Light', value: 'light', icon: Sun },
+  { name: 'Dark', value: 'dark', icon: Moon },
 ]
 
 export function ThemeSwitcher() {
@@ -34,25 +32,23 @@ export function ThemeSwitcher() {
     localStorage.setItem('theme', newTheme)
   }
 
+  const toggleTheme = () => {
+    const newTheme = theme === 'light' ? 'dark' : 'light'
+    changeTheme(newTheme)
+  }
+
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button variant="ghost" size="icon">
-          <Palette className="h-[1.2rem] w-[1.2rem]" />
-          <span className="sr-only">Toggle theme</span>
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
-        {themes.map((t) => (
-          <DropdownMenuItem
-            key={t.value}
-            onClick={() => changeTheme(t.value)}
-            className={theme === t.value ? 'bg-accent/10' : ''}
-          >
-            {t.name}
-          </DropdownMenuItem>
-        ))}
-      </DropdownMenuContent>
-    </DropdownMenu>
+    <Button 
+      variant="ghost" 
+      size="icon" 
+      onClick={toggleTheme}
+      aria-label={`Switch to ${theme === 'light' ? 'dark' : 'light'} theme`}
+    >
+      {theme === 'light' ? (
+        <Moon className="h-[1.2rem] w-[1.2rem]" />
+      ) : (
+        <Sun className="h-[1.2rem] w-[1.2rem]" />
+      )}
+    </Button>
   )
 }

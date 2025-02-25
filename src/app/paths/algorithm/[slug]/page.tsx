@@ -65,8 +65,14 @@ async function getAlgorithm(slug: string) {
   }
 }
 
-export default async function AlgorithmPage({ params }: { params: { slug: string } }) {
-  const { slug } = await params;
+export default async function AlgorithmPage({ 
+  params 
+}: { 
+  params: { 
+    slug: string 
+  } 
+}) {
+  const { slug } = params;
   const algorithm = await getAlgorithm(slug);  
 
   if (!algorithm) {

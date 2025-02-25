@@ -9,30 +9,32 @@ export default async function AlgorithmPage() {
   const algorithmList = await getAllContent<Algorithm>('algorithm');
 
   return (
-    <main className="min-h-screen bg-[#0C0C0D] p-8">
+    <main className="min-h-screen p-8">
       <div className="max-w-7xl mx-auto">
-        <h1 className="text-4xl font-bold text-gray-100 mb-8">Quantum Algorithms</h1>
-        <p className="text-xl text-gray-400 mb-8">
+        <h1 className="text-4xl font-bold text-gray-900 mb-8">Quantum Algorithms</h1>
+        <p className="text-xl text-gray-600 mb-8">
           Explore quantum algorithms from fundamental protocols to complex applications
         </p>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {algorithmList.map((algorithm) => (
             <Link key={algorithm.slug} href={`/paths/algorithm/${algorithm.slug}`}>
-              <Card className="bg-gray-900 border-gray-800 hover:border-gray-700 transition-all">
+              <Card className="bg-white border hover:shadow-lg transition-all">
                 <CardHeader>
                   <div className="flex items-center justify-between mb-2">
-                    <Badge>{algorithm.frontmatter.complexity}</Badge>
+                    <Badge className="bg-[#F4A261] text-white border-0">
+                      {algorithm.frontmatter.complexity}
+                    </Badge>
                   </div>
-                  <CardTitle className="text-xl mb-2 text-gray-100">
+                  <CardTitle className="text-xl mb-2 text-gray-900">
                     {algorithm.frontmatter.title}
                   </CardTitle>
-                  <CardDescription className="text-gray-400">
+                  <CardDescription className="text-gray-600">
                     {algorithm.frontmatter.description}
                   </CardDescription>
                   <div className="flex flex-wrap gap-2 mt-4">
                     {algorithm.frontmatter.applications.slice(0, 3).map((app: string) => (
-                      <Badge key={app} variant="outline">
+                      <Badge key={app} variant="outline" className="text-gray-600 border-gray-300">
                         {app}
                       </Badge>
                     ))}

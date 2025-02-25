@@ -43,8 +43,8 @@ export default async function LearningPathsPage() {
       description: "Choose your learning path based on your role and experience level",
       href: "/paths/persona",
       count: counts.persona,
-      examples: ["Software Engineer", "Financial Analyst", "Research Scientist"],
-      badgeClass: "bg-accent/10 text-accent"  // Using your theme colors
+      examples: ["Software Engineer", "Financial Analyst", "Research Scientist", "Another", "Something Else"],
+      badgeClass: "bg-accent/10 text-accent"
     },
     {
       title: "By Industry",

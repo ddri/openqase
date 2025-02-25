@@ -1,0 +1,18 @@
+// File: src/lib/diagrams/user-journey.mmd
+
+graph TD
+    Start((•)) --> Persona[Persona Path]
+    Start --> Industry[Industry Path]
+    Start --> Algorithm[Algorithm Path]
+    
+    click Persona "/persona" "Explore by persona"
+    click Industry "/industry" "Explore by industry"
+    click Algorithm "/algorithm" "Explore by algorithm"
+    
+    classDef default fill:#FFFFFF,stroke:#000,stroke-width:2px;
+    classDef connection stroke:#F4A261,stroke-width:3px;
+    classDef clickable cursor:pointer;
+    
+    class Persona,Industry,Algorithm clickable;
+    linkStyle default stroke:#F4A261,stroke-width:3px;
+    style Start fill:#F4A261,stroke:#F4A261

@@ -1,0 +1,153 @@
+---
+title: "Shor's Algorithm"
+type: "Technical"
+slug: "shors-algorithm"
+complexity: "O((log N)³) quantum, O((log N)²) classical post-processing"
+description: "A quantum algorithm that performs integer factorization in polynomial time, demonstrating exponential speedup over the best known classical algorithms. This breakthrough has significant implications for cryptography and number theory."
+applications:
+  - "Integer Factorization"
+  - "Cryptanalysis"
+  - "Number Theory"
+  - "RSA Cryptography"
+  - "Period Finding"
+prerequisites:
+  - "Quantum Fourier Transform"
+  - "Modular Arithmetic"
+  - "Number Theory"
+  - "Quantum Circuits"
+  - "Probability Theory"
+relatedCaseStudies:
+  - "rsa-cryptanalysis"
+  - "quantum-period-finding"
+  - "cryptographic-impact"
+keywords:
+  - "Shor's Algorithm"
+  - "quantum factorization"
+  - "cryptography"
+  - "period finding"
+  - "quantum advantage"
+  - "RSA security"
+lastUpdated: "2024-02-21"
+---
+
+# Shor's Algorithm
+
+## Overview
+
+Shor's Algorithm is a quantum algorithm for integer factorization that runs in polynomial time. Its ability to efficiently factor large numbers poses a significant threat to RSA cryptography and demonstrates a clear quantum advantage over classical computing.
+
+## Algorithm Details
+
+### Complexity
+```
+Quantum Part: O((log N)³)
+Classical Part: O((log N)²)
+Classical Best: O(exp(log N)^(1/3))
+```
+
+### Key Components
+1. Quantum Period Finding
+2. Quantum Fourier Transform
+3. Modular Exponentiation
+4. Classical Post-processing
+5. Continued Fractions
+
+## Prerequisites
+
+Before implementing Shor's Algorithm, you should understand:
+
+- Quantum Fourier Transform - Core component for period finding
+- Modular Arithmetic - Essential for the arithmetic operations
+- Number Theory - Understanding of periodic functions
+- Quantum Circuits - Implementation of quantum operations
+- Probability Theory - Analysis of measurement outcomes
+
+## Algorithm Structure
+
+### 1. Classical Preparation
+- Input number N to be factored
+- Choose random a < N
+- Verify gcd(a,N) = 1
+
+### 2. Quantum Period Finding
+- Initialize quantum registers
+- Apply modular exponentiation
+- Perform Quantum Fourier Transform
+- Measure to find period
+
+### 3. Classical Post-processing
+- Convert measurements to factors
+- Verify factorization
+- Handle edge cases
+
+## Implementation Details
+
+1. **Register Preparation**
+   ```
+   |input⟩ = |1⟩
+   |output⟩ = |0⟩
+   ```
+
+2. **Quantum Operations**
+   - Apply modular exponentiation
+   - Implement QFT
+   - Perform measurements
+
+3. **Result Processing**
+   - Convert period to factors
+   - Verify results
+   - Handle failures
+
+## Applications
+
+### Cryptanalysis
+- Breaking RSA encryption
+- Public key cryptography
+- Digital signatures
+
+### Number Theory
+- Period finding problems
+- Order finding
+- Hidden subgroup problems
+
+### Quantum Computing Benchmarks
+- Algorithm implementation
+- Hardware testing
+- Error rate analysis
+
+## Impact on Cryptography
+
+1. **RSA Security**
+   - Threat to current systems
+   - Need for quantum-safe alternatives
+   - Transition timeline considerations
+
+2. **Post-Quantum Cryptography**
+   - Alternative encryption methods
+   - New security standards
+   - Implementation challenges
+
+## Best Practices
+
+1. **Implementation**
+   - Optimize circuit depth
+   - Handle error propagation
+   - Verify intermediate results
+
+2. **Resource Management**
+   - Qubit requirement analysis
+   - Circuit optimization
+   - Error correction needs
+
+3. **Result Verification**
+   - Classical verification
+   - Statistical analysis
+   - Error bounds
+
+## Additional Resources
+
+- Research Papers
+- Implementation Examples
+- Cryptography Standards
+- Number Theory Background
+- Quantum Computing Frameworks

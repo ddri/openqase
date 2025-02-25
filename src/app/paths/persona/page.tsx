@@ -1,65 +1,58 @@
 // src/app/paths/persona/page.tsx
-import ContentCard from '@/components/ContentCard'
-import { Persona } from '@/types'
+import { getAllContent } from '@/lib/mdx';
+import { Persona } from '@/lib/types';
+import { Card, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import Link from 'next/link';
 
-const personas: Array<Pick<Persona, 'id' | 'title' | 'slug' | 'type' | 'description'>> = [
-  {
-    id: '1',
-    title: 'Government Policy Maker',
-    slug: 'government',
-    type: 'Persona',
-    description: 'Understand quantum computing impact on national security, research funding, and policy implications'
-  },
-  {
-    id: '2',
-    title: 'Investment Professional',
-    slug: 'investor',
-    type: 'Persona',
-    description: 'Evaluate quantum computing opportunities, market trends, and investment strategies'
-  },
-  {
-    id: '3',
-    title: 'Software Engineer',
-    slug: 'software-engineer',
-    type: 'Technical',
-    description: 'Learn quantum algorithm implementation, development tools, and programming frameworks'
-  },
-  {
-    id: '4',
-    title: 'Financial Analyst',
-    slug: 'finance',
-    type: 'Technical',
-    description: 'Explore quantum applications in trading, risk analysis, and portfolio optimization'
-  },
-  {
-    id: '5',
-    title: 'Quantum Chemist',
-    slug: 'chemistry',
-    type: 'Technical',
-    description: 'Apply quantum computing to molecular simulation and materials science research'
-  }
-]
+export const metadata = {
+  title: 'Learning Path by Persona | OpenQase',
+  description: 'Choose your quantum computing learning path based on your role and experience'
+};
 
-export default function PersonaPath() {
+export default async function PersonaPage() {
+  const personaList = await getAllContent<Persona>('persona');
+
   return (
-    <main className="min-h-screen bg-[#0C0C0D] p-8">
+    <main className="min-h-screen p-8">
       <div className="max-w-7xl mx-auto">
-        <h1 className="text-4xl font-bold mb-4 text-gray-100">Persona path</h1>
-        <p className="text-gray-400 mb-8">Find case studies relevant to your role</p>
-        
+        <h1 className="text-4xl font-bold text-text-primary mb-8">Learning Path by Persona</h1>
+        <p className="text-xl text-text-secondary mb-8">Choose your path based on your role and experience</p>
+
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {personas.map((persona) => (
-            <ContentCard
-              key={persona.id}
-              title={persona.title}
-              type={persona.type}
-              path="persona"
-              slug={persona.slug}
-              description={persona.description}
-            />
+          {personaList.map((persona) => (
+            <Link key={persona.slug} href={`/paths/persona/${persona.slug}`}>
+              <Card className="hover:bg-accent/5 transition-all h-full">
+                <CardHeader>
+                  <div className="flex items-center justify-between mb-2">
+                    <Badge className="bg-accent text-white border-0">
+                      {persona.frontmatter.role}
+                    </Badge>
+                  </div>
+                  <CardTitle className="text-xl mb-2">
+                    {persona.frontmatter.title}
+                  </CardTitle>
+                  <CardDescription>
+                    {persona.frontmatter.description}
+                  </CardDescription>
+                  {persona.frontmatter.expertise && (
+                    <div className="mt-4">
+                      <p className="text-sm text-text-secondary mb-2">Key expertise:</p>
+                      <div className="flex flex-wrap gap-2">
+                        {persona.frontmatter.expertise.slice(0, 3).map((item: string) => (
+                          <Badge key={item} variant="outline">
+                            {item}
+                          </Badge>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </CardHeader>
+              </Card>
+            </Link>
           ))}
         </div>
       </div>
     </main>
-  )
+  );
 }

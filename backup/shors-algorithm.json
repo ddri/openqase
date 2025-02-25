@@ -1,0 +1,77 @@
+{
+  "id": "1",
+  "title": "Shor's Algorithm",
+  "slug": "shors-algorithm",
+  "type": "Technical",
+  "description": "A groundbreaking quantum algorithm for integer factorization, particularly significant for its potential to break RSA encryption. This algorithm demonstrates quantum computing's ability to solve certain problems exponentially faster than classical computers.",
+  "complexity": "O(log N)",
+  "yearPublished": 1994,
+  "author": "Peter Shor",
+  "prerequisites": [
+    "Quantum Fourier Transform",
+    "Modular Arithmetic",
+    "Basic Quantum Gates",
+    "Classical Period Finding"
+  ],
+  "keyComponents": [
+    {
+      "name": "Phase Estimation",
+      "description": "Used to find the period of a modular exponential function"
+    },
+    {
+      "name": "Quantum Fourier Transform",
+      "description": "Core component for extracting the period from quantum state"
+    },
+    {
+      "name": "Classical Post-Processing",
+      "description": "Continued fraction expansion to extract factors"
+    }
+  ],
+  "workingPrinciple": "Shor's algorithm works by reducing the factoring problem to finding the period of a function, which can be done efficiently on a quantum computer using quantum Fourier transform and phase estimation.",
+  "applications": [
+    {
+      "area": "Cryptography",
+      "description": "Breaking RSA encryption by factoring large numbers"
+    },
+    {
+      "area": "Number Theory",
+      "description": "Solving integer factorization problems"
+    },
+    {
+      "area": "Security Research",
+      "description": "Developing quantum-resistant cryptography"
+    }
+  ],
+  "limitations": [
+    "Requires large number of error-corrected qubits",
+    "Sensitive to quantum noise and decoherence",
+    "Practical implementation still challenging on current hardware"
+  ],
+  "quantumAdvantage": {
+    "classicalComplexity": "O(exp(n^(1/3) * log(n)^(2/3)))",
+    "quantumComplexity": "O(log N)",
+    "speedupType": "Exponential",
+    "explanation": "Provides exponential speedup over best known classical algorithms for integer factorization"
+  },
+  "implementation": {
+    "requiredResources": {
+      "qubits": "2n + 3",
+      "gates": ["Hadamard", "CNOT", "Phase Rotation"],
+      "measurements": "O(log N)"
+    },
+    "steps": [
+      "Initialize quantum registers",
+      "Apply quantum Fourier transform",
+      "Perform modular exponentiation",
+      "Inverse quantum Fourier transform",
+      "Measure and post-process classically"
+    ]
+  },
+  "furtherReading": [
+    "Original paper: 'Polynomial-Time Algorithms for Prime Factorization and Discrete Logarithms on a Quantum Computer'",
+    "IBM Quantum Experience documentation on Shor's Algorithm",
+    "Quantum Computation and Quantum Information by Nielsen and Chuang"
+  ],
+  "createdAt": "2024-02-13T00:00:00Z",
+  "updatedAt": "2024-02-13T00:00:00Z"
+}

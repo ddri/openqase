@@ -72,9 +72,11 @@ export async function generateStaticParams() {
    }));
 }
 
-// Get metadata for the page
-export async function generateMetadata({ params }: { params: { slug: string } }) {
- const { slug } = await params;
+// Get metadata for the page with Promise params
+export async function generateMetadata(props: { params: Promise<{ slug: string }> }) {
+ // Await the params before using
+ const resolvedParams = await props.params;
+ const slug = resolvedParams.slug;
  const persona = await getPersona(slug);
  
  if (!persona) {
@@ -91,8 +93,11 @@ export async function generateMetadata({ params }: { params: { slug: string } })
  };
 }
 
-export default async function PersonaPage({ params }: { params: { slug: string } }) {
- const { slug } = await params;
+// Updated to handle params as a Promise
+export default async function PersonaPage(props: { params: Promise<{ slug: string }> }) {
+ // Await the params before using
+ const resolvedParams = await props.params;
+ const slug = resolvedParams.slug;
  const persona = await getPersona(slug);
  
  if (!persona) {

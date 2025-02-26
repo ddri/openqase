@@ -65,8 +65,11 @@ async function getAlgorithm(slug: string) {
   }
 }
 
-export default async function AlgorithmPage({ params }: { params: { slug: string } }) {
-  const { slug } = await params;
+// Updated to handle params as a Promise
+export default async function AlgorithmPage(props: { params: Promise<{ slug: string }> }) {
+  // Await the params before using
+  const resolvedParams = await props.params;
+  const slug = resolvedParams.slug;
   const algorithm = await getAlgorithm(slug);  
 
   if (!algorithm) {

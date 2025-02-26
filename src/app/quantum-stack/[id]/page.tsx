@@ -63,17 +63,26 @@ async function getStackLayer(id: string): Promise<StackLayer | null> {
     const fileContent = await fs.readFile(filePath, 'utf8');
     const { data, content } = matter(fileContent);
     
+    // Fix: ensure we're returning the proper type with all required fields
     return {
       ...data,
-      source: content
+      rawContent: content,
+      title: data.title || '',
+      description: data.description || '',
+      color: data.color || 'blue',
+      layer: data.layer || 0,
+      applications: data.applications || []
     } as StackLayer;
   } catch (error) {
     return null;
   }
 }
 
-export default async function StackLayerPage({ params }: { params: { id: string } }) {
-  const stackLayer = await getStackLayer(params.id);
+// Updated to handle params as a Promise
+export default async function StackLayerPage(props: { params: Promise<{ id: string }> }) {
+  // Await the params before using
+  const resolvedParams = await props.params;
+  const stackLayer = await getStackLayer(resolvedParams.id);
 
   if (!stackLayer) {
     notFound();

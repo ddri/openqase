@@ -1,18 +1,13 @@
 // src/app/case-study/[slug]/page.tsx
+import { promises as fs } from 'fs';
+import path from 'path';
 import { notFound } from 'next/navigation';
+import matter from 'gray-matter';
 import { MDXRemote } from 'next-mdx-remote/rsc';
 import { Badge } from '@/components/ui/badge';
 import Link from 'next/link';
-import { getContentBySlug, getAllContent } from '@/lib/mdx';
-import type { CaseStudy } from '@/lib/types';
-import type { MDXContent } from '@/lib/mdx';
 
-// Generate static params for all case studies
-export async function generateStaticParams() {
-  const caseStudies = await getAllContent<CaseStudy>('case-study');
-  return caseStudies.map(study => ({ slug: study.slug }));
-}
-
+// Custom components for MDX rendering
 const components = {
   // Add any custom components here
   h1: (props: React.HTMLProps<HTMLHeadingElement>) => (
@@ -23,20 +18,57 @@ const components = {
   ),
 };
 
-interface PageProps {
-  params: Promise<{
-    slug: string;
-  }>;
+// Generate static params for all case studies
+export async function generateStaticParams() {
+  const contentDirectory = path.join(process.cwd(), 'content', 'case-study');
+  const files = await fs.readdir(contentDirectory);
+  
+  return files
+    .filter(file => file.endsWith('.mdx'))
+    .map(file => ({
+      slug: file.replace('.mdx', ''),
+    }));
 }
 
-export default async function CaseStudyPage({ params }: PageProps) {
-  const { slug } = await params;
-  const caseStudy = await getContentBySlug<CaseStudy>('case-study', slug);
+// Custom function to get case study content directly
+async function getCaseStudy(slug: string) {
+  try {
+    console.log(`Fetching case study: ${slug}`);
+    const filePath = path.join(process.cwd(), 'content', 'case-study', `${slug}.mdx`);
+    console.log(`File path: ${filePath}`);
+    
+    const fileContent = await fs.readFile(filePath, 'utf8');
+    const { data, content } = matter(fileContent);
+    
+    console.log(`Successfully processed frontmatter for ${slug}`);
+    console.log(`Frontmatter keys: ${Object.keys(data).join(', ')}`);
+    
+    return {
+      frontmatter: data,
+      content,
+    };
+  } catch (error) {
+    console.error(`Error fetching case study ${slug}:`, error);
+    return null;
+  }
+}
 
+// Updated the page component to handle params as a Promise
+export default async function CaseStudyPage(props: { params: Promise<{ slug: string }> }) {
+  // Await the params object before using it
+  const resolvedParams = await props.params;
+  console.log("Received params:", resolvedParams);
+  
+  const slug = resolvedParams.slug;
+  const caseStudy = await getCaseStudy(slug);
+  
   if (!caseStudy) {
+    console.log(`Case study not found: ${slug}`);
     notFound();
   }
-
+  
+  const { frontmatter, content } = caseStudy;
+  
   return (
     <main className="container mx-auto p-8">
       <Link 
@@ -50,18 +82,13 @@ export default async function CaseStudyPage({ params }: PageProps) {
         {/* Main Content */}
         <div className="col-span-8">
           <article className="prose prose-lg dark:prose-invert max-w-none">
-            <h1>{caseStudy.frontmatter.title}</h1>
-            <p className="text-xl text-muted-foreground">{caseStudy.frontmatter.description}</p>
+            <h1>{frontmatter.title}</h1>
+            <p className="text-xl text-muted-foreground">{frontmatter.description}</p>
             
+            {/* Pass raw content directly to MDXRemote */}
             <MDXRemote 
-              source={caseStudy.source} 
+              source={content} 
               components={components}
-              options={{
-                parseFrontmatter: false,
-                mdxOptions: {
-                  development: process.env.NODE_ENV === 'development'
-                }
-              }}
             />
           </article>
         </div>
@@ -73,29 +100,29 @@ export default async function CaseStudyPage({ params }: PageProps) {
               <h3 className="font-semibold mb-4">Case Study Details</h3>
               
               <div className="space-y-4">
-                {caseStudy.frontmatter.difficulty && (
+                {frontmatter.difficulty && (
                   <div>
                     <h4 className="text-sm font-medium text-muted-foreground">Difficulty</h4>
-                    <Badge>{caseStudy.frontmatter.difficulty}</Badge>
+                    <Badge>{frontmatter.difficulty}</Badge>
                   </div>
                 )}
 
-                {caseStudy.frontmatter.technologies?.length > 0 && (
+                {frontmatter.technologies?.length > 0 && (
                   <div>
                     <h4 className="text-sm font-medium text-muted-foreground">Technologies</h4>
                     <div className="flex flex-wrap gap-2 mt-2">
-                      {caseStudy.frontmatter.technologies.map((tech: string) => (
+                      {frontmatter.technologies.map((tech: string) => (
                         <Badge key={tech} variant="outline">{tech}</Badge>
                       ))}
                     </div>
                   </div>
                 )}
 
-                {caseStudy.frontmatter.persona?.length > 0 && (
+                {frontmatter.persona?.length > 0 && (
                   <div>
                     <h4 className="text-sm font-medium text-muted-foreground">Related Content</h4>
                     <div className="mt-2 space-y-2">
-                      {caseStudy.frontmatter.persona.map((p: string) => (
+                      {frontmatter.persona.map((p: string) => (
                         <Link
                           key={p}
                           href={`/paths/persona/${p}`}
@@ -108,14 +135,14 @@ export default async function CaseStudyPage({ params }: PageProps) {
                   </div>
                 )}
 
-                {caseStudy.frontmatter.metrics && Object.keys(caseStudy.frontmatter.metrics).length > 0 && (
+                {frontmatter.metrics && Object.keys(frontmatter.metrics).length > 0 && (
                   <div>
                     <h4 className="text-sm font-medium text-muted-foreground">Key Metrics</h4>
                     <div className="mt-2 space-y-1">
-                      {Object.entries(caseStudy.frontmatter.metrics).map(([key, value]) => (
+                      {Object.entries(frontmatter.metrics).map(([key, value]) => (
                         <div key={key} className="flex justify-between text-sm">
                           <span className="text-muted-foreground">{key}:</span>
-                          <span className="font-medium">{value}</span>
+                          <span className="font-medium">{String(value)}</span>
                         </div>
                       ))}
                     </div>

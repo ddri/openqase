@@ -41,7 +41,14 @@ export async function getContentBySlug<T>(
   };
 }
 
-export async function getAllContent<T>(
+// Define a base type for the frontmatter to ensure type safety
+interface BaseFrontmatter {
+  title?: string;
+  lastUpdated?: string;
+  [key: string]: any;
+}
+
+export async function getAllContent<T extends BaseFrontmatter = BaseFrontmatter>(
   type: ContentType
 ): Promise<MDXContent<T>[]> {
   const contentDirectory = path.join(process.cwd(), 'content', type);
@@ -58,13 +65,20 @@ export async function getAllContent<T>(
       })
   );
 
-  return content.sort((a, b) => {
+  // Filter out any null results and then sort
+  return content.filter(Boolean).sort((a, b) => {
+    if (!a || !b) return 0;
+    
     // Sort by date if available, otherwise by title
-    const dateA = a.frontmatter.lastUpdated;
-    const dateB = b.frontmatter.lastUpdated;
+    const dateA = a.frontmatter?.lastUpdated;
+    const dateB = b.frontmatter?.lastUpdated;
     if (dateA && dateB) {
       return new Date(dateB).getTime() - new Date(dateA).getTime();
     }
-    return a.frontmatter.title.localeCompare(b.frontmatter.title);
+    
+    // Safely access title with fallback to empty string
+    const titleA = a.frontmatter?.title || '';
+    const titleB = b.frontmatter?.title || '';
+    return titleA.localeCompare(titleB);
   });
 }

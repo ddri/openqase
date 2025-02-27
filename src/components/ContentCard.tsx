@@ -18,21 +18,21 @@ export default function ContentCard({
 }: ContentCardProps) {
   return (
     <Link href={`/${path}/${slug}`}>
-      <div className="block bg-card-background rounded-xl 
-        border border-card-border hover:border-card-hoverBorder 
-        hover:bg-card-hoverBackground transition-all duration-200 
+      <div className="block bg-[var(--card)] rounded-xl 
+        border border-[var(--border)] hover:border-[var(--card-hover-border)] 
+        hover:bg-[var(--card-hover-background)] transition-all duration-200 
         shadow-sm overflow-hidden">
         <div className="p-4">
           <span className="inline-block px-2 py-1 rounded-full text-xs
-            bg-accent/10 text-accent mb-2">
+            bg-[var(--accent)]/10 text-[var(--accent)] mb-2">
             {type}
           </span>
           
-          <h3 className="text-lg font-semibold text-text-primary mb-2">
+          <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-2">
             {title}
           </h3>
           
-          <p className="text-sm text-text-secondary">
+          <p className="text-sm text-[var(--text-secondary)]">
             {description}
           </p>
         </div>

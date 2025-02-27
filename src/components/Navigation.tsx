@@ -1,47 +1,46 @@
-// File: src/components/Navigation.tsx
+// src/components/Navigation.tsx
 'use client';
 
-import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { cn } from '@/lib/utils';
+import ThemeSwitcher from './ui/ThemeSwitcher';
 
-const Navigation = () => {
+export default function Navigation() {
   const pathname = usePathname();
 
-  const navItems = [
-    { label: 'openQase', href: '/' },
-    { label: 'Learning Paths', href: '/paths' },
-    { label: 'Case Studies', href: '/case-study' },
-    { label: 'Quantum Stack', href: '/quantum-stack' }
-  ];
+  const isActive = (path: string) => {
+    return pathname?.startsWith(path);
+  };
+
+  const linkClass = (path: string) => {
+    return `px-4 py-2 text-[var(--foreground)] hover:text-[var(--primary)] transition-colors ${
+      isActive(path) ? 'font-bold text-[var(--primary)]' : ''
+    }`;
+  };
 
   return (
-    <nav className="w-full border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container flex h-16 items-center px-4">
-        <div className="flex gap-6 md:gap-10">
-          {navItems.map((item, index) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              className={cn(
-                'transition-colors hover:text-foreground/80',
-                // First item (openQase) gets different styling
-                index === 0 
-                  ? 'font-bold text-lg'
-                  : 'text-foreground/60',
-                pathname === item.href
-                  ? 'text-foreground'
-                  : 'text-foreground/60',
-              )}
-            >
-              {item.label}
-            </Link>
-          ))}
+    <nav className="sticky top-0 z-10 w-full bg-[var(--background)] border-b border-[var(--border)] py-4">
+      <div className="container mx-auto px-4 flex items-center">
+        <Link href="/" className="text-xl font-bold mr-8 text-[var(--foreground)]">
+          openQase
+        </Link>
+        
+        <div className="flex space-x-4">
+          <Link href="/paths" className={linkClass('/paths')}>
+            Learning Paths
+          </Link>
+          <Link href="/case-study" className={linkClass('/case-study')}>
+            Case Studies
+          </Link>
+          <Link href="/quantum-stack" className={linkClass('/quantum-stack')}>
+            Quantum Stack
+          </Link>
+        </div>
+        
+        <div className="ml-auto">
+          <ThemeSwitcher />
         </div>
       </div>
     </nav>
   );
-};
-
-export default Navigation;
+}

@@ -13,13 +13,13 @@ import { CaseStudy } from '@/lib/types';
 // Components for MDX
 const components = {
  h1: ({ children }: { children: React.ReactNode }) => (
-   <h1 className="text-4xl font-bold text-gray-900 mb-6">{children}</h1>
+    <h1 className="text-4xl font-bold text-[var(--text-primary)] mb-6">{children}</h1>
  ),
  h2: ({ children }: { children: React.ReactNode }) => (
-   <h2 className="text-2xl font-semibold text-gray-900 mt-8 mb-4">{children}</h2>
+  <h2 className="text-2xl font-semibold text-[var(--text-primary)] mt-8 mb-4">{children}</h2>
  ),
  p: ({ children }: { children: React.ReactNode }) => (
-   <p className="text-gray-600 mb-4">{children}</p>
+  <p className="text-[var(--text-secondary)] mb-4">{children}</p>
  ),
 };
 
@@ -119,9 +119,9 @@ export default async function PersonaPage(props: { params: Promise<{ slug: strin
        <div className="grid grid-cols-12 gap-8">
          {/* Left Column - Persona Card */}
          <div className="col-span-2">
-           <Card className="bg-white border">
-             <div className="aspect-[3/2] bg-white flex items-center justify-center">
-               <span className="text-gray-900">{persona.frontmatter.title}</span>
+          <Card className="bg-[var(--card)] border">
+          <div className="aspect-[3/2] bg-[var(--card)] flex items-center justify-center">
+          <span className="text-[var(--text-primary)]">{persona.frontmatter.title}</span>
              </div>
              <div className="p-3">
                <Badge className="bg-[#F4A261] text-white border-0">
@@ -131,7 +131,7 @@ export default async function PersonaPage(props: { params: Promise<{ slug: strin
            </Card>
            <Link
              href="/paths/persona"
-             className="inline-block mt-4 text-sm text-gray-600 hover:text-gray-900 transition-colors"
+             className="inline-block mt-4 text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors"
            >
              ← Back to Persona
            </Link>
@@ -146,7 +146,7 @@ export default async function PersonaPage(props: { params: Promise<{ slug: strin
 
          {/* Right Column - Case Studies */}
          <div className="col-span-3">
-           <h2 className="text-xl font-semibold text-gray-900 mb-4">
+         <h2 className="text-xl font-semibold text-[var(--text-primary)] mb-4">
              Related Case Studies
            </h2>
            <div className="space-y-4">
@@ -154,17 +154,17 @@ export default async function PersonaPage(props: { params: Promise<{ slug: strin
                <Link
                  key={study.slug}
                  href={`/case-study/${study.slug}`}
-                 className="block p-4 bg-white border border-gray-300 rounded-lg hover:shadow-md"
+                 className="block p-4 bg-[var(--card)] border border-[var(--border)] rounded-lg hover:shadow-md"
                >
-                 <h3 className="font-medium text-gray-900 mb-2">
+                 <h3 className="font-medium text-[var(--text-primary)] mb-2">
                    {study.frontmatter.title}
                  </h3>
-                 <p className="text-sm text-gray-600">
+                 <p className="text-sm text-[var(--text-secondary)]">
                    {study.frontmatter.description}
                  </p>
                  <div className="mt-3 flex flex-wrap gap-2">
                    {study.frontmatter.tags.map((tag: string) => (
-                     <Badge key={tag} variant="outline" className="text-gray-600 border-gray-300">
+                     <Badge key={tag} variant="outline" className="text-[var(--text-secondary)] border-[var(--border)]">
                        {tag}
                      </Badge>
                    ))}

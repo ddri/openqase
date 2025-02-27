@@ -16,31 +16,31 @@ export default async function PersonaPage() {
  return (
    <main className="min-h-screen p-8">
      <div className="max-w-7xl mx-auto">
-       <h1 className="text-4xl font-bold text-gray-900 mb-8">Learning Path by Persona</h1>
-       <p className="text-xl text-gray-600 mb-8">Choose your path based on your role and experience</p>
+      <h1 className="text-4xl font-bold text-[var(--text-primary)] mb-8">Learning Path by Persona</h1>
+      <p className="text-xl text-[var(--text-secondary)] mb-8">Choose your path based on your role and experience</p>
 
        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
          {personaList.map((persona) => (
            <Link key={persona.slug} href={`/paths/persona/${persona.slug}`}>
-             <Card className="bg-white border hover:shadow-lg transition-all h-full">
+             <Card className="bg-[var(--card)] border hover:shadow-lg transition-all h-full">
                <CardHeader>
                  <div className="flex items-center justify-between mb-2">
                    <Badge className="bg-[#F4A261] text-white border-0">
                      {persona.frontmatter.role}
                    </Badge>
                  </div>
-                 <CardTitle className="text-xl mb-2 text-gray-900">
+                 <CardTitle className="text-xl mb-2 text-[var(--text-primary)]">
                    {persona.frontmatter.title}
                  </CardTitle>
-                 <CardDescription className="text-gray-600">
+                 <CardDescription className="text-[var(--text-secondary)]">
                    {persona.frontmatter.description}
                  </CardDescription>
                  {persona.frontmatter.expertise && (
                    <div className="mt-4">
-                     <p className="text-sm text-gray-600 mb-2">Key expertise:</p>
+                     <p className="text-sm text-[var(--text-secondary)] mb-2">Key expertise:</p>
                      <div className="flex flex-wrap gap-2">
                        {persona.frontmatter.expertise.slice(0, 3).map((item: string) => (
-                         <Badge key={item} variant="outline" className="text-gray-600 border-gray-300">
+                         <Badge key={item} variant="outline" className="text-[var(--text-secondary)] border-[var(--border)]">
                            {item}
                          </Badge>
                        ))}

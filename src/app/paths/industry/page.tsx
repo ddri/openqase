@@ -14,10 +14,9 @@ export default async function IndustryPage() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {industryList.map((industry) => (
           <Link key={industry.slug} href={`/paths/industry/${industry.slug}`}>
-            <Card className="hover:bg-accent/5 transition-colors">
-              <CardHeader>
+            <Card fixedHeight height={190} className="hover:bg-accent/15 transition-colors">
+              <CardHeader flexGrow>
                 <div className="flex items-center justify-between mb-2">
-                  <Badge>{industry.frontmatter.sector}</Badge>
                 </div>
                 <CardTitle className="text-xl mb-2">{industry.frontmatter.title}</CardTitle>
                 <CardDescription>{industry.frontmatter.description}</CardDescription>

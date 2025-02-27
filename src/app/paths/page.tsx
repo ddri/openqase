@@ -40,15 +40,15 @@ export default async function LearningPathsPage() {
   const paths = [
     {
       title: "By Persona",
-      description: "Choose your learning path based on your role and experience level",
+      description: "Choose your learning path based on your role and experience level.",
       href: "/paths/persona",
       count: counts.persona,
-      examples: ["Software Engineer", "Financial Analyst", "Research Scientist"],
+      examples: ["Software Engineer", "Financial Analyst"],
       badgeClass: "bg-accent/10 text-accent"  // Using your theme colors
     },
     {
       title: "By Industry",
-      description: "Explore quantum computing applications in your industry",
+      description: "Explore quantum computing applications in your industry.",
       href: "/paths/industry",
       count: counts.industry,
       examples: ["Finance", "Healthcare", "Smart Cities"],
@@ -56,7 +56,7 @@ export default async function LearningPathsPage() {
     },
     {
       title: "By Algorithm",
-      description: "Learn specific quantum algorithms and their applications",
+      description: "Learn specific quantum algorithms and their applications.",
       href: "/paths/algorithm",
       count: counts.algorithm,
       examples: ["Grover's", "QAOA", "VQE"],
@@ -78,8 +78,8 @@ export default async function LearningPathsPage() {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
         {paths.map((path) => (
           <Link key={path.title} href={path.href}>
-            <Card className="hover:bg-accent/5 transition-colors">
-              <CardHeader>
+            <Card fixedHeight height={220} className="hover:shadow-lg transition-all">
+            <CardHeader flexGrow>
                 <div className="flex items-center justify-between mb-2">
                   <Badge className={path.badgeClass}>
                     {counts[path.title.toLowerCase().split(' ')[1] as keyof typeof counts]} Paths

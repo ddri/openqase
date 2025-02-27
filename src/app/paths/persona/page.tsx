@@ -22,12 +22,9 @@ export default async function PersonaPage() {
        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
          {personaList.map((persona) => (
            <Link key={persona.slug} href={`/paths/persona/${persona.slug}`}>
-             <Card className="bg-[var(--card)] border hover:shadow-lg transition-all h-full">
-               <CardHeader>
+             <Card fixedHeight height={320} className="hover:bg-accent/15 transition-colors">
+             <CardHeader flexGrow>
                  <div className="flex items-center justify-between mb-2">
-                   <Badge className="bg-[#F4A261] text-white border-0">
-                     {persona.frontmatter.role}
-                   </Badge>
                  </div>
                  <CardTitle className="text-xl mb-2 text-[var(--text-primary)]">
                    {persona.frontmatter.title}

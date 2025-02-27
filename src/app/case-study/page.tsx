@@ -36,10 +36,9 @@ export default async function CaseStudyPage() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {caseStudies.map((study: any) => (
           <Link key={study.slug} href={`/case-study/${study.slug}`}>
-            <Card className="hover:bg-accent/5 transition-colors">
-              <CardHeader>
+            <Card fixedHeight height={220} className="hover:bg-accent/15 transition-colors">
+              <CardHeader flexGrow>
                 <div className="flex items-center justify-between mb-2">
-                  <Badge>{study.difficulty}</Badge>
                 </div>
                 <CardTitle className="text-xl mb-2">{study.title}</CardTitle>
                 <CardDescription>{study.description}</CardDescription>

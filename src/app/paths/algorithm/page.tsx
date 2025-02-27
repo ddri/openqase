@@ -20,12 +20,9 @@ export default async function AlgorithmPage() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {algorithmList.map((algorithm) => (
             <Link key={algorithm.slug} href={`/paths/algorithm/${algorithm.slug}`}>
-              <Card className="bg-[var(--card)] border hover:shadow-lg transition-all h-[380px] flex flex-col">
+              <Card fixedHeight height={320} className="hover:bg-accent/15 transition-colors">
                 <CardHeader>
                   <div className="flex items-center justify-between mb-2">
-                    <Badge className="bg-[#F4A261] text-white border-0">
-                      {algorithm.frontmatter.complexity}
-                    </Badge>
                   </div>
                   <CardTitle className="text-xl mb-2 text-[var(--text-primary)]">
                     {algorithm.frontmatter.title}

@@ -88,14 +88,6 @@ export default function QuantumStackPage() {
         <div className="relative">
           {/* Quantum Computer Container */}
           <div className="bg-accent/5 border-2 border-accent/20 rounded-xl p-6 relative">
-            {/* Decorative elements */}
-            <div className="absolute top-0 left-0 w-full h-8 bg-accent/10 rounded-t-xl" />
-            <div className="absolute bottom-0 left-0 w-full h-12 bg-accent/10 rounded-b-xl" />
-            
-            {/* Side connectors */}
-            <div className="absolute -left-3 top-1/4 w-6 h-12 bg-accent/10 rounded-l-lg" />
-            <div className="absolute -right-3 top-1/3 w-6 h-12 bg-accent/10 rounded-r-lg" />
-            <div className="absolute -left-3 bottom-1/4 w-6 h-12 bg-accent/10 rounded-l-lg" />
 
             {/* Stack layers */}
             <div className="space-y-3 relative z-10">

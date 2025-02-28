@@ -36,20 +36,34 @@ export default async function CaseStudyPage() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {caseStudies.map((study: any) => (
           <Link key={study.slug} href={`/case-study/${study.slug}`}>
-            <Card fixedHeight height={220} className="hover:bg-accent/15 transition-colors">
+            <Card fixedHeight height={260} className="hover:bg-accent/5 transition-colors relative">
               <CardHeader flexGrow>
-                <div className="flex items-center justify-between mb-2">
-                </div>
                 <CardTitle className="text-xl mb-2">{study.title}</CardTitle>
-                <CardDescription>{study.description}</CardDescription>
-                <div className="flex flex-wrap gap-2 mt-4">
-                  {study.tags.map((tag: string) => (
-                    <Badge key={tag} variant="outline">
-                      {tag}
-                    </Badge>
-                  ))}
-                </div>
+                {/* Description with max height to prevent overflow */}
+                <CardDescription className="mb-12"> {/* Extra bottom margin to make room for badges */}
+                  {study.description}
+                </CardDescription>
               </CardHeader>
+              
+              {/* Fixed position badge container at bottom of card */}
+              <div className="absolute bottom-4 left-6 right-6">
+                {study.tags && study.tags.length > 0 && (
+                  <div className="flex overflow-x-auto pb-1 scrollbar-none"> {/* Horizontal scrolling container */}
+                    <div className="flex gap-2 flex-nowrap">
+                      {study.tags.slice(0, 3).map((tag: string) => (
+                        <Badge key={tag} variant="outline" className="whitespace-nowrap">
+                          {tag}
+                        </Badge>
+                      ))}
+                      {study.tags.length > 3 && (
+                        <Badge variant="outline" className="whitespace-nowrap">
+                          +{study.tags.length - 3} more
+                        </Badge>
+                      )}
+                    </div>
+                  </div>
+                )}
+              </div>
             </Card>
           </Link>
         ))}

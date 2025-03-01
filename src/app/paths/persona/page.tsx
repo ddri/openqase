@@ -1,65 +1,61 @@
 // src/app/paths/persona/page.tsx
-import ContentCard from '@/components/ContentCard'
-import { Persona } from '@/types'
+import { getAllContent } from '@/lib/mdx';
+import { Persona } from '@/lib/types';
+import { Card, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import Link from 'next/link';
 
-const personas: Array<Pick<Persona, 'id' | 'title' | 'slug' | 'type' | 'description'>> = [
-  {
-    id: '1',
-    title: 'Government Policy Maker',
-    slug: 'government',
-    type: 'Persona',
-    description: 'Understand quantum computing impact on national security, research funding, and policy implications'
-  },
-  {
-    id: '2',
-    title: 'Investment Professional',
-    slug: 'investor',
-    type: 'Persona',
-    description: 'Evaluate quantum computing opportunities, market trends, and investment strategies'
-  },
-  {
-    id: '3',
-    title: 'Software Engineer',
-    slug: 'software-engineer',
-    type: 'Technical',
-    description: 'Learn quantum algorithm implementation, development tools, and programming frameworks'
-  },
-  {
-    id: '4',
-    title: 'Financial Analyst',
-    slug: 'finance',
-    type: 'Technical',
-    description: 'Explore quantum applications in trading, risk analysis, and portfolio optimization'
-  },
-  {
-    id: '5',
-    title: 'Quantum Chemist',
-    slug: 'chemistry',
-    type: 'Technical',
-    description: 'Apply quantum computing to molecular simulation and materials science research'
-  }
-]
+export const metadata = {
+ title: 'Learning Path by Persona | OpenQase',
+ description: 'Choose your quantum computing learning path based on your role and experience'
+};
 
-export default function PersonaPath() {
-  return (
-    <main className="min-h-screen bg-[#0C0C0D] p-8">
-      <div className="max-w-7xl mx-auto">
-        <h1 className="text-4xl font-bold mb-4 text-gray-100">Persona path</h1>
-        <p className="text-gray-400 mb-8">Find case studies relevant to your role</p>
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {personas.map((persona) => (
-            <ContentCard
-              key={persona.id}
-              title={persona.title}
-              type={persona.type}
-              path="persona"
-              slug={persona.slug}
-              description={persona.description}
-            />
-          ))}
-        </div>
+export default async function PersonaPage() {
+ const personaList = await getAllContent<Persona>('persona');
+
+ return (
+   <main className="min-h-screen p-8">
+     <div className="max-w-7xl mx-auto">
+      <h1 className="text-4xl font-bold text-[var(--text-primary)] mb-8">Learning Path by Persona</h1>
+      <p className="text-xl text-[var(--text-secondary)] mb-8">Choose your path based on your role and experience</p>
+
+       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+         {personaList.map((persona) => (
+          <Link key={persona.slug} href={`/paths/persona/${persona.slug}`}>
+  <Card fixedHeight height={280} className="hover:bg-accent/5 transition-colors relative">
+    <CardHeader flexGrow>
+      <CardTitle className="text-xl mb-2 text-[var(--text-primary)]">
+        {persona.frontmatter.title}
+      </CardTitle>
+      <CardDescription className="text-[var(--text-secondary)] mb-16">
+        {persona.frontmatter.description}
+      </CardDescription>
+    </CardHeader>
+    
+    {/* Added: Fixed position expertise badges at bottom of card */}
+    {persona.frontmatter.expertise && (
+  <div className="absolute bottom-4 left-6 right-6">
+    <div className="flex overflow-x-auto pb-1 scrollbar-none">
+      <div className="flex gap-2 flex-nowrap">
+        {persona.frontmatter.expertise.slice(0, 3).map((item: string) => (
+          <Badge key={item} variant="outline" className="text-[var(--text-secondary)] border-[var(--border)]">
+            {item}
+          </Badge>
+        ))}
+        {persona.frontmatter.expertise.length > 3 && (
+          <Badge variant="outline" className="text-[var(--text-secondary)] border-[var(--border)]">
+            +{persona.frontmatter.expertise.length - 3} more
+          </Badge>
+        )}
       </div>
-    </main>
-  )
+    </div>
+  </div>
+)}
+  </Card>
+</Link>
+         ))}
+       </div>
+     </div>
+   </main>
+ );
 }

@@ -1,193 +1,155 @@
 // src/app/quantum-stack/page.tsx
-'use client'
+'use client';
 
-import { useState } from 'react'
-import { Card } from '@/components/ui/card'
-import CardPixelPattern from '@/components/CardPixelPattern'
+import { useState } from 'react';
+import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { cn } from '@/lib/utils';
 
-interface StackItem {
-  id: string
-  title: string
-  description: string
-  details: {
-    overview: string
-    examples?: string[]
-    additionalInfo?: string
+const stackLayers = [
+  {
+    title: "Applications",
+    description: "Domain-specific quantum applications and use cases",
+    items: [
+      "Optimization Problems",
+      "Machine Learning",
+      "Simulation",
+      "Cryptography"
+    ],
+    content: "Applications form the topmost layer of the quantum computing stack. These are the practical implementations that solve real-world problems. From optimization in logistics and finance to breakthroughs in drug discovery and materials science, quantum applications leverage the unique properties of quantum systems to tackle problems that classical computers struggle with.",
+    layerNumber: 5
+  },
+  {
+    title: "Algorithms",
+    description: "Quantum algorithms and protocols",
+    items: [
+      "Grover's Algorithm",
+      "Shor's Algorithm",
+      "VQE",
+      "QAOA"
+    ],
+    content: "Quantum algorithms are the mathematical procedures that harness quantum mechanical effects to solve computational problems. Some algorithms offer exponential speedup over classical methods for specific tasks. This layer bridges the gap between practical applications and the underlying quantum hardware.",
+    layerNumber: 4
+  },
+  {
+    title: "Software Development",
+    description: "Development tools and frameworks",
+    items: [
+      "Qiskit",
+      "Cirq",
+      "Q#",
+      "Pennylane"
+    ],
+    content: "The software development layer provides the tools and frameworks that developers use to write quantum programs. These frameworks abstract away much of the complexity of quantum operations while providing powerful capabilities for circuit design, optimization, and execution.",
+    layerNumber: 3
+  },
+  {
+    title: "Control & Operations",
+    description: "Quantum circuit operations and control systems",
+    items: [
+      "Gates",
+      "Measurement",
+      "Error Correction",
+      "Calibration"
+    ],
+    content: "Control and operations manage the precise manipulation of quantum states. This layer handles the translation of quantum algorithms into physical operations, implements error correction protocols, and ensures accurate measurement of quantum states.",
+    layerNumber: 2
+  },
+  {
+    title: "Hardware",
+    description: "Physical quantum computing hardware",
+    items: [
+      "Superconducting Qubits",
+      "Ion Traps",
+      "Photonic Systems",
+      "Topological Qubits"
+    ],
+    content: "The hardware layer forms the foundation of quantum computing. It encompasses the physical qubits and their supporting infrastructure. Different hardware approaches each have their own advantages and challenges in maintaining quantum coherence and scaling up to more qubits.",
+    layerNumber: 1
   }
-}
+];
 
-const stackItems: StackItem[] = [
-  {
-    id: 'language',
-    title: 'Language',
-    description: 'Quantum Programming Languages',
-    details: {
-      overview: 'Quantum programming languages are specifically designed to express quantum algorithms and operations.',
-      examples: [
-        'Qiskit (IBM)',
-        'Q# (Microsoft)',
-        'Cirq (Google)',
-        'Forest (Rigetti)'
-      ],
-      additionalInfo: 'These languages provide the syntax and structures needed to write quantum programs, including operations like superposition, entanglement, and quantum gates.'
-    }
-  },
-  {
-    id: 'sdk',
-    title: 'SDK',
-    description: 'Software Development Kits',
-    details: {
-      overview: 'Software Development Kits provide the tools and libraries needed to develop quantum applications.',
-      examples: [
-        'Qiskit SDK',
-        'Azure Quantum SDK',
-        'Cirq SDK',
-        'Forest SDK'
-      ],
-      additionalInfo: 'These SDKs include tools for circuit design, simulation capabilities, and hardware interfaces.'
-    }
-  },
-  {
-    id: 'framework',
-    title: 'Framework',
-    description: 'Quantum Computing Frameworks',
-    details: {
-      overview: 'Quantum frameworks provide the structure and tools for building quantum applications.',
-      examples: [
-        'Qiskit Runtime',
-        'Q# Runtime',
-        'Cirq Framework',
-        'PyQuil'
-      ],
-      additionalInfo: 'Frameworks handle circuit optimization, hardware abstraction, and integration with classical systems.'
-    }
-  },
-  {
-    id: 'compiler',
-    title: 'Compiler',
-    description: 'Quantum Circuit Compilation',
-    details: {
-      overview: 'Quantum compilers translate high-level quantum programs into low-level quantum circuits.',
-      examples: [
-        'Qiskit Terra',
-        'Quilc',
-        'Cirq Compiler',
-        'Q# Compiler'
-      ],
-      additionalInfo: 'Compilers handle gate decomposition, circuit optimization, and mapping to physical qubits.'
-    }
-  },
-  {
-    id: 'error-correction',
-    title: 'Error Correction',
-    description: 'Quantum Error Correction',
-    details: {
-      overview: 'Error correction is crucial for reliable quantum computation.',
-      examples: [
-        'Surface Codes',
-        'Stabilizer Codes',
-        'Topological Codes',
-        'Color Codes'
-      ],
-      additionalInfo: 'These techniques detect and correct qubit errors to maintain quantum state coherence.'
-    }
-  },
-  {
-    id: 'physics',
-    title: 'Physics Package',
-    description: 'Quantum Hardware Interface',
-    details: {
-      overview: 'The physics package interfaces directly with the quantum hardware.',
-      examples: [
-        'Control Systems',
-        'Signal Processing',
-        'Qubit Control',
-        'Readout Systems'
-      ],
-      additionalInfo: 'This layer handles the physical control and measurement of quantum states.'
-    }
-  },
-  {
-    id: 'measurement',
-    title: 'Measurement',
-    description: 'Quantum State Measurement',
-    details: {
-      overview: 'Measurement systems handle the final readout of quantum states.',
-      examples: [
-        'State Detection',
-        'Signal Amplification',
-        'Data Collection',
-        'Classical Post-processing'
-      ],
-      additionalInfo: 'These systems convert quantum information into classical results.'
-    }
-  }
-]
-
-export default function QuantumStack() {
-  const [selectedItem, setSelectedItem] = useState<StackItem>(stackItems[0])
+export default function QuantumStackPage() {
+  const [selectedLayer, setSelectedLayer] = useState(stackLayers[0]);
 
   return (
-    <main className="min-h-screen bg-[#0C0C0D] p-8">
-      <div className="max-w-7xl mx-auto">
-        <h1 className="text-4xl font-bold text-white mb-4">Quantum Stack</h1>
-        <p className="text-gray-400 mb-12">Understanding the quantum computing technology stack</p>
+    <main className="container mx-auto p-8">
+      <div className="text-center mb-16">
+        <h1 className="text-4xl font-bold mb-6">
+          The Quantum Computing Stack
+        </h1>
+        <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+          Understanding the complete quantum computing technology stack, from hardware to applications
+        </p>
+      </div>
 
-        <div className="grid grid-cols-12 gap-8">
-          {/* Left Column - Stack Navigation */}
-          <div className="col-span-4">
-            <Card className="bg-[#1A1A1D] border-gray-800 p-4">
-              <div className="space-y-2">
-                {stackItems.map((item) => (
-                  <button
-                    key={item.id}
-                    onClick={() => setSelectedItem(item)}
-                    className={`w-full p-4 rounded-lg text-left transition-all duration-300
-                      ${selectedItem.id === item.id 
-                        ? 'bg-copper/20 text-white border border-copper/40' 
-                        : 'bg-gray-900/50 text-gray-400 hover:bg-gray-900 hover:text-gray-300 border border-transparent'
-                      }`}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        {/* Left side - Stack visualization */}
+        <div className="relative">
+          {/* Quantum Computer Container */}
+          <div className="bg-accent/5 border-2 border-accent/20 rounded-xl p-6 relative">
+
+            {/* Stack layers */}
+            <div className="space-y-3 relative z-10">
+              {stackLayers.map((layer) => (
+                <Card 
+                  key={layer.title}
+                  className={cn(
+                    "cursor-pointer transition-all transform hover:scale-[1.02]",
+                    selectedLayer.title === layer.title 
+                      ? "border-primary bg-primary/5 shadow-lg" 
+                      : "hover:bg-accent/5"
+                  )}
+                  onClick={() => setSelectedLayer(layer)}
+                >
+                  <CardHeader className="p-4">
+                    <div className="flex items-center justify-between mb-2">
+                      <Badge className="bg-primary/10 text-primary">
+                        Layer {layer.layerNumber}
+                      </Badge>
+                    </div>
+                    <CardTitle className="text-lg">{layer.title}</CardTitle>
+                    <CardDescription className="text-sm text-muted-foreground">
+                      {layer.description}
+                    </CardDescription>
+                  </CardHeader>
+                </Card>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Right side - Layer details */}
+        <div className="lg:sticky lg:top-8">
+          <Card className="h-full">
+            <CardHeader className="p-6">
+              <Badge className="w-fit mb-4 bg-primary/10 text-primary">
+                Layer {selectedLayer.layerNumber}
+              </Badge>
+              <CardTitle className="text-2xl mb-4">{selectedLayer.title}</CardTitle>
+              <CardDescription className="text-lg text-muted-foreground">
+                {selectedLayer.content}
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="p-6 pt-0">
+              <h3 className="font-semibold mb-4">Key Components</h3>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {selectedLayer.items.map((item) => (
+                  <div 
+                    key={item}
+                    className="p-4 bg-accent/5 rounded-lg border border-accent/10"
                   >
-                    {item.title}
-                  </button>
+                    <h4 className="font-medium mb-2">{item}</h4>
+                    <p className="text-sm text-muted-foreground">
+                      Learn more about {item.toLowerCase()} in quantum computing
+                    </p>
+                  </div>
                 ))}
               </div>
-            </Card>
-          </div>
-
-          {/* Right Column - Content */}
-          <div className="col-span-8">
-            <Card className="bg-[#1A1A1D] border-gray-800 p-6">
-              <h2 className="text-2xl font-bold text-white mb-2">
-                {selectedItem.title}
-              </h2>
-              <h3 className="text-lg text-copper mb-4">
-                {selectedItem.description}
-              </h3>
-              <div className="space-y-4">
-                <p className="text-gray-300">
-                  {selectedItem.details.overview}
-                </p>
-                {selectedItem.details.examples && (
-                  <div className="mt-4">
-                    <h4 className="text-white font-semibold mb-2">Common examples:</h4>
-                    <ul className="list-disc list-inside space-y-1">
-                      {selectedItem.details.examples.map((example) => (
-                        <li key={example} className="text-gray-300">{example}</li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
-                {selectedItem.details.additionalInfo && (
-                  <p className="text-gray-300 mt-4">
-                    {selectedItem.details.additionalInfo}
-                  </p>
-                )}
-              </div>
-            </Card>
-          </div>
+            </CardContent>
+          </Card>
         </div>
       </div>
     </main>
-  )
+  );
 }

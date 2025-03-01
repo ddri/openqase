@@ -19,7 +19,7 @@ export default function Navigation() {
   };
 
   return (
-    <nav className="sticky top-0 z-10 w-full bg-[var(--background)] border-b border-[var(--border)] py-4">
+    <nav className="sticky top-0 z-50 w-full bg-[var(--background)] border-b border-[var(--border)] py-4">
       <div className="container mx-auto px-4 flex items-center">
         <Link href="/" className="text-xl font-bold mr-8 text-[var(--foreground)]">
           openQase

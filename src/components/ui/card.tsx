@@ -1,28 +1,41 @@
 // src/components/ui/card.tsx
 import * as React from "react";
 
-const Card = React.forwardRef<
-  HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement>
->(({ className, ...props }, ref) => (
-  <div
-    ref={ref}
-    className={`bg-[var(--card)] text-[var(--card-foreground)] rounded-lg border border-[var(--border)] shadow-sm ${className || ""}`}
-    {...props}
-  />
-));
+interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
+  fixedHeight?: boolean;
+  height?: number;
+}
+
+const Card = React.forwardRef<HTMLDivElement, CardProps>(
+  ({ className, fixedHeight = false, height = 210, ...props }, ref) => (
+    <div
+      ref={ref}
+      className={`bg-[var(--card)] text-[var(--card-foreground)] rounded-lg border border-[var(--border)] shadow-sm ${
+        fixedHeight ? 'flex flex-col' : ''
+      } ${className || ""}`}
+      style={fixedHeight ? { height: `${height}px` } : undefined}
+      {...props}
+    />
+  )
+);
+
 Card.displayName = "Card";
 
-const CardHeader = React.forwardRef<
-  HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement>
->(({ className, ...props }, ref) => (
-  <div
-    ref={ref}
-    className={`flex flex-col space-y-1.5 p-6 ${className || ""}`}
-    {...props}
-  />
-));
+interface CardHeaderProps extends React.HTMLAttributes<HTMLDivElement> {
+  flexGrow?: boolean;
+}
+
+const CardHeader = React.forwardRef<HTMLDivElement, CardHeaderProps>(
+  ({ className, flexGrow = false, ...props }, ref) => (
+    <div
+      ref={ref}
+      className={`flex flex-col space-y-1.5 p-6 ${
+        flexGrow ? 'flex-grow' : ''
+      } ${className || ""}`}
+      {...props}
+    />
+  )
+);
 CardHeader.displayName = "CardHeader";
 
 const CardTitle = React.forwardRef<
@@ -69,4 +82,4 @@ const CardFooter = React.forwardRef<
 ));
 CardFooter.displayName = "CardFooter";
 
-export { Card, CardHeader, CardFooter, CardTitle, CardDescription, CardContent };
+export { Card, CardHeader, CardFooter, CardTitle, CardDescription, CardContent }; 

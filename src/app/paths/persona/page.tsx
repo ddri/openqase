@@ -5,10 +5,11 @@ import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import Link from 'next/link';
 import { ArrowRight, Atom, BarChart3, Code, LightbulbIcon, Shield } from 'lucide-react';
+import React from 'react';
 
 // Icon mapping function
 const getPersonaIcon = (title: string) => {
-  const iconMap: Record<string, JSX.Element> = {
+  const iconMap: Record<string, React.ReactElement> = {
     "Quantum Chemist": <Atom className="persona-icon" />,
     "Financial Analyst": <BarChart3 className="persona-icon" />,
     "Government Policy Maker": <Shield className="persona-icon" />,
@@ -30,8 +31,7 @@ export default async function PersonaPage() {
  return (
    <main className="min-h-screen p-8">
      <div className="max-w-7xl mx-auto">
-      <h1 className="text-4xl font-bold mb-2">Learning Path by Persona</h1>
-      <p className="text-xl text-[var(--muted-foreground)] mb-8">Choose your path based on your role and experience</p>
+      <h1 className="text-4xl font-bold mb-8">Learning Path by Persona</h1>
 
        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
          {personaList.map((persona) => (

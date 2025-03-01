@@ -13,14 +13,10 @@ export default async function AlgorithmPage() {
       <div className="max-w-7xl mx-auto">
       <h1 className="text-4xl font-bold text-[var(--text-primary)] mb-8">
       Quantum Algorithms</h1>
-      <p className="text-xl text-[var(--text-secondary)] mb-8">
-          Explore quantum algorithms from fundamental protocols to complex applications
-        </p>
-
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {algorithmList.map((algorithm) => (
             <Link key={algorithm.slug} href={`/paths/algorithm/${algorithm.slug}`}>
-              <Card fixedHeight height={320} className="hover:bg-accent/15 transition-colors">
+              <Card fixedHeight height={320} className="hover:bg-accent/15 hover:shadow-lg transition-all">
                 <CardHeader>
                   <div className="flex items-center justify-between mb-2">
                   </div>

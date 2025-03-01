@@ -3,47 +3,50 @@
 @tailwind utilities;
 
 @layer base {
-  /* Light theme (default) - softer, less bright sandy/gray style */
+  /* Light theme - inspired by Anthropic's website */
   :root {
-    --background: 30 15% 92%;  /* Reduced from 96% to 92% lightness */
-    --foreground: 224 71.4% 4.1%;
+    /* Soft beige/cream background like Anthropic */
+    --background: 36 33% 94%;  /* Soft beige/cream like Anthropic */
+    --foreground: 220 30% 15%; /* Dark gray, almost black text */
     
-    --card: 30 10% 94%;  /* Reduced from 98% to 94% lightness */
-    --card-foreground: 224 71.4% 4.1%;
-    --card-background: 30 10% 94% / 0.9;
-    --card-border: 30 15% 86%;  /* Darker border for better definition */
-    --card-hover-border: 27 100% 65%;
-    --card-hover-background: 27 100% 65% / 0.05;
+    --card: 36 25% 96%;  /* Slightly lighter card background */
+    --card-foreground: 220 30% 15%;
+    --card-background: 36 25% 96% / 0.9;
+    --card-border: 36 15% 86%;  /* Subtle border */
+    --card-hover-border: 210 90% 50%;
+    --card-hover-background: 210 90% 50% / 0.05;
     
-    --text-primary: 224 71.4% 4.1%;
-    --text-secondary: 220 9% 29%;
-    --text-tertiary: 220 9% 45%;
+    --text-primary: 220 30% 15%; /* Dark gray, almost black */
+    --text-secondary: 220 15% 30%;
+    --text-tertiary: 220 10% 45%;
     
-    --surface-primary: 30 10% 94%;
-    --surface-secondary: 30 10% 90%;  /* Slightly darker */
-    --surface-tertiary: 30 10% 88%;   /* Even darker */
+    --surface-primary: 36 25% 96%;
+    --surface-secondary: 36 20% 92%;
+    --surface-tertiary: 36 15% 88%;
     
-    --popover: 30 10% 94%;
-    --popover-foreground: 224 71.4% 4.1%;
+    --popover: 36 25% 96%;
+    --popover-foreground: 220 30% 15%;
     
-    --primary: 27 100% 65%;
+    /* Keep the blue accent */
+    --primary: 210 90% 50%;
     --primary-foreground: 210 20% 98%;
     
-    --secondary: 30 20% 88%;  /* Warmer, darker secondary */
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 36 20% 90%;
+    --secondary-foreground: 220 30% 15%;
     
-    --muted: 30 20% 88%;  /* Warmer, darker muted */
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --muted: 36 20% 90%;
+    --muted-foreground: 220 15% 40%;
     
-    --accent: 27 100% 65%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    /* Blue accent */
+    --accent: 210 90% 50%;
+    --accent-foreground: 220 30% 15%;
     
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
     
-    --border: 30 15% 84%;  /* Darker border for better definition */
-    --input: 30 15% 84%;
-    --ring: 27 100% 65%;
+    --border: 36 15% 86%;
+    --input: 36 15% 86%;
+    --ring: 210 90% 50%;
     --radius: 0.5rem;
   }
 

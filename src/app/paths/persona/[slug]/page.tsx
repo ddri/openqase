@@ -1,112 +1,180 @@
 // src/app/paths/persona/[slug]/page.tsx
-import Link from 'next/link'
-import { Persona, CaseStudy } from '@/types'
+import React from 'react';
+import { promises as fs } from 'fs';
+import path from 'path';
+import matter from 'gray-matter';
+import { notFound } from 'next/navigation';
+import { MDXRemote } from 'next-mdx-remote/rsc';
+import { Badge } from '@/components/ui/badge';
+import { Card } from '@/components/ui/card';
+import Link from 'next/link';
+import { CaseStudy } from '@/lib/types';
 
-interface PersonaProfileProps {
-  params: Promise<{
-    slug: string
-  }>
+// Components for MDX
+const components = {
+ h1: ({ children }: { children: React.ReactNode }) => (
+    <h1 className="text-4xl font-bold text-[var(--text-primary)] mb-6">{children}</h1>
+ ),
+ h2: ({ children }: { children: React.ReactNode }) => (
+  <h2 className="text-2xl font-semibold text-[var(--text-primary)] mt-8 mb-4">{children}</h2>
+ ),
+ p: ({ children }: { children: React.ReactNode }) => (
+  <p className="text-[var(--text-secondary)] mb-4">{children}</p>
+ ),
+};
+
+async function getPersona(slug: string) {
+ try {
+   const filePath = path.join(process.cwd(), 'content', 'persona', `${slug}.mdx`);
+   const fileContent = await fs.readFile(filePath, 'utf8');
+   const { data, content } = matter(fileContent);
+   
+   // Add debug logging to help us verify
+   console.log('Loading persona MDX:', slug);
+   console.log('Content found:', !!content);
+   
+   return {
+     frontmatter: data,
+     content,
+     source: content // For MDXRemote compatibility
+   };
+ } catch (error) {
+   console.error('Error loading persona:', error);
+   return null;
+ }
 }
 
-// This would typically come from your database
-async function getPersonaData(slug: string): Promise<Persona> {
-  // Placeholder data
-  return {
-    id: '1',
-    title: 'Business Analyst',
-    slug: 'business-analyst',
-    description: 'Understanding quantum computing from a business perspective',
-    type: 'Technical',
-    role: 'Business Analysis',
-    expertise: ['Strategy', 'Requirements Analysis', 'Stakeholder Management'],
-    relatedCaseStudies: ['case-1', 'case-2'],
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString()
-  }
+async function getCaseStudy(slug: string) {
+ try {
+   const filePath = path.join(process.cwd(), 'content', 'case-study', `${slug}.mdx`);
+   const fileContent = await fs.readFile(filePath, 'utf8');
+   const { data, content } = matter(fileContent);
+   return {
+     frontmatter: data,
+     content,
+     slug,
+   };
+ } catch (error) {
+   console.error('Error loading case study:', error);
+   return null;
+ }
 }
 
-async function getRelatedCaseStudies(ids: string[]): Promise<CaseStudy[]> {
-  // Placeholder data
-  return ids.map(id => ({
-    id,
-    title: 'Case Study Example',
-    slug: `case-${id}`,
-    description: 'Lorem ipsum dolor sit amet...',
-    content: 'Full case study content...',
-    personas: ['business-analyst'],
-    industries: ['finance'],
-    algorithms: ['grover'],
-    difficulty: 'Beginner' as const,
-    tags: ['optimization', 'finance'],
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString()
-  }))
+// Generate static paths
+export async function generateStaticParams() {
+ const contentDirectory = path.join(process.cwd(), 'content', 'persona');
+ const files = await fs.readdir(contentDirectory);
+ 
+ return files
+   .filter(file => file.endsWith('.mdx'))
+   .map(file => ({
+     slug: file.replace('.mdx', ''),
+   }));
 }
 
-export default async function PersonaProfile(props: PersonaProfileProps) {
-  const params = await props.params;
-  const persona = await getPersonaData(params.slug)
-  const caseStudies = await getRelatedCaseStudies(persona.relatedCaseStudies)
+// Get metadata for the page with Promise params
+export async function generateMetadata(props: { params: Promise<{ slug: string }> }) {
+ // Await the params before using
+ const resolvedParams = await props.params;
+ const slug = resolvedParams.slug;
+ const persona = await getPersona(slug);
+ 
+ if (!persona) {
+   return {
+     title: 'Not Found',
+     description: 'Page not found'
+   };
+ }
 
-  return (
-    <main className="min-h-screen bg-[#0C0C0D] p-8">
-      <div className="max-w-7xl mx-auto">
-        <div className="grid grid-cols-12 gap-8">
-          {/* Left Column - Persona Card */}
-          <div className="col-span-2">
-            <div className="bg-white rounded-xl overflow-hidden mb-4">
-              <div className="aspect-[3/2] bg-gray-400 flex items-center justify-center">
-                <span className="text-white">{persona.title}</span>
-              </div>
-              <div className="p-3">
-                <div className="mb-1.5">
-                  <span className="inline-block px-1.5 py-0.5 rounded-full text-[10px] bg-blue-100 text-blue-800">
-                    {persona.type}
-                  </span>
-                </div>
-              </div>
-            </div>
-            <Link 
-              href="/paths/persona"
-              className="inline-block text-sm text-gray-300 hover:text-white transition-colors"
-            >
-              ← Back
-            </Link>
-          </div>
+ return {
+   title: `${persona.frontmatter.title} | OpenQase Quantum Computing`,
+   description: persona.frontmatter.description,
+   keywords: persona.frontmatter.keywords,
+ };
+}
 
-          {/* Middle Column - Main Content */}
-          <div className="col-span-7">
-            <h1 className="text-2xl font-bold text-white mb-4">{persona.title}</h1>
-            <div className="space-y-4 text-gray-300">
-              <p>{persona.description}</p>
-              
-              <h2 className="text-xl font-semibold text-white mt-8 mb-4">Expertise</h2>
-              <ul className="list-disc list-inside">
-                {persona.expertise.map((item) => (
-                  <li key={item} className="text-gray-300">{item}</li>
-                ))}
-              </ul>
-            </div>
-          </div>
+// Updated to handle params as a Promise
+export default async function PersonaPage(props: { params: Promise<{ slug: string }> }) {
+ // Await the params before using
+ const resolvedParams = await props.params;
+ const slug = resolvedParams.slug;
+ const persona = await getPersona(slug);
+ 
+ if (!persona) {
+   notFound();
+ }
+   
+ // Get related case studies
+ const caseStudies = await Promise.all(
+   persona.frontmatter.relatedCaseStudies.map(async (studySlug: string) => {
+     const study = await getCaseStudy(studySlug);
+     if (!study) return null;
+     return study;
+   })
+ ).then(studies => studies.filter(Boolean)); // Remove any null results
 
-          {/* Right Column - Case Studies */}
-          <div className="col-span-3">
-            <h2 className="text-xl font-semibold text-white mb-4">Case studies</h2>
-            <div className="space-y-4">
-              {caseStudies.map((study) => (
-                <Link 
-                  key={study.id}
-                  href={`/case-studies/${study.slug}`}
-                  className="block p-4 bg-gray-800 rounded-lg hover:bg-gray-700 transition-colors"
-                >
-                  <h3 className="font-medium text-white mb-2">{study.title}</h3>
-                  <p className="text-sm text-gray-300">{study.description}</p>
-                </Link>
-              ))}
-            </div>
-          </div>
-        </div>
-      </div>
-    </main>
-  )
+ return (
+   <main className="min-h-screen p-8">
+     <div className="max-w-7xl mx-auto">
+       <div className="grid grid-cols-12 gap-8">
+         {/* Left Column - Persona Card */}
+         <div className="col-span-2">
+          <Card className="bg-[var(--card)] border">
+          <div className="aspect-[3/2] bg-[var(--card)] flex items-center justify-center">
+          <span className="text-[var(--text-primary)]">{persona.frontmatter.title}</span>
+             </div>
+             <div className="p-3">
+               <Badge className="bg-[#F4A261] text-white border-0">
+                 {persona.frontmatter.role}
+               </Badge>
+             </div>
+           </Card>
+           <Link
+             href="/paths/persona"
+             className="inline-block mt-4 text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors"
+           >
+             ← Back to Persona
+           </Link>
+         </div>
+
+         {/* Main Content */}
+         <div className="col-span-7">
+           <article className="prose max-w-none">
+             <MDXRemote source={persona.source} components={components} />
+           </article>
+         </div>
+
+         {/* Right Column - Case Studies */}
+         <div className="col-span-3">
+         <h2 className="text-xl font-semibold text-[var(--text-primary)] mb-4">
+             Related Case Studies
+           </h2>
+           <div className="space-y-4">
+             {caseStudies.map((study) => (
+               <Link
+                 key={study.slug}
+                 href={`/case-study/${study.slug}`}
+                 className="block p-4 bg-[var(--card)] border border-[var(--border)] rounded-lg hover:shadow-md"
+               >
+                 <h3 className="font-medium text-[var(--text-primary)] mb-2">
+                   {study.frontmatter.title}
+                 </h3>
+                 <p className="text-sm text-[var(--text-secondary)]">
+                   {study.frontmatter.description}
+                 </p>
+                 <div className="mt-3 flex flex-wrap gap-2">
+                   {study.frontmatter.tags.map((tag: string) => (
+                     <Badge key={tag} variant="outline" className="text-[var(--text-secondary)] border-[var(--border)]">
+                       {tag}
+                     </Badge>
+                   ))}
+                 </div>
+               </Link>
+             ))}
+           </div>
+         </div>
+       </div>
+     </div>
+   </main>
+ );
 }

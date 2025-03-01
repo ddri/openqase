@@ -1,172 +1,183 @@
 // src/app/paths/algorithm/[slug]/page.tsx
-import Link from 'next/link'
-import { Metadata } from 'next'
-import { Algorithm, CaseStudy } from '@/types'
+import { promises as fs } from 'fs';
+import path from 'path';
+import { notFound } from 'next/navigation';
+import matter from 'gray-matter';
+import { MDXRemote } from 'next-mdx-remote/rsc';
+import { Badge } from '@/components/ui/badge';
+import { Card } from '@/components/ui/card';
+import Link from 'next/link';
 
-// Updated interface to match Next.js Page Props
-interface AlgorithmProfileProps {
-  params: Promise<{
-    slug: string
-  }>
-  searchParams?: Promise<{ [key: string]: string | string[] | undefined }>
+const components = {
+  h1: ({ children }: { children: React.ReactNode }) => (
+    <h1 className="text-4xl font-bold text-[var(--text-primary)] mb-6">{children}</h1>
+  ),
+  h2: ({ children }: { children: React.ReactNode }) => (
+    <h2 className="text-2xl font-semibold text-[var(--text-primary)] mt-8 mb-4">{children}</h2>
+  ),
+  h3: ({ children }: { children: React.ReactNode }) => (
+    <h3 className="text-xl font-semibold text-[var(--text-primary)] mt-6 mb-3">{children}</h3>
+  ),
+  p: ({ children }: { children: React.ReactNode }) => (
+    <p className="text-[var(--text-secondary)] mb-4 leading-relaxed">{children}</p>
+  ),
+  ul: ({ children }: { children: React.ReactNode }) => (
+    <ul className="list-disc list-inside space-y-2 text-[var(--text-secondary)] mb-6 ml-4">{children}</ul>
+  ),
+  li: ({ children }: { children: React.ReactNode }) => (
+    <li className="text-[var(--text-secondary)]">{children}</li>
+  ),
+  code: ({ children }: { children: React.ReactNode }) => (
+    <code className="bg-[var(--muted)] rounded px-2 py-1 text-sm font-mono text-[var(--primary)]">
+      {children}
+    </code>
+  ),
+  pre: ({ children }: { children: React.ReactNode }) => (
+    <pre className="bg-[var(--muted)] rounded-lg p-4 overflow-x-auto mb-6 text-sm font-mono text-[var(--primary)]">
+      {children}
+    </pre>
+  ),
+};
+
+export async function generateStaticParams() {
+  const contentDirectory = path.join(process.cwd(), 'content', 'algorithm');
+  const files = await fs.readdir(contentDirectory);
+  
+  return files
+    .filter(file => file.endsWith('.mdx'))
+    .map(file => ({
+      slug: file.replace('.mdx', ''),
+    }));
 }
 
-async function getAlgorithmData(slug: string): Promise<Algorithm> {
-  // Placeholder data - in real implementation, this would fetch from a database
-  return {
-    id: '1',
-    title: 'Shor\'s Algorithm',
-    slug: 'shors-algorithm',
-    description: 'A quantum algorithm for integer factorization',
-    type: 'Technical',
-    complexity: 'O(log N)',
-    applications: [
-      'Cryptography',
-      'Number Theory',
-      'RSA Breaking'
-    ],
-    prerequisites: [
-      'Quantum Fourier Transform',
-      'Modular Arithmetic',
-      'Basic Quantum Gates'
-    ],
-    relatedCaseStudies: ['case-1', 'case-2'],
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString()
+async function getAlgorithm(slug: string) {
+  try {
+    const filePath = path.join(process.cwd(), 'content', 'algorithm', `${slug}.mdx`);
+    const fileContent = await fs.readFile(filePath, 'utf8');
+    const { data, content } = matter(fileContent);
+    
+    return {
+      frontmatter: data,
+      content,
+    };
+  } catch (error) {
+    return null;
   }
 }
 
-async function getRelatedCaseStudies(ids: string[]): Promise<CaseStudy[]> {
-  // Placeholder data - in real implementation, this would fetch from a database
-  return ids.map(id => ({
-    id,
-    title: 'Case Study Example',
-    slug: `case-${id}`,
-    description: 'Implementation and practical applications',
-    content: 'Full case study content...',
-    personas: ['researcher'],
-    industries: ['cryptography'],
-    algorithms: ['shors-algorithm'],
-    difficulty: 'Advanced' as const,
-    tags: ['cryptography', 'factorization'],
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString()
-  }))
-}
+// Updated to handle params as a Promise
+export default async function AlgorithmPage(props: { params: Promise<{ slug: string }> }) {
+  // Await the params before using
+  const resolvedParams = await props.params;
+  const slug = resolvedParams.slug;
+  const algorithm = await getAlgorithm(slug);  
 
-// Metadata generation for SEO
-export async function generateMetadata(props: AlgorithmProfileProps): Promise<Metadata> {
-  const params = await props.params;
-  const algorithm = await getAlgorithmData(params.slug)
-
-  return {
-    title: `${algorithm.title} | OpenQase Quantum Algorithms`,
-    description: algorithm.description,
-    keywords: [
-      'quantum algorithm',
-      algorithm.title.toLowerCase(),
-      ...algorithm.applications
-    ],
-    openGraph: {
-      title: `${algorithm.title} | OpenQase`,
-      description: algorithm.description,
-      type: 'article',
-      url: `/paths/algorithm/${algorithm.slug}`
-    }
+  if (!algorithm) {
+    notFound();
   }
-}
 
-export default async function AlgorithmProfile(props: AlgorithmProfileProps) {
-  const params = await props.params;
-  const algorithm = await getAlgorithmData(params.slug)
-  const caseStudies = await getRelatedCaseStudies(algorithm.relatedCaseStudies)
+  const { frontmatter, content } = algorithm;
 
   return (
-    <main className="min-h-screen bg-[#0C0C0D] p-8">
+    <main className="min-h-screen p-8">
       <div className="max-w-7xl mx-auto">
+        <div className="mb-8">
+          <Link 
+            href="/paths/algorithm"
+            className="text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors"
+
+          >
+            ← Back to Algorithms
+          </Link>
+        </div>
+
         <div className="grid grid-cols-12 gap-8">
           {/* Left Column - Algorithm Card */}
           <div className="col-span-2">
-            <div className="bg-white rounded-xl overflow-hidden mb-4">
-              <div className="aspect-[3/2] bg-gray-400 flex items-center justify-center">
-                <span className="text-white">{algorithm.title}</span>
+          <Card className="bg-[var(--card)] border">
+          <div className="aspect-[3/2] bg-[var(--card)] flex items-center justify-center">
+          <span className="text-[var(--text-primary)]">{frontmatter.title}</span>
               </div>
               <div className="p-3">
                 <div className="mb-1.5">
-                  <span className="inline-block px-1.5 py-0.5 rounded-full text-[10px] bg-blue-100 text-blue-800">
-                    {algorithm.type}
-                  </span>
+                  <Badge className="bg-[#F4A261] text-white border-0">
+                    {frontmatter.complexity}
+                  </Badge>
+                </div>
+                <div className="text-xs text-[var(--text-secondary)]">
+                  Complexity: <code className="text-blue-600">{frontmatter.complexity}</code>
                 </div>
               </div>
-            </div>
-            <Link 
-              href="/paths/algorithm"
-              className="inline-block text-sm text-gray-300 hover:text-white transition-colors"
-            >
-              ← Back
-            </Link>
+            </Card>
           </div>
 
-          {/* Middle Column - Main Content */}
+          {/* Main Content */}
           <div className="col-span-7">
-            <h1 className="text-2xl font-bold text-white mb-4">{algorithm.title}</h1>
-            <div className="space-y-6 text-gray-300">
-              <div>
-                <p>{algorithm.description}</p>
-                <div className="mt-2">
-                  <span className="text-gray-400">Complexity:</span>
-                  <span className="ml-2 font-mono">{algorithm.complexity}</span>
-                </div>
-              </div>
-              
-              <div>
-                <h2 className="text-xl font-semibold text-white mb-4">Prerequisites</h2>
-                <ul className="list-disc list-inside space-y-2">
-                  {algorithm.prerequisites.map((item) => (
-                    <li key={item} className="text-gray-300">{item}</li>
-                  ))}
-                </ul>
-              </div>
-
-              <div>
-                <h2 className="text-xl font-semibold text-white mb-4">Applications</h2>
-                <ul className="list-disc list-inside space-y-2">
-                  {algorithm.applications.map((item) => (
-                    <li key={item} className="text-gray-300">{item}</li>
-                  ))}
-                </ul>
-              </div>
-            </div>
+            <article className="prose max-w-none">
+              <MDXRemote 
+                source={content} 
+                components={components} 
+              />
+            </article>
           </div>
 
-          {/* Right Column - Case Studies */}
+          {/* Right Column - Details & Related */}
           <div className="col-span-3">
-            <h2 className="text-xl font-semibold text-white mb-4">Case studies</h2>
-            <div className="space-y-4">
-              {caseStudies.map((study) => (
-                <Link 
-                  key={study.id}
-                  href={`/case-studies/${study.slug}`}
-                  className="block p-4 bg-gray-800 rounded-lg hover:bg-gray-700 transition-colors"
-                >
-                  <h3 className="font-medium text-white mb-2">{study.title}</h3>
-                  <p className="text-sm text-gray-300">{study.description}</p>
-                  <div className="mt-2 flex gap-2">
-                    {study.tags.map((tag) => (
-                      <span 
-                        key={tag}
-                        className="text-[10px] px-1.5 py-0.5 bg-gray-700 text-gray-300 rounded-full"
-                      >
-                        {tag}
-                      </span>
+            <div className="sticky top-8 space-y-6">
+            <Card className="bg-[var(--card)] border">
+                <div className="p-4">
+                <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-3">
+                    Prerequisites
+                  </h3>
+                  <div className="space-y-2">
+                    {frontmatter.prerequisites.map((prereq: string) => (
+                      <div key={prereq} className="text-[var(--text-secondary)]">
+                        • {prereq}
+                      </div>
                     ))}
                   </div>
-                </Link>
-              ))}
+                </div>
+              </Card>
+
+              <Card className="bg-[var(--card)] border">
+                <div className="p-4">
+                <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-3">
+                    Applications
+                  </h3>
+                  <div className="flex flex-wrap gap-2">
+                    {frontmatter.applications.map((app: string) => (
+                      <Badge key={app} variant="outline" className="text-[var(--text-secondary)] border-[var(--border)]">
+                        {app}
+                      </Badge>
+                    ))}
+                  </div>
+                </div>
+              </Card>
+
+              {frontmatter.relatedCaseStudies && frontmatter.relatedCaseStudies.length > 0 && (
+                <Card className="bg-[var(--card)] border">
+                  <div className="p-4">
+                  <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-3">
+                      Related Case Studies
+                    </h3>
+                    <div className="space-y-2">
+                      {frontmatter.relatedCaseStudies.map((study: string) => (
+                        <Link 
+                          key={study}
+                          href={`/case-study/${study}`}
+                          className="block text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors"
+                        >
+                          {study}
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                </Card>
+              )}
             </div>
           </div>
         </div>
       </div>
     </main>
-  )
+  );
 }

@@ -1,0 +1,27 @@
+{
+  "id": "2",
+  "title": "Volkswagen's Traffic Flow Optimization",
+  "slug": "volkswagen-traffic-optimization",
+  "description": "Volkswagen's implementation of quantum computing for optimizing traffic flow in major cities.",
+  "content": "Volkswagen implemented quantum computing to optimize traffic flow in major cities, focusing on reducing congestion and emissions while improving travel times. The solution utilized quantum annealing and QAOA approaches to solve complex optimization problems, mapping traffic flow to a quantum system where the ground state represents the optimal traffic configuration.",
+  "personas": ["software-engineer", "government"],
+  "industries": ["automotive", "smart-cities"],
+  "algorithms": ["qaoa"],
+  "difficulty": "Intermediate",
+  "tags": ["automotive", "optimization", "smart-cities"],
+  "metrics": {
+    "trafficReduction": "26%",
+    "timeSaved": "17min",
+    "co2Reduction": "18%",
+    "fuelSaved": "21%",
+    "noiseReduction": "15%"
+  },
+  "technologies": [
+    "D-Wave Quantum Annealer",
+    "Custom Optimization Software",
+    "Real-time Traffic Systems",
+    "Cloud Integration Platform"
+  ],
+  "createdAt": "2024-02-13T00:00:00Z",
+  "updatedAt": "2024-02-13T00:00:00Z"
+}

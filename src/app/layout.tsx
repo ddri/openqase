@@ -6,7 +6,13 @@ import Link from 'next/link';
 import Navigation from '@/components/Navigation';
 import ThemeProvider from '@/components/ThemeProvider';
 
-const inter = Inter({ subsets: ['latin'] });
+// Load Inter with additional weights for better typography
+const inter = Inter({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-inter',
+  weight: ['400', '500', '600', '700'],
+});
 
 export const metadata: Metadata = {
   title: 'OpenQASE - Quantum Computing Education Platform',
@@ -19,8 +25,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body className={inter.className}>
+    <html lang="en" suppressHydrationWarning className={inter.variable}>
+      <body className="min-h-screen antialiased">
         <ThemeProvider>
           <div className="min-h-screen flex flex-col">
             <Navigation />

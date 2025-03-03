@@ -3,81 +3,88 @@
 @tailwind utilities;
 
 @layer base {
-  /* Light theme (default) */
+  /* Light theme - faded paper look */
   :root {
-    --background: 0 0% 100%;
-    --foreground: 224 71.4% 4.1%;
+    /* Warmer, more muted paper background - less white */
+    --background: 35 30% 90%;  /* Darker, more muted paper */
+    --foreground: 30 15% 15%; /* Darker text for better readability on paper */
     
-    --card: 0 0% 100%;
-    --card-foreground: 224 71.4% 4.1%;
-    --card-background: 0 0% 100% / 0.9;
-    --card-border: 220 13% 91%;
-    --card-hover-border: 27 100% 65%;
-    --card-hover-background: 27 100% 65% / 0.05;
+    --card: 35 25% 92%;  /* Slightly darker card background */
+    --card-foreground: 30 15% 15%;
+    --card-background: 35 25% 92% / 0.9;
+    --card-border: 35 25% 83%;  /* Subtle border */
+    --card-hover-border: 210 90% 50%;
+    --card-hover-background: 210 90% 50% / 0.05;
     
-    --text-primary: 224 71.4% 4.1%;
-    --text-secondary: 220 9% 29%;
-    --text-tertiary: 220 9% 45%;
+    --text-primary: 30 15% 15%; /* Darker text for headings */
+    --text-secondary: 30 15% 20%; /* Much darker text for paragraphs */
+    --text-tertiary: 30 10% 30%; /* Much darker text for tertiary elements */
     
-    --surface-primary: 0 0% 100%;
-    --surface-secondary: 0 0% 97%;
-    --surface-tertiary: 0 0% 95%;
+    --surface-primary: 35 25% 92%;
+    --surface-secondary: 35 25% 87%;   /* Slightly darker for secondary surfaces */
+    --surface-tertiary: 35 25% 83%;    /* Darker for sidebar */
     
-    --popover: 0 0% 100%;
-    --popover-foreground: 224 71.4% 4.1%;
+    --popover: 35 25% 92%;
+    --popover-foreground: 30 15% 15%;
     
-    --primary: 27 100% 65%;
+    /* Keep the blue accent */
+    --primary: 210 90% 50%;
     --primary-foreground: 210 20% 98%;
     
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 35 25% 87%;
+    --secondary-foreground: 30 15% 15%;
     
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --muted: 35 25% 87%;
+    --muted-foreground: 30 15% 30%; /* Darker muted text */
     
-    --accent: 27 100% 65%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    /* Blue accent */
+    --accent: 210 90% 50%;
+    --accent-foreground: 220 30% 15%;
     
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
     
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 27 100% 65%;
+    --border: 35 25% 83%;
+    --input: 35 25% 83%;
+    --ring: 210 90% 50%;
     --radius: 0.5rem;
+
+    /* Anthropic-inspired typography */
+    --font-sans: var(--font-inter), system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --font-heading: var(--font-sans);
   }
 
-  /* Dark theme - improved with dark grey instead of dark blue */
+  /* Dark theme - improved with graphite grey instead of near-black */
   [data-theme='dark'] {
-    --background: 224 7% 12%; /* Dark grey instead of dark blue */
+    --background: 220 10% 17%; /* Graphite grey instead of near-black */
     --foreground: 210 40% 98%;
     
-    --card: 224 7% 16%; /* Slightly lighter dark grey */
+    --card: 220 10% 22%; /* Slightly lighter graphite grey */
     --card-foreground: 210 40% 98%;
-    --card-background: 224 7% 16% / 0.9;
-    --card-border: 224 7% 22%;
+    --card-background: 220 10% 22% / 0.9;
+    --card-border: 220 10% 28%;
     --card-hover-border: 27 100% 65%;
     --card-hover-background: 27 100% 65% / 0.1;
     
     --text-primary: 210 40% 98%;
-    --text-secondary: 215 20.2% 75%; /* Increased contrast for better readability */
+    --text-secondary: 215 20% 75%; /* Increased contrast for better readability */
     --text-tertiary: 215 16% 65%; /* Increased contrast for better readability */
     
-    --surface-primary: 224 7% 16%;
-    --surface-secondary: 224 7% 22%;
-    --surface-tertiary: 224 7% 28%;
+    --surface-primary: 220 10% 22%;
+    --surface-secondary: 220 10% 28%;
+    --surface-tertiary: 220 10% 34%;
     
-    --popover: 224 7% 16%;
+    --popover: 220 10% 22%;
     --popover-foreground: 210 40% 98%;
     
     --primary: 27 100% 65%;
-    --primary-foreground: 224 7% 12%;
+    --primary-foreground: 220 10% 17%;
     
-    --secondary: 224 7% 22%;
+    --secondary: 220 10% 28%;
     --secondary-foreground: 210 40% 98%;
     
-    --muted: 224 7% 22%;
-    --muted-foreground: 215 20.2% 75%; /* Increased contrast */
+    --muted: 220 10% 28%;
+    --muted-foreground: 215 20% 75%; /* Increased contrast */
     
     --accent: 27 100% 65%;
     --accent-foreground: 210 40% 98%;
@@ -85,10 +92,75 @@
     --destructive: 0 62.8% 45%; /* Brighter for better visibility */
     --destructive-foreground: 210 40% 98%;
     
-    --border: 224 7% 28%;
-    --input: 224 7% 28%;
+    --border: 220 10% 34%;
+    --input: 220 10% 34%;
     --ring: 27 100% 65%;
     --radius: 0.5rem;
+  }
+  
+  /* Graphite theme */
+  [data-theme='graphite'] {
+    --background: 240 5% 10%;  /* zinc-900 equivalent */
+    --foreground: 0 0% 98%;
+    
+    --card: 240 5% 15%;  /* zinc-800/50 equivalent */
+    --card-foreground: 0 0% 100%;
+    
+    /* Add missing text color variables */
+    --text-primary: 0 0% 98%;
+    --text-secondary: 240 5% 80%;
+    --text-tertiary: 240 5% 70%;
+    
+    --primary: 22 100% 50%;  /* orange-500 */
+    --primary-foreground: 0 0% 100%;
+    
+    --secondary: 240 5% 25%;
+    --secondary-foreground: 0 0% 98%;
+    
+    --accent: 22 100% 50%;  /* orange-500 */
+    --accent-foreground: 0 0% 98%;
+    
+    --muted: 240 5% 35%;
+    --muted-foreground: 240 5% 65%;  /* zinc-400 */
+    
+    --border: 240 5% 30%;  /* zinc-700 */
+    --input: 240 5% 30%;
+    --ring: 22 100% 50%;  /* orange-500 */
+  }
+
+  /* Make sure main content has appropriate z-index to not overlap with nav */
+  main {
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Ensure proper stacking contexts for page elements */
+  body > * {
+    isolation: isolate;
+  }
+
+  /* Smooth scrolling for better user experience */
+  html {
+    scroll-behavior: smooth;
+  }
+  
+  /* Add box-shadow transition for elements */
+  .shadow-transition {
+    transition: box-shadow 0.3s ease;
+  }
+  
+  /* Navigation active indicator animation, keeping existing styles */
+  .active::after {
+    content: '';
+    display: block;
+    width: 100%;
+    height: 2px;
+    background-color: hsl(var(--primary));
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    transform-origin: left;
+    transition: transform 0.3s ease;
   }
 }
 
@@ -97,6 +169,283 @@
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-sans text-base antialiased;
+    font-feature-settings: "salt" 1;
   }
+
+  /* Anthropic-inspired typography */
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-medium tracking-tight text-foreground;
+    font-feature-settings: "salt" 1;
+  }
+  
+  h1 {
+    @apply text-3xl md:text-4xl font-[600] leading-tight;
+    letter-spacing: -0.01em;
+  }
+  
+  h2 {
+    @apply text-2xl md:text-3xl font-[600] leading-tight mb-4;
+    letter-spacing: -0.01em;
+  }
+  
+  h3 {
+    @apply text-xl md:text-2xl font-[500] leading-snug mb-2;
+  }
+  
+  h4 {
+    @apply text-lg md:text-xl font-[500] mb-2;
+  }
+  
+  p {
+    @apply leading-relaxed mb-4 text-base; /* Changed from text-[15px] to text-base (16px) */
+  }
+
+  /* Specific styles for case study headings */
+  .case-study-title {
+    @apply text-2xl md:text-3xl font-[600] mb-1;
+    letter-spacing: -0.01em;
+  }
+  
+  .section-title {
+    @apply text-2xl font-[600] mb-6 pb-1;
+    letter-spacing: -0.01em;
+  }
+  
+  /* Sidebar heading - smaller than main headings */
+  .sidebar-title {
+    @apply text-lg font-[500] mb-4;
+    letter-spacing: -0.01em;
+  }
+  
+  /* Tag styling */
+  .tag-label {
+    @apply font-[500] text-foreground;
+  }
+  
+  .tag {
+    @apply text-[15px] text-foreground/80;
+  }
+  
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+/* Additional Anthropic-inspired component styling */
+@layer components {
+  /* Button styling with Anthropic-like typography */
+  .btn-primary {
+    @apply bg-primary text-primary-foreground rounded-full px-6 py-3 font-medium transition-all;
+    letter-spacing: -0.01em;
+  }
+  
+  .btn-secondary {
+    @apply bg-secondary text-secondary-foreground rounded-full px-6 py-3 font-medium border border-border transition-all;
+    letter-spacing: -0.01em;
+  }
+  
+  /* Card title styling */
+  .card-title {
+    @apply text-xl font-[500] tracking-tight;
+    letter-spacing: -0.01em;
+  }
+  
+  /* Make card descriptions larger and more prominent */
+  .description-text, 
+  div[class*="CardDescription"] {
+    @apply text-base leading-relaxed text-text-secondary font-normal;
+  }
+  
+  /* Subtle links styling */
+  .subtle-link {
+    @apply text-foreground/80 hover:text-foreground transition-colors underline-offset-4 hover:underline;
+  }
+  
+  /* Navigation links */
+  .nav-link {
+    @apply text-base font-medium text-foreground/80 hover:text-foreground transition-colors;
+  }
+  
+  /* Enhanced navigation styling */
+  .nav-indicator {
+    @apply absolute bottom-0 left-0 h-0.5 bg-primary transition-all duration-300 rounded-full;
+    width: 0;
+  }
+  
+  /* Active state for navigation */
+  .nav-active .nav-indicator {
+    @apply w-full;
+  }
+  
+  /* Active state for link text */
+  .nav-active {
+    @apply text-primary font-medium;
+  }
+  
+  /* Content section spacing */
+  .content-section {
+    @apply mb-12;
+  }
+  
+  /* Case study list */
+  .case-study-list {
+    @apply space-y-10;
+  }
+  
+  .case-study-item {
+    @apply mb-8;
+  }
+  
+  /* Tag container */
+  .tags-container {
+    @apply flex flex-wrap gap-2 mt-1;
+  }
+  
+  /* Topic list with proper spacing */
+  .topic-list {
+    @apply space-y-2 mb-6;
+  }
+  
+  .topic-item {
+    @apply text-[15px] leading-relaxed;
+  }
+  
+  /* Case study sidebar - darker, more subtle background */
+  .case-study-sidebar {
+    @apply bg-surface-tertiary border-l border-border p-6 h-full;
+  }
+  
+  /* Metric item in sidebar */
+  .metric-item {
+    @apply flex justify-between items-center py-2 border-b border-border/50 last:border-0;
+  }
+  
+  .metric-label {
+    @apply text-[15px] text-foreground/80;
+  }
+  
+  .metric-value {
+    @apply text-[15px] font-[500];
+  }
+  
+  /* Badge for technologies */
+  .tech-badge {
+    @apply inline-flex px-3 py-1 text-[13px] bg-surface-secondary border border-border/60 rounded-full mr-2 mb-2;
+  }
+  
+  /* Badge for difficulty */
+  .difficulty-badge {
+    @apply inline-flex px-3 py-1 text-[13px] text-primary-foreground bg-primary rounded-full;
+  }
+}
+
+/* Enhanced Card styling for graphite theme */
+[data-theme='graphite'] .card {
+  @apply bg-zinc-800/50 border-zinc-700 backdrop-blur-sm relative overflow-hidden transition-all duration-300;
+}
+
+[data-theme='graphite'] .card:hover {
+  @apply shadow-lg shadow-orange-500/20 border-orange-500/30 bg-zinc-800/70 transform scale-[1.02];
+}
+
+/* Make the bottom gradient more prominent on hover */
+[data-theme='graphite'] .card::after {
+  content: "";
+  @apply absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-orange-500 to-transparent opacity-0 transition-opacity duration-300;
+}
+
+[data-theme='graphite'] .card:hover::after {
+  @apply opacity-100;
+}
+
+/* Add an orange glow effect on hover */
+[data-theme='graphite'] .card:hover .persona-icon-wrapper {
+  @apply border-orange-500/50 bg-zinc-900/90 shadow-orange-500/30 shadow-md;
+}
+
+/* Add subtle orange corner accent that becomes more visible on hover */
+[data-theme='graphite'] .card::before {
+  content: "";
+  @apply absolute top-0 right-0 w-32 h-32 bg-orange-500/5 rounded-bl-full -mr-16 -mt-16 transform rotate-45 transition-all duration-300;
+}
+
+[data-theme='graphite'] .card:hover::before {
+  @apply bg-orange-500/20;
+}
+
+/* Icon styling */
+[data-theme='graphite'] .persona-icon-wrapper {
+  @apply p-3 bg-zinc-900/80 rounded-lg border border-zinc-700/50 shadow-lg mb-3;
+}
+
+[data-theme='graphite'] .persona-icon {
+  @apply h-8 w-8 text-orange-500;
+}
+
+/* Badge styling */
+[data-theme='graphite'] .badge {
+  @apply bg-zinc-900/70 text-zinc-300 border-zinc-700;
+}
+
+[data-theme='graphite'] .badge:hover {
+  @apply bg-orange-500/20 text-orange-300 border-orange-500/50;
+}
+
+[data-theme='graphite'] .more-badge {
+  @apply bg-zinc-900/70 text-zinc-400 border-zinc-700;
+}
+
+/* Decorative elements */
+[data-theme='graphite'] .card::before {
+  content: "";
+  @apply absolute top-0 right-0 w-32 h-32 bg-orange-500/10 rounded-bl-full -mr-16 -mt-16 transform rotate-45;
+}
+
+[data-theme='graphite'] .card::after {
+  content: "";
+  @apply absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-orange-500/70 to-transparent opacity-0 transition-opacity;
+}
+
+[data-theme='graphite'] .card:hover::after {
+  @apply opacity-100;
+}
+
+
+/* Navigation styling - proper implementation */
+nav {
+  /* Regular nav styles */
+  @apply bg-background border-b border-border;
+}
+
+nav a {
+  position: relative;
+  transition: color 0.2s ease;
+}
+
+/* Underline effect that respects theme colors */
+nav a::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform 0.3s ease;
+  border-radius: 2px;
+  background-color: hsl(var(--primary));
+}
+
+/* Active and hover states */
+nav a:hover::after,
+nav a.active::after {
+  transform: scaleX(1);
+}
+
+/* Ensure active nav links are highlighted with theme color */
+nav a.active {
+  color: hsl(var(--primary));
+  font-weight: 500;
 }

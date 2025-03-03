@@ -78,7 +78,7 @@ export default function HomePage() {
         </p>
         <Link 
           href="/paths"
-          className="inline-block bg-accent hover:bg-accent/90 text-accent-foreground px-8 py-3 rounded-lg transition-colors"
+          className="inline-block bg-accent hover:bg-accent/90 text-white px-8 py-3 rounded-lg transition-colors"
         >
           Explore Learning Paths
         </Link>

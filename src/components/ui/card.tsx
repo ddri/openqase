@@ -10,9 +10,9 @@ const Card = React.forwardRef<HTMLDivElement, CardProps>(
   ({ className, fixedHeight = false, height = 210, ...props }, ref) => (
     <div
       ref={ref}
-      className={`bg-[var(--card)] text-[var(--card-foreground)] rounded-lg border border-[var(--border)] shadow-sm ${
-        fixedHeight ? 'flex flex-col' : ''
-      } ${className || ""}`}
+      className={`bg-[var(--card)] text-[var(--card-foreground)] rounded-lg border border-[var(--border)] shadow-sm 
+      [data-theme='graphite'] & relative overflow-hidden 
+      ${fixedHeight ? 'flex flex-col' : ''} ${className || ""}`}
       style={fixedHeight ? { height: `${height}px` } : undefined}
       {...props}
     />

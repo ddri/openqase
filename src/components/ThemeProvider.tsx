@@ -4,7 +4,7 @@
 
 import React, { createContext, useContext, useEffect, useState } from 'react';
 
-type Theme = 'light' | 'dark';
+type Theme = 'light' | 'dark' | 'graphite';
 
 interface ThemeContextType {
   theme: Theme;
@@ -35,7 +35,7 @@ export default function ThemeProvider({ children }: { children: React.ReactNode 
     const storedTheme = localStorage.getItem('theme') as Theme | null;
     const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
     
-    if (storedTheme && (storedTheme === 'light' || storedTheme === 'dark')) {
+    if (storedTheme && (storedTheme === 'light' || storedTheme === 'dark' || storedTheme === 'graphite')) {
       setTheme(storedTheme);
     } else if (systemPrefersDark) {
       setTheme('dark');
@@ -51,7 +51,12 @@ export default function ThemeProvider({ children }: { children: React.ReactNode 
   }, [theme, mounted]);
   
   const toggleTheme = () => {
-    setTheme(prevTheme => prevTheme === 'light' ? 'dark' : 'light');
+    setTheme(prevTheme => {
+      // Rotate through three themes: light → dark → graphite → light
+      if (prevTheme === 'light') return 'dark';
+      if (prevTheme === 'dark') return 'graphite';
+      return 'light'; // from graphite back to light
+    });
   };
 
   // Return the context provider

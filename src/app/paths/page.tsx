@@ -110,7 +110,7 @@ export default async function LearningPathsPage() {
         </p>
         <Link 
           href="/paths/persona"
-          className="inline-block bg-accent text-accent-foreground hover:bg-accent/90 px-6 py-3 rounded-lg transition-colors"
+          className="inline-block bg-accent text-white hover:bg-accent/90 px-6 py-3 rounded-lg transition-colors"
         >
           Explore Persona
         </Link>

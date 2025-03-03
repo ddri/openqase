@@ -124,7 +124,7 @@ export default async function PersonaPage(props: { params: Promise<{ slug: strin
           <span className="text-[var(--text-primary)]">{persona.frontmatter.title}</span>
              </div>
              <div className="p-3">
-               <Badge className="bg-[#F4A261] text-white border-0">
+               <Badge className="bg-[var(--primary)] text-[var(--primary-foreground)] border-0">
                  {persona.frontmatter.role}
                </Badge>
              </div>

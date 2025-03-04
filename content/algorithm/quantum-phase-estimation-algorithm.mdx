@@ -1,7 +1,7 @@
 ---
 title: "Quantum Phase Estimation (QPE)"
 type: "Technical"
-slug: "qaoa"
+slug: "QPE"
 complexity: "Variable (depends on circuit depth p and problem size)"
 description: "A hybrid quantum-classical algorithm specifically designed for solving combinatorial optimization problems on near-term quantum devices. QAOA combines quantum and classical processing to find approximate solutions to problems that are computationally challenging for classical computers."
 applications:
@@ -156,15 +156,29 @@ Quantum Phase Estimation (QPE) is a fundamental quantum algorithm that plays a c
 QPE is closely related to the Quantum Fourier Transform (QFT) and is often used in conjunction with other quantum algorithms, such as the Harrow-Hassidim-Lloyd (HHL) algorithm for solving linear systems of equations and Shor's algorithm for factoring large integers.
 What does it solve?The problem addressed by QPE can be formulated as follows: given a unitary operator U and an eigenvector |ψ⟩ of U, estimate the corresponding eigenvalue e^(2πiθ), where θ is the phase to be estimated. The eigenvalue equation can be written as: U|ψ⟩ = e^(2πiθ)|ψ⟩. By applying controlled-U operations on an initial state and measuring the resulting state in the computational basis, the QPE algorithm estimates the phase θ.
 How does it work?QPE prepares an ancilla qubit register to store the binary representation of the phase, while applying controlled versions of the unitary operator to the target qubit. The number of controlled operations is doubled with each subsequent ancilla qubit, creating a superposition of states encoding different phase approximations. A subsequent inverse Quantum Fourier Transform (QFT) applied to the ancilla register then collapses the state into a measurement outcome that provides an estimate of the phase with high probability. The accuracy of the estimation increases with the number of ancilla qubits used in the process. QPE finds applications in diverse quantum algorithms, such as Shor's factoring algorithm and Hamiltonian simulation.
-What are the steps?The algorithm can be broken down into several key steps:
+
+## What are the steps?
+
+The algorithm can be broken down into several key steps:
+
 1. State preparation. Prepare a quantum state |ψ⟩ that is an eigenvector of the unitary operator U. This state is typically obtained through some state preparation procedure, such as the Variational Quantum Eigensolver (VQE) or the Quantum Adiabatic Algorithm (QAA).
+
 2. Ancilla qubits. Initialise a set of ancilla qubits in the |0⟩ state. The number of ancilla qubits determines the precision of the phase estimation.
+
 3. Controlled-U operations. Apply a sequence of controlled-U operations on the ancilla qubits, where the number of applications of U depends on the position of the ancilla qubit. For example, the first ancilla qubit controls the application of U^(2^0), the second ancilla qubit controls U^(2^1), and so on, up to U^(2^(n-1)), where n is the number of ancilla qubits.
+
 4. Quantum Fourier Transform. Apply the inverse Quantum Fourier Transform (QFT) to the ancilla qubits. This step transforms the phase information encoded in the ancilla qubits into the computational basis.
+
 5. Measurement. Measure the ancilla qubits in the computational basis. The resulting binary string represents an approximation of the phase θ, with a precision that depends on the number of ancilla qubits.
 What is the real-world context?QPE is a remarkable quantum algorithm with a time complexity of O(1/ε), where ε represents the desired precision of the phase estimation. This exponential speedup over classical methods, which usually scale polynomially with precision, opens up a world of possibilities across various fields.
 In quantum chemistry, QPE is effective in enabling the estimation of ground state energies and other vital properties of molecular systems, accelerating research in drug discovery and materials science. Quantum simulation, another major beneficiary, harnesses QPE to model the dynamics of quantum systems, advancing our understanding in condensed matter physics and quantum field theory.
 QPE also plays a pivotal role in quantum linear algebra, serving as a key component of the HHL algorithm, which boasts an exponential speedup in solving linear systems under certain conditions. The same can be said for explorations in quantum machine learning, where QPE empowers algorithms like the Quantum Support Vector Machine (QSVM) and Quantum Principal Component Analysis (QPCA) to efficiently extract features and classify high-dimensional data.
-What are the limitations?Despite its power and versatility, QPE also faces challenges in its implementation on real quantum hardware. The algorithm requires a large number of controlled-U operations, which can be difficult to implement with high fidelity on current quantum devices. Moreover, the precision of the phase estimation is limited by the coherence time of the quantum system and the presence of noise and errors.
+
+What are the limitations?
+
+Despite its power and versatility, QPE also faces challenges in its implementation on real quantum hardware. The algorithm requires a large number of controlled-U operations, which can be difficult to implement with high fidelity on current quantum devices. Moreover, the precision of the phase estimation is limited by the coherence time of the quantum system and the presence of noise and errors.
 Ongoing research in QPE focuses on developing more efficient and robust implementations of the algorithm, as well as exploring new applications in various fields. Some promising directions include the use of error mitigation techniques, such as quantum error correction and dynamical decoupling, to improve the accuracy of the phase estimation, and the development of hybrid quantum-classical approaches that leverage the strengths of both quantum and classical computing.
-What’s the takeaway?Quantum Phase Estimation is a powerful and fundamental quantum algorithm that has wide-ranging applications in quantum computing, from quantum chemistry and simulation to linear algebra and machine learning. As quantum hardware continues to advance and scale up, QPE is expected to play an increasingly important role in unlocking the potential of quantum computing for solving complex problems and advancing scientific discovery.
+
+What’s the takeaway?
+
+Quantum Phase Estimation is a powerful and fundamental quantum algorithm that has wide-ranging applications in quantum computing, from quantum chemistry and simulation to linear algebra and machine learning. As quantum hardware continues to advance and scale up, QPE is expected to play an increasingly important role in unlocking the potential of quantum computing for solving complex problems and advancing scientific discovery.

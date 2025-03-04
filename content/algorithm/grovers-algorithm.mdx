@@ -136,3 +136,51 @@ Using Grover's Algorithm to solve complex optimization problems in logistics and
    - Implement classical verification
    - Use simulation for testing
    - Validate results statistically
+
+
+
+## Chapter 13: Grover's algorithm
+
+Grover's algorithm was developed soon after Shor’s, this time seeing Lov Grover publishing his own breakthrough in 1996. His focus was on creating a quantum algorithm for searching an unsorted database quadratically faster than the best possible classical algorithm. It is one of the most well-known and widely studied quantum algorithms, with numerous applications in various fields, such as database search, optimisation, and machine learning.
+
+## What does it solve?
+
+Grover's algorithm addresses the problem of searching an unsorted database or solving an unstructured search problem. Given a large set of N items, it finds a specific item or solution that satisfies a given condition, often referred to as the "marked item" or "solution state". In the classical setting, this problem requires O(N) operations in the worst case, as one might need to search through all N items to find the desired one. Grover's algorithm can solve this problem using only O(√N) quantum operations, providing a quadratic speedup over classical methods.
+
+## How does it work?
+
+The key idea behind Grover's algorithm is the concept of amplitude amplification, which allows the algorithm to increase the amplitude of the quantum state corresponding to the desired item, while decreasing the amplitudes of the other states. This is achieved through a series of quantum operations that are applied iteratively to the quantum state, gradually transforming it into a state where the desired item has a high probability of being measured. This process effectively "rotates" the system state towards the solution through a process of phase amplification and attenuation.
+
+## What are the steps?
+
+The algorithm can be broken down into several key steps:
+
+1. Initialisation. The algorithm starts by preparing a uniform superposition of all possible states, where each state corresponds to an index in the database. This is done by applying a Hadamard gate to each qubit in the quantum register.
+
+2. Oracle query. An oracle function is applied to the quantum state, which marks the desired item by flipping the sign of its amplitude. The oracle function is a black box that can recognise the desired item based on the given condition.
+
+3. Diffusion operator. A diffusion operator is applied to the quantum state, which reflects the amplitudes around their average value. This has the effect of increasing the amplitude of the marked item while decreasing the amplitudes of the other items.
+
+4. Amplitude amplification. Steps 2 and 3 are repeated iteratively, approximately π/4 * √N times, which gradually amplifies the amplitude of the marked item while suppressing the amplitudes of the other items.
+
+5. Measurement. The quantum state is measured, and with a high probability, the outcome will correspond to the index of the marked item.
+
+## What is the real-world context?
+
+Grover's algorithm has been experimentally demonstrated on various quantum computing platforms, including superconducting1 qubits, trapped ions2, photonic3, and silicon qubits4. It has also been applied to a wide range of problems beyond database search, such as optimisation, machine learning, and quantum chemistry.
+One of the most significant applications of Grover's algorithm is in the field of optimisation. By combining Grover's algorithm with classical optimisation techniques, such as the Quantum Approximate Optimisation Algorithm (QAOA), researchers have developed hybrid quantum-classical algorithms that can solve complex optimisation problems faster than purely classical methods.
+
+This combination of quantum and classical approaches gives some clues as to the utility beyond the “quantum is the future” hype curve, and shows the potential for incremental but significant improvements in existing workflows and problem spaces. It also shows how any singular advancement can inspire and combine with other efforts to unlock further fields of study. 
+In this way, Grover's algorithm has had a profound impact on the theoretical foundations of quantum computing. It has led to the development of new quantum algorithms and techniques, such as Quantum Amplitude Amplification and Quantum Counting, which have further expanded the capabilities of quantum computers and associated research.
+
+## What are the limitations?
+
+The efficiency of Grover's algorithm comes from its ability to exploit quantum parallelism and quantum interference to search the database in a way that is quadratically faster than classical methods. Note that this is “just” a quadratic speedup, compared to the exponential benefits found in the various applications other quantum algorithms in their specific problem space.
+
+The standard disclaimer in the NISQ era also applies, where the true extent of the algorithm’s performance relies on the eventual realisation of a fault-tolerant quantum computer with a sufficient number of qubits. The decoherence and noise in the current range of available quantum hardware limit the number of iterations that can be performed accurately.
+
+Another condition that is common to most if not all quantum algorithms is the actual implementation via the intended SDK and platform, where the oracle function must be implemented efficiently as a quantum circuit. It’s useful to keep in mind that not all systems or architectures will transpile the same way, or achieve the same performance in the process.
+
+## What’s the takeaway?
+
+Grover's algorithm is a powerful and versatile quantum algorithm that demonstrates the potential of quantum computing to solve certain problems quadratically faster than classical computers. Its impact on various fields, from database search and optimisation to machine learning and quantum chemistry, highlights the broad applicability of quantum algorithms. But in the current era, the full benefits of Grover’s algorithm is limited to simulation or smaller scale and noisy quantum hardware, which inversely means that Grover's algorithm and its variants will likely play an increasingly important role in the near-term future.

@@ -60,7 +60,7 @@ export default function AlgorithmList({ algorithms }: AlgorithmListProps) {
       {/* Filters and Sort Controls */}
       <div className="flex flex-col md:flex-row gap-4 items-start md:items-center">
         <div className="flex-1 w-full">
-          <Label htmlFor="search">Search algorithms</Label>
+          <Label htmlFor="search" className="mb-4 block">Search algorithms</Label>
           <Input
             id="search"
             type="search"
@@ -73,7 +73,7 @@ export default function AlgorithmList({ algorithms }: AlgorithmListProps) {
         
         <div className="flex gap-4 w-full md:w-auto">
           <div className="flex-1">
-            <Label htmlFor="sort">Sort by</Label>
+            <Label htmlFor="sort" className="mb-4 block">Sort by</Label>
             <Select value={sortBy} onValueChange={(value: SortOption) => setSortBy(value)}>
               <SelectTrigger id="sort" className="w-full">
                 <SelectValue placeholder="Sort by" />

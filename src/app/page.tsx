@@ -1,4 +1,6 @@
 // src/app/page.tsx
+'use client';
+
 import { Card, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import Link from 'next/link';

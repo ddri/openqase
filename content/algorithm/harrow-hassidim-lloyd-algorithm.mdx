@@ -31,11 +31,7 @@ keywords:
 lastUpdated: "2024-02-21"
 ---
 
-# Quantum Approximate Optimization Algorithm (QAOA)
-
-## Overview
-
-QAOA is a hybrid quantum-classical algorithm designed for solving combinatorial optimization problems on NISQ (Noisy Intermediate-Scale Quantum) devices. It combines quantum and classical processing to find approximate solutions to computationally challenging problems.
+The Harrow-Hassidim-Lloyd algorithm is designed to solve systems of linear equations, particularly when the matrices involved are large and sparse, potentially offering exponential speedups in specific applications.
 
 ## Algorithm Details
 
@@ -56,8 +52,6 @@ Classically, solving a linear system with N variables requires O(N³) time using
 The HHL algorithm works by encoding the matrix A and vector b into quantum states and then applying a series of quantum operations to find the solution vector |x⟩5.
 
 ## Implementation Steps
-
-The algorithm can be broken down into several key steps:
 
 Step 1. Quantum state preparation. The matrix A and vector b are encoded into quantum states |A⟩ and |b⟩, respectively. This is done using techniques such as quantum random access memory (QRAM) or quantum circuits that prepare the desired states.
 

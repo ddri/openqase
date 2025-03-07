@@ -62,7 +62,7 @@ The algorithm can be broken down into several key steps:
 
 6. Measure the state. Measure the |ψ⟩ state in the computational basis, obtaining an n-bit string y.
 
-7. Classical post-processing. Repeat steps 1-6 O(n) times to obtain a set of n-bit strings {y_i}. Solve the system of linear equations y_i · s = 0 (mod 2) to determine the string s.
+7. Classical post-processing. Repeat steps 1-6 O(n) times to obtain a set of n-bit strings {y_i}. Solve the system of linear equations `y_i · s = 0 (mod 2)` to determine the string s.
 
 What is the real-world context?Simon's algorithm achieves an exponential speedup over classical algorithms by exploiting the properties of quantum superposition and entanglement. The quantum oracle creates a superposition of input-output pairs, which allows the algorithm to probe the structure of the function f(x) in parallel. The final measurement and classical post-processing steps extract the information about the string s from the quantum state.
 Simon's algorithm has important implications for cryptography, as it demonstrates the potential of quantum computers to break certain classical cryptographic schemes that rely on the hardness of finding collisions in two-to-one functions. In particular, Simon's algorithm inspired the development of Shor's algorithm for factoring large integers, which poses a threat to the widely-used RSA cryptographic system.

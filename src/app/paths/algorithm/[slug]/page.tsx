@@ -37,6 +37,35 @@ const components = {
       {children}
     </pre>
   ),
+  sup: ({ children }: { children: React.ReactNode }) => (
+    <sup className="text-xs">{children}</sup>
+  ),
+  a: ({ href, children }: { href: string; children: React.ReactNode }) => (
+    <a 
+      href={href} 
+      className="text-[hsl(var(--primary))] hover:underline scroll-smooth"
+    >
+      {children}
+    </a>
+  ),
+  div: ({ className, children, id }: { className?: string; children: React.ReactNode; id?: string }) => {
+    if (className === 'references-section') {
+      return (
+        <div className="mt-12 pt-8 border-t border-[var(--border)] bg-[var(--muted)] rounded-lg p-6">
+          <h2 className="text-2xl font-semibold text-[var(--text-primary)] mb-6">References</h2>
+          {children}
+        </div>
+      );
+    }
+    if (className === 'reference-item') {
+      return (
+        <div id={id} className="mb-4 pl-8 -indent-8 text-[var(--text-secondary)]">
+          {children}
+        </div>
+      );
+    }
+    return <div className={className}>{children}</div>;
+  }
 };
 
 export async function generateStaticParams() {

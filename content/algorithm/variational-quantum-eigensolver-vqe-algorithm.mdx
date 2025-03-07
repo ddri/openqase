@@ -31,11 +31,7 @@ keywords:
 lastUpdated: "2024-02-21"
 ---
 
-# Variational Quantum Eigensolver (VQE)
-
-## Overview
-
-VQE is a hybrid quantum-classical algorithm designed to find the ground state energy of molecular and chemical systems. By combining quantum computation with classical optimization, VQE is particularly well-suited for NISQ (Noisy Intermediate-Scale Quantum) devices.
+VQE combines classical optimization with quantum circuits to approximate the ground state energy of a quantum system.
 
 ## Algorithm Details
 
@@ -51,19 +47,47 @@ The VQE algorithm tackles this problem by using a parameterised quantum circuit,
 
 ## Implementation Steps
 
-The algorithm can be broken down into several key steps:
-
 Step 1. Problem encoding. The Hamiltonian matrix is encoded into a quantum circuit, which can be efficiently executed on a quantum computer. This typically involves mapping the fermionic operators of the Hamiltonian to qubit operators using techniques such as the Jordan-Wigner or Bravyi-Kitaev transformations4.
 
 Step 2. Ansatz preparation. A parameterised quantum circuit, the ansatz, is constructed to prepare trial wavefunctions. The ansatz is designed to capture the essential features of the problem and is usually inspired by the structure of the Hamiltonian or the physical system being studied.
 
 Step 3. Expectation value measurement. The expectation value of the Hamiltonian with respect to the trial wavefunction is estimated by measuring the output of the quantum circuit and averaging the results over multiple runs. This step requires the efficient evaluation of the terms in the Hamiltonian using techniques such as qubit-wise commuting measurements or low-rank factorisation.
-4. Classical optimisation. A classical optimisation algorithm, such as gradient descent, Nelder-Mead, or Bayesian optimisation, is used to update the parameters of the ansatz to minimise the expectation value of the Hamiltonian. The optimisation process iterates between steps three and four until convergence is achieved.
-5. Result interpretation. The final converged parameters of the ansatz represent the approximate ground state wavefunction, and the corresponding expectation value provides an estimate of the ground state energy.
-Practical ApplicationsThe VQE algorithm has several advantages over classical methods for solving eigenvalue problems in quantum chemistry and materials science5. First, it can leverage the exponential computational space of quantum computers to efficiently represent and manipulate complex wavefunctions, which is challenging for classical computers. Second, VQE is relatively resilient to noise and errors in current quantum hardware, as it relies on short-depth circuits and can incorporate error mitigation techniques. Finally, VQE can be used to solve problems beyond the reach of classical methods, such as strongly correlated systems and excited state properties.
+
+Step 4. Classical optimisation. A classical optimisation algorithm, such as gradient descent, Nelder-Mead, or Bayesian optimisation, is used to update the parameters of the ansatz to minimise the expectation value of the Hamiltonian. The optimisation process iterates between steps three and four until convergence is achieved.
+
+Step 5. Result interpretation. The final converged parameters of the ansatz represent the approximate ground state wavefunction, and the corresponding expectation value provides an estimate of the ground state energy.
+
+## Practical Applications
+
+The VQE algorithm has several advantages over classical methods for solving eigenvalue problems in quantum chemistry and materials science5. First, it can leverage the exponential computational space of quantum computers to efficiently represent and manipulate complex wavefunctions, which is challenging for classical computers. Second, VQE is relatively resilient to noise and errors in current quantum hardware, as it relies on short-depth circuits and can incorporate error mitigation techniques. Finally, VQE can be used to solve problems beyond the reach of classical methods, such as strongly correlated systems and excited state properties.
+
 VQE has been experimentally demonstrated on various quantum computing platforms, including superconducting qubits, trapped ions, and photonic qubits6. It has been applied to a range of problems in quantum chemistry and materials science, such as calculating the ground state energies of small molecules, simulating the electronic structure of solids, and optimizing the parameters of quantum circuits for other applications.
-Implementation ChallengesVQE’s performance heavily depends on the choice of ansatz, which can be challenging to design effectively for specific problems. VQE is susceptible to the "barren plateau" problem, where gradients become exponentially small as the system size increases, making optimization difficult7. The classical optimization component may get stuck in local minima, failing to find the global minimum. While relatively resilient to some noise, VQE can still be affected by hardware errors and decoherence, potentially leading to inaccurate results. 
+
+## Implementation Challenges
+
+VQE’s performance heavily depends on the choice of ansatz, which can be challenging to design effectively for specific problems. VQE is susceptible to the "barren plateau" problem, where gradients become exponentially small as the system size increases, making optimization difficult7. The classical optimization component may get stuck in local minima, failing to find the global minimum. While relatively resilient to some noise, VQE can still be affected by hardware errors and decoherence, potentially leading to inaccurate results.
+
 The algorithm also requires a large number of measurements for accurate energy estimation, which can be time-consuming and resource-intensive. Scalability remains a challenge, as the complexity of the optimization problem grows rapidly with system size. Current NISQ device limitations in qubit count, connectivity, and coherence times restrict the complexity of implementable ansatze and the size of tractable problems. 
 Additionally, VQE may struggle with excited state calculations and suffer from convergence issues, especially for systems with small energy gaps or near-degenerate states. Addressing these limitations is an active area of research, with ongoing efforts to develop improved ansatze, more efficient optimization techniques, and error mitigation strategies to enhance VQE's performance and applicability across various domains.
-Bottom LineVQE is a powerful hybrid quantum-classical algorithm that exploits the benefits of both quantum and classical computing to solve eigenvalue problems in quantum chemistry and materials science. Its potential to tackle problems beyond the reach of classical methods and its resilience to noise and errors make it a promising approach for near-term quantum computing applications.
-A point to keep in mind is that VQE was developed specifically for the NISQ era. Its prominence may decrease in the fault-tolerant era, although it may remain a valuable tool in the quantum computing toolkit, especially for problems where its hybrid and variational nature offer distinct advantages. The exact role of VQE in future quantum computing landscapes will depend on ongoing research, the specific capabilities of fault-tolerant systems, and the nature of the problems being addressed.1. Peruzzo, A., McClean, J., Shadbolt, P., Yung, M. H., Zhou, X. Q., Love, P. J., Aspuru-Guzik, A., & O'Brien, J. L. (2014). A variational eigenvalue solver on a photonic quantum processor. Nature Communications, 5(1), 4213.2. Cao, Y., Romero, J., Olson, J. P., Degroote, M., Johnson, P. D., Kieferová, M., Kivlichan, I. D., Menke, T., Peropadre, B., Sawaya, N. P., Sim, S., Veis, L., & Aspuru-Guzik, A. (2019). Quantum chemistry in the age of quantum computing. Chemical Reviews, 119(19), 10856-10915.3. McClean, J. R., Romero, J., Babbush, R., & Aspuru-Guzik, A. (2016). The theory of variational hybrid quantum-classical algorithms. New Journal of Physics, 18(2), 023023.4. McArdle, S., Endo, S., Aspuru-Guzik, A., Benjamin, S. C., & Yuan, X. (2020). Quantum computational chemistry. Reviews of Modern Physics, 92(1), 015003.5. Cerezo, M., Arrasmith, A., Babbush, R., Benjamin, S. C., Endo, S., Fujii, K., McClean, J. R., Mitarai, K., Yuan, X., Cincio, L., & Coles, P. J. (2021). Variational quantum algorithms. Nature Reviews Physics, 3(9), 625-644.6. Kandala, A., Mezzacapo, A., Temme, K., Takita, M., Brink, M., Chow, J. M., & Gambetta, J. M. (2017). Hardware-efficient variational quantum eigensolver for small molecules and quantum magnets. Nature, 549(7671), 242-246.7. McClean, J. R., Boixo, S., Smelyanskiy, V. N., Babbush, R., & Neven, H. (2018). Barren plateaus in quantum neural network training landscapes. Nature Communications, 9(1), 4812.
+
+## Bottom Line
+
+VQE is a powerful hybrid quantum-classical algorithm that exploits the benefits of both quantum and classical computing to solve eigenvalue problems in quantum chemistry and materials science. Its potential to tackle problems beyond the reach of classical methods and its resilience to noise and errors make it a promising approach for near-term quantum computing applications.
+
+A point to keep in mind is that VQE was developed specifically for the NISQ era. Its prominence may decrease in the fault-tolerant era, although it may remain a valuable tool in the quantum computing toolkit, especially for problems where its hybrid and variational nature offer distinct advantages. The exact role of VQE in future quantum computing landscapes will depend on ongoing research, the specific capabilities of fault-tolerant systems, and the nature of the problems being addressed.
+
+## References
+
+1. Peruzzo, A., McClean, J., Shadbolt, P., Yung, M. H., Zhou, X. Q., Love, P. J., Aspuru-Guzik, A., & O'Brien, J. L. (2014). A variational eigenvalue solver on a photonic quantum processor. Nature Communications, 5(1), 4213.
+
+2. Cao, Y., Romero, J., Olson, J. P., Degroote, M., Johnson, P. D., Kieferová, M., Kivlichan, I. D., Menke, T., Peropadre, B., Sawaya, N. P., Sim, S., Veis, L., & Aspuru-Guzik, A. (2019). Quantum chemistry in the age of quantum computing. Chemical Reviews, 119(19), 10856-10915.
+
+3. McClean, J. R., Romero, J., Babbush, R., & Aspuru-Guzik, A. (2016). The theory of variational hybrid quantum-classical algorithms. New Journal of Physics, 18(2), 023023.
+
+4. McArdle, S., Endo, S., Aspuru-Guzik, A., Benjamin, S. C., & Yuan, X. (2020). Quantum computational chemistry. Reviews of Modern Physics, 92(1), 015003.
+
+5. Cerezo, M., Arrasmith, A., Babbush, R., Benjamin, S. C., Endo, S., Fujii, K., McClean, J. R., Mitarai, K., Yuan, X., Cincio, L., & Coles, P. J. (2021). Variational quantum algorithms. Nature Reviews Physics, 3(9), 625-644.
+
+6. Kandala, A., Mezzacapo, A., Temme, K., Takita, M., Brink, M., Chow, J. M., & Gambetta, J. M. (2017). Hardware-efficient variational quantum eigensolver for small molecules and quantum magnets. Nature, 549(7671), 242-246.
+
+7. McClean, J. R., Boixo, S., Smelyanskiy, V. N., Babbush, R., & Neven, H. (2018). Barren plateaus in quantum neural network training landscapes. Nature Communications, 9(1), 4812.

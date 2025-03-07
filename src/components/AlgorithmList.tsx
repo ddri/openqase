@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useMemo } from 'react';
-import { Card, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import Link from 'next/link';
 import type { Algorithm } from '@/lib/types';
@@ -96,22 +96,38 @@ export default function AlgorithmList({ algorithms }: AlgorithmListProps) {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {filteredAlgorithms.map((algorithm) => (
           <Link key={algorithm.slug} href={`/paths/algorithm/${algorithm.slug}`}>
-            <Card fixedHeight height={320} className="hover:bg-accent/15 hover:shadow-lg transition-all">
+            <Card fixedHeight height={320} className="hover:bg-accent/15 hover:shadow-lg transition-all flex flex-col">
               <CardHeader>
                 <CardTitle className="text-xl mb-2 text-[var(--text-primary)]">
                   {algorithm.title}
                 </CardTitle>
+              </CardHeader>
+              <CardContent className="flex-grow">
                 <CardDescription className="text-[var(--text-secondary)]">
                   {algorithm.description}
                 </CardDescription>
-                <div className="flex flex-wrap gap-2 mt-4">
-                  {algorithm.applications.slice(0, 3).map((app: string) => (
-                    <Badge key={app} variant="outline" className="text-[var(--text-secondary)] border-[var(--border)]">
-                      {app}
+              </CardContent>
+              <CardFooter>
+                <div className="flex flex-wrap gap-2">
+                  {[...algorithm.applications]
+                    .sort((a, b) => a.length - b.length) // Sort by length, shortest first
+                    .slice(0, 3)
+                    .map((app: string, index: number) => (
+                      <Badge 
+                        key={app} 
+                        variant="outline" 
+                        className="text-[var(--text-secondary)] border-[var(--border)]"
+                      >
+                        {app}
+                      </Badge>
+                    ))}
+                  {algorithm.applications.length > 3 && (
+                    <Badge variant="outline" className="more-badge">
+                      +{algorithm.applications.length - 3} more
                     </Badge>
-                  ))}
+                  )}
                 </div>
-              </CardHeader>
+              </CardFooter>
             </Card>
           </Link>
         ))}

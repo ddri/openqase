@@ -85,34 +85,26 @@ export default async function AlgorithmPage(props: { params: Promise<{ slug: str
           <Link 
             href="/paths/algorithm"
             className="text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors"
-
           >
             ← Back to Algorithms
           </Link>
         </div>
 
-        <div className="grid grid-cols-12 gap-8">
-          {/* Left Column - Algorithm Card */}
-          <div className="col-span-2">
-          <Card className="bg-[var(--card)] border">
-          <div className="aspect-[3/2] bg-[var(--card)] flex items-center justify-center">
-          <span className="text-[var(--text-primary)]">{frontmatter.title}</span>
-              </div>
-              <div className="p-3">
-                <div className="mb-1.5">
-                  <Badge className="bg-[#F4A261] text-white border-0">
-                    {frontmatter.complexity}
-                  </Badge>
-                </div>
-                <div className="text-xs text-[var(--text-secondary)]">
-                  Complexity: <code className="text-blue-600">{frontmatter.complexity}</code>
-                </div>
-              </div>
-            </Card>
-          </div>
+        {/* Header Section */}
+        <div className="mb-8">
+          <h1 className="text-4xl font-bold text-[hsl(var(--primary))] mb-4">
+            {frontmatter.title}
+          </h1>
+          {frontmatter.complexity && (
+            <p className="text-sm text-[var(--text-secondary)]">
+              Complexity: <code className="text-[var(--primary)]">{frontmatter.complexity}</code>
+            </p>
+          )}
+        </div>
 
+        <div className="grid grid-cols-12 gap-8">
           {/* Main Content */}
-          <div className="col-span-7">
+          <div className="col-span-9">
             <article className="prose max-w-none">
               <MDXRemote 
                 source={content} 
@@ -121,12 +113,13 @@ export default async function AlgorithmPage(props: { params: Promise<{ slug: str
             </article>
           </div>
 
-          {/* Right Column - Details & Related */}
+          {/* Right Sidebar */}
           <div className="col-span-3">
             <div className="sticky top-8 space-y-6">
-            <Card className="bg-[var(--card)] border">
+              {/* Prerequisites Card */}
+              <Card className="bg-[var(--card)] border">
                 <div className="p-4">
-                <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-3">
+                  <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-3">
                     Prerequisites
                   </h3>
                   <div className="space-y-2">
@@ -139,9 +132,10 @@ export default async function AlgorithmPage(props: { params: Promise<{ slug: str
                 </div>
               </Card>
 
+              {/* Applications Card */}
               <Card className="bg-[var(--card)] border">
                 <div className="p-4">
-                <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-3">
+                  <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-3">
                     Applications
                   </h3>
                   <div className="flex flex-wrap gap-2">
@@ -154,10 +148,11 @@ export default async function AlgorithmPage(props: { params: Promise<{ slug: str
                 </div>
               </Card>
 
+              {/* Related Case Studies Card */}
               {frontmatter.relatedCaseStudies && frontmatter.relatedCaseStudies.length > 0 && (
                 <Card className="bg-[var(--card)] border">
                   <div className="p-4">
-                  <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-3">
+                    <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-3">
                       Related Case Studies
                     </h3>
                     <div className="space-y-2">

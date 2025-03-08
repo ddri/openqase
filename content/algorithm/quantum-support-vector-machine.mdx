@@ -1,9 +1,9 @@
 ---
-title: "The Quantum Support Vector Machine (QSVM)"
+title: "Quantum Support Vector Machine (QSVM)"
 type: "Technical"
 slug: "QSVM"
 complexity: "Variable (depends on circuit depth p and problem size)"
-description: "A hybrid quantum-classical algorithm specifically designed for solving combinatorial optimization problems on near-term quantum devices. QAOA combines quantum and classical processing to find approximate solutions to problems that are computationally challenging for classical computers."
+description: "QSVMs use quantum computing to accelerate Support Vector Machine tasks, especially kernel calculations, for faster training and classification."
 applications:
   - "Maximum Cut Problems"
   - "Portfolio Optimization"
@@ -31,141 +31,61 @@ keywords:
 lastUpdated: "2024-02-21"
 ---
 
-# Quantum Approximate Optimization Algorithm (QAOA)
-
-## Overview
-
-QAOA is a hybrid quantum-classical algorithm designed for solving combinatorial optimization problems on NISQ (Noisy Intermediate-Scale Quantum) devices. It combines quantum and classical processing to find approximate solutions to computationally challenging problems.
+A Quantum Support Vector Machine (QSVM) uses quantum computing to accelerate Support Vector Machine tasks, especially kernel calculations, for faster training and classification.
 
 ## Algorithm Details
 
-### Complexity
-```
-Complexity: Variable (depends on circuit depth p and problem size)
-Classical Part: Polynomial in the number of parameters
-Quantum Part: O(p) circuit depth
-```
+The Quantum Support Vector Machine (QSVM) is a quantum version of the classical Support Vector Machine (SVM), which is a widely used algorithm for classification and regression tasks in machine learning1. SVMs aim to find the optimal hyperplane that separates different classes of data points in a high-dimensional feature space, while maximising the margin between the classes.
 
-### Key Components
-1. Problem Hamiltonian
-2. Mixing Hamiltonian
-3. Variational Parameters
-4. Classical Optimizer
-5. Measurement and Post-processing
+## Problem Target
 
-## Prerequisites
+The core idea behind QSVM is to use quantum circuits to construct quantum kernels, which are mathematical functions used to measure the similarity between data points2. Quantum kernels offer a potentially richer representation of relationships within the data compared to classical kernels, leading to more accurate classifications.
 
-Before implementing QAOA, you should understand:
+## Quantum Approach
 
-- Quantum Mechanics Fundamentals - Basic quantum principles and evolution
-- Combinatorial Optimization - Problem formulation and classical approaches
-- Hamiltonian Evolution - Quantum dynamics and time evolution
-- Classical Optimization Methods - Parameter optimization techniques
-- Graph Theory Basics - For problem encoding and mapping
-
-## Applications
-
-QAOA can be applied to various optimization problems:
-
-### Maximum Cut Problems
-- Graph partitioning
-- Network clustering
-- Community detection
-
-### Portfolio Optimization
-- Asset allocation
-- Risk minimization
-- Investment strategy
-
-### Traffic Flow Optimization
-- Route planning
-- Traffic signal timing
-- Network congestion
-
-### Resource Allocation
-- Task scheduling
-- Resource distribution
-- Capacity planning
-
-## Implementation Guide
-
-1. **Problem Encoding**
-   - Map problem to Ising Hamiltonian
-   - Define cost function
-   - Prepare initial state
-
-2. **Circuit Construction**
-   - Implement problem unitary
-   - Create mixing operator
-   - Set up parameterized circuit
-
-3. **Parameter Optimization**
-   - Choose classical optimizer
-   - Define optimization strategy
-   - Implement parameter updates
-
-4. **Result Processing**
-   - Measure quantum state
-   - Post-process results
-   - Verify solution quality
-
-## Related Case Studies
-
-### MaxCut Problem Solution using QAOA
-Implementing QAOA to solve the Maximum Cut problem on real quantum hardware.
-**Tags**: MaxCut, optimization, implementation
-**Difficulty**: Advanced
-
-### Financial Portfolio Optimization
-Using QAOA for portfolio optimization in financial markets.
-**Tags**: finance, portfolio, optimization
-**Difficulty**: Advanced
-
-### Smart City Traffic Optimization
-Applying QAOA to optimize traffic flow in urban environments.
-**Tags**: smart-cities, traffic, routing
-**Difficulty**: Intermediate
-
-## Best Practices
-
-1. **Circuit Design**
-   - Minimize circuit depth
-   - Optimize for hardware connectivity
-   - Consider noise characteristics
-
-2. **Parameter Optimization**
-   - Choose appropriate initial parameters
-   - Use efficient classical optimizers
-   - Implement parameter bounds
-
-3. **Result Validation**
-   - Compare with classical solutions
-   - Assess solution quality
-   - Analyze convergence behavior
-
-## Additional Resources
-
-- Implementation Examples
-- Hardware Specifications
-- Optimization Libraries
-- Classical Solvers
-- Research Papers
-
-
-
-
-The Quantum Support Vector Machine (QSVM) is a quantum version of the classical Support Vector Machine (SVM), which is a widely used algorithm for classification and regression tasks in machine learning. SVMs aim to find the optimal hyperplane that separates different classes of data points in a high-dimensional feature space, while maximising the margin between the classes.
-What does it solve?The core idea behind QSVM is to use quantum circuits to construct quantum kernels, which are mathematical functions used to measure the similarity between data points. Quantum kernels offer a potentially richer representation of relationships within the data compared to classical kernels, leading to more accurate classifications.
-How does it work?QSVM works by encoding classical data into quantum states and then using quantum circuits to evaluate the quantum kernel. Classical optimization techniques are then used to find the best hyperplane based on this quantum information. New data points are classified by comparing them to the support vectors, which are the key data points that define the separation between classes, using the quantum kernel.
+QSVM works by encoding classical data into quantum states and then using quantum circuits to evaluate the quantum kernel3. Classical optimization techniques are then used to find the best hyperplane based on this quantum information4. New data points are classified by comparing them to the support vectors, which are the key data points that define the separation between classes, using the quantum kernel.
 While still an active area of research, QSVM holds the promise of significant advancements in machine learning, particularly for complex datasets where quantum advantage could be harnessed to achieve superior performance.
-What are the steps?The algorithm can be broken down into several key steps:
-1. Data encoding. The classical input data is encoded into a quantum state, typically using amplitude encoding or qubit encoding. In amplitude encoding, each data point is represented by a quantum state, where the amplitudes of the basis states correspond to the feature values. In qubit encoding, each feature is assigned to a qubit, and the feature values are encoded in the qubit states.
-2. Kernel mapping. A quantum kernel function is applied to the encoded data to map it into a higher-dimensional feature space. Quantum kernels, such as the quantum radial basis function (RBF) kernel or the quantum polynomial kernel, can be efficiently computed using quantum circuits, enabling the processing of high-dimensional data with fewer qubits compared to classical kernels.
-3. Training. The QSVM training algorithm optimises the parameters of the quantum hyperplane to maximise the margin between the classes. This can be done using quantum algorithms for optimization, such as the Variational Quantum Eigensolver (VQE) or the Quantum Approximate Optimization Algorithm (QAOA), which iteratively adjust the parameters of a variational quantum circuit to minimise a cost function.
-4. Classification. Once the QSVM is trained, new data points can be classified by encoding them into quantum states, applying the quantum kernel, and measuring the output of the variational quantum circuit. The measurement outcome determines the predicted class label of the input data.
-What is the real-world context?There are a number of potential advantages of QSVMs over classical SVMs. One of the most promising is the exponential speedup, where for certain types of datasets and kernel functions, QSVMs can provide an exponential speedup over classical SVMs in terms of training time and classification accuracy. This is due to the ability of quantum computers to process high-dimensional data in a compact quantum state and perform certain operations, such as inner products, more efficiently than classical computers.
+
+
+## Implementation Steps
+
+Step 1. Data encoding. The classical input data is encoded into a quantum state, typically using amplitude encoding or qubit encoding. In amplitude encoding, each data point is represented by a quantum state, where the amplitudes of the basis states correspond to the feature values. In qubit encoding, each feature is assigned to a qubit, and the feature values are encoded in the qubit states.
+
+Step 2. Kernel mapping. A quantum kernel function is applied to the encoded data to map it into a higher-dimensional feature space. Quantum kernels, such as the quantum radial basis function (RBF) kernel or the quantum polynomial kernel, can be efficiently computed using quantum circuits, enabling the processing of high-dimensional data with fewer qubits compared to classical kernels5.
+
+Step 3. Training. The QSVM training algorithm optimises the parameters of the quantum hyperplane to maximise the margin between the classes. This can be done using quantum algorithms for optimization, such as the Variational Quantum Eigensolver (VQE) or the Quantum Approximate Optimization Algorithm (QAOA), which iteratively adjust the parameters of a variational quantum circuit to minimise a cost function.
+
+Step 4. Classification. Once the QSVM is trained, new data points can be classified by encoding them into quantum states, applying the quantum kernel, and measuring the output of the variational quantum circuit. The measurement outcome determines the predicted class label of the input data.
+
+## Practical Applications
+
+There are a number of potential advantages of QSVMs over classical SVMs. One of the most promising is the exponential speedup, where for certain types of datasets and kernel functions, QSVMs can provide an exponential speedup over classical SVMs in terms of training time and classification accuracy6. This is due to the ability of quantum computers to process high-dimensional data in a compact quantum state and perform certain operations, such as inner products, more efficiently than classical computers.
+
 The improved generalisation and reduced overfitting of quantum kernels compared to classical kernels can potentially capture more complex and expressive feature maps than classical kernels. Likewise the reduced data requirements may prove advantageous, where QSVMs may require fewer training examples to achieve a given level of accuracy compared to classical SVMs, due to the ability of quantum computers to efficiently explore a larger feature space.
-What are the limitations?QSVMs face the limitations of the current state of quantum hardware. Existing quantum computers are constrained by limited qubit counts and high error rates, making it difficult to tackle large-scale problems effectively.
+
+## Implementation Challenges
+
+QSVMs face the limitations of the current state of quantum hardware. Existing quantum computers are constrained by limited qubit counts and high error rates, making it difficult to tackle large-scale problems effectively.
 Another challenge lies in the design of efficient quantum circuits for kernel evaluation and optimization. Creating quantum circuits that outperform classical counterparts requires ongoing research and development. Additionally, the inherent susceptibility of quantum systems to errors due to noise and decoherence necessitates the development of robust error mitigation and correction techniques, adding another layer of complexity.
-Efficiently encoding classical data into quantum states suitable for QSVM computations remains a challenge. Finding encoding methods that preserve relevant information while minimising qubit requirements is an active area of research. Moreover, while QSVMs show promise in theory, demonstrating a consistent practical advantage over classical SVMs in real-world scenarios remains an ongoing endeavour.
-What’s the takeaway?Quantum Support Vector Machines are a promising application of quantum computing for machine learning, particularly for classification and regression tasks on high-dimensional and large-scale datasets. With the power of quantum kernels and quantum optimization algorithms, QSVMs have the potential to provide exponential speedups and improved generalisation performance compared to classical SVMs. As quantum technologies continue to advance, QSVMs are expected to play an important role in quantum-enhanced machine learning, with applications ranging from image and speech recognition to drug discovery and financial forecasting. However, significant research efforts are still needed to address the challenges of efficient data encoding, scalable quantum kernels, noise-resilient training, and integration with classical machine learning techniques.
+
+Efficiently encoding classical data into quantum states suitable for QSVM computations remains a challenge7. Finding encoding methods that preserve relevant information while minimising qubit requirements is an active area of research. Moreover, while QSVMs show promise in theory, demonstrating a consistent practical advantage over classical SVMs in real-world scenarios remains an ongoing endeavour.
+
+## Bottom Line
+
+Quantum Support Vector Machines are a promising application of quantum computing for machine learning, particularly for classification and regression tasks on high-dimensional and large-scale datasets. With the power of quantum kernels and quantum optimization algorithms, QSVMs have the potential to provide exponential speedups and improved generalisation performance compared to classical SVMs. As quantum technologies continue to advance, QSVMs are expected to play an important role in quantum-enhanced machine learning, with applications ranging from image and speech recognition to drug discovery and financial forecasting. However, significant research efforts are still needed to address the challenges of efficient data encoding, scalable quantum kernels, noise-resilient training, and integration with classical machine learning techniques.
+
+## References
+
+1. Cortes, C., & Vapnik, V. (1995). Support-vector networks. Machine Learning, 20(3), 273-297.
+
+2. Havlíček, V., Córcoles, A. D., Temme, K., Harrow, A. W., Kandala, A., Chow, J. M., & Gambetta, J. M. (2019). Supervised learning with quantum-enhanced feature spaces. Nature, 567(7747), 209-212.
+
+3. Rebentrost, P., Mohseni, M., & Lloyd, S. (2014). Quantum support vector machine for big data classification. Physical Review Letters, 113(13), 130503.
+
+4. Schuld, M., & Killoran, N. (2019). Quantum machine learning in feature Hilbert spaces. Physical Review Letters, 122(4), 040504.
+
+5. Huang, H. Y., Broughton, M., Mohseni, M., Babbush, R., Boixo, S., Neven, H., & McClean, J. R. (2021). Power of data in quantum machine learning. Nature Communications, 12(1), 2631.
+
+6. Liu, Y., Arunachalam, S., & Temme, K. (2021). A rigorous and robust quantum speed-up in supervised machine learning. Nature Physics, 17(9), 1013-1017.
+
+7. Cincio, L., Subaşı, Y., Sornborger, A. T., & Coles, P. J. (2018). Learning the quantum algorithm for state overlap. New Journal of Physics, 20(11), 113022.

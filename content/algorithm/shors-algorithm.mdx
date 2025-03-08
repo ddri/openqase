@@ -3,7 +3,7 @@ title: "Shor's Algorithm"
 type: "Technical"
 slug: "shors-algorithm"
 complexity: "O((log N)³) quantum, O((log N)²) classical post-processing"
-description: "A quantum algorithm that performs integer factorization in polynomial time, demonstrating exponential speedup over the best known classical algorithms. This breakthrough has significant implications for cryptography and number theory."
+description: "Shor's algorithm uses quantum computation to find the prime factors of a large integer in polynomial time, a task considered computationally infeasible for classical computers."
 applications:
   - "Integer Factorization"
   - "Cryptanalysis"
@@ -30,124 +30,105 @@ keywords:
 lastUpdated: "2024-02-21"
 ---
 
-# Shor's Algorithm
-
-## Overview
-
 Shor's Algorithm is a quantum algorithm for integer factorization that runs in polynomial time. Its ability to efficiently factor large numbers poses a significant threat to RSA cryptography and demonstrates a clear quantum advantage over classical computing.
 
 ## Algorithm Details
 
-### Complexity
-```
-Quantum Part: O((log N)³)
-Classical Part: O((log N)²)
-Classical Best: O(exp(log N)^(1/3))
-```
+Shor's algorithm is the most famous, and perhaps even infamous, of the family of quantum algorithms. It might not have been the first, but it has become the first-to-mind example in any discussion of the topic due to the very understandable nature of its potential impact on the world. Along with just a little of the paranoia and hype that surrounds quantum computing in the public eye.
 
-### Key Components
-1. Quantum Period Finding
-2. Quantum Fourier Transform
-3. Modular Exponentiation
-4. Classical Post-processing
-5. Continued Fractions
+The algorithm was developed by Peter Shor in 1994<sup><a href="#ref-1">1</a></sup>, and demonstrated the potential of quantum computers to solve certain problems exponentially faster than classical computers. It quickly became such an influential quantum algorithm due to the potential impact on cryptography and its demonstration of quantum acceleration in a real-world problem space.
 
-## Prerequisites
+## Problem Target
 
-Before implementing Shor's Algorithm, you should understand:
+The significance of Shor's algorithm lies in its ability to solve the integer factorisation problem exponentially faster than the best-known classical algorithms<sup><a href="#ref-2">2</a></sup>. Many widely used public-key cryptography systems, such as RSA and Diffie-Hellman, rely on the assumption that factoring large integers is computationally infeasible<sup><a href="#ref-3">3</a></sup>. However, Shor's algorithm shows that a sufficiently powerful quantum computer could break these cryptographic systems in polynomial time, posing a serious threat to their security<sup><a href="#ref-4">4</a></sup>.
 
-- Quantum Fourier Transform - Core component for period finding
-- Modular Arithmetic - Essential for the arithmetic operations
-- Number Theory - Understanding of periodic functions
-- Quantum Circuits - Implementation of quantum operations
-- Probability Theory - Analysis of measurement outcomes
+## Quantum Approach
 
-## Algorithm Structure
+At its core, Shor's algorithm relies on the Quantum Fourier Transform (QFT) and Quantum Phase Estimation (QPE) to find the period of a modular exponential function5.
 
-### 1. Classical Preparation
-- Input number N to be factored
-- Choose random a < N
-- Verify gcd(a,N) = 1
+## Implementation Steps
 
-### 2. Quantum Period Finding
-- Initialize quantum registers
-- Apply modular exponentiation
-- Perform Quantum Fourier Transform
-- Measure to find period
+The algorithm can be broken down into several key steps:
 
-### 3. Classical Post-processing
-- Convert measurements to factors
-- Verify factorization
-- Handle edge cases
+Step 1. Quantum state preparation. The algorithm starts by preparing a superposition of quantum states that encode the integers from 0 to N-1, where N is the number to be factored.
 
-## Implementation Details
+Step 2. Modular exponentiation. A unitary operation is applied to the quantum state, which performs modular exponentiation of a randomly chosen integer with respect to the input state. This operation creates a periodic structure in the quantum state. This step is performed efficiently using controlled quantum operations, a key advantage of quantum computation6.
 
-1. **Register Preparation**
-   ```
-   |input⟩ = |1⟩
-   |output⟩ = |0⟩
-   ```
+Step 3. Quantum Fourier Transform. The Quantum Fourier Transform, a cornerstone of many quantum algorithms, is then applied to the first register. This transformation reshapes the quantum state, redistributing the probabilities associated with each possible measurement outcome. The resulting state encodes crucial information about the period of the modular exponentiation function7.
 
-2. **Quantum Operations**
-   - Apply modular exponentiation
-   - Implement QFT
-   - Perform measurements
+Step 4. Measurement. The quantum state is measured, collapsing it to a classical state that contains information about the period. Due to the probabilistic nature of quantum measurements, steps 2-4 may need to be repeated multiple times to obtain a reliable estimate of the period.
 
-3. **Result Processing**
-   - Convert period to factors
-   - Verify results
-   - Handle failures
+Step 5. Classical post-processing. The measured period is used to compute a factor of the original number N using classical algorithms, such as the continued fractions algorithm or the Euclidean algorithm. This step is probabilistic and may need to be repeated if it fails to find a non-trivial factor.
 
-## Applications
+## Practical Applications
 
-### Cryptanalysis
-- Breaking RSA encryption
-- Public key cryptography
-- Digital signatures
+The efficiency of Shor's algorithm comes from its ability to exploit quantum parallelism and quantum interference to perform the modular exponentiation and QFT steps in a way that is exponentially faster than classical methods8. By using a quantum computer to factor large integers, Shor's algorithm can achieve a time complexity of O((log N)³), compared to the best-known classical algorithms, which have a sub-exponential time complexity of O(exp((log N)^(1/3) (log log N)^(2/3))).
 
-### Number Theory
-- Period finding problems
-- Order finding
-- Hidden subgroup problems
+The potential impact of Shor's algorithm has led to a surge of interest in post-quantum cryptography, which aims to develop classical cryptographic systems that are secure against attacks by both classical and quantum computers9. This includes the development of new cryptographic primitives based on mathematical problems that are believed to be hard for both classical and quantum computers, such as lattice-based cryptography and multivariate cryptography.
 
-### Quantum Computing Benchmarks
-- Algorithm implementation
-- Hardware testing
-- Error rate analysis
+In addition to its implications for cryptography, Shor's algorithm has also inspired further research into quantum algorithms and quantum computing overall. It has led to the development of other important quantum algorithms, such as the Quantum Amplitude Amplification and the Quantum Counting algorithms, which have applications in various fields beyond cryptography.
 
-## Impact on Cryptography
+## Implementation Challenges
 
-1. **RSA Security**
-   - Threat to current systems
-   - Need for quantum-safe alternatives
-   - Transition timeline considerations
+When it comes to real-world use, it's the algorithm's hunger for qubits that presents the primary challenge. Factoring a number with n bits is generally assumed to require approximately 2n qubits of sufficient quality. The exact number depends on the implementation and algorithm variations but it serves as a useful rule of thumb to illustrate that a 2048-bit RSA key would likely require about 4096 qubits to factor it.
 
-2. **Post-Quantum Cryptography**
-   - Alternative encryption methods
-   - New security standards
-   - Implementation challenges
+Now we must also account for the fragility of quantum states requiring extensive quantum error correction, further inflating the number of physical qubits required, potentially by orders of magnitude10. This also ties into the challenge of coherence time; the quantum system must maintain coherence throughout the computation, a feat that becomes increasingly difficult as the size of the number to be factored grows.
+Gate fidelity poses another hurdle. Shor's algorithm demands a large number of quantum gates applied with high precision, a requirement that strains current quantum hardware capabilities. As the size of the target number increases, the resources required by the algorithm scale up rapidly, creating significant scalability issues.
 
-## Best Practices
+Outside of these functional issues, we can also appreciate that while Shor's algorithm is powerful for factoring and solving discrete logarithms, its speedup doesn't generalize to all computational problems. Its applicability is limited to specific mathematical challenges. And the algorithm relies on non-trivial classical post-processing, which can be computationally intensive for large numbers.
 
-1. **Implementation**
-   - Optimize circuit depth
-   - Handle error propagation
-   - Verify intermediate results
+The sheer complexity of implementing Shor's algorithm on actual quantum hardware cannot be overstated. It requires precise control and manipulation of quantum states, which is a formidable challenge even for advanced quantum systems11.
 
-2. **Resource Management**
-   - Qubit requirement analysis
-   - Circuit optimization
-   - Error correction needs
+These limitations collectively mean that while Shor's algorithm poses a theoretical threat to certain cryptographic systems, practically breaking widely-used cryptographic keys remains out of reach for current and near-term quantum computers.
 
-3. **Result Verification**
-   - Classical verification
-   - Statistical analysis
-   - Error bounds
+## Bottom Line
 
-## Additional Resources
+Shor's algorithm is a seminal quantum algorithm that demonstrates the potential of quantum computing to solve certain problems exponentially faster than classical computers. While its practical implementation remains a challenge, its theoretical importance and impact on cryptography and quantum computing research is foundational (and well worth your knowing). As quantum hardware continues to improve and scale up, Shor's algorithm will likely play a crucial role in shaping the future of cryptography and computing.
 
-- Research Papers
-- Implementation Examples
-- Cryptography Standards
-- Number Theory Background
-- Quantum Computing Frameworks
+## References
+
+<div className="references-section">
+  <div id="ref-1" className="reference-item">
+    1. Shor, P. W. (1994). Algorithms for quantum computation: Discrete logarithms and factoring. Proceedings 35th Annual Symposium on Foundations of Computer Science, 124-134.
+  </div>
+
+  <div id="ref-2" className="reference-item">
+    2. Lenstra, A. K., & Verheul, E. R. (2001). Selecting cryptographic key sizes. Journal of Cryptology, 14(4), 255-293.
+  </div>
+
+  <div id="ref-3" className="reference-item">
+    3. Rivest, R. L., Shamir, A., & Adleman, L. (1978). A method for obtaining digital signatures and public-key cryptosystems. Communications of the ACM, 21(2), 120-126.
+  </div>
+
+  <div id="ref-4" className="reference-item">
+    4. Gidney, C., & Ekerå, M. (2021). How to factor 2048 bit RSA integers in 8 hours using 20 million noisy qubits. Quantum, 5, 433.
+  </div>
+
+  <div id="ref-5" className="reference-item">
+    5. Coppersmith, D. (1994). An approximate Fourier transform useful in quantum factoring. IBM Research Report, RC19642.
+  </div>
+
+  <div id="ref-6" className="reference-item">
+    6. Beauregard, S. (2003). Circuit for Shor's algorithm using 2n+3 qubits. Quantum Information & Computation, 3(2), 175-185.
+  </div>
+
+  <div id="ref-7" className="reference-item">
+    7. Hales, L., & Hallgren, S. (2000). An improved quantum Fourier transform algorithm and applications. Proceedings 41st Annual Symposium on Foundations of Computer Science, 515-525.
+  </div>
+
+  <div id="ref-8" className="reference-item">
+    8. Ekert, A., & Jozsa, R. (1996). Quantum computation and Shor's factoring algorithm. Reviews of Modern Physics, 68(3), 733.
+  </div>
+
+  <div id="ref-9" className="reference-item">
+    9. Bernstein, D. J., & Lange, T. (2017). Post-quantum cryptography. Nature, 549(7671), 188-194.
+  </div>
+
+  <div id="ref-10" className="reference-item">
+    10. Fowler, A. G., Mariantoni, M., Martinis, J. M., & Cleland, A. N. (2012). Surface codes: Towards practical large-scale quantum computation. Physical Review A, 86(3), 032324.
+  </div>
+
+  <div id="ref-11" className="reference-item">
+    11. Häner, T., Roetteler, M., & Svore, K. M. (2017). Factoring using 2n+2 qubits with Toffoli based modular multiplication. Quantum Information & Computation, 17(7-8), 673-684.
+  </div>
+</div>

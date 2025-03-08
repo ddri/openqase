@@ -1,0 +1,104 @@
+---
+title: "Bernstein-Vazirani algorithm"
+type: "Technical"
+slug: "bernstein-vazirani"
+complexity: "Variable (depends on circuit depth p and problem size)"
+description: "The Bernstein-Vazirani algorithm is a quantum algorithm that efficiently determines a secret string of bits encoded within a function, using only a single query, which is exponentially faster than any classical algorithm."
+applications:
+  - "Maximum Cut Problems"
+  - "Portfolio Optimization"
+  - "Traffic Flow Optimization"
+  - "Network Design"
+  - "Resource Allocation"
+  - "Vehicle Routing Problems"
+prerequisites:
+  - "Quantum Mechanics Fundamentals"
+  - "Combinatorial Optimization"
+  - "Hamiltonian Evolution"
+  - "Classical Optimization Methods"
+  - "Graph Theory Basics"
+relatedCaseStudies:
+  - "maxcut-study"
+  - "portfolio-opt"
+  - "traffic-routing"
+keywords:
+  - "QAOA"
+  - "quantum optimization"
+  - "combinatorial problems"
+  - "MaxCut"
+  - "NISQ algorithms"
+  - "hybrid quantum-classical"
+lastUpdated: "2024-02-21"
+---
+
+The Bernstein-Vazirani algorithm is a quantum algorithm that efficiently determines a secret string of bits encoded within a function, using only a single query, which is exponentially faster than any classical algorithm.
+
+## Algorithm Details
+
+The Bernstein-Vazirani algorithm was introduced by Ethan Bernstein and Umesh Vazirani in 19921, and is designed to find a hidden string (or a secret key) in a black-box function using fewer queries than classical algorithms.
+
+## Problem Target
+
+The problem addressed by the Bernstein-Vazirani algorithm can be formulated as follows: given a black-box function f(x) that takes an n-bit binary string x as input and returns a single bit, find the secret n-bit string s that satisfies the following condition: f(x) = s · x (mod 2) where · denotes the bitwise inner product (or dot product) modulo 2. In other words, the function f(x) is a linear function that computes the parity of the bitwise AND of the input string x and the secret string s.
+
+Classically, finding the secret string s requires n queries to the black-box function, as each query reveals one bit of information about s. However, the Bernstein-Vazirani algorithm can find the secret string using only one query to a quantum oracle that implements the function f(x)2.
+
+## Quantum Approach
+
+The Bernstein-Vazirani algorithm achieves this result by exploiting the properties of quantum superposition and interference. The Hadamard gates create a superposition of all possible input strings, allowing the quantum oracle to evaluate the function f(x) for all inputs simultaneously. The oracle encodes the secret string into the phases of the quantum state, which are then converted into amplitudes by the second set of Hadamard gates. Finally, the measurement of the quantum state reveals the secret string3.
+
+## Implementation Steps
+
+Step 1. State preparation. Initialise an n-qubit quantum state |ψ⟩ in the |0⟩ state and an ancilla qubit in the |1⟩ state.
+
+Step 2. Apply Hadamard gates. Apply a Hadamard gate to each of the n qubits and the ancilla qubit. This creates a superposition of all possible n-bit strings in the n-qubit state and puts the ancilla qubit in the |-⟩ state.
+
+Step 3. Oracle query. Apply the quantum oracle that implements the function f(x) to the n-qubit state and the ancilla qubit. The oracle performs the following transformation: |x⟩|y⟩ → |x⟩|y ⊕ f(x)⟩ where ⊕ denotes the XOR operation. This step encodes the secret string s into the phases of the n-qubit state.
+
+Step 4. Apply Hadamard gates. Apply a Hadamard gate to each of the n qubits. This step transforms the phase information encoded by the oracle into the amplitudes of the n-qubit state.
+
+Step 5. Measurement. Measure the n-qubit state in the computational basis. The resulting n-bit string is the secret string s.
+
+## Practical Applications
+
+The Bernstein-Vazirani algorithm demonstrates a clear advantage of quantum computing over classical computing for this specific problem, as it requires only one query to the oracle, compared to the n queries required classically4. Although the problem itself is relatively simple and has limited practical applications, the algorithm has theoretical importance in the field of quantum computing.
+
+The Bernstein-Vazirani algorithm has been experimentally demonstrated on various quantum computing platforms, including nuclear magnetic resonance (NMR)5, linear optics6, and superconducting qubits7. These experimental realisations have validated the principles of the algorithm and have paved the way for the development of more complex quantum algorithms.
+
+Moreover, the Bernstein-Vazirani algorithm has inspired further research in the field of quantum query complexity, which studies the number of oracle queries required to solve certain problems using quantum algorithms8. This research has led to the development of other quantum algorithms, such as the Deutsch-Jozsa algorithm and Simon's algorithm, which also demonstrate quantum speedups over classical algorithms.
+
+## Implementation Challenges
+
+The Bernstein-Vazirani algorithm’s primary constraint lies in its narrow focus, as it's tailor-made for the singular task of determining a hidden string given a particular type of function. This specialisation restricts its direct applicability to other computational challenges9.
+
+Furthermore, the algorithm operates under the assumption of a quantum oracle capable of efficiently evaluating the required function. While theoretically feasible, constructing such oracles for real-world problems can pose a significant hurdle10. Consequently, the Bernstein-Vazirani algorithm's practical applications remain limited, primarily serving as a theoretical testament to the potential power of quantum computing.
+
+Additionally, like other quantum algorithms, it's susceptible to errors arising from noise and decoherence in quantum systems, which can compromise accuracy and hinder its practicality for larger problem sizes11. The algorithm's scalability also remains an open question, as the resources required might increase exponentially with the problem size, potentially limiting its effectiveness for large-scale computations.
+
+## Bottom Line
+
+The Bernstein-Vazirani algorithm is a quantum algorithm that showcases the power of quantum computing in solving a specific problem with a clear quantum advantage over classical methods. While the problem itself may have limited practical applications, the algorithm has theoretical significance and has inspired further research in quantum query complexity and the development of more advanced quantum algorithms.
+
+## References
+
+1. [1] Bernstein, E., & Vazirani, U. (1993). Quantum complexity theory. SIAM Journal on Computing, 26(5), 1411-1473.
+
+2. [3] Montanaro, A. (2016). Quantum algorithms: an overview. npj Quantum Information, 2(1), 1-8.
+
+3. [5] Du, J., et al. (2001). Implementation of a quantum algorithm to solve the Bernstein-Vazirani parity problem without entanglement on an ensemble quantum computer. Physical Review A, 64(4), 042306.
+
+4. [7] Aaronson, S., & Ambainis, A. (2009). The need for structure in quantum speedups. Theory of Computing, 10(6), 133-166.
+
+5. [8] Chuang, I. L., Gershenfeld, N., & Kubinec, M. (1998). Experimental implementation of fast quantum searching. Physical Review Letters, 80(15), 3408.
+
+6. [9] O'Brien, J. L. (2007). Optical quantum computing. Science, 318(5856), 1567-1570.
+
+7. [10] Barends, R., et al. (2016). Digitized adiabatic quantum computing with a superconducting circuit. Nature, 534(7606), 222-226.
+
+8. [11] Ambainis, A. (2002). Quantum lower bounds by quantum arguments. Journal of Computer and System Sciences, 64(4), 750-767.
+
+9. [13] Harrow, A. W., Hassidim, A., & Lloyd, S. (2009). Quantum algorithms for linear systems of equations. Physical Review Letters, 103(15), 150502.
+
+10. [14] Bravyi, S., Gosset, D., & König, R. (2018). Quantum advantage with shallow circuits. Science, 362(6412), 308-311.
+
+11. [15] Preskill, J. (2018). Quantum Computing in the NISQ era and beyond. Quantum, 2, 79.

@@ -72,44 +72,43 @@ export default async function IndustryPage(props: { params: Promise<{ slug: stri
             ← Back to Industries
           </Link>
         </div>
+
+        {/* Header Section */}
+        <div className="mb-8">
+          <h1 className="text-4xl font-bold text-[hsl(var(--primary))] mb-4">
+            {frontmatter.title}
+          </h1>
+          <Badge className="bg-[#2A9D8F] text-white border-0">
+            {frontmatter.sector}
+          </Badge>
+        </div>
         
         <div className="grid grid-cols-12 gap-8">
-          {/* Left Column - Industry Card */}
-          <div className="col-span-2">
-          <Card className="bg-[var(--card)] border">
-          <div className="aspect-[3/2] bg-[var(--card)] flex items-center justify-center">
-          <span className="text-[var(--text-primary)]">{frontmatter.title}</span>
-              </div>
-              <div className="p-3">
-                <Badge className="bg-[#2A9D8F] text-white border-0">
-                  {frontmatter.sector}
-                </Badge>
-              </div>
-            </Card>
-          </div>
-          
           {/* Main Content */}
-          <div className="col-span-7">
+          <div className="col-span-9">
             <article className="prose max-w-none">
               <MDXRemote source={content} components={components} />
             </article>
           </div>
           
-          {/* Right Column - Applications & Related */}
+          {/* Right Sidebar */}
           <div className="col-span-3">
             <div className="sticky top-8 space-y-6">
               {frontmatter.keyApplications && frontmatter.keyApplications.length > 0 && (
                 <Card className="bg-[var(--card)] border">
                   <div className="p-4">
-                  <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-3">
+                    <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-3">
                       Key Applications
                     </h3>
                     <div className="space-y-4">
                       {frontmatter.keyApplications.map((app: any, index: number) => (
                         <div key={index}>
                           <h4 className="font-medium text-[var(--text-primary)]">
-                          {app.title}</h4>
-                          <p className="text-sm text-[var(--text-secondary)] mb-2">{app.description}</p>
+                            {app.title}
+                          </h4>
+                          <p className="text-sm text-[var(--text-secondary)] mb-2">
+                            {app.description}
+                          </p>
                           <div className="flex flex-wrap gap-2">
                             {app.examples && Array.isArray(app.examples) && app.examples.map((example: string) => (
                               <Badge key={example} variant="outline" className="text-[var(--text-secondary)] border-[var(--border)]">
@@ -127,7 +126,7 @@ export default async function IndustryPage(props: { params: Promise<{ slug: stri
               {frontmatter.relatedCaseStudies && frontmatter.relatedCaseStudies.length > 0 && (
                 <Card className="bg-[var(--card)] border">
                   <div className="p-4">
-                  <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-3">
+                    <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-3">
                       Related Case Studies
                     </h3>
                     <div className="space-y-2">

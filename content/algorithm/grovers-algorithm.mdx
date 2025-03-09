@@ -46,15 +46,27 @@ The key idea behind Grover's algorithm is the concept of amplitude amplification
 
 ## Implementation Steps
 
-Step 1. Initialisation. The algorithm starts by preparing a uniform superposition of all possible states, where each state corresponds to an index in the database. This is done by applying a Hadamard gate to each qubit in the quantum register.
+<Steps>
+  <Step title="Initialisation">
+    The algorithm starts by preparing a uniform superposition of all possible states, where each state corresponds to an index in the database. This is done by applying a Hadamard gate to each qubit in the quantum register.
+  </Step>
 
-Step 2. Oracle query. An oracle function is applied to the quantum state, which marks the desired item by flipping the sign of its amplitude. The oracle function is a black box that can recognise the desired item based on the given condition.
+  <Step title="Oracle query">
+    An oracle function is applied to the quantum state, which marks the desired item by flipping the sign of its amplitude. The oracle function is a black box that can recognise the desired item based on the given condition.
+  </Step>
 
-Step 3. Diffusion operator. A diffusion operator is applied to the quantum state, which reflects the amplitudes around their average value. This has the effect of increasing the amplitude of the marked item while decreasing the amplitudes of the other items.
+  <Step title="Diffusion operator">
+    A diffusion operator is applied to the quantum state, which reflects the amplitudes around their average value. This has the effect of increasing the amplitude of the marked item while decreasing the amplitudes of the other items.
+  </Step>
 
-Step 4. Amplitude amplification. Steps 2 and 3 are repeated iteratively, approximately π/4 * √N times, which gradually amplifies the amplitude of the marked item while suppressing the amplitudes of the other items.
+  <Step title="Amplitude amplification">
+    Steps 2 and 3 are repeated iteratively, approximately π/4 * √N times, which gradually amplifies the amplitude of the marked item while suppressing the amplitudes of the other items.
+  </Step>
 
-Step 5. Measurement. The quantum state is measured, and with a high probability, the outcome will correspond to the index of the marked item.
+  <Step title="Measurement">
+    The quantum state is measured, and with a high probability, the outcome will correspond to the index of the marked item.
+  </Step>
+</Steps>  
 
 ## Practical Applications
 

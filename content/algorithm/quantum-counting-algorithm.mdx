@@ -49,15 +49,23 @@ In essence, the algorithm works by creating a superposition of all possible solu
 
 ## Implementation Steps
 
-Step 1. Initialisation. Prepare a quantum register with two components, a work register (usually initialised to an equal superposition of all possible states) and an ancilla register (initialised to a specific state, usually |0⟩).
-
-Step 2. Grover Iteration. Apply Grover's search algorithm to the work register with a modified oracle. This modified oracle marks all states that are solutions to the search problem. The number of Grover iterations is carefully chosen based on an estimate of the number of solutions.
-
-Step 3. Phase Estimation. Apply QPE to the work register, using the Grover iteration as the unitary operator. QPE estimates the phase of the Grover iteration, which is related to the number of solutions6.
-
-Step 4. Measurement. Measure the ancilla register to obtain an estimate of the phase. This phase estimate is then converted into an estimate of the number of solutions using classical post-processing.
-
-Step 5. Refinement (Optional). If the initial estimate is not sufficiently accurate, the process can be repeated with a modified number of Grover iterations to refine the estimate.
+<Steps>
+  <Step title="Initialisation">
+    Prepare a quantum register with two components, a work register (usually initialised to an equal superposition of all possible states) and an ancilla register (initialised to a specific state, usually |0⟩).
+  </Step>
+  <Step title="Grover Iteration">
+    Apply Grover's search algorithm to the work register with a modified oracle. This modified oracle marks all states that are solutions to the search problem. The number of Grover iterations is carefully chosen based on an estimate of the number of solutions.
+  </Step>
+  <Step title="Phase Estimation">
+    Apply QPE to the work register, using the Grover iteration as the unitary operator. QPE estimates the phase of the Grover iteration, which is related to the number of solutions6.
+  </Step>
+  <Step title="Measurement">
+    Measure the ancilla register to obtain an estimate of the phase. This phase estimate is then converted into an estimate of the number of solutions using classical post-processing.
+  </Step>
+  <Step title="Refinement (Optional)">
+    If the initial estimate is not sufficiently accurate, the process can be repeated with a modified number of Grover iterations to refine the estimate.
+  </Step>
+</Steps>
 
 The QCA combines Grover's search and QPE to efficiently estimate the number of solutions to a search problem. It first uses Grover's algorithm to create a superposition of solutions and then applies QPE to extract information about their number. The resulting estimate can be further refined through repetition if needed.
 

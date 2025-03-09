@@ -47,15 +47,23 @@ QAOA works by encoding an optimization problem into a quantum circuit that alter
 
 ## Implementation Steps
 
-Step 1. Problem encoding. The optimization problem is mapped onto a classical Hamiltonian, which encodes the objective function and constraints of the problem. The Hamiltonian is typically expressed as a sum of local terms that can be efficiently implemented on a quantum computer.
-
-Step 2. Ansatz preparation. A parameterised quantum circuit, called the QAOA ansatz, is constructed by alternating two types of quantum operations: a phase separation operator, which encodes the classical Hamiltonian, and a mixing operator, which introduces quantum fluctuations and enables the exploration of the solution space.
-
-Step 3. Expectation value measurement. The expectation value of the classical Hamiltonian with respect to the QAOA ansatz is estimated by measuring the output of the quantum circuit and averaging the results over multiple runs. This step requires the efficient evaluation of the local terms in the Hamiltonian.
-
-Step 4. Classical optimization. A classical optimization algorithm, such as gradient descent or Bayesian optimization, is used to update the parameters of the QAOA ansatz to minimize the expectation value of the Hamiltonian. The optimization process iterates between steps 3 and 4 until convergence is achieved or a maximum number of iterations is reached4.
-
-Step 5. Result interpretation. The final converged parameters of the QAOA ansatz represent an approximate solution to the optimization problem, and the corresponding expectation value provides an estimate of the quality of the solution.
+<Steps>
+  <Step title="Problem encoding">
+    The optimization problem is mapped onto a classical Hamiltonian, which encodes the objective function and constraints of the problem. The Hamiltonian is typically expressed as a sum of local terms that can be efficiently implemented on a quantum computer.
+  </Step>
+  <Step title="Ansatz preparation">
+    A parameterised quantum circuit, called the QAOA ansatz, is constructed by alternating two types of quantum operations: a phase separation operator, which encodes the classical Hamiltonian, and a mixing operator, which introduces quantum fluctuations and enables the exploration of the solution space.
+  </Step>
+  <Step title="Expectation value measurement">
+    The expectation value of the classical Hamiltonian with respect to the QAOA ansatz is estimated by measuring the output of the quantum circuit and averaging the results over multiple runs. This step requires the efficient evaluation of the local terms in the Hamiltonian.
+  </Step>
+  <Step title="Classical optimization">
+    A classical optimization algorithm, such as gradient descent or Bayesian optimization, is used to update the parameters of the QAOA ansatz to minimize the expectation value of the Hamiltonian. The optimization process iterates between steps 3 and 4 until convergence is achieved or a maximum number of iterations is reached4.
+  </Step>
+  <Step title="Result interpretation">
+    The final converged parameters of the QAOA ansatz represent an approximate solution to the optimization problem, and the corresponding expectation value provides an estimate of the quality of the solution.
+  </Step>
+</Steps>
 
 ## Practical Applications
 

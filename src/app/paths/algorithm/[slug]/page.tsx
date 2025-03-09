@@ -6,9 +6,12 @@ import matter from 'gray-matter';
 import { MDXRemote } from 'next-mdx-remote/rsc';
 import { Badge } from '@/components/ui/badge';
 import { Card } from '@/components/ui/card';
+import { Steps, Step } from '@/components/ui/steps';
 import Link from 'next/link';
 
 const components = {
+  Steps,
+  Step,
   h1: ({ children }: { children: React.ReactNode }) => (
     <h1 className="text-4xl font-bold text-[var(--text-primary)] mb-6">{children}</h1>
   ),

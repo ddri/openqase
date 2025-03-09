@@ -49,13 +49,20 @@ QGD typically involves an iterative process where the quantum estimate of the gr
 
 ## Implementation Steps
 
-Step 1. Parameter encoding. The model parameters are encoded into a quantum state, typically using amplitude encoding or qubit encoding. In amplitude encoding, each parameter is represented by the amplitude of a basis state in a quantum superposition. In qubit encoding, each parameter is assigned to a qubit or a group of qubits, and the parameter values are encoded in the qubit states.
-
-Step 2. Cost function evaluation. The cost function is evaluated for the current set of parameters, using a quantum subroutine that computes the value of the cost function from the quantum state representing the parameters. This can be done using techniques such as Quantum Phase Estimation (QPE), Quantum Amplitude Estimation (QAE), or Variational Quantum Eigensolvers (VQE).
-
-Step 3. Gradient computation. The gradients of the cost function with respect to the parameters are computed using a quantum subroutine, such as the quantum finite difference method, the quantum back-propagation algorithm, or the parameter-shift rule. These subroutines can estimate the gradients more efficiently than classical methods, by exploiting the quantum parallelism and finite difference effects4.
-
-Step 4. Parameter update. The parameters are updated based on the computed gradients, using a quantum subroutine that performs the gradient descent update rule, such as the quantum stochastic gradient descent or the quantum Adam optimiser. These subroutines can update the parameters more efficiently than classical methods, by exploiting the quantum superposition and interference effects.
+<Steps>
+  <Step title="Parameter encoding">
+    The model parameters are encoded into a quantum state, typically using amplitude encoding or qubit encoding. In amplitude encoding, each parameter is represented by the amplitude of a basis state in a quantum superposition. In qubit encoding, each parameter is assigned to a qubit or a group of qubits, and the parameter values are encoded in the qubit states.
+  </Step>
+  <Step title="Cost function evaluation">
+    The cost function is evaluated for the current set of parameters, using a quantum subroutine that computes the value of the cost function from the quantum state representing the parameters. This can be done using techniques such as Quantum Phase Estimation (QPE), Quantum Amplitude Estimation (QAE), or Variational Quantum Eigensolvers (VQE).
+  </Step>
+  <Step title="Gradient computation">
+    The gradients of the cost function with respect to the parameters are computed using a quantum subroutine, such as the quantum finite difference method, the quantum back-propagation algorithm, or the parameter-shift rule. These subroutines can estimate the gradients more efficiently than classical methods, by exploiting the quantum parallelism and finite difference effects4.
+  </Step>
+  <Step title="Parameter update">
+    The parameters are updated based on the computed gradients, using a quantum subroutine that performs the gradient descent update rule, such as the quantum stochastic gradient descent or the quantum Adam optimiser. These subroutines can update the parameters more efficiently than classical methods, by exploiting the quantum superposition and interference effects.
+  </Step>
+</Steps>
 
 Steps two to four are repeated until the cost function converges or a maximum number of iterations is reached. After the algorithm terminates, the optimal parameters are obtained by measuring the quantum state and post-processing the results.
 

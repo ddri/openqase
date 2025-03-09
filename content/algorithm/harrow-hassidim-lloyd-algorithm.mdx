@@ -53,15 +53,27 @@ The HHL algorithm works by encoding the matrix A and vector b into quantum state
 
 ## Implementation Steps
 
-Step 1. Quantum state preparation. The matrix A and vector b are encoded into quantum states |A⟩ and |b⟩, respectively. This is done using techniques such as quantum random access memory (QRAM) or quantum circuits that prepare the desired states.
+<Steps>
+  <Step title="Quantum state preparation">
+    The matrix A and vector b are encoded into quantum states |A⟩ and |b⟩, respectively. This is done using techniques such as quantum random access memory (QRAM) or quantum circuits that prepare the desired states.
+  </Step>
 
-Step 2. Quantum phase estimation. The eigenvalues and eigenvectors of the matrix A are estimated using the Quantum Phase Estimation algorithm. This step is crucial for the HHL algorithm as it allows for the inversion of the eigenvalues, which is necessary for solving the linear system6.
+  <Step title="Quantum phase estimation">
+    The eigenvalues and eigenvectors of the matrix A are estimated using the Quantum Phase Estimation algorithm. This step is crucial for the HHL algorithm as it allows for the inversion of the eigenvalues, which is necessary for solving the linear system6.
+  </Step>
 
-Step 3. Controlled rotation. A controlled rotation is applied to an ancillary qubit, where the rotation angle is proportional to the inverse of the eigenvalues obtained in the previous step. This operation effectively creates a quantum state that is proportional to the solution vector x.
+  <Step title="Controlled rotation">
+    A controlled rotation is applied to an ancillary qubit, where the rotation angle is proportional to the inverse of the eigenvalues obtained in the previous step. This operation effectively creates a quantum state that is proportional to the solution vector x.
+  </Step>
 
-Step 4. Uncomputation. The quantum phase estimation step is reversed to uncompute the eigenvalues and eigenvectors, leaving only the solution state.
+  <Step title="Uncomputation">
+    The quantum phase estimation step is reversed to uncompute the eigenvalues and eigenvectors, leaving only the solution state.
+  </Step>
 
-Step 5. Measurement. The final solution state is measured to obtain an approximation of the solution vector x.
+  <Step title="Measurement">
+    The final solution state is measured to obtain an approximation of the solution vector x.
+  </Step>
+</Steps>
 
 ## Practical Applications
 

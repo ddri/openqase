@@ -48,15 +48,23 @@ A QBM consists of a network of quantum nodes, each representing a qubit or a gro
 
 ## Implementation Steps
 
-Step 1. State preparation. The input data is encoded into a quantum state, typically using amplitude encoding or qubit encoding. In amplitude encoding, each data sample is represented by a quantum state, where the amplitudes of the basis states correspond to the feature values. In qubit encoding, each feature is assigned to a qubit, and the feature values are encoded in the qubit states.
-
-Step 2. Model initialisation. The parameters of the QBM, such as the weights of the quantum edges and the biases of the quantum nodes, are initialised to random values or based on prior knowledge.
-
-Step 3. Quantum sampling. A quantum sampling algorithm, such as quantum annealing or quantum Gibbs sampling, is used to generate samples from the model distribution4. These algorithms exploit the quantum superposition and quantum tunnelling effects to explore the state space more efficiently than classical sampling methods.
-
-Step 4. Gradient estimation. The gradients of the model parameters with respect to the objective function, such as the log-likelihood or the Kullback-Leibler divergence, are estimated using the quantum samples and classical post-processing. This can be done using techniques such as quantum back-propagation or quantum natural gradient.
-
-Step 5. Parameter update. The model parameters are updated based on the estimated gradients, using classical optimization algorithms such as gradient descent or Adam.
+<Steps>
+  <Step title="InitiState preparationalisation">
+    The input data is encoded into a quantum state, typically using amplitude encoding or qubit encoding. In amplitude encoding, each data sample is represented by a quantum state, where the amplitudes of the basis states correspond to the feature values. In qubit encoding, each feature is assigned to a qubit, and the feature values are encoded in the qubit states.
+  </Step>
+  <Step title="Model Initialisation">
+    The parameters of the QBM, such as the weights of the quantum edges and the biases of the quantum nodes, are initialised to random values or based on prior knowledge.
+  </Step>
+  <Step title="Quantum sampling">
+    A quantum sampling algorithm, such as quantum annealing or quantum Gibbs sampling, is used to generate samples from the model distribution4. These algorithms exploit the quantum superposition and quantum tunnelling effects to explore the state space more efficiently than classical sampling methods.
+  </Step>
+  <Step title="Gradient estimation">
+    The gradients of the model parameters with respect to the objective function, such as the log-likelihood or the Kullback-Leibler divergence, are estimated using the quantum samples and classical post-processing. This can be done using techniques such as quantum back-propagation or quantum natural gradient.
+  </Step>
+  <Step title="Parameter update">
+    The model parameters are updated based on the estimated gradients, using classical optimization algorithms such as gradient descent or Adam.
+  </Step>
+</Steps>
 
 Steps three to five are repeated until the model converges or a maximum number of iterations is reached. After training, the QBM can be used for tasks such as data generation, anomaly detection, and classification, by sampling from the learned distribution or computing the probabilities of the input data.
 

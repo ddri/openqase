@@ -116,37 +116,38 @@ export default async function PersonaPage(props: { params: Promise<{ slug: strin
  return (
    <main className="min-h-screen p-8">
      <div className="max-w-7xl mx-auto">
-       <div className="grid grid-cols-12 gap-8">
-         {/* Left Column - Persona Card */}
-         <div className="col-span-2">
-          <Card className="bg-[var(--card)] border">
-          <div className="aspect-[3/2] bg-[var(--card)] flex items-center justify-center">
-          <span className="text-[var(--text-primary)]">{persona.frontmatter.title}</span>
-             </div>
-             <div className="p-3">
-               <Badge className="bg-[var(--primary)] text-[var(--primary-foreground)] border-0">
-                 {persona.frontmatter.role}
-               </Badge>
-             </div>
-           </Card>
-           <Link
-             href="/paths/persona"
-             className="inline-block mt-4 text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors"
-           >
-             ← Back to Persona
-           </Link>
-         </div>
+       {/* Back link */}
+       <div className="mb-8">
+         <Link
+           href="/paths/persona"
+           className="text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors"
+         >
+           ← Back to Persona
+         </Link>
+       </div>
 
+       {/* Header Section */}
+       <div className="mb-8">
+         <h1 className="text-4xl font-bold text-[hsl(var(--primary))] mb-4">
+           {persona.frontmatter.title}
+         </h1>
+         <Badge className="persona-role-badge">
+           {persona.frontmatter.role}
+         </Badge>
+       </div>
+
+       {/* Main Content + Sidebar */}
+       <div className="grid grid-cols-12 gap-8">
          {/* Main Content */}
-         <div className="col-span-7">
+         <div className="col-span-9">
            <article className="prose max-w-none">
              <MDXRemote source={persona.source} components={components} />
            </article>
          </div>
 
-         {/* Right Column - Case Studies */}
+         {/* Right Sidebar - Case Studies */}
          <div className="col-span-3">
-         <h2 className="text-xl font-semibold text-[var(--text-primary)] mb-4">
+           <h2 className="text-xl font-semibold text-[var(--text-primary)] mb-4">
              Related Case Studies
            </h2>
            <div className="space-y-4">

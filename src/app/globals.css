@@ -385,10 +385,6 @@
 
 /* Badge styling */
 [data-theme='graphite'] .badge {
-  @apply bg-zinc-900/70 text-zinc-300 border-zinc-700;
-}
-
-[data-theme='graphite'] .badge:hover {
   @apply bg-orange-500/20 text-orange-300 border-orange-500/50;
 }
 
@@ -411,6 +407,10 @@
   @apply opacity-100;
 }
 
+/* Persona role badge - using the hover state colors by default */
+[data-theme='graphite'] .persona-role-badge {
+  @apply bg-orange-500/20 text-orange-300 border-orange-500/50;
+}
 
 /* Navigation styling - proper implementation */
 nav {

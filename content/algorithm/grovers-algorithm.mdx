@@ -3,7 +3,7 @@ title: "Grover's Algorithm"
 type: "Technical"
 slug: "grovers-algorithm"
 complexity: "O(√N)"
-description: "A quantum algorithm that provides quadratic speedup for searching unstructured databases. It transforms the classical O(N) search problem into a quantum O(√N) solution, demonstrating a clear quantum advantage for search and optimization problems."
+description: "Grover's algorithm is a quantum search algorithm that finds a specific entry in an unsorted database in significantly fewer steps than classical algorithms."
 applications:
   - "Unstructured Database Search"
   - "Optimization Problems"
@@ -17,7 +17,9 @@ prerequisites:
   - "Linear Algebra Basics"
   - "Quantum Measurement Theory"
 relatedCaseStudies:
-
+  - "maxcut-study"
+  - "portfolio-opt"
+  - "traffic-routing"
 keywords:
   - "Grover's Algorithm"
   - "quantum search"
@@ -28,111 +30,76 @@ keywords:
 lastUpdated: "2024-02-21"
 ---
 
-# Grover's Algorithm
-
-## Overview
-
 Grover's Algorithm provides a quadratic speedup for searching unstructured databases, transforming a classical O(N) search problem into a quantum O(√N) solution. This demonstrates a clear quantum advantage for search and optimization problems.
 
 ## Algorithm Details
 
-### Complexity
-```
-Classical: O(N)
-Quantum:   O(√N)
-```
+Grover's algorithm was developed soon after Shor’s, this time seeing Lov Grover publishing his own breakthrough in 19961. His focus was on creating a quantum algorithm for searching an unsorted database quadratically faster than the best possible classical algorithm. It is one of the most well-known and widely studied quantum algorithms, with numerous applications in various fields, such as database search, optimisation, and machine learning.
 
-### Key Components
-1. Initial State Preparation
-2. Oracle Operation
-3. Diffusion Operator
-4. Amplitude Amplification
-5. Measurement
+## Problem Target
 
-## Prerequisites
+Grover's algorithm addresses the problem of searching an unsorted database or solving an unstructured search problem. Given a large set of N items, it finds a specific item or solution that satisfies a given condition, often referred to as the "marked item" or "solution state"2. In the classical setting, this problem requires O(N) operations in the worst case, as one might need to search through all N items to find the desired one. Grover's algorithm can solve this problem using only O(√N) quantum operations, providing a quadratic speedup over classical methods3.
 
-Before implementing Grover's Algorithm, you should understand:
+## Quantum Approach
 
-- Quantum Gates and Circuits - Basic building blocks for quantum computation
-- Amplitude Amplification - Core technique used in the algorithm
-- Oracle Implementation - Problem-specific quantum operation
-- Linear Algebra Basics - Required for understanding the mathematical foundation
-- Quantum Measurement Theory - Critical for result interpretation
+The key idea behind Grover's algorithm is the concept of amplitude amplification, which allows the algorithm to increase the amplitude of the quantum state corresponding to the desired item, while decreasing the amplitudes of the other states4. This is achieved through a series of quantum operations that are applied iteratively to the quantum state, gradually transforming it into a state where the desired item has a high probability of being measured. This process effectively "rotates" the system state towards the solution through a process of phase amplification and attenuation.
 
-## Applications
+## Implementation Steps
 
-Grover's Algorithm can be applied to:
+<Steps>
+  <Step title="Initialisation">
+    The algorithm starts by preparing a uniform superposition of all possible states, where each state corresponds to an index in the database. This is done by applying a Hadamard gate to each qubit in the quantum register.
+  </Step>
 
-### Database Search
-- Searching unstructured databases
-- Finding specific entries in large datasets
-- Database query optimization
+  <Step title="Oracle query">
+    An oracle function is applied to the quantum state, which marks the desired item by flipping the sign of its amplitude. The oracle function is a black box that can recognise the desired item based on the given condition.
+  </Step>
 
-### Optimization Problems
-- Finding solutions to constraint satisfaction problems
-- Optimization in discrete search spaces
-- Combinatorial optimization
+  <Step title="Diffusion operator">
+    A diffusion operator is applied to the quantum state, which reflects the amplitudes around their average value. This has the effect of increasing the amplitude of the marked item while decreasing the amplitudes of the other items.
+  </Step>
 
-### SAT Problem Solving
-- Boolean satisfiability problems
-- Constraint solving
-- Logical verification
+  <Step title="Amplitude amplification">
+    Steps 2 and 3 are repeated iteratively, approximately π/4 * √N times, which gradually amplifies the amplitude of the marked item while suppressing the amplitudes of the other items.
+  </Step>
 
-### Quantum State Preparation
-- Preparing specific quantum states
-- State initialization for other quantum algorithms
+  <Step title="Measurement">
+    The quantum state is measured, and with a high probability, the outcome will correspond to the index of the marked item.
+  </Step>
+</Steps>  
 
-### Cryptographic Applications
-- Cryptanalysis
-- Key search problems
-- Security analysis
+## Practical Applications
 
-## Implementation Guide
+Grover's algorithm has been experimentally demonstrated on various quantum computing platforms, including superconducting qubits, trapped ions, photonic, and silicon qubits5. It has also been applied to a wide range of problems beyond database search, such as optimisation, machine learning, and quantum chemistry.
 
-1. **State Preparation**
-   - Initialize quantum register in superposition
-   - Prepare auxiliary qubits if needed
+One of the most significant applications of Grover's algorithm is in the field of optimisation. By combining Grover's algorithm with classical optimisation techniques, such as the Quantum Approximate Optimisation Algorithm (QAOA), researchers have developed hybrid quantum-classical algorithms that can solve complex optimisation problems faster than purely classical methods6.
 
-2. **Oracle Construction**
-   - Design problem-specific oracle
-   - Implement phase kickback
-   - Verify oracle correctness
+This combination of quantum and classical approaches gives some clues as to the utility beyond the “quantum is the future” hype curve, and shows the potential for incremental but significant improvements in existing workflows and problem spaces. It also shows how any singular advancement can inspire and combine with other efforts to unlock further fields of study. 
 
-3. **Diffusion Operator**
-   - Implement Grover diffusion
-   - Apply amplitude amplification
-   - Optimize gate sequence
+In this way, Grover's algorithm has had a profound impact on the theoretical foundations of quantum computing. It has led to the development of new quantum algorithms and techniques, such as Quantum Amplitude Amplification and Quantum Counting, which have further expanded the capabilities of quantum computers and associated research.
 
-4. **Iteration Control**
-   - Calculate optimal number of iterations
-   - Implement iteration loop
-   - Add measurement operations
+## Implementation Challenges
 
-## Related Case Studies
+The efficiency of Grover's algorithm comes from its ability to exploit quantum parallelism and quantum interference to search the database in a way that is quadratically faster than classical methods. Note that this is “just” a quadratic speedup, compared to the exponential benefits found in the various applications other quantum algorithms in their specific problem space.
 
-### Quantum Database Search Implementation
-Real-world implementation of Grover's Algorithm for searching large databases, with performance comparisons to classical methods.
-**Tags**: search, optimization, implementation
-**Difficulty**: Intermediate
+The standard disclaimer in the NISQ era also applies, where the true extent of the algorithm’s performance relies on the eventual realisation of a fault-tolerant quantum computer with a sufficient number of qubits7. The decoherence and noise in the current range of available quantum hardware limit the number of iterations that can be performed accurately. 
 
-### Solving Optimization Problems
-Using Grover's Algorithm to solve complex optimization problems in logistics and operations research.
-**Tags**: optimization, logistics, operations-research
-**Difficulty**: Advanced
+Another condition that is common to most if not all quantum algorithms is the actual implementation via the intended SDK and platform, where the oracle function must be implemented efficiently as a quantum circuit. It’s useful to keep in mind that not all systems or architectures will transpile the same way, or achieve the same performance in the process.
 
-## Best Practices
+## Bottom Line
 
-1. **Oracle Design**
-   - Keep oracle implementation efficient
-   - Minimize ancilla qubits
-   - Ensure reversibility
+Grover's algorithm is a powerful and versatile quantum algorithm that demonstrates the potential of quantum computing to solve certain problems quadratically faster than classical computers. Its impact on various fields, from database search and optimisation to machine learning and quantum chemistry, highlights the broad applicability of quantum algorithms. But in the current era, the full benefits of Grover’s algorithm is limited to simulation or smaller scale and noisy quantum hardware, which inversely means that Grover's algorithm and its variants will likely play an increasingly important role in the near-term future.
 
-2. **Circuit Optimization**
-   - Reduce gate count
-   - Optimize for target hardware
-   - Consider error rates
+1. Grover, L. K. (1996). A fast quantum mechanical algorithm for database search. Proceedings of the 28th Annual ACM Symposium on Theory of Computing, 212-219.
 
-3. **Result Verification**
-   - Implement classical verification
-   - Use simulation for testing
-   - Validate results statistically
+2. Bennett, C. H., Bernstein, E., Brassard, G., & Vazirani, U. (1997). Strengths and weaknesses of quantum computing. SIAM Journal on Computing, 26(5), 1510-1523.
+
+3. Zalka, C. (1999). Grover's quantum searching algorithm is optimal. Physical Review A, 60(4), 2746.
+
+4. Brassard, G., Høyer, P., Mosca, M., & Tapp, A. (2002). Quantum amplitude amplification and estimation. Contemporary Mathematics, 305, 53-74.
+
+5. Figgatt, C., Maslov, D., Landsman, K. A., Linke, N. M., Debnath, S., & Monroe, C. (2017). Complete 3-Qubit Grover search on a programmable quantum computer. Nature Communications, 8(1), 1918.
+
+6. Farhi, E., Goldstone, J., & Gutmann, S. (2014). A quantum approximate optimization algorithm. arXiv preprint arXiv:1411.4028.
+
+7. Preskill, J. (2018). Quantum Computing in the NISQ era and beyond. Quantum, 2, 79.

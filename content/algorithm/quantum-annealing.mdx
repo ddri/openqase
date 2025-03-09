@@ -1,0 +1,108 @@
+---
+title: "Quantum Annealing (QA)"
+type: "Technical"
+slug: "annealing"
+complexity: "Variable (depends on circuit depth p and problem size)"
+description: "Quantum Annealing uses quantum tunneling to find optimal solutions by gradually evolving a quantum system. This method is especially effective for combinatorial optimization challenges."
+applications:
+  - "Maximum Cut Problems"
+  - "Portfolio Optimization"
+  - "Traffic Flow Optimization"
+  - "Network Design"
+  - "Resource Allocation"
+  - "Vehicle Routing Problems"
+prerequisites:
+  - "Quantum Mechanics Fundamentals"
+  - "Combinatorial Optimization"
+  - "Hamiltonian Evolution"
+  - "Classical Optimization Methods"
+  - "Graph Theory Basics"
+relatedCaseStudies:
+  - "maxcut-study"
+  - "portfolio-opt"
+  - "traffic-routing"
+keywords:
+  - "QAOA"
+  - "quantum optimization"
+  - "combinatorial problems"
+  - "MaxCut"
+  - "NISQ algorithms"
+  - "hybrid quantum-classical"
+lastUpdated: "2024-02-21"
+---
+
+Quantum Annealing uses quantum tunneling to find optimal solutions by gradually evolving a quantum system. This method is especially effective for combinatorial optimization challenges.
+
+## Algorithm Details
+
+Quantum Annealing (QA) is a metaheuristic optimization algorithm that exploits the principles of quantum mechanics to solve complex optimization problems1. It is inspired by the process of annealing in metallurgy, where a metal is heated and then slowly cooled to remove defects and reach a low-energy crystalline state. Similarly, QA explores the solution space of an optimization problem by slowly evolving a quantum system from an initial state to a final state that encodes the optimal solution.
+
+## Problem Target
+
+QA algorithms are particularly well-suited for solving combinatorial optimization problems, such as the Traveling Salesman Problem, the Max-Cut Problem, and the Quadratic Unconstrained Binary Optimization (QUBO) problem2. These problems are characterised by a large number of discrete variables and a complex energy landscape with many local minima, making them difficult to solve using classical optimization methods.
+
+## Quantum Approach
+
+The key idea behind QA is to map the optimization problem onto a physical system of interacting qubits, where the energy of the system corresponds to the cost function of the problem3. The system is initialised in a state of quantum superposition, where each qubit represents a possible solution to the problem. The system is then slowly evolved according to a time-dependent Hamiltonian, which gradually changes the strength of the interactions between the qubits and drives the system towards the ground state, which corresponds to the optimal solution4.
+
+## Implementation Steps
+
+<Steps>
+  <Step title="Problem encoding">
+    The optimization problem is mapped onto a QUBO or Ising Hamiltonian, which describes the energy of the quantum system as a function of the binary variables. The mapping involves defining the couplings between the qubits and the local fields acting on each qubit, based on the constraints and objectives of the problem.
+  </Step>
+  <Step title="Initialisation">
+    The quantum system is initialised in a state of uniform superposition, where each qubit is in an equal superposition of the |0⟩ and |1⟩ states. This state represents a equal probability distribution over all possible solutions to the problem.
+  </Step>
+  <Step title="Annealing">
+    The quantum system is slowly evolved according to a time-dependent Hamiltonian, which consists of two terms: a problem Hamiltonian that encodes the QUBO or Ising model, and a driver Hamiltonian that provides the quantum fluctuations needed to explore the solution space. The strength of the driver Hamiltonian is gradually decreased over time, while the strength of the problem Hamiltonian is increased, guiding the system towards the ground state.
+  </Step>
+  <Step title="Measurement">
+    After the annealing process is complete, the quantum system is measured in the computational basis, collapsing the superposition into a classical state that represents a candidate solution to the problem. The measurement is repeated multiple times to obtain a statistical distribution of the solutions.
+  </Step>
+  <Step title="Post-processing">
+    The candidate solutions are post-processed using classical optimization techniques, such as local search or simulated annealing, to further improve their quality and remove any invalid or suboptimal solutions.
+  </Step>
+</Steps>
+
+## Practical Applications
+
+QA holds the promise of outperforming classical optimization algorithms in several key aspects. One notable advantage is its potential for faster convergence. By harnessing quantum tunnelling and quantum entanglement, QA can navigate the solution space more efficiently, potentially finding the optimal solution faster than classical methods, especially for problems with complex energy landscapes where classical algorithms might become trapped in local minima5.
+
+Another compelling advantage lies in its scalability potential. QA can potentially tackle larger and more intricate problems that overwhelm classical algorithms. This is due to the exponential nature of quantum state spaces, where a relatively small number of qubits can represent and manipulate exponentially large superpositions.
+
+Furthermore, QA benefits from an inherent robustness to certain types of noise and errors, such as thermal fluctuations and control errors. This resilience stems from the adiabatic nature of the algorithm, making it well suited for near-term quantum hardware, which is often prone to such disturbances6.
+
+## Implementation Challenges
+
+Despite its promising potential, the practical implementation of QA faces several hurdles. One significant challenge lies in the limited connectivity between qubits in current quantum annealing hardware. This limitation can make mapping certain problems onto the hardware difficult, leading to additional overhead in problem encoding and a potential reduction in performance7.
+
+Another issue is the sensitivity of QA's performance to various parameters, such as the annealing schedule, the initial and final Hamiltonians, and other settings. Determining the optimal parameter configuration for a specific problem can be a complex task, often requiring extensive empirical tuning and experimentation.
+
+Furthermore, comparing QA with classical optimization algorithms is crucial for assessing its true potential. In some cases, classical methods like simulated annealing or tensor networks can perform as well as or even outperform it, particularly when dealing with small problem sizes or less complex energy landscapes. Therefore, rigorous benchmarking and comparison with classical approaches are essential for understanding the specific scenarios where QA can offer a quantum advantage8.
+
+## Bottom Line
+
+Quantum Annealing is a powerful metaheuristic optimization algorithm that uses the principles of quantum mechanics to solve complex combinatorial optimization problems. By mapping the problem onto a system of interacting qubits and slowly evolving the system towards the ground state, QA has the potential to provide faster convergence, better scalability, and robustness to noise compared to classical optimization methods.
+
+QA has been extensively studied and applied to various optimization problems in fields such as machine learning, finance, logistics, and materials science. Experimental demonstrations have been performed on quantum annealing hardware, such as the D-Wave systems, as well as on gate-based quantum computers and quantum simulators.
+
+Ongoing research in QA aims to develop more efficient and scalable algorithms, improve the mapping and encoding of problems, and benchmark the performance of it against classical methods, paving the way for the practical deployment in real-world applications.
+
+## References
+
+1. Kadowaki, T., & Nishimori, H. (1998). Quantum annealing in the transverse Ising model. Physical Review E, 58(5), 5355.
+
+2. Lucas, A. (2014). Ising formulations of many NP problems. Frontiers in Physics, 2, 5.
+
+3. Johnson, M. W., Amin, M. H. S., Gildert, S., Lanting, T., Hamze, F., Dickson, N., ... & Rose, G. (2011). Quantum annealing with manufactured spins. Nature, 473(7346), 194-198.
+
+4. Farhi, E., Goldstone, J., Gutmann, S., & Sipser, M. (2000). Quantum computation by adiabatic evolution. arXiv preprint quant-ph/0001106
+
+5. Denchev, V. S., Boixo, S., Isakov, S. V., Ding, N., Babbush, R., Smelyanskiy, V., ... & Neven, H. (2016). What is the computational value of finite-range tunneling? Physical Review X, 6(3), 031015.
+
+6. Dickson, N. G., Johnson, M. W., Amin, M. H., Harris, R., Altomare, F., Berkley, A. J., ... & Rose, G. (2013). Thermally assisted quantum annealing of a 16-qubit problem. Nature Communications, 4(1), 1-6.
+
+7. Choi, V. (2008). Minor-embedding in adiabatic quantum computation: I. The parameter setting problem. Quantum Information Processing, 7(5), 193-209.
+
+8. Rønnow, T. F., Wang, Z., Job, J., Boixo, S., Isakov, S. V., Wecker, D., ... & Troyer, M. (2014). Defining and detecting quantum speedup. Science, 345(6195), 420-424.

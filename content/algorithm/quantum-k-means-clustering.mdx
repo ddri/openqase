@@ -1,0 +1,110 @@
+---
+title: "Quantum K-Means Clustering"
+type: "Technical"
+slug: "k-means"
+complexity: "Variable (depends on circuit depth p and problem size)"
+description: "Quantum K-Means enhances data clustering, particularly for high-dimensional data, by performing distance and centroid calculations using quantum computation."
+applications:
+  - "Maximum Cut Problems"
+  - "Portfolio Optimization"
+  - "Traffic Flow Optimization"
+  - "Network Design"
+  - "Resource Allocation"
+  - "Vehicle Routing Problems"
+prerequisites:
+  - "Quantum Mechanics Fundamentals"
+  - "Combinatorial Optimization"
+  - "Hamiltonian Evolution"
+  - "Classical Optimization Methods"
+  - "Graph Theory Basics"
+relatedCaseStudies:
+  - "maxcut-study"
+  - "portfolio-opt"
+  - "traffic-routing"
+keywords:
+  - "QAOA"
+  - "quantum optimization"
+  - "combinatorial problems"
+  - "MaxCut"
+  - "NISQ algorithms"
+  - "hybrid quantum-classical"
+lastUpdated: "2024-02-21"
+---
+
+Quantum K-Means enhances data clustering, particularly for high-dimensional data, by performing distance and centroid calculations using quantum computation.
+
+## Algorithm Details
+
+Quantum K-Means Clustering is a quantum version of the classical K-Means clustering algorithm, which is a popular unsupervised machine learning technique used for partitioning a dataset into K clusters1. The goal of K-Means is to find the optimal centroid locations that minimize the total distance between each data point and its nearest centroid.
+
+## Problem Target
+
+The quantum version of K-Means aims to exploit the power of quantum computing to perform the clustering task more efficiently than classical algorithms, particularly for high-dimensional and large-scale datasets2. The key idea behind Quantum K-Means is to use quantum states and quantum operations to represent the data points and centroids, and to compute the distances and update the cluster assignments more efficiently than classical methods.
+
+## Quantum Approach
+
+QKMC typically starts by encoding the classical data points into quantum states3. This can be done using various encoding techniques, such as amplitude encoding or basis encoding. Once the data is encoded, quantum operations are used to manipulate the quantum states and compute distances between data points.
+
+One key aspect of QKMC is the utilisation of quantum distance measures. Quantum computers can use the phenomena of quantum superposition and interference to calculate distances between quantum states more efficiently than classical methods in some cases4. This quantum advantage is especially pronounced when dealing with high-dimensional data or complex distance metrics.
+
+Another crucial element of QKMC is the centroid update procedure. Similar to classical K-Means, QKMC iteratively updates the cluster centroids to minimize the distance between data points and their assigned centroids. However, quantum algorithms like Quantum Phase Estimation (QPE) or Variational Quantum Eigensolver (VQE) can be employed to perform these updates more efficiently in certain scenarios5.
+
+Overall, QKMC holds the promise of improving clustering tasks for large datasets and complex distance measures. However, it's important to note that QKMC is still an active research area, and its practical advantages depend on the specific problem and the available quantum hardware. As quantum technology progresses, QKMC is expected to play an increasingly important role in data analysis and machine learning applications.
+
+## Implementation Steps
+
+<Steps>
+  <Step title="Data encoding">
+    The input data points are encoded into quantum states, typically using amplitude encoding or qubit encoding. In amplitude encoding, each data point is represented by a quantum state, where the amplitudes of the basis states correspond to the feature values. In qubit encoding, each feature is assigned to a qubit, and the feature values are encoded in the qubit states.
+  </Step>
+  <Step title="Centroid initialisation">
+    The initial centroids are chosen randomly or based on some heuristic, and encoded into quantum states using the same encoding scheme as the data points.
+  </Step>
+  <Step title=" Distance calculation">
+    The distances between each data point and each centroid are computed using a quantum subroutine, such as the Swap Test or the Hadamard Test6. These subroutines can estimate the inner product or the euclidean distance between two quantum states more efficiently than classical methods, by exploiting the quantum parallelism and interference effects.
+  </Step>
+  <Step title="Cluster assignment">
+    Each data point is assigned to the nearest centroid based on the computed distances, using a quantum measurement operation. The measurement outcomes are used to update the classical cluster assignments.
+  </Step>
+  <Step title="Centroid update">
+    The centroids are updated based on the new cluster assignments, by computing the mean or median of the data points in each cluster using a quantum subroutine, such as the Quantum Arithmetic Mean or the Quantum Median Estimation.
+  </Step>
+</Steps>
+
+Steps three to five are repeated until the centroids converge or a maximum number of iterations is reached. After the algorithm terminates, the final cluster assignments and centroids are obtained by measuring the quantum states and post-processing the results.
+
+## Practical Applications
+
+The potential advantages of Quantum K-Means over classical K-Means starts with the speedup. For certain types of datasets and distance metrics, Quantum K-Means can provide a polynomial or even exponential speedup over classical K-Means, in terms of the number of distance calculations and the overall clustering time7. This is due to the ability of quantum computers to perform certain operations, such as inner products and matrix multiplications, more efficiently than classical computers.
+
+The improved accuracy is another advantage to explore. Quantum K-Means may be able to find better clustering solutions than classical K-Means, by exploring a larger space of possible centroid configurations and avoiding local optima. Quantum K-Means can also potentially reduce the amount of data movement and communication required for distributed or parallel clustering, by encoding the data points and centroids into quantum states and performing the distance calculations and updates locally on each quantum processor.
+
+## Implementation Challenges
+
+Once again we face the challenges of efficient data encoding. Developing the effective and efficient methods for encoding large-scale and high-dimensional classical data into quantum states, while preserving the relevant features and geometries, poses practical challenges. So does designing quantum subroutines for computing distances and similarities between quantum states that can be efficiently implemented on near-term quantum hardware with limited qubit count and gate fidelity. Not to mention the challenge of designing robust Quantum K-Means algorithms that can operate in the presence of noise and errors in the quantum hardware, using techniques such as error mitigation and quantum error correction.
+
+Over on the integration side of things, more work needs to be done in exploring hybrid quantum-classical approaches that combine Quantum K-Means with classical machine learning techniques (such as dimensionality reduction, feature selection, and ensemble clustering) to make the most of the strengths of both paradigms.
+
+Experimental demonstrations of Quantum K-Means have been reported on various quantum computing platforms, including superconducting qubits and quantum simulators, showing promising results for small-scale datasets. However, the scalability and performance of Quantum K-Means on larger and more realistic datasets remain open research questions.
+
+## Bottom Line
+
+Quantum K-Means Clustering is a promising application of quantum computing for unsupervised machine learning, particularly for partitioning high-dimensional and large-scale datasets into meaningful clusters. By applying the power of quantum states and quantum operations to represent the data points and centroids, and to compute the distances and update the cluster assignments more efficiently than classical methods, Quantum K-Means has the potential to provide significant speedups and improved accuracy compared to classical K-Means. 
+
+However, significant research efforts are still needed to address the challenges of efficient data encoding, scalable distance metrics, noise-resilient clustering, and integration with classical machine learning techniques, before Quantum K-Means can be deployed in real-world scenarios. As quantum technologies continue to advance, Quantum K-Means is expected to play an important role in the emerging field of quantum-enhanced data analytics and pattern recognition.
+
+## References
+
+1. Lloyd, S., Garnerone, S., & Zanardi, P. (2016). Quantum algorithms for topological and geometric analysis of data. Nature Communications, 7(1), 10138.
+
+2. Kerenidis, I., Landman, J., Luongo, A., & Prakash, A. (2019). q-means: A quantum algorithm for unsupervised machine learning. In Advances in Neural Information Processing Systems (pp. 4134-4144).
+
+3. Wiebe, N., Kapoor, A., & Svore, K. M. (2015). Quantum algorithms for nearest-neighbor methods for supervised and unsupervised learning. Quantum Information & Computation, 15(3-4), 316-356.
+
+4. Buhrman, H., Cleve, R., Watrous, J., & De Wolf, R. (2001). Quantum fingerprinting. Physical Review Letters, 87(16), 167902.
+
+5. Otterbach, J. S., Manenti, R., Alidoust, N., Bestwick, A., Block, M., Bloom, B., ... & Neven, H. (2017). Unsupervised machine learning on a hybrid quantum processor. arXiv preprint arXiv:1712.05771.
+
+6. Lloyd, S., Mohseni, M., & Rebentrost, P. (2013). Quantum principal component analysis. Nature Physics, 9(10), 631-633.
+
+7. Aïmeur, E., Brassard, G., & Gambs, S. (2013). Quantum speed-up for unsupervised learning. Machine Learning, 90(2), 261-287.

@@ -31,7 +31,9 @@ export default async function PersonaPage() {
  return (
    <main className="min-h-screen p-8">
      <div className="max-w-7xl mx-auto">
-      <h1 className="text-4xl font-bold mb-8">Learning Path by Persona</h1>
+      <h1 className="text-4xl font-bold text-[hsl(var(--primary))] mb-8">
+        Quantum Personas
+      </h1>
 
        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
          {personaList.map((persona) => (

@@ -1,34 +1,32 @@
 ---
-title: "Simon's algorithm"
+title: "Simon's Algorithm"
 type: "Technical"
 slug: "simons"
-complexity: "Variable (depends on circuit depth p and problem size)"
-description: "Simon's algorithm efficiently determines a hidden bit string that defines the periodicity of a function, providing an exponential quantum speedup."
+complexity: "O(n) quantum operations"
+description: "Simon's algorithm efficiently solves the hidden subgroup problem, demonstrating exponential speedup over classical methods by finding a hidden binary string pattern in a black-box function."
 applications:
-  - "Maximum Cut Problems"
-  - "Portfolio Optimization"
-  - "Traffic Flow Optimization"
-  - "Network Design"
-  - "Resource Allocation"
-  - "Vehicle Routing Problems"
+  - "Hidden Pattern Detection"
+  - "Cryptanalysis"
+  - "Period Finding"
+  - "Quantum Pattern Recognition"
+  - "Symmetry Detection"
 prerequisites:
-  - "Quantum Mechanics Fundamentals"
-  - "Combinatorial Optimization"
-  - "Hamiltonian Evolution"
-  - "Classical Optimization Methods"
-  - "Graph Theory Basics"
+  - "Quantum Gates"
+  - "Linear Algebra"
+  - "Binary Arithmetic"
+  - "Quantum Measurement"
+  - "Oracle Implementation"
 relatedCaseStudies:
   - "rsa-cryptanalysis"
 keywords:
-  - "QAOA"
-  - "quantum optimization"
-  - "combinatorial problems"
-  - "MaxCut"
-  - "NISQ algorithms"
-  - "hybrid quantum-classical"
+  - "hidden subgroup"
+  - "quantum pattern finding"
+  - "oracle problems"
+  - "quantum speedup"
+  - "quantum cryptanalysis"
+  - "period finding"
 lastUpdated: "2024-02-21"
 ---
-
 
 Simon's algorithm efficiently determines a hidden bit string that defines the periodicity of a function, providing an exponential quantum speedup.
 
@@ -44,22 +42,35 @@ Quantum ApproachClassically, solving Simon's problem requires Ω(2^(n/2)) querie
 
 ## Implementation Steps
 
+<Steps>
+  <Step title="State preparation">
+    Initialise an n-qubit quantum state |ψ⟩ in the |0⟩ state and an n-qubit ancilla register in the |0⟩ state.
+  </Step>
 
-Step 1. State preparation. Initialise an n-qubit quantum state |ψ⟩ in the |0⟩ state and an n-qubit ancilla register in the |0⟩ state.
+  <Step title="Apply Hadamard gates">
+    Apply a Hadamard gate to each of the n qubits in the |ψ⟩ state. This creates a superposition of all possible n-bit strings.
+  </Step>
 
-Step 2. Apply Hadamard gates. Apply a Hadamard gate to each of the n qubits in the |ψ⟩ state. This creates a superposition of all possible n-bit strings.
+  <Step title="Oracle query">
+    Apply the quantum oracle that implements the function f(x) to the |ψ⟩ state and the ancilla register. The oracle performs the following transformation: |x⟩|0⟩ → |x⟩|f(x)⟩ which entangles the |ψ⟩ state with the ancilla register, encoding the structure of the function f(x) into the quantum state.
+  </Step>
 
-Step 3. Oracle query. Apply the quantum oracle that implements the function f(x) to the |ψ⟩ state and the ancilla register. The oracle performs the following transformation: |x⟩|0⟩ → |x⟩|f(x)⟩ which entangles the |ψ⟩ state with the ancilla register, encoding the structure of the function f(x) into the quantum state3.
+  <Step title="Measure the ancilla register">
+    Measure the ancilla register in the computational basis and discard the result. This step disentangles the |ψ⟩ state from the ancilla register and collapses the quantum state into a superposition of input strings that map to the same output string.
+  </Step>
 
-Step 4. Measure the ancilla register. Measure the ancilla register in the computational basis and discard the result. This step disentangles the |ψ⟩ state from the ancilla register and collapses the quantum state into a superposition of input strings that map to the same output string.
+  <Step title="Apply Hadamard gates">
+    Apply a Hadamard gate to each of the n qubits in the |ψ⟩ state. This step transforms the quantum state into a superposition of states that encode information about the string s.
+  </Step>
 
-Step 5. Apply Hadamard gates. Apply a Hadamard gate to each of the n qubits in the |ψ⟩ state. This step transforms the quantum state into a superposition of states that encode information about the string s.
+  <Step title="Measure the state">
+    Measure the |ψ⟩ state in the computational basis, obtaining an n-bit string y.
+  </Step>
 
-Step 6. Measure the state. Measure the |ψ⟩ state in the computational basis, obtaining an n-bit string y.
-
-```
-7. Classical post-processing. Repeat steps 1-6 O(n) times to obtain a set of n-bit strings {y_i}. Solve the system of linear equations $$y_i · s = 0 (mod 2)$$ to determine the string s.
-```
+  <Step title="Classical post-processing">
+    Repeat steps 1-6 O(n) times to obtain a set of n-bit strings `{y_i}`. Solve the system of linear equations y_i · s = 0 (mod 2) to determine the string s.
+  </Step>
+</Steps>
 
 ## Practical Applications
 

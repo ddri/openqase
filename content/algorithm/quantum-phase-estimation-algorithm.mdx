@@ -49,15 +49,23 @@ QPE prepares an ancilla qubit register to store the binary representation of the
 
 ## Implementation Steps
 
-Step 1. State preparation. Prepare a quantum state |ψ⟩ that is an eigenvector of the unitary operator U. This state is typically obtained through some state preparation procedure, such as the Variational Quantum Eigensolver (VQE) or the Quantum Adiabatic Algorithm (QAA).
-
-Step 2. Ancilla qubits. Initialise a set of ancilla qubits in the |0⟩ state. The number of ancilla qubits determines the precision of the phase estimation.
-
-Step 3. Controlled-U operations. Apply a sequence of controlled-U operations on the ancilla qubits, where the number of applications of U depends on the position of the ancilla qubit. For example, the first ancilla qubit controls the application of U^(2^0), the second ancilla qubit controls U^(2^1), and so on, up to U^(2^(n-1)), where n is the number of ancilla qubits6.
-
-Step 4. Quantum Fourier Transform. Apply the inverse Quantum Fourier Transform (QFT) to the ancilla qubits. This step transforms the phase information encoded in the ancilla qubits into the computational basis.
-
-Step 5. Measurement. Measure the ancilla qubits in the computational basis. The resulting binary string represents an approximation of the phase θ, with a precision that depends on the number of ancilla qubits.
+<Steps>
+  <Step title="State preparation">
+    Prepare a quantum state |ψ⟩ that is an eigenvector of the unitary operator U. This state is typically obtained through some state preparation procedure, such as the Variational Quantum Eigensolver (VQE) or the Quantum Adiabatic Algorithm (QAA).
+  </Step>
+  <Step title="Ancilla qubits">
+    Initialise a set of ancilla qubits in the |0⟩ state. The number of ancilla qubits determines the precision of the phase estimation.
+  </Step>
+  <Step title="Controlled-U operations">
+    Apply a sequence of controlled-U operations on the ancilla qubits, where the number of applications of U depends on the position of the ancilla qubit. For example, the first ancilla qubit controls the application of U^(2^0), the second ancilla qubit controls U^(2^1), and so on, up to U^(2^(n-1)), where n is the number of ancilla qubits6.
+  </Step>
+  <Step title="Quantum Fourier Transform">
+    Apply the inverse Quantum Fourier Transform (QFT) to the ancilla qubits. This step transforms the phase information encoded in the ancilla qubits into the computational basis.
+  </Step>
+  <Step title="Measurement">
+    Measure the ancilla qubits in the computational basis. The resulting binary string represents an approximation of the phase θ, with a precision that depends on the number of ancilla qubits.
+  </Step>
+</Steps>
 
 ## Practical Applications
 

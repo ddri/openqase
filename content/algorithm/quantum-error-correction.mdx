@@ -59,13 +59,20 @@ QEC is a set of techniques used to protect fragile quantum information from erro
 
 ## Implementation Steps
 
-Step 1. Encoding. The encoding operation maps the logical qubit state onto the redundant physical qubit state, creating the error-correcting code.
-
-Step 2. Syndrome measurement. The syndrome measurement is a quantum operation that detects the occurrence of errors without disturbing the logical qubit state. It measures the parity of certain qubit subsets and compares it with the expected parity of the code.
-
-Step 3. Error correction. If an error is detected by the syndrome measurement, the error correction operation applies the appropriate quantum gate to the affected qubit(s) to restore the correct code state.
-
-Step 4. Decoding. The decoding operation maps the corrected physical qubit state back onto the logical qubit state, recovering the original quantum information.
+<Steps>
+  <Step title="Encoding">
+    The encoding operation maps the logical qubit state onto the redundant physical qubit state, creating the error-correcting code.
+  </Step>
+  <Step title="Syndrome measurement">
+    The syndrome measurement is a quantum operation that detects the occurrence of errors without disturbing the logical qubit state. It measures the parity of certain qubit subsets and compares it with the expected parity of the code.
+  </Step>
+  <Step title="Error correction">
+    If an error is detected by the syndrome measurement, the error correction operation applies the appropriate quantum gate to the affected qubit(s) to restore the correct code state.
+  </Step>
+  <Step title="Decoding">
+    The decoding operation maps the corrected physical qubit state back onto the logical qubit state, recovering the original quantum information.
+  </Step>
+</Steps>
 
 ## Practical Applications
 

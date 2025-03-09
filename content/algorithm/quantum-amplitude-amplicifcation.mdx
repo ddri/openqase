@@ -49,13 +49,22 @@ The basic idea behind QAA can be understood in the context of Grover's algorithm
 
 QAA generalises this idea to a broader class of problems, where the goal is to amplify the amplitude of a desired state (or a set of states) that satisfies a given condition.
 
-Step 1. State preparation. Initialise the quantum system in a superposition of states, where the desired state (or states) has a non-zero amplitude. This can be achieved using a state preparation circuit that encodes the problem instance.
+<Steps>
+  <Step title="State preparation">
+    Initialise the quantum system in a superposition of states, where the desired state (or states) has a non-zero amplitude. This can be achieved using a state preparation circuit that encodes the problem instance.
+  </Step>
 
-Step 2. Amplitude amplification. Apply a sequence of quantum operations that amplify the amplitude of the desired state while suppressing the amplitudes of the other states. This is typically achieved using a combination of quantum oracles (which mark the desired state) and reflection operators (which invert the amplitudes around the average).
+  <Step title="Amplitude amplification">
+    Apply a sequence of quantum operations that amplify the amplitude of the desired state while suppressing the amplitudes of the other states. This is typically achieved using a combination of quantum oracles (which mark the desired state) and reflection operators (which invert the amplitudes around the average).
+  </Step>
 
-Step 3. Measurement. Measure the quantum system in the computational basis. If the amplitude amplification has been successful, the desired state will be observed with a high probability.
+  <Step title="Measurement">
+    Measure the quantum system in the computational basis. If the amplitude amplification has been successful, the desired state will be observed with a high probability.
+  </Step>
+</Steps>
 
 The number of amplitude amplification steps required to maximise the success probability depends on the initial amplitude of the desired state. In the case of Grover's algorithm, where the initial amplitude is 1/√N, the optimal number of steps is approximately π/4 · √N. More generally, if the initial amplitude is α, the optimal number of steps is O(1/α)4.
+
 
 ## Practical Applications
 

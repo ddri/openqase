@@ -47,15 +47,23 @@ The key idea behind QA is to map the optimization problem onto a physical system
 
 ## Implementation Steps
 
-Step 1. Problem encoding. The optimization problem is mapped onto a QUBO or Ising Hamiltonian, which describes the energy of the quantum system as a function of the binary variables. The mapping involves defining the couplings between the qubits and the local fields acting on each qubit, based on the constraints and objectives of the problem.
-
-Step 2. Initialisation. The quantum system is initialised in a state of uniform superposition, where each qubit is in an equal superposition of the |0⟩ and |1⟩ states. This state represents a equal probability distribution over all possible solutions to the problem.
-
-Step 3. Annealing. The quantum system is slowly evolved according to a time-dependent Hamiltonian, which consists of two terms: a problem Hamiltonian that encodes the QUBO or Ising model, and a driver Hamiltonian that provides the quantum fluctuations needed to explore the solution space. The strength of the driver Hamiltonian is gradually decreased over time, while the strength of the problem Hamiltonian is increased, guiding the system towards the ground state.
-
-Step 4. Measurement. After the annealing process is complete, the quantum system is measured in the computational basis, collapsing the superposition into a classical state that represents a candidate solution to the problem. The measurement is repeated multiple times to obtain a statistical distribution of the solutions.
-
-Step 5. Post-processing. The candidate solutions are post-processed using classical optimization techniques, such as local search or simulated annealing, to further improve their quality and remove any invalid or suboptimal solutions.
+<Steps>
+  <Step title="Problem encoding">
+    The optimization problem is mapped onto a QUBO or Ising Hamiltonian, which describes the energy of the quantum system as a function of the binary variables. The mapping involves defining the couplings between the qubits and the local fields acting on each qubit, based on the constraints and objectives of the problem.
+  </Step>
+  <Step title="Initialisation">
+    The quantum system is initialised in a state of uniform superposition, where each qubit is in an equal superposition of the |0⟩ and |1⟩ states. This state represents a equal probability distribution over all possible solutions to the problem.
+  </Step>
+  <Step title="Annealing">
+    The quantum system is slowly evolved according to a time-dependent Hamiltonian, which consists of two terms: a problem Hamiltonian that encodes the QUBO or Ising model, and a driver Hamiltonian that provides the quantum fluctuations needed to explore the solution space. The strength of the driver Hamiltonian is gradually decreased over time, while the strength of the problem Hamiltonian is increased, guiding the system towards the ground state.
+  </Step>
+  <Step title="Measurement">
+    After the annealing process is complete, the quantum system is measured in the computational basis, collapsing the superposition into a classical state that represents a candidate solution to the problem. The measurement is repeated multiple times to obtain a statistical distribution of the solutions.
+  </Step>
+  <Step title="Post-processing">
+    The candidate solutions are post-processed using classical optimization techniques, such as local search or simulated annealing, to further improve their quality and remove any invalid or suboptimal solutions.
+  </Step>
+</Steps>
 
 ## Practical Applications
 

@@ -47,15 +47,27 @@ The VQE algorithm tackles this problem by using a parameterised quantum circuit,
 
 ## Implementation Steps
 
-Step 1. Problem encoding. The Hamiltonian matrix is encoded into a quantum circuit, which can be efficiently executed on a quantum computer. This typically involves mapping the fermionic operators of the Hamiltonian to qubit operators using techniques such as the Jordan-Wigner or Bravyi-Kitaev transformations4.
+<Steps>
+  <Step title="Problem encoding">
+    The Hamiltonian matrix is encoded into a quantum circuit, which can be efficiently executed on a quantum computer. This typically involves mapping the fermionic operators of the Hamiltonian to qubit operators using techniques such as the Jordan-Wigner or Bravyi-Kitaev transformations4.
+  </Step>
+  
+  <Step title="Ansatz preparation">
+    A parameterised quantum circuit, the ansatz, is constructed to prepare trial wavefunctions. The ansatz is designed to capture the essential features of the problem and is usually inspired by the structure of the Hamiltonian or the physical system being studied.
+  </Step>
 
-Step 2. Ansatz preparation. A parameterised quantum circuit, the ansatz, is constructed to prepare trial wavefunctions. The ansatz is designed to capture the essential features of the problem and is usually inspired by the structure of the Hamiltonian or the physical system being studied.
+  <Step title="Expectation value measurement">
+    The expectation value of the Hamiltonian with respect to the trial wavefunction is estimated by measuring the output of the quantum circuit and averaging the results over multiple runs. This step requires the efficient evaluation of the terms in the Hamiltonian using techniques such as qubit-wise commuting measurements or low-rank factorisation.
+  </Step>
 
-Step 3. Expectation value measurement. The expectation value of the Hamiltonian with respect to the trial wavefunction is estimated by measuring the output of the quantum circuit and averaging the results over multiple runs. This step requires the efficient evaluation of the terms in the Hamiltonian using techniques such as qubit-wise commuting measurements or low-rank factorisation.
+  <Step title="Classical optimisation">
+    A classical optimisation algorithm, such as gradient descent, Nelder-Mead, or Bayesian optimisation, is used to update the parameters of the ansatz to minimise the expectation value of the Hamiltonian. The optimisation process iterates between steps three and four until convergence is achieved.
+  </Step>
 
-Step 4. Classical optimisation. A classical optimisation algorithm, such as gradient descent, Nelder-Mead, or Bayesian optimisation, is used to update the parameters of the ansatz to minimise the expectation value of the Hamiltonian. The optimisation process iterates between steps three and four until convergence is achieved.
-
-Step 5. Result interpretation. The final converged parameters of the ansatz represent the approximate ground state wavefunction, and the corresponding expectation value provides an estimate of the ground state energy.
+  <Step title="Result interpretation">
+    The final converged parameters of the ansatz represent the approximate ground state wavefunction, and the corresponding expectation value provides an estimate of the ground state energy.
+  </Step>
+</Steps>
 
 ## Practical Applications
 

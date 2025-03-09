@@ -44,13 +44,23 @@ The Deutsch-Jozsa algorithm displays a fundamental quantum computing strategy, n
 
 ## Implementation Steps
 
-Step 1. Initialisation. The algorithm starts by preparing two quantum registers: an n-qubit register initialised to the state |0⟩n, and a single-qubit register initialised to the state |1⟩. A Hadamard gate is then applied to each qubit, creating a superposition of all possible input states in the first register and the state (|0⟩ - |1⟩) / √2 in the second register.
+<Steps>
+  <Step title="Initialisation">
+    The algorithm starts by preparing two quantum registers: an n-qubit register initialised to the state |0⟩n, and a single-qubit register initialised to the state |1⟩. A Hadamard gate is then applied to each qubit, creating a superposition of all possible input states in the first register and the state (|0⟩ - |1⟩) / √2 in the second register.
+  </Step>
+  
+  <Step title="Oracle query">
+    The function f is implemented as a quantum oracle, which is applied to the quantum state. The oracle performs the following transformation: if f(x) = 0, the state remains unchanged, and if f(x) = 1, a phase flip is applied to the state.
+  </Step>
 
-Step 2. Oracle query. The function f is implemented as a quantum oracle, which is applied to the quantum state. The oracle performs the following transformation: if f(x) = 0, the state remains unchanged, and if f(x) = 1, a phase flip is applied to the state.
+  <Step title="Hadamard transformation">
+    A Hadamard gate is applied to each qubit in the first register, which results in the interference of the quantum states.
+  </Step>
 
-Step 3. Hadamard transformation. A Hadamard gate is applied to each qubit in the first register, which results in the interference of the quantum states.
-
-Step 4. Measurement. The first register is measured. If the function is constant, the measurement will always yield the state |0⟩n. If the function is balanced, the measurement will yield any state other than |0⟩n with certainty.
+  <Step title="Measurement">
+    The first register is measured. If the function is constant, the measurement will always yield the state |0⟩n. If the function is balanced, the measurement will yield any state other than |0⟩n with certainty.
+  </Step>
+</Steps>
 
 ## Practical Applications
 

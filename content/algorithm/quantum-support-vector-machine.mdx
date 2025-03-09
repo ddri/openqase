@@ -49,13 +49,20 @@ While still an active area of research, QSVM holds the promise of significant ad
 
 ## Implementation Steps
 
-Step 1. Data encoding. The classical input data is encoded into a quantum state, typically using amplitude encoding or qubit encoding. In amplitude encoding, each data point is represented by a quantum state, where the amplitudes of the basis states correspond to the feature values. In qubit encoding, each feature is assigned to a qubit, and the feature values are encoded in the qubit states.
-
-Step 2. Kernel mapping. A quantum kernel function is applied to the encoded data to map it into a higher-dimensional feature space. Quantum kernels, such as the quantum radial basis function (RBF) kernel or the quantum polynomial kernel, can be efficiently computed using quantum circuits, enabling the processing of high-dimensional data with fewer qubits compared to classical kernels5.
-
-Step 3. Training. The QSVM training algorithm optimises the parameters of the quantum hyperplane to maximise the margin between the classes. This can be done using quantum algorithms for optimization, such as the Variational Quantum Eigensolver (VQE) or the Quantum Approximate Optimization Algorithm (QAOA), which iteratively adjust the parameters of a variational quantum circuit to minimise a cost function.
-
-Step 4. Classification. Once the QSVM is trained, new data points can be classified by encoding them into quantum states, applying the quantum kernel, and measuring the output of the variational quantum circuit. The measurement outcome determines the predicted class label of the input data.
+<Steps>
+  <Step title="Data encoding">
+    The classical input data is encoded into a quantum state, typically using amplitude encoding or qubit encoding. In amplitude encoding, each data point is represented by a quantum state, where the amplitudes of the basis states correspond to the feature values. In qubit encoding, each feature is assigned to a qubit, and the feature values are encoded in the qubit states.
+  </Step>
+  <Step title="Kernel mapping">
+    A quantum kernel function is applied to the encoded data to map it into a higher-dimensional feature space. Quantum kernels, such as the quantum radial basis function (RBF) kernel or the quantum polynomial kernel, can be efficiently computed using quantum circuits, enabling the processing of high-dimensional data with fewer qubits compared to classical kernels5.
+  </Step>
+  <Step title="Training">
+    The QSVM training algorithm optimises the parameters of the quantum hyperplane to maximise the margin between the classes. This can be done using quantum algorithms for optimization, such as the Variational Quantum Eigensolver (VQE) or the Quantum Approximate Optimization Algorithm (QAOA), which iteratively adjust the parameters of a variational quantum circuit to minimise a cost function.
+  </Step>
+  <Step title="Classification">
+    Once the QSVM is trained, new data points can be classified by encoding them into quantum states, applying the quantum kernel, and measuring the output of the variational quantum circuit. The measurement outcome determines the predicted class label of the input data.
+  </Step>
+</Steps>
 
 ## Practical Applications
 

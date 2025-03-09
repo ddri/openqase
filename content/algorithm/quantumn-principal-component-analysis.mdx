@@ -51,17 +51,26 @@ By measuring these prepared states, one can obtain estimates of the eigenvalues 
 
 ## Implementation Steps
 
-Steps 1. State preparation. The quantum dataset is prepared as a set of quantum states, each representing a data point. This can be done using a quantum algorithm or a quantum memory that stores the data in a coherent superposition.
-
-Steps 2. Covariance matrix estimation. The covariance matrix of the quantum dataset is estimated using a series of quantum measurements and classical post-processing. This can be done using techniques such as quantum state tomography or quantum state discrimination.
-
-Steps 3. Eigenvalue estimation. The eigenvalues of the covariance matrix are estimated using a quantum algorithm, such as the Quantum Phase Estimation (QPE) algorithm or the Variational Quantum Eigensolver (VQE). These algorithms can find the eigenvalues with a high precision using a small number of quantum operations3.
-
-Steps 4. Eigenvector preparation. The eigenvectors of the covariance matrix (i.e., the principal components) are prepared as quantum states using the estimated eigenvalues and a quantum state preparation circuit. This can be done using techniques such as quantum amplitude amplification or quantum state synthesis.
-
-Steps 5. Dimensionality reduction. The quantum data points are projected onto the subspace spanned by the principal components, effectively reducing the dimensionality of the data. This can be done using a quantum inner product circuit or a quantum swap test.
-
-Steps 6. Data analysis. The reduced-dimensional quantum data can be analysed using quantum algorithms for clustering, classification, or anomaly detection, depending on the application.
+<Steps>
+  <Step title="State preparation">
+    The quantum dataset is prepared as a set of quantum states, each representing a data point. This can be done using a quantum algorithm or a quantum memory that stores the data in a coherent superposition.
+  </Step>
+  <Step title="Covariance matrix estimation">
+    The covariance matrix of the quantum dataset is estimated using a series of quantum measurements and classical post-processing. This can be done using techniques such as quantum state tomography or quantum state discrimination.
+  </Step>
+  <Step title="Eigenvalue estimation">
+    The eigenvalues of the covariance matrix are estimated using a quantum algorithm, such as the Quantum Phase Estimation (QPE) algorithm or the Variational Quantum Eigensolver (VQE). These algorithms can find the eigenvalues with a high precision using a small number of quantum operations3.
+  </Step>
+  <Step title="Eigenvector preparation">
+    The eigenvectors of the covariance matrix (i.e., the principal components) are prepared as quantum states using the estimated eigenvalues and a quantum state preparation circuit. This can be done using techniques such as quantum amplitude amplification or quantum state synthesis.
+  </Step>
+  <Step title="Dimensionality reduction">
+    The quantum data points are projected onto the subspace spanned by the principal components, effectively reducing the dimensionality of the data. This can be done using a quantum inner product circuit or a quantum swap test.
+  </Step>
+  <Step title="Data analysis">
+    The reduced-dimensional quantum data can be analysed using quantum algorithms for clustering, classification, or anomaly detection, depending on the application.
+  </Step>
+</Steps>
 
 ## Practical Applications
 

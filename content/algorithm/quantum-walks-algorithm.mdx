@@ -57,15 +57,22 @@ Quantum walks involve a "walker" in superposition, moving in multiple directions
 
 ## Implementation Steps
 
-Step 1. State preparation. The quantum walk starts with initialising the quantum system in a specific state, usually a superposition of all possible positions.
-
-Step 2. Evolution. The quantum walk evolves through a series of steps. Each step typically involves two operations:
+<Steps>
+  <Step title="State preparation">
+    The quantum walk starts with initialising the quantum system in a specific state, usually a superposition of all possible positions.
+  </Step>
+  <Step title="Evolution">
+    The quantum walk evolves through a series of steps. Each step typically involves two operations:
    a. Coin operation. A "quantum coin" is flipped, which is usually implemented as a unitary operation (like a Hadamard gate) applied to a coin register. This creates a superposition of "directions" for the walk.
    b. Shift operation. Based on the coin state, the position of the walker is updated. This is usually implemented as a controlled operation that moves the walker based on the coin state.
-
-Step 3. Measurement. After a certain number of steps, or at the end of the algorithm, a measurement is performed to collapse the quantum state and obtain a classical outcome.
-
-Step 4. Repetition. Steps one to three may be repeated multiple times to gather statistical data about the walk's behaviour.
+  </Step>
+  <Step title="Measurement">
+    After a certain number of steps, or at the end of the algorithm, a measurement is performed to collapse the quantum state and obtain a classical outcome.
+  </Step>
+  <Step title="Repetition">
+    Steps one to three may be repeated multiple times to gather statistical data about the walk's behaviour.
+  </Step>
+</Steps>
 
 For continuous-time quantum walks, the evolution is described by a time-dependent Schrödinger equation instead of discrete steps. It's worth noting that the specific implementation can vary depending on the type of quantum walk (discrete-time or continuous-time) and the problem being solved. Quantum walks can be applied to various tasks such as search algorithms, element distinctness, and graph property testing.
 

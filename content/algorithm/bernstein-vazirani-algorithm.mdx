@@ -49,15 +49,27 @@ The Bernstein-Vazirani algorithm achieves this result by exploiting the properti
 
 ## Implementation Steps
 
-Step 1. State preparation. Initialise an n-qubit quantum state |ψ⟩ in the |0⟩ state and an ancilla qubit in the |1⟩ state.
+<Steps>
+  <Step title="State preparation">
+    Initialise an n-qubit quantum state |ψ⟩ in the |0⟩ state and an ancilla qubit in the |1⟩ state.
+  </Step>
 
-Step 2. Apply Hadamard gates. Apply a Hadamard gate to each of the n qubits and the ancilla qubit. This creates a superposition of all possible n-bit strings in the n-qubit state and puts the ancilla qubit in the |-⟩ state.
+  <Step title="Apply Hadamard gates">
+    Apply a Hadamard gate to each of the n qubits and the ancilla qubit. This creates a superposition of all possible n-bit strings in the n-qubit state and puts the ancilla qubit in the |-⟩ state.
+  </Step>
 
-Step 3. Oracle query. Apply the quantum oracle that implements the function f(x) to the n-qubit state and the ancilla qubit. The oracle performs the following transformation: |x⟩|y⟩ → |x⟩|y ⊕ f(x)⟩ where ⊕ denotes the XOR operation. This step encodes the secret string s into the phases of the n-qubit state.
+  <Step title="Oracle query">
+    Apply the quantum oracle that implements the function f(x) to the n-qubit state and the ancilla qubit. The oracle performs the following transformation: |x⟩|y⟩ → |x⟩|y ⊕ f(x)⟩ where ⊕ denotes the XOR operation. This step encodes the secret string s into the phases of the n-qubit state.
+  </Step>
 
-Step 4. Apply Hadamard gates. Apply a Hadamard gate to each of the n qubits. This step transforms the phase information encoded by the oracle into the amplitudes of the n-qubit state.
+  <Step title="Apply Hadamard gates">
+    Apply a Hadamard gate to each of the n qubits. This step transforms the phase information encoded by the oracle into the amplitudes of the n-qubit state.
+  </Step>
 
-Step 5. Measurement. Measure the n-qubit state in the computational basis. The resulting n-bit string is the secret string s.
+  <Step title="Measurement">
+    Measure the n-qubit state in the computational basis. The resulting n-bit string is the secret string s.
+  </Step>
+</Steps>
 
 ## Practical Applications
 

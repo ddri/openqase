@@ -48,17 +48,27 @@ At its core, Shor's algorithm relies on the Quantum Fourier Transform (QFT) and 
 
 ## Implementation Steps
 
-The algorithm can be broken down into several key steps:
+<Steps>
+  <Step title="Quantum state preparation">
+    The algorithm starts by preparing a superposition of quantum states that encode the integers from 0 to N-1, where N is the number to be factored.
+  </Step>
 
-Step 1. Quantum state preparation. The algorithm starts by preparing a superposition of quantum states that encode the integers from 0 to N-1, where N is the number to be factored.
+  <Step title="Modular exponentiation">
+    A unitary operation is applied to the quantum state, which performs modular exponentiation of a randomly chosen integer with respect to the input state. This operation creates a periodic structure in the quantum state. This step is performed efficiently using controlled quantum operations, a key advantage of quantum computation.
+  </Step>
 
-Step 2. Modular exponentiation. A unitary operation is applied to the quantum state, which performs modular exponentiation of a randomly chosen integer with respect to the input state. This operation creates a periodic structure in the quantum state. This step is performed efficiently using controlled quantum operations, a key advantage of quantum computation6.
+  <Step title="Quantum Fourier Transform">
+    The Quantum Fourier Transform, a cornerstone of many quantum algorithms, is then applied to the first register. This transformation reshapes the quantum state, redistributing the probabilities associated with each possible measurement outcome. The resulting state encodes crucial information about the period of the modular exponentiation function.
+  </Step>
 
-Step 3. Quantum Fourier Transform. The Quantum Fourier Transform, a cornerstone of many quantum algorithms, is then applied to the first register. This transformation reshapes the quantum state, redistributing the probabilities associated with each possible measurement outcome. The resulting state encodes crucial information about the period of the modular exponentiation function7.
+  <Step title="Measurement">
+    The quantum state is measured, collapsing it to a classical state that contains information about the period. Due to the probabilistic nature of quantum measurements, steps 2-4 may need to be repeated multiple times to obtain a reliable estimate of the period.
+  </Step>
 
-Step 4. Measurement. The quantum state is measured, collapsing it to a classical state that contains information about the period. Due to the probabilistic nature of quantum measurements, steps 2-4 may need to be repeated multiple times to obtain a reliable estimate of the period.
-
-Step 5. Classical post-processing. The measured period is used to compute a factor of the original number N using classical algorithms, such as the continued fractions algorithm or the Euclidean algorithm. This step is probabilistic and may need to be repeated if it fails to find a non-trivial factor.
+  <Step title="Classical post-processing">
+    The measured period is used to compute a factor of the original number N using classical algorithms, such as the continued fractions algorithm or the Euclidean algorithm. This step is probabilistic and may need to be repeated if it fails to find a non-trivial factor.
+  </Step>
+</Steps>
 
 ## Practical Applications
 

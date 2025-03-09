@@ -53,15 +53,23 @@ Overall, QKMC holds the promise of improving clustering tasks for large datasets
 
 ## Implementation Steps
 
-Steps 1. Data encoding. The input data points are encoded into quantum states, typically using amplitude encoding or qubit encoding. In amplitude encoding, each data point is represented by a quantum state, where the amplitudes of the basis states correspond to the feature values. In qubit encoding, each feature is assigned to a qubit, and the feature values are encoded in the qubit states.
-
-Steps 2. Centroid initialisation. The initial centroids are chosen randomly or based on some heuristic, and encoded into quantum states using the same encoding scheme as the data points.
-
-Steps 3. Distance calculation. The distances between each data point and each centroid are computed using a quantum subroutine, such as the Swap Test or the Hadamard Test6. These subroutines can estimate the inner product or the euclidean distance between two quantum states more efficiently than classical methods, by exploiting the quantum parallelism and interference effects.
-
-Steps 4. Cluster assignment. Each data point is assigned to the nearest centroid based on the computed distances, using a quantum measurement operation. The measurement outcomes are used to update the classical cluster assignments.
-
-Steps 5. Centroid update. The centroids are updated based on the new cluster assignments, by computing the mean or median of the data points in each cluster using a quantum subroutine, such as the Quantum Arithmetic Mean or the Quantum Median Estimation.
+<Steps>
+  <Step title="Data encoding">
+    The input data points are encoded into quantum states, typically using amplitude encoding or qubit encoding. In amplitude encoding, each data point is represented by a quantum state, where the amplitudes of the basis states correspond to the feature values. In qubit encoding, each feature is assigned to a qubit, and the feature values are encoded in the qubit states.
+  </Step>
+  <Step title="Centroid initialisation">
+    The initial centroids are chosen randomly or based on some heuristic, and encoded into quantum states using the same encoding scheme as the data points.
+  </Step>
+  <Step title=" Distance calculation">
+    The distances between each data point and each centroid are computed using a quantum subroutine, such as the Swap Test or the Hadamard Test6. These subroutines can estimate the inner product or the euclidean distance between two quantum states more efficiently than classical methods, by exploiting the quantum parallelism and interference effects.
+  </Step>
+  <Step title="Cluster assignment">
+    Each data point is assigned to the nearest centroid based on the computed distances, using a quantum measurement operation. The measurement outcomes are used to update the classical cluster assignments.
+  </Step>
+  <Step title="Centroid update">
+    The centroids are updated based on the new cluster assignments, by computing the mean or median of the data points in each cluster using a quantum subroutine, such as the Quantum Arithmetic Mean or the Quantum Median Estimation.
+  </Step>
+</Steps>
 
 Steps three to five are repeated until the centroids converge or a maximum number of iterations is reached. After the algorithm terminates, the final cluster assignments and centroids are obtained by measuring the quantum states and post-processing the results.
 

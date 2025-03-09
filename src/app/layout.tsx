@@ -5,6 +5,7 @@ import { Inter } from 'next/font/google';
 import Link from 'next/link';
 import Navigation from '@/components/Navigation';
 import ThemeProvider from '@/components/ThemeProvider';
+import AlphaBanner from '@/components/ui/AlphaBanner';
 
 // Load Inter with additional weights for better typography
 const inter = Inter({
@@ -29,6 +30,7 @@ export default function RootLayout({
       <body className="min-h-screen antialiased">
         <ThemeProvider>
           <div className="min-h-screen flex flex-col">
+            <AlphaBanner />
             <Navigation />
             <main className="flex-grow">
               {children}

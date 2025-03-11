@@ -35,16 +35,16 @@ Quantum Boltzmann Machines (QBMs) are quantum-enhanced probabilistic models that
 
 ## Algorithm Details
 
-Quantum Boltzmann Machines (QBMs) are a class of quantum machine learning models that generalize the classical Boltzmann machines to the quantum domain1. Boltzmann machines are probabilistic graphical models that learn the probability distribution underlying a set of input data and can be used for tasks such as unsupervised learning, generative modeling, and combinatorial optimization.
+Quantum Boltzmann Machines (QBMs) are a class of quantum machine learning models that generalize the classical Boltzmann machines to the quantum domain<sup><a href="#ref-1">1</a></sup>. Boltzmann machines are probabilistic graphical models that learn the probability distribution underlying a set of input data and can be used for tasks such as unsupervised learning, generative modeling, and combinatorial optimization.
 
 ## Problem Target
 
-QBMs exploit the power of quantum computing to represent and manipulate complex probability distributions more efficiently than classical Boltzmann machines, particularly for high-dimensional and strongly correlated data2. The key idea behind QBMs is to use quantum states and quantum operations to represent the model parameters and perform the learning and inference tasks.
+QBMs exploit the power of quantum computing to represent and manipulate complex probability distributions more efficiently than classical Boltzmann machines, particularly for high-dimensional and strongly correlated data<sup><a href="#ref-2">2</a></sup>. The key idea behind QBMs is to use quantum states and quantum operations to represent the model parameters and perform the learning and inference tasks.
 
 
 ## Quantum Approach
 
-A QBM consists of a network of quantum nodes, each representing a qubit or a group of qubits, and connected by quantum edges that encode the interactions between the nodes3. The quantum state of the QBM represents the joint probability distribution of the variables in the model, and the goal of training is to adjust the parameters of the quantum edges to minimize the difference between the model distribution and the target distribution of the input data.
+A QBM consists of a network of quantum nodes, each representing a qubit or a group of qubits, and connected by quantum edges that encode the interactions between the nodes<sup><a href="#ref-3">3</a></sup>. The quantum state of the QBM represents the joint probability distribution of the variables in the model, and the goal of training is to adjust the parameters of the quantum edges to minimize the difference between the model distribution and the target distribution of the input data.
 
 ## Implementation Steps
 
@@ -56,7 +56,7 @@ A QBM consists of a network of quantum nodes, each representing a qubit or a gro
     The parameters of the QBM, such as the weights of the quantum edges and the biases of the quantum nodes, are initialised to random values or based on prior knowledge.
   </Step>
   <Step title="Quantum sampling">
-    A quantum sampling algorithm, such as quantum annealing or quantum Gibbs sampling, is used to generate samples from the model distribution4. These algorithms exploit the quantum superposition and quantum tunnelling effects to explore the state space more efficiently than classical sampling methods.
+    A quantum sampling algorithm, such as quantum annealing or quantum Gibbs sampling, is used to generate samples from the model distribution<sup><a href="#ref-4">4</a></sup>. These algorithms exploit the quantum superposition and quantum tunnelling effects to explore the state space more efficiently than classical sampling methods.
   </Step>
   <Step title="Gradient estimation">
     The gradients of the model parameters with respect to the objective function, such as the log-likelihood or the Kullback-Leibler divergence, are estimated using the quantum samples and classical post-processing. This can be done using techniques such as quantum back-propagation or quantum natural gradient.
@@ -70,15 +70,15 @@ Steps three to five are repeated until the model converges or a maximum number o
 
 ## Practical Applications
 
-The potential advantages of QBMs over classical Boltzmann machines include some of the usual themes we might expect in such quantum explorations. The exponential speedup is a benefit for certain types of data and model architectures, where QBMs can provide an exponential speedup over classical Boltzmann machines in terms of training time and model capacity5. This is due to the ability of quantum computers to represent and manipulate exponentially large state spaces with a linear number of qubits.
+The potential advantages of QBMs over classical Boltzmann machines include some of the usual themes we might expect in such quantum explorations. The exponential speedup is a benefit for certain types of data and model architectures, where QBMs can provide an exponential speedup over classical Boltzmann machines in terms of training time and model capacity<sup><a href="#ref-5">5</a></sup>. This is due to the ability of quantum computers to represent and manipulate exponentially large state spaces with a linear number of qubits.
 
-These quantum states and quantum operations can potentially capture more complex and expressive probability distributions than classical models, due to the presence of entanglement and interference effects6. Likewise the improved generalisation of QBMs may result in more robust representations of the input data, by exploiting the quantum superposition and quantum parallelism effects to explore a larger hypothesis space.
+These quantum states and quantum operations can potentially capture more complex and expressive probability distributions than classical models, due to the presence of entanglement and interference effects<sup><a href="#ref-6">6</a></sup>. Likewise the improved generalisation of QBMs may result in more robust representations of the input data, by exploiting the quantum superposition and quantum parallelism effects to explore a larger hypothesis space.
 
 ## Implementation Challenges
 
 QBMs face the usual collection of limitations given their reliance on near-term quantum devices. Developing efficient methods for encoding large-scale and high-dimensional classical data into quantum states, while preserving the relevant features and correlations, requires efficient data encoding in the first place. Similar issues exist with designing QBM architectures that can be efficiently implemented on near-term quantum hardware with limited qubit count and gate fidelity. One such example is in noise-resilient training, where the development of robust QBM training algorithms that can operate in the presence of noise and errors in the quantum hardware, requires continual advances in techniques such as error mitigation and quantum error correction.
 
-The practical application of integrating with classical machine learning is also a concern in the current era7. There is much work to be done in exploring hybrid quantum-classical approaches that combine QBMs with classical machine learning techniques, such as pre-training, fine-tuning, and transfer learning, to use the strengths of both paradigms. Experimental demonstrations of QBMs have been reported on various quantum computing platforms, including superconducting qubits, trapped ions, and quantum annealers, showing promising results for small-scale datasets. However, the scalability and performance of QBMs on larger and more realistic datasets remain open research questions.
+The practical application of integrating with classical machine learning is also a concern in the current era<sup><a href="#ref-7">7</a></sup>. There is much work to be done in exploring hybrid quantum-classical approaches that combine QBMs with classical machine learning techniques, such as pre-training, fine-tuning, and transfer learning, to use the strengths of both paradigms. Experimental demonstrations of QBMs have been reported on various quantum computing platforms, including superconducting qubits, trapped ions, and quantum annealers, showing promising results for small-scale datasets. However, the scalability and performance of QBMs on larger and more realistic datasets remain open research questions.
 
 ## Bottom Line
 
@@ -90,24 +90,24 @@ However, significant research efforts are still needed to address the challenges
 
 <div className="references-section">
   <div id="ref-1" className="reference-item">
-1. Amin, M. H., Andriyash, E., Rolfe, J., Kulchytskyy, B., & Melko, R. (2018). Quantum Boltzmann machine. Physical Review X, 8(2), 021050.
+    1. Amin, M. H., Andriyash, E., Rolfe, J., Kulchytskyy, B., & Melko, R. (2018). Quantum Boltzmann machine. Physical Review X, 8(2), 021050.
   </div>
-  <div id="ref-1" className="reference-item">
-2. Kieferová, M., & Wiebe, N. (2017). Tomography and generative training with quantum Boltzmann machines. Physical Review A, 96(6), 062327.
+  <div id="ref-2" className="reference-item">
+    2. Kieferová, M., & Wiebe, N. (2017). Tomography and generative training with quantum Boltzmann machines. Physical Review A, 96(6), 062327.
   </div>
-  <div id="ref-1" className="reference-item">
-3. Benedetti, M., Realpe-Gómez, J., Biswas, R., & Perdomo-Ortiz, A. (2017). Quantum-assisted learning of hardware-embedded probabilistic graphical models. Physical Review X, 7(4), 041052.
+  <div id="ref-3" className="reference-item">
+    3. Benedetti, M., Realpe-Gómez, J., Biswas, R., & Perdomo-Ortiz, A. (2017). Quantum-assisted learning of hardware-embedded probabilistic graphical models. Physical Review X, 7(4), 041052.
   </div>
-  <div id="ref-1" className="reference-item">
-4. Johnson, M. W., Amin, M. H. S., Gildert, S., Lanting, T., Hamze, F., Dickson, N., Harris, R., Berkley, A. J., Johansson, J., Bunyk, P., Chapple, E. M., Enderud, C., Hilton, J. P., Karimi, K., Ladizinsky, E., Ladizinsky, N., Oh, T., Perminov, I., Rich, C., ... & Rose, G. (2011). Quantum annealing with manufactured spins. Nature, 473(7346), 194-198.
+  <div id="ref-4" className="reference-item">
+    4. Johnson, M. W., Amin, M. H. S., Gildert, S., Lanting, T., Hamze, F., Dickson, N., Harris, R., Berkley, A. J., Johansson, J., Bunyk, P., Chapple, E. M., Enderud, C., Hilton, J. P., Karimi, K., Ladizinsky, E., Ladizinsky, N., Oh, T., Perminov, I., Rich, C., ... & Rose, G. (2011). Quantum annealing with manufactured spins. Nature, 473(7346), 194-198.
   </div>
-  <div id="ref-1" className="reference-item">
-5. Adachi, S. H., & Henderson, M. P. (2015). Application of quantum annealing to training of deep neural networks. arXiv preprint arXiv:1510.06356.
+  <div id="ref-5" className="reference-item">
+    5. Adachi, S. H., & Henderson, M. P. (2015). Application of quantum annealing to training of deep neural networks. arXiv preprint arXiv:1510.06356.
   </div>
-  <div id="ref-1" className="reference-item">
-6. Korenkevych, D., Xue, Y., Bian, Z., Chudak, F., Macready, W. G., Rolfe, J., & Andriyash, E. (2016). Benchmarking quantum hardware for training of fully visible Boltzmann machines. arXiv preprint arXiv:1611.04528.
+  <div id="ref-6" className="reference-item">
+    6. Korenkevych, D., Xue, Y., Bian, Z., Chudak, F., Macready, W. G., Rolfe, J., & Andriyash, E. (2016). Benchmarking quantum hardware for training of fully visible Boltzmann machines. arXiv preprint arXiv:1611.04528.
   </div>
-  <div id="ref-1" className="reference-item">
-7. Khoshaman, A., Vinci, W., Denis, B., Andriyash, E., Sadeghi, H., & Amin, M. H. (2018). Quantum variational autoencoder. Quantum Science and Technology, 4(1), 014001.
-</div>
+  <div id="ref-7" className="reference-item">
+    7. Khoshaman, A., Vinci, W., Denis, B., Andriyash, E., Sadeghi, H., & Amin, M. H. (2018). Quantum variational autoencoder. Quantum Science and Technology, 4(1), 014001.
+  </div>
 </div>

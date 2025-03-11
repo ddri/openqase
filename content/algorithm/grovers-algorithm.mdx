@@ -34,15 +34,15 @@ Grover's Algorithm provides a quadratic speedup for searching unstructured datab
 
 ## Algorithm Details
 
-Grover's algorithm was developed soon after Shor’s, this time seeing Lov Grover publishing his own breakthrough in 19961. His focus was on creating a quantum algorithm for searching an unsorted database quadratically faster than the best possible classical algorithm. It is one of the most well-known and widely studied quantum algorithms, with numerous applications in various fields, such as database search, optimisation, and machine learning.
+Grover's algorithm was developed soon after Shor’s, this time seeing Lov Grover publishing his own breakthrough in 1996<sup><a href="#ref-1">1</a></sup>. His focus was on creating a quantum algorithm for searching an unsorted database quadratically faster than the best possible classical algorithm. It is one of the most well-known and widely studied quantum algorithms, with numerous applications in various fields, such as database search, optimisation, and machine learning.
 
 ## Problem Target
 
-Grover's algorithm addresses the problem of searching an unsorted database or solving an unstructured search problem. Given a large set of N items, it finds a specific item or solution that satisfies a given condition, often referred to as the "marked item" or "solution state"2. In the classical setting, this problem requires O(N) operations in the worst case, as one might need to search through all N items to find the desired one. Grover's algorithm can solve this problem using only O(√N) quantum operations, providing a quadratic speedup over classical methods3.
+Grover's algorithm addresses the problem of searching an unsorted database or solving an unstructured search problem. Given a large set of N items, it finds a specific item or solution that satisfies a given condition, often referred to as the "marked item" or "solution state"<sup><a href="#ref-2">2</a></sup>. In the classical setting, this problem requires O(N) operations in the worst case, as one might need to search through all N items to find the desired one. Grover's algorithm can solve this problem using only O(√N) quantum operations, providing a quadratic speedup over classical methods<sup><a href="#ref-3">3</a></sup>.
 
 ## Quantum Approach
 
-The key idea behind Grover's algorithm is the concept of amplitude amplification, which allows the algorithm to increase the amplitude of the quantum state corresponding to the desired item, while decreasing the amplitudes of the other states4. This is achieved through a series of quantum operations that are applied iteratively to the quantum state, gradually transforming it into a state where the desired item has a high probability of being measured. This process effectively "rotates" the system state towards the solution through a process of phase amplification and attenuation.
+The key idea behind Grover's algorithm is the concept of amplitude amplification, which allows the algorithm to increase the amplitude of the quantum state corresponding to the desired item, while decreasing the amplitudes of the other states<sup><a href="#ref-4">4</a></sup>. This is achieved through a series of quantum operations that are applied iteratively to the quantum state, gradually transforming it into a state where the desired item has a high probability of being measured. This process effectively "rotates" the system state towards the solution through a process of phase amplification and attenuation.
 
 ## Implementation Steps
 
@@ -70,7 +70,7 @@ The key idea behind Grover's algorithm is the concept of amplitude amplification
 
 ## Practical Applications
 
-Grover's algorithm has been experimentally demonstrated on various quantum computing platforms, including superconducting qubits, trapped ions, photonic, and silicon qubits5. It has also been applied to a wide range of problems beyond database search, such as optimisation, machine learning, and quantum chemistry.
+Grover's algorithm has been experimentally demonstrated on various quantum computing platforms, including superconducting qubits, trapped ions, photonic, and silicon qubits<sup><a href="#ref-5">5</a></sup>. It has also been applied to a wide range of problems beyond database search, such as optimisation, machine learning, and quantum chemistry.
 
 One of the most significant applications of Grover's algorithm is in the field of optimisation. By combining Grover's algorithm with classical optimisation techniques, such as the Quantum Approximate Optimisation Algorithm (QAOA), researchers have developed hybrid quantum-classical algorithms that can solve complex optimisation problems faster than purely classical methods6.
 
@@ -82,7 +82,7 @@ In this way, Grover's algorithm has had a profound impact on the theoretical fou
 
 The efficiency of Grover's algorithm comes from its ability to exploit quantum parallelism and quantum interference to search the database in a way that is quadratically faster than classical methods. Note that this is “just” a quadratic speedup, compared to the exponential benefits found in the various applications other quantum algorithms in their specific problem space.
 
-The standard disclaimer in the NISQ era also applies, where the true extent of the algorithm’s performance relies on the eventual realisation of a fault-tolerant quantum computer with a sufficient number of qubits7. The decoherence and noise in the current range of available quantum hardware limit the number of iterations that can be performed accurately. 
+The standard disclaimer in the NISQ era also applies, where the true extent of the algorithm’s performance relies on the eventual realisation of a fault-tolerant quantum computer with a sufficient number of qubits<sup><a href="#ref-7">7</a></sup>. The decoherence and noise in the current range of available quantum hardware limit the number of iterations that can be performed accurately. 
 
 Another condition that is common to most if not all quantum algorithms is the actual implementation via the intended SDK and platform, where the oracle function must be implemented efficiently as a quantum circuit. It’s useful to keep in mind that not all systems or architectures will transpile the same way, or achieve the same performance in the process.
 
@@ -90,16 +90,28 @@ Another condition that is common to most if not all quantum algorithms is the ac
 
 Grover's algorithm is a powerful and versatile quantum algorithm that demonstrates the potential of quantum computing to solve certain problems quadratically faster than classical computers. Its impact on various fields, from database search and optimisation to machine learning and quantum chemistry, highlights the broad applicability of quantum algorithms. But in the current era, the full benefits of Grover’s algorithm is limited to simulation or smaller scale and noisy quantum hardware, which inversely means that Grover's algorithm and its variants will likely play an increasingly important role in the near-term future.
 
-1. Grover, L. K. (1996). A fast quantum mechanical algorithm for database search. Proceedings of the 28th Annual ACM Symposium on Theory of Computing, 212-219.
+## References
 
-2. Bennett, C. H., Bernstein, E., Brassard, G., & Vazirani, U. (1997). Strengths and weaknesses of quantum computing. SIAM Journal on Computing, 26(5), 1510-1523.
-
-3. Zalka, C. (1999). Grover's quantum searching algorithm is optimal. Physical Review A, 60(4), 2746.
-
-4. Brassard, G., Høyer, P., Mosca, M., & Tapp, A. (2002). Quantum amplitude amplification and estimation. Contemporary Mathematics, 305, 53-74.
-
-5. Figgatt, C., Maslov, D., Landsman, K. A., Linke, N. M., Debnath, S., & Monroe, C. (2017). Complete 3-Qubit Grover search on a programmable quantum computer. Nature Communications, 8(1), 1918.
-
-6. Farhi, E., Goldstone, J., & Gutmann, S. (2014). A quantum approximate optimization algorithm. arXiv preprint arXiv:1411.4028.
-
-7. Preskill, J. (2018). Quantum Computing in the NISQ era and beyond. Quantum, 2, 79.
+<div className="references-section">
+  <div id="ref-1" className="reference-item">
+    1. Grover, L. K. (1996). A fast quantum mechanical algorithm for database search. Proceedings of the 28th Annual ACM Symposium on Theory of Computing, 212-219.
+  </div>
+  <div id="ref-2" className="reference-item">
+    2. Bennett, C. H., Bernstein, E., Brassard, G., & Vazirani, U. (1997). Strengths and weaknesses of quantum computing. SIAM Journal on Computing, 26(5), 1510-1523.
+  </div>
+  <div id="ref-3" className="reference-item">
+    3. Zalka, C. (1999). Grover's quantum searching algorithm is optimal. Physical Review A, 60(4), 2746.
+  </div>
+  <div id="ref-4" className="reference-item">
+    4. Brassard, G., Høyer, P., Mosca, M., & Tapp, A. (2002). Quantum amplitude amplification and estimation. Contemporary Mathematics, 305, 53-74.
+  </div>
+  <div id="ref-5" className="reference-item">
+    5. Figgatt, C., Maslov, D., Landsman, K. A., Linke, N. M., Debnath, S., & Monroe, C. (2017). Complete 3-Qubit Grover search on a programmable quantum computer. Nature Communications, 8(1), 1918.
+  </div> 
+  <div id="ref-6" className="reference-item">
+    6. Farhi, E., Goldstone, J., & Gutmann, S. (2014). A quantum approximate optimization algorithm. arXiv preprint arXiv:1411.4028.
+  </div>
+  <div id="ref-7" className="reference-item">      
+    7. Preskill, J. (2018). Quantum Computing in the NISQ era and beyond. Quantum, 2, 79.
+  </div>
+</div>

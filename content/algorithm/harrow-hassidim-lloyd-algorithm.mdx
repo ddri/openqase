@@ -35,21 +35,21 @@ The Harrow-Hassidim-Lloyd algorithm is designed to solve systems of linear equat
 
 ## Algorithm Details
 
-The Harrow-Hassidim-Lloyd (HHL) algorithm was introduced by Aram Harrow, Avinatan Hassidim, and Seth Lloyd in 2009 as a quantum algorithm for solving linear systems of equations1. It offers the potential for an exponential speedup over classical methods, but this advantage is realised under specific conditions.
+The Harrow-Hassidim-Lloyd (HHL) algorithm was introduced by Aram Harrow, Avinatan Hassidim, and Seth Lloyd in 2009 as a quantum algorithm for solving linear systems of equations<sup><a href="#ref-1">1</a></sup>. It offers the potential for an exponential speedup over classical methods, but this advantage is realised under specific conditions.
 
-For instance, the matrix representing the system must be sparse (containing mostly zeros) and well-conditioned (having a low ratio of largest to smallest eigenvalue). Additionally, the input data needs to be efficiently representable in a quantum state, and the algorithm provides a quantum state proportional to the solution, allowing for the extraction of specific information like expectation values, rather than the full solution vector directly2.
+For instance, the matrix representing the system must be sparse (containing mostly zeros) and well-conditioned (having a low ratio of largest to smallest eigenvalue). Additionally, the input data needs to be efficiently representable in a quantum state, and the algorithm provides a quantum state proportional to the solution, allowing for the extraction of specific information like expectation values, rather than the full solution vector directly<sup><a href="#ref-2">2</a></sup>.
 
-When these conditions are met, HHL can solve the system in O(log(N)) time, where N is the number of variables. This contrasts sharply with classical methods, which typically require O(N3) time. This dramatic improvement in efficiency has far-reaching implications, as linear systems are ubiquitous in diverse fields. For example, HHL could potentially accelerate the simulation of quantum systems in materials science, improve the accuracy of fluid dynamics simulations for aircraft design, and enhance the efficiency of machine learning algorithms for tasks like image recognition3.
+When these conditions are met, HHL can solve the system in O(log(N)) time, where N is the number of variables. This contrasts sharply with classical methods, which typically require O(N3) time. This dramatic improvement in efficiency has far-reaching implications, as linear systems are ubiquitous in diverse fields. For example, HHL could potentially accelerate the simulation of quantum systems in materials science, improve the accuracy of fluid dynamics simulations for aircraft design, and enhance the efficiency of machine learning algorithms for tasks like image recognition<sup><a href="#ref-3">3</a></sup>.
 
 ## Problem Target
 
 The problem addressed by the HHL algorithm is: given a matrix A and a vector b, find a vector x such that Ax = b. This is equivalent to solving the linear system Ax = b.
 
-Classically, solving a linear system with N variables requires O(N³) time using methods like Gaussian elimination or LU decomposition. The HHL algorithm, under certain conditions, achieves O(log N) time, offering an exponential speedup4.
+Classically, solving a linear system with N variables requires O(N³) time using methods like Gaussian elimination or LU decomposition. The HHL algorithm, under certain conditions, achieves O(log N) time, offering an exponential speedup<sup><a href="#ref-4">4</a></sup>.
 
 ## Quantum Approach
 
-The HHL algorithm works by encoding the matrix A and vector b into quantum states and then applying a series of quantum operations to find the solution vector |x⟩5.
+The HHL algorithm works by encoding the matrix A and vector b into quantum states and then applying a series of quantum operations to find the solution vector |x⟩<sup><a href="#ref-5">5</a></sup>.
 
 ## Implementation Steps
 
@@ -59,7 +59,7 @@ The HHL algorithm works by encoding the matrix A and vector b into quantum state
   </Step>
 
   <Step title="Quantum phase estimation">
-    The eigenvalues and eigenvectors of the matrix A are estimated using the Quantum Phase Estimation algorithm. This step is crucial for the HHL algorithm as it allows for the inversion of the eigenvalues, which is necessary for solving the linear system6.
+    The eigenvalues and eigenvectors of the matrix A are estimated using the Quantum Phase Estimation algorithm. This step is crucial for the HHL algorithm as it allows for the inversion of the eigenvalues, which is necessary for solving the linear system<sup><a href="#ref-6">6</a></sup>.
   </Step>
 
   <Step title="Controlled rotation">
@@ -81,7 +81,7 @@ The efficiency of the HHL algorithm makes it particularly promising for applicat
 
 ## Implementation Challenges
 
-The HHL algorithm achieves its exponential speedup by exploiting quantum parallelism to perform the phase estimation and controlled rotation steps efficiently. A primary constraint of the HHL algorithm is its requirement for the input matrix A to be both sparse and well-conditioned, meaning it must have a small condition number. This specificity limits the algorithm's applicability, as the quantum speedup may be lost when dealing with dense or ill-conditioned matrices, which are common in many real-world problems7.
+The HHL algorithm achieves its exponential speedup by exploiting quantum parallelism to perform the phase estimation and controlled rotation steps efficiently. A primary constraint of the HHL algorithm is its requirement for the input matrix A to be both sparse and well-conditioned, meaning it must have a small condition number. This specificity limits the algorithm's applicability, as the quantum speedup may be lost when dealing with dense or ill-conditioned matrices, which are common in many real-world problems<sup><a href="#ref-7">7</a></sup>.
 
 Additionally, the algorithm's output is not a classical vector but a quantum state proportional to the solution vector x. While this quantum state contains the solution, extracting the classical information requires quantum state tomography, a process that can be resource-intensive and potentially offset the algorithm's speed advantages for certain applications.
 
@@ -97,16 +97,26 @@ As quantum hardware continues to advance and scale up, there's optimism that the
 
 ## References
 
-1. Harrow, A. W., Hassidim, A., & Lloyd, S. (2009). Quantum algorithm for linear systems of equations. Physical Review Letters, 103(15), 150502.
-
-2. Aaronson, S. (2015). Read the fine print. Nature Physics, 11(4), 291-293.
-
-3. Biamonte, J., Wittek, P., Pancotti, N., Rebentrost, P., Wiebe, N., & Lloyd, S. (2017). Quantum machine learning. Nature, 549(7671), 195-202.
-
-4. Montanaro, A. (2016). Quantum algorithms: an overview. npj Quantum Information, 2(1), 1-8.
-
-5. Nielsen, M. A., & Chuang, I. L. (2010). Quantum Computation and Quantum Information. Cambridge University Press.
-
-6. Kitaev, A. Y. (1995). Quantum measurements and the Abelian stabilizer problem. arXiv preprint quant-ph/9511026.
-
-7. Childs, A. M., Kothari, R., & Somma, R. D. (2017). Quantum algorithm for systems of linear equations with exponentially improved dependence on precision. SIAM Journal on Computing, 46(6), 1920-1950.
+<div className="references-section">
+  <div id="ref-1" className="reference-item">
+    1. Harrow, A. W., Hassidim, A., & Lloyd, S. (2009). Quantum algorithm for linear systems of equations. Physical Review Letters, 103(15), 150502.
+  </div>
+  <div id="ref-2" className="reference-item">
+    2. Aaronson, S. (2015). Read the fine print. Nature Physics, 11(4), 291-293.
+  </div>
+  <div id="ref-3" className="reference-item">
+    3. Biamonte, J., Wittek, P., Pancotti, N., Rebentrost, P., Wiebe, N., & Lloyd, S. (2017). Quantum machine learning. Nature, 549(7671), 195-202.
+  </div>
+  <div id="ref-4" className="reference-item">
+    4. Montanaro, A. (2016). Quantum algorithms: an overview. npj Quantum Information, 2(1), 1-8.
+  </div>
+  <div id="ref-5" className="reference-item">
+    5. Nielsen, M. A., & Chuang, I. L. (2010). Quantum Computation and Quantum Information. Cambridge University Press.
+  </div>
+  <div id="ref-6" className="reference-item">
+    6. Kitaev, A. Y. (1995). Quantum measurements and the Abelian stabilizer problem. arXiv preprint quant-ph/9511026.
+  </div>
+  <div id="ref-7" className="reference-item">
+    7. Childs, A. M., Kothari, R., & Somma, R. D. (2017). Quantum algorithm for systems of linear equations with exponentially improved dependence on precision. SIAM Journal on Computing, 46(6), 1920-1950.
+  </div>
+</div>

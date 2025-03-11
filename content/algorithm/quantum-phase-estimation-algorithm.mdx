@@ -35,17 +35,17 @@ Quantum Phase Estimation (QPE) is a quantum algorithm that accurately measures t
 
 ## Algorithm Details
 
-Quantum Phase Estimation (QPE) is a fundamental quantum algorithm that plays a crucial role in many quantum computing applications, such as quantum chemistry, quantum simulation, and quantum linear algebra1. The main objective of QPE is to estimate the eigenvalues (phases) of a unitary operator, which can provide valuable information about the properties and behaviour of quantum systems.
+Quantum Phase Estimation (QPE) is a fundamental quantum algorithm that plays a crucial role in many quantum computing applications, such as quantum chemistry, quantum simulation, and quantum linear algebra<sup><a href="#ref-1">1</a></sup>. The main objective of QPE is to estimate the eigenvalues (phases) of a unitary operator, which can provide valuable information about the properties and behaviour of quantum systems.
 
-QPE is closely related to the Quantum Fourier Transform (QFT) and is often used in conjunction with other quantum algorithms, such as the Harrow-Hassidim-Lloyd (HHL) algorithm for solving linear systems of equations and Shor's algorithm for factoring large integers2.
+QPE is closely related to the Quantum Fourier Transform (QFT) and is often used in conjunction with other quantum algorithms, such as the Harrow-Hassidim-Lloyd (HHL) algorithm for solving linear systems of equations and Shor's algorithm for factoring large integers<sup><a href="#ref-2">2</a></sup>.
 
 ## Problem Target
 
-The problem addressed by QPE can be formulated as follows: given a unitary operator U and an eigenvector |ψ⟩ of U, estimate the corresponding eigenvalue e^(2πiθ), where θ is the phase to be estimated3. The eigenvalue equation can be written as: U|ψ⟩ = e^(2πiθ)|ψ⟩. By applying controlled-U operations on an initial state and measuring the resulting state in the computational basis, the QPE algorithm estimates the phase θ.
+The problem addressed by QPE can be formulated as follows: given a unitary operator U and an eigenvector |ψ⟩ of U, estimate the corresponding eigenvalue e^(2πiθ), where θ is the phase to be estimated<sup><a href="#ref-3">3</a></sup>. The eigenvalue equation can be written as: U|ψ⟩ = e^(2πiθ)|ψ⟩. By applying controlled-U operations on an initial state and measuring the resulting state in the computational basis, the QPE algorithm estimates the phase θ.
 
 ## Quantum Approach
 
-QPE prepares an ancilla qubit register to store the binary representation of the phase, while applying controlled versions of the unitary operator to the target qubit4. The number of controlled operations is doubled with each subsequent ancilla qubit, creating a superposition of states encoding different phase approximations. A subsequent inverse Quantum Fourier Transform (QFT) applied to the ancilla register then collapses the state into a measurement outcome that provides an estimate of the phase with high probability5. The accuracy of the estimation increases with the number of ancilla qubits used in the process. QPE finds applications in diverse quantum algorithms, such as Shor's factoring algorithm and Hamiltonian simulation.
+QPE prepares an ancilla qubit register to store the binary representation of the phase, while applying controlled versions of the unitary operator to the target qubit<sup><a href="#ref-4">4</a></sup>. The number of controlled operations is doubled with each subsequent ancilla qubit, creating a superposition of states encoding different phase approximations. A subsequent inverse Quantum Fourier Transform (QFT) applied to the ancilla register then collapses the state into a measurement outcome that provides an estimate of the phase with high probability<sup><a href="#ref-5">5</a></sup>. The accuracy of the estimation increases with the number of ancilla qubits used in the process. QPE finds applications in diverse quantum algorithms, such as Shor's factoring algorithm and Hamiltonian simulation.
 
 ## Implementation Steps
 
@@ -57,7 +57,7 @@ QPE prepares an ancilla qubit register to store the binary representation of the
     Initialise a set of ancilla qubits in the |0⟩ state. The number of ancilla qubits determines the precision of the phase estimation.
   </Step>
   <Step title="Controlled-U operations">
-    Apply a sequence of controlled-U operations on the ancilla qubits, where the number of applications of U depends on the position of the ancilla qubit. For example, the first ancilla qubit controls the application of U^(2^0), the second ancilla qubit controls U^(2^1), and so on, up to U^(2^(n-1)), where n is the number of ancilla qubits6.
+    Apply a sequence of controlled-U operations on the ancilla qubits, where the number of applications of U depends on the position of the ancilla qubit. For example, the first ancilla qubit controls the application of U^(2^0), the second ancilla qubit controls U^(2^1), and so on, up to U^(2^(n-1)), where n is the number of ancilla qubits<sup><a href="#ref-6">6</a></sup>.
   </Step>
   <Step title="Quantum Fourier Transform">
     Apply the inverse Quantum Fourier Transform (QFT) to the ancilla qubits. This step transforms the phase information encoded in the ancilla qubits into the computational basis.
@@ -69,17 +69,17 @@ QPE prepares an ancilla qubit register to store the binary representation of the
 
 ## Practical Applications
 
-QPE is a remarkable quantum algorithm with a time complexity of O(1/ε), where ε represents the desired precision of the phase estimation7. This exponential speedup over classical methods, which usually scale polynomially with precision, opens up a world of possibilities across various fields.
+QPE is a remarkable quantum algorithm with a time complexity of O(1/ε), where ε represents the desired precision of the phase estimation<sup><a href="#ref-7">7</a></sup>. This exponential speedup over classical methods, which usually scale polynomially with precision, opens up a world of possibilities across various fields.
 
-In quantum chemistry, QPE is effective in enabling the estimation of ground state energies and other vital properties of molecular systems, accelerating research in drug discovery and materials science8. Quantum simulation, another major beneficiary, harnesses QPE to model the dynamics of quantum systems, advancing our understanding in condensed matter physics and quantum field theory.
+In quantum chemistry, QPE is effective in enabling the estimation of ground state energies and other vital properties of molecular systems, accelerating research in drug discovery and materials science<sup><a href="#ref-8">8</a></sup>. Quantum simulation, another major beneficiary, harnesses QPE to model the dynamics of quantum systems, advancing our understanding in condensed matter physics and quantum field theory.
 
-QPE also plays a pivotal role in quantum linear algebra, serving as a key component of the HHL algorithm, which boasts an exponential speedup in solving linear systems under certain conditions9. The same can be said for explorations in quantum machine learning, where QPE empowers algorithms like the Quantum Support Vector Machine (QSVM) and Quantum Principal Component Analysis (QPCA) to efficiently extract features and classify high-dimensional data.
+QPE also plays a pivotal role in quantum linear algebra, serving as a key component of the HHL algorithm, which boasts an exponential speedup in solving linear systems under certain conditions<sup><a href="#ref-9">9</a></sup>. The same can be said for explorations in quantum machine learning, where QPE empowers algorithms like the Quantum Support Vector Machine (QSVM) and Quantum Principal Component Analysis (QPCA) to efficiently extract features and classify high-dimensional data.
 
 ## Implementation Challenges
 
-Despite its power and versatility, QPE also faces challenges in its implementation on real quantum hardware. The algorithm requires a large number of controlled-U operations, which can be difficult to implement with high fidelity on current quantum devices10. Moreover, the precision of the phase estimation is limited by the coherence time of the quantum system and the presence of noise and errors.
+Despite its power and versatility, QPE also faces challenges in its implementation on real quantum hardware. The algorithm requires a large number of controlled-U operations, which can be difficult to implement with high fidelity on current quantum devices<sup><a href="#ref-10">10</a></sup>. Moreover, the precision of the phase estimation is limited by the coherence time of the quantum system and the presence of noise and errors.
 
-Ongoing research in QPE focuses on developing more efficient and robust implementations of the algorithm, as well as exploring new applications in various fields. Some promising directions include the use of error mitigation techniques, such as quantum error correction and dynamical decoupling, to improve the accuracy of the phase estimation, and the development of hybrid quantum-classical approaches that leverage the strengths of both quantum and classical computing11.
+Ongoing research in QPE focuses on developing more efficient and robust implementations of the algorithm, as well as exploring new applications in various fields. Some promising directions include the use of error mitigation techniques, such as quantum error correction and dynamical decoupling, to improve the accuracy of the phase estimation, and the development of hybrid quantum-classical approaches that leverage the strengths of both quantum and classical computing<sup><a href="#ref-11">11</a></sup>.
 
 ## Bottom Line
 
@@ -87,24 +87,38 @@ Quantum Phase Estimation is a powerful and fundamental quantum algorithm that ha
 
 ## References
 
-1. Nielsen, M. A., & Chuang, I. L. (2010). Quantum Computation and Quantum Information. Cambridge University Press.
-
-2. Shor, P. W. (1994). Algorithms for quantum computation: Discrete logarithms and factoring. Proceedings 35th Annual Symposium on Foundations of Computer Science, 124-134.
-
-3. Kitaev, A. Y. (1995). Quantum measurements and the Abelian stabilizer problem. arXiv preprint quant-ph/9511026.
-
-4. Griffiths, R. B., & Niu, C. S. (1996). Semiclassical Fourier transform for quantum computation. Physical Review Letters, 76(17), 3228.
-
-5. Abrams, D. S., & Lloyd, S. (1999). Quantum algorithm providing exponential speed increase for finding eigenvalues and eigenvectors. Physical Review Letters, 83(24), 5162.
-
-6. Cleve, R., Ekert, A., Macchiavello, C., & Mosca, M. (1998). Quantum algorithms revisited. Proceedings of the Royal Society of London. Series A: Mathematical, Physical and Engineering Sciences, 454(1969), 339-354.
-
-7. Higgins, B. L., Berry, D. W., Bartlett, S. D., Wiseman, H. M., & Pryde, G. J. (2007). Entanglement-free Heisenberg-limited phase estimation. Nature, 450(7168), 393-396.
-
-8. Aspuru-Guzik, A., Dutoi, A. D., Love, P. J., & Head-Gordon, M. (2005). Simulated quantum computation of molecular energies. Science, 309(5741), 1704-1707.
-
-9. Harrow, A. W., Hassidim, A., & Lloyd, S. (2009). Quantum algorithm for linear systems of equations. Physical Review Letters, 103(15), 150502.
-
-10. Preskill, J. (2018). Quantum Computing in the NISQ era and beyond. Quantum, 2, 79.
-
-11. Kandala, A., Mezzacapo, A., Temme, K., Takita, M., Brink, M., Chow, J. M., & Gambetta, J. M. (2017). Hardware-efficient variational quantum eigensolver for small molecules and quantum magnets. Nature, 549(7671), 242-246.
+<div className="references-section">
+  <div id="ref-1" className="reference-item">
+   1. Nielsen, M. A., & Chuang, I. L. (2010). Quantum Computation and Quantum Information. Cambridge University Press.
+  </div>
+  <div id="ref-2" className="reference-item">
+   2. Shor, P. W. (1994). Algorithms for quantum computation: Discrete logarithms and factoring. Proceedings 35th Annual Symposium on Foundations of Computer Science, 124-134.
+  </div>
+  <div id="ref-3" className="reference-item">
+   3. Kitaev, A. Y. (1995). Quantum measurements and the Abelian stabilizer problem. arXiv preprint quant-ph/9511026.
+  </div>
+  <div id="ref-4" className="reference-item">
+   4. Griffiths, R. B., & Niu, C. S. (1996). Semiclassical Fourier transform for quantum computation. Physical Review Letters, 76(17), 3228.
+  </div>
+  <div id="ref-5" className="reference-item">
+   5. Abrams, D. S., & Lloyd, S. (1999). Quantum algorithm providing exponential speed increase for finding eigenvalues and eigenvectors. Physical Review Letters, 83(24), 5162.
+  </div>
+  <div id="ref-6" className="reference-item">
+   6. Cleve, R., Ekert, A., Macchiavello, C., & Mosca, M. (1998). Quantum algorithms revisited. Proceedings of the Royal Society of London. Series A: Mathematical, Physical and Engineering Sciences, 454(1969), 339-354.
+  </div>
+  <div id="ref-7" className="reference-item">
+   7. Higgins, B. L., Berry, D. W., Bartlett, S. D., Wiseman, H. M., & Pryde, G. J. (2007). Entanglement-free Heisenberg-limited phase estimation. Nature, 450(7168), 393-396.
+  </div>
+  <div id="ref-8" className="reference-item">
+   8. Aspuru-Guzik, A., Dutoi, A. D., Love, P. J., & Head-Gordon, M. (2005). Simulated quantum computation of molecular energies. Science, 309(5741), 1704-1707.
+  </div>
+  <div id="ref-9" className="reference-item">
+   9. Harrow, A. W., Hassidim, A., & Lloyd, S. (2009). Quantum algorithm for linear systems of equations. Physical Review Letters, 103(15), 150502.
+  </div>
+  <div id="ref-10" className="reference-item">
+   10. Preskill, J. (2018). Quantum Computing in the NISQ era and beyond. Quantum, 2, 79.
+  </div>
+  <div id="ref-11" className="reference-item">
+   11. Kandala, A., Mezzacapo, A., Temme, K., Takita, M., Brink, M., Chow, J. M., & Gambetta, J. M. (2017). Hardware-efficient variational quantum eigensolver for small molecules and quantum magnets. Nature, 549(7671), 242-246.
+   </div>
+</div>

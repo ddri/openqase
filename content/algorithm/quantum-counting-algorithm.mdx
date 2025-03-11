@@ -35,17 +35,17 @@ Quantum Counting Algorithm (QCA) efficiently counts solutions to search problems
 
 ## Algorithm Details
 
-The Quantum Counting Algorithm (QCA) is a quantum algorithm that combines Grover's algorithm with the Quantum Phase Estimation (QPE) algorithm to estimate the number of solutions to a search problem1. It was developed by Gilles Brassard, Peter Høyer, and Alain Tapp in 1998 as an extension of Grover's search algorithm.
+The Quantum Counting Algorithm (QCA) is a quantum algorithm that combines Grover's algorithm with the Quantum Phase Estimation (QPE) algorithm to estimate the number of solutions to a search problem<sup><a href="#ref-1">1</a></sup>. It was developed by Gilles Brassard, Peter Høyer, and Alain Tapp in 1998 as an extension of Grover's search algorithm.
 
 ## Problem Target
 
-The QCA solves the problem of determining the number of solutions to a search problem2. This might seem trivial at first, but for many real-world applications, the search space (the set of all possible solutions) can be incredibly vast. Trying to count the solutions classically could take an impractically long time.
+The QCA solves the problem of determining the number of solutions to a search problem<sup><a href="#ref-2">2</a></sup>. This might seem trivial at first, but for many real-world applications, the search space (the set of all possible solutions) can be incredibly vast. Trying to count the solutions classically could take an impractically long time.
 
-The key point of the QCA is that it does this much more efficiently than classical methods3. In some cases, it offers a quadratic speedup, meaning that it can count the solutions in a time that's proportional to the square root of the time it would take a classical algorithm. This can be a game-changer when dealing with large and complex search spaces.
+The key point of the QCA is that it does this much more efficiently than classical methods<sup><a href="#ref-3">3</a></sup>. In some cases, it offers a quadratic speedup, meaning that it can count the solutions in a time that's proportional to the square root of the time it would take a classical algorithm. This can be a game-changer when dealing with large and complex search spaces.
 
 ## Quantum Approach
 
-In essence, the algorithm works by creating a superposition of all possible solutions to the search problem using Grover's algorithm4. This superposition is then used as input to QPE, which estimates the phase of a unitary operator related to Grover's iteration. This phase information is directly linked to the number of solutions, allowing the algorithm to provide an accurate estimate with high probability5.
+In essence, the algorithm works by creating a superposition of all possible solutions to the search problem using Grover's algorithm<sup><a href="#ref-4">4</a></sup>. This superposition is then used as input to QPE, which estimates the phase of a unitary operator related to Grover's iteration. This phase information is directly linked to the number of solutions, allowing the algorithm to provide an accurate estimate with high probability<sup><a href="#ref-5">5</a></sup>.
 
 ## Implementation Steps
 
@@ -57,7 +57,7 @@ In essence, the algorithm works by creating a superposition of all possible solu
     Apply Grover's search algorithm to the work register with a modified oracle. This modified oracle marks all states that are solutions to the search problem. The number of Grover iterations is carefully chosen based on an estimate of the number of solutions.
   </Step>
   <Step title="Phase Estimation">
-    Apply QPE to the work register, using the Grover iteration as the unitary operator. QPE estimates the phase of the Grover iteration, which is related to the number of solutions6.
+    Apply QPE to the work register, using the Grover iteration as the unitary operator. QPE estimates the phase of the Grover iteration, which is related to the number of solutions<sup><a href="#ref-6">6</a></sup>.
   </Step>
   <Step title="Measurement">
     Measure the ancilla register to obtain an estimate of the phase. This phase estimate is then converted into an estimate of the number of solutions using classical post-processing.
@@ -71,7 +71,7 @@ The QCA combines Grover's search and QPE to efficiently estimate the number of s
 
 ## Practical Applications
 
-The QCA presents a significant advantage over classical counting methods, particularly when dealing with vast search spaces7. By harnessing the principles of quantum mechanics, it can often provide a quadratic speedup compared to its classical counterparts, making it a valuable tool for a wide range of applications.
+The QCA presents a significant advantage over classical counting methods, particularly when dealing with vast search spaces<sup><a href="#ref-7">7</a></sup>. By harnessing the principles of quantum mechanics, it can often provide a quadratic speedup compared to its classical counterparts, making it a valuable tool for a wide range of applications.
 
 In the area of database search, QCA can rapidly estimate the number of items that meet specific criteria, streamlining the process of retrieving relevant information. For optimization problems, it can efficiently count feasible solutions, guiding the search for optimal solutions and enhancing the efficiency of optimization algorithms. In graph theory, QCA can determine the number of specific subgraphs within larger graphs, such as triangles or cliques, offering insights into the structure and properties of complex networks.
 
@@ -95,24 +95,24 @@ Overall, the Quantum Counting Algorithm is a versatile tool with the potential t
 
 <div className="references-section">
   <div id="ref-1" className="reference-item">
-1. Brassard, G., Høyer, P., & Tapp, A. (1998). Quantum counting. In International Colloquium on Automata, Languages, and Programming (pp. 820-831). Springer, Berlin, Heidelberg.
+    1. Brassard, G., Høyer, P., & Tapp, A. (1998). Quantum counting. In International Colloquium on Automata, Languages, and Programming (pp. 820-831). Springer, Berlin, Heidelberg.
   </div>
-  <div id="ref-1" className="reference-item">
-2. Brassard, G., Høyer, P., Mosca, M., & Tapp, A. (2002). Quantum amplitude amplification and estimation. Contemporary Mathematics, 305, 53-74.
+  <div id="ref-2" className="reference-item">
+    2. Brassard, G., Høyer, P., Mosca, M., & Tapp, A. (2002). Quantum amplitude amplification and estimation. Contemporary Mathematics, 305, 53-74.
   </div>
-  <div id="ref-1" className="reference-item">
-3. Boyer, M., Brassard, G., Høyer, P., & Tapp, A. (1998). Tight bounds on quantum searching. Fortschritte der Physik, 46(4-5), 493-505.
+  <div id="ref-3" className="reference-item">
+    3. Boyer, M., Brassard, G., Høyer, P., & Tapp, A. (1998). Tight bounds on quantum searching. Fortschritte der Physik, 46(4-5), 493-505.
   </div>
-  <div id="ref-1" className="reference-item">
-4. Grover, L. K. (1997). Quantum mechanics helps in searching for a needle in a haystack. Physical Review Letters, 79(2), 325.
+  <div id="ref-4" className="reference-item">
+    4. Grover, L. K. (1997). Quantum mechanics helps in searching for a needle in a haystack. Physical Review Letters, 79(2), 325.
   </div>
-  <div id="ref-1" className="reference-item">
-5. Svore, K. M., Hastings, M. B., & Freedman, M. (2013). Faster phase estimation. Quantum Information & Computation, 14(3-4), 306-328.
+  <div id="ref-5" className="reference-item">
+    5. Svore, K. M., Hastings, M. B., & Freedman, M. (2013). Faster phase estimation. Quantum Information & Computation, 14(3-4), 306-328.
   </div>
-  <div id="ref-1" className="reference-item">
-6. Kitaev, A. Y. (1995). Quantum measurements and the Abelian stabilizer problem. arXiv preprint quant-ph/9511026.
+  <div id="ref-6" className="reference-item">
+    6. Kitaev, A. Y. (1995). Quantum measurements and the Abelian stabilizer problem. arXiv preprint quant-ph/9511026.
   </div>
-  <div id="ref-1" className="reference-item">
-7. Mosca, M. (1999). Quantum computer algorithms. University of Oxford, Oxford.
-</div>
+  <div id="ref-7" className="reference-item">
+    7. Mosca, M. (1999). Quantum computer algorithms. University of Oxford, Oxford.
+  </div>
 </div>

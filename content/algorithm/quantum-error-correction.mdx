@@ -35,27 +35,27 @@ Quantum Error Correction (QEC)  techniques protect quantum information from erro
 
 ## Algorithm Details
 
-Quantum Error Correction (QEC) is a critical technique in quantum computing that aims to protect quantum information from errors and decoherence, which are inevitable in real-world quantum systems1. QEC is essential for building reliable and scalable quantum computers that can perform long computations and store quantum information for extended periods.
+Quantum Error Correction (QEC) is a critical technique in quantum computing that aims to protect quantum information from errors and decoherence, which are inevitable in real-world quantum systems<sup><a href="#ref-1">1</a></sup>. QEC is essential for building reliable and scalable quantum computers that can perform long computations and store quantum information for extended periods.
 
-The need for QEC arises from the fragility of quantum states and the susceptibility of quantum systems to external influence2. Unlike classical bits, which are robust against noise and can be easily copied, quantum bits are extremely sensitive to environmental disturbances, such as temperature fluctuations, electromagnetic interference, and material imperfections3. These disturbances can cause errors in the quantum state, leading to the loss of coherence and the corruption of quantum information.
+The need for QEC arises from the fragility of quantum states and the susceptibility of quantum systems to external influence<sup><a href="#ref-2">2</a></sup>. Unlike classical bits, which are robust against noise and can be easily copied, quantum bits are extremely sensitive to environmental disturbances, such as temperature fluctuations, electromagnetic interference, and material imperfections<sup><a href="#ref-3">3</a></sup>. These disturbances can cause errors in the quantum state, leading to the loss of coherence and the corruption of quantum information.
 
 ## Problem Target
 
-The basic idea behind QEC is to encode the quantum information in a redundant way, using multiple physical qubits to represent a single logical qubit4. By distributing the information across many qubits, QEC can detect and correct errors that affect individual qubits, without compromising the integrity of the logical qubit. This is similar to classical error correction, where redundant bits are used to detect and correct errors in communication channels.
+The basic idea behind QEC is to encode the quantum information in a redundant way, using multiple physical qubits to represent a single logical qubit<sup><a href="#ref-4">4</a></sup>. By distributing the information across many qubits, QEC can detect and correct errors that affect individual qubits, without compromising the integrity of the logical qubit. This is similar to classical error correction, where redundant bits are used to detect and correct errors in communication channels.
 
 There are several types of QEC codes, each with its own advantages and limitations. Some of the most well-known QEC codes include:
 
 Shor's code is one of the first QEC codes, which uses nine physical qubits to encode a single logical qubit. It can correct any single-qubit error and is based on the concatenation of two classical error-correcting codes.
 
-Steane's code is a more efficient QEC code that uses seven physical qubits to encode a single logical qubit5. It can correct any single-qubit error and is based on the properties of a particular class of classical error-correcting codes known as CSS codes.
+Steane's code is a more efficient QEC code that uses seven physical qubits to encode a single logical qubit<sup><a href="#ref-5">5</a></sup>. It can correct any single-qubit error and is based on the properties of a particular class of classical error-correcting codes known as CSS codes.
 
-Surface codes are a family of QEC codes that are particularly well-suited for 2D quantum architectures, such as superconducting qubit arrays6. They encode logical qubits in the topology of a 2D lattice of physical qubits and can tolerate a relatively high error rate (up to 1%) while still enabling fault-tolerant quantum computation.
+Surface codes are a family of QEC codes that are particularly well-suited for 2D quantum architectures, such as superconducting qubit arrays<sup><a href="#ref-6">6</a></sup>. They encode logical qubits in the topology of a 2D lattice of physical qubits and can tolerate a relatively high error rate (up to 1%) while still enabling fault-tolerant quantum computation.
 
-Color codes are another family of QEC codes that are similar to surface codes but offer additional features, such as the ability to perform transversal logical gates and to encode multiple logical qubits in a single code block7.
+Color codes are another family of QEC codes that are similar to surface codes but offer additional features, such as the ability to perform transversal logical gates and to encode multiple logical qubits in a single code block<sup><a href="#ref-7">7</a></sup>.
 
 ## Quantum Approach
 
-QEC is a set of techniques used to protect fragile quantum information from errors caused by noise and decoherence8. It works by encoding the quantum information of a single logical qubit into multiple entangled physical qubits, creating redundancy. This redundancy allows for the detection and correction of errors without disturbing the underlying quantum state. When errors occur, they affect the encoded physical qubits, and by measuring specific subsets of these qubits, a syndrome is obtained that reveals the type and location of the error. QEC then applies corrective operations based on the syndrome to restore the encoded quantum state to its original, error-free form. Different QEC codes employ various strategies for encoding and decoding quantum information to achieve error suppression and fault-tolerant quantum computation.
+QEC is a set of techniques used to protect fragile quantum information from errors caused by noise and decoherence<sup><a href="#ref-8">8</a></sup>. It works by encoding the quantum information of a single logical qubit into multiple entangled physical qubits, creating redundancy. This redundancy allows for the detection and correction of errors without disturbing the underlying quantum state. When errors occur, they affect the encoded physical qubits, and by measuring specific subsets of these qubits, a syndrome is obtained that reveals the type and location of the error. QEC then applies corrective operations based on the syndrome to restore the encoded quantum state to its original, error-free form. Different QEC codes employ various strategies for encoding and decoding quantum information to achieve error suppression and fault-tolerant quantum computation.
 
 ## Implementation Steps
 
@@ -76,11 +76,11 @@ QEC is a set of techniques used to protect fragile quantum information from erro
 
 ## Practical Applications
 
-QEC has been experimentally demonstrated on various quantum computing platforms, including superconducting qubits, trapped ions, and spin qubits9. These demonstrations have shown the feasibility of QEC and have provided valuable insights into the challenges and limitations of practical QEC implementations.
+QEC has been experimentally demonstrated on various quantum computing platforms, including superconducting qubits, trapped ions, and spin qubits<sup><a href="#ref-9">9</a></sup>. These demonstrations have shown the feasibility of QEC and have provided valuable insights into the challenges and limitations of practical QEC implementations.
 
 ## Implementation Challenges
 
-The realisation of fault-tolerant quantum computing, which requires QEC to operate reliably and continuously, remains a major challenge. Current implementations are limited by the fidelity of quantum operations, the scalability of quantum hardware, and the overhead of the process itself10. Ongoing research aims to address these challenges by developing more efficient and robust QEC codes, optimizing the quantum hardware for the process, and exploring new approaches to fault-tolerant quantum computation.
+The realisation of fault-tolerant quantum computing, which requires QEC to operate reliably and continuously, remains a major challenge. Current implementations are limited by the fidelity of quantum operations, the scalability of quantum hardware, and the overhead of the process itself<sup><a href="#ref-11">11</a></sup>. Ongoing research aims to address these challenges by developing more efficient and robust QEC codes, optimizing the quantum hardware for the process, and exploring new approaches to fault-tolerant quantum computation.
 
 ## Bottom Line
 
@@ -88,24 +88,38 @@ Quantum Error Correction is a critical technique for building reliable and scala
 
 ## References
 
-1. Shor, P. W. (1995). Scheme for reducing decoherence in quantum computer memory. Physical Review A, 52(4), R2493.
-
-2. Zurek, W. H. (2003). Decoherence, einselection, and the quantum origins of the classical. Reviews of Modern Physics, 75(3), 715.
-
-3. Preskill, J. (2018). Quantum Computing in the NISQ era and beyond. Quantum, 2, 79.
-
-4. Knill, E., & Laflamme, R. (1997). Theory of quantum error-correcting codes. Physical Review A, 55(2), 900.
-
-5. Steane, A. (1996). Multiple-particle interference and quantum error correction. Proceedings of the Royal Society of London. Series A: Mathematical, Physical and Engineering Sciences, 452(1954), 2551-2577.
-
-6. Fowler, A. G., Mariantoni, M., Martinis, J. M., & Cleland, A. N. (2012). Surface codes: Towards practical large-scale quantum computation. Physical Review A, 86(3), 032324.
-
-7. Bombin, H., & Martin-Delgado, M. A. (2006). Topological quantum distillation. Physical Review Letters, 97(18), 180501.
-
-8. Gottesman, D. (1997). Stabilizer codes and quantum error correction. arXiv preprint quant-ph/9705052.
-
-9. Chiaverini, J., Leibfried, D., Schaetz, T., Barrett, M. D., Blakestad, R. B., Britton, J., ... & Wineland, D. J. (2004). Realization of quantum error correction. Nature, 432(7017), 602-605.
-
-10. Campbell, E. T., Terhal, B. M., & Vuillot, C. (2017). Roads towards fault-tolerant universal quantum computation. Nature, 549(7671), 172-179.
-
-11. Devitt, S. J., Munro, W. J., & Nemoto, K. (2013). Quantum error correction for beginners. Reports on Progress in Physics, 76(7), 076001.
+<div className="references-section">
+  <div id="ref-1" className="reference-item">
+      1. Shor, P. W. (1995). Scheme for reducing decoherence in quantum computer memory. Physical Review A, 52(4), R2493.
+  </div>
+  <div id="ref-2" className="reference-item">
+      2. Zurek, W. H. (2003). Decoherence, einselection, and the quantum origins of the classical. Reviews of Modern Physics, 75(3), 715.
+  </div>
+  <div id="ref-3" className="reference-item">
+      3. Preskill, J. (2018). Quantum Computing in the NISQ era and beyond. Quantum, 2, 79.
+  </div>
+  <div id="ref-4" className="reference-item">
+      4. Knill, E., & Laflamme, R. (1997). Theory of quantum error-correcting codes. Physical Review A, 55(2), 900.
+  </div>
+  <div id="ref-5" className="reference-item">
+      5. Steane, A. (1996). Multiple-particle interference and quantum error correction. Proceedings of the Royal Society of London. Series A: Mathematical, Physical and Engineering Sciences, 452(1954), 2551-2577.
+  </div>
+  <div id="ref-6" className="reference-item">
+      6. Fowler, A. G., Mariantoni, M., Martinis, J. M., & Cleland, A. N. (2012). Surface codes: Towards practical large-scale quantum computation. Physical Review A, 86(3), 032324.
+  </div>
+  <div id="ref-7" className="reference-item">
+      7. Bombin, H., & Martin-Delgado, M. A. (2006). Topological quantum distillation. Physical Review Letters, 97(18), 180501.
+  </div>
+  <div id="ref-8" className="reference-item">
+      8. Gottesman, D. (1997). Stabilizer codes and quantum error correction. arXiv preprint quant-ph/9705052.
+  </div>
+  <div id="ref-9" className="reference-item">
+      9. Chiaverini, J., Leibfried, D., Schaetz, T., Barrett, M. D., Blakestad, R. B., Britton, J., ... & Wineland, D. J. (2004). Realization of quantum error correction. Nature, 432(7017), 602-605.
+  </div>
+  <div id="ref-10" className="reference-item">
+      10. Campbell, E. T., Terhal, B. M., & Vuillot, C. (2017). Roads towards fault-tolerant universal quantum computation. Nature, 549(7671), 172-179.
+  </div>
+  <div id="ref-11" className="reference-item">
+      11. Devitt, S. J., Munro, W. J., & Nemoto, K. (2013). Quantum error correction for beginners. Reports on Progress in Physics, 76(7), 076001.
+   </div>
+</div>

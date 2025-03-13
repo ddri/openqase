@@ -1,17 +1,50 @@
 // src/components/Footer.tsx
 import Link from 'next/link'
-import { Github, Twitter, Linkedin, MessageCircle } from 'lucide-react'
+import { Github, Twitter, Linkedin, MessageCircle, ChevronDown } from 'lucide-react'
+import { useState } from 'react'
+import { cn } from '@/lib/utils'
+
+interface FooterSectionProps {
+  title: string
+  children: React.ReactNode
+}
+
+function FooterSection({ title, children }: FooterSectionProps) {
+  const [isOpen, setIsOpen] = useState(true)
+
+  return (
+    <div className="border-b md:border-none border-border last:border-0">
+      <button
+        className="flex w-full items-center justify-between py-4 md:py-0 md:cursor-default"
+        onClick={() => setIsOpen(!isOpen)}
+      >
+        <h4 className="text-sm font-semibold uppercase">
+          {title}
+        </h4>
+        <ChevronDown 
+          className={cn(
+            "h-4 w-4 transition-transform md:hidden",
+            isOpen && "transform rotate-180"
+          )} 
+        />
+      </button>
+      <div className={cn(
+        "overflow-hidden transition-all duration-200 ease-in-out",
+        isOpen ? "max-h-96 pb-4 md:pb-0" : "max-h-0 md:max-h-96"
+      )}>
+        {children}
+      </div>
+    </div>
+  )
+}
 
 export default function Footer() {
   return (
     <footer className="border-t border-border bg-background">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2 md:gap-8">
           {/* About Us Column */}
-          <div>
-            <h4 className="text-sm font-semibold mb-4 uppercase">
-              About Us
-            </h4>
+          <FooterSection title="About Us">
             <ul className="space-y-2">
               <li>
                 <Link href="/about" className="text-muted-foreground hover:text-accent transition-colors">
@@ -34,13 +67,10 @@ export default function Footer() {
                 </Link>
               </li>
             </ul>
-          </div>
+          </FooterSection>
 
           {/* Resources Column */}
-          <div>
-            <h4 className="text-sm font-semibold mb-4 uppercase">
-              Resources
-            </h4>
+          <FooterSection title="Resources">
             <ul className="space-y-2">
               <li>
                 <Link href="/blog" className="text-muted-foreground hover:text-accent transition-colors">
@@ -63,13 +93,10 @@ export default function Footer() {
                 </Link>
               </li>
             </ul>
-          </div>
+          </FooterSection>
 
           {/* Connect Column */}
-          <div>
-            <h4 className="text-sm font-semibold mb-4 uppercase">
-              Connect
-            </h4>
+          <FooterSection title="Connect">
             <ul className="space-y-2">
               <li>
                 <Link 
@@ -116,13 +143,10 @@ export default function Footer() {
                 </Link>
               </li>
             </ul>
-          </div>
+          </FooterSection>
 
           {/* Legal Column */}
-          <div>
-            <h4 className="text-sm font-semibold mb-4 uppercase">
-              Legal
-            </h4>
+          <FooterSection title="Legal">
             <ul className="space-y-2">
               <li>
                 <Link href="/privacy" className="text-muted-foreground hover:text-accent transition-colors">
@@ -140,12 +164,12 @@ export default function Footer() {
                 </Link>
               </li>
             </ul>
-          </div>
+          </FooterSection>
         </div>
 
         {/* Bottom Section */}
-        <div className="mt-12 pt-8 border-t border-border">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+        <div className="mt-8 md:mt-12 pt-4 md:pt-8 border-t border-border">
+          <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-center md:text-left">
             <p className="text-muted-foreground text-sm">
               © {new Date().getFullYear()} openQase. All rights reserved.
             </p>

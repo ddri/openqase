@@ -6,6 +6,8 @@ import matter from 'gray-matter';
 import { Card, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import Link from 'next/link';
+import { Button } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
 
 async function getContentCounts() {
   const counts = {
@@ -45,7 +47,7 @@ export default async function LearningPathsPage() {
       href: "/paths/persona",
       count: counts.persona,
       examples: ["Software Engineer", "Financial Analyst"],
-      badgeClass: "bg-accent/10 text-accent"  // Using your theme colors
+      icon: "👤"
     },
     {
       title: "By Industry",
@@ -53,7 +55,7 @@ export default async function LearningPathsPage() {
       href: "/paths/industry",
       count: counts.industry,
       examples: ["Finance", "Healthcare", "Smart Cities"],
-      badgeClass: "bg-accent/10 text-accent"
+      icon: "🏢"
     },
     {
       title: "By Algorithm",
@@ -61,61 +63,84 @@ export default async function LearningPathsPage() {
       href: "/paths/algorithm",
       count: counts.algorithm,
       examples: ["Grover's", "QAOA", "VQE"],
-      badgeClass: "bg-accent/10 text-accent"
+      icon: "⚛️"
     }
   ];
 
   return (
-    <main className="container mx-auto p-8">
-      <div className="text-center mb-16">
-        <h1 className="text-4xl font-bold text-text-primary mb-6">
-          Choose Your Learning Path
-        </h1>
-        <p className="text-xl text-text-secondary max-w-3xl mx-auto">
-          Explore quantum computing through different perspectives, tailored to your interests and needs
-        </p>
-      </div>
+    <main className="min-h-screen">
+      <div className="container-outer section-spacing">
+        {/* Header Section */}
+        <div className="max-w-2xl mx-auto text-center mb-12 md:mb-16">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-4">
+            Choose Your Learning Path
+          </h1>
+          <p className="text-base sm:text-lg text-muted-foreground">
+            Explore quantum computing through different perspectives, tailored to your interests and needs
+          </p>
+        </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-        {paths.map((path) => (
-          <Link key={path.title} href={path.href}>
-            <Card fixedHeight height={220} className="hover:shadow-lg transition-all">
-            <CardHeader flexGrow>
-                <div className="flex items-center justify-between mb-2">
-                  <Badge className={path.badgeClass}>
-                    {counts[path.title.toLowerCase().split(' ')[1] as keyof typeof counts]} Paths
-                  </Badge>
-                </div>
-                <CardTitle className="text-xl mb-2">{path.title}</CardTitle>
-                <CardDescription>{path.description}</CardDescription>
-                <div className="flex flex-wrap gap-2 mt-4">
-                  {path.examples.map((example) => (
-                    <Badge key={example} variant="outline">
-                      {example}
+        {/* Path Cards */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-12 md:mb-16">
+          {paths.map((path) => (
+            <Link key={path.title} href={path.href} className="group">
+              <Card className={cn(
+                "h-full transition-all duration-200",
+                "hover:shadow-sm hover:border-border-hover hover:bg-accent/5"
+              )}>
+                <CardHeader className="h-full flex flex-col">
+                  <div className="flex items-center justify-between mb-4">
+                    <span className="text-2xl" role="img" aria-label={path.title}>
+                      {path.icon}
+                    </span>
+                    <Badge variant="secondary" className="text-xs">
+                      {counts[path.title.toLowerCase().split(' ')[1] as keyof typeof counts]} Paths
                     </Badge>
-                  ))}
-                </div>
-              </CardHeader>
-            </Card>
-          </Link>
-        ))}
-      </div>
+                  </div>
+                  
+                  <div className="flex-grow">
+                    <CardTitle className="text-lg sm:text-xl mb-2">
+                      {path.title}
+                    </CardTitle>
+                    <CardDescription className="mb-4">
+                      {path.description}
+                    </CardDescription>
+                  </div>
 
+                  <div className="flex flex-wrap gap-2 mt-auto pt-2">
+                    {path.examples.map((example) => (
+                      <Badge key={example} variant="outline" className="text-xs">
+                        {example}
+                      </Badge>
+                    ))}
+                  </div>
+                </CardHeader>
+              </Card>
+            </Link>
+          ))}
+        </div>
 
-      <div className="mt-16 p-8 bg-card border border-card-border rounded-lg">
-        <h2 className="text-2xl font-semibold text-text-primary mb-4">
-          Not Sure Where to Start?
-        </h2>
-        <p className="text-text-secondary mb-6">
-          We recommend starting with the Persona-based learning path to get content tailored to your role and experience level.
-        </p>
-        <Link 
-          href="/paths/persona"
-          className="inline-block bg-accent text-white hover:bg-accent/90 px-6 py-3 rounded-lg transition-colors"
-        >
-          Explore Persona
-        </Link>
+        {/* CTA Section */}
+        <div className="max-w-3xl mx-auto">
+          <Card className="bg-card/50">
+            <CardHeader>
+              <div className="text-center">
+                <h2 className="text-xl sm:text-2xl font-semibold mb-4">
+                  Not Sure Where to Start?
+                </h2>
+                <p className="text-muted-foreground mb-6">
+                  We recommend starting with the Persona-based learning path to get content tailored to your role and experience level.
+                </p>
+                <Button asChild size="lg">
+                  <Link href="/paths/persona">
+                    Explore Persona Paths
+                  </Link>
+                </Button>
+              </div>
+            </CardHeader>
+          </Card>
+        </div>
       </div>
-</main>
-);
+    </main>
+  );
 }

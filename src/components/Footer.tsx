@@ -1,3 +1,5 @@
+'use client'
+
 // src/components/Footer.tsx
 import Link from 'next/link'
 import { Github, Twitter, Linkedin, MessageCircle, ChevronDown } from 'lucide-react'

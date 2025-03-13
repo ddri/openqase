@@ -8,6 +8,7 @@ import type { CaseStudy } from '@/lib/types';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { cn } from '@/lib/utils';
 
 interface CaseStudyListProps {
   caseStudies: CaseStudy[];
@@ -51,9 +52,11 @@ export default function CaseStudyList({ caseStudies }: CaseStudyListProps) {
   return (
     <div className="space-y-6">
       {/* Filters and Sort Controls */}
-      <div className="flex flex-col md:flex-row gap-4 items-start md:items-center">
-        <div className="flex-1 w-full">
-          <Label htmlFor="search" className="mb-4 block">Search case studies</Label>
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-[1fr,auto]">
+        <div className="w-full">
+          <Label htmlFor="search" className="text-sm font-medium mb-1.5 block">
+            Search case studies
+          </Label>
           <Input
             id="search"
             type="search"
@@ -64,62 +67,81 @@ export default function CaseStudyList({ caseStudies }: CaseStudyListProps) {
           />
         </div>
         
-        <div className="flex gap-4 w-full md:w-auto">
-          <div className="flex-1">
-            <Label htmlFor="sort" className="mb-4 block">Sort by</Label>
-            <Select value={sortBy} onValueChange={(value: SortOption) => setSortBy(value)}>
-              <SelectTrigger id="sort" className="w-full">
-                <SelectValue placeholder="Sort by" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="title">Title (A-Z)</SelectItem>
-                <SelectItem value="lastUpdated">Last Updated</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
+        <div className="w-full sm:max-w-[200px]">
+          <Label htmlFor="sort" className="text-sm font-medium mb-1.5 block">
+            Sort by
+          </Label>
+          <Select value={sortBy} onValueChange={(value: SortOption) => setSortBy(value)}>
+            <SelectTrigger id="sort" className="w-full">
+              <SelectValue placeholder="Sort by" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="title">Title (A-Z)</SelectItem>
+              <SelectItem value="lastUpdated">Last Updated</SelectItem>
+            </SelectContent>
+          </Select>
         </div>
       </div>
 
       {/* Results count */}
-      <div className="text-sm text-[var(--text-secondary)]">
+      <div className="text-sm text-muted-foreground">
         {filteredCaseStudies.length} case stud{filteredCaseStudies.length !== 1 ? 'ies' : 'y'} found
       </div>
 
       {/* Case Studies Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
         {filteredCaseStudies.map((study) => (
-          <Link key={study.slug} href={`/case-study/${study.slug}`}>
-            <Card fixedHeight height={260} className="hover:bg-accent/5 transition-colors relative">
-              <CardHeader flexGrow>
-                <CardTitle className="text-xl mb-2">{study.title}</CardTitle>
-                <CardDescription className="mb-12">
-                  {study.description}
-                </CardDescription>
-              </CardHeader>
-              
-              {/* Fixed position badge container at bottom of card */}
-              <div className="absolute bottom-4 left-6 right-6">
+          <Link key={study.slug} href={`/case-study/${study.slug}`} className="group">
+            <Card className={cn(
+              "h-full transition-all duration-200 hover:border-border-hover",
+              "hover:shadow-sm hover:bg-accent/5"
+            )}>
+              <CardHeader className="h-full flex flex-col">
+                <div className="flex-grow">
+                  <CardTitle className="text-lg sm:text-xl mb-2 line-clamp-2">
+                    {study.title}
+                  </CardTitle>
+                  <CardDescription className="line-clamp-3 mb-4">
+                    {study.description}
+                  </CardDescription>
+                </div>
+                
+                {/* Tags */}
                 {study.tags && study.tags.length > 0 && (
-                  <div className="flex overflow-x-auto pb-1 scrollbar-none">
-                    <div className="flex gap-2 flex-nowrap">
-                      {study.tags.slice(0, 3).map((tag: string) => (
-                        <Badge key={tag} variant="outline" className="whitespace-nowrap">
-                          {tag}
-                        </Badge>
-                      ))}
-                      {study.tags.length > 3 && (
-                        <Badge variant="outline" className="whitespace-nowrap">
-                          +{study.tags.length - 3} more
-                        </Badge>
-                      )}
-                    </div>
+                  <div className="flex flex-wrap gap-2 mt-auto pt-2">
+                    {study.tags.slice(0, 3).map((tag: string) => (
+                      <Badge 
+                        key={tag} 
+                        variant="outline" 
+                        className="text-xs px-2 py-0.5 whitespace-nowrap"
+                      >
+                        {tag}
+                      </Badge>
+                    ))}
+                    {study.tags.length > 3 && (
+                      <Badge 
+                        variant="outline" 
+                        className="text-xs px-2 py-0.5 whitespace-nowrap"
+                      >
+                        +{study.tags.length - 3} more
+                      </Badge>
+                    )}
                   </div>
                 )}
-              </div>
+              </CardHeader>
             </Card>
           </Link>
         ))}
       </div>
+
+      {/* Empty State */}
+      {filteredCaseStudies.length === 0 && (
+        <div className="text-center py-12">
+          <p className="text-lg text-muted-foreground">
+            No case studies found matching your search.
+          </p>
+        </div>
+      )}
     </div>
   );
 } 

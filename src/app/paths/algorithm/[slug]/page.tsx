@@ -8,6 +8,7 @@ import { Badge } from '@/components/ui/badge';
 import { Card } from '@/components/ui/card';
 import { Steps, Step } from '@/components/ui/steps';
 import Link from 'next/link';
+import { cn } from '@/lib/utils';
 
 const components = {
   Steps,
@@ -21,8 +22,8 @@ const components = {
   h3: ({ children }: { children: React.ReactNode }) => (
     <h3 className="text-xl font-semibold text-[var(--text-primary)] mt-6 mb-3">{children}</h3>
   ),
-  p: ({ children }: { children: React.ReactNode }) => (
-    <p className="text-[var(--text-secondary)] mb-4 leading-relaxed">{children}</p>
+  p: ({ children, className }: { children: React.ReactNode; className?: string }) => (
+    <p className={cn("text-[var(--text-secondary)] mb-4 leading-relaxed", className)}>{children}</p>
   ),
   ul: ({ children }: { children: React.ReactNode }) => (
     <ul className="list-disc list-inside space-y-2 text-[var(--text-secondary)] mb-6 ml-4">{children}</ul>
@@ -52,22 +53,23 @@ const components = {
     </a>
   ),
   div: ({ className, children, id }: { className?: string; children: React.ReactNode; id?: string }) => {
-    if (className === 'references-section') {
-      return (
-        <div className="mt-12 pt-8 border-t border-[var(--border)] bg-[var(--muted)] rounded-lg p-6">
-          <h2 className="text-2xl font-semibold text-[var(--text-primary)] mb-6">References</h2>
-          {children}
-        </div>
-      );
+    switch (className) {
+      case 'references-section':
+        return (
+          <div className="mt-12 pt-8 border-t border-[var(--border)] bg-[var(--muted)] rounded-lg p-6">
+            <h2 className="text-2xl font-semibold text-[var(--text-primary)] mb-6">References</h2>
+            {children}
+          </div>
+        );
+      case 'reference-item':
+        return (
+          <div id={id} className="mb-4 pl-8 -indent-8 text-[var(--text-secondary)]">
+            {children}
+          </div>
+        );
+      default:
+        return <div className={className}>{children}</div>;
     }
-    if (className === 'reference-item') {
-      return (
-        <div id={id} className="mb-4 pl-8 -indent-8 text-[var(--text-secondary)]">
-          {children}
-        </div>
-      );
-    }
-    return <div className={className}>{children}</div>;
   }
 };
 
@@ -111,33 +113,35 @@ export default async function AlgorithmPage(props: { params: Promise<{ slug: str
   const { frontmatter, content } = algorithm;
 
   return (
-    <main className="min-h-screen p-8">
-      <div className="max-w-7xl mx-auto">
-        <div className="mb-8">
+    <main className="min-h-screen">
+      <div className="container-outer section-spacing">
+        {/* Back link */}
+        <div className="mb-6 sm:mb-8">
           <Link 
             href="/paths/algorithm"
-            className="text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors"
+            className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
           >
-            ← Back to Algorithms
+            <span>←</span>
+            <span>Back to Algorithms</span>
           </Link>
         </div>
 
         {/* Header Section */}
-        <div className="mb-8">
-          <h1 className="text-4xl font-bold text-[hsl(var(--primary))] mb-4">
+        <div className="mb-8 sm:mb-12">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-primary mb-4 tracking-tight">
             {frontmatter.title}
           </h1>
           {frontmatter.complexity && (
-            <p className="text-sm text-[var(--text-secondary)]">
-              Complexity: <code className="text-[var(--primary)]">{frontmatter.complexity}</code>
+            <p className="text-base sm:text-lg text-muted-foreground">
+              Complexity: <code className="text-primary">{frontmatter.complexity}</code>
             </p>
           )}
         </div>
 
-        <div className="grid grid-cols-12 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12">
           {/* Main Content */}
-          <div className="col-span-9">
-            <article className="prose max-w-none">
+          <div className="lg:col-span-8">
+            <article className="prose prose-lg dark:prose-invert max-w-none">
               <MDXRemote 
                 source={content} 
                 components={components} 
@@ -146,18 +150,19 @@ export default async function AlgorithmPage(props: { params: Promise<{ slug: str
           </div>
 
           {/* Right Sidebar */}
-          <div className="col-span-3">
-            <div className="sticky top-8 space-y-6">
+          <aside className="lg:col-span-4">
+            <div className="sticky top-24 space-y-6">
               {/* Prerequisites Card */}
-              <Card className="bg-[var(--card)] border">
-                <div className="p-4">
-                  <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-3">
+              <Card>
+                <div className="p-4 sm:p-6">
+                  <h3 className="text-xl font-semibold mb-4">
                     Prerequisites
                   </h3>
                   <div className="space-y-2">
                     {frontmatter.prerequisites.map((prereq: string) => (
-                      <div key={prereq} className="text-[var(--text-secondary)]">
-                        • {prereq}
+                      <div key={prereq} className="flex items-start gap-2 text-muted-foreground">
+                        <span>•</span>
+                        <span>{prereq}</span>
                       </div>
                     ))}
                   </div>
@@ -165,14 +170,18 @@ export default async function AlgorithmPage(props: { params: Promise<{ slug: str
               </Card>
 
               {/* Applications Card */}
-              <Card className="bg-[var(--card)] border">
-                <div className="p-4">
-                  <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-3">
+              <Card>
+                <div className="p-4 sm:p-6">
+                  <h3 className="text-xl font-semibold mb-4">
                     Applications
                   </h3>
                   <div className="flex flex-wrap gap-2">
                     {frontmatter.applications.map((app: string) => (
-                      <Badge key={app} variant="outline" className="text-[var(--text-secondary)] border-[var(--border)]">
+                      <Badge 
+                        key={app} 
+                        variant="secondary"
+                        className="text-sm"
+                      >
                         {app}
                       </Badge>
                     ))}
@@ -182,17 +191,17 @@ export default async function AlgorithmPage(props: { params: Promise<{ slug: str
 
               {/* Related Case Studies Card */}
               {frontmatter.relatedCaseStudies && frontmatter.relatedCaseStudies.length > 0 && (
-                <Card className="bg-[var(--card)] border">
-                  <div className="p-4">
-                    <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-3">
+                <Card>
+                  <div className="p-4 sm:p-6">
+                    <h3 className="text-xl font-semibold mb-4">
                       Related Case Studies
                     </h3>
-                    <div className="space-y-2">
+                    <div className="grid gap-2">
                       {frontmatter.relatedCaseStudies.map((study: string) => (
                         <Link 
                           key={study}
                           href={`/case-study/${study}`}
-                          className="block text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors"
+                          className="text-muted-foreground hover:text-foreground transition-colors"
                         >
                           {study}
                         </Link>
@@ -202,7 +211,7 @@ export default async function AlgorithmPage(props: { params: Promise<{ slug: str
                 </Card>
               )}
             </div>
-          </div>
+          </aside>
         </div>
       </div>
     </main>

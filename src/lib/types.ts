@@ -33,7 +33,7 @@ export interface BaseContent {
 // Algorithm-specific interface
 export interface Algorithm extends BaseContent {
   complexity: string;
-  applications: Application[];
+  applications: string[];
   prerequisites: string[];
   implementation: {
     steps: string[];
@@ -59,7 +59,8 @@ export interface CaseStudy extends BaseContent {
 // Industry specific interface
 export interface Industry extends BaseContent {
   sector: string;
-  applications: string[];
+  keyApplications: string[];
+  relatedCaseStudies: string[];
 }
 
 // Persona specific interface

@@ -12,39 +12,49 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Github, Twitter, Linkedin, MessageCircle } from 'lucide-react'
 import Link from 'next/link'
-import { useForm } from '@/hooks/useForm'
-
-interface ContactForm {
-  name: string
-  email: string
-  subject: string
-  message: string
-}
+import { useState } from 'react'
+import { useToast } from "@/components/ui/use-toast"
 
 export default function ContactPage() {
-  const { values, isSubmitting, handleChange, handleSubmit } = useForm<ContactForm>({
-    initialValues: {
-      name: '',
-      email: '',
-      subject: '',
-      message: ''
-    },
-    onSubmit: async (values) => {
-      const response = await fetch('/api/contact', {
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const { toast } = useToast()
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    setIsSubmitting(true)
+
+    try {
+      const formData = new FormData(e.currentTarget)
+      const response = await fetch('https://formspree.io/f/mdkekzlb', {
         method: 'POST',
+        body: formData,
         headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(values),
+          'Accept': 'application/json'
+        }
       })
 
-      if (!response.ok) {
-        throw new Error('Failed to submit form')
+      if (response.ok) {
+        toast({
+          title: "Success",
+          description: "Thank you for your message. We'll get back to you soon.",
+          duration: 3000,
+        })
+        // Reset the form
+        ;(e.target as HTMLFormElement).reset()
+      } else {
+        throw new Error('Failed to send message')
       }
-    },
-    successMessage: "Thank you for your message. We'll get back to you soon.",
-    errorMessage: "Failed to send message. Please try again later."
-  })
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "Failed to send message. Please try again later.",
+        duration: 5000,
+      })
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
 
   return (
     <main className="min-h-screen">
@@ -80,8 +90,6 @@ export default function ContactPage() {
                       id="name"
                       name="name"
                       placeholder="Your name"
-                      value={values.name}
-                      onChange={handleChange}
                       required
                     />
                   </div>
@@ -94,8 +102,6 @@ export default function ContactPage() {
                       name="email"
                       type="email"
                       placeholder="your@email.com"
-                      value={values.email}
-                      onChange={handleChange}
                       required
                     />
                   </div>
@@ -108,8 +114,6 @@ export default function ContactPage() {
                     id="subject"
                     name="subject"
                     placeholder="What's this about?"
-                    value={values.subject}
-                    onChange={handleChange}
                     required
                   />
                 </div>
@@ -122,8 +126,6 @@ export default function ContactPage() {
                     name="message"
                     placeholder="Your message..."
                     className="min-h-[150px] resize-y"
-                    value={values.message}
-                    onChange={handleChange}
                     required
                   />
                 </div>

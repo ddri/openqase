@@ -23,7 +23,7 @@ export default function AlgorithmList({ algorithms }: AlgorithmListProps) {
       return (
         alg.title.toLowerCase().includes(query) ||
         alg.description.toLowerCase().includes(query) ||
-        alg.keywords.some(k => k.toLowerCase().includes(query))
+        alg.keywords?.some(k => k.toLowerCase().includes(query))
       );
     })
     .sort((a, b) => {

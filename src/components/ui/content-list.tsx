@@ -48,7 +48,7 @@ export default function ContentList<T extends BaseContent>({
       filtered = filtered.filter(item => 
         item.title.toLowerCase().includes(query) ||
         item.description.toLowerCase().includes(query) ||
-        item.keywords.some(keyword => keyword.toLowerCase().includes(query))
+        item.keywords?.some(keyword => keyword.toLowerCase().includes(query))
       );
     }
 

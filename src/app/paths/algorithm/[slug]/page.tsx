@@ -218,15 +218,30 @@ async function getAlgorithm(slug: string) {
   }
 }
 
-export default async function AlgorithmPage({
-  params,
-}: {
-  params: { slug: string }
-}) {
-  const algorithm = await getAlgorithm(params.slug)
+export async function generateMetadata(props: { params: Promise<{ slug: string }> }) {
+  const resolvedParams = await props.params;
+  const algorithm = await getAlgorithm(resolvedParams.slug);
+  
+  if (!algorithm) {
+    return {
+      title: 'Not Found',
+      description: 'Page not found'
+    };
+  }
+
+  return {
+    title: `${algorithm.frontmatter.title} | OpenQase Quantum Computing`,
+    description: algorithm.frontmatter.description,
+    keywords: algorithm.frontmatter.keywords,
+  };
+}
+
+export default async function Page(props: { params: Promise<{ slug: string }> }) {
+  const resolvedParams = await props.params;
+  const algorithm = await getAlgorithm(resolvedParams.slug);
 
   if (!algorithm) {
-    notFound()
+    notFound();
   }
 
   return (
@@ -255,7 +270,7 @@ export default async function AlgorithmPage({
               <div>
                 <h3 className="mb-4 text-lg font-semibold">Prerequisites</h3>
                 <div className="space-y-2">
-                  {algorithm.frontmatter.prerequisites.map((prerequisite: string) => (
+                  {algorithm.frontmatter.prerequisites?.map((prerequisite: string) => (
                     <div
                       key={prerequisite}
                       className="rounded-lg border p-4 hover:bg-muted/50"
@@ -268,7 +283,7 @@ export default async function AlgorithmPage({
               <div>
                 <h3 className="mb-4 text-lg font-semibold">Applications</h3>
                 <div className="space-y-2">
-                  {algorithm.frontmatter.applications.map((application: string) => (
+                  {algorithm.frontmatter.keyApplications?.map((application: string) => (
                     <div
                       key={application}
                       className="rounded-lg border p-4 hover:bg-muted/50"
@@ -283,5 +298,5 @@ export default async function AlgorithmPage({
         </div>
       </div>
     </main>
-  )
+  );
 }

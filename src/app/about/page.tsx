@@ -7,59 +7,35 @@ export default function AboutPage() {
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 md:mb-6 tracking-tight">
             About openQase
           </h1>
-          <p className="text-lg sm:text-xl text-muted-foreground">
-            Bridging the gap between quantum computing theory and real-world applications through 
-            practical education and industry case studies.
-          </p>
         </div>
 
         {/* Mission Section */}
         <section id="mission" className="max-w-3xl mx-auto mb-12 md:mb-16">
-          <h2 className="text-2xl sm:text-3xl font-semibold mb-4 md:mb-6">Our Mission</h2>
+          <h2 className="text-2xl sm:text-3xl font-semibold mb-4 md:mb-6">What is OpenQase?</h2>
           <div className="space-y-4 text-base sm:text-lg">
             <p className="text-muted-foreground">
-              openQase aims to democratize quantum computing education by providing accessible, 
-              practical, and industry-relevant learning resources. We believe in learning through 
-              real-world examples and hands-on experience.
+              OpenQase is a curated collection of business cases and industry partnerships involving Quantum Computing. The project exists to unlock the practical potential of quantum-related technologies, and does so by showcasing not only the most thorough collection of these published case studies, but relating them with the personas, industries, and algorithms involved. This is not just an educational resource, but an acceleration for decisions makers and industry stakeholders looking to find useful examples and form their own practical projects.
             </p>
             <p className="text-muted-foreground">
-              Our platform brings together quantum computing enthusiasts, professionals, and 
-              organizations to share knowledge and experiences, creating a vibrant community 
-              of quantum learners and practitioners.
+              Our mission is to illuminate the path from quantum theory to implementation by showcasing how organizations are solving complex problems and creating value with quantum technologies today. By providing access to these vetted case studies and success stories, we enable individuals and companies to visualize their own quantum opportunities and accelerate their adoption journey.
             </p>
+            <p className="text-muted-foreground">
+              We're committed to demystifying quantum computing by grounding it in business reality. Through our platform, we connect the quantum ecosystem—researchers, practitioners, business leaders, and curious learners—creating a resource that transforms abstract quantum concepts into actionable insights and collaborative possibilities.
+            </p>            
           </div>
         </section>
 
         {/* Why Quantum Education Section */}
         <section className="max-w-3xl mx-auto mb-12 md:mb-16">
-          <h2 className="text-2xl sm:text-3xl font-semibold mb-4 md:mb-6">Why Quantum Education?</h2>
+          <h2 className="text-2xl sm:text-3xl font-semibold mb-4 md:mb-6">Why does OpenQase exist?</h2>
           <div className="space-y-4 text-base sm:text-lg">
             <p className="text-muted-foreground">
               As quantum computing continues to evolve, there's a growing need for practical 
-              education that bridges theoretical knowledge with real-world applications. 
+              case studies that bridges theoretical knowledge with the early efforts at exploring real-world applications. 
               Traditional learning resources often focus heavily on theory, leaving a gap 
-              in practical implementation knowledge.
+              in practical implementation knowledge. This is a pain we have felt, as the OpenQase team stems from a number of established quantum computing companies on both the technical and commercial side of operations. These are the case studies and examples we wish we had, and pulled together because we needed. And now they are curated, arranged, and are continually being added for your and the wider community's benefit.
             </p>
-            <p className="text-muted-foreground">
-              openQase fills this gap by providing:
-            </p>
-            <ul className="list-disc list-inside space-y-2 text-muted-foreground ml-4">
-              <li>Real-world case studies from industry leaders</li>
-              <li>Practical implementation guides for quantum algorithms</li>
-              <li>Role-based learning paths for different career trajectories</li>
-              <li>Interactive quantum computing exercises</li>
-            </ul>
           </div>
-        </section>
-
-        {/* Team Section */}
-        <section id="team" className="max-w-3xl mx-auto mb-12 md:mb-16">
-          <h2 className="text-2xl sm:text-3xl font-semibold mb-4 md:mb-6">Our Team</h2>
-          <p className="text-base sm:text-lg text-muted-foreground mb-8">
-            openQase is built and maintained by a passionate team of quantum computing 
-            enthusiasts, educators, and industry professionals.
-          </p>
-          {/* Team member cards will be added here */}
         </section>
 
         {/* Contributing Section */}

@@ -12,7 +12,7 @@ import ThemeToggle from './ThemeToggle';
 const navItems = [
   { href: '/paths', label: 'Learning Paths' },
   { href: '/case-study', label: 'Case Studies' },
-  { href: '/stack', label: 'Quantum Stack' },
+  { href: '/quantum-stack', label: 'Quantum Stack' },
 ];
 
 export default function Navigation() {

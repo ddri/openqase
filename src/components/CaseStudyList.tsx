@@ -17,20 +17,23 @@ export default function CaseStudyList({ caseStudies }: CaseStudyListProps) {
   const [sortBy, setSortBy] = useState<'title' | 'lastUpdated'>('title');
 
   // Get unique industries for filtering
-  const industries = Array.from(new Set(caseStudies.map(cs => cs.industry[0]))).sort();
+  const industries = Array.from(new Set(caseStudies.map(cs => cs.industry?.[0] || 'Unknown'))).filter(i => i !== 'Unknown').sort();
 
   // Filter and sort case studies
   const filteredCaseStudies = caseStudies
     .filter(cs => {
-      if (industryFilter !== 'all' && !cs.industry.includes(industryFilter)) return false;
+      if (industryFilter !== 'all' && !cs.industry?.includes(industryFilter)) return false;
       if (!searchQuery) return true;
       
       const query = searchQuery.toLowerCase();
+      const industryMatch = cs.industry?.some(ind => ind.toLowerCase().includes(query)) || false;
+      const techMatch = cs.technologies?.some(tech => tech.toLowerCase().includes(query)) || false;
+      
       return (
         cs.title.toLowerCase().includes(query) ||
         cs.description.toLowerCase().includes(query) ||
-        cs.industry.some(ind => ind.toLowerCase().includes(query)) ||
-        cs.technologies.some(tech => tech.toLowerCase().includes(query))
+        industryMatch ||
+        techMatch
       );
     })
     .sort((a, b) => {
@@ -105,7 +108,7 @@ export default function CaseStudyList({ caseStudies }: CaseStudyListProps) {
             key={caseStudy.slug}
             title={caseStudy.title}
             description={caseStudy.description}
-            badges={[...caseStudy.industry, ...caseStudy.technologies]}
+            badges={[...(caseStudy.industry || []), ...(caseStudy.technologies || [])]}
             href={`/paths/case-study/${caseStudy.slug}`}
           />
         ))}

@@ -243,9 +243,6 @@ export default async function AlgorithmPage({
         </div>
         <div className="mb-8">
           <h1 className="text-3xl font-bold sm:text-4xl">{algorithm.frontmatter.title}</h1>
-          <div className="mt-2">
-            <Badge variant="outline">Complexity: {algorithm.frontmatter.complexity}</Badge>
-          </div>
         </div>
         <div className="grid grid-cols-1 gap-12 lg:grid-cols-12">
           <div className="lg:col-span-8">

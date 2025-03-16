@@ -35,15 +35,15 @@ Quantum Approximate Optimization Algorithm (QAOA) is a hybrid quantum-classical 
 
 ## Algorithm Details
 
-The Quantum Approximate Optimization Algorithm (QAOA) is a hybrid quantum-classical algorithm designed to solve combinatorial optimization problems. It was introduced by Edward Farhi, Jeffrey Goldstone, and Sam Gutmann in 2014 as a general-purpose algorithm for finding approximate solutions to hard optimization problems that are difficult to solve using classical computers<sup><a href="#ref-1">1</a></sup>. QAOA has attracted significant attention in the quantum computing community due to its potential to demonstrate quantum advantage on near-term quantum devices.
+The Quantum Approximate Optimization Algorithm (QAOA) is a hybrid quantum-classical algorithm designed to solve combinatorial optimization problems. It was introduced by Edward Farhi, Jeffrey Goldstone, and Sam Gutmann in 2014 as a general-purpose algorithm for finding approximate solutions to hard optimization problems that are difficult to solve using classical computers[^1]. QAOA has attracted significant attention in the quantum computing community due to its potential to demonstrate quantum advantage on near-term quantum devices.
 
 ## Problem Target
 
-The goal of QAOA is to find the optimal solution to a given optimization problem, which can be expressed as finding the ground state of a corresponding classical Hamiltonian<sup><a href="#ref-2">2</a></sup>. The algorithm works by preparing a parameterised quantum state using a series of alternating quantum operations, and then optimizing the parameters using a classical optimization algorithm to minimize the energy of the resulting state.
+The goal of QAOA is to find the optimal solution to a given optimization problem, which can be expressed as finding the ground state of a corresponding classical Hamiltonian[^2]. The algorithm works by preparing a parameterised quantum state using a series of alternating quantum operations, and then optimizing the parameters using a classical optimization algorithm to minimize the energy of the resulting state.
 
 ## Quantum Approach
 
-QAOA works by encoding an optimization problem into a quantum circuit that alternates between two types of operations: a problem-specific phase separation operator and a mixing operator<sup><a href="#ref-3">3</a></sup>. It then uses a classical optimization algorithm to adjust the parameters of this quantum circuit, aiming to minimize the expectation value of the problem Hamiltonian. The process iterates between running the quantum circuit and classical optimization until convergence, producing an approximate solution to the original optimization problem.
+QAOA works by encoding an optimization problem into a quantum circuit that alternates between two types of operations: a problem-specific phase separation operator and a mixing operator[^3]. It then uses a classical optimization algorithm to adjust the parameters of this quantum circuit, aiming to minimize the expectation value of the problem Hamiltonian. The process iterates between running the quantum circuit and classical optimization until convergence, producing an approximate solution to the original optimization problem.
 
 ## Implementation Steps
 
@@ -58,7 +58,7 @@ QAOA works by encoding an optimization problem into a quantum circuit that alter
     The expectation value of the classical Hamiltonian with respect to the QAOA ansatz is estimated by measuring the output of the quantum circuit and averaging the results over multiple runs. This step requires the efficient evaluation of the local terms in the Hamiltonian.
   </Step>
   <Step title="Classical optimization">
-    A classical optimization algorithm, such as gradient descent or Bayesian optimization, is used to update the parameters of the QAOA ansatz to minimize the expectation value of the Hamiltonian. The optimization process iterates between steps 3 and 4 until convergence is achieved or a maximum number of iterations is reached<sup><a href="#ref-4">4</a></sup>.
+    A classical optimization algorithm, such as gradient descent or Bayesian optimization, is used to update the parameters of the QAOA ansatz to minimize the expectation value of the Hamiltonian. The optimization process iterates between steps 3 and 4 until convergence is achieved or a maximum number of iterations is reached[^4].
   </Step>
   <Step title="Result interpretation">
     The final converged parameters of the QAOA ansatz represent an approximate solution to the optimization problem, and the corresponding expectation value provides an estimate of the quality of the solution.
@@ -67,13 +67,13 @@ QAOA works by encoding an optimization problem into a quantum circuit that alter
 
 ## Practical Applications
 
-One of the key advantages of QAOA is its flexibility and applicability to a wide range of optimization problems, including Max-Cut, graph colouring, and satisfiability problems<sup><a href="#ref-5">5</a></sup>. By adjusting the number of alternating layers in the QAOA ansatz, one can trade off between the quality of the approximate solution and the computational resources required. In the limit of an infinite number of layers, QAOA can theoretically converge to the optimal solution, although this is not practically feasible due to the limitations of current quantum hardware.
+One of the key advantages of QAOA is its flexibility and applicability to a wide range of optimization problems, including Max-Cut, graph colouring, and satisfiability problems[^5]. By adjusting the number of alternating layers in the QAOA ansatz, one can trade off between the quality of the approximate solution and the computational resources required. In the limit of an infinite number of layers, QAOA can theoretically converge to the optimal solution, although this is not practically feasible due to the limitations of current quantum hardware.
 
-QAOA has been experimentally demonstrated on various quantum computing platforms, including superconducting qubits and trapped ions<sup><a href="#ref-6">6</a></sup>. It has been applied to a range of optimization problems and has shown promising results in finding approximate solutions that are competitive with classical methods.
+QAOA has been experimentally demonstrated on various quantum computing platforms, including superconducting qubits and trapped ions[^6]. It has been applied to a range of optimization problems and has shown promising results in finding approximate solutions that are competitive with classical methods.
 
 ## Implementation Challenges
 
-There are still open questions and challenges regarding the performance and scalability of QAOA. The choice of the mixing operator and the efficiency of the classical optimization algorithm can significantly impact the quality of the approximate solutions and the computational resources required<sup><a href="#ref-7">7</a></sup>. Moreover, the presence of noise and errors in near-term quantum devices may limit the depth of the QAOA ansatz and the accuracy of the results.
+There are still open questions and challenges regarding the performance and scalability of QAOA. The choice of the mixing operator and the efficiency of the classical optimization algorithm can significantly impact the quality of the approximate solutions and the computational resources required[^7]. Moreover, the presence of noise and errors in near-term quantum devices may limit the depth of the QAOA ansatz and the accuracy of the results.
 
 Despite these challenges, QAOA remains an active area of research in the quantum computing community, with ongoing efforts to improve its performance, develop new variants and extensions, and apply it to real-world optimization problems. As quantum hardware continues to improve and scale up, QAOA and related algorithms are expected to play an increasingly important role in demonstrating the potential of quantum computing for solving hard optimization problems.
 
@@ -83,26 +83,10 @@ At the time of writing it looks like QAOA is a promising hybrid quantum-classica
 
 ## References
 
-<div className="references-section">
-  <div id="ref-1" className="reference-item">
-    1. Farhi, E., Goldstone, J., & Gutmann, S. (2014). A quantum approximate optimization algorithm. arXiv preprint arXiv:1411.4028.
-  </div>
-  <div id="ref-2" className="reference-item">
-    2. Lucas, A. (2014). Ising formulations of many NP problems. Frontiers in Physics, 2, 5.
-  </div>
-  <div id="ref-3" className="reference-item">
-    3. Zhou, L., Wang, S. T., Choi, S., Pichler, H., & Lukin, M. D. (2020). Quantum approximate optimization algorithm: Performance, mechanism, and implementation on near-term devices. Physical Review X, 10(2), 021067.
-  </div>
-  <div id="ref-4" className="reference-item">
-    4. Moll, N., Barkoutsos, P., Bishop, L. S., Chow, J. M., Cross, A., Egger, D. J., Filipp, S., Fuhrer, A., Gambetta, J. M., Ganzhorn, M., Kandala, A., Mezzacapo, A., Müller, P., Riess, W., Salis, G., Smolin, J., Tavernelli, I., & Temme, K. (2018). Quantum optimization using variational algorithms on near-term quantum devices. Quantum Science and Technology, 3(3), 030503.
-  </div>
-  <div id="ref-5" className="reference-item">
-    5. Harrigan, M. P., Sung, K. J., Neeley, M., Satzinger, K. J., Arute, F., Arya, K., Babbush, R., Bacon, D., Bardin, J. C., Barends, R., Boixo, S., Broughton, M., Buckley, B. B., Buell, D. A., Burkett, B., Bushnell, N., Chen, Y., Chen, Z., Chiaro, B., & Martinis, J. M. (2021). Quantum approximate optimization of non-planar graph problems on a planar superconducting processor. Nature Physics, 17(3), 332-336.
-  </div>
-  <div id="ref-6" className="reference-item">
-    6. Pagano, G., Bapat, A., Becker, P., Collins, K. S., De, A., Hess, P. W., Kaplan, H. B., Kyprianidis, A., Tan, W. L., Baldwin, C., Brady, L. T., Deshpande, A., Liu, F., Jordan, S., Gorshkov, A. V., & Monroe, C. (2020). Quantum approximate optimization of the long-range Ising model with a trapped-ion quantum simulator. Proceedings of the National Academy of Sciences, 117(41), 25396-25401.
-  </div>
-  <div id="ref-7" className="reference-item">
-    7. McClean, J. R., Boixo, S., Smelyanskiy, V. N., Babbush, R., & Neven, H. (2018). Barren plateaus in quantum neural network training landscapes. Nature Communications, 9(1), 4812.
-  </div>
-</div>
+[^1]: Farhi, E., Goldstone, J., & Gutmann, S. (2014). A quantum approximate optimization algorithm. arXiv preprint arXiv:1411.4028.
+[^2]: Lucas, A. (2014). Ising formulations of many NP problems. Frontiers in Physics, 2, 5.
+[^3]: Zhou, L., Wang, S. T., Choi, S., Pichler, H., & Lukin, M. D. (2020). Quantum approximate optimization algorithm: Performance, mechanism, and implementation on near-term devices. Physical Review X, 10(2), 021067.
+[^4]: Moll, N., Barkoutsos, P., Bishop, L. S., Chow, J. M., Cross, A., Egger, D. J., Filipp, S., Fuhrer, A., Gambetta, J. M., Ganzhorn, M., Kandala, A., Mezzacapo, A., Müller, P., Riess, W., Salis, G., Smolin, J., Tavernelli, I., & Temme, K. (2018). Quantum optimization using variational algorithms on near-term quantum devices. Quantum Science and Technology, 3(3), 030503.
+[^5]: Harrigan, M. P., Sung, K. J., Neeley, M., Satzinger, K. J., Arute, F., Arya, K., Babbush, R., Bacon, D., Bardin, J. C., Barends, R., Boixo, S., Broughton, M., Buckley, B. B., Buell, D. A., Burkett, B., Bushnell, N., Chen, Y., Chen, Z., Chiaro, B., & Martinis, J. M. (2021). Quantum approximate optimization of non-planar graph problems on a planar superconducting processor. Nature Physics, 17(3), 332-336.
+[^6]: Pagano, G., Bapat, A., Becker, P., Collins, K. S., De, A., Hess, P. W., Kaplan, H. B., Kyprianidis, A., Tan, W. L., Baldwin, C., Brady, L. T., Deshpande, A., Liu, F., Jordan, S., Gorshkov, A. V., & Monroe, C. (2020). Quantum approximate optimization of the long-range Ising model with a trapped-ion quantum simulator. Proceedings of the National Academy of Sciences, 117(41), 25396-25401.
+[^7]: McClean, J. R., Boixo, S., Smelyanskiy, V. N., Babbush, R., & Neven, H. (2018). Barren plateaus in quantum neural network training landscapes. Nature Communications, 9(1), 4812.

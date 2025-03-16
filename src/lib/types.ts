@@ -26,16 +26,15 @@ export interface BaseContent {
   description: string;
   lastUpdated: string;
   difficulty: DifficultyLevel;
-  keywords: string[];
-  relatedContent: RelatedContent;
+  keywords?: string[];
+  relatedContent?: RelatedContent;
 }
 
 // Algorithm-specific interface
 export interface Algorithm extends BaseContent {
-  complexity: string;
   applications: string[];
-  prerequisites: string[];
-  implementation: {
+  prerequisites?: string[];
+  implementation?: {
     steps: string[];
     requirements: string[];
     considerations: string[];
@@ -45,11 +44,9 @@ export interface Algorithm extends BaseContent {
 // Case study specific interface
 export interface CaseStudy extends BaseContent {
   industry: string[];
-  technologies: string[];
-  metrics: {
-    [key: string]: string | number;
-  };
-  outcomes: {
+  technologies?: string[];
+  metrics?: Record<string, string>;
+  outcomes?: {
     challenges: string[];
     solutions: string[];
     results: string[];
@@ -60,16 +57,15 @@ export interface CaseStudy extends BaseContent {
 export interface Industry extends BaseContent {
   sector: string;
   keyApplications: string[];
-  relatedCaseStudies: string[];
 }
 
 // Persona specific interface
 export interface Persona extends BaseContent {
   role: string;
   expertise: string[];
-  goals: string[];
-  challenges: string[];
-  learningPath: {
+  goals?: string[];
+  challenges?: string[];
+  learningPath?: {
     prerequisites: string[];
     recommendations: string[];
   };
@@ -92,10 +88,8 @@ export function isPersona(content: BaseContent): content is Persona {
   return content.type === 'persona';
 }
 
-// Utility type for content maps
-export type ContentMap<T extends BaseContent> = {
-  [slug: string]: T;
-};
+// Type for content maps
+export type ContentMap<T> = { [slug: string]: T };
 
 // Type for the complete content store
 export interface ContentStore {
@@ -103,15 +97,4 @@ export interface ContentStore {
   caseStudy: ContentMap<CaseStudy>;
   industry: ContentMap<Industry>;
   persona: ContentMap<Persona>;
-}
-
-// Validation interfaces
-export interface ValidationError {
-  path: string;
-  message: string;
-}
-
-export interface ValidationResult {
-  isValid: boolean;
-  errors: ValidationError[];
 }

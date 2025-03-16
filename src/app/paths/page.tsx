@@ -8,6 +8,7 @@ import { Badge } from '@/components/ui/badge';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
+import { Users, Building2, Atom } from 'lucide-react';
 
 async function getContentCounts() {
   const counts = {
@@ -47,7 +48,7 @@ export default async function LearningPathsPage() {
       href: "/paths/persona",
       count: counts.persona,
       examples: ["Software Engineer", "Financial Analyst"],
-      icon: "👤"
+      Icon: Users
     },
     {
       title: "By Industry",
@@ -55,7 +56,7 @@ export default async function LearningPathsPage() {
       href: "/paths/industry",
       count: counts.industry,
       examples: ["Finance", "Healthcare", "Smart Cities"],
-      icon: "🏢"
+      Icon: Building2
     },
     {
       title: "By Algorithm",
@@ -63,7 +64,7 @@ export default async function LearningPathsPage() {
       href: "/paths/algorithm",
       count: counts.algorithm,
       examples: ["Grover's", "QAOA", "VQE"],
-      icon: "⚛️"
+      Icon: Atom
     }
   ];
 
@@ -90,11 +91,11 @@ export default async function LearningPathsPage() {
               )}>
                 <CardHeader className="h-full flex flex-col">
                   <div className="flex items-center justify-between mb-4">
-                    <span className="text-2xl" role="img" aria-label={path.title}>
-                      {path.icon}
-                    </span>
+                    <div className="p-2 rounded-lg bg-primary/10">
+                      <path.Icon className="h-6 w-6 text-primary" />
+                    </div>
                     <Badge variant="secondary" className="text-xs">
-                      {counts[path.title.toLowerCase().split(' ')[1] as keyof typeof counts]} Paths
+                      {path.count} Paths
                     </Badge>
                   </div>
                   

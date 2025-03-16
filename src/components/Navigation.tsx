@@ -40,33 +40,35 @@ export default function Navigation() {
       isScrolled ? 'bg-background/80 backdrop-blur-sm' : 'bg-background'
     )}>
       <nav className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex h-16 items-center justify-between">
-          {/* Logo */}
-          <Link href="/" className="flex items-center space-x-2">
-            <span className="text-xl font-bold">openQase</span>
-          </Link>
+        <div className="flex h-16 items-center">
+          {/* Logo and Desktop Navigation */}
+          <div className="flex items-center space-x-8">
+            <Link href="/" className="flex items-center">
+              <span className="text-xl font-bold">openQase</span>
+            </Link>
 
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex md:items-center md:space-x-8">
-            {navItems.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={cn(
-                  'nav-link relative py-2 text-base font-medium',
-                  pathname === item.href ? 'nav-active text-primary' : 'text-muted-foreground hover:text-primary'
-                )}
-              >
-                {item.label}
-                {pathname === item.href && (
-                  <span className="absolute inset-x-0 -bottom-[1px] h-0.5 bg-primary" />
-                )}
-              </Link>
-            ))}
+            {/* Desktop Navigation */}
+            <div className="hidden md:flex md:items-center md:space-x-6">
+              {navItems.map((item) => (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className={cn(
+                    'nav-link relative py-2 text-base font-medium',
+                    pathname === item.href ? 'nav-active text-primary' : 'text-muted-foreground hover:text-primary'
+                  )}
+                >
+                  {item.label}
+                  {pathname === item.href && (
+                    <span className="absolute inset-x-0 -bottom-[1px] h-0.5 bg-primary" />
+                  )}
+                </Link>
+              ))}
+            </div>
           </div>
 
-          {/* Desktop Actions */}
-          <div className="hidden md:flex md:items-center md:space-x-4">
+          {/* Desktop Actions - pushed to the right */}
+          <div className="hidden md:flex md:items-center md:space-x-4 ml-auto">
             <ThemeToggle />
             <Button asChild>
               <Link href="/contact">Contact</Link>
@@ -74,7 +76,7 @@ export default function Navigation() {
           </div>
 
           {/* Mobile Menu Button */}
-          <div className="flex items-center space-x-4 md:hidden">
+          <div className="flex items-center space-x-4 md:hidden ml-auto">
             <ThemeToggle />
             <button
               onClick={() => setIsOpen(!isOpen)}

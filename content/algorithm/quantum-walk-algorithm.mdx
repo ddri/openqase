@@ -33,87 +33,98 @@ lastUpdated: "2024-02-21"
 
 Quantum Walks use quantum mechanics to create a superposition of possible paths, allowing simultaneous exploration of a graph. They can outperform classical random walks in tasks like search and navigation.
 
-## Algorithm Details
-
-Quantum walk algorithms are a class of quantum algorithms that exploit the principles of quantum mechanics to perform walks on graphs or other structured spaces. They are the quantum analogues of classical random walks, which have numerous applications in computer science, physics, and other fields<sup><a href="#ref-1">1</a></sup>. However, quantum walks can exhibit markedly different behaviour compared to their classical counterparts, leading to new possibilities for quantum algorithms and simulations.
-
-In a classical random walk, a walker moves randomly between adjacent nodes of a graph, with the probability of moving to each neighbouring node being equal. In contrast, a quantum walk involves a quantum particle (or a quantum state) that moves between the nodes of a graph in a superposition of different paths<sup><a href="#ref-2">2</a></sup>. The interference between these paths can lead to a faster spread of the quantum walker compared to the classical random walker, and can also result in the localisation of the quantum walker on certain nodes or subgraphs.
-
-There are two main types of quantum walks: discrete-time quantum walks (DTQW) and continuous-time quantum walks (CTQW)<sup><a href="#ref-3">3</a></sup>. In a DTQW, the quantum walker evolves in discrete time steps, and the evolution is governed by a coin operator (which determines the direction of the walk) and a shift operator (which moves the walker between the nodes). In a CTQW, the quantum walker evolves continuously in time according to the Schrödinger equation, with the Hamiltonian of the system determined by the structure of the graph.
+Quantum Walk Algorithms are quantum analogues of classical random walks, providing quadratic speedup for various search and graph problems[^1]. These algorithms exploit quantum superposition and interference to explore multiple paths simultaneously, leading to faster solutions for certain computational tasks[^2].
 
 ## Problem Target
 
-Quantum walk algorithms have emerged as a powerful tool in various domains, offering significant advantages over classical approaches. In the study of graph traversal and search, quantum walks provide a quadratic speedup compared to their classical counterparts, enabling faster and more efficient exploration of complex networks<sup><a href="#ref-4">4</a></sup>. For instance, they can pinpoint a marked node on a graph with remarkable speed, outperforming classical random walks.
-
-Quantum walks also tackle the element distinctness problem with unprecedented efficiency, determining the presence of duplicates in a list significantly faster than classical algorithms<sup><a href="#ref-5">5</a></sup>. They also prove invaluable in quantum simulations, shedding light on the dynamics of intricate quantum systems like photosynthetic complexes and disordered media, paving the way for advancements in quantum technologies.
-
-The applications of quantum walks extend to the field of quantum machine learning, where they revolutionise tasks such as clustering, classification, and feature extraction. Quantum walk-based clustering algorithms, for example, can rapidly identify patterns in datasets with exceptional speed.
-
-Finally, quantum walks have made their mark in the domain of quantum cryptography, contributing to the development of secure key distribution protocols and other cryptographic schemes that are resistant to eavesdropping and other threats.
+Quantum walks address problems that can be modeled as searches or traversals on graphs[^3]. While classical random walks move through a graph one step at a time, quantum walks can explore multiple paths simultaneously through quantum superposition. This parallel exploration leads to quadratic speedup in hitting times and mixing times compared to classical random walks[^4].
 
 ## Quantum Approach
 
-Quantum walks involve a "walker" in superposition, moving in multiple directions simultaneously<sup><a href="#ref-6">6</a></sup>. A quantum coin flip determines movement, and interference between different paths creates unique probability distributions for the walker's location. This allows quantum walks to excel at searching graphs, simulating quantum systems, and potentially enhancing machine learning and cryptography.
+The algorithm implements two main types of quantum walks[^5]:
+
+1. Discrete-time quantum walks
+   - Uses coin operators and shift operators
+   - Moves in discrete steps
+
+2. Continuous-time quantum walks
+   - Uses Hamiltonian evolution
+   - Continuous evolution of quantum state[^6]
 
 ## Implementation Steps
 
 <Steps>
-  <Step title="State preparation">
-    The quantum walk starts with initialising the quantum system in a specific state, usually a superposition of all possible positions.
+  <Step title="State Preparation">
+    Initialize the quantum system in a superposition of position states.
   </Step>
-  <Step title="Evolution">
-    The quantum walk evolves through a series of steps. Each step typically involves two operations:
-   a. Coin operation. A "quantum coin" is flipped, which is usually implemented as a unitary operation (like a Hadamard gate) applied to a coin register. This creates a superposition of "directions" for the walk.
-   b. Shift operation. Based on the coin state, the position of the walker is updated. This is usually implemented as a controlled operation that moves the walker based on the coin state.
+  <Step title="Walk Operation">
+    Apply coin and shift operators (discrete-time) or Hamiltonian evolution (continuous-time)[^7].
   </Step>
   <Step title="Measurement">
-    After a certain number of steps, or at the end of the algorithm, a measurement is performed to collapse the quantum state and obtain a classical outcome.
+    Measure the system to obtain the final position.
   </Step>
-  <Step title="Repetition">
-    Steps one to three may be repeated multiple times to gather statistical data about the walk's behaviour.
+  <Step title="Post-processing">
+    Process measurement results to solve the target problem.
   </Step>
 </Steps>
 
-For continuous-time quantum walks, the evolution is described by a time-dependent Schrödinger equation instead of discrete steps. It's worth noting that the specific implementation can vary depending on the type of quantum walk (discrete-time or continuous-time) and the problem being solved. Quantum walks can be applied to various tasks such as search algorithms, element distinctness, and graph property testing.
-
-
 ## Practical Applications
 
-The implementation of quantum walk algorithms on quantum hardware requires the ability to perform quantum state preparation, coin and shift operations, and quantum measurements. Experimental realisations of quantum walks have been demonstrated on various platforms, including photonic qubits, trapped ions, and superconducting qubits. These experiments have validated the basic principles of quantum walks and have paved the way for the development of more complex quantum algorithms based on walks.
+Quantum walks find applications in various areas[^8]:
+
+1. Search Problems
+   - Element finding
+   - Graph traversal
+   - Pattern matching
+
+2. Graph Theory
+   - Network analysis
+   - Connectivity testing
+   - Shortest path finding
+
+3. Quantum Simulation
+   - Physical systems
+   - Chemical processes
+   - Biological processes
+
+4. Machine Learning
+   - Clustering
+   - Classification
+   - Optimization
 
 ## Implementation Challenges
 
-The practical implementation of quantum walk algorithms faces challenges, such as the need for high-fidelity quantum operations, the presence of decoherence and noise, and the scalability of the quantum hardware<sup><a href="#ref-7">7</a></sup>. Ongoing research in quantum error correction, fault-tolerant quantum computing, and quantum algorithm design aims to address these challenges and unlock the full potential of quantum walks for various applications.
+Key challenges in implementing quantum walks include[^9]:
+
+1. Coherence Time
+   - Maintaining quantum states
+   - Dealing with decoherence
+
+2. Graph Structure
+   - Implementing complex topologies
+   - Scaling to large graphs
+
+3. Measurement
+   - Extracting useful information
+   - Multiple run requirements
+
+4. Hardware Requirements
+   - Quantum memory needs
+   - Gate fidelity requirements
 
 ## Bottom Line
 
-Quantum walk algorithms are a powerful tool in the quantum computing toolbox, with the potential to solve certain problems faster than classical algorithms and to simulate the behaviour of complex quantum systems<sup><a href="#ref-8">8</a></sup>. As quantum technologies continue to advance, quantum walks are expected to play an increasingly important role in various fields, from quantum information processing and quantum sensing to quantum-enhanced machine learning and quantum cryptography.
+Quantum walks represent a powerful quantum computing paradigm, offering significant speedup for certain graph and search problems[^10]. While implementation challenges exist, ongoing research continues to expand their applications and improve their practicality.
 
 ## References
 
-<div className="references-section">
-  <div id="ref-1" className="reference-item">
-      1. Kempe, J. (2003). Quantum random walks: An introductory overview. Contemporary Physics, 44(4), 307-327.
-  </div>
-  <div id="ref-2" className="reference-item">
-      2. Aharonov, Y., Davidovich, L., & Zagury, N. (1993). Quantum random walks. Physical Review A, 48(2), 1687.
-  </div>
-  <div id="ref-3" className="reference-item">
-      3. Venegas-Andraca, S. E. (2012). Quantum walks: a comprehensive review. Quantum Information Processing, 11(5), 1015-1106.
-  </div>
-  <div id="ref-4" className="reference-item">
-      4. Shenvi, N., Kempe, J., & Whaley, K. B. (2003). Quantum random-walk search algorithm. Physical Review A, 67(5), 052307.
-  </div>
-  <div id="ref-5" className="reference-item">
-      5. Ambainis, A. (2007). Quantum walk algorithm for element distinctness. SIAM Journal on Computing, 37(1), 210-239.
-  </div>
-  <div id="ref-6" className="reference-item">
-      6. Childs, A. M. (2009). Universal computation by quantum walk. Physical Review Letters, 102(18), 180501.
-  </div>
-  <div id="ref-7" className="reference-item">
-      7. Kendon, V. (2006). Decoherence in quantum walks—a review. Mathematical Structures in Computer Science, 17(6), 1169-1220.
-  </div>
-  <div id="ref-8" className="reference-item">
-      8. Montanaro, A. (2016). Quantum algorithms: an overview. npj Quantum Information, 2(1), 1-8.
-   </div>
-</div>
+[^1]: Aharonov, Y., Davidovich, L., & Zagury, N. (1993). Quantum random walks. Physical Review A, 48(2), 1687.
+[^2]: Ambainis, A. (2003). Quantum walks and their algorithmic applications. International Journal of Quantum Information, 1(04), 507-518.
+[^3]: Kempe, J. (2003). Quantum random walks: an introductory overview. Contemporary Physics, 44(4), 307-327.
+[^4]: Childs, A. M., Cleve, R., Deotto, E., Farhi, E., Gutmann, S., & Spielman, D. A. (2003). Exponential algorithmic speedup by a quantum walk. In Proceedings of the thirty-fifth annual ACM symposium on Theory of computing (pp. 59-68).
+[^5]: Venegas-Andraca, S. E. (2012). Quantum walks: a comprehensive review. Quantum Information Processing, 11(5), 1015-1106.
+[^6]: Farhi, E., & Gutmann, S. (1998). Quantum computation and decision trees. Physical Review A, 58(2), 915.
+[^7]: Szegedy, M. (2004). Quantum speed-up of Markov chain based algorithms. In 45th Annual IEEE symposium on foundations of computer science (pp. 32-41).
+[^8]: Santha, M. (2008). Quantum walk based search algorithms. In International Conference on Theory and Applications of Models of Computation (pp. 31-46).
+[^9]: Wong, T. G. (2015). Quantum walk search with time-reversal symmetry breaking. Journal of Physics A: Mathematical and Theoretical, 48(40), 405303.
+[^10]: Montanaro, A. (2016). Quantum algorithms: an overview. npj Quantum Information, 2(1), 1-8.

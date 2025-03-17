@@ -2,7 +2,6 @@
 title: "Quantum Fourier Transform (QFT)"
 type: "Technical"
 slug: "QFT"
-complexity: "Variable (depends on circuit depth p and problem size)"
 description: "The Quantum Fourier Transform (QFT) efficiently performs a discrete Fourier transform on quantum states, serving as a key building block for many other quantum algorithms."
 applications:
   - "Maximum Cut Problems"
@@ -36,17 +35,17 @@ The Quantum Fourier Transform (QFT) efficiently performs a discrete Fourier tran
 
 ## Algorithm Details
 
-The Quantum Fourier Transform (QFT) is a fundamental quantum algorithm that plays a crucial role in many quantum computing applications. These include quantum phase estimation, Shor's algorithm for factoring, and quantum simulations1. It is the quantum analog of the classical Discrete Fourier Transform (DFT), which is used to analyse and manipulate signals and data in various fields, including signal processing, image compression, and cryptography.
+The Quantum Fourier Transform (QFT) is a fundamental quantum algorithm that plays a crucial role in many quantum computing applications. These include quantum phase estimation, Shor's algorithm for factoring, and quantum simulations[^1]. It is the quantum analog of the classical Discrete Fourier Transform (DFT), which is used to analyse and manipulate signals and data in various fields, including signal processing, image compression, and cryptography.
 
 ## Problem Target
 
-The QFT solves the problem of efficiently transforming a quantum state from the computational basis to the Fourier basis. It allows for the extraction of periodicity and frequency information from quantum states (where the amplitudes of the state are proportional to the discrete Fourier coefficients)2. This transformation is crucial for many quantum algorithms, as it enables them to efficiently analyse and manipulate the frequency components of quantum data.
+The QFT solves the problem of efficiently transforming a quantum state from the computational basis to the Fourier basis. It allows for the extraction of periodicity and frequency information from quantum states (where the amplitudes of the state are proportional to the discrete Fourier coefficients)[^2]. This transformation is crucial for many quantum algorithms, as it enables them to efficiently analyse and manipulate the frequency components of quantum data.
 
 ## Quantum Approach
 
-The QFT uses a series of Hadamard gates and controlled phase rotation gates to efficiently extract periodicity and frequency information from quantum states3. The QFT has a time complexity of O(n²) for n qubits, making it exponentially faster than the classical Discrete Fourier Transform.
+The QFT uses a series of Hadamard gates and controlled phase rotation gates to efficiently extract periodicity and frequency information from quantum states[^3]. The QFT has a time complexity of O(n²) for n qubits, making it exponentially faster than the classical Discrete Fourier Transform.
 
-The QFT can be defined as follows: given a quantum state |x⟩ = ∑ₓ αₓ |x⟩ in the computational basis, where x is an n-bit integer and αₓ are the complex amplitudes, the QFT transforms the state into the Fourier basis |ψ⟩ = ∑ₖ βₖ |k⟩, where k is an n-bit integer and βₖ are the Fourier coefficients. The relationship between the amplitudes and the Fourier coefficients is given by: βₖ = (1/√N) ∑ₓ αₓ exp(2πi·xk/N) where N = 2ⁿ is the dimension of the Hilbert space4.
+The QFT can be defined as follows: given a quantum state |x⟩ = ∑ₓ αₓ |x⟩ in the computational basis, where x is an n-bit integer and αₓ are the complex amplitudes, the QFT transforms the state into the Fourier basis |ψ⟩ = ∑ₖ βₖ |k⟩, where k is an n-bit integer and βₖ are the Fourier coefficients. The relationship between the amplitudes and the Fourier coefficients is given by: βₖ = (1/√N) ∑ₓ αₓ exp(2πi·xk/N) where N = 2ⁿ is the dimension of the Hilbert space[^4].
 
 ## Implementation Steps
 
@@ -68,13 +67,13 @@ The QFT can be defined as follows: given a quantum state |x⟩ = ∑ₓ αₓ |x
   </Step>
 </Steps>
 
-The QFT has a time complexity of O(n²), where n is the number of qubits, making it exponentially faster than the classical DFT, which has a time complexity of O(n2ⁿ). This speedup is one of the main advantages of the QFT and is exploited in many quantum algorithms5.
+The QFT has a time complexity of O(n²), where n is the number of qubits, making it exponentially faster than the classical DFT, which has a time complexity of O(n2ⁿ). This speedup is one of the main advantages of the QFT and is exploited in many quantum algorithms[^5].
 
 ## Practical Applications
 
-One of the most famous applications of the QFT is in Shor's algorithm for factoring large integers, which has significant implications for cryptography6. The QFT is used in the period-finding subroutine of Shor's algorithm, which enables the efficient determination of the period of a modular exponentiation function. This, in turn, allows for the factorisation of large numbers in polynomial time, a feat that is believed to be infeasible for classical computers.
+One of the most famous applications of the QFT is in Shor's algorithm for factoring large integers, which has significant implications for cryptography[^6]. The QFT is used in the period-finding subroutine of Shor's algorithm, which enables the efficient determination of the period of a modular exponentiation function. This, in turn, allows for the factorisation of large numbers in polynomial time, a feat that is believed to be infeasible for classical computers.
 
-The QFT is also a key component in quantum phase estimation, which is a technique for estimating the eigenvalues of a unitary operator7. Quantum phase estimation is used in many quantum algorithms, such as the Harrow-Hassidim-Lloyd (HHL) algorithm for solving linear systems of equations and the Variational Quantum Eigensolver (VQE) for finding the ground state energy of a quantum system.
+The QFT is also a key component in quantum phase estimation, which is a technique for estimating the eigenvalues of a unitary operator[^7]. Quantum phase estimation is used in many quantum algorithms, such as the Harrow-Hassidim-Lloyd (HHL) algorithm for solving linear systems of equations and the Variational Quantum Eigensolver (VQE) for finding the ground state energy of a quantum system.
 
 In addition to its algorithmic applications, the QFT is also used in quantum error correction schemes, such as the Shor code and the Steane code, where it helps to detect and correct errors in quantum states.
 
@@ -90,16 +89,10 @@ The Quantum Fourier Transform (QFT) is a powerful and versatile quantum algorith
 
 ## References
 
-1. Nielsen, M. A., & Chuang, I. L. (2010). Quantum Computation and Quantum Information. Cambridge University Press.
-
-2. Jozsa, R. (1998). Quantum algorithms and the Fourier transform. Proceedings of the Royal Society of London. Series A: Mathematical, Physical and Engineering Sciences, 454(1969), 323-337.
-
-3. Coppersmith, D. (1994). An approximate Fourier transform useful in quantum factoring. IBM Research Report, RC19642.
-
-4. Bernstein, E., & Vazirani, U. (1997). Quantum complexity theory. SIAM Journal on Computing, 26(5), 1411-1473.
-
-5. Cleve, R., Ekert, A., Macchiavello, C., & Mosca, M. (1998). Quantum algorithms revisited. Proceedings of the Royal Society of London. Series A: Mathematical, Physical and Engineering Sciences, 454(1969), 339-354.
-
-6. Shor, P. W. (1994). Algorithms for quantum computation: Discrete logarithms and factoring. Proceedings 35th Annual Symposium on Foundations of Computer Science, 124-134.
-
-7. Kitaev, A. Y. (1995). Quantum measurements and the Abelian stabilizer problem. arXiv preprint quant-ph/9511026.
+[^1]: Nielsen, M. A., & Chuang, I. L. (2010). Quantum Computation and Quantum Information. Cambridge University Press.
+[^2]: Jozsa, R. (1998). Quantum algorithms and the Fourier transform. Proceedings of the Royal Society of London. Series A: Mathematical, Physical and Engineering Sciences, 454(1969), 323-337.
+[^3]: Coppersmith, D. (1994). An approximate Fourier transform useful in quantum factoring. IBM Research Report, RC19642.
+[^4]: Bernstein, E., & Vazirani, U. (1997). Quantum complexity theory. SIAM Journal on Computing, 26(5), 1411-1473.
+[^5]: Cleve, R., Ekert, A., Macchiavello, C., & Mosca, M. (1998). Quantum algorithms revisited. Proceedings of the Royal Society of London. Series A: Mathematical, Physical and Engineering Sciences, 454(1969), 339-354.
+[^6]: Shor, P. W. (1994). Algorithms for quantum computation: Discrete logarithms and factoring. Proceedings 35th Annual Symposium on Foundations of Computer Science, 124-134.
+[^7]: Kitaev, A. Y. (1995). Quantum measurements and the Abelian stabilizer problem. arXiv preprint quant-ph/9511026.

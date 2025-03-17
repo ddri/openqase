@@ -1,109 +1,153 @@
 # Card Component Refactoring Documentation
 
-## Work Completed So Far
+## Current Implementation
 
-1. **Theme System Implementation**
-   - Fixed hydration errors by implementing a client-side only theme system
-   - Set dark theme as the default with proper theme variables
-   - Added mounting state to prevent hydration mismatches
+1. **Unified Card System**
+   - Implemented a standardized `ContentCard` component
+   - All content types now use the same card component
+   - Consistent styling and behavior across the application
+   - Proper theme support with dark mode
 
-2. **Card Height Standardization**
-   - Updated the base Card component (`src/components/ui/card.tsx`) to accept:
-     - `fixedHeight` prop - Boolean to enable fixed height mode
-     - `height` prop - Number parameter for specific pixel height
-   - Updated CardHeader to accept `flexGrow` prop for proper content distribution
-   - Set default height to 210px
-   - Created documentation for recommended heights by page type
+2. **Card Features**
+   - Title with consistent styling
+   - Description with line clamp
+   - Badge system for metadata display
+   - Consistent spacing and layout
+   - Proper hover states and interactions
 
-3. **Theme Variable Replacement**
-   - Replaced hardcoded colors with theme variables (e.g., changed `text-gray-900` to `text-[var(--text-primary)]`)
-   - Ensured proper dark mode support across components
+3. **Badge System**
+   - Badges are sorted by length
+   - Maximum of three visible badges
+   - Overflow indicator for additional badges
+   - Consistent badge styling and spacing
 
-## Card Component Analysis
+## Component Structure
 
-We've identified three different card components in the codebase:
+The card system is now built around these key components:
 
-1. **Base Card Component** (`src/components/ui/card.tsx`)
-   - Generic, composable card with subcomponents (CardHeader, CardTitle, etc.)
-   - Recently enhanced with height parameters for consistent sizing
-   - Used in some pages of the application
+1. **ContentCard Component** (`src/components/ui/content-card.tsx`)
+   - Main component for all content types
+   - Uses shadcn/ui Card component internally
+   - Handles consistent layout and styling
+   - Manages badge display and overflow
 
-2. **ContentCard Component** (`src/components/ContentCard.tsx`)
-   - Specialized card for content items
-   - Custom implementation not using the base Card component
-   - Uses its own styling approach
+2. **Content List Components**
+   - `AlgorithmList`
+   - `CaseStudyList`
+   - `IndustryList`
+   - `PersonaList`
+   Each list component:
+   - Handles filtering and sorting
+   - Uses ContentCard for display
+   - Manages its own state
+   - Provides consistent search functionality
 
-3. **PathCard Component** (`src/components/PathCard.tsx`)
-   - Specialized card for learning paths
-   - Also not using the base Card component
-   - Includes unique features like an aspect ratio container for images
+## Implementation Details
 
-## Decision Pending
+### ContentCard Props
+```typescript
+interface ContentCardProps {
+  title: string;
+  description: string;
+  badges: string[];
+  href: string;
+}
+```
 
-We need to decide on a strategy for handling these multiple card implementations:
+### Key Features
+- Title uses consistent font size and weight
+- Description is limited to 2 lines with ellipsis
+- Badges are displayed in a flex container
+- Hover state provides visual feedback
+- Links wrap entire card for better UX
 
-**Option 1: Keep Separate Components**
-- Maintain separate specialized card components
-- Add height control to each card type
-- Accept potential inconsistencies and maintenance overhead
+## Usage Examples
 
-**Option 2: Refactor to Single Card System (Preferred)**
-- Rebuild specialized cards using the base Card component internally
-- Maintain the specialized APIs but implement them using Card composition
-- Ensure consistent styling and behavior across all pages
+1. **Algorithm Display**
+```typescript
+<ContentCard
+  title={algorithm.title}
+  description={algorithm.description}
+  badges={[algorithm.complexity, ...algorithm.keyApplications]}
+  href={`/paths/algorithm/${algorithm.slug}`}
+/>
+```
 
-We are leaning towards Option 2 (refactoring to a single card system) for these reasons:
-- Better consistency across the application
-- Reduced maintenance burden
-- Easier application of system-wide changes
-- Better adherence to the DRY principle
+2. **Industry Display**
+```typescript
+<ContentCard
+  title={industry.title}
+  description={industry.description}
+  badges={[industry.sector, ...industry.keyApplications]}
+  href={`/paths/industry/${industry.slug}`}
+/>
+```
 
-## Next Steps
+## Styling Guidelines
 
-1. **Inventory Card Usage**
-   - Identify all pages using ContentCard and PathCard components
-   - Document specific styling and behavior requirements for each
+- Cards maintain consistent padding and margins
+- Text sizes follow the design system
+- Badge colors use theme variables
+- Hover states are subtle but noticeable
+- All interactive elements are accessible
 
-2. **Create Refactored Components**
-   - Rebuild ContentCard and PathCard using base Card composition
-   - Maintain the same API to minimize changes to consuming pages
-   - Incorporate height parameters consistently
+## Best Practices
 
-3. **Page Updates**
-   - Update page implementations to use appropriate fixed heights
-   - Ensure consistent card appearance across different page types
+1. **Component Usage**
+   - Always use ContentCard for content display
+   - Pass all required props
+   - Handle badge arrays appropriately
+   - Use proper TypeScript types
 
-4. **Testing**
-   - Verify consistent card heights within each page type
-   - Test theme switching to ensure proper styling in both modes
-   - Confirm no regression in existing functionality
+2. **Styling**
+   - Use theme variables for colors
+   - Follow spacing guidelines
+   - Maintain accessibility standards
+   - Test in both light and dark modes
+
+3. **Performance**
+   - Memoize card components when needed
+   - Handle large badge arrays efficiently
+   - Optimize image loading if used
+   - Monitor render performance
+
+## Testing Checklist
+
+- [ ] Verify card rendering for all content types
+- [ ] Check badge overflow behavior
+- [ ] Test responsive design
+- [ ] Verify hover states
+- [ ] Check accessibility
+- [ ] Test theme switching
+- [ ] Verify link behavior
+
+## Future Improvements
+
+1. **Potential Enhancements**
+   - Image support for certain content types
+   - Custom badge colors by type
+   - Enhanced hover interactions
+   - Additional metadata display options
+
+2. **Performance Optimizations**
+   - Virtual scrolling for long lists
+   - Better image optimization
+   - More efficient badge handling
+   - Reduced re-renders
 
 ## Relevant Files
 
-- `src/components/ui/card.tsx` - Base card component with height parameters
-- `src/components/ContentCard.tsx` - Custom content card implementation
-- `src/components/PathCard.tsx` - Custom path card implementation
-- `src/app/paths/page.tsx` - Learning paths page using Card component
-- `src/app/paths/industry/page.tsx` - Industry page using Card component
-- `src/app/paths/persona/page.tsx` - Persona page that may be using PathCard
-- `src/app/case-study/page.tsx` - Case studies page that may be using ContentCard
+- `src/components/ui/content-card.tsx` - Main card component
+- `src/components/AlgorithmList.tsx` - Algorithm list implementation
+- `src/components/CaseStudyList.tsx` - Case study list implementation
+- `src/components/IndustryList.tsx` - Industry list implementation
+- `src/components/PersonaList.tsx` - Persona list implementation
 
-## Resuming This Work
+## Maintenance Notes
 
-When resuming this work:
-
-1. First review this document to understand the context and decisions made
-2. Check the implementation status of the refactoring plan
-3. Prioritize consistent card height implementation across all pages
-4. Focus on component composition rather than duplication
-5. Ensure all pages maintain proper theme variable usage
-6. Verify all refactored components support both light and dark themes
-
-For each page type, refer to this height reference:
-- Industries: 210-220px
-- Case Studies: 260px
-- Algorithms: 280px
-- Personas: 320px
-- Learning Paths: 340px
-
-The primary goal is to unify the card implementation approach while maintaining the visual distinctiveness of each section.
+When making changes:
+1. Test across all content types
+2. Verify theme compatibility
+3. Check responsive behavior
+4. Update documentation
+5. Run accessibility checks

@@ -1,82 +1,98 @@
 'use client';
 
-import { useState, useMemo } from 'react';
-import { Card, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import Link from 'next/link';
-import type { CaseStudy } from '@/lib/types';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { useState } from 'react';
 import { Input } from '@/components/ui/input';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Label } from '@/components/ui/label';
+import type { CaseStudy } from '@/lib/types';
+import ContentCard from '@/components/ui/content-card';
 
 interface CaseStudyListProps {
   caseStudies: CaseStudy[];
 }
 
-type SortOption = 'title' | 'lastUpdated';
-
 export default function CaseStudyList({ caseStudies }: CaseStudyListProps) {
   const [searchQuery, setSearchQuery] = useState('');
-  const [sortBy, setSortBy] = useState<SortOption>('title');
+  const [industryFilter, setIndustryFilter] = useState('all');
+  const [sortBy, setSortBy] = useState<'title' | 'lastUpdated'>('title');
+
+  // Get unique industries for filtering
+  const industries = Array.from(new Set(caseStudies.map(cs => cs.industry?.[0] || 'Unknown'))).filter(i => i !== 'Unknown').sort();
 
   // Filter and sort case studies
-  const filteredCaseStudies = useMemo(() => {
-    let filtered = [...caseStudies];
-
-    // Apply search filter
-    if (searchQuery) {
+  const filteredCaseStudies = caseStudies
+    .filter(cs => {
+      if (industryFilter !== 'all' && !cs.industry?.includes(industryFilter)) return false;
+      if (!searchQuery) return true;
+      
       const query = searchQuery.toLowerCase();
-      filtered = filtered.filter(study => 
-        study.title.toLowerCase().includes(query) ||
-        study.description.toLowerCase().includes(query) ||
-        study.tags?.some(tag => tag.toLowerCase().includes(query))
+      const industryMatch = cs.industry?.some(ind => ind.toLowerCase().includes(query)) || false;
+      const techMatch = cs.technologies?.some(tech => tech.toLowerCase().includes(query)) || false;
+      
+      return (
+        cs.title.toLowerCase().includes(query) ||
+        cs.description.toLowerCase().includes(query) ||
+        industryMatch ||
+        techMatch
       );
-    }
-
-    // Apply sorting
-    filtered.sort((a, b) => {
-      switch (sortBy) {
-        case 'title':
-          return a.title.localeCompare(b.title);
-        case 'lastUpdated':
-          return new Date(b.lastUpdated).getTime() - new Date(a.lastUpdated).getTime();
-        default:
-          return 0;
+    })
+    .sort((a, b) => {
+      if (sortBy === 'lastUpdated') {
+        return new Date(b.lastUpdated).getTime() - new Date(a.lastUpdated).getTime();
       }
+      return a.title.localeCompare(b.title);
     });
-
-    return filtered;
-  }, [caseStudies, searchQuery, sortBy]);
 
   return (
     <div className="space-y-6">
-      {/* Filters and Sort Controls */}
-      <div className="flex flex-col md:flex-row gap-4 items-start md:items-center">
-        <div className="flex-1 w-full">
-          <Label htmlFor="search" className="mb-4 block">Search case studies</Label>
+      {/* Search and Filter Controls */}
+      <div className="flex flex-col sm:flex-row gap-4">
+        <div className="flex-1">
+          <Label htmlFor="search" className="text-sm font-medium mb-1.5 block">
+            Search case studies
+          </Label>
           <Input
             id="search"
             type="search"
-            placeholder="Search by title, description, or tags..."
+            placeholder="Search by title, description, industry, or technologies..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="w-full"
           />
         </div>
         
-        <div className="flex gap-4 w-full md:w-auto">
-          <div className="flex-1">
-            <Label htmlFor="sort" className="mb-4 block">Sort by</Label>
-            <Select value={sortBy} onValueChange={(value: SortOption) => setSortBy(value)}>
-              <SelectTrigger id="sort" className="w-full">
-                <SelectValue placeholder="Sort by" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="title">Title (A-Z)</SelectItem>
-                <SelectItem value="lastUpdated">Last Updated</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
+        <div className="w-full sm:w-[200px]">
+          <Label htmlFor="industry" className="text-sm font-medium mb-1.5 block">
+            Industry
+          </Label>
+          <Select value={industryFilter} onValueChange={setIndustryFilter}>
+            <SelectTrigger id="industry" className="w-full">
+              <SelectValue placeholder="Filter by industry" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All Industries</SelectItem>
+              {industries.map(industry => (
+                <SelectItem key={industry} value={industry}>
+                  {industry}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+
+        <div className="w-full sm:w-[200px]">
+          <Label htmlFor="sort" className="text-sm font-medium mb-1.5 block">
+            Sort by
+          </Label>
+          <Select value={sortBy} onValueChange={(value: 'title' | 'lastUpdated') => setSortBy(value)}>
+            <SelectTrigger id="sort" className="w-full">
+              <SelectValue placeholder="Sort by" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="title">Title (A-Z)</SelectItem>
+              <SelectItem value="lastUpdated">Last Updated</SelectItem>
+            </SelectContent>
+          </Select>
         </div>
       </div>
 
@@ -85,41 +101,27 @@ export default function CaseStudyList({ caseStudies }: CaseStudyListProps) {
         {filteredCaseStudies.length} case stud{filteredCaseStudies.length !== 1 ? 'ies' : 'y'} found
       </div>
 
-      {/* Case Studies Grid */}
+      {/* Case Study Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {filteredCaseStudies.map((study) => (
-          <Link key={study.slug} href={`/case-study/${study.slug}`}>
-            <Card fixedHeight height={260} className="hover:bg-accent/5 transition-colors relative">
-              <CardHeader flexGrow>
-                <CardTitle className="text-xl mb-2">{study.title}</CardTitle>
-                <CardDescription className="mb-12">
-                  {study.description}
-                </CardDescription>
-              </CardHeader>
-              
-              {/* Fixed position badge container at bottom of card */}
-              <div className="absolute bottom-4 left-6 right-6">
-                {study.tags && study.tags.length > 0 && (
-                  <div className="flex overflow-x-auto pb-1 scrollbar-none">
-                    <div className="flex gap-2 flex-nowrap">
-                      {study.tags.slice(0, 3).map((tag: string) => (
-                        <Badge key={tag} variant="outline" className="whitespace-nowrap">
-                          {tag}
-                        </Badge>
-                      ))}
-                      {study.tags.length > 3 && (
-                        <Badge variant="outline" className="whitespace-nowrap">
-                          +{study.tags.length - 3} more
-                        </Badge>
-                      )}
-                    </div>
-                  </div>
-                )}
-              </div>
-            </Card>
-          </Link>
+        {filteredCaseStudies.map((caseStudy) => (
+          <ContentCard
+            key={caseStudy.slug}
+            title={caseStudy.title}
+            description={caseStudy.description}
+            badges={[...(caseStudy.industry || []), ...(caseStudy.technologies || [])]}
+            href={`/paths/case-study/${caseStudy.slug}`}
+          />
         ))}
       </div>
+
+      {/* Empty State */}
+      {filteredCaseStudies.length === 0 && (
+        <div className="text-center py-12">
+          <p className="text-lg text-[var(--text-secondary)]">
+            No case studies found matching your search.
+          </p>
+        </div>
+      )}
     </div>
   );
 } 

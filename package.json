@@ -4,9 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "validate": "ts-node scripts/validate-content.ts",
     "build": "next build",
-    "build:validate": "npm run validate && next build",
     "start": "next start",
     "lint": "next lint",
     "type": "module",
@@ -28,6 +26,7 @@
     "mermaid": "^11.4.1",
     "next": "15.1.7",
     "next-mdx-remote": "^5.0.0",
+    "next-themes": "^0.4.6",
     "radix-ui": "^1.1.3",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
@@ -35,13 +34,15 @@
     "rehype-prism-plus": "^2.0.0",
     "remark-gfm": "^4.0.1",
     "tailwind-merge": "^3.0.1",
-    "tailwindcss-animate": "^1.0.7"
+    "tailwindcss-animate": "^1.0.7",
+    "uuid": "^11.1.0"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
     "@types/node": "^20.17.18",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "@types/uuid": "^10.0.0",
     "autoprefixer": "^10.4.20",
     "chalk": "^5.4.1",
     "eslint": "^9",

@@ -1,35 +1,88 @@
+# OpenQase
 
-OpenQase is a curation of quantum computing business case studies. The resource is organised by multiple contexts to showcase case studies, quantum algorithms, and associated research papers relevant to industry or user persona.
+OpenQase is a curation of quantum computing business case studies. The resource is organized by multiple contexts to showcase case studies, quantum algorithms, and associated research papers relevant to industry or user persona.
 
+## Overview
 
------
+OpenQase provides:
+- **Algorithms**: Detailed explanations of quantum algorithms and their applications
+- **Case Studies**: Real-world implementations and business impact
+- **Industry Focus**: Industry-specific applications and use cases
+- **Personas**: Role-based learning paths and resources
 
-## Development notes
+## Technology Stack
 
-- OpenQase is build on top of a [Next.js](https://nextjs.org) and uses Shadcdn UI componenets. 
-
-- NextJS 15 has breaking changes. New components may need [this async await codemod](https://nextjs.org/docs/app/building-your-application/upgrading/codemods) to fix linter issues.
-
-- Deployment is currently on Vercel (internal [link here](https://vercel.com/ddris-projects/openqase/9XVBdfF5RmdBKR6zCrwrdQ5W4CgK)). 
-
-- Data is currently locally represented. Will likely move to MongoDB Atlas for document storage.
-
-
-
+- **Framework**: [Next.js](https://nextjs.org) 15.x with App Router
+- **UI Components**: [shadcn/ui](https://ui.shadcn.com/) for consistent design
+- **Content**: MDX-based content management
+- **Styling**: Tailwind CSS for responsive design
+- **Deployment**: Vercel
 
 ## Getting Started
 
-First, run the development server:
+1. Clone the repository:
+```bash
+git clone https://github.com/yourusername/openqase.git
+cd openqase
+```
 
+2. Install dependencies:
+```bash
+npm install
+```
+
+3. Run the development server:
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+
+## Content Management
+
+Content is managed through MDX files organized in the following structure:
+```
+content/
+├── algorithm/     # Quantum algorithms
+├── case-study/    # Real-world implementations
+├── industry/      # Industry applications
+└── persona/       # Role-based learning paths
+```
+
+Each content type follows a specific frontmatter structure. For example:
+
+```mdx
+---
+title: "Content Title"
+type: "algorithm"
+slug: "content-slug"
+description: "Brief description"
+keyApplications: ["application1", "application2"]
+prerequisites: ["prerequisite1", "prerequisite2"]
+keywords: ["keyword1", "keyword2"]
+lastUpdated: "2024-02-23"
+---
+
+Content here...
+```
+
+## Development Notes
+
+- The project uses TypeScript for type safety
+- Components are organized in a modular structure
+- Content is statically generated at build time
+- Custom components can be used within MDX content
+
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Submit a pull request
+
+Please ensure your content follows our MDX structure and includes all required frontmatter fields.
+
+## License
+
+[Add license information here]
 

@@ -2,7 +2,6 @@
 title: "Quantum Amplitude Amplification (QAA)"
 type: "Technical"
 slug: "QAA"
-complexity: "Variable (depends on circuit depth p and problem size)"
 description: "Quantum Amplitude Amplification (QAA) amplifies the probability amplitude of a desired state, quadratically speeding up the search for solutions in problems where a classical algorithm would require a linear search."
 applications:
   - "Maximum Cut Problems"
@@ -35,15 +34,15 @@ Quantum Amplitude Amplification (QAA) amplifies the probability amplitude of a d
 
 ## Algorithm Details
 
-Quantum Amplitude Amplification (QAA) is a fundamental technique in quantum computing that generalises the idea of amplitude amplification, which is the key concept behind Grover's algorithm for unstructured search. QAA is a powerful tool that can be used to enhance the success probability of quantum algorithms and to speed up the solution of various problems, including optimization, machine learning, and quantum simulation1.
+Quantum Amplitude Amplification (QAA) is a fundamental technique in quantum computing that generalises the idea of amplitude amplification, which is the key concept behind Grover's algorithm for unstructured search. QAA is a powerful tool that can be used to enhance the success probability of quantum algorithms and to speed up the solution of various problems, including optimization, machine learning, and quantum simulation[^1].
 
 ## Problem Target
 
-The goal of QAA is to amplify the amplitude of a desired quantum state (or a set of states) within a larger superposition, while suppressing the amplitudes of the other states. This is achieved by applying a sequence of quantum operations that gradually transform the initial superposition into a state where the desired amplitude is maximised2.
+The goal of QAA is to amplify the amplitude of a desired quantum state (or a set of states) within a larger superposition, while suppressing the amplitudes of the other states. This is achieved by applying a sequence of quantum operations that gradually transform the initial superposition into a state where the desired amplitude is maximised[^2].
 
 ## Quantum Approach
 
-The basic idea behind QAA can be understood in the context of Grover's algorithm. In Grover's algorithm, the goal is to find a marked item within an unstructured database of size N. The algorithm starts by preparing a uniform superposition of all possible states, where each state corresponds to a different item in the database. Then, a sequence of quantum operations (known as the Grover iteration) is applied to amplify the amplitude of the marked state, while suppressing the amplitudes of the other states. After O(√N) iterations, the marked state is measured with a high probability, effectively solving the search problem with a quadratic speedup over classical methods3.
+The basic idea behind QAA can be understood in the context of Grover's algorithm. In Grover's algorithm, the goal is to find a marked item within an unstructured database of size N. The algorithm starts by preparing a uniform superposition of all possible states, where each state corresponds to a different item in the database. Then, a sequence of quantum operations (known as the Grover iteration) is applied to amplify the amplitude of the marked state, while suppressing the amplitudes of the other states. After O(√N) iterations, the marked state is measured with a high probability, effectively solving the search problem with a quadratic speedup over classical methods[^3].
 
 ## Implementation Steps
 
@@ -63,18 +62,18 @@ QAA generalises this idea to a broader class of problems, where the goal is to a
   </Step>
 </Steps>
 
-The number of amplitude amplification steps required to maximise the success probability depends on the initial amplitude of the desired state. In the case of Grover's algorithm, where the initial amplitude is 1/√N, the optimal number of steps is approximately π/4 · √N. More generally, if the initial amplitude is α, the optimal number of steps is O(1/α)4.
+The number of amplitude amplification steps required to maximise the success probability depends on the initial amplitude of the desired state. In the case of Grover's algorithm, where the initial amplitude is 1/√N, the optimal number of steps is approximately π/4 · √N. More generally, if the initial amplitude is α, the optimal number of steps is O(1/α)[^4].
 
 
 ## Practical Applications
 
-QAA is a versatile technique that has found applications across various domains of quantum computing. In the area of optimization, it can significantly accelerate the solution of complex problems like the Minimum Vertex Cover and Traveling Salesman problem, offering a quadratic speedup over classical methods by manipulating quantum states to amplify the optimal solution5.
+QAA is a versatile technique that has found applications across various domains of quantum computing. In the area of optimization, it can significantly accelerate the solution of complex problems like the Minimum Vertex Cover and Traveling Salesman problem, offering a quadratic speedup over classical methods by manipulating quantum states to amplify the optimal solution[^5].
 
-It also plays an important role in enhancing the performance of quantum machine learning algorithms. By amplifying the amplitudes of desired feature states, it can boost classification accuracy and speed up convergence, unlocking the full potential of algorithms like Quantum Support Vector Machine (QSVM) and Quantum Principal Component Analysis (QPCA)6.
+It also plays an important role in enhancing the performance of quantum machine learning algorithms. By amplifying the amplitudes of desired feature states, it can boost classification accuracy and speed up convergence, unlocking the full potential of algorithms like Quantum Support Vector Machine (QSVM) and Quantum Principal Component Analysis (QPCA)[^6].
 
 Furthermore, QAA proves invaluable in quantum simulation by efficiently preparing specific quantum states essential for simulations. It can amplify the amplitude of target states within a superposition, allowing for streamlined initialisation of quantum simulators and reducing computational overhead.
 
-Lastly, QAA contributes to the robustness of quantum computing by aiding in error detection and correction. By amplifying the amplitude of error-free states and suppressing erroneous ones, the algorithm helps improve the fidelity of quantum operations and extend the coherence time of quantum devices7.
+Lastly, QAA contributes to the robustness of quantum computing by aiding in error detection and correction. By amplifying the amplitude of error-free states and suppressing erroneous ones, the algorithm helps improve the fidelity of quantum operations and extend the coherence time of quantum devices[^7].
 
 ## Implementation Challenges
 
@@ -88,14 +87,10 @@ Quantum Amplitude Amplification is a powerful technique in quantum computing tha
 
 ## References
 
-1. Brassard, G., Høyer, P., Mosca, M., & Tapp, A. (2002). Quantum amplitude amplification and estimation. Contemporary Mathematics, 305, 53-74.
-
-2. Grover, L. K. (2005). Fixed-point quantum search. Physical Review Letters, 95(15), 150501.
-
-3. Grover, L. K. (1996). A fast quantum mechanical algorithm for database search. Proceedings of the 28th Annual ACM Symposium on Theory of Computing, 212-219.
-
-4. Yoder, T. J., Low, G. H., & Chuang, I. L. (2014). Fixed-point quantum search with an optimal number of queries. Physical Review Letters, 113(21), 210501.
-
-5. Dürr, C., & Høyer, P. (1996). A quantum algorithm for finding the minimum. arXiv preprint quant-ph/9607014.6. Rebentrost, P., Mohseni, M., & Lloyd, S. (2014). Quantum support vector machine for big data classification. Physical Review Letters, 113(13), 130503.
-
-7. Temme, K., Bravyi, S., & Gambetta, J. M. (2017). Error mitigation for short-depth quantum circuits. Physical Review Letters, 119(18), 180509.
+[^1]: Brassard, G., Høyer, P., Mosca, M., & Tapp, A. (2002). Quantum amplitude amplification and estimation. Contemporary Mathematics, 305, 53-74.
+[^2]: Grover, L. K. (2005). Fixed-point quantum search. Physical Review Letters, 95(15), 150501.
+[^3]: Grover, L. K. (1996). A fast quantum mechanical algorithm for database search. Proceedings of the 28th Annual ACM Symposium on Theory of Computing, 212-219.
+[^4]: Yoder, T. J., Low, G. H., & Chuang, I. L. (2014). Fixed-point quantum search with an optimal number of queries. Physical Review Letters, 113(21), 210501.
+[^5]: Dürr, C., & Høyer, P. (1996). A quantum algorithm for finding the minimum. arXiv preprint quant-ph/9607014.
+[^6]: Rebentrost, P., Mohseni, M., & Lloyd, S. (2014). Quantum support vector machine for big data classification. Physical Review Letters, 113(13), 130503.
+[^7]: Temme, K., Bravyi, S., & Gambetta, J. M. (2017). Error mitigation for short-depth quantum circuits. Physical Review Letters, 119(18), 180509.

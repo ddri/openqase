@@ -3,75 +3,122 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import ThemeSwitcher from './ui/ThemeSwitcher';
-import { useEffect, useState } from 'react';
+import { Menu, X } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { Button } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
+import ThemeToggle from './ThemeToggle';
+
+const navItems = [
+  { href: '/paths', label: 'Learning Paths' },
+  { href: '/case-study', label: 'Case Studies' },
+  { href: '/quantum-stack', label: 'Quantum Stack' },
+];
 
 export default function Navigation() {
+  const [isOpen, setIsOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
   const pathname = usePathname();
-  const [scrolled, setScrolled] = useState(false);
 
+  // Handle scroll effect
   useEffect(() => {
     const handleScroll = () => {
-      const offset = window.scrollY;
-      if (offset > 10) {
-        setScrolled(true);
-      } else {
-        setScrolled(false);
-      }
+      setIsScrolled(window.scrollY > 0);
     };
-
     window.addEventListener('scroll', handleScroll);
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-    };
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const isActive = (path: string) => {
-    return pathname?.startsWith(path);
-  };
+  // Close mobile menu when route changes
+  useEffect(() => {
+    setIsOpen(false);
+  }, [pathname]);
 
   return (
-    <nav 
-      className={`sticky top-0 z-[100] w-full border-b border-[var(--border)] transition-all duration-300 ${
-        scrolled 
-          ? 'py-2 backdrop-blur-md bg-[var(--background)/90] shadow-md' 
-          : 'py-4 bg-[var(--background)]'
-      }`}
-    >
-      <div className="container mx-auto px-4 flex items-center">
-        <Link href="/" className={`font-bold mr-8 text-[var(--foreground)] transition-all duration-300 ${
-          scrolled ? 'text-lg' : 'text-xl'
-        }`}>
-          openQase
-        </Link>
-        
-        <div className="flex space-x-4 pb-1">
-          <Link 
-            href="/paths" 
-            className={`px-4 py-2 ${isActive('/paths') ? 'text-[color:hsl(var(--primary))] active' : ''}`}
-          >
-            Learning Paths
-          </Link>
-          
-          <Link 
-            href="/case-study" 
-            className={`px-4 py-2 ${isActive('/case-study') ? 'text-[color:hsl(var(--primary))] active' : ''}`}
-          >
-            Case Studies
-          </Link>
-          
-          <Link 
-            href="/quantum-stack" 
-            className={`px-4 py-2 ${isActive('/quantum-stack') ? 'text-[color:hsl(var(--primary))] active' : ''}`}
-          >
-            Quantum Stack
-          </Link>
+    <header className={cn(
+      'sticky top-0 z-40 w-full border-b border-border transition-all duration-200',
+      isScrolled ? 'bg-background/80 backdrop-blur-sm' : 'bg-background'
+    )}>
+      <nav className="container mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex h-16 items-center">
+          {/* Logo and Desktop Navigation */}
+          <div className="flex items-center space-x-8">
+            <Link href="/" className="flex items-center">
+              <span className="text-xl font-bold">openQase</span>
+            </Link>
+
+            {/* Desktop Navigation */}
+            <div className="hidden md:flex md:items-center md:space-x-6">
+              {navItems.map((item) => (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className={cn(
+                    'nav-link relative py-2 text-base font-medium',
+                    pathname === item.href ? 'nav-active text-primary' : 'text-muted-foreground hover:text-primary'
+                  )}
+                >
+                  {item.label}
+                  {pathname === item.href && (
+                    <span className="absolute inset-x-0 -bottom-[1px] h-0.5 bg-primary" />
+                  )}
+                </Link>
+              ))}
+            </div>
+          </div>
+
+          {/* Desktop Actions - pushed to the right */}
+          <div className="hidden md:flex md:items-center md:space-x-4 ml-auto">
+            <ThemeToggle />
+            <Button asChild>
+              <Link href="/contact">Contact</Link>
+            </Button>
+          </div>
+
+          {/* Mobile Menu Button */}
+          <div className="flex items-center space-x-4 md:hidden ml-auto">
+            <ThemeToggle />
+            <button
+              onClick={() => setIsOpen(!isOpen)}
+              className="touch-target -mr-2 p-2"
+              aria-label="Toggle menu"
+            >
+              {isOpen ? (
+                <X className="h-6 w-6" />
+              ) : (
+                <Menu className="h-6 w-6" />
+              )}
+            </button>
+          </div>
         </div>
-        
-        <div className="ml-auto">
-          <ThemeSwitcher />
-        </div>
-      </div>
-    </nav>
+
+        {/* Mobile Navigation */}
+        {isOpen && (
+          <div className="border-t md:hidden">
+            <div className="space-y-1 py-3">
+              {navItems.map((item) => (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className={cn(
+                    'block px-3 py-2 text-base font-medium transition-colors',
+                    pathname === item.href 
+                      ? 'bg-primary/10 text-primary' 
+                      : 'text-muted-foreground hover:bg-accent hover:text-accent-foreground'
+                  )}
+                >
+                  {item.label}
+                </Link>
+              ))}
+              <div className="px-3 py-2">
+                <Button asChild className="w-full">
+                  <Link href="/contact">Contact</Link>
+                </Button>
+              </div>
+            </div>
+          </div>
+        )}
+      </nav>
+    </header>
   );
 }

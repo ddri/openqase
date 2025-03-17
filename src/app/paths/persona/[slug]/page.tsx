@@ -114,66 +114,77 @@ export default async function PersonaPage(props: { params: Promise<{ slug: strin
  ).then(studies => studies.filter(Boolean)); // Remove any null results
 
  return (
-   <main className="min-h-screen p-8">
-     <div className="max-w-7xl mx-auto">
+   <main className="min-h-screen">
+     <div className="container-outer section-spacing">
        {/* Back link */}
-       <div className="mb-8">
+       <div className="mb-6 sm:mb-8">
          <Link
            href="/paths/persona"
-           className="text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors"
+           className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
          >
-           ← Back to Persona
+           <span>←</span>
+           <span>Back to Persona</span>
          </Link>
        </div>
 
        {/* Header Section */}
-       <div className="mb-8">
-         <h1 className="text-4xl font-bold text-[hsl(var(--primary))] mb-4">
+       <div className="mb-8 sm:mb-12">
+         <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-primary mb-4 tracking-tight">
            {persona.frontmatter.title}
          </h1>
-         <Badge className="persona-role-badge">
+         <Badge className="persona-role-badge text-base">
            {persona.frontmatter.role}
          </Badge>
        </div>
 
        {/* Main Content + Sidebar */}
-       <div className="grid grid-cols-12 gap-8">
+       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12">
          {/* Main Content */}
-         <div className="col-span-9">
-           <article className="prose max-w-none">
+         <div className="lg:col-span-8">
+           <article className="prose prose-lg dark:prose-invert max-w-none">
              <MDXRemote source={persona.source} components={components} />
            </article>
          </div>
 
          {/* Right Sidebar - Case Studies */}
-         <div className="col-span-3">
-           <h2 className="text-xl font-semibold text-[var(--text-primary)] mb-4">
-             Related Case Studies
-           </h2>
-           <div className="space-y-4">
-             {caseStudies.map((study) => (
-               <Link
-                 key={study.slug}
-                 href={`/case-study/${study.slug}`}
-                 className="block p-4 bg-[var(--card)] border border-[var(--border)] rounded-lg hover:shadow-md"
-               >
-                 <h3 className="font-medium text-[var(--text-primary)] mb-2">
-                   {study.frontmatter.title}
-                 </h3>
-                 <p className="text-sm text-[var(--text-secondary)]">
-                   {study.frontmatter.description}
-                 </p>
-                 <div className="mt-3 flex flex-wrap gap-2">
-                   {study.frontmatter.tags.map((tag: string) => (
-                     <Badge key={tag} variant="outline" className="text-[var(--text-secondary)] border-[var(--border)]">
-                       {tag}
-                     </Badge>
-                   ))}
-                 </div>
-               </Link>
-             ))}
+         <aside className="lg:col-span-4">
+           <div className="sticky top-24">
+             <h2 className="text-2xl font-semibold mb-4">
+               Related Case Studies
+             </h2>
+             <div className="grid gap-4">
+               {caseStudies.map((study) => (
+                 <Link
+                   key={study.slug}
+                   href={`/case-study/${study.slug}`}
+                   className="group block"
+                 >
+                   <Card className="h-full transition-all duration-200 hover:shadow-md hover:border-border-hover">
+                     <div className="p-4 sm:p-6">
+                       <h3 className="font-medium text-lg mb-2 group-hover:text-primary transition-colors">
+                         {study.frontmatter.title}
+                       </h3>
+                       <p className="text-muted-foreground text-sm mb-4">
+                         {study.frontmatter.description}
+                       </p>
+                       <div className="flex flex-wrap gap-2">
+                         {study.frontmatter.tags.map((tag: string) => (
+                           <Badge 
+                             key={tag} 
+                             variant="secondary"
+                             className="text-xs"
+                           >
+                             {tag}
+                           </Badge>
+                         ))}
+                       </div>
+                     </div>
+                   </Card>
+                 </Link>
+               ))}
+             </div>
            </div>
-         </div>
+         </aside>
        </div>
      </div>
    </main>

@@ -2,7 +2,6 @@
 title: "Quantum Boltzmann Machines"
 type: "Technical"
 slug: "boltzmann-machines"
-complexity: "Variable (depends on circuit depth p and problem size)"
 description: "Quantum Boltzmann Machines (QBMs) are quantum-enhanced probabilistic models that improve upon classical Boltzmann Machines using quantum effects for enhanced learning and sampling."
 applications:
   - "Maximum Cut Problems"
@@ -31,73 +30,79 @@ keywords:
 lastUpdated: "2024-02-21"
 ---
 
-Quantum Boltzmann Machines (QBMs) are quantum-enhanced probabilistic models that improve upon classical Boltzmann Machines using quantum effects for enhanced learning and sampling.
+Quantum Boltzmann Machines (QBM) are quantum versions of classical Boltzmann machines, designed to leverage quantum effects for potentially more efficient training and inference[^1]. These machines combine principles from quantum mechanics with machine learning to create powerful generative models.
 
-## Algorithm Details
-
-Quantum Boltzmann Machines (QBMs) are a class of quantum machine learning models that generalize the classical Boltzmann machines to the quantum domain1. Boltzmann machines are probabilistic graphical models that learn the probability distribution underlying a set of input data and can be used for tasks such as unsupervised learning, generative modeling, and combinatorial optimization.
+The algorithm exploits quantum tunneling and quantum fluctuations to potentially escape local minima more effectively than classical methods[^2]. This quantum advantage could be particularly valuable for training deep neural networks and solving complex optimization problems.
 
 ## Problem Target
 
-QBMs exploit the power of quantum computing to represent and manipulate complex probability distributions more efficiently than classical Boltzmann machines, particularly for high-dimensional and strongly correlated data2. The key idea behind QBMs is to use quantum states and quantum operations to represent the model parameters and perform the learning and inference tasks.
+QBMs address several key challenges in machine learning:
 
+1. Training deep neural networks
+2. Generating complex probability distributions
+3. Pattern recognition and classification
+4. Feature learning and dimensionality reduction
+5. Optimization in high-dimensional spaces[^3]
 
 ## Quantum Approach
 
-A QBM consists of a network of quantum nodes, each representing a qubit or a group of qubits, and connected by quantum edges that encode the interactions between the nodes3. The quantum state of the QBM represents the joint probability distribution of the variables in the model, and the goal of training is to adjust the parameters of the quantum edges to minimize the difference between the model distribution and the target distribution of the input data.
+The quantum Boltzmann machine process involves several key components[^4]:
+
+1. **Quantum State Preparation**: Initializing quantum states representing network parameters
+2. **Quantum Evolution**: Evolving the system according to a quantum Hamiltonian
+3. **Measurement**: Sampling from the quantum distribution
+4. **Parameter Updates**: Classical processing of measurement results
 
 ## Implementation Steps
 
 <Steps>
-  <Step title="InitiState preparationalisation">
-    The input data is encoded into a quantum state, typically using amplitude encoding or qubit encoding. In amplitude encoding, each data sample is represented by a quantum state, where the amplitudes of the basis states correspond to the feature values. In qubit encoding, each feature is assigned to a qubit, and the feature values are encoded in the qubit states.
-  </Step>
-  <Step title="Model Initialisation">
-    The parameters of the QBM, such as the weights of the quantum edges and the biases of the quantum nodes, are initialised to random values or based on prior knowledge.
-  </Step>
-  <Step title="Quantum sampling">
-    A quantum sampling algorithm, such as quantum annealing or quantum Gibbs sampling, is used to generate samples from the model distribution4. These algorithms exploit the quantum superposition and quantum tunnelling effects to explore the state space more efficiently than classical sampling methods.
-  </Step>
-  <Step title="Gradient estimation">
-    The gradients of the model parameters with respect to the objective function, such as the log-likelihood or the Kullback-Leibler divergence, are estimated using the quantum samples and classical post-processing. This can be done using techniques such as quantum back-propagation or quantum natural gradient.
-  </Step>
-  <Step title="Parameter update">
-    The model parameters are updated based on the estimated gradients, using classical optimization algorithms such as gradient descent or Adam.
-  </Step>
+    <Step title="Network Design">
+        Define the quantum Boltzmann machine architecture and parameters[^5].
+    </Step>
+    <Step title="State Preparation">
+        Initialize quantum states representing the network configuration[^6].
+    </Step>
+    <Step title="Training">
+        Update parameters using quantum sampling and classical optimization[^7].
+    </Step>
+    <Step title="Inference">
+        Use the trained network for prediction or generation tasks[^8].
+    </Step>
 </Steps>
-
-Steps three to five are repeated until the model converges or a maximum number of iterations is reached. After training, the QBM can be used for tasks such as data generation, anomaly detection, and classification, by sampling from the learned distribution or computing the probabilities of the input data.
 
 ## Practical Applications
 
-The potential advantages of QBMs over classical Boltzmann machines include some of the usual themes we might expect in such quantum explorations. The exponential speedup is a benefit for certain types of data and model architectures, where QBMs can provide an exponential speedup over classical Boltzmann machines in terms of training time and model capacity5. This is due to the ability of quantum computers to represent and manipulate exponentially large state spaces with a linear number of qubits.
+QBMs have potential applications in various fields:
 
-These quantum states and quantum operations can potentially capture more complex and expressive probability distributions than classical models, due to the presence of entanglement and interference effects6. Likewise the improved generalisation of QBMs may result in more robust representations of the input data, by exploiting the quantum superposition and quantum parallelism effects to explore a larger hypothesis space.
+1. **Machine Learning**: Deep learning and pattern recognition
+2. **Optimization**: Solving complex optimization problems
+3. **Data Analysis**: Feature extraction and dimensionality reduction
+4. **Generative Modeling**: Creating new samples from learned distributions
+5. **Financial Modeling**: Risk assessment and portfolio optimization
 
 ## Implementation Challenges
 
-QBMs face the usual collection of limitations given their reliance on near-term quantum devices. Developing efficient methods for encoding large-scale and high-dimensional classical data into quantum states, while preserving the relevant features and correlations, requires efficient data encoding in the first place. Similar issues exist with designing QBM architectures that can be efficiently implemented on near-term quantum hardware with limited qubit count and gate fidelity. One such example is in noise-resilient training, where the development of robust QBM training algorithms that can operate in the presence of noise and errors in the quantum hardware, requires continual advances in techniques such as error mitigation and quantum error correction.
+Several challenges need to be addressed when implementing QBMs:
 
-The practical application of integrating with classical machine learning is also a concern in the current era7. There is much work to be done in exploring hybrid quantum-classical approaches that combine QBMs with classical machine learning techniques, such as pre-training, fine-tuning, and transfer learning, to use the strengths of both paradigms. Experimental demonstrations of QBMs have been reported on various quantum computing platforms, including superconducting qubits, trapped ions, and quantum annealers, showing promising results for small-scale datasets. However, the scalability and performance of QBMs on larger and more realistic datasets remain open research questions.
+1. **Quantum Hardware**: Limited availability of quantum devices[^9]
+2. **Coherence Time**: Maintaining quantum states during computation
+3. **Sampling Efficiency**: Obtaining sufficient samples for training
+4. **Parameter Optimization**: Finding optimal network parameters
+5. **Classical Integration**: Combining quantum and classical processing[^10]
 
 ## Bottom Line
 
-Quantum Boltzmann Machines are a promising class of quantum machine learning models that exploit the power of quantum computing to learn and represent complex probability distributions more efficiently than classical models. By exploiting the quantum superposition, entanglement, and interference effects, QBMs have the potential to provide exponential speedups and enhanced expressivity compared to classical Boltzmann machines, with applications ranging from unsupervised learning and generative modeling to optimization and decision-making. 
-
-However, significant research efforts are still needed to address the challenges of efficient data encoding, scalable model architectures, noise-resilient training, and integration with classical machine learning techniques, before QBMs can be deployed in real-world scenarios. As quantum technologies continue to advance, QBMs are expected to play an important role in the emerging field of quantum-enhanced artificial intelligence.
+Quantum Boltzmann Machines represent a promising approach to quantum machine learning. While current implementations face various challenges, ongoing research continues to improve their practical applicability and efficiency.
 
 ## References
 
-1. Amin, M. H., Andriyash, E., Rolfe, J., Kulchytskyy, B., & Melko, R. (2018). Quantum Boltzmann machine. Physical Review X, 8(2), 021050.
-
-2. Kieferová, M., & Wiebe, N. (2017). Tomography and generative training with quantum Boltzmann machines. Physical Review A, 96(6), 062327.
-
-3. Benedetti, M., Realpe-Gómez, J., Biswas, R., & Perdomo-Ortiz, A. (2017). Quantum-assisted learning of hardware-embedded probabilistic graphical models. Physical Review X, 7(4), 041052.
-
-4. Johnson, M. W., Amin, M. H. S., Gildert, S., Lanting, T., Hamze, F., Dickson, N., Harris, R., Berkley, A. J., Johansson, J., Bunyk, P., Chapple, E. M., Enderud, C., Hilton, J. P., Karimi, K., Ladizinsky, E., Ladizinsky, N., Oh, T., Perminov, I., Rich, C., ... & Rose, G. (2011). Quantum annealing with manufactured spins. Nature, 473(7346), 194-198.
-
-5. Adachi, S. H., & Henderson, M. P. (2015). Application of quantum annealing to training of deep neural networks. arXiv preprint arXiv:1510.06356.
-
-6. Korenkevych, D., Xue, Y., Bian, Z., Chudak, F., Macready, W. G., Rolfe, J., & Andriyash, E. (2016). Benchmarking quantum hardware for training of fully visible Boltzmann machines. arXiv preprint arXiv:1611.04528.
-
-7. Khoshaman, A., Vinci, W., Denis, B., Andriyash, E., Sadeghi, H., & Amin, M. H. (2018). Quantum variational autoencoder. Quantum Science and Technology, 4(1), 014001.
+[^1]: Amin, M. H., Andriyash, E., Rolfe, J., Kulchytskyy, B., & Melko, R. (2018). Quantum Boltzmann Machine. Physical Review X, 8(2), 021050.
+[^2]: Wiebe, N., Kapoor, A., & Svore, K. M. (2014). Quantum deep learning. arXiv preprint arXiv:1412.3489.
+[^3]: Benedetti, M., Realpe-Gómez, J., Biswas, R., & Perdomo-Ortiz, A. (2017). Estimation of effective temperatures in quantum annealers for sampling applications: A case study with possible applications in deep learning. Physical Review A, 94(2), 022308.
+[^4]: Kieferová, M., & Wiebe, N. (2017). Tomography and generative training with quantum Boltzmann machines. Physical Review A, 96(6), 062327.
+[^5]: Crawford, D., Levit, A., Ghadermarzy, N., Oberoi, J. S., & Ronagh, P. (2019). Reinforcement learning using quantum Boltzmann machines. Quantum Information & Computation, 18(1&2), 51-74.
+[^6]: Adachi, S. H., & Henderson, M. P. (2015). Application of quantum annealing to training of deep neural networks. arXiv preprint arXiv:1510.06356.
+[^7]: Perdomo-Ortiz, A., Benedetti, M., Realpe-Gómez, J., & Biswas, R. (2018). Opportunities and challenges for quantum-assisted machine learning in near-term quantum computers. Quantum Science and Technology, 3(3), 030502.
+[^8]: Biamonte, J., Wittek, P., Pancotti, N., Rebentrost, P., Wiebe, N., & Lloyd, S. (2017). Quantum machine learning. Nature, 549(7671), 195-202.
+[^9]: Preskill, J. (2018). Quantum Computing in the NISQ era and beyond. Quantum, 2, 79.
+[^10]: Schuld, M., Sinayskiy, I., & Petruccione, F. (2015). An introduction to quantum machine learning. Contemporary Physics, 56(2), 172-185.

@@ -1,8 +1,8 @@
-# OpenQASE Architecture and Implementation Guide
+# OpenQase Architecture and Implementation Guide
 
 ## System Overview
 
-OpenQASE is a Next.js-based educational platform for quantum computing that uses a content-first approach with MDX for content management. The application is built with static site generation (SSG) for optimal performance and SEO.
+OpenQase is a Next.js-based educational platform for quantum computing that uses a content-first approach with MDX for content management. The application is built with static site generation (SSG) for optimal performance and SEO.
 
 ## Content Architecture
 
@@ -12,8 +12,7 @@ content/
 ├── algorithm/       # Quantum algorithms
 ├── case-study/     # Real-world implementations
 ├── industry/       # Industry applications
-├── persona/        # Role-based learning paths
-└── stack-layers/   # Quantum stack components
+└── persona/        # Role-based learning paths
 ```
 
 ### 2. Content Types and Relationships
@@ -21,33 +20,34 @@ content/
 Each content type has specific requirements and relationships:
 
 - **Algorithm**
-  - Properties: complexity, prerequisites, applications
+  - Properties: prerequisites, keyApplications, keywords
   - Links to: case studies, industries
   
 - **Case Study**
-  - Properties: difficulty, metrics, technologies
+  - Properties: industry, technologies, metrics, outcomes
   - Links to: persona, industry, algorithm
   
 - **Industry**
-  - Properties: sector, applications, layer
+  - Properties: sector, keyApplications
   - Links to: case studies, algorithms
   
 - **Persona**
-  - Properties: role, expertise, keywords, personaType
+  - Properties: role, expertise, keywords
   - Links to: case studies, relevant content
 
 ## Technical Implementation
 
 ### 1. Content Loading System
-- Uses `lib/mdx.ts` as central content loader
-- Implements MDX plugins (remarkGfm, rehypePrismPlus)
+- Uses Next.js App Router for routing
+- Implements MDX with next-mdx-remote
 - Uses React's cache for performance
-- Validates content structure and relationships
 - Processes content in parallel for build efficiency
 
 ```typescript
 // Example content loading
-const content = await getContentBySlug<Algorithm>('algorithm', 'grover');
+import { getContentBySlug } from '@/lib/mdx';
+
+const content = await getContentBySlug('algorithm', 'grover');
 console.log(content.frontmatter.title);
 ```
 
@@ -61,7 +61,7 @@ console.log(content.frontmatter.title);
 - Supports GitHub Flavored Markdown
 - Includes code syntax highlighting
 - Handles frontmatter metadata
-- Enables custom components
+- Enables custom components like Steps, Mermaid diagrams
 - Separates content from metadata
 
 ## Recommendations for Effective Use
@@ -73,7 +73,7 @@ console.log(content.frontmatter.title);
 - Include all required fields for content type
 - Maintain clear relationships between content
 - Follow MDX best practices
-- Always access data through frontmatter
+- Keep content focused and well-organized
 
 Example MDX structure:
 ```mdx
@@ -82,10 +82,8 @@ title: "Algorithm Name"
 type: "algorithm"
 slug: "algorithm-name"
 description: "Brief description"
-complexity: "O(n²)"
+keyApplications: ["optimization", "cryptography"]
 prerequisites: ["linear algebra", "quantum gates"]
-applications: ["optimization", "cryptography"]
-relatedCaseStudies: ["case-study-1"]
 keywords: ["quantum", "algorithm"]
 lastUpdated: "2024-02-23"
 ---
@@ -97,22 +95,22 @@ Content here...
 - Keep related content linked
 - Maintain clear file naming conventions
 - Update lastUpdated dates
-- Validate content before commits
 - Use singular directory names
+- Group related content logically
 
 ### 2. Development Workflow
 
 #### Adding New Features
 1. Update types if needed
-2. Add content validation rules
-3. Implement new components
-4. Update MDX processing if required
+2. Implement new components
+3. Update MDX processing if required
+4. Test with sample content
 
 #### Content Updates
 1. Create/update MDX files
-2. Validate frontmatter
-3. Test local build
-4. Check generated routes
+2. Test local build
+3. Check generated routes
+4. Review content rendering
 
 ### 3. Performance Optimization
 
@@ -120,13 +118,13 @@ Content here...
 - Images should be optimized
 - Use proper caching strategies
 - Minimize client-side JavaScript
-- Leverage MDX plugins
+- Leverage Next.js built-in optimizations
 
 ### 4. Maintenance Tasks
 
 Regular maintenance should include:
-1. Content validation
-2. Relationship checking
+1. Content updates
+2. Dependency updates
 3. Dead link detection
 4. Performance monitoring
 5. MDX plugin updates
@@ -134,40 +132,40 @@ Regular maintenance should include:
 ## Implementation Checklist
 
 ### Content Management
-- [ ] Validate all existing content
-- [ ] Check content relationships
+- [ ] Review existing content
 - [ ] Update outdated content
 - [ ] Verify frontmatter consistency
-- [ ] Check personaType values
+- [ ] Check content relationships
+- [ ] Update keywords and descriptions
 
 ### Technical Tasks
 - [ ] Monitor build performance
 - [ ] Update dependencies
 - [ ] Check type safety
 - [ ] Verify route generation
-- [ ] Test MDX processing
+- [ ] Test MDX rendering
 
 ### Documentation
 - [ ] Update content guidelines
 - [ ] Document new features
 - [ ] Maintain API documentation
 - [ ] Keep examples current
-- [ ] Document frontmatter requirements
+- [ ] Document component usage
 
 ## Next Steps
 
 1. **Content Audit**
    - Review existing content
-   - Check for missing relationships
    - Update outdated information
-   - Validate all frontmatter
-   - Verify personaType values
+   - Check content relationships
+   - Verify metadata consistency
+   - Update keywords and descriptions
 
 2. **Technical Improvements**
-   - Implement content validation
-   - Add relationship checking
-   - Improve error handling
    - Enhance build performance
+   - Update dependencies
+   - Improve error handling
+   - Optimize image loading
    - Update MDX plugins
 
 3. **Documentation**
@@ -175,11 +173,11 @@ Regular maintenance should include:
    - Document component usage
    - Update contribution guide
    - Add examples
-   - Document frontmatter access
+   - Document best practices
 
 4. **Testing**
-   - Add content validation tests
    - Implement route testing
-   - Check relationship integrity
+   - Check content rendering
    - Verify build process
-   - Test MDX rendering
+   - Test MDX components
+   - Monitor performance

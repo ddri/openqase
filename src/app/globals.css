@@ -52,6 +52,9 @@
     /* Anthropic-inspired typography */
     --font-sans: var(--font-inter), system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     --font-heading: var(--font-sans);
+
+    --header-height: 4rem;
+    --banner-height: 2.5rem;
   }
 
   /* Dark theme - improved with graphite grey instead of near-black */
@@ -162,17 +165,124 @@
     transform-origin: left;
     transition: transform 0.3s ease;
   }
-}
 
-@layer base {
   * {
     @apply border-border;
   }
+  
   body {
     @apply bg-background text-foreground font-sans text-base antialiased;
     font-feature-settings: "salt" 1;
   }
 
+  /* Responsive typography */
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-medium tracking-tight text-foreground;
+    font-feature-settings: "salt" 1;
+  }
+  
+  h1 {
+    @apply text-2xl sm:text-3xl md:text-4xl font-[600] leading-tight;
+    letter-spacing: -0.02em;
+  }
+  
+  h2 {
+    @apply text-xl sm:text-2xl md:text-3xl font-[600] leading-tight mb-4;
+    letter-spacing: -0.01em;
+  }
+  
+  h3 {
+    @apply text-lg sm:text-xl md:text-2xl font-[500] leading-snug mb-2;
+  }
+  
+  h4 {
+    @apply text-base sm:text-lg md:text-xl font-[500] mb-2;
+  }
+  
+  p {
+    @apply leading-relaxed mb-4 text-[15px] sm:text-base;
+  }
+
+  /* Container classes */
+  .container-outer {
+    @apply w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+
+  .container-inner {
+    @apply w-full max-w-5xl mx-auto;
+  }
+
+  /* Grid system */
+  .grid-responsive-1 {
+    @apply grid grid-cols-1 gap-4 sm:gap-6;
+  }
+
+  .grid-responsive-2 {
+    @apply grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6;
+  }
+
+  .grid-responsive-3 {
+    @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6;
+  }
+
+  .grid-responsive-4 {
+    @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6;
+  }
+
+  /* Section spacing */
+  .section-spacing {
+    @apply py-8 sm:py-12 md:py-16;
+  }
+
+  .section-spacing-sm {
+    @apply py-6 sm:py-8 md:py-12;
+  }
+
+  /* Card styles */
+  .card {
+    @apply rounded-lg border border-border bg-card p-4 sm:p-6;
+  }
+
+  .card-hover {
+    @apply hover:border-border-hover hover:shadow-sm transition-all duration-200;
+  }
+
+  /* Button sizes */
+  .btn {
+    @apply px-4 py-2 sm:px-6 sm:py-2.5 rounded-md text-sm sm:text-base;
+  }
+
+  .btn-lg {
+    @apply px-6 py-3 sm:px-8 sm:py-4 rounded-md text-base sm:text-lg;
+  }
+
+  /* Form elements */
+  .form-input {
+    @apply w-full px-3 py-2 sm:px-4 sm:py-2.5 rounded-md text-sm sm:text-base;
+  }
+
+  /* Touch targets */
+  .touch-target {
+    @apply min-h-[44px] min-w-[44px] flex items-center justify-center;
+  }
+
+  /* Navigation spacing */
+  .nav-spacing {
+    @apply px-4 py-2 sm:px-6 sm:py-2.5;
+  }
+
+  /* List spacing */
+  .list-spacing > * + * {
+    @apply mt-2 sm:mt-3;
+  }
+
+  /* Text balance for better readability */
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+@layer base {
   /* Anthropic-inspired typography */
   h1, h2, h3, h4, h5, h6 {
     @apply font-medium tracking-tight text-foreground;
@@ -225,10 +335,6 @@
   
   .tag {
     @apply text-[15px] text-foreground/80;
-  }
-  
-  .text-balance {
-    text-wrap: balance;
   }
 }
 
@@ -448,4 +554,52 @@ nav a.active::after {
 nav a.active {
   color: hsl(var(--primary));
   font-weight: 500;
+}
+
+/* Mobile-first spacing utilities */
+.spacing-mobile {
+  @apply p-4 sm:p-6;
+}
+
+.spacing-mobile-y {
+  @apply py-4 sm:py-6;
+}
+
+.spacing-mobile-x {
+  @apply px-4 sm:px-6;
+}
+
+/* Improved grid gaps for mobile */
+.grid-gap-mobile {
+  @apply gap-4 sm:gap-6 md:gap-8;
+}
+
+/* Mobile navigation improvements */
+.nav-mobile {
+  @apply fixed bottom-0 left-0 right-0 bg-background border-t md:relative md:border-t-0;
+}
+
+/* Mobile-friendly form controls */
+.form-control-mobile {
+  @apply min-h-[44px] px-4 text-base;
+}
+
+/* Mobile-friendly card padding */
+.card-mobile {
+  @apply p-4 sm:p-6 md:p-8;
+}
+
+/* Improved mobile typography */
+.text-mobile {
+  @apply text-base leading-relaxed sm:text-lg;
+}
+
+/* Mobile-friendly buttons */
+.btn-mobile {
+  @apply w-full sm:w-auto min-h-[44px] px-4 py-2 text-base;
+}
+
+/* Mobile-first container padding */
+.container-mobile {
+  @apply px-4 sm:px-6 lg:px-8;
 }

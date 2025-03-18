@@ -13,7 +13,7 @@ export default function HomePage() {
       <div className="max-w-4xl mx-auto space-y-8">
         {/* Heading */}
         <h1 className="text-4xl md:text-6xl font-bold tracking-tight">
-          Explore the World of{' '}
+          Curating the case studies of{' '}
           <span className="text-primary block mt-2">
             Quantum Computing
           </span>
@@ -21,7 +21,7 @@ export default function HomePage() {
 
         {/* Subtitle */}
         <p className="text-xl md:text-2xl text-muted-foreground max-w-3xl mx-auto">
-          A comprehensive educational resource for understanding quantum computing principles, applications, and algorithms.
+          OpenQase is a living library of quantum computing case studies, organised so you can explore by user persona, industry, or right down to the algorithm. An open industry resource created to accelerate the journey to quantum utility.
         </p>
 
         {/* Call to Action Buttons */}

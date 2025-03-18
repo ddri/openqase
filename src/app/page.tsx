@@ -6,7 +6,6 @@ import { Badge } from '@/components/ui/badge';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
-import { motion } from "framer-motion"
 
 export default function HomePage() {
   return (

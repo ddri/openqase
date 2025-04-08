@@ -2,23 +2,54 @@
 'use client';
 
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import { Menu, X } from 'lucide-react';
-import { useState, useEffect } from 'react';
+import { useRouter, usePathname } from 'next/navigation';
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import ThemeToggle from './ThemeToggle';
+import { useEffect, useState } from 'react';
+import type { User as SupabaseUser } from '@supabase/supabase-js';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import { Menu, X, User } from 'lucide-react';
 
 const navItems = [
-  { href: '/paths', label: 'Learning Paths' },
-  { href: '/case-study', label: 'Case Studies' },
+  { href: '/learning-paths', label: 'Learning Paths' },
+  { href: '/case-studies', label: 'Case Studies' },
   { href: '/quantum-stack', label: 'Quantum Stack' },
 ];
 
 export default function Navigation() {
+  const router = useRouter();
+  const pathname = usePathname();
+  const [user, setUser] = useState<SupabaseUser | null>(null);
+  const supabase = createClientComponentClient();
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
-  const pathname = usePathname();
+
+  useEffect(() => {
+    const getUser = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      setUser(user);
+    };
+
+    getUser();
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user ?? null);
+    });
+
+    return () => subscription.unsubscribe();
+  }, [supabase.auth]);
+
+  const handleSignOut = async () => {
+    await supabase.auth.signOut();
+    router.refresh();
+  };
 
   // Handle scroll effect
   useEffect(() => {
@@ -28,11 +59,6 @@ export default function Navigation() {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
-
-  // Close mobile menu when route changes
-  useEffect(() => {
-    setIsOpen(false);
-  }, [pathname]);
 
   return (
     <header className={cn(
@@ -70,9 +96,33 @@ export default function Navigation() {
           {/* Desktop Actions - pushed to the right */}
           <div className="hidden md:flex md:items-center md:space-x-4 ml-auto">
             <ThemeToggle />
-            <Button asChild>
-              <Link href="/contact">Contact</Link>
-            </Button>
+            {user ? (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" size="icon">
+                    <User className="h-5 w-5" />
+                    <span className="sr-only">User menu</span>
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuItem asChild>
+                    <Link href="/profile">Profile</Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={handleSignOut}>
+                    Sign Out
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            ) : (
+              <div className="flex items-center gap-4">
+                <Button variant="ghost" asChild>
+                  <Link href="/auth">Sign In</Link>
+                </Button>
+                <Button asChild>
+                  <Link href="/auth">Sign Up</Link>
+                </Button>
+              </div>
+            )}
           </div>
 
           {/* Mobile Menu Button */}
@@ -111,9 +161,33 @@ export default function Navigation() {
                 </Link>
               ))}
               <div className="px-3 py-2">
-                <Button asChild className="w-full">
-                  <Link href="/contact">Contact</Link>
-                </Button>
+                {user ? (
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="ghost" size="icon">
+                        <User className="h-5 w-5" />
+                        <span className="sr-only">User menu</span>
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                      <DropdownMenuItem asChild>
+                        <Link href="/profile">Profile</Link>
+                      </DropdownMenuItem>
+                      <DropdownMenuItem onClick={handleSignOut}>
+                        Sign Out
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                ) : (
+                  <div className="flex items-center gap-4">
+                    <Button variant="ghost" asChild>
+                      <Link href="/auth">Sign In</Link>
+                    </Button>
+                    <Button asChild>
+                      <Link href="/auth">Sign Up</Link>
+                    </Button>
+                  </div>
+                )}
               </div>
             </div>
           </div>

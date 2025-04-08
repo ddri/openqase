@@ -1,6 +1,6 @@
 // Type definitions
 export type DifficultyLevel = 'Beginner' | 'Intermediate' | 'Advanced';
-export type ContentType = 'algorithm' | 'case-study' | 'industry' | 'persona';
+export type ContentType = 'algorithm' | 'case-study' | 'industry' | 'persona' | 'blog';
 export type MaturityLevel = 'Emerging' | 'Growing' | 'Established';
 
 // Common interfaces
@@ -71,6 +71,16 @@ export interface Persona extends BaseContent {
   };
 }
 
+// Blog post specific interface
+export interface BlogPost {
+  title: string;
+  description: string;
+  date: string;
+  category: string;
+  published: boolean;
+  slug: string;
+}
+
 // Type guard functions to check content types
 export function isAlgorithm(content: BaseContent): content is Algorithm {
   return content.type === 'algorithm';
@@ -88,6 +98,10 @@ export function isPersona(content: BaseContent): content is Persona {
   return content.type === 'persona';
 }
 
+export function isBlogPost(content: any): content is BlogPost {
+  return content && 'title' in content && 'date' in content && 'category' in content;
+}
+
 // Type for content maps
 export type ContentMap<T> = { [slug: string]: T };
 
@@ -97,4 +111,5 @@ export interface ContentStore {
   caseStudy: ContentMap<CaseStudy>;
   industry: ContentMap<Industry>;
   persona: ContentMap<Persona>;
+  blog: ContentMap<BlogPost>;
 }

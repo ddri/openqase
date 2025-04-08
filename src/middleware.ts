@@ -1,43 +1,49 @@
 // src/middleware.ts
+import { createMiddlewareClient } from '@supabase/auth-helpers-nextjs'
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 
-// This is a simple example - in production you'd want more secure authentication
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'your-secure-password'
+// Add routes that require authentication
+const protectedRoutes = [
+  '/dashboard',
+  '/profile',
+  '/case-studies',
+  '/learning-paths',
+]
 
-export function middleware(request: NextRequest) {
-  // Only run on admin routes
-  if (!request.nextUrl.pathname.startsWith('/admin')) {
-    return NextResponse.next()
+export async function middleware(req: NextRequest) {
+  const res = NextResponse.next()
+  const supabase = createMiddlewareClient({ req, res })
+  
+  // Refresh session if expired
+  const { data: { session } } = await supabase.auth.getSession()
+  
+  // Check if the current route is protected
+  const isProtectedRoute = protectedRoutes.some(route => 
+    req.nextUrl.pathname.startsWith(route)
+  )
+
+  // Handle protected routes
+  if (isProtectedRoute && !session) {
+    const redirectUrl = req.nextUrl.clone()
+    redirectUrl.pathname = '/auth'
+    redirectUrl.searchParams.set('redirectTo', req.nextUrl.pathname)
+    return NextResponse.redirect(redirectUrl)
   }
 
-  const authHeader = request.headers.get('authorization')
-
-  if (!authHeader || !authHeader.startsWith('Basic ')) {
-    return new NextResponse('Authentication required', {
-      status: 401,
-      headers: {
-        'WWW-Authenticate': 'Basic realm="Admin Access"',
-      },
-    })
+  // Handle auth routes when user is already authenticated
+  if (req.nextUrl.pathname.startsWith('/auth') && session) {
+    return NextResponse.redirect(new URL('/', req.url))
   }
 
-  // Basic auth header format: Basic base64(username:password)
-  const auth = Buffer.from(authHeader.split(' ')[1], 'base64').toString()
-  const [username, password] = auth.split(':')
-
-  if (password !== ADMIN_PASSWORD) {
-    return new NextResponse('Invalid credentials', {
-      status: 401,
-      headers: {
-        'WWW-Authenticate': 'Basic realm="Admin Access"',
-      },
-    })
-  }
-
-  return NextResponse.next()
+  return res
 }
 
+// Only run middleware on auth-required routes
 export const config = {
-  matcher: '/admin/:path*',
+  matcher: [
+    '/case-studies/:path*',
+    '/learning-paths/:path*',
+    '/auth/callback'
+  ]
 }

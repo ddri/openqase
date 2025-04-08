@@ -246,6 +246,56 @@ graph LR
    - Build process updates
    - Dependency management
 
+## Next.js 15 Compatibility
+
+### Dynamic Route Parameters
+
+In Next.js 15, there was a significant change in how dynamic route parameters are handled. The `params` object in dynamic routes is now a Promise that needs to be awaited before accessing its properties.
+
+#### Before Next.js 15
+```typescript
+// Old approach (pre-Next.js 15)
+export default async function Page({ params }) {
+  const { slug } = params; // Direct access
+  // Use slug...
+}
+```
+
+#### After Next.js 15
+```typescript
+// New approach (Next.js 15+)
+export default async function Page({ params }) {
+  const { slug } = await params; // Must await params
+  // Use slug...
+}
+```
+
+#### Type Definition
+```typescript
+interface PageProps {
+  params: Promise<{
+    slug: string;
+    // other params...
+  }>;
+}
+```
+
+#### Common Error
+If you see this error:
+```
+Error: Route "/path/[param]" used `params.param`. `params` should be awaited before using its properties.
+```
+
+It means you need to await the params object before accessing its properties.
+
+#### Affected Routes
+This change affects all dynamic routes in the application, including:
+- `/blog/[slug]`
+- `/paths/[type]/[slug]`
+- Any other routes with dynamic parameters
+
+For more information, see the [Next.js documentation](https://nextjs.org/docs/messages/sync-dynamic-apis).
+
 ## Future Considerations
 
 1. **Scalability**

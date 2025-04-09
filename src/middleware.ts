@@ -3,12 +3,11 @@ import { createMiddlewareClient } from '@supabase/auth-helpers-nextjs'
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 
-// Add routes that require authentication
 const protectedRoutes = [
-  '/dashboard',
-  '/profile',
-  '/case-studies',
-  '/learning-paths',
+  '/paths',
+  '/case-study',
+  '/quantum-stack',
+  '/profile'
 ]
 
 export async function middleware(req: NextRequest) {
@@ -17,33 +16,42 @@ export async function middleware(req: NextRequest) {
   
   // Refresh session if expired
   const { data: { session } } = await supabase.auth.getSession()
-  
-  // Check if the current route is protected
+
+  const isAuthPage = req.nextUrl.pathname.startsWith('/auth')
+  const isAuthCallback = req.nextUrl.pathname === '/auth/callback'
   const isProtectedRoute = protectedRoutes.some(route => 
     req.nextUrl.pathname.startsWith(route)
   )
 
-  // Handle protected routes
-  if (isProtectedRoute && !session) {
-    const redirectUrl = req.nextUrl.clone()
-    redirectUrl.pathname = '/auth'
-    redirectUrl.searchParams.set('redirectTo', req.nextUrl.pathname)
-    return NextResponse.redirect(redirectUrl)
+  // Handle auth callback - must come first
+  if (isAuthCallback) {
+    return res
   }
 
-  // Handle auth routes when user is already authenticated
-  if (req.nextUrl.pathname.startsWith('/auth') && session) {
-    return NextResponse.redirect(new URL('/', req.url))
+  // Redirect from auth page if already logged in
+  if (isAuthPage && session) {
+    const redirectTo = req.nextUrl.searchParams.get('redirectTo') || '/'
+    return NextResponse.redirect(new URL(redirectTo, req.url))
+  }
+
+  // Show auth gate for protected routes when not logged in
+  if (isProtectedRoute && !session) {
+    // Store the original URL to redirect back after auth
+    const redirectUrl = new URL('/auth', req.url)
+    redirectUrl.searchParams.set('redirectTo', req.nextUrl.pathname)
+    return NextResponse.redirect(redirectUrl)
   }
 
   return res
 }
 
-// Only run middleware on auth-required routes
+// Run middleware on auth routes and protected routes
 export const config = {
   matcher: [
-    '/case-studies/:path*',
-    '/learning-paths/:path*',
-    '/auth/callback'
+    '/auth/:path*',
+    '/paths/:path*',
+    '/case-study/:path*',
+    '/quantum-stack/:path*',
+    '/profile'
   ]
 }

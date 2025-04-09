@@ -18,8 +18,8 @@ import {
 import { Menu, X, User } from 'lucide-react';
 
 const navItems = [
-  { href: '/learning-paths', label: 'Learning Paths' },
-  { href: '/case-studies', label: 'Case Studies' },
+  { href: '/paths', label: 'Learning Paths' },
+  { href: '/case-study', label: 'Case Studies' },
   { href: '/quantum-stack', label: 'Quantum Stack' },
 ];
 

@@ -1,33 +1,23 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import Link from "next/link"
+import { getAllContent } from "@/lib/mdx"
+import { BlogPost } from "@/lib/types"
 
-// This would typically come from your blog post data source
-const SAMPLE_POSTS = [
-  {
-    slug: "welcome-to-openqase",
-    title: "Welcome to openQase",
-    description: "Introducing our open-source quantum computing education platform",
-    date: "2024-03-20",
-    category: "News"
-  },
-  {
-    slug: "quantum-computing-basics",
-    title: "Understanding Quantum Computing Basics",
-    description: "A beginner's guide to quantum computing concepts",
-    date: "2024-03-21",
-    category: "Tutorial"
-  },
-  {
-    slug: "case-study-airbus",
-    title: "Deep Dive: Airbus Quantum Computing Journey",
-    description: "Analyzing how Airbus is implementing quantum solutions",
-    date: "2024-03-22",
-    category: "Case Study"
+// Fetch blog posts from MDX files
+async function getBlogPosts() {
+  try {
+    const posts = await getAllContent<BlogPost>('blog');
+    return posts.filter(post => post.frontmatter.published);
+  } catch (error) {
+    console.error('Error fetching blog posts:', error);
+    return [];
   }
-]
+}
 
-export default function BlogPage() {
+export default async function BlogPage() {
+  const posts = await getBlogPosts();
+
   return (
     <div className="container mx-auto px-4 py-12">
       {/* Hero Section */}
@@ -57,15 +47,15 @@ export default function BlogPage() {
 
       {/* Blog Posts Grid */}
       <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {SAMPLE_POSTS.map((post) => (
+        {posts.map((post) => (
           <Link key={post.slug} href={`/blog/${post.slug}`}>
             <Card className="h-full hover:bg-accent/5 transition-colors">
               <CardHeader>
                 <div className="text-sm text-muted-foreground mb-2">
-                  {post.category} • {post.date}
+                  {post.frontmatter.category} • {post.frontmatter.date}
                 </div>
-                <CardTitle className="text-xl mb-2">{post.title}</CardTitle>
-                <CardDescription>{post.description}</CardDescription>
+                <CardTitle className="text-xl mb-2">{post.frontmatter.title}</CardTitle>
+                <CardDescription>{post.frontmatter.description}</CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="text-sm text-accent hover:underline">

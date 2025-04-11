@@ -2,12 +2,11 @@
 import './globals.css';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
-import Link from 'next/link';
 import Navigation from '@/components/Navigation';
-import ThemeProvider from '@/components/ThemeProvider';
 import AlphaBanner from '@/components/ui/AlphaBanner';
 import { Toaster } from '@/components/ui/toaster';
 import Footer from '@/components/Footer';
+import Providers from '@/components/Providers';
 
 // Load Inter with additional weights for better typography
 const inter = Inter({
@@ -18,8 +17,8 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: 'OpenQASE - Quantum Computing Education Platform',
-  description: 'Learn about quantum computing with case studies and learning paths',
+  title: 'OpenQASE',
+  description: 'Open Quantum Algorithm Study Environment',
 };
 
 export default function RootLayout({
@@ -30,7 +29,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning className={inter.variable}>
       <body className="min-h-screen antialiased">
-        <ThemeProvider>
+        <Providers>
           <div className="min-h-screen flex flex-col">
             <AlphaBanner />
             <Navigation />
@@ -40,7 +39,7 @@ export default function RootLayout({
             <Footer />
           </div>
           <Toaster />
-        </ThemeProvider>
+        </Providers>
       </body>
     </html>
   );

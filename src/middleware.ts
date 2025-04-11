@@ -19,9 +19,6 @@ export async function middleware(req: NextRequest) {
 
   const isAuthPage = req.nextUrl.pathname.startsWith('/auth')
   const isAuthCallback = req.nextUrl.pathname === '/auth/callback'
-  const isProtectedRoute = protectedRoutes.some(route => 
-    req.nextUrl.pathname.startsWith(route)
-  )
 
   // Handle auth callback - must come first
   if (isAuthCallback) {
@@ -32,14 +29,6 @@ export async function middleware(req: NextRequest) {
   if (isAuthPage && session) {
     const redirectTo = req.nextUrl.searchParams.get('redirectTo') || '/'
     return NextResponse.redirect(new URL(redirectTo, req.url))
-  }
-
-  // Show auth gate for protected routes when not logged in
-  if (isProtectedRoute && !session) {
-    // Store the original URL to redirect back after auth
-    const redirectUrl = new URL('/auth', req.url)
-    redirectUrl.searchParams.set('redirectTo', req.nextUrl.pathname)
-    return NextResponse.redirect(redirectUrl)
   }
 
   return res

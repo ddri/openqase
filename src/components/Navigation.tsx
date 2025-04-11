@@ -119,7 +119,7 @@ export default function Navigation() {
                   <Link href="/auth">Sign In</Link>
                 </Button>
                 <Button asChild>
-                  <Link href="/auth">Sign Up</Link>
+                  <Link href="/auth">Get Started</Link>
                 </Button>
               </div>
             )}
@@ -184,7 +184,7 @@ export default function Navigation() {
                       <Link href="/auth">Sign In</Link>
                     </Button>
                     <Button asChild>
-                      <Link href="/auth">Sign Up</Link>
+                      <Link href="/auth">Get Started</Link>
                     </Button>
                   </div>
                 )}

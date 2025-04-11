@@ -7,6 +7,8 @@ import { MDXRemote } from 'next-mdx-remote/rsc';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import Link from 'next/link';
+import { ContentErrorBoundary } from '@/components/error-boundary/ContentErrorBoundary';
+import { validateContent } from '@/lib/validation';
 
 interface StackLayer {
   title: string;
@@ -63,8 +65,7 @@ async function getStackLayer(id: string): Promise<StackLayer | null> {
     const fileContent = await fs.readFile(filePath, 'utf8');
     const { data, content } = matter(fileContent);
     
-    // Fix: ensure we're returning the proper type with all required fields
-    return {
+    const stackLayer = {
       ...data,
       rawContent: content,
       title: data.title || '',
@@ -73,7 +74,25 @@ async function getStackLayer(id: string): Promise<StackLayer | null> {
       layer: data.layer || 0,
       applications: data.applications || []
     } as StackLayer;
+
+    // Validate content before returning
+    const validation = validateContent(stackLayer, 'stack-layers', id);
+    if (!validation.isValid) {
+      console.error('Content validation failed:', {
+        contentType: 'stack-layers',
+        contentId: id,
+        errors: validation.errors
+      });
+      return null;
+    }
+
+    return stackLayer;
   } catch (error) {
+    console.error('Error loading stack layer:', {
+      contentType: 'stack-layers',
+      contentId: id,
+      error
+    });
     return null;
   }
 }
@@ -116,10 +135,12 @@ export default async function StackLayerPage(props: { params: Promise<{ id: stri
           {/* Main Content */}
           <div className="col-span-7">
             <article className="prose prose-invert max-w-none">
-              <MDXRemote 
-                source={stackLayer.rawContent}
-                components={components} 
-              />
+              <ContentErrorBoundary contentType="stack-layers" contentId={resolvedParams.id}>
+                <MDXRemote 
+                  source={stackLayer.rawContent}
+                  components={components} 
+                />
+              </ContentErrorBoundary>
             </article>
           </div>
 

@@ -2,11 +2,52 @@
 
 ## Overview
 
-OpenQASE is a Next.js application that converts MDX content into a static educational platform. This document explains the technical implementation details.
+OpenQASE is a Next.js application that combines MDX content management with Supabase authentication to create a secure, educational platform. This document explains the technical implementation details.
 
 ## Core Components
 
-### 1. Content Processing System
+### 1. Authentication System
+
+```mermaid
+graph TD
+    A[User Request] --> B{Auth Check}
+    B -->|Authenticated| C[Protected Content]
+    B -->|Unauthenticated| D[Auth Gate]
+    D --> E[Sign In]
+    E --> F[Supabase Auth]
+    F -->|Success| C
+    F -->|Failure| D
+```
+
+#### Implementation Details
+
+1. **Middleware (`src/middleware.ts`)**
+   - Handles session validation
+   - Manages protected routes
+   - Handles auth callbacks
+   ```typescript
+   export async function middleware(req: NextRequest) {
+     const res = NextResponse.next()
+     const supabase = createMiddlewareClient({ req, res })
+     const { data: { session } } = await supabase.auth.getSession()
+     // Handle auth logic
+     return res
+   }
+   ```
+
+2. **AuthGate Component (`src/components/auth/AuthGate.tsx`)**
+   - Client-side protection
+   - Friendly warning messages
+   - Handles auth state
+   ```typescript
+   export function AuthGate({ children, title, description }) {
+     const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false)
+     // Auth gate implementation
+     return isAuthenticated ? children : <WarningMessage />
+   }
+   ```
+
+### 2. Content Processing System
 
 ```mermaid
 graph TD
@@ -15,15 +56,9 @@ graph TD
     C --> D[Content Store]
     D --> E[Static Generation]
     
-    subgraph "MDX Loader"
-    F[Read Files] --> G[Parse Frontmatter]
-    G --> H[Process MDX]
-    H --> I[Return Typed Content]
-    end
-    
     subgraph "MDX Processing"
-    J[Apply Plugins] --> K[Apply Components]
-    K --> L[Generate HTML]
+    F[Parse Frontmatter] --> G[Process MDX]
+    G --> H[Apply Components]
     end
 ```
 
@@ -31,279 +66,129 @@ graph TD
 
 1. **MDX Processing (`src/lib/mdx.ts`)**
    - Reads and processes MDX files
-   - Uses gray-matter for frontmatter parsing
-   - Applies MDX plugins (remarkGfm, rehypePrismPlus)
-   - Returns typed content with frontmatter separation
-   - Implements React cache for performance
+   - Uses gray-matter for frontmatter
+   - Applies MDX plugins
+   ```typescript
+   export async function getContentBySlug<T>(
+     type: ContentType,
+     slug: string
+   ): Promise<MDXContent<T>> {
+     // MDX processing implementation
+   }
+   ```
 
-```typescript
-// src/lib/mdx.ts
-export async function getContentBySlug<T>(
-  type: ContentType,
-  slug: string
-): Promise<MDXContent<T>> {
-  const { data, content } = matter(fileContents);
-  const mdxSource = await serialize(content, {
-    mdxOptions: {
-      remarkPlugins: [remarkGfm],
-      rehypePlugins: [rehypePrismPlus],
-    },
-    scope: data,
-  });
-  
-  return {
-    source: mdxSource,
-    frontmatter: data as T,
-    slug
-  };
-}
-```
-
-2. **Validation System (`src/lib/validation.ts`)**
-   - Validates required fields
-   - Checks content relationships
-   - Ensures data integrity
-   - Provides error reporting
-
-### 2. Routing System
+### 3. Routing System
 
 ```mermaid
 graph LR
     A[App Router] --> B{Route Types}
-    B --> C[Dynamic Routes]
-    B --> D[Static Routes]
+    B --> C[Protected Routes]
+    B --> D[Public Routes]
     
-    C --> E[/paths/[type]/[slug]]
-    D --> F[/index]
+    C --> E[/paths/*]
+    C --> F[/case-study/*]
+    C --> G[/quantum-stack/*]
     
-    E --> G[Content Page]
-    F --> H[Landing Page]
+    D --> H[/]
+    D --> I[/auth]
 ```
 
 #### Route Implementation
 
-1. **Dynamic Routes**
-   - `/paths/[type]/[slug]/page.tsx` files
-   - Generated from content at build time
-   - Handle individual content pages
-   - Include related content
-
-2. **Static Routes**
-   - Section landing pages
-   - Content type indexes
-   - Navigation pages
-   - Search functionality
-
-### 3. Build Process
-
-```mermaid
-sequenceDiagram
-    participant Content as MDX Content
-    participant Build as Build Process
-    participant Static as Static Site
-    
-    Content->>Build: Load Files
-    Build->>Build: Process MDX
-    Build->>Build: Generate Routes
-    Build->>Build: Apply Components
-    Build->>Static: Generate Pages
-    Static->>Static: Optimize Assets
-```
-
-#### Build Steps
-
-1. **Content Processing**
+1. **Protected Routes**
+   - Require authentication
+   - Use AuthGate component
+   - Handle redirects
    ```typescript
-   // src/lib/mdx.ts
-   export const getAllContent = cache(async <T>(
-     type: ContentType
-   ): Promise<MDXContent<T>[]> => {
-     // Process all content of a type
-     return contentList.sort((a, b) => {
-       // Sort by date/title
-     });
-   });
-   ```
-
-2. **Route Generation**
-   ```typescript
-   // paths/[type]/[slug]/page.tsx
-   export async function generateStaticParams() {
-     const contentList = await getAllContent<ContentType>(type);
-     return contentList.map(content => ({
-       slug: content.slug
-     }));
-   }
-   ```
-
-3. **Page Generation**
-   ```typescript
-   // Example page component
-   export default async function ContentPage({ params }) {
-     const content = await getContentBySlug<ContentType>(params.type, params.slug);
+   export default function ProtectedPage() {
      return (
-       <article>
-         <h1>{content.frontmatter.title}</h1>
-         <MDXRemote source={content.source} components={components} />
-       </article>
+       <AuthGate title="..." description="...">
+         {/* Protected content */}
+       </AuthGate>
      );
    }
    ```
 
-### 4. Content Rendering
+2. **Public Routes**
+   - Open access
+   - Landing pages
+   - Auth pages
+
+### 4. Component System
 
 ```mermaid
 graph TD
-    A[Page Request] --> B[Load Content]
-    B --> C[Process MDX]
-    C --> D[Apply Components]
-    D --> E[Render Page]
+    A[Components] --> B[UI Components]
+    A --> C[Auth Components]
+    A --> D[Content Components]
     
-    subgraph "Components"
-    F[Custom MDX] --> G[UI Components]
-    G --> H[Interactive Elements]
-    end
+    B --> E[Base UI]
+    C --> F[AuthGate]
+    C --> G[Auth Forms]
+    D --> H[MDX Components]
 ```
 
-#### Rendering Components
+#### Component Types
 
-1. **MDX Components**
-   - Custom heading styles
-   - Code block highlighting
-   - Interactive diagrams
-   - Special content blocks
+1. **UI Components**
+   - Reusable base components
+   - Styled with Tailwind
+   - Accessible and responsive
 
-2. **Page Components**
-   - Content layout
-   - Navigation
-   - Related content
-   - Metadata display
+2. **Auth Components**
+   - Handle authentication flows
+   - Manage auth state
+   - Show auth gates
+
+3. **Content Components**
+   - MDX renderers
+   - Content layouts
+   - Interactive elements
 
 ### 5. Data Flow
 
 ```mermaid
 graph LR
-    A[MDX Files] --> B[MDX Processing]
-    B --> C[Static Site]
-    C --> D[CDN]
-    D --> E[Browser]
-    
-    subgraph "Build Process"
-    F[Process MDX] --> G[Generate Routes]
-    G --> H[Optimize]
-    end
+    A[Client] --> B[Next.js]
+    B --> C[Middleware]
+    C --> D[Supabase Auth]
+    C --> E[Protected Routes]
+    C --> F[Public Routes]
 ```
+
+## Security Considerations
+
+1. **Authentication**
+   - Secure session management
+   - Protected route middleware
+   - Client-side auth gates
+
+2. **Environment Variables**
+   - Supabase credentials
+   - API keys
+   - Environment-specific configs
+
+3. **Route Protection**
+   - Server-side checks
+   - Client-side gates
+   - Redirect handling
 
 ## Development Workflow
 
-### 1. Content Updates
-
-1. Create/update MDX files
-2. Run validation
-3. Test locally
-4. Build and deploy
-
-### 2. Code Updates
-
-1. Modify components/routes
-2. Update MDX processing
-3. Test with sample content
-4. Validate build process
-
-## Performance Considerations
-
-1. **Build Optimization**
-   - MDX processing with plugins
-   - Efficient route generation
-   - Asset optimization
-
-2. **Runtime Performance**
-   - Static page generation
-   - Content caching
-   - Optimized components
-
-## Security
-
-1. **Content Validation**
-   - Strict frontmatter checking
-   - Relationship validation
-   - Format verification
+1. **Local Development**
+   ```bash
+   npm run dev
+   # Environment setup
+   cp .env.example .env.local
+   # Update Supabase credentials
+   ```
 
 2. **Build Process**
-   - Secure MDX processing
-   - Safe component rendering
-   - Error handling
+   ```bash
+   npm run build
+   # Generates static pages
+   # Processes MDX content
+   # Optimizes assets
+   ```
 
-## Maintenance
-
-1. **Content Updates**
-   - Regular validation
-   - Relationship checking
-   - Performance monitoring
-
-2. **Code Updates**
-   - Component maintenance
-   - Build process updates
-   - Dependency management
-
-## Next.js 15 Compatibility
-
-### Dynamic Route Parameters
-
-In Next.js 15, there was a significant change in how dynamic route parameters are handled. The `params` object in dynamic routes is now a Promise that needs to be awaited before accessing its properties.
-
-#### Before Next.js 15
-```typescript
-// Old approach (pre-Next.js 15)
-export default async function Page({ params }) {
-  const { slug } = params; // Direct access
-  // Use slug...
-}
-```
-
-#### After Next.js 15
-```typescript
-// New approach (Next.js 15+)
-export default async function Page({ params }) {
-  const { slug } = await params; // Must await params
-  // Use slug...
-}
-```
-
-#### Type Definition
-```typescript
-interface PageProps {
-  params: Promise<{
-    slug: string;
-    // other params...
-  }>;
-}
-```
-
-#### Common Error
-If you see this error:
-```
-Error: Route "/path/[param]" used `params.param`. `params` should be awaited before using its properties.
-```
-
-It means you need to await the params object before accessing its properties.
-
-#### Affected Routes
-This change affects all dynamic routes in the application, including:
-- `/blog/[slug]`
-- `/paths/[type]/[slug]`
-- Any other routes with dynamic parameters
-
-For more information, see the [Next.js documentation](https://nextjs.org/docs/messages/sync-dynamic-apis).
-
-## Future Considerations
-
-1. **Scalability**
-   - Content organization
-   - Build performance
-   - Caching strategies
-
-2. **Features**
-   - Enhanced validation
-   - More interactive components
-   - Advanced search
+## Last Updated: 2024-03

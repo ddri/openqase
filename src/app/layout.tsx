@@ -7,6 +7,7 @@ import AlphaBanner from '@/components/ui/AlphaBanner';
 import { Toaster } from '@/components/ui/toaster';
 import Footer from '@/components/Footer';
 import Providers from '@/components/Providers';
+import { GlobalErrorBoundary } from '@/components/error-boundary/GlobalErrorBoundary';
 
 // Load Inter with additional weights for better typography
 const inter = Inter({
@@ -34,7 +35,9 @@ export default function RootLayout({
             <AlphaBanner />
             <Navigation />
             <main className="flex-grow">
-              {children}
+              <GlobalErrorBoundary>
+                {children}
+              </GlobalErrorBoundary>
             </main>
             <Footer />
           </div>

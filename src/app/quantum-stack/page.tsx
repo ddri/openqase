@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
+import AuthGate from '@/components/auth/AuthGate';
 
 const stackLayers = [
   {
@@ -73,83 +74,88 @@ export default function QuantumStackPage() {
   const [selectedLayer, setSelectedLayer] = useState(stackLayers[0]);
 
   return (
-    <main className="container mx-auto p-8">
-      <div className="text-center mb-16">
-        <h1 className="text-4xl font-bold mb-6">
-          The Quantum Computing Stack
-        </h1>
-        <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-          Understanding the complete quantum computing technology stack, from hardware to applications
-        </p>
-      </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        {/* Left side - Stack visualization */}
-        <div className="relative">
-          {/* Quantum Computer Container */}
-          <div className="bg-accent/5 border-2 border-accent/20 rounded-xl p-6 relative">
-
-            {/* Stack layers */}
-            <div className="space-y-3 relative z-10">
-              {stackLayers.map((layer) => (
-                <Card 
-                  key={layer.title}
-                  className={cn(
-                    "cursor-pointer transition-all transform hover:scale-[1.02]",
-                    selectedLayer.title === layer.title 
-                      ? "border-primary bg-primary/5 shadow-lg" 
-                      : "hover:bg-accent/5"
-                  )}
-                  onClick={() => setSelectedLayer(layer)}
-                >
-                  <CardHeader className="p-4">
-                    <div className="flex items-center justify-between mb-2">
-                      <Badge className="bg-primary/10 text-primary">
-                        Layer {layer.layerNumber}
-                      </Badge>
-                    </div>
-                    <CardTitle className="text-lg">{layer.title}</CardTitle>
-                    <CardDescription className="text-sm text-muted-foreground">
-                      {layer.description}
-                    </CardDescription>
-                  </CardHeader>
-                </Card>
-              ))}
-            </div>
-          </div>
+    <AuthGate
+      title="Explore the Quantum Technology Stack"
+      description="Dive deep into each layer of quantum computing technology, from hardware fundamentals to advanced algorithms and real-world applications."
+    >
+      <main className="container mx-auto p-8">
+        <div className="text-center mb-16">
+          <h1 className="text-4xl font-bold mb-6">
+            The Quantum Computing Stack
+          </h1>
+          <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+            Understanding the complete quantum computing technology stack, from hardware to applications
+          </p>
         </div>
 
-        {/* Right side - Layer details */}
-        <div className="lg:sticky lg:top-8">
-          <Card className="h-full">
-            <CardHeader className="p-6">
-              <Badge className="w-fit mb-4 bg-primary/10 text-primary">
-                Layer {selectedLayer.layerNumber}
-              </Badge>
-              <CardTitle className="text-2xl mb-4">{selectedLayer.title}</CardTitle>
-              <CardDescription className="text-lg text-muted-foreground">
-                {selectedLayer.content}
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="p-6 pt-0">
-              <h3 className="font-semibold mb-4">Key Components</h3>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {selectedLayer.items.map((item) => (
-                  <div 
-                    key={item}
-                    className="p-4 bg-accent/5 rounded-lg border border-accent/10"
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          {/* Left side - Stack visualization */}
+          <div className="relative">
+            {/* Quantum Computer Container */}
+            <div className="bg-accent/5 border-2 border-accent/20 rounded-xl p-6 relative">
+
+              {/* Stack layers */}
+              <div className="space-y-3 relative z-10">
+                {stackLayers.map((layer) => (
+                  <Card 
+                    key={layer.title}
+                    className={cn(
+                      "cursor-pointer transition-all transform hover:scale-[1.02]",
+                      selectedLayer.title === layer.title 
+                        ? "border-primary bg-primary/5 shadow-lg" 
+                        : "hover:bg-accent/5"
+                    )}
+                    onClick={() => setSelectedLayer(layer)}
                   >
-                    <h4 className="font-medium mb-2">{item}</h4>
-                    <p className="text-sm text-muted-foreground">
-                      Learn more about {item.toLowerCase()} in quantum computing
-                    </p>
-                  </div>
+                    <CardHeader className="p-4">
+                      <div className="flex items-center justify-between mb-2">
+                        <Badge className="bg-primary/10 text-primary">
+                          Layer {layer.layerNumber}
+                        </Badge>
+                      </div>
+                      <CardTitle className="text-lg">{layer.title}</CardTitle>
+                      <CardDescription className="text-sm text-muted-foreground">
+                        {layer.description}
+                      </CardDescription>
+                    </CardHeader>
+                  </Card>
                 ))}
               </div>
-            </CardContent>
-          </Card>
+            </div>
+          </div>
+
+          {/* Right side - Layer details */}
+          <div className="lg:sticky lg:top-8">
+            <Card className="h-full">
+              <CardHeader className="p-6">
+                <Badge className="w-fit mb-4 bg-primary/10 text-primary">
+                  Layer {selectedLayer.layerNumber}
+                </Badge>
+                <CardTitle className="text-2xl mb-4">{selectedLayer.title}</CardTitle>
+                <CardDescription className="text-lg text-muted-foreground">
+                  {selectedLayer.content}
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="p-6 pt-0">
+                <h3 className="font-semibold mb-4">Key Components</h3>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  {selectedLayer.items.map((item) => (
+                    <div 
+                      key={item}
+                      className="p-4 bg-accent/5 rounded-lg border border-accent/10"
+                    >
+                      <h4 className="font-medium mb-2">{item}</h4>
+                      <p className="text-sm text-muted-foreground">
+                        Learn more about {item.toLowerCase()} in quantum computing
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          </div>
         </div>
-      </div>
-    </main>
+      </main>
+    </AuthGate>
   );
 }

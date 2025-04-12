@@ -2,7 +2,18 @@
 
 ## Overview
 
-OpenQase is a Next.js-based educational platform for quantum computing. This guide will help you get started with development and content creation.
+OpenQase is a Next.js-based educational platform for quantum computing, using Supabase for authentication and data management. This guide will help you get started with development.
+
+## Prerequisites
+
+1. **Node.js and npm**
+   - Node.js 18.x or later
+   - npm 9.x or later
+
+2. **Supabase Account**
+   - Create an account at [Supabase](https://supabase.com)
+   - Create a new project
+   - Keep your project URL and anon key handy
 
 ## Getting Started
 
@@ -13,12 +24,24 @@ OpenQase is a Next.js-based educational platform for quantum computing. This gui
    npm install
    ```
 
-2. **Run Development Server**
+2. **Environment Setup**
+   ```bash
+   # Copy example env file
+   cp .env.example .env.local
+   ```
+   
+   Update `.env.local` with your Supabase credentials:
+   ```env
+   NEXT_PUBLIC_SUPABASE_URL=your_project_url
+   NEXT_PUBLIC_SUPABASE_ANON_KEY=your_anon_key
+   ```
+
+3. **Run Development Server**
    ```bash
    npm run dev
    ```
 
-3. **View Documentation**
+4. **View Documentation**
    - `docs/content-management.md` - Content creation guide
    - `docs/architecture-and-recommendations.md` - Technical details
    - `docs/quick-start.md` - This guide
@@ -34,13 +57,27 @@ openqase/
 │   └── persona/      # Role-based learning paths
 ├── src/
 │   ├── app/         # Next.js app router pages
+│   │   ├── auth/    # Authentication pages
 │   │   └── paths/   # Content type routes
 │   ├── components/  # React components
 │   │   ├── ui/     # Base UI components
-│   │   └── journey/ # Learning path components
+│   │   └── auth/   # Auth components
 │   └── lib/        # Utilities and types
 └── docs/           # Documentation
 ```
+
+## Authentication Setup
+
+1. **Configure Auth Providers**
+   - Go to your Supabase project dashboard
+   - Navigate to Authentication > Providers
+   - Enable Email/Password provider
+   - (Optional) Configure additional providers
+
+2. **Test Authentication**
+   - Visit `http://localhost:3000/auth`
+   - Try signing up with email/password
+   - Verify redirect behavior
 
 ## Common Tasks
 
@@ -52,25 +89,33 @@ openqase/
 4. Write content using markdown and custom components
 5. Test locally
 
-### 2. Updating Content
+### 2. Protected Routes
 
-1. Edit MDX file
-2. Update lastUpdated date in frontmatter
-3. Test locally
-4. Build and verify
+The following routes require authentication:
+- `/paths/*` - Learning paths
+- `/case-study/*` - Case studies
+- `/quantum-stack/*` - Quantum stack
+- `/profile` - User profile
 
-### 3. Development
+To add new protected routes:
+1. Add route to `protectedRoutes` in `src/middleware.ts`
+2. Wrap component with `AuthGate`
+3. Add appropriate warning messages
+
+### 3. Development Workflow
 
 1. Make code changes
 2. Run development server
 3. Test with sample content
-4. Build and verify
+4. Test authentication flows
+5. Build and verify
 
 ## Key Files
 
+- `src/middleware.ts` - Auth middleware and route protection
+- `src/components/auth/AuthGate.tsx` - Auth protection component
 - `src/lib/mdx.ts` - MDX processing and content loading
-- `src/lib/types.ts` - TypeScript definitions for content
-- `src/components/ui/content-card.tsx` - Content card component
+- `src/lib/types.ts` - TypeScript definitions
 
 ## Content Creation Examples
 
@@ -129,17 +174,23 @@ openqase/
 
 ### Common Issues
 
-1. **Build Errors**
+1. **Authentication Issues**
+   - Check Supabase credentials in `.env.local`
+   - Verify Supabase project configuration
+   - Clear browser cookies and try again
+   - Check browser console for errors
+
+2. **Build Errors**
    - Check required frontmatter fields
    - Verify MDX syntax
-   - Ensure frontmatter matches types
+   - Ensure proper TypeScript types
    - Check for proper date format
 
-2. **Development Server Issues**
-   - Clear .next directory
+3. **Development Server Issues**
+   - Clear `.next` directory
    - Restart development server
    - Check for syntax errors
-   - Verify MDX content format
+   - Verify environment variables
 
 ### Need Help?
 
@@ -150,23 +201,31 @@ openqase/
 
 ## Best Practices
 
-1. **Content Creation**
+1. **Authentication**
+   - Always use `AuthGate` for protected content
+   - Test both authenticated and unauthenticated states
+   - Handle loading and error states
+   - Use proper TypeScript types
+
+2. **Content Creation**
    - Follow templates exactly
    - Keep content focused
    - Use appropriate keywords
    - Update lastUpdated date
    - Use custom components where appropriate
 
-2. **Development**
+3. **Development**
    - Test changes locally
    - Follow TypeScript types
    - Use existing components
    - Follow accessibility guidelines
    - Keep code DRY
 
-3. **Deployment**
+4. **Deployment**
    - Build and test locally
    - Verify all routes work
+   - Test authentication flows
    - Check content rendering
-   - Test responsive design
    - Monitor performance
+
+## Last Updated: 2024-03

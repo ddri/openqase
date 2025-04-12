@@ -3,100 +3,174 @@ export default function AboutPage() {
     <main className="min-h-screen">
       <div className="container-outer section-spacing">
         {/* Hero Section */}
-        <div className="max-w-3xl mx-auto text-center mb-12 md:mb-16">
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 md:mb-6 tracking-tight">
-            About OpenQase
+        <div className="max-w-3xl mx-auto text-center mb-12">
+          <h1 className="text-4xl font-bold mb-4">
+            About OpenQASE
           </h1>
+          <p className="text-lg text-muted-foreground">
+            OpenQASE (Open Quantum Applications and Studies Explorer) is a comprehensive knowledge platform dedicated to documenting and sharing quantum computing business case studies and applications.
+          </p>
         </div>
 
-        {/* Mission Section */}
-        <section id="mission" className="max-w-3xl mx-auto mb-12 md:mb-16">
-          <h2 className="text-2xl sm:text-3xl font-semibold mb-4 md:mb-6">What is OpenQase?</h2>
-          <div className="space-y-4 text-base sm:text-lg">
-            <p className="text-muted-foreground">
-              OpenQase is a curated collection of the available business cases and industry partnerships exploring Quantum Computing. The project aims to accelerate the adoption of quantum technology, and to shorten the time it takes for those companies and individuals who are quantum curious to actively explore the practical potential of this emerging industry.
-            </p>
-            <p className="text-muted-foreground">
-              We do this by showcasing not only the most thorough collection of published case studies to date, but relating them with the personas, industries, and algorithms involved. This is not just an educational resource, but a collection of examples for decisions makers and industry stakeholders looking to structure their own practical projects. We know this is useful because we ourselves work in the industry, and are open sourcing the resources that we have collected from our own commercial, technical, or scientific purposes.
-            </p>            
-          </div>
-        </section>
+        <div className="lg:grid lg:grid-cols-12 lg:gap-8">
+          {/* Main Content */}
+          <div className="lg:col-span-8">
+            {/* Mission Section */}
+            <section className="mb-12">
+              <h2 className="text-2xl font-semibold mb-4">Our Mission</h2>
+              <div className="space-y-4">
+                <p className="text-muted-foreground">
+                  OpenQASE aims to become the definitive resource for quantum computing business applications by bridging the gap between theoretical quantum research and practical business implementation.
+                </p>
+                <p className="text-muted-foreground">
+                  Despite significant advances in quantum computing technology, there remains a substantial gap between theoretical quantum research and practical business applications. Many organizations and professionals struggle to understand how quantum computing can solve real-world business problems, identify relevant use cases for their specific industry, navigate the complex technical landscape of quantum algorithms, and find comprehensive, accessible resources that bridge theoretical concepts with business value.
+                </p>
+                <p className="text-muted-foreground">
+                  OpenQASE addresses these challenges through a structured, accessible platform that connects quantum computing concepts with tangible business applications through carefully curated content and intuitive navigation options.
+                </p>
+              </div>
+            </section>
 
-        {/* Why Quantum Education Section */}
-        <section className="max-w-3xl mx-auto mb-12 md:mb-16">
-          <h2 className="text-2xl sm:text-3xl font-semibold mb-4 md:mb-6">How to use the OpenQase library?</h2>
-          <div className="space-y-4 text-base sm:text-lg">
-            <p className="text-muted-foreground">
-              A small curation of business cases have been published to the Case Studies section. These will continue to be added to, and we will be expanding the metadata and highlighting the insights and metrics that matter. There is also the Lesrning Path section, which you can explore by either the Persona path, the Industry path, or the Algorithm path. As the names suggest, these individual learning paths focus on these unique perspectives, and effectively cross-examine the case studies published to date through the lens of who is doing what, and where, and with what algorithms. As an indicative resource, it's a powerful way to get a feel for the current state of quantum utility, and more rapidly stand on the shoulders of giants, as it were, and formulate your own contributions or projects.
-            </p>
-          </div>
-        </section>
+            {/* Our Approach Section */}
+            <section className="mb-12">
+              <h2 className="text-2xl font-semibold mb-4">Our Approach</h2>
+              <p className="text-muted-foreground mb-8">
+                The Learning Paths concept is central to OpenQASE's approach to making quantum computing accessible to diverse audiences. The platform offers three distinct navigation journeys:
+              </p>
+              <div className="grid gap-8 md:grid-cols-3">
+                <div>
+                  <div className="mb-3">
+                    <h3 className="text-lg font-medium">Persona Path</h3>
+                  </div>
+                  <p className="text-muted-foreground">
+                    Content tailored to your professional role, ensuring business leaders receive strategic insights while technical practitioners get implementation details.
+                  </p>
+                </div>
+                <div>
+                  <div className="mb-3">
+                    <h3 className="text-lg font-medium">Industry Path</h3>
+                  </div>
+                  <p className="text-muted-foreground">
+                    Content organized around specific business sectors, helping professionals understand quantum computing applications relevant to their industry.
+                  </p>
+                </div>
+                <div>
+                  <div className="mb-3">
+                    <h3 className="text-lg font-medium">Algorithm Path</h3>
+                  </div>
+                  <p className="text-muted-foreground">
+                    Content organized around quantum algorithms and techniques, helping match business problems with appropriate quantum solutions.
+                  </p>
+                </div>
+              </div>
+            </section>
 
-        {/* Contributing Section */}
-        <section className="max-w-3xl mx-auto mb-12 md:mb-16">
-          <h2 className="text-2xl sm:text-3xl font-semibold mb-4 md:mb-6">Contributing to OpenQase</h2>
-          <p className="text-base sm:text-lg text-muted-foreground mb-6">
-            OpenQase is an open-source project, and we welcome contributions from the 
-            community. Whether you're interested in adding case studies, improving the
-            documentation, or enhancing the platform's features, there are many ways 
-            to get involved. Contact us via the contact form with a suggestion of how you would like to be involved.  
-          </p>
-          <div className="bg-card rounded-lg p-4 sm:p-6 border">
-            <h3 className="text-xl sm:text-2xl font-medium mb-4">Ways to Contribute</h3>
-            <ul className="space-y-2 text-base sm:text-lg text-muted-foreground">
-              <li className="flex items-start">
-                <span className="mr-2">•</span>
-                <span>Add new case studies</span>
-              </li>
-              <li className="flex items-start">
-                <span className="mr-2">•</span>
-                <span>Improve documentation</span>
-              </li>
-              <li className="flex items-start">
-                <span className="mr-2">•</span>
-                <span>Report bugs and suggest features</span>
-              </li>
-              <li className="flex items-start">
-                <span className="mr-2">•</span>
-                <span>Share your quantum computing experiences</span>
-              </li>
-              <li className="flex items-start">
-                <span className="mr-2">•</span>
-                <span>Help others in the community</span>
-              </li>
-            </ul>
-          </div>
-        </section>
+            {/* Case Studies Section */}
+            <section className="mb-12">
+              <h2 className="text-2xl font-semibold mb-4">Case Studies: Our Core Content</h2>
+              <div className="space-y-4">
+                <p className="text-muted-foreground">
+                  The Case Studies section forms the core content foundation of OpenQASE, providing documented examples of real-world quantum computing implementations. Each case study details actual quantum computing deployments, including the business context, problem description, implementation approach, and outcomes.
+                </p>
+                <p className="text-muted-foreground">
+                  Our case studies include quantifiable metrics on how quantum computing solutions affected business outcomes, ROI considerations, and comparative advantages over classical approaches. They provide practical information on implementation approaches, technical requirements, integration challenges, and solution architectures.
+                </p>
+                <p className="text-muted-foreground">
+                  All case studies are structured to balance technical depth with business relevance, ensuring they serve both decision-makers and implementers while providing concrete examples of quantum computing's practical value.
+                </p>
+              </div>
+            </section>
 
-        {/* Timeline/Roadmap Section */}
-        <section className="max-w-3xl mx-auto">
-          <h2 className="text-2xl sm:text-3xl font-semibold mb-4 md:mb-6">Project Roadmap</h2>
-          <div className="space-y-4 text-base sm:text-lg">
-            <p className="text-muted-foreground">
-              The high level roadmap for OpenQase covers the three phases for the project's establishment through to ongoing community-driven operations. Notable updates are documented in the Release Notes section, and we regularly write about the project and wider community collaboration in the Blog section. You're welcome to add feature requests or raise bugs directly on the GitHub repository.
-            </p>
+            {/* Our Vision Section */}
+            <section>
+              <h2 className="text-2xl font-semibold mb-4">Our Vision</h2>
+              <p className="text-muted-foreground mb-6">
+                OpenQASE aims to become the definitive resource for quantum computing business applications by:
+              </p>
+              <ul className="space-y-4">
+                <li className="flex gap-2">
+                  <span className="font-medium">Democratizing Knowledge:</span>
+                  <span className="text-muted-foreground">Making quantum computing concepts accessible to diverse business stakeholders through clear, practical examples.</span>
+                </li>
+                <li className="flex gap-2">
+                  <span className="font-medium">Bridging Theory and Practice:</span>
+                  <span className="text-muted-foreground">Connecting theoretical quantum concepts with practical business applications to accelerate adoption.</span>
+                </li>
+                <li className="flex gap-2">
+                  <span className="font-medium">Supporting Informed Decision-Making:</span>
+                  <span className="text-muted-foreground">Providing organizations with the knowledge needed to evaluate quantum computing's potential value.</span>
+                </li>
+                <li className="flex gap-2">
+                  <span className="font-medium">Accelerating Skill Development:</span>
+                  <span className="text-muted-foreground">Offering clear learning paths for professionals seeking to develop quantum computing expertise.</span>
+                </li>
+                <li className="flex gap-2">
+                  <span className="font-medium">Building Community:</span>
+                  <span className="text-muted-foreground">Creating a central hub for sharing implementation experiences, best practices, and outcomes.</span>
+                </li>
+              </ul>
+            </section>
           </div>
-          <div className="space-y-6 sm:space-y-8">
-            <div className="border-l-2 pl-4 sm:pl-6 pb-6 sm:pb-8">
-              <h3 className="text-lg sm:text-xl font-medium mb-2">Phase 1: Foundation (Current)</h3>
-              <p className="text-base sm:text-lg text-muted-foreground">
-                Create the basic platform structure, seed the initial case studies, and develop the core learning paths.
+
+          {/* Sidebar */}
+          <aside className="mt-12 lg:mt-0 lg:col-span-4">
+            {/* Join Our Community Section */}
+            <div className="rounded-lg border bg-card p-6 mb-8">
+              <h3 className="text-lg font-semibold mb-4">Join Our Community</h3>
+              <p className="text-muted-foreground mb-6">
+                Connect with other professionals exploring quantum computing applications in business contexts.
               </p>
+              <button className="w-full bg-primary text-primary-foreground hover:bg-primary/90 px-4 py-2 rounded-md">
+                Subscribe to Updates
+              </button>
             </div>
-            <div className="border-l-2 pl-4 sm:pl-6 pb-6 sm:pb-8">
-              <h3 className="text-lg sm:text-xl font-medium mb-2">Phase 2: Community-Driven </h3>
-              <p className="text-base sm:text-lg text-muted-foreground">
-              User accounts, community submissions, and expanded case study library.
+
+            {/* Our Team Section */}
+            <div className="rounded-lg border bg-card p-6 mb-8">
+              <h3 className="text-lg font-semibold mb-4">Our Team</h3>
+              <p className="text-muted-foreground mb-4">
+                OpenQASE is developed by a multidisciplinary team with expertise in:
               </p>
+              <ul className="space-y-3">
+                <li className="flex items-center gap-3">
+                  <div className="w-5 h-5 rounded-full bg-primary/10 flex items-center justify-center">
+                    <div className="w-2.5 h-2.5 rounded-full bg-primary"></div>
+                  </div>
+                  <span>Quantum Computing</span>
+                </li>
+                <li className="flex items-center gap-3">
+                  <div className="w-5 h-5 rounded-full bg-primary/10 flex items-center justify-center">
+                    <div className="w-2.5 h-2.5 rounded-full bg-primary"></div>
+                  </div>
+                  <span>Business Strategy</span>
+                </li>
+                <li className="flex items-center gap-3">
+                  <div className="w-5 h-5 rounded-full bg-primary/10 flex items-center justify-center">
+                    <div className="w-2.5 h-2.5 rounded-full bg-primary"></div>
+                  </div>
+                  <span>Education & Knowledge Sharing</span>
+                </li>
+                <li className="flex items-center gap-3">
+                  <div className="w-5 h-5 rounded-full bg-primary/10 flex items-center justify-center">
+                    <div className="w-2.5 h-2.5 rounded-full bg-primary"></div>
+                  </div>
+                  <span>Content Development</span>
+                </li>
+              </ul>
             </div>
-            <div className="border-l-2 pl-4 sm:pl-6">
-              <h3 className="text-lg sm:text-xl font-medium mb-2">Phase 3: Interactive Learning</h3>
-              <p className="text-base sm:text-lg text-muted-foreground">
-                Integration of interactive notebooks, select third-party research APIs, and curated selection of industry and implementation partners.
+
+            {/* Contact Us Section */}
+            <div className="rounded-lg border bg-card p-6">
+              <h3 className="text-lg font-semibold mb-4">Contact Us</h3>
+              <p className="text-muted-foreground mb-6">
+                Have questions or want to contribute a case study? We'd love to hear from you!
               </p>
+              <button className="w-full bg-secondary text-secondary-foreground hover:bg-secondary/90 px-4 py-2 rounded-md">
+                Get in Touch
+              </button>
             </div>
-          </div>
-        </section>
+          </aside>
+        </div>
       </div>
     </main>
   );

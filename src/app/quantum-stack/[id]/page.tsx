@@ -7,6 +7,8 @@ import { MDXRemote } from 'next-mdx-remote/rsc';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import Link from 'next/link';
+import { ContentErrorBoundary } from '@/components/error-boundary/ContentErrorBoundary';
+import { validateContent } from '@/lib/validation';
 
 interface StackLayer {
   title: string;
@@ -63,8 +65,7 @@ async function getStackLayer(id: string): Promise<StackLayer | null> {
     const fileContent = await fs.readFile(filePath, 'utf8');
     const { data, content } = matter(fileContent);
     
-    // Fix: ensure we're returning the proper type with all required fields
-    return {
+    const stackLayer = {
       ...data,
       rawContent: content,
       title: data.title || '',
@@ -73,7 +74,25 @@ async function getStackLayer(id: string): Promise<StackLayer | null> {
       layer: data.layer || 0,
       applications: data.applications || []
     } as StackLayer;
+
+    // Validate content before returning
+    const validation = validateContent(stackLayer, 'stack-layers', id);
+    if (!validation.isValid) {
+      console.error('Content validation failed:', {
+        contentType: 'stack-layers',
+        contentId: id,
+        errors: validation.errors
+      });
+      return null;
+    }
+
+    return stackLayer;
   } catch (error) {
+    console.error('Error loading stack layer:', {
+      contentType: 'stack-layers',
+      contentId: id,
+      error
+    });
     return null;
   }
 }
@@ -116,10 +135,12 @@ export default async function StackLayerPage(props: { params: Promise<{ id: stri
           {/* Main Content */}
           <div className="col-span-7">
             <article className="prose prose-invert max-w-none">
-              <MDXRemote 
-                source={stackLayer.rawContent}
-                components={components} 
-              />
+              <ContentErrorBoundary contentType="stack-layers" contentId={resolvedParams.id}>
+                <MDXRemote 
+                  source={stackLayer.rawContent}
+                  components={components} 
+                />
+              </ContentErrorBoundary>
             </article>
           </div>
 
@@ -133,12 +154,12 @@ export default async function StackLayerPage(props: { params: Promise<{ id: stri
                   </CardHeader>
                   <CardContent>
                     <div className="space-y-4">
-                      {stackLayer.applications.map((app) => (
+                      {stackLayer.applications.map((app: { title: string; description: string; examples: string[] }) => (
                         <div key={app.title}>
                           <h4 className="font-medium text-gray-200 mb-2">{app.title}</h4>
                           <p className="text-sm text-gray-400 mb-2">{app.description}</p>
                           <div className="flex flex-wrap gap-2">
-                            {app.examples.map((example) => (
+                            {app.examples.map((example: string) => (
                               <Badge key={example} variant="outline">
                                 {example}
                               </Badge>
@@ -151,13 +172,13 @@ export default async function StackLayerPage(props: { params: Promise<{ id: stri
                 </Card>
               )}
 
-              {stackLayer.relatedContent && (
+              {stackLayer.relatedContent && Object.keys(stackLayer.relatedContent).length > 0 && (
                 <Card className="bg-gray-900 border-gray-800">
                   <CardHeader>
                     <CardTitle className="text-lg">Related Content</CardTitle>
                   </CardHeader>
                   <CardContent>
-                    {stackLayer.relatedContent.algorithm && (
+                    {stackLayer.relatedContent?.algorithm && stackLayer.relatedContent.algorithm.length > 0 && (
                       <div className="mb-4">
                         <h4 className="font-medium text-gray-200 mb-2">Algorithms</h4>
                         <div className="space-y-1">
@@ -173,7 +194,7 @@ export default async function StackLayerPage(props: { params: Promise<{ id: stri
                         </div>
                       </div>
                     )}
-                    {stackLayer.relatedContent.caseStudy && (
+                    {stackLayer.relatedContent?.caseStudy && stackLayer.relatedContent.caseStudy.length > 0 && (
                       <div>
                         <h4 className="font-medium text-gray-200 mb-2">Case Studies</h4>
                         <div className="space-y-1">

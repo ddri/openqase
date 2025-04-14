@@ -1,177 +1,92 @@
 // src/app/quantum-stack/[id]/page.tsx
-import { promises as fs } from 'fs';
-import path from 'path';
+import { supabase } from '@/lib/supabase';
+import { StackLayer } from '@/lib/types';
 import { notFound } from 'next/navigation';
-import matter from 'gray-matter';
-import { MDXRemote } from 'next-mdx-remote/rsc';
-import { Badge } from '@/components/ui/badge';
-import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import Link from 'next/link';
-import { ContentErrorBoundary } from '@/components/error-boundary/ContentErrorBoundary';
-import { validateContent } from '@/lib/validation';
-
-interface StackLayer {
-  title: string;
-  description: string;
-  color: string;
-  layer: number;
-  applications: Array<{
-    title: string;
-    description: string;
-    examples: string[];
-  }>;
-  relatedContent?: {
-    algorithm?: string[];
-    caseStudy?: string[];
-  };
-  rawContent: string;
-}
-
-const components = {
-  h1: ({ children }: { children: React.ReactNode }) => (
-    <h1 className="text-4xl font-bold text-gray-100 mb-6">{children}</h1>
-  ),
-  h2: ({ children }: { children: React.ReactNode }) => (
-    <h2 className="text-2xl font-semibold text-gray-100 mt-8 mb-4">{children}</h2>
-  ),
-  h3: ({ children }: { children: React.ReactNode }) => (
-    <h3 className="text-xl font-semibold text-gray-100 mt-6 mb-3">{children}</h3>
-  ),
-  p: ({ children }: { children: React.ReactNode }) => (
-    <p className="text-gray-300 mb-4 leading-relaxed">{children}</p>
-  ),
-  ul: ({ children }: { children: React.ReactNode }) => (
-    <ul className="list-disc list-inside space-y-2 text-gray-300 mb-6 ml-4">{children}</ul>
-  ),
-  li: ({ children }: { children: React.ReactNode }) => (
-    <li className="text-gray-300">{children}</li>
-  ),
-};
-
-export async function generateStaticParams() {
-  const contentDirectory = path.join(process.cwd(), 'content', 'stack-layers');
-  const files = await fs.readdir(contentDirectory);
-  
-  return files
-    .filter(file => file.endsWith('.mdx'))
-    .map(file => ({
-      id: file.replace('.mdx', ''),
-    }));
-}
+import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 
 async function getStackLayer(id: string): Promise<StackLayer | null> {
-  try {
-    const filePath = path.join(process.cwd(), 'content', 'stack-layers', `${id}.mdx`);
-    const fileContent = await fs.readFile(filePath, 'utf8');
-    const { data, content } = matter(fileContent);
-    
-    const stackLayer = {
-      ...data,
-      rawContent: content,
-      title: data.title || '',
-      description: data.description || '',
-      color: data.color || 'blue',
-      layer: data.layer || 0,
-      applications: data.applications || []
-    } as StackLayer;
+  const { data, error } = await supabase
+    .from('stack_layers')
+    .select('*')
+    .eq('slug', id)
+    .single();
 
-    // Validate content before returning
-    const validation = validateContent(stackLayer, 'stack-layers', id);
-    if (!validation.isValid) {
-      console.error('Content validation failed:', {
-        contentType: 'stack-layers',
-        contentId: id,
-        errors: validation.errors
-      });
-      return null;
-    }
-
-    return stackLayer;
-  } catch (error) {
-    console.error('Error loading stack layer:', {
-      contentType: 'stack-layers',
-      contentId: id,
-      error
-    });
+  if (error || !data) {
     return null;
   }
+
+  return {
+    title: data.title,
+    description: data.description,
+    color: data.color,
+    layer: data.layer,
+    slug: data.slug,
+    mdx_content: data.mdx_content,
+    source: data.source,
+    applications: data.applications,
+    relatedContent: data.related_content
+  };
 }
 
-// Updated to handle params as a Promise
-export default async function StackLayerPage(props: { params: Promise<{ id: string }> }) {
-  // Await the params before using
-  const resolvedParams = await props.params;
-  const stackLayer = await getStackLayer(resolvedParams.id);
+interface PageProps {
+  params: {
+    id: string;
+  };
+}
+
+export default async function StackLayerPage({ params }: PageProps) {
+  const stackLayer = await getStackLayer(params.id);
 
   if (!stackLayer) {
     notFound();
   }
 
   return (
-    <main className="min-h-screen bg-[#0C0C0D] p-8">
-      <div className="max-w-7xl mx-auto">
-        <div className="mb-8">
-          <Link 
-            href="/quantum-stack"
-            className="text-sm text-gray-400 hover:text-gray-300 transition-colors"
-          >
-            ← Back to Quantum Stack
-          </Link>
-        </div>
+    <main className="min-h-screen bg-gray-950 text-gray-100">
+      <div className="container mx-auto px-4 py-12">
+        <div className="max-w-4xl mx-auto">
+          <header className="mb-12">
+            <h1 className="text-4xl font-bold mb-6">{stackLayer.title}</h1>
+            <p className="text-lg mb-8">{stackLayer.description}</p>
+          </header>
 
-        <div className="grid grid-cols-12 gap-8">
-          {/* Left Column - Layer Info */}
-          <div className="col-span-2">
-            <Card className="bg-gray-900 border-gray-800">
-              <CardHeader>
-                <Badge className={`bg-${stackLayer.color}-900 text-${stackLayer.color}-200 mb-2`}>
-                  Layer {stackLayer.layer}
-                </Badge>
-                <CardTitle className="text-gray-100">{stackLayer.title}</CardTitle>
-              </CardHeader>
-            </Card>
-          </div>
+          {stackLayer.mdx_content && (
+            <div className="prose dark:prose-invert max-w-none mb-12">
+              <div dangerouslySetInnerHTML={{ __html: stackLayer.mdx_content }} />
+            </div>
+          )}
 
-          {/* Main Content */}
-          <div className="col-span-7">
-            <article className="prose prose-invert max-w-none">
-              <ContentErrorBoundary contentType="stack-layers" contentId={resolvedParams.id}>
-                <MDXRemote 
-                  source={stackLayer.rawContent}
-                  components={components} 
-                />
-              </ContentErrorBoundary>
-            </article>
-          </div>
-
-          {/* Right Column - Applications & Related */}
-          <div className="col-span-3">
-            <div className="sticky top-8 space-y-6">
-              {stackLayer.applications && (
-                <Card className="bg-gray-900 border-gray-800">
-                  <CardHeader>
-                    <CardTitle className="text-lg">Key Applications</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="space-y-4">
-                      {stackLayer.applications.map((app: { title: string; description: string; examples: string[] }) => (
-                        <div key={app.title}>
-                          <h4 className="font-medium text-gray-200 mb-2">{app.title}</h4>
-                          <p className="text-sm text-gray-400 mb-2">{app.description}</p>
-                          <div className="flex flex-wrap gap-2">
-                            {app.examples.map((example: string) => (
-                              <Badge key={example} variant="outline">
-                                {example}
-                              </Badge>
-                            ))}
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </CardContent>
-                </Card>
+          <div className="grid gap-8 lg:grid-cols-[1fr,300px]">
+            <div>
+              {stackLayer.applications && stackLayer.applications.length > 0 && (
+                <section className="mt-12">
+                  <h2 className="text-2xl font-bold mb-6">Key Applications</h2>
+                  <div className="grid gap-6">
+                    {stackLayer.applications.map((app: { title: string; description: string; examples: string[] }, index: number) => (
+                      <Card key={index} className="bg-gray-900 border-gray-800">
+                        <CardHeader>
+                          <CardTitle>{app.title}</CardTitle>
+                          <p className="text-gray-300 mt-2">{app.description}</p>
+                        </CardHeader>
+                        {app.examples && app.examples.length > 0 && (
+                          <CardContent>
+                            <h4 className="font-medium text-gray-200 mb-2">Examples</h4>
+                            <ul className="list-disc list-inside text-gray-300 space-y-1">
+                              {app.examples.map((example: string, idx: number) => (
+                                <li key={idx}>{example}</li>
+                              ))}
+                            </ul>
+                          </CardContent>
+                        )}
+                      </Card>
+                    ))}
+                  </div>
+                </section>
               )}
+            </div>
 
+            <aside>
               {stackLayer.relatedContent && Object.keys(stackLayer.relatedContent).length > 0 && (
                 <Card className="bg-gray-900 border-gray-800">
                   <CardHeader>
@@ -182,9 +97,9 @@ export default async function StackLayerPage(props: { params: Promise<{ id: stri
                       <div className="mb-4">
                         <h4 className="font-medium text-gray-200 mb-2">Algorithms</h4>
                         <div className="space-y-1">
-                          {stackLayer.relatedContent.algorithm.map((algo) => (
+                          {stackLayer.relatedContent.algorithm.map((algo: string, index: number) => (
                             <Link 
-                              key={algo}
+                              key={index}
                               href={`/paths/algorithm/${algo}`}
                               className="block text-gray-400 hover:text-gray-300"
                             >
@@ -198,9 +113,9 @@ export default async function StackLayerPage(props: { params: Promise<{ id: stri
                       <div>
                         <h4 className="font-medium text-gray-200 mb-2">Case Studies</h4>
                         <div className="space-y-1">
-                          {stackLayer.relatedContent.caseStudy.map((study) => (
+                          {stackLayer.relatedContent.caseStudy.map((study: string, index: number) => (
                             <Link 
-                              key={study}
+                              key={index}
                               href={`/case-study/${study}`}
                               className="block text-gray-400 hover:text-gray-300"
                             >
@@ -213,7 +128,7 @@ export default async function StackLayerPage(props: { params: Promise<{ id: stri
                   </CardContent>
                 </Card>
               )}
-            </div>
+            </aside>
           </div>
         </div>
       </div>

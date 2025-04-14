@@ -1,152 +1,100 @@
 // src/app/paths/industry/[slug]/page.tsx
-import { promises as fs } from 'fs';
-import path from 'path';
-import { notFound } from 'next/navigation';
-import matter from 'gray-matter';
-import { MDXRemote } from 'next-mdx-remote/rsc';
+import { cookies } from 'next/headers';
+import { createServerClient } from '@/lib/supabase-server';
+import { Database } from '@/types/supabase';
+import LearningPathLayout from '@/components/ui/learning-path-layout';
 import { Badge } from '@/components/ui/badge';
 import { Card } from '@/components/ui/card';
 import Link from 'next/link';
+import MarkdownIt from 'markdown-it';
+import { SupabaseClient } from '@supabase/supabase-js';
 
-// Components for MDX
-const components = {
-  h1: ({ children }: { children: React.ReactNode }) => (
-    <h1 className="text-4xl font-bold text-[var(--text-primary)] mb-6">{children}</h1>
-  ),
-  h2: ({ children }: { children: React.ReactNode }) => (
-    <h2 className="text-2xl font-semibold text-[var(--text-primary)] mt-8 mb-4">{children}</h2>
-  ),
-  p: ({ children }: { children: React.ReactNode }) => (
-    <p className="text-[var(--text-secondary)] mb-4">{children}</p>
-  ),
-};
+const md = new MarkdownIt();
 
-export async function generateStaticParams() {
-  const contentDirectory = path.join(process.cwd(), 'content', 'industry');
-  const files = await fs.readdir(contentDirectory);
-  
-  return files
-    .filter(file => file.endsWith('.mdx'))
-    .map(file => ({
-      slug: file.replace('.mdx', ''),
-    }));
+interface PageParams {
+  params: {
+    slug: string;
+  };
 }
 
-async function getIndustry(slug: string) {
-  try {
-    const filePath = path.join(process.cwd(), 'content', 'industry', `${slug}.mdx`);
-    const fileContent = await fs.readFile(filePath, 'utf8');
-    const { data, content } = matter(fileContent);
-    
-    return {
-      frontmatter: data,
-      content,
-    };
-  } catch (error) {
-    console.error('Error loading industry:', error);
-    return null;
+export async function generateMetadata({ params }: PageParams) {
+  const resolvedParams = await params;
+  const supabase = createServerClient() as SupabaseClient<Database>;
+  const { data: industry } = await supabase
+    .from('industries')
+    .select('*')
+    .eq('slug', resolvedParams.slug)
+    .single();
+
+  return {
+    title: industry?.name || 'Industry Not Found',
+    description: industry?.description || '',
+  };
+}
+
+export default async function IndustryPage({ params }: PageParams) {
+  const resolvedParams = await params;
+  const supabase = createServerClient() as SupabaseClient<Database>;
+  
+  console.log('Fetching industry with slug:', resolvedParams.slug);
+  const { data: industry, error: industryError } = await supabase
+    .from('industries')
+    .select('*')
+    .eq('slug', resolvedParams.slug)
+    .single();
+
+  if (industryError) {
+    console.error('Error fetching industry:', industryError);
+    return <div>Error loading industry</div>;
   }
-}
 
-// Updated to handle params as a Promise
-export default async function IndustryPage(props: { params: Promise<{ slug: string }> }) {
-  // Await the params before using
-  const resolvedParams = await props.params;
-  const slug = resolvedParams.slug;
-  const industry = await getIndustry(slug);
-  
   if (!industry) {
-    notFound();
+    return <div>Industry not found</div>;
   }
-  
-  const { frontmatter, content } = industry;
-  
+
+  console.log('Fetching case studies for industry:', industry.name);
+  const { data: caseStudies, error: caseStudiesError } = await supabase
+    .from('case_studies')
+    .select('*')
+    .contains('industries', [industry.name]);
+
+  if (caseStudiesError) {
+    console.error('Error fetching case studies:', caseStudiesError);
+  }
+
   return (
-    <main className="min-h-screen p-8">
-      <div className="max-w-7xl mx-auto">
-        <div className="mb-8">
-          <Link 
-            href="/paths/industry"
-            className="text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors"
-          >
-            ← Back to Industries
-          </Link>
+    <LearningPathLayout 
+      title={industry.name}
+      backLinkText="Back to Industries"
+      backLinkHref="/paths/industry"
+    >
+      <div className="space-y-8">
+        <div className="flex flex-col gap-4">
+          <p className="text-lg text-muted-foreground">{industry.description}</p>
+          {industry.mdx_content && (
+            <div 
+              className="prose dark:prose-invert max-w-none" 
+              dangerouslySetInnerHTML={{ __html: md.render(industry.mdx_content) }}
+            />
+          )}
         </div>
 
-        {/* Header Section */}
-        <div className="mb-8">
-          <h1 className="text-4xl font-bold text-[hsl(var(--primary))] mb-4">
-            {frontmatter.title}
-          </h1>
-          <Badge className="bg-[#2A9D8F] text-white border-0">
-            {frontmatter.sector}
-          </Badge>
-        </div>
-        
-        <div className="grid grid-cols-12 gap-8">
-          {/* Main Content */}
-          <div className="col-span-9">
-            <article className="prose max-w-none">
-              <MDXRemote source={content} components={components} />
-            </article>
-          </div>
-          
-          {/* Right Sidebar */}
-          <div className="col-span-3">
-            <div className="sticky top-8 space-y-6">
-              {frontmatter.keyApplications && frontmatter.keyApplications.length > 0 && (
-                <Card className="bg-[var(--card)] border">
-                  <div className="p-4">
-                    <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-3">
-                      Key Applications
-                    </h3>
-                    <div className="space-y-4">
-                      {frontmatter.keyApplications.map((app: any, index: number) => (
-                        <div key={index}>
-                          <h4 className="font-medium text-[var(--text-primary)]">
-                            {app.title}
-                          </h4>
-                          <p className="text-sm text-[var(--text-secondary)] mb-2">
-                            {app.description}
-                          </p>
-                          <div className="flex flex-wrap gap-2">
-                            {app.examples && Array.isArray(app.examples) && app.examples.map((example: string) => (
-                              <Badge key={example} variant="outline" className="text-[var(--text-secondary)] border-[var(--border)]">
-                                {example}
-                              </Badge>
-                            ))}
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
+        {caseStudies && caseStudies.length > 0 && (
+          <div className="space-y-4">
+            <h2 className="text-2xl font-bold">Related Case Studies</h2>
+            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+              {caseStudies.map((study) => (
+                <Card key={study.id} className="p-4">
+                  <Link href={`/case-study/${study.slug}`} className="hover:underline">
+                    <h3 className="font-semibold">{study.title}</h3>
+                  </Link>
+                  <p className="text-sm text-muted-foreground mt-2">{study.description}</p>
                 </Card>
-              )}
-              
-              {frontmatter.relatedCaseStudies && frontmatter.relatedCaseStudies.length > 0 && (
-                <Card className="bg-[var(--card)] border">
-                  <div className="p-4">
-                    <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-3">
-                      Related Case Studies
-                    </h3>
-                    <div className="space-y-2">
-                      {frontmatter.relatedCaseStudies.map((study: string) => (
-                        <Link 
-                          key={study}
-                          href={`/case-study/${study}`}
-                          className="block text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors"
-                        >
-                          {study.replace(/-/g, ' ')}
-                        </Link>
-                      ))}
-                    </div>
-                  </div>
-                </Card>
-              )}
+              ))}
             </div>
           </div>
-        </div>
+        )}
       </div>
-    </main>
+    </LearningPathLayout>
   );
 }

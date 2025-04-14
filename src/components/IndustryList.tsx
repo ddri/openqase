@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Label } from '@/components/ui/label';
-import type { Industry } from '@/lib/types';
+import type { Industry } from '@/types/supabase';
 import ContentCard from '@/components/ui/content-card';
 
 interface IndustryListProps {
@@ -14,10 +14,10 @@ interface IndustryListProps {
 export default function IndustryList({ industries }: IndustryListProps) {
   const [searchQuery, setSearchQuery] = useState('');
   const [sectorFilter, setSectorFilter] = useState('all');
-  const [sortBy, setSortBy] = useState<'title' | 'lastUpdated'>('title');
+  const [sortBy, setSortBy] = useState<'name' | 'created_at'>('name');
 
   // Get unique sectors for filtering
-  const sectors = Array.from(new Set(industries.map(ind => ind.sector))).sort();
+  const sectors = Array.from(new Set(industries.map(ind => ind.sector || 'Other'))).sort();
 
   // Filter and sort industries
   const filteredIndustries = industries
@@ -27,17 +27,20 @@ export default function IndustryList({ industries }: IndustryListProps) {
       
       const query = searchQuery.toLowerCase();
       return (
-        industry.title.toLowerCase().includes(query) ||
-        industry.description.toLowerCase().includes(query) ||
-        industry.sector.toLowerCase().includes(query) ||
-        industry.keyApplications?.some(app => app.toLowerCase().includes(query))
+        industry.name.toLowerCase().includes(query) ||
+        industry.description?.toLowerCase().includes(query) ||
+        (industry.sector || '').toLowerCase().includes(query) ||
+        industry.key_applications?.some(app => 
+          app.title.toLowerCase().includes(query) || 
+          app.description.toLowerCase().includes(query)
+        )
       );
     })
     .sort((a, b) => {
-      if (sortBy === 'lastUpdated') {
-        return new Date(b.lastUpdated).getTime() - new Date(a.lastUpdated).getTime();
+      if (sortBy === 'created_at') {
+        return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
       }
-      return a.title.localeCompare(b.title);
+      return a.name.localeCompare(b.name);
     });
 
   return (
@@ -51,7 +54,7 @@ export default function IndustryList({ industries }: IndustryListProps) {
           <Input
             id="search"
             type="search"
-            placeholder="Search by title, description, sector, or applications..."
+            placeholder="Search by name, description, sector, or applications..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="w-full"
@@ -81,20 +84,20 @@ export default function IndustryList({ industries }: IndustryListProps) {
           <Label htmlFor="sort" className="text-sm font-medium mb-1.5 block">
             Sort by
           </Label>
-          <Select value={sortBy} onValueChange={(value: 'title' | 'lastUpdated') => setSortBy(value)}>
+          <Select value={sortBy} onValueChange={(value: 'name' | 'created_at') => setSortBy(value)}>
             <SelectTrigger id="sort" className="w-full">
               <SelectValue placeholder="Sort by" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="title">Title (A-Z)</SelectItem>
-              <SelectItem value="lastUpdated">Last Updated</SelectItem>
+              <SelectItem value="name">Name (A-Z)</SelectItem>
+              <SelectItem value="created_at">Last Updated</SelectItem>
             </SelectContent>
           </Select>
         </div>
       </div>
 
       {/* Results count */}
-      <div className="text-sm text-[var(--text-secondary)]">
+      <div className="text-sm text-muted-foreground">
         {filteredIndustries.length} industr{filteredIndustries.length !== 1 ? 'ies' : 'y'} found
       </div>
 
@@ -103,9 +106,12 @@ export default function IndustryList({ industries }: IndustryListProps) {
         {filteredIndustries.map((industry) => (
           <ContentCard
             key={industry.slug}
-            title={industry.title}
-            description={industry.description}
-            badges={[industry.sector, ...(industry.keyApplications || [])]}
+            title={industry.name}
+            description={industry.description || ''}
+            badges={[
+              industry.sector || 'Other',
+              ...(industry.key_applications?.map(app => app.title) || [])
+            ]}
             href={`/paths/industry/${industry.slug}`}
           />
         ))}
@@ -114,7 +120,7 @@ export default function IndustryList({ industries }: IndustryListProps) {
       {/* Empty State */}
       {filteredIndustries.length === 0 && (
         <div className="text-center py-12">
-          <p className="text-lg text-[var(--text-secondary)]">
+          <p className="text-lg text-muted-foreground">
             No industries found matching your search.
           </p>
         </div>

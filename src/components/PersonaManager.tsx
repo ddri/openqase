@@ -6,226 +6,221 @@ import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
 import { Plus, Edit, Save, Trash } from 'lucide-react';
+import { Database } from '../types/database.types';
 
-// You would define these types in your types.ts file
-type PersonaType = 'Technical' | 'Persona';
+type DbPersona = Database['public']['Tables']['personas']['Row'] & {
+  key_interests: string[];
+};
+type PersonaInsert = Database['public']['Tables']['personas']['Insert'];
+type PersonaUpdate = Database['public']['Tables']['personas']['Update'];
 
-interface Persona {
-  id: string;
-  title: string;
-  slug: string;
-  type: PersonaType;
-  description: string;
-  role: string;
-  expertise: string[];
-  relatedCaseStudies: string[];
+interface PersonaManagerProps {
+  onSave: (persona: PersonaInsert | PersonaUpdate) => Promise<void>;
+  onDelete: (id: string) => Promise<void>;
+  personas: DbPersona[];
 }
 
-const PersonaManager = () => {
-  const [personaList, setPersonaList] = useState<Persona[]>([]);
-  const [selectedPersona, setSelectedPersona] = useState<Persona | null>(null);
+export function PersonaManager({ onSave, onDelete, personas }: PersonaManagerProps) {
+  const [personaList, setPersonaList] = useState<DbPersona[]>(personas);
+  const [selectedPersona, setSelectedPersona] = useState<DbPersona | null>(null);
   const [isEditing, setIsEditing] = useState(false);
   const [newExpertise, setNewExpertise] = useState('');
 
-  // Example admin functions - in production these would call your API
-  const savePersona = async (persona: Persona) => {
-    // Here you would make an API call to save the persona
-    console.log('Saving persona:', persona);
+  const handleSave = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (!selectedPersona) return;
+
+    const formData = new FormData(event.currentTarget);
+    const personaData: PersonaInsert | PersonaUpdate = {
+      name: formData.get('name') as string,
+      description: formData.get('description') as string,
+      role: formData.get('role') as string,
+      industry_focus: formData.get('industry_focus') as string,
+      key_interests: selectedPersona.key_interests
+    };
+
+    await onSave(personaData);
+    setIsEditing(false);
   };
 
-  const deletePersona = async (id: string) => {
-    // Here you would make an API call to delete the persona
-    console.log('Deleting persona:', id);
+  const handleDelete = async (id: string) => {
+    await onDelete(id);
+    setSelectedPersona(null);
+    setIsEditing(false);
+  };
+
+  const handleAddInterest = () => {
+    if (!selectedPersona) return;
+    setSelectedPersona({
+      ...selectedPersona,
+      key_interests: [...selectedPersona.key_interests, '']
+    });
+  };
+
+  const handleInterestChange = (index: number, value: string) => {
+    if (!selectedPersona) return;
+    const newInterests = [...selectedPersona.key_interests];
+    newInterests[index] = value;
+    setSelectedPersona({
+      ...selectedPersona,
+      key_interests: newInterests
+    });
+  };
+
+  const handleRemoveInterest = (indexToRemove: number) => {
+    if (!selectedPersona) return;
+    setSelectedPersona({
+      ...selectedPersona,
+      key_interests: selectedPersona.key_interests.filter((_: string, index: number) => index !== indexToRemove)
+    });
   };
 
   return (
-    <div className="p-6 max-w-6xl mx-auto">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">Persona Manager</h1>
-        <Button onClick={() => {
-          setSelectedPersona(null);
-          setIsEditing(true);
-        }}>
-          <Plus className="w-4 h-4 mr-2" />
-          New Persona
-        </Button>
+    <div className="space-y-4">
+      <div className="flex justify-between">
+        <h2 className="text-xl font-bold">Personas</h2>
+        <button
+          onClick={() => {
+            setSelectedPersona({
+              id: '',
+              name: '',
+              description: '',
+              role: '',
+              industry_focus: '',
+              key_interests: [],
+              created_at: new Date().toISOString(),
+              updated_at: new Date().toISOString()
+            });
+            setIsEditing(true);
+          }}
+          className="btn btn-primary"
+        >
+          Add New Persona
+        </button>
       </div>
 
-      <div className="grid grid-cols-12 gap-6">
-        {/* Left sidebar - Persona List */}
-        <div className="col-span-4 space-y-4">
-          {personaList.map(persona => (
-            <Card 
+      {selectedPersona && isEditing ? (
+        <form onSubmit={handleSave} className="space-y-4">
+          <div>
+            <label className="label">Name</label>
+            <input
+              type="text"
+              name="name"
+              defaultValue={selectedPersona.name}
+              className="input input-bordered w-full"
+              required
+            />
+          </div>
+          <div>
+            <label className="label">Description</label>
+            <textarea
+              name="description"
+              defaultValue={selectedPersona.description || ''}
+              className="textarea textarea-bordered w-full"
+            />
+          </div>
+          <div>
+            <label className="label">Role</label>
+            <input
+              type="text"
+              name="role"
+              defaultValue={selectedPersona.role || ''}
+              className="input input-bordered w-full"
+            />
+          </div>
+          <div>
+            <label className="label">Industry Focus</label>
+            <input
+              type="text"
+              name="industry_focus"
+              defaultValue={selectedPersona.industry_focus || ''}
+              className="input input-bordered w-full"
+            />
+          </div>
+          <div>
+            <label className="label">Key Interests</label>
+            {selectedPersona.key_interests.map((interest: string, index: number) => (
+              <div key={index} className="flex gap-2 mb-2">
+                <input
+                  type="text"
+                  value={interest}
+                  onChange={(e) => handleInterestChange(index, e.target.value)}
+                  className="input input-bordered flex-1"
+                />
+                <button
+                  type="button"
+                  onClick={() => handleRemoveInterest(index)}
+                  className="btn btn-error"
+                >
+                  Remove
+                </button>
+              </div>
+            ))}
+            <button
+              type="button"
+              onClick={handleAddInterest}
+              className="btn btn-secondary"
+            >
+              Add Interest
+            </button>
+          </div>
+          <div className="flex justify-end gap-2">
+            <button type="submit" className="btn btn-primary">
+              Save
+            </button>
+            <button
+              type="button"
+              onClick={() => setIsEditing(false)}
+              className="btn"
+            >
+              Cancel
+            </button>
+          </div>
+        </form>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {personaList.map((persona) => (
+            <div
               key={persona.id}
-              className="cursor-pointer hover:border-blue-500 transition-colors"
+              className="card bg-base-200 cursor-pointer"
               onClick={() => {
                 setSelectedPersona(persona);
-                setIsEditing(false);
+                setIsEditing(true);
               }}
             >
-              <CardContent className="p-4">
-                <div className="flex justify-between items-start">
+              <div className="card-body">
+                <h3 className="card-title">{persona.name}</h3>
+                <p>{persona.description}</p>
+                {persona.role && <p>Role: {persona.role}</p>}
+                {persona.industry_focus && (
+                  <p>Industry: {persona.industry_focus}</p>
+                )}
+                {persona.key_interests.length > 0 && (
                   <div>
-                    <h3 className="font-medium">{persona.title}</h3>
-                    <p className="text-sm text-gray-500">{persona.role}</p>
+                    <p className="font-semibold">Key Interests:</p>
+                    <ul className="list-disc list-inside">
+                      {persona.key_interests.map((interest: string, index: number) => (
+                        <li key={index}>{interest}</li>
+                      ))}
+                    </ul>
                   </div>
-                  <Badge variant={persona.type === 'Technical' ? 'default' : 'secondary'}>
-                    {persona.type}
-                  </Badge>
+                )}
+                <div className="card-actions justify-end">
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleDelete(persona.id);
+                    }}
+                    className="btn btn-error btn-sm"
+                  >
+                    Delete
+                  </button>
                 </div>
-              </CardContent>
-            </Card>
+              </div>
+            </div>
           ))}
         </div>
-
-        {/* Right side - Editor */}
-        <div className="col-span-8">
-          {selectedPersona && (
-            <Card>
-              <CardContent className="p-6">
-                <div className="flex justify-between items-center mb-6">
-                  <h2 className="text-xl font-semibold">
-                    {isEditing ? 'Edit Persona' : 'Persona Details'}
-                  </h2>
-                  <div className="space-x-2">
-                    {!isEditing ? (
-                      <Button onClick={() => setIsEditing(true)}>
-                        <Edit className="w-4 h-4 mr-2" />
-                        Edit
-                      </Button>
-                    ) : (
-                      <>
-                        <Button variant="outline" onClick={() => setIsEditing(false)}>
-                          Cancel
-                        </Button>
-                        <Button onClick={() => {
-                          savePersona(selectedPersona);
-                          setIsEditing(false);
-                        }}>
-                          <Save className="w-4 h-4 mr-2" />
-                          Save
-                        </Button>
-                      </>
-                    )}
-                  </div>
-                </div>
-
-                <Tabs defaultValue="basic" className="w-full">
-                  <TabsList>
-                    <TabsTrigger value="basic">Basic Info</TabsTrigger>
-                    <TabsTrigger value="expertise">Expertise</TabsTrigger>
-                    <TabsTrigger value="related">Related Content</TabsTrigger>
-                  </TabsList>
-
-                  <TabsContent value="basic" className="space-y-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="title">Title</Label>
-                      <Input
-                        id="title"
-                        value={selectedPersona.title}
-                        disabled={!isEditing}
-                        onChange={(e) => setSelectedPersona({
-                          ...selectedPersona,
-                          title: e.target.value
-                        })}
-                      />
-                    </div>
-
-                    <div className="space-y-2">
-                      <Label htmlFor="description">Description</Label>
-                      <textarea
-                        id="description"
-                        className="w-full min-h-[100px] p-2 border rounded"
-                        value={selectedPersona.description}
-                        disabled={!isEditing}
-                        onChange={(e) => setSelectedPersona({
-                          ...selectedPersona,
-                          description: e.target.value
-                        })}
-                      />
-                    </div>
-
-                    <div className="space-y-2">
-                      <Label htmlFor="type">Type</Label>
-                      <select
-                        id="type"
-                        className="w-full p-2 border rounded"
-                        value={selectedPersona.type}
-                        disabled={!isEditing}
-                        onChange={(e) => setSelectedPersona({
-                          ...selectedPersona,
-                          type: e.target.value as PersonaType
-                        })}
-                      >
-                        <option value="Technical">Technical</option>
-                        <option value="Persona">Persona</option>
-                      </select>
-                    </div>
-                  </TabsContent>
-
-                  <TabsContent value="expertise" className="space-y-4">
-                    <div className="space-y-2">
-                      {selectedPersona.expertise.map((exp, index) => (
-                        <div key={index} className="flex items-center gap-2">
-                          <span className="flex-1">{exp}</span>
-                          {isEditing && (
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              onClick={() => {
-                                const newExpertise = [...selectedPersona.expertise];
-                                newExpertise.splice(index, 1);
-                                setSelectedPersona({
-                                  ...selectedPersona,
-                                  expertise: newExpertise
-                                });
-                              }}
-                            >
-                              <Trash className="w-4 h-4" />
-                            </Button>
-                          )}
-                        </div>
-                      ))}
-
-                      {isEditing && (
-                        <div className="flex gap-2">
-                          <Input
-                            value={newExpertise}
-                            onChange={(e) => setNewExpertise(e.target.value)}
-                            placeholder="Add new expertise..."
-                          />
-                          <Button
-                            onClick={() => {
-                              if (newExpertise.trim()) {
-                                setSelectedPersona({
-                                  ...selectedPersona,
-                                  expertise: [...selectedPersona.expertise, newExpertise.trim()]
-                                });
-                                setNewExpertise('');
-                              }
-                            }}
-                          >
-                            Add
-                          </Button>
-                        </div>
-                      )}
-                    </div>
-                  </TabsContent>
-
-                  <TabsContent value="related" className="space-y-4">
-                    <div className="space-y-2">
-                      <Label>Related Case Studies</Label>
-                      {/* Add your case study selector here */}
-                    </div>
-                  </TabsContent>
-                </Tabs>
-              </CardContent>
-            </Card>
-          )}
-        </div>
-      </div>
+      )}
     </div>
   );
-};
-
-export default PersonaManager;
+}

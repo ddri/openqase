@@ -35,23 +35,30 @@ create table case_studies (
     description text,
     content text,
     -- Core metadata
-    partner_company text,
+    partner_companies text[],
     quantum_companies text[],
     url text,
     -- Classifications
     algorithms text[],
     industries text[],
     personas text[],
+    tags text[],
     -- Technical details
-    qubits_used int,
     quantum_hardware text[],
-    classical_hardware text[],
     -- Status and timestamps
     published boolean default false,
+    featured boolean default false,
     published_at timestamp with time zone,
     created_at timestamp with time zone default now(),
     updated_at timestamp with time zone default now()
 );
+
+-- Indexes for case studies
+create index case_studies_slug_idx on case_studies (slug);
+create index case_studies_algorithms_idx on case_studies using gin (algorithms);
+create index case_studies_industries_idx on case_studies using gin (industries);
+create index case_studies_personas_idx on case_studies using gin (personas);
+create index case_studies_tags_idx on case_studies using gin (tags);
 ```
 
 ### 3. Algorithms (`algorithms`)
@@ -235,4 +242,84 @@ create policy "Users can update own preferences"
 - Regular VACUUM and ANALYZE
 - Index maintenance
 - Monitoring and alerting
-- Backup verification 
+- Backup verification
+
+## Future TODO
+
+## Implementation Plan
+
+### Phase 1: Frontend Integration
+1. **API Client Setup**
+   - Create TypeScript API client utilities
+   - Implement data fetching hooks (React Query/SWR)
+   - Add TypeScript interfaces for API responses
+   - Set up error handling utilities
+
+2. **Authentication Implementation**
+   - Integrate Supabase Auth UI
+   - Set up protected routes
+   - Implement auth state management
+   - Create login/signup flows
+   - Add session persistence
+
+3. **Core UI Components**
+   - Case study display components
+   - Learning path navigation
+   - User preference settings
+   - Loading states and error boundaries
+   - Responsive layouts
+
+### Phase 2: State Management & Performance
+1. **Global State**
+   - User preferences management
+   - Authentication state
+   - Theme management
+   - Cache management
+
+2. **Performance Optimization**
+   - API response caching
+   - Image optimization
+   - Code splitting
+   - Lazy loading
+
+### Phase 3: Testing & Quality Assurance
+1. **Testing Infrastructure**
+   - Unit tests for API clients
+   - Integration tests for endpoints
+   - E2E tests for critical flows
+   - API response mocking
+
+2. **Quality Checks**
+   - TypeScript strict mode
+   - ESLint configuration
+   - Prettier setup
+   - CI/CD pipeline
+
+### Phase 4: Documentation & Developer Experience
+1. **Documentation**
+   - API response examples
+   - Component documentation
+   - Development setup guide
+   - Contributing guidelines
+
+2. **Developer Tools**
+   - Development environment setup
+   - Debugging utilities
+   - Local development tools
+   - API testing tools
+
+### Success Metrics
+- API response times < 200ms
+- 100% TypeScript coverage
+- > 90% test coverage
+- Zero critical security issues
+- < 1s Time to First Byte
+- < 2s Time to Interactive
+
+### Dependencies
+- Next.js 14+
+- React Query/SWR
+- Supabase Client
+- TypeScript 5+
+- Jest/React Testing Library
+- ESLint/Prettier 

@@ -4,8 +4,10 @@ import { useState } from 'react';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Label } from '@/components/ui/label';
-import type { Algorithm } from '@/lib/types';
+import type { Database } from '@/types/supabase';
 import ContentCard from '@/components/ui/content-card';
+
+type Algorithm = Database['public']['Tables']['algorithms']['Row'];
 
 interface AlgorithmListProps {
   algorithms: Algorithm[];
@@ -13,25 +15,36 @@ interface AlgorithmListProps {
 
 export default function AlgorithmList({ algorithms }: AlgorithmListProps) {
   const [searchQuery, setSearchQuery] = useState('');
-  const [sortBy, setSortBy] = useState<'title' | 'lastUpdated'>('title');
+  const [sortBy, setSortBy] = useState<'name' | 'created_at'>('name');
+
+  console.log('AlgorithmList received algorithms:', algorithms);
 
   // Filter and sort algorithms
   const filteredAlgorithms = algorithms
     .filter(alg => {
       if (!searchQuery) return true;
       const query = searchQuery.toLowerCase();
+      console.log('Filtering algorithm:', { alg, query });
       return (
-        alg.title.toLowerCase().includes(query) ||
-        alg.description.toLowerCase().includes(query) ||
-        alg.keywords?.some(k => k.toLowerCase().includes(query))
+        alg.name.toLowerCase().includes(query) ||
+        alg.description?.toLowerCase().includes(query) ||
+        alg.use_cases?.some(k => k.toLowerCase().includes(query))
       );
     })
     .sort((a, b) => {
-      if (sortBy === 'lastUpdated') {
-        return new Date(b.lastUpdated).getTime() - new Date(a.lastUpdated).getTime();
+      console.log('Comparing for sort:', {
+        a_name: a.name,
+        b_name: b.name,
+        a_slug: a.slug,
+        b_slug: b.slug
+      });
+      if (sortBy === 'created_at') {
+        return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
       }
-      return a.title.localeCompare(b.title);
+      return a.name.localeCompare(b.name);
     });
+
+  console.log('Filtered and sorted algorithms:', filteredAlgorithms);
 
   return (
     <div className="space-y-6">
@@ -44,7 +57,7 @@ export default function AlgorithmList({ algorithms }: AlgorithmListProps) {
           <Input
             id="search"
             type="search"
-            placeholder="Search by title, description, or keywords..."
+            placeholder="Search by name, description, or use cases..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="w-full"
@@ -55,13 +68,13 @@ export default function AlgorithmList({ algorithms }: AlgorithmListProps) {
           <Label htmlFor="sort" className="text-sm font-medium mb-1.5 block">
             Sort by
           </Label>
-          <Select value={sortBy} onValueChange={(value: 'title' | 'lastUpdated') => setSortBy(value)}>
+          <Select value={sortBy} onValueChange={(value: 'name' | 'created_at') => setSortBy(value)}>
             <SelectTrigger id="sort" className="w-full">
               <SelectValue placeholder="Sort by" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="title">Title (A-Z)</SelectItem>
-              <SelectItem value="lastUpdated">Last Updated</SelectItem>
+              <SelectItem value="name">Name (A-Z)</SelectItem>
+              <SelectItem value="created_at">Last Updated</SelectItem>
             </SelectContent>
           </Select>
         </div>
@@ -77,9 +90,9 @@ export default function AlgorithmList({ algorithms }: AlgorithmListProps) {
         {filteredAlgorithms.map((algorithm) => (
           <ContentCard
             key={algorithm.slug}
-            title={algorithm.title}
-            description={algorithm.description}
-            badges={algorithm.applications}
+            title={algorithm.name}
+            description={algorithm.description || ''}
+            badges={algorithm.use_cases || []}
             href={`/paths/algorithm/${algorithm.slug}`}
           />
         ))}

@@ -1,6 +1,8 @@
+import type { Database } from '@/types/supabase';
+
 // Type definitions
 export type DifficultyLevel = 'Beginner' | 'Intermediate' | 'Advanced';
-export type ContentType = 'algorithm' | 'case-study' | 'industry' | 'persona' | 'blog';
+export type ContentType = 'algorithm' | 'case-study' | 'industry' | 'persona';
 export type MaturityLevel = 'Emerging' | 'Growing' | 'Established';
 
 // Common interfaces
@@ -12,82 +14,110 @@ export interface Application {
 
 export interface RelatedContent {
   algorithms?: string[];
-  caseStudies?: string[];
+  case_studies?: string[];
   industries?: string[];
   personas?: string[];
 }
 
-// Base content interface that all content types extend from
+// Database types - using the Database type directly
+export type DbPersona = Database['public']['Tables']['personas']['Row'];
+export type DbCaseStudy = Database['public']['Tables']['case_studies']['Row'];
+export type DbAlgorithm = Database['public']['Tables']['algorithms']['Row'];
+export type DbIndustry = Database['public']['Tables']['industries']['Row'];
+
+// Base content interface
 export interface BaseContent {
-  id: string;
-  title: string;
   type: ContentType;
+  id: string;
   slug: string;
-  description: string;
-  lastUpdated: string;
-  difficulty: DifficultyLevel;
-  keywords?: string[];
-  relatedContent?: RelatedContent;
+  title: string;
+  description: string | null;
+  created_at: string;
+  updated_at: string;
 }
 
-// Algorithm-specific interface
-export interface Algorithm extends BaseContent {
-  applications: string[];
-  prerequisites?: string[];
-  implementation?: {
-    steps: string[];
-    requirements: string[];
-    considerations: string[];
-  };
-}
-
-// Case study specific interface
+// Content type interfaces
 export interface CaseStudy extends BaseContent {
-  industry: string[];
-  technologies?: string[];
-  metrics?: Record<string, string>;
-  outcomes?: {
-    challenges: string[];
-    solutions: string[];
-    results: string[];
-  };
+  type: 'case-study';
+  content: string | null;
+  partner_company: string | null;
+  quantum_companies: string[];
+  url: string | null;
+  algorithms: string[];
+  industries: string[];
+  personas: string[];
+  qubits_used: number | null;
+  quantum_hardware: string[];
+  classical_hardware: string[];
+  published: boolean;
+  published_at: string | null;
 }
 
-// Industry specific interface
+export interface Algorithm extends BaseContent {
+  type: 'algorithm';
+  prerequisites: string[];
+  use_cases: string[];
+  published: boolean;
+}
+
 export interface Industry extends BaseContent {
-  sector: string;
-  keyApplications: string[];
+  type: 'industry';
+  icon: string | null;
 }
 
-// Persona specific interface
 export interface Persona extends BaseContent {
-  role: string;
-  expertise: string[];
-  goals?: string[];
-  challenges?: string[];
-  learningPath?: {
-    prerequisites: string[];
-    recommendations: string[];
-  };
+  type: 'persona';
+  role: string | null;
+  industry: string[];
+  key_interests: string[];
+  technical_level: string | null;
 }
 
-// Blog post specific interface
-export interface BlogPost {
+// Type for content maps
+export interface ContentMap<T extends BaseContent> {
+  [slug: string]: T;
+}
+
+// Type for the complete content store
+export interface ContentStore {
+  algorithm: ContentMap<Algorithm>;
+  case_study: ContentMap<CaseStudy>;
+  industry: ContentMap<Industry>;
+  persona: ContentMap<Persona>;
+}
+
+export interface LearningPathLayoutProps {
+  children: React.ReactNode;
+  title: string;
+  description?: string;
+}
+
+export interface StackLayer {
   title: string;
   description: string;
-  date: string;
-  category: string;
-  published: boolean;
+  color: string;
+  layer: number;
   slug: string;
+  mdx_content?: string;
+  source?: string;
+  applications: Array<{
+    title: string;
+    description: string;
+    examples: string[];
+  }>;
+  relatedContent?: {
+    algorithm?: string[];
+    caseStudy?: string[];
+  };
 }
 
-// Type guard functions to check content types
-export function isAlgorithm(content: BaseContent): content is Algorithm {
-  return content.type === 'algorithm';
-}
-
+// Type guards
 export function isCaseStudy(content: BaseContent): content is CaseStudy {
   return content.type === 'case-study';
+}
+
+export function isAlgorithm(content: BaseContent): content is Algorithm {
+  return content.type === 'algorithm';
 }
 
 export function isIndustry(content: BaseContent): content is Industry {
@@ -96,20 +126,4 @@ export function isIndustry(content: BaseContent): content is Industry {
 
 export function isPersona(content: BaseContent): content is Persona {
   return content.type === 'persona';
-}
-
-export function isBlogPost(content: any): content is BlogPost {
-  return content && 'title' in content && 'date' in content && 'category' in content;
-}
-
-// Type for content maps
-export type ContentMap<T> = { [slug: string]: T };
-
-// Type for the complete content store
-export interface ContentStore {
-  algorithm: ContentMap<Algorithm>;
-  caseStudy: ContentMap<CaseStudy>;
-  industry: ContentMap<Industry>;
-  persona: ContentMap<Persona>;
-  blog: ContentMap<BlogPost>;
 }

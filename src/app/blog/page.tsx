@@ -1,22 +1,32 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import Link from "next/link"
-import { getAllContent } from "@/lib/mdx"
-import { BlogPost } from "@/lib/types"
+import { createServerClient } from '@/lib/supabase-server'
+import type { Database } from '@/types/supabase'
+import { notFound } from 'next/navigation'
 
-// Fetch blog posts from MDX files
+type BlogPost = Database['public']['Tables']['blog_posts']['Row']
+
+// Fetch blog posts from database
 async function getBlogPosts() {
-  try {
-    const posts = await getAllContent<BlogPost>('blog');
-    return posts.filter(post => post.frontmatter.published);
-  } catch (error) {
-    console.error('Error fetching blog posts:', error);
-    return [];
+  const supabase = createServerClient()
+  
+  const { data, error } = await supabase
+    .from('blog_posts')
+    .select()
+    .match({ published: true })
+    .order('published_at', { ascending: false })
+
+  if (error) {
+    console.error('Error fetching blog posts:', error)
+    return []
   }
+
+  return data as BlogPost[]
 }
 
 export default async function BlogPage() {
-  const posts = await getBlogPosts();
+  const posts = await getBlogPosts()
 
   return (
     <div className="container mx-auto px-4 py-12">
@@ -49,19 +59,14 @@ export default async function BlogPage() {
       <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {posts.map((post) => (
           <Link key={post.slug} href={`/blog/${post.slug}`}>
-            <Card className="h-full hover:bg-accent/5 transition-colors">
+            <Card className="h-full hover:shadow-md transition-all">
               <CardHeader>
                 <div className="text-sm text-muted-foreground mb-2">
-                  {post.frontmatter.category} • {post.frontmatter.date}
+                  {post.category} • {post.published_at ? new Date(post.published_at).toLocaleDateString() : ''}
                 </div>
-                <CardTitle className="text-xl mb-2">{post.frontmatter.title}</CardTitle>
-                <CardDescription>{post.frontmatter.description}</CardDescription>
+                <CardTitle className="mb-2">{post.title}</CardTitle>
+                <CardDescription>{post.description}</CardDescription>
               </CardHeader>
-              <CardContent>
-                <div className="text-sm text-accent hover:underline">
-                  Read more →
-                </div>
-              </CardContent>
             </Card>
           </Link>
         ))}

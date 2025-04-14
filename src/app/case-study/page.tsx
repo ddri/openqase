@@ -1,17 +1,22 @@
 // src/app/case-study/page.tsx
-import { getAllContent } from '@/lib/mdx';
-import type { CaseStudy } from '@/lib/types';
+import { createServerClient } from '@/lib/supabase-server';
+import type { CaseStudy } from '@/types/supabase';
 import CaseStudyList from '@/components/CaseStudyList';
 import AuthGate from '@/components/auth/AuthGate';
 
 export default async function CaseStudyPage() {
-  const caseStudyList = await getAllContent<CaseStudy>('case-study');
+  const supabase = createServerClient();
   
-  // Map the data to match what CaseStudyList expects
-  const caseStudies = caseStudyList.map(item => ({
-    ...item.frontmatter,
-    slug: item.slug
-  }));
+  const { data: caseStudies, error } = await supabase
+    .from('case_studies')
+    .select('*')
+    .eq('published', true)
+    .order('published_at', { ascending: false });
+
+  if (error) {
+    console.error('Error fetching case studies:', error);
+    return <div>Error loading case studies</div>;
+  }
 
   return (
     <AuthGate
@@ -28,7 +33,7 @@ export default async function CaseStudyPage() {
               Explore real-world applications of quantum computing across different industries and use cases.
             </p>
           </div>
-          <CaseStudyList caseStudies={caseStudies} />
+          <CaseStudyList caseStudies={caseStudies || []} />
         </div>
       </main>
     </AuthGate>

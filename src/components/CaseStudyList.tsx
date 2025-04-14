@@ -109,7 +109,7 @@ export default function CaseStudyList({ caseStudies }: CaseStudyListProps) {
             title={caseStudy.title}
             description={caseStudy.description}
             badges={[...(caseStudy.industry || []), ...(caseStudy.technologies || [])]}
-            href={`/paths/case-study/${caseStudy.slug}`}
+            href={`/case-study/${caseStudy.slug}`}
           />
         ))}
       </div>

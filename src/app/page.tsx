@@ -194,7 +194,7 @@ export default function HomePage() {
               </p>
             </div>
             <Button variant="ghost" asChild className="gap-2">
-              <Link href="/case-studies">
+              <Link href="/case-study">
                 View All Case Studies
                 <ArrowRight className="h-4 w-4" />
               </Link>

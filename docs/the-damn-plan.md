@@ -1615,3 +1615,39 @@ async function getIndustries() {
   - [ ] API endpoints
   - [ ] Data models
   - [ ] Integration points
+
+## 5. Next.js 15 Compliance
+### A. Page Props Pattern
+- [x] Identified correct Next.js 15 page props pattern
+  ```typescript
+  interface PageProps {
+    params: {
+      id: string;  // or whatever param name you need
+    };
+  }
+  export default async function Page({ params }: PageProps)
+  ```
+- [x] Audited current usage
+  - ✅ `/quantum-stack/[id]/page.tsx` - Using correct pattern
+  - ✅ `/paths/algorithm/[slug]/page.tsx` - Using correct pattern
+  - ✅ `/paths/industry/[slug]/page.tsx` - Using correct pattern
+  - ✅ `/paths/persona/[slug]/page.tsx` - Using correct pattern
+  - ❌ `/admin/case-studies/[id]/page.tsx` - Using incorrect inline type
+  - ⚠️ `/case-study/[slug]/page.tsx` - Needs verification
+  - ⚠️ `/blog/[slug]/page.tsx` - Needs verification
+
+### B. Required Fixes
+- [x] Update case studies admin page
+  - [x] Add proper interface definition (`CaseStudyPageProps`)
+  - [x] Update component props
+  - [x] Remove unnecessary `resolvedParams` await
+  - [ ] Test deployment
+- [ ] Verify and update if needed:
+  - [ ] Case study detail page
+  - [ ] Blog post page
+
+### C. Documentation
+- [ ] Add Next.js 15 patterns section to technical docs
+  - [ ] Page props pattern
+  - [ ] Common gotchas (e.g., no need to await params)
+  - [ ] Migration guide from older patterns

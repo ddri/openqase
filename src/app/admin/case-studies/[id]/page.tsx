@@ -14,21 +14,22 @@ type Industry = Database['public']['Tables']['industries']['Row'];
 type Algorithm = Database['public']['Tables']['algorithms']['Row'];
 type Persona = Database['public']['Tables']['personas']['Row'];
 
-export default async function EditCaseStudyPage({
-  params,
-}: {
-  params: { id: string };
-}) {
+interface CaseStudyPageProps {
+  params: {
+    id: string;
+  };
+}
+
+export default async function EditCaseStudyPage({ params }: CaseStudyPageProps) {
   const supabase = await createServerClient();
-  const resolvedParams = await params;
-  const isNew = resolvedParams.id === 'new';
+  const isNew = params.id === 'new';
 
   // Fetch case study if editing
   const { data: caseStudy } = !isNew
     ? await supabase
         .from('case_studies')
         .select('*')
-        .eq('id', resolvedParams.id)
+        .eq('id', params.id)
         .single()
     : { data: null };
 

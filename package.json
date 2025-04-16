@@ -8,9 +8,11 @@
     "start": "next start",
     "lint": "next lint",
     "type": "module",
-    "migrate:content": "ts-node scripts/migrate-mdx-to-db.ts"
+    "migrate:content": "ts-node scripts/migrate-mdx-to-db.ts",
+    "setup-admin": "ts-node -r tsconfig-paths/register scripts/setup-admin.ts"
   },
   "dependencies": {
+    "@radix-ui/react-checkbox": "^1.1.5",
     "@radix-ui/react-dropdown-menu": "^2.1.6",
     "@radix-ui/react-label": "^2.1.2",
     "@radix-ui/react-slot": "^1.1.2",
@@ -21,6 +23,8 @@
     "@supabase/supabase-js": "^2.39.8",
     "@tanstack/react-query": "^5.72.2",
     "@tanstack/react-query-devtools": "^5.72.2",
+    "@tanstack/react-table": "^8.21.3",
+    "@tanstack/table-core": "^8.21.3",
     "@types/markdown-it": "^14.1.2",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
@@ -30,6 +34,7 @@
     "next": "15.1.7",
     "next-themes": "^0.4.6",
     "prismjs": "^1.30.0",
+    "psql": "^0.0.1",
     "radix-ui": "^1.1.3",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",

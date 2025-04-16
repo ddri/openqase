@@ -10,6 +10,10 @@ const protectedRoutes = [
   '/profile'
 ]
 
+const adminRoutes = [
+  '/admin'
+]
+
 export async function middleware(req: NextRequest) {
   const res = NextResponse.next()
   const supabase = createMiddlewareClient({ req, res })
@@ -19,6 +23,8 @@ export async function middleware(req: NextRequest) {
 
   const isAuthPage = req.nextUrl.pathname.startsWith('/auth')
   const isAuthCallback = req.nextUrl.pathname === '/auth/callback'
+  const isAdminRoute = adminRoutes.some(route => req.nextUrl.pathname.startsWith(route))
+  const isProtectedRoute = protectedRoutes.some(route => req.nextUrl.pathname.startsWith(route))
 
   // Handle auth callback - must come first
   if (isAuthCallback) {
@@ -31,6 +37,29 @@ export async function middleware(req: NextRequest) {
     return NextResponse.redirect(new URL(redirectTo, req.url))
   }
 
+  // Check admin access for admin routes
+  if (isAdminRoute) {
+    if (!session) {
+      return NextResponse.redirect(new URL('/auth?redirectTo=/admin', req.url))
+    }
+
+    // Check if user is admin
+    const { data: userPreferences } = await supabase
+      .from('user_preferences')
+      .select('role')
+      .eq('id', session.user.id)
+      .single()
+
+    if (!userPreferences || userPreferences.role !== 'admin') {
+      return NextResponse.redirect(new URL('/', req.url))
+    }
+  }
+
+  // Check auth for protected routes
+  if (isProtectedRoute && !session) {
+    return NextResponse.redirect(new URL('/auth?redirectTo=' + req.nextUrl.pathname, req.url))
+  }
+
   return res
 }
 
@@ -38,6 +67,7 @@ export async function middleware(req: NextRequest) {
 export const config = {
   matcher: [
     '/auth/:path*',
+    '/admin/:path*',
     '/paths/:path*',
     '/case-study/:path*',
     '/quantum-stack/:path*',

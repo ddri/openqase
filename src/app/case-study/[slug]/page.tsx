@@ -1,12 +1,10 @@
 // src/app/case-study/[slug]/page.tsx
 import { notFound } from 'next/navigation';
-import { createServerClient } from '@/lib/supabase-server';
-import { Database } from '@/types/supabase';
+import { supabase } from '@/lib/supabase';
+import type { Database } from '@/types/supabase';
 import LearningPathLayout from '@/components/ui/learning-path-layout';
 import { Badge } from '@/components/ui/badge';
-import { cookies } from 'next/headers';
 import MarkdownIt from 'markdown-it';
-import { SupabaseClient } from '@supabase/supabase-js';
 
 // Initialize markdown-it with GFM features enabled
 const md = new MarkdownIt({
@@ -19,13 +17,13 @@ const md = new MarkdownIt({
 type CaseStudy = Database['public']['Tables']['case_studies']['Row'];
 
 export default async function CaseStudyPage({ params }: { params: { slug: string } }) {
-  const supabase = createServerClient() as SupabaseClient<Database>;
-  console.log('Fetching case study with slug:', params.slug);
+  const slug = params.slug;
+  console.log('Fetching case study with slug:', slug);
 
   const { data: caseStudy, error } = await supabase
     .from('case_studies')
-    .select()
-    .eq('slug', params.slug)
+    .select('*')
+    .eq('slug', slug)
     .eq('published', true)
     .single();
 
@@ -41,7 +39,7 @@ export default async function CaseStudyPage({ params }: { params: { slug: string
   return (
     <LearningPathLayout
       title={caseStudy.title}
-      description={caseStudy.description}
+      description={caseStudy.description || ''}
       backLinkText="Back to Case Studies"
       backLinkHref="/case-study"
     >

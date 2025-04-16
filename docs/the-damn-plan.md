@@ -23,6 +23,14 @@
 
 ## Critical Rules
 
+⚠️ THIS IS A NEXT.JS 15 PROJECT
+- ALWAYS use Next.js 15 patterns and best practices
+- DO NOT assume Next.js 13 patterns
+- DO NOT copy/paste solutions from older Next.js versions
+- When searching for solutions, explicitly search for Next.js 15
+- When reviewing code, verify it follows Next.js 15 patterns
+- Question any implementation that looks like it's from an older Next.js version
+
 ⚠️ NEVER modify configuration files (package.json, next.config.ts, etc.) without explicit approval from the project owner. All config changes must be proposed and approved before implementation.
 
 ## 1. Verify Pages Using Database vs MDX
@@ -156,6 +164,13 @@
 
 ## Current Issues Being Addressed
 
+### Type Synchronization
+1. ✅ Fixed user preferences type synchronization:
+   - Updated `user_preferences` table in `database.types.ts` to include `role` field
+   - Made `UserPreferences` interface match database types exactly
+   - Fixed nullable fields to match database schema
+   - Verified type consistency between interface and database schema
+
 ### Case Study Content Display
 1. ✅ Identified correct content field:
    - Content is stored in `mdx_content` field
@@ -181,11 +196,50 @@
      ```
 
 ### TypeScript Errors to Fix
-1. Line 20: Expected 0 arguments, but got 1
-2. Line 27: Type mismatch in slug parameter
-3. Line 42: Missing required 'title' prop in LearningPathLayout
-4. Lines 48-59: Property access on potentially undefined fields
-5. Line 59: Implicit any type in map function
+1. ✅ Added `mdx_content` and other fields to database types
+   - Verified field types against migration file
+   - Added proper typing for array fields
+   - Updated interfaces to match database schema
+
+2. ✅ Case Study Edit Page TypeScript Errors
+   - ✅ Added Database type export with all tables
+   - ✅ Created checkbox component with proper types
+   - ✅ Fixed Supabase client typing
+   - ✅ Added proper types for map functions
+
+3. ✅ Form Submission Handling
+   - ✅ Updated API route to handle array fields
+   - ✅ Added validation for JSON fields (metrics)
+   - ✅ Added proper error handling
+   - ✅ Implemented proper form submission with all fields
+
+4. ✅ UI Improvements
+   - ✅ Added loading states
+   - ✅ Added error messages
+   - ✅ Added success notifications
+   - ✅ Improved form organization with tabs
+
+5. Next Steps:
+   a. Testing:
+      - Test form submission with all fields
+      - Test validation
+      - Test error handling
+   
+   b. Content Management:
+      - Implement list view for case studies
+      - Add sorting and filtering
+      - Add search functionality
+   
+   c. Other Content Types:
+      - Apply same pattern to algorithms, industries, personas
+      - Create reusable components for common functionality
+      - Ensure consistent UI across all content types
+
+6. Remaining Issues:
+   - Need to implement list view for case studies
+   - Need to add search and filtering functionality
+   - Need to apply same pattern to other content types
+   - Need to create reusable components for common functionality
 
 ### Next Actions
 1. Fix TypeScript errors in case study page:
@@ -194,6 +248,28 @@
    - Add proper type guards for case study fields
    - ✅ Add explicit typing for map function parameters
    - ✅ Add markdown-it rendering for persona content with proper styling and layout
+
+### Environment Configuration
+1. ✅ Standardize admin email across environments:
+   - Use `davedri@gmail.com` as the consistent admin email
+   - Added to `.env.example` as reference
+   - Document in deployment guide
+
+2. ✅ Environment Setup Process:
+   - Copy `.env.example` to `.env.local` for local development
+   - Set up same admin email in Supabase cloud instance
+   - Ensure consistent auth behavior across environments
+
+3. ✅ Auth Middleware Updates:
+   - Added proper admin route protection
+   - Added role-based access control
+   - Improved redirect handling for protected routes
+   - Added proper session checks
+
+4. Development Method Improvements:
+   - Use real email addresses for testing
+   - Maintain consistency between local and cloud environments
+   - Document environment-specific configurations
 
 ### ContentCard Component Issues
 1. ✅ Fixed incorrect field reference in AlgorithmList:
@@ -209,24 +285,274 @@
 
 ## Next Steps
 
-1. Clean up:
-   - Remove unused MDX-specific code and dependencies
-   - Archive or remove the original MDX files (after verifying all content is in Supabase)
-   - Update documentation to reflect the new database-driven architecture
+1. Fix TypeScript Errors:
+   - Update database.types.ts to match current schema
+   - Properly type Supabase client usage
+   - Fix component prop types
 
-2. Path Consistency:
-   - Ensure all links across the site use the correct paths:
-     - Case Studies: `/case-study/[slug]`
-     - Algorithms: `/paths/algorithm/[slug]`
-     - Industries: `/paths/industry/[slug]`
-     - Personas: `/paths/persona/[slug]`
-   - ✅ Fix persona page back link to say "Back to Personas" instead of "Back to Learning Paths"
-   - ✅ Fix industry page back link to say "Back to Industries" instead of "Back to Learning Paths"
+2. Content Verification:
+   - Test all pages with actual content
+   - Verify markdown rendering
+   - Check related content links
 
-3. Testing:
-   - Add comprehensive tests for database content loading
-   - Verify all content is displaying correctly with proper formatting
-   - Test search and filtering functionality with the new database backend
+3. Cleanup:
+   - Remove unused MDX-related code
+   - Clean up debug logging
+   - Add automated tests
+
+## Admin Interface Plan
+
+### A. Requirements
+1. Content Management:
+   - [ ] Create new personas, algorithms, industries, and case studies
+   - [ ] Edit existing content
+   - [ ] Markdown editor for rich content
+   - [ ] Preview rendered content
+   - [ ] Manage relationships between content types
+
+2. Authentication & Authorization:
+   - [x] Admin-only access
+   - [x] Role-based permissions
+   - [ ] Audit logging for changes
+
+3. Data Validation:
+   - [ ] Required fields validation
+   - [ ] Slug uniqueness check
+   - [ ] Relationship integrity
+   - [ ] Markdown syntax validation
+
+### B. Implementation Approach
+1. Phase 1: Basic CRUD
+   - [x] Create `/admin` route with authentication
+   - [ ] Implement basic forms for each content type
+   - [x] Use Supabase's built-in auth for admin access
+   - [ ] Start with simple text fields and basic markdown
+
+2. Phase 2: Rich Content
+   - [ ] Add markdown editor (e.g., TipTap or MDX Editor)
+   - [ ] Implement live preview
+   - [ ] Add image upload support
+   - [ ] Add relationship management UI
+
+3. Phase 3: Advanced Features
+   - [ ] Add bulk operations
+   - [ ] Implement version history
+   - [ ] Add content scheduling
+   - [ ] Add export/import functionality
+
+### C. Technical Stack
+1. Frontend:
+   - Next.js App Router
+   - React Hook Form for form handling
+   - TipTap for rich text editing
+   - Tailwind CSS for styling
+
+2. Backend:
+   - Supabase for database and auth
+   - Row Level Security (RLS) for data protection
+   - Storage for media files
+
+### D. UI/UX Design with Shadcn/UI
+
+1. Admin Dashboard Layout:
+   ```
+   +------------------+------------------------------------------+
+   |     Logo         |  Content Management                     |
+   +------------------+------------------------------------------+
+   |  Navigation      |  [Search]  [New Content]  [Settings]    |
+   |  - Case Studies  |                                          |
+   |  - Algorithms    |  +------------------------------------+  |
+   |  - Industries    |  |  Title  | Type  | Status | Actions |  |
+   |  - Personas      |  +------------------------------------+  |
+   |                  |  | Case... | Case  | Draft  | [Edit]  |  |
+   |  [User Profile]  |  | Algo... | Algo  | Pub... | [View]  |  |
+   |                  |  | Ind...  | Ind   | Pub... | [Del]   |  |
+   +------------------+  +------------------------------------+  |
+   ```
+
+2. Content Editor Layout:
+   ```
+   +----------------------------------------------------------+
+   |  [Back]  Edit Case Study  [Save]  [Preview]  [Publish]   |
+   +----------------------------------------------------------+
+   |  Title: [_____________________________]                   |
+   |  Slug:  [_____________________________]                   |
+   |                                                           |
+   |  Description:                                            |
+   |  [Rich Text Editor with Toolbar]                         |
+   |  +---------------------------------------------------+   |
+   |  |                                                   |   |
+   |  |                                                   |   |
+   |  +---------------------------------------------------+   |
+   |                                                           |
+   |  Relationships:                                          |
+   |  [ ] Related Algorithms  [ ] Related Industries          |
+   |  +-------------------------------------------+           |
+   |  | Algorithm 1  [x]  Algorithm 2  [x]       |           |
+   |  +-------------------------------------------+           |
+   +----------------------------------------------------------+
+   ```
+
+3. Components to Use:
+   - Navigation:
+     ```tsx
+     <NavigationMenu>
+       <NavigationMenuList>
+         <NavigationMenuItem>
+           <NavigationMenuTrigger>Case Studies</NavigationMenuTrigger>
+           <NavigationMenuContent>
+             <ul className="grid w-[400px] gap-3 p-4">
+               <li><NavigationMenuLink>All Case Studies</NavigationMenuLink></li>
+               <li><NavigationMenuLink>New Case Study</NavigationMenuLink></li>
+             </ul>
+           </NavigationMenuContent>
+         </NavigationMenuItem>
+       </NavigationMenuList>
+     </NavigationMenu>
+     ```
+
+   - Data Table:
+     ```tsx
+     <DataTable
+       columns={[
+         { accessorKey: "title", header: "Title" },
+         { accessorKey: "type", header: "Type" },
+         { accessorKey: "status", header: "Status" },
+         {
+           id: "actions",
+           cell: ({ row }) => (
+             <DropdownMenu>
+               <DropdownMenuTrigger>Actions</DropdownMenuTrigger>
+               <DropdownMenuContent>
+                 <DropdownMenuItem>Edit</DropdownMenuItem>
+                 <DropdownMenuItem>View</DropdownMenuItem>
+                 <DropdownMenuItem>Delete</DropdownMenuItem>
+               </DropdownMenuContent>
+             </DropdownMenu>
+           ),
+         },
+       ]}
+       data={content}
+     />
+     ```
+
+   - Form Layout:
+     ```tsx
+     <Form>
+       <FormField
+         name="title"
+         render={({ field }) => (
+           <FormItem>
+             <FormLabel>Title</FormLabel>
+             <FormControl>
+               <Input {...field} />
+             </FormControl>
+           </FormItem>
+         )}
+       />
+       <FormField
+         name="content"
+         render={({ field }) => (
+           <FormItem>
+             <FormLabel>Content</FormLabel>
+             <FormControl>
+               <TipTapEditor {...field} />
+             </FormControl>
+           </FormItem>
+         )}
+       />
+     </Form>
+     ```
+
+4. Key Features:
+   - Responsive sidebar navigation
+   - Searchable data tables with sorting
+   - Rich text editor with markdown support
+   - Relationship management with multi-select
+   - Preview mode for content
+   - Status indicators and badges
+   - Action menus for each item
+
+5. Color Scheme:
+   - Primary: Your brand color
+   - Secondary: Neutral grays
+   - Success: Green for published
+   - Warning: Yellow for drafts
+   - Error: Red for errors/deletions
+
+### E. Implementation Progress
+
+#### Completed Tasks
+1. ✅ Admin Layout:
+   - Created modern sidebar with Shadcn/UI components
+   - Added user profile section
+   - Implemented navigation with icons
+   - Added search functionality
+   - Added sign out button
+
+2. ✅ Fixed TypeScript Error in Admin Layout:
+   - Updated database types to include `role` field in `user_preferences` table
+   - Added proper type assertion for Supabase query result
+   - Used `Pick` to select only the `role` field from `UserPreferences` type
+   - Added error handling for database queries
+   - Location: `src/app/admin/layout.tsx` and `src/types/supabase.ts`
+
+#### Admin Access Setup
+1. ✅ Current State Verified:
+   - User exists in Supabase cloud (davedri@gmail.com)
+   - User ID: 2c956050-3a2b-4de4-9e39-942b9ee9f402
+   - Account is confirmed and active
+   - Authentication is working
+
+2. ✅ Local Development Setup:
+   - Reset local database with migrations
+   - Created local user account
+   - Set up admin role in user_preferences
+   - Verified role assignment
+
+3. 🚧 Required Steps:
+   - [x] Verify user_preferences table structure
+   - [x] Add/update admin role for existing user
+   - [ ] Test `/admin` access
+   - [ ] Document the process for future reference
+
+4. Implementation Rules:
+   - Make minimal necessary changes
+   - Verify each step before proceeding
+   - Use existing user account
+   - Focus on cloud instance first, then local development
+
+#### Admin Access Verification
+1. Test admin layout access
+2. Verify role-based checks in admin layout
+3. Test admin-only API endpoints
+4. Document admin access requirements
+
+#### Current Issues
+1. ~~TypeScript Error in Admin Layout:~~
+   ~~```
+   Line 33: Property 'role' does not exist on type '{ role: any; } | SelectQueryError<"Processing node failed."> | SelectQueryError<"Could not retrieve a valid record or error value">'.
+   Property 'role' does not exist on type 'SelectQueryError<"Processing node failed.">'
+   ```~~
+   ~~- This error occurs because the Supabase query result type doesn't properly handle the user preferences table~~
+   ~~- Need to properly type the user preferences table in the database types~~
+   ~~- Solution: Update the Database type in `src/types/supabase.ts` to include the user_preferences table with proper typing~~
+
+#### Next Steps
+1. ~~Fix TypeScript Error:~~
+   ~~- Update database types to include user_preferences table~~
+   ~~- Add proper typing for the role field~~
+   ~~- Update the admin layout to handle potential errors~~
+
+2. Implement Content Management Pages:
+   - Start with case studies list page
+   - Add data table with sorting and filtering
+   - Implement create/edit forms
+
+3. Add Rich Text Editor:
+   - Integrate TipTap for markdown editing
+   - Add preview functionality
+   - Implement image upload
 
 ## Current Blockers:
 1. Type issues with Supabase query results
@@ -677,3 +1003,615 @@ async function getIndustries() {
    - Remove unused MDX-related code
    - Clean up debug logging
    - Add automated tests
+
+## Technical Documentation
+
+### Authentication System
+
+#### 1. Authentication Flow
+
+1. **Login/Logout Process**
+   - Entry point: `/auth` page
+   - Uses Supabase Auth UI with custom theme
+   - Handles redirects via `redirectTo` parameter
+   - Success flow: `/auth/callback` → original destination
+   - Logout: Clears session, redirects to home
+
+2. **AuthGate Component** (Content Protection)
+   - Client-side protection wrapper
+   - Shows friendly warning for unauthenticated users
+   - Customizable titles and descriptions per section
+   - Redirects to `/auth` with proper `redirectTo`
+   - Used on learning paths, case studies, quantum stack
+
+3. **Admin Access**
+   - Protected by middleware
+   - Requirements:
+     - Valid session
+     - User role = 'admin' in `user_preferences`
+   - Redirects unauthorized users to home
+   - Admin routes defined in middleware
+
+#### 2. Protection Layers
+
+1. **Server-Side (Middleware)**
+   ```typescript
+   Protected Routes:
+   - /paths/*
+   - /case-study/*
+   - /quantum-stack/*
+   - /profile
+   
+   Admin Routes:
+   - /admin/*
+   ```
+
+2. **Client-Side (AuthGate)**
+   - Wraps protected content
+   - Handles session state
+   - Shows appropriate UI
+   - Used in layouts and pages
+
+#### 3. Sources of Truth
+
+1. **Session Management**
+   - Supabase handles session storage
+   - Middleware refreshes expired sessions
+   - Client components use Supabase hooks
+
+2. **Role Management**
+   - `user_preferences` table is source of truth for roles
+   - Checked by middleware for admin routes
+   - Role field is required for admin access
+
+3. **Route Protection**
+   - Middleware (`src/middleware.ts`) is source of truth for protected routes
+   - `protectedRoutes` and `adminRoutes` arrays define protection
+
+#### 4. Known Issues & Status
+
+1. Admin Panel Access
+   - ✅ Middleware correctly checks for admin role
+   - ✅ Role-based access control implemented
+   - ✅ Redirect path updated to use `/auth` with proper redirectTo parameter
+   - ✅ Admin layout updated to match auth system standard
+
+2. Authentication Flow
+   - ✅ Login/Logout process working
+   - ✅ Session management implemented
+   - ✅ Protected routes working
+   - ✅ AuthGate component functioning
+   - ✅ Callback handling implemented
+
+#### 5. Implementation Checklist
+
+- [x] Basic auth flow with Supabase
+- [x] Protected routes middleware
+- [x] AuthGate component
+- [x] Admin role in user_preferences
+- [x] Admin routes protection
+- [ ] Fix admin layout redirect path
+- [ ] Verify all protected routes are in middleware
+- [ ] Add error handling for auth failures
+- [ ] Add session refresh handling
+- [ ] Document auth flow in user guide
+
+## Admin Implementation Plan
+
+### Core Principles
+1. **Keep It Simple**
+   - Admin page is a solved problem - don't overcomplicate
+   - Follow basic CMS patterns
+   - One source of truth for admin access (middleware only)
+
+2. **Clear Goals**
+   - Create and edit Learning Paths (Personas, Industries, Algorithms)
+   - Create and edit Case Studies
+   - Simple, functional admin UI
+
+### Implementation Steps
+1. **Phase 1: Basic Admin Access** 🚧 IN PROGRESS
+   - Remove duplicate auth checks
+   - Keep middleware as single source of truth
+   - Create minimal admin page that displays "Welcome Admin"
+   - Verify access works without redirect loops
+
+2. **Phase 2: Content Management UI**
+   - Add content type selection (Persona, Industry, Algorithm, Case Study)
+   - Implement basic create/edit forms
+   - Add markdown editor for content
+   - Add metadata fields (title, description, etc.)
+
+3. **Phase 3: Content Organization**
+   - Add list views for each content type
+   - Add search and filtering
+   - Add draft/publish functionality
+   - Add content validation
+
+### Technical Approach
+1. **Authentication**
+   - ✅ Middleware handles admin route protection
+   - ✅ User role stored in user_preferences
+   - ✅ Admin email configured in environment
+
+2. **UI Components**
+   - Use Shadcn/UI for consistent design
+   - Simple layout with sidebar navigation
+   - Content editor with preview
+   - Form validation and error handling
+
+3. **Data Management**
+   - Direct Supabase queries for content
+   - Optimistic updates where possible
+   - Proper error handling
+   - Draft state management
+
+### Success Criteria
+- Admin can access `/admin` without redirect loops
+- Can create and edit all content types
+- Content immediately available on the site
+- Simple, intuitive interface
+
+### Admin Interface Implementation
+1. Fix Data Table Dependencies
+   - ✅ Identified missing @tanstack/react-table dependency
+   - ✅ Successfully installed @tanstack/react-table
+   - ✅ Verify data-table component works after installation
+
+2. Content Management Implementation Order
+   a. Case Studies Management (Priority)
+   - [ ] Create basic list view with data table
+   - [ ] Implement create/edit/delete functionality
+   - [ ] Add sorting and filtering
+   - [ ] Add proper error handling and loading states
+   - [ ] Test with real data from Supabase
+
+   b. Algorithms Management
+   - [ ] Create list view with data table
+   - [ ] Create edit form with proper validation
+   - [ ] Implement relationship management with case studies
+   - [ ] Add sorting and filtering
+   - [ ] Test with real data
+
+   c. Industries Management
+   - [ ] Create list view with data table
+   - [ ] Create edit form with proper validation
+   - [ ] Fix case studies relationship as noted
+   - [ ] Add sorting and filtering
+   - [ ] Test with real data
+
+   d. Personas Management
+   - [ ] Create list view with data table
+   - [ ] Create edit form with proper validation
+   - [ ] Add sorting and filtering
+   - [ ] Test with real data
+
+   e. Quantum Stack Management
+   - [ ] Create list view with data table
+   - [ ] Create edit form with proper validation
+   - [ ] Add sorting and filtering
+   - [ ] Test with real data
+
+3. Shared Components and Infrastructure
+   - [ ] Create reusable form components using Shadcn/UI
+   - [ ] Implement proper error handling components
+   - [ ] Create loading state components
+   - [ ] Add toast notifications for actions
+   - [ ] Implement proper validation patterns
+
+4. Testing and Validation
+   - [ ] Test all CRUD operations
+   - [ ] Verify proper error handling
+   - [ ] Check mobile responsiveness
+   - [ ] Verify proper role-based access
+   - [ ] Test relationship management
+
+5. Documentation
+   - [ ] Document component usage
+   - [ ] Add inline code comments
+   - [ ] Update README with new admin features
+   - [ ] Document any required environment variables
+
+### Implementation Notes
+- Follow Next.js 15 patterns strictly
+- Use Shadcn/UI components consistently
+- Maintain TypeScript type safety
+- Follow existing auth patterns
+- Keep performance in mind (pagination, lazy loading)
+
+### Next.js 15 Component Architecture
+1. Server/Client Component Separation
+   - ❌ Current Issue: Mixing server components in client-side cell renderers
+   - ❌ Current Issue: Synchronous cookies() usage
+   - ❌ Current Issue: Server-side column definitions with client components
+
+2. Required Changes for Next.js 15:
+   a. Data Table Implementation
+   - [~] Move column definitions to a client component
+   - [~] Create separate server component for data fetching
+   - [ ] Use proper async patterns for cookies and auth
+   - [ ] Implement proper error boundaries
+
+   b. Component Structure
+   - [ ] Create ClientPage wrapper for client-side logic
+   - [ ] Keep ServerPage for data fetching
+   - [ ] Pass serializable data between components
+   - [ ] Use proper Next.js 15 patterns for dynamic rendering
+
+3. Implementation Order:
+   - [ ] Fix synchronous cookie access
+   - [ ] Verify auth helper implementations
+   - [ ] Test admin role verification
+   - [ ] Implement proper error boundaries
+   - [ ] Add loading states
+   - [ ] Then proceed with UI improvements
+
+### Authentication and Permissions Issues
+1. Cookie Handling Problems
+   - ❌ Synchronous cookie access in auth chain
+   - ❌ createServerComponentClient cookie implementation needs review
+   - ✅ Completed cookie access audit:
+     Found 3 different cookie handling patterns:
+     1. Synchronous in supabase-server.ts:
+        - Using cookies() directly in cookie getter
+        - Needs to be updated to async pattern
+     2. Mixed in case-studies/page.tsx:
+        - Attempting async but implementation incorrect
+        - Using createServerComponentClient incorrectly
+     3. Correct in middleware.ts:
+        - Using createMiddlewareClient properly
+        - This is the pattern to follow
+
+   New Findings:
+   - ❌ Next.js 15 cookies() returns Promise<ReadonlyRequestCookies>
+   - ❌ Current implementation doesn't handle async cookie access correctly
+   - ❌ Need to await cookies() before accessing values
+   
+   Updated Fix Required:
+   1. Cookie Handler Pattern:
+      ```typescript
+      export const getAsyncCookieHandler = async () => {
+        const cookieStore = await cookies()
+        return {
+          async get(name: string) {
+            return cookieStore.get(name)?.value
+          }
+        }
+      }
+      ```
+
+   2. Usage in Components:
+      ```typescript
+      export default async function CaseStudiesPage() {
+        const cookieHandler = await getAsyncCookieHandler()
+        const supabase = createServerComponentClient<Database>({
+          cookies: cookieHandler
+        })
+        // ... rest of the code
+      }
+      ```
+
+   Implementation Order (Updated):
+   1. [ ] Update cookie handler to use proper async pattern
+   2. [ ] Test cookie handler in isolation
+   3. [ ] Update supabase-server.ts
+   4. [ ] Update case-studies page
+   5. [ ] Test full auth flow
+
+2. Supabase Permission Chain
+   - ❌ Permission denied for users table
+   - ❌ RLS policies need review
+   - [ ] Verify admin role check implementation
+   - [ ] Review user_preferences table access
+   - [ ] Document permission requirements
+
+3. Auth Implementation Review
+   a. Current Issues:
+   - Cookie handling breaks auth context
+   - Permission chain fails at user verification
+   - Middleware auth check may be incomplete
+
+   b. Required Fixes:
+   - [ ] Audit createServerComponentClient usage
+   - [ ] Review middleware auth implementation
+   - [ ] Document correct Next.js 15 auth patterns
+   - [ ] Test auth flow comprehensively
+
+4. Implementation Order (Updated):
+   - [ ] Fix synchronous cookie access
+   - [ ] Verify auth helper implementations
+   - [ ] Test admin role verification
+   - [ ] Implement proper error boundaries
+   - [ ] Add loading states
+   - [ ] Then proceed with UI improvements
+
+### Root Cause Analysis
+1. Cookie Handling
+   - Problem: Synchronous cookie access breaking auth chain
+   - Impact: Auth context lost, permissions fail
+   - Location: Somewhere in createServerComponentClient usage
+   - Required Investigation:
+     - ✅ Audit all cookie access points
+     - ✅ Review auth helper implementations
+     - ✅ Check middleware cookie handling
+     - [ ] Verify Next.js 15 compatibility
+
+   Specific Fix Required:
+   1. Update supabase-server.ts:
+      ```typescript
+      export const createServerClient = async () => {
+        const cookieStore = cookies();
+        
+        return createClient<Database>(
+          process.env.NEXT_PUBLIC_SUPABASE_URL!,
+          process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+          {
+            cookies: {
+              async get(name: string) {
+                return cookieStore.get(name)?.value;
+              },
+            },
+          }
+        );
+      };
+      ```
+
+   2. Update case-studies/page.tsx:
+      ```typescript
+      export default async function CaseStudiesPage() {
+        const cookieStore = cookies();
+        const supabase = createServerComponentClient<Database>({
+          cookies: async () => {
+            return {
+              get(name: string) {
+                return cookieStore.get(name)?.value;
+              },
+              set(name: string, value: string, options: CookieOptions) {
+                // Not needed in Server Component
+              },
+              remove(name: string, options: CookieOptions) {
+                // Not needed in Server Component
+              },
+            }
+          }
+        });
+        // ... rest of the code
+      }
+      ```
+
+   3. Create a shared utility:
+      ```typescript
+      // src/lib/cookies.ts
+      export const getAsyncCookieHandler = (cookieStore: ReturnType<typeof cookies>) => ({
+        async get(name: string) {
+          return cookieStore.get(name)?.value;
+        },
+        // Other methods as needed
+      });
+      ```
+
+   Implementation Order:
+   1. [ ] Create shared cookie utility
+   2. [ ] Update supabase-server.ts
+   3. [ ] Update case-studies page
+   4. [ ] Test auth flow
+   5. [ ] Document working pattern
+
+## 4. Case Study CMS Implementation
+### A. Current State
+- [x] Admin panel accessible
+- [x] Case study creation view working
+- [x] Basic case study listing and viewing functional
+- [x] Database connection (Supabase) working
+
+### B. Case Study Fields & Data Model
+- [x] Document all available fields
+  - [x] Required vs optional fields
+  - [x] Field types and validation
+  - [x] Relationships (algorithms, industries, personas)
+  - [x] Content field types (text, rich text, arrays, etc.)
+
+#### Field Documentation
+
+1. Basic Information (Tab)
+   ```typescript
+   {
+     title: string;          // Required: The display title of the case study
+     slug: string;           // Required: URL-friendly version of title (e.g., "quantum-chemistry-2024")
+     description: string;    // Optional: Short summary for listings and previews
+     content: string;        // Optional: Main content in Markdown format
+   }
+   ```
+
+2. Partner Information
+   ```typescript
+   {
+     partner_companies: string[];  // Optional: Array of company names involved
+     quantum_companies: string[];  // Optional: Array of quantum computing companies
+     url: string;                  // Optional: External reference URL
+   }
+   ```
+
+3. Classifications
+   ```typescript
+   {
+     algorithms: string[];    // Optional: Array of algorithm slugs
+     industries: string[];    // Optional: Array of industry slugs
+     personas: string[];      // Optional: Array of persona slugs
+     tags: string[];         // Optional: Array of custom tags
+   }
+   ```
+
+4. Technical Details
+   ```typescript
+   {
+     quantum_hardware: string[];  // Optional: Array of quantum hardware used
+   }
+   ```
+
+5. Publication Status
+   ```typescript
+   {
+     published: boolean;           // Required: Whether the case study is public
+     featured: boolean;           // Optional: Whether to feature on homepage
+     published_at: Date;          // Optional: When the case study was published
+     created_at: Date;           // Auto-generated: Creation timestamp
+     updated_at: Date;           // Auto-generated: Last update timestamp
+   }
+   ```
+
+#### Field Design Pattern
+
+1. Input Guidelines
+   - Title: Clear, descriptive name (50-100 characters)
+   - Slug: Auto-generated from title, URL-friendly
+   - Description: Concise summary (100-200 characters)
+   - Content: Rich text with Markdown support
+
+2. Relationship Fields
+   - Use multi-select dropdowns for:
+     - Algorithms
+     - Industries
+     - Personas
+   - Allow custom tags with typeahead
+
+3. Array Fields
+   - Partner Companies: One per line
+   - Quantum Companies: One per line
+   - Quantum Hardware: One per line
+   - Tags: Comma-separated or one per line
+
+4. Validation Rules
+   - Required Fields:
+     - Title
+     - Slug
+     - Published status
+   - Format Validation:
+     - Slug: URL-friendly (lowercase, hyphens)
+     - URLs: Valid URL format
+     - Dates: ISO format
+
+5. Helper Text Pattern
+   ```typescript
+   const fieldHelpers = {
+     title: "Enter a clear, descriptive title for the case study",
+     slug: "URL-friendly version of the title (auto-generated)",
+     description: "Brief summary for listings and previews",
+     content: "Main content in Markdown format",
+     partner_companies: "Enter company names, one per line",
+     quantum_companies: "Enter quantum computing companies, one per line",
+     algorithms: "Select relevant quantum algorithms",
+     industries: "Select applicable industries",
+     personas: "Select target user personas",
+     tags: "Add custom tags, separated by commas",
+     quantum_hardware: "List quantum hardware used, one per line",
+     url: "External reference URL (if applicable)"
+   };
+   ```
+
+6. Tab Organization
+   - Basic Info: Core metadata
+   - Content: Main content and description
+   - Classifications: Relationships and tags
+   - Technical Details: Hardware and technical info
+
+7. Form Layout Pattern
+   ```typescript
+   <div className="space-y-4">
+     <div className="space-y-2">
+       <Label htmlFor="field">Field Label</Label>
+       <Input
+         type="text"
+         name="field"
+         id="field"
+         placeholder={fieldHelpers.field}
+         required={isRequired}
+       />
+       <p className="text-sm text-muted-foreground">
+         {fieldHelpers.field}
+       </p>
+     </div>
+   </div>
+   ```
+
+### C. Database Operations
+- [ ] Document case study creation flow
+  - [ ] Data validation
+  - [ ] Error handling
+  - [ ] Success/failure notifications
+- [ ] Map data transformation process
+  - [ ] Form data to database schema
+  - [ ] Database schema to display format
+- [ ] Document database triggers/hooks
+  - [ ] Timestamps
+  - [ ] Slug generation
+  - [ ] Search indexing
+
+### D. CMS Features
+- [ ] Draft/Preview System
+  - [ ] Draft state management
+  - [ ] Preview rendering
+  - [ ] Publish workflow
+- [ ] Content Management
+  - [ ] Version control/history
+  - [ ] Media handling
+  - [ ] Rich text editing
+  - [ ] Tag management
+- [ ] Search and Filtering
+  - [ ] Admin search
+  - [ ] Public search
+  - [ ] Filter combinations
+- [ ] Bulk Operations
+  - [ ] Bulk edit
+  - [ ] Bulk delete
+  - [ ] Import/Export
+
+### E. Content Display Patterns
+- [ ] List View
+  - [ ] Pagination
+  - [ ] Sorting
+  - [ ] Filtering
+  - [ ] Search
+- [ ] Detail View
+  - [ ] Content layout
+  - [ ] Related content
+  - [ ] Navigation
+  - [ ] Metadata display
+
+### F. Admin Panel Features
+- [ ] User Management
+  - [ ] Roles and permissions
+  - [ ] Access control
+- [ ] Audit System
+  - [ ] Change logging
+  - [ ] User activity tracking
+- [ ] Content Moderation
+  - [ ] Review workflow
+  - [ ] Approval process
+- [ ] Analytics
+  - [ ] Usage metrics
+  - [ ] Content performance
+
+### G. Testing & Validation
+- [ ] Form Validation
+  - [ ] Client-side validation
+  - [ ] Server-side validation
+  - [ ] Error messages
+- [ ] Data Integrity
+  - [ ] Required fields
+  - [ ] Data types
+  - [ ] Relationships
+- [ ] Error Handling
+  - [ ] User feedback
+  - [ ] Error recovery
+  - [ ] Logging
+
+### H. Documentation
+- [ ] User Guide
+  - [ ] Admin interface
+  - [ ] Content creation
+  - [ ] Publishing workflow
+- [ ] Technical Documentation
+  - [ ] API endpoints
+  - [ ] Data models
+  - [ ] Integration points

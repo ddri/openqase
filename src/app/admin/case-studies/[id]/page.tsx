@@ -1,23 +1,34 @@
 import { createServerClient } from '@/lib/supabase-server';
 import { Database } from '@/types/supabase';
 import { notFound } from 'next/navigation';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Label } from '@/components/ui/label';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 type CaseStudy = Database['public']['Tables']['case_studies']['Row'];
+type Industry = Database['public']['Tables']['industries']['Row'];
+type Algorithm = Database['public']['Tables']['algorithms']['Row'];
+type Persona = Database['public']['Tables']['personas']['Row'];
 
 export default async function EditCaseStudyPage({
   params,
 }: {
   params: { id: string };
 }) {
-  const supabase = createServerClient();
-  const isNew = params.id === 'new';
+  const supabase = await createServerClient();
+  const resolvedParams = await params;
+  const isNew = resolvedParams.id === 'new';
 
   // Fetch case study if editing
   const { data: caseStudy } = !isNew
     ? await supabase
         .from('case_studies')
         .select('*')
-        .eq('id', params.id)
+        .eq('id', resolvedParams.id)
         .single()
     : { data: null };
 
@@ -42,275 +53,269 @@ export default async function EditCaseStudyPage({
   }
 
   return (
-    <div>
+    <div className="container mx-auto py-8">
       <h1 className="mb-8 text-2xl font-bold">
         {isNew ? 'Add New Case Study' : 'Edit Case Study'}
       </h1>
 
-      <form action="/api/case-studies" method="POST" className="space-y-6">
+      <form action="/api/case-studies" method="POST" className="space-y-8">
         {!isNew && <input type="hidden" name="id" value={caseStudy.id} />}
 
-        <div>
-          <label
-            htmlFor="title"
-            className="block text-sm font-medium text-gray-700"
-          >
-            Title
-          </label>
-          <input
-            type="text"
-            name="title"
-            id="title"
-            defaultValue={caseStudy?.title}
-            required
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-          />
-        </div>
+        <Tabs defaultValue="basic" className="w-full">
+          <TabsList>
+            <TabsTrigger value="basic">Basic Info</TabsTrigger>
+            <TabsTrigger value="content">Content</TabsTrigger>
+            <TabsTrigger value="classifications">Classifications</TabsTrigger>
+            <TabsTrigger value="technical">Technical Details</TabsTrigger>
+          </TabsList>
 
-        <div>
-          <label
-            htmlFor="slug"
-            className="block text-sm font-medium text-gray-700"
-          >
-            Slug
-          </label>
-          <input
-            type="text"
-            name="slug"
-            id="slug"
-            defaultValue={caseStudy?.slug}
-            required
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-          />
-        </div>
+          <TabsContent value="basic">
+            <Card>
+              <CardHeader>
+                <CardTitle>Basic Information</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="title">Title</Label>
+                  <Input
+                    type="text"
+                    name="title"
+                    id="title"
+                    defaultValue={caseStudy?.title}
+                    required
+                  />
+                </div>
 
-        <div>
-          <label
-            htmlFor="description"
-            className="block text-sm font-medium text-gray-700"
-          >
-            Description
-          </label>
-          <textarea
-            name="description"
-            id="description"
-            rows={3}
-            defaultValue={caseStudy?.description || ''}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-          />
-        </div>
+                <div className="space-y-2">
+                  <Label htmlFor="slug">Slug</Label>
+                  <Input
+                    type="text"
+                    name="slug"
+                    id="slug"
+                    defaultValue={caseStudy?.slug}
+                    required
+                  />
+                </div>
 
-        <div>
-          <label
-            htmlFor="content"
-            className="block text-sm font-medium text-gray-700"
-          >
-            Content
-          </label>
-          <textarea
-            name="content"
-            id="content"
-            rows={10}
-            defaultValue={caseStudy?.content || ''}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-          />
-        </div>
+                <div className="space-y-2">
+                  <Label htmlFor="description">Description</Label>
+                  <Textarea
+                    name="description"
+                    id="description"
+                    rows={3}
+                    defaultValue={caseStudy?.description || ''}
+                  />
+                </div>
 
-        <div>
-          <label
-            htmlFor="partner_company"
-            className="block text-sm font-medium text-gray-700"
-          >
-            Partner Company
-          </label>
-          <input
-            type="text"
-            name="partner_company"
-            id="partner_company"
-            defaultValue={caseStudy?.partner_company || ''}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-          />
-        </div>
+                <div className="space-y-2">
+                  <Label htmlFor="url">URL</Label>
+                  <Input
+                    type="url"
+                    name="url"
+                    id="url"
+                    defaultValue={caseStudy?.url || ''}
+                  />
+                </div>
 
-        <div>
-          <label
-            htmlFor="quantum_companies"
-            className="block text-sm font-medium text-gray-700"
-          >
-            Quantum Companies
-          </label>
-          <input
-            type="text"
-            name="quantum_companies"
-            id="quantum_companies"
-            defaultValue={caseStudy?.quantum_companies?.join(', ') || ''}
-            placeholder="Comma-separated list"
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-          />
-        </div>
+                <div className="flex items-center space-x-4">
+                  <div className="flex items-center space-x-2">
+                    <Checkbox
+                      name="published"
+                      id="published"
+                      defaultChecked={caseStudy?.published}
+                    />
+                    <Label htmlFor="published">Published</Label>
+                  </div>
 
-        <div>
-          <label
-            htmlFor="url"
-            className="block text-sm font-medium text-gray-700"
-          >
-            URL
-          </label>
-          <input
-            type="url"
-            name="url"
-            id="url"
-            defaultValue={caseStudy?.url || ''}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-          />
-        </div>
+                  <div className="flex items-center space-x-2">
+                    <Checkbox
+                      name="featured"
+                      id="featured"
+                      defaultChecked={caseStudy?.featured}
+                    />
+                    <Label htmlFor="featured">Featured</Label>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
 
-        <div>
-          <label className="block text-sm font-medium text-gray-700">
-            Industries
-          </label>
-          <div className="mt-2 space-y-2">
-            {industries?.map((industry) => (
-              <label key={industry.slug} className="inline-flex items-center mr-4">
-                <input
-                  type="checkbox"
-                  name="industries[]"
-                  value={industry.slug}
-                  defaultChecked={caseStudy?.industries?.includes(industry.slug)}
-                  className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-                />
-                <span className="ml-2">{industry.name}</span>
-              </label>
-            ))}
-          </div>
-        </div>
+          <TabsContent value="content">
+            <Card>
+              <CardHeader>
+                <CardTitle>Content</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="content">Content</Label>
+                  <Textarea
+                    name="content"
+                    id="content"
+                    rows={10}
+                    defaultValue={caseStudy?.content || ''}
+                  />
+                </div>
 
-        <div>
-          <label className="block text-sm font-medium text-gray-700">
-            Algorithms
-          </label>
-          <div className="mt-2 space-y-2">
-            {algorithms?.map((algorithm) => (
-              <label key={algorithm.slug} className="inline-flex items-center mr-4">
-                <input
-                  type="checkbox"
-                  name="algorithms[]"
-                  value={algorithm.slug}
-                  defaultChecked={caseStudy?.algorithms?.includes(algorithm.slug)}
-                  className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-                />
-                <span className="ml-2">{algorithm.name}</span>
-              </label>
-            ))}
-          </div>
-        </div>
+                <div className="space-y-2">
+                  <Label htmlFor="mdx_content">MDX Content</Label>
+                  <Textarea
+                    name="mdx_content"
+                    id="mdx_content"
+                    rows={10}
+                    defaultValue={caseStudy?.mdx_content || ''}
+                  />
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
 
-        <div>
-          <label className="block text-sm font-medium text-gray-700">
-            Personas
-          </label>
-          <div className="mt-2 space-y-2">
-            {personas?.map((persona) => (
-              <label key={persona.slug} className="inline-flex items-center mr-4">
-                <input
-                  type="checkbox"
-                  name="personas[]"
-                  value={persona.slug}
-                  defaultChecked={caseStudy?.personas?.includes(persona.slug)}
-                  className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-                />
-                <span className="ml-2">{persona.name}</span>
-              </label>
-            ))}
-          </div>
-        </div>
+          <TabsContent value="classifications">
+            <Card>
+              <CardHeader>
+                <CardTitle>Classifications</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                <div className="space-y-2">
+                  <Label>Industries</Label>
+                  <div className="grid grid-cols-2 gap-2">
+                    {industries?.map((industry: Pick<Industry, 'slug' | 'name'>) => (
+                      <div key={industry.slug} className="flex items-center space-x-2">
+                        <Checkbox
+                          name="industries[]"
+                          value={industry.slug}
+                          defaultChecked={caseStudy?.industries?.includes(industry.slug)}
+                        />
+                        <Label>{industry.name}</Label>
+                      </div>
+                    ))}
+                  </div>
+                </div>
 
-        <div>
-          <label
-            htmlFor="qubits_used"
-            className="block text-sm font-medium text-gray-700"
-          >
-            Qubits Used
-          </label>
-          <input
-            type="number"
-            name="qubits_used"
-            id="qubits_used"
-            defaultValue={caseStudy?.qubits_used || ''}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-          />
-        </div>
+                <div className="space-y-2">
+                  <Label>Algorithms</Label>
+                  <div className="grid grid-cols-2 gap-2">
+                    {algorithms?.map((algorithm: Pick<Algorithm, 'slug' | 'name'>) => (
+                      <div key={algorithm.slug} className="flex items-center space-x-2">
+                        <Checkbox
+                          name="algorithms[]"
+                          value={algorithm.slug}
+                          defaultChecked={caseStudy?.algorithms?.includes(algorithm.slug)}
+                        />
+                        <Label>{algorithm.name}</Label>
+                      </div>
+                    ))}
+                  </div>
+                </div>
 
-        <div>
-          <label
-            htmlFor="quantum_hardware"
-            className="block text-sm font-medium text-gray-700"
-          >
-            Quantum Hardware
-          </label>
-          <input
-            type="text"
-            name="quantum_hardware"
-            id="quantum_hardware"
-            defaultValue={caseStudy?.quantum_hardware?.join(', ') || ''}
-            placeholder="Comma-separated list"
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-          />
-        </div>
+                <div className="space-y-2">
+                  <Label>Personas</Label>
+                  <div className="grid grid-cols-2 gap-2">
+                    {personas?.map((persona: Pick<Persona, 'slug' | 'name'>) => (
+                      <div key={persona.slug} className="flex items-center space-x-2">
+                        <Checkbox
+                          name="personas[]"
+                          value={persona.slug}
+                          defaultChecked={caseStudy?.personas?.includes(persona.slug)}
+                        />
+                        <Label>{persona.name}</Label>
+                      </div>
+                    ))}
+                  </div>
+                </div>
 
-        <div>
-          <label
-            htmlFor="classical_hardware"
-            className="block text-sm font-medium text-gray-700"
-          >
-            Classical Hardware
-          </label>
-          <input
-            type="text"
-            name="classical_hardware"
-            id="classical_hardware"
-            defaultValue={caseStudy?.classical_hardware?.join(', ') || ''}
-            placeholder="Comma-separated list"
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-          />
-        </div>
+                <div className="space-y-2">
+                  <Label htmlFor="tags">Tags</Label>
+                  <Input
+                    type="text"
+                    name="tags"
+                    id="tags"
+                    defaultValue={caseStudy?.tags?.join(', ') || ''}
+                    placeholder="Comma-separated list"
+                  />
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
 
-        <div className="flex items-center space-x-4">
-          <label className="inline-flex items-center">
-            <input
-              type="checkbox"
-              name="published"
-              defaultChecked={caseStudy?.published}
-              className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-            />
-            <span className="ml-2">Published</span>
-          </label>
+          <TabsContent value="technical">
+            <Card>
+              <CardHeader>
+                <CardTitle>Technical Details</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="partner_companies">Partner Companies</Label>
+                  <Input
+                    type="text"
+                    name="partner_companies"
+                    id="partner_companies"
+                    defaultValue={caseStudy?.partner_companies?.join(', ') || ''}
+                    placeholder="Comma-separated list"
+                  />
+                </div>
 
-          <label className="inline-flex items-center">
-            <input
-              type="checkbox"
-              name="featured"
-              defaultChecked={caseStudy?.featured}
-              className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-            />
-            <span className="ml-2">Featured</span>
-          </label>
-        </div>
+                <div className="space-y-2">
+                  <Label htmlFor="quantum_companies">Quantum Companies</Label>
+                  <Input
+                    type="text"
+                    name="quantum_companies"
+                    id="quantum_companies"
+                    defaultValue={caseStudy?.quantum_companies?.join(', ') || ''}
+                    placeholder="Comma-separated list"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="quantum_hardware">Quantum Hardware</Label>
+                  <Input
+                    type="text"
+                    name="quantum_hardware"
+                    id="quantum_hardware"
+                    defaultValue={caseStudy?.quantum_hardware?.join(', ') || ''}
+                    placeholder="Comma-separated list"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="technologies">Technologies</Label>
+                  <Input
+                    type="text"
+                    name="technologies"
+                    id="technologies"
+                    defaultValue={caseStudy?.technologies?.join(', ') || ''}
+                    placeholder="Comma-separated list"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="difficulty">Difficulty</Label>
+                  <Input
+                    type="text"
+                    name="difficulty"
+                    id="difficulty"
+                    defaultValue={caseStudy?.difficulty || ''}
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="metrics">Metrics (JSON)</Label>
+                  <Textarea
+                    name="metrics"
+                    id="metrics"
+                    rows={5}
+                    defaultValue={caseStudy?.metrics ? JSON.stringify(caseStudy.metrics, null, 2) : ''}
+                    placeholder="Enter JSON metrics"
+                  />
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+        </Tabs>
 
         <div className="flex justify-end space-x-4">
-          <button
-            type="button"
-            onClick={() => window.history.back()}
-            className="rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
-          >
-            Cancel
-          </button>
-          <button
-            type="submit"
-            className="rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700"
-          >
+          <Button type="submit" variant="default">
             {isNew ? 'Create Case Study' : 'Update Case Study'}
-          </button>
+          </Button>
         </div>
       </form>
     </div>

@@ -1,12 +1,12 @@
 // src/app/case-study/page.tsx
-import { createServerClient } from '@/lib/supabase-server';
-import type { CaseStudy } from '@/types/supabase';
+import { supabase } from '@/lib/supabase';
+import type { Database } from '@/types/supabase';
 import CaseStudyList from '@/components/CaseStudyList';
 import AuthGate from '@/components/auth/AuthGate';
 
+type CaseStudy = Database['public']['Tables']['case_studies']['Row'];
+
 export default async function CaseStudyPage() {
-  const supabase = createServerClient();
-  
   const { data: caseStudies, error } = await supabase
     .from('case_studies')
     .select('*')

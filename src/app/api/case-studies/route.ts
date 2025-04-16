@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { supabase } from '@/lib/supabase';
 import { Database } from '@/types/supabase';
+import { createServerClient } from '@/lib/supabase-server';
 
 type Tables = Database['public']['Tables']
 type CaseStudyRow = Tables['case_studies']['Row']
@@ -87,25 +88,15 @@ export async function GET(request: Request) {
 export async function POST(request: Request) {
   try {
     const formData = await request.formData();
-
-    // Check if user is admin
-    const {
-      data: { session },
-    } = await supabase.auth.getSession();
-
-    if (!session) {
-      return NextResponse.json(
-        { error: 'Unauthorized' },
-        { status: 401 }
-      );
-    }
+    const supabase = await createServerClient();
 
     // Get form data
     const id = formData.get('id') as string;
     const title = formData.get('title') as string;
     const slug = formData.get('slug') as string;
-    const description = formData.get('description') as string;
-    const content = formData.get('content') as string;
+    const description = formData.get('description') as string || null;
+    const content = formData.get('content') as string || null;
+    const mdx_content = formData.get('mdx_content') as string || null;
     const partner_companies = (formData.get('partner_companies') as string)
       ?.split(',')
       .map((s) => s.trim())
@@ -114,7 +105,7 @@ export async function POST(request: Request) {
       ?.split(',')
       .map((s) => s.trim())
       .filter(Boolean) || null;
-    const url = formData.get('url') as string;
+    const url = formData.get('url') as string || null;
     const industries = formData.getAll('industries[]') as string[];
     const algorithms = formData.getAll('algorithms[]') as string[];
     const personas = formData.getAll('personas[]') as string[];
@@ -122,10 +113,16 @@ export async function POST(request: Request) {
       ?.split(',')
       .map((s) => s.trim())
       .filter(Boolean) || null;
-    const classical_hardware = (formData.get('classical_hardware') as string)
+    const technologies = (formData.get('technologies') as string)
       ?.split(',')
       .map((s) => s.trim())
       .filter(Boolean) || null;
+    const tags = (formData.get('tags') as string)
+      ?.split(',')
+      .map((s) => s.trim())
+      .filter(Boolean) || null;
+    const difficulty = formData.get('difficulty') as string || null;
+    const metrics = formData.get('metrics') ? JSON.parse(formData.get('metrics') as string) : null;
     const published = formData.get('published') === 'on';
     const featured = formData.get('featured') === 'on';
 
@@ -133,21 +130,25 @@ export async function POST(request: Request) {
     const baseData: Omit<CaseStudyInsert, 'published_at' | 'created_at' | 'updated_at'> = {
       title,
       slug,
-      description: description || undefined,
-      content: content || undefined,
-      partner_companies: partner_companies?.length ? partner_companies : undefined,
-      quantum_companies: quantum_companies?.length ? quantum_companies : undefined,
-      url: url || undefined,
-      industries: industries?.length ? industries : undefined,
-      algorithms: algorithms?.length ? algorithms : undefined,
-      personas: personas?.length ? personas : undefined,
-      quantum_hardware: quantum_hardware?.length ? quantum_hardware : undefined,
-      classical_hardware: classical_hardware?.length ? classical_hardware : undefined,
-      published: published || undefined,
-      featured: featured || undefined,
+      description,
+      content,
+      mdx_content,
+      partner_companies,
+      quantum_companies,
+      url,
+      industries: industries || [],
+      algorithms: algorithms || [],
+      personas: personas || [],
+      quantum_hardware,
+      technologies,
+      tags,
+      difficulty,
+      metrics,
+      published,
+      featured
     };
 
-    let result: CaseStudyRow | null = null;
+    let result;
     if (id) {
       // Update existing case study
       const { data: updatedData, error } = await supabase

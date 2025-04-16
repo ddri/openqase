@@ -42,7 +42,6 @@ export function AuthContent({ redirectTo }: { redirectTo?: string }) {
           title: 'Success',
           description: 'Successfully signed in',
         })
-        router.replace(redirectToParam)
       } else if (event === 'SIGNED_OUT') {
         toast({
           title: 'Signed out',

@@ -73,7 +73,7 @@ export type Database = {
           slug: string
           title: string
           description: string | null
-          content: string | null
+          mdx_content: string | null
           partner_companies: string[] | null
           quantum_companies: string[] | null
           url: string | null
@@ -87,13 +87,17 @@ export type Database = {
           published_at: string | null
           created_at: string
           updated_at: string
+          difficulty: string | null
+          metrics: Json | null
+          technologies: string[] | null
+          ts_content: unknown | null
         }
         Insert: {
           id?: string
           slug: string
           title: string
           description?: string | null
-          content?: string | null
+          mdx_content?: string | null
           partner_companies?: string[] | null
           quantum_companies?: string[] | null
           url?: string | null
@@ -107,13 +111,16 @@ export type Database = {
           published_at?: string | null
           created_at?: string
           updated_at?: string
+          difficulty?: string | null
+          metrics?: Json | null
+          technologies?: string[] | null
         }
         Update: {
           id?: string
           slug?: string
           title?: string
           description?: string | null
-          content?: string | null
+          mdx_content?: string | null
           partner_companies?: string[] | null
           quantum_companies?: string[] | null
           url?: string | null
@@ -127,6 +134,9 @@ export type Database = {
           published_at?: string | null
           created_at?: string
           updated_at?: string
+          difficulty?: string | null
+          metrics?: Json | null
+          technologies?: string[] | null
         }
         Relationships: []
       }
@@ -240,6 +250,7 @@ export type Database = {
           theme_preference: string | null
           ui_preferences: Json | null
           updated_at: string | null
+          role: 'user' | 'admin'
         }
         Insert: {
           created_at?: string | null
@@ -248,6 +259,7 @@ export type Database = {
           theme_preference?: string | null
           ui_preferences?: Json | null
           updated_at?: string | null
+          role?: 'user' | 'admin'
         }
         Update: {
           created_at?: string | null
@@ -256,6 +268,7 @@ export type Database = {
           theme_preference?: string | null
           ui_preferences?: Json | null
           updated_at?: string | null
+          role?: 'user' | 'admin'
         }
         Relationships: []
       }

@@ -1,6 +1,6 @@
 // src/app/paths/algorithm/[slug]/page.tsx
 import { notFound } from 'next/navigation';
-import { createServerClient } from '@/lib/supabase-server';
+import { createClient } from '@/utils/supabase/server';
 import type { Database } from '@/types/supabase';
 import LearningPathLayout from '@/components/ui/learning-path-layout';
 import { Badge } from '@/components/ui/badge';
@@ -24,13 +24,14 @@ interface AlgorithmPageProps {
 }
 
 export default async function AlgorithmPage({ params }: AlgorithmPageProps) {
-  const supabase = createServerClient();
+  const resolvedParams = await params;
+  const supabase = await createClient();
   
-  console.log('Fetching algorithm with slug:', params.slug);
+  console.log('Fetching algorithm with slug:', resolvedParams.slug);
   const { data: algorithm, error } = await supabase
     .from('algorithms')
     .select()
-    .eq('slug', params.slug)
+    .eq('slug', resolvedParams.slug)
     .single();
 
   console.log('Algorithm query result:', { algorithm, error });
@@ -40,13 +41,30 @@ export default async function AlgorithmPage({ params }: AlgorithmPageProps) {
     notFound();
   }
 
-  // Fetch related case studies
+  // Fetch related case studies using the API route
   console.log('Fetching case studies for algorithm:', algorithm.name);
-  const { data: caseStudies, error: caseStudiesError } = await supabase
-    .from('case_studies')
-    .select()
-    .contains('algorithms', [algorithm.name])
-    .eq('published', true);
+  
+  let caseStudies = [];
+  let caseStudiesError = null;
+  
+  try {
+    // Use the API route instead of direct Supabase query
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/api/case-studies?algorithm=${encodeURIComponent(algorithm.name)}`,
+      { cache: 'no-store' }
+    );
+    
+    if (response.ok) {
+      const data = await response.json();
+      caseStudies = data.items;
+    } else {
+      caseStudiesError = await response.json();
+      console.error('Error fetching case studies:', caseStudiesError);
+    }
+  } catch (error) {
+    caseStudiesError = error;
+    console.error('Error fetching case studies:', error);
+  }
 
   console.log('Case studies query result:', { caseStudies, error: caseStudiesError });
 
@@ -67,7 +85,7 @@ export default async function AlgorithmPage({ params }: AlgorithmPageProps) {
           <p className="text-muted-foreground mb-6">{algorithm.description}</p>
           
           <div className="flex flex-wrap gap-2 mb-6">
-            {algorithm.use_cases?.map((app) => (
+            {algorithm.use_cases?.map((app: string) => (
               <Badge key={app} variant="outline">
                 {app}
               </Badge>

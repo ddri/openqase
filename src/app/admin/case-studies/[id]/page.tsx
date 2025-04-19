@@ -21,15 +21,16 @@ interface CaseStudyPageProps {
 }
 
 export default async function EditCaseStudyPage({ params }: CaseStudyPageProps) {
+  const resolvedParams = await params;
   const supabase = await createServerClient();
-  const isNew = params.id === 'new';
+  const isNew = resolvedParams.id === 'new';
 
   // Fetch case study if editing
   const { data: caseStudy } = !isNew
     ? await supabase
         .from('case_studies')
         .select('*')
-        .eq('id', params.id)
+        .eq('id', resolvedParams.id)
         .single()
     : { data: null };
 

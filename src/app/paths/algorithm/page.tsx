@@ -1,5 +1,5 @@
 // src/app/paths/algorithm/page.tsx
-import { createServerClient } from '@/lib/supabase-server';
+import { createClient } from '@/utils/supabase/server';
 import AlgorithmList from '@/components/AlgorithmList';
 import LearningPathLayout from '@/components/ui/learning-path-layout';
 import type { Database } from '@/types/supabase';
@@ -7,7 +7,7 @@ import type { Database } from '@/types/supabase';
 type Algorithm = Database['public']['Tables']['algorithms']['Row'];
 
 async function getAlgorithms() {
-  const supabase = createServerClient();
+  const supabase = await createClient();
   
   const { data, error } = await supabase
     .from('algorithms')

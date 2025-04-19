@@ -16,7 +16,7 @@ Stores information about quantum algorithms and their applications.
 | published | boolean | Whether the algorithm is publicly visible |
 | created_at | string | Timestamp of when the record was created |
 | updated_at | string | Timestamp of when the record was last updated |
-| mdx_content | string | MDX format content describing the algorithm |
+| main_content | string | Main content in markdown format describing the algorithm |
 | key_applications | object | Array of key applications for this algorithm |
 | ts_content | string | TypeScript content related to the algorithm |
 
@@ -29,7 +29,6 @@ Contains detailed case studies of quantum computing applications.
 | slug | string | URL-friendly version of the case study title |
 | title | string | Title of the case study |
 | description | string | Brief description of the case study |
-| content | string | Main content of the case study |
 | partner_companies | object | Array of companies partnering in this case study |
 | quantum_companies | object | Array of quantum computing companies involved |
 | url | object | Related URLs and references |
@@ -41,13 +40,8 @@ Contains detailed case studies of quantum computing applications.
 | published_at | string | Timestamp when the case study was published |
 | created_at | string | Timestamp of when the record was created |
 | updated_at | string | Timestamp of when the record was last updated |
-| mdx_content | string | MDX format content of the case study |
-| difficulty | object | Difficulty level indicators |
-| tags | object | Array of tags categorizing the case study |
-| metrics | object | Performance metrics and results |
-| technologies | object | Technologies used in the implementation |
+| main_content | string | Main content in markdown format of the case study |
 | ts_content | string | TypeScript content related to the case study |
-| stack_layers | object | Quantum stack layers involved |
 
 ## Table: case_study_relations
 Manages relationships between case studies and other entities (currently empty).
@@ -63,7 +57,7 @@ Catalogs different industries and their quantum computing applications.
 | description | string | Description of the industry |
 | icon | string | Icon identifier for the industry |
 | created_at | string | Timestamp of when the record was created |
-| mdx_content | string | MDX format content about the industry |
+| main_content | string | Main content in markdown format about the industry |
 | key_applications | object | Array of key quantum computing applications in this industry |
 | ts_content | string | TypeScript content related to the industry |
 
@@ -81,14 +75,12 @@ Defines user personas for targeting content and experiences.
 | key_interests | object | Array of key interests for this persona |
 | technical_level | string | Technical expertise level |
 | created_at | string | Timestamp of when the record was created |
-| mdx_content | object | MDX format content about the persona |
+| main_content | string | Main content in markdown format about the persona |
 | expertise | object | Areas of expertise |
 | persona_type | object | Type classification of the persona |
 | related_case_studies | object | Case studies relevant to this persona |
 | ts_content | string | TypeScript content related to the persona |
 
-## Table: stack_layers
-Defines layers in the quantum computing stack (currently empty).
 
 ## Table: user_preferences
 Stores user preferences and settings.

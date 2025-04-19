@@ -73,7 +73,7 @@ export default function AboutPage() {
                   The Case Studies section forms the core content foundation of OpenQASE, providing documented examples of real-world quantum computing implementations. Each case study details actual quantum computing deployments, including the business context, problem description, implementation approach, and outcomes.
                 </p>
                 <p className="text-muted-foreground">
-                  Our case studies include quantifiable metrics on how quantum computing solutions affected business outcomes, ROI considerations, and comparative advantages over classical approaches. They provide practical information on implementation approaches, technical requirements, integration challenges, and solution architectures.
+                  Our case studies focus on the business context, problem description, and outcomes of quantum computing implementations. They provide information on the industries served, algorithms used, and partner companies involved, making it easy to understand the practical value of quantum computing.
                 </p>
                 <p className="text-muted-foreground">
                   All case studies are structured to balance technical depth with business relevance, ensuring they serve both decision-makers and implementers while providing concrete examples of quantum computing's practical value.

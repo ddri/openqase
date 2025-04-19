@@ -25,8 +25,8 @@ export default async function CaseStudyPage() {
     slug: item.slug,
     title: item.title,
     description: item.description,
-    content: item.content,
-    partner_company: item.partner_companies?.[0] || null,
+    main_content: item.main_content,
+    partner_companies: item.partner_companies || [],
     quantum_companies: item.quantum_companies || [],
     url: item.url,
     algorithms: item.algorithms || [],
@@ -38,7 +38,8 @@ export default async function CaseStudyPage() {
     published: item.published,
     published_at: item.published_at,
     created_at: item.created_at,
-    updated_at: item.updated_at
+    updated_at: item.updated_at,
+    lastUpdated: item.updated_at
   }));
 
   return (

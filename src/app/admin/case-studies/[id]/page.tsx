@@ -149,22 +149,12 @@ export default async function EditCaseStudyPage({ params }: CaseStudyPageProps) 
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="space-y-2">
-                  <Label htmlFor="content">Content</Label>
+                  <Label htmlFor="main_content">Main Content</Label>
                   <Textarea
-                    name="content"
-                    id="content"
+                    name="main_content"
+                    id="main_content"
                     rows={10}
-                    defaultValue={caseStudy?.content || ''}
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="mdx_content">MDX Content</Label>
-                  <Textarea
-                    name="mdx_content"
-                    id="mdx_content"
-                    rows={10}
-                    defaultValue={caseStudy?.mdx_content || ''}
+                    defaultValue={caseStudy?.main_content || ''}
                   />
                 </div>
               </CardContent>
@@ -224,17 +214,6 @@ export default async function EditCaseStudyPage({ params }: CaseStudyPageProps) 
                     ))}
                   </div>
                 </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="tags">Tags</Label>
-                  <Input
-                    type="text"
-                    name="tags"
-                    id="tags"
-                    defaultValue={caseStudy?.tags?.join(', ') || ''}
-                    placeholder="Comma-separated list"
-                  />
-                </div>
               </CardContent>
             </Card>
           </TabsContent>
@@ -275,38 +254,6 @@ export default async function EditCaseStudyPage({ params }: CaseStudyPageProps) 
                     id="quantum_hardware"
                     defaultValue={caseStudy?.quantum_hardware?.join(', ') || ''}
                     placeholder="Comma-separated list"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="technologies">Technologies</Label>
-                  <Input
-                    type="text"
-                    name="technologies"
-                    id="technologies"
-                    defaultValue={caseStudy?.technologies?.join(', ') || ''}
-                    placeholder="Comma-separated list"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="difficulty">Difficulty</Label>
-                  <Input
-                    type="text"
-                    name="difficulty"
-                    id="difficulty"
-                    defaultValue={caseStudy?.difficulty || ''}
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="metrics">Metrics (JSON)</Label>
-                  <Textarea
-                    name="metrics"
-                    id="metrics"
-                    rows={5}
-                    defaultValue={caseStudy?.metrics ? JSON.stringify(caseStudy.metrics, null, 2) : ''}
-                    placeholder="Enter JSON metrics"
                   />
                 </div>
               </CardContent>

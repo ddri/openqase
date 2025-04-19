@@ -35,7 +35,7 @@ export default async function CaseStudyPage({ params }: { params: { slug: string
     return notFound();
   }
 
-  const content = caseStudy.mdx_content ? md.render(caseStudy.mdx_content) : '';
+  const content = caseStudy.main_content ? md.render(caseStudy.main_content) : '';
 
   return (
     <LearningPathLayout

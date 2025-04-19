@@ -54,7 +54,6 @@ import type { NextRequest } from 'next/server'
 const protectedRoutes = [
   '/paths',
   '/case-study',
-  '/quantum-stack',
   '/profile'
 ]
 
@@ -118,7 +117,6 @@ export const config = {
     '/admin/:path*',
     '/paths/:path*',
     '/case-study/:path*',
-    '/quantum-stack/:path*',
     '/profile'
   ]
 }

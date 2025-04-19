@@ -67,7 +67,7 @@ export default async function PersonaPage({ params }: PageParams) {
   console.log('Fetched persona data:', {
     slug: resolvedParams.slug,
     persona,
-    mdxContent: persona?.mdx_content,
+    mdxContent: persona?.main_content,
     error: personaError
   });
 
@@ -103,7 +103,7 @@ export default async function PersonaPage({ params }: PageParams) {
   }
 
   // Render markdown content
-  const renderedContent = persona.mdx_content ? md.render(persona.mdx_content) : '';
+  const renderedContent = persona.main_content ? md.render(persona.main_content) : '';
 
   return (
     <AuthGate

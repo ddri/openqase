@@ -1,7 +1,6 @@
 import type { Database } from '@/types/supabase';
 
 // Type definitions
-export type DifficultyLevel = 'Beginner' | 'Intermediate' | 'Advanced';
 export type ContentType = 'algorithm' | 'case-study' | 'industry' | 'persona';
 export type MaturityLevel = 'Emerging' | 'Growing' | 'Established';
 
@@ -39,18 +38,17 @@ export interface BaseContent {
 // Content type interfaces
 export interface CaseStudy extends BaseContent {
   type: 'case-study';
-  content: string | null;
-  partner_company: string | null;
+  main_content: string | null;
+  partner_companies: string[];
   quantum_companies: string[];
   url: string | null;
   algorithms: string[];
   industries: string[];
   personas: string[];
-  qubits_used: number | null;
   quantum_hardware: string[];
-  classical_hardware: string[];
   published: boolean;
   published_at: string | null;
+  lastUpdated: string;
 }
 
 export interface Algorithm extends BaseContent {
@@ -90,25 +88,6 @@ export interface LearningPathLayoutProps {
   children: React.ReactNode;
   title: string;
   description?: string;
-}
-
-export interface StackLayer {
-  title: string;
-  description: string;
-  color: string;
-  layer: number;
-  slug: string;
-  mdx_content?: string;
-  source?: string;
-  applications: Array<{
-    title: string;
-    description: string;
-    examples: string[];
-  }>;
-  relatedContent?: {
-    algorithm?: string[];
-    caseStudy?: string[];
-  };
 }
 
 // Type guards

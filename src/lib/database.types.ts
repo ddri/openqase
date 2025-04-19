@@ -73,23 +73,19 @@ export type Database = {
           slug: string
           title: string
           description: string | null
-          mdx_content: string | null
+          main_content: string | null
           partner_companies: string[] | null
           quantum_companies: string[] | null
           url: string | null
           algorithms: string[] | null
           industries: string[] | null
           personas: string[] | null
-          tags: string[] | null
           quantum_hardware: string[] | null
           published: boolean
           featured: boolean
           published_at: string | null
           created_at: string
           updated_at: string
-          difficulty: string | null
-          metrics: Json | null
-          technologies: string[] | null
           ts_content: unknown | null
         }
         Insert: {
@@ -97,46 +93,38 @@ export type Database = {
           slug: string
           title: string
           description?: string | null
-          mdx_content?: string | null
+          main_content?: string | null
           partner_companies?: string[] | null
           quantum_companies?: string[] | null
           url?: string | null
           algorithms?: string[] | null
           industries?: string[] | null
           personas?: string[] | null
-          tags?: string[] | null
           quantum_hardware?: string[] | null
           published?: boolean
           featured?: boolean
           published_at?: string | null
           created_at?: string
           updated_at?: string
-          difficulty?: string | null
-          metrics?: Json | null
-          technologies?: string[] | null
         }
         Update: {
           id?: string
           slug?: string
           title?: string
           description?: string | null
-          mdx_content?: string | null
+          main_content?: string | null
           partner_companies?: string[] | null
           quantum_companies?: string[] | null
           url?: string | null
           algorithms?: string[] | null
           industries?: string[] | null
           personas?: string[] | null
-          tags?: string[] | null
           quantum_hardware?: string[] | null
           published?: boolean
           featured?: boolean
           published_at?: string | null
           created_at?: string
           updated_at?: string
-          difficulty?: string | null
-          metrics?: Json | null
-          technologies?: string[] | null
         }
         Relationships: []
       }

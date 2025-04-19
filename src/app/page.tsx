@@ -47,10 +47,10 @@ const features: FeatureCard[] = [
     focus: "Problem-solution mapping"
   },
   {
-    title: "Implementation Guidance",
-    description: "Step-by-step guidance for implementing quantum computing solutions in your organization.",
+    title: "Simplified Content",
+    description: "Clear, focused information about quantum computing applications without overwhelming technical details.",
     icon: <ArrowRight className="w-6 h-6" />,
-    focus: "Technical execution"
+    focus: "Accessible information"
   }
 ];
 

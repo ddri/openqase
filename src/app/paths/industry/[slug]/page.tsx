@@ -87,10 +87,9 @@ export default async function IndustryPage({ params }: PageParams) {
       <div className="space-y-8">
         <div className="flex flex-col gap-4">
           <p className="text-lg text-muted-foreground">{industry.description}</p>
-          {industry.mdx_content && (
-            <div 
-              className="prose dark:prose-invert max-w-none" 
-              dangerouslySetInnerHTML={{ __html: md.render(industry.mdx_content) }}
+          {industry.main_content && (
+            <div className="prose dark:prose-invert max-w-none mt-8"
+              dangerouslySetInnerHTML={{ __html: md.render(industry.main_content) }}
             />
           )}
         </div>

@@ -32,7 +32,7 @@ export async function GET(
       );
     }
 
-    // Get related case studies based on shared tags or industries
+    // Get related case studies based on shared industries
     let relatedQuery = supabase
       .from('case_studies')
       .select(`
@@ -40,7 +40,6 @@ export async function GET(
         slug,
         title,
         description,
-        tags,
         industries,
         published_at
       `)
@@ -49,10 +48,7 @@ export async function GET(
       .order('published_at', { ascending: false })
       .limit(3);
 
-    // Add filters for tags and industries if they exist
-    if (data.tags?.length) {
-      relatedQuery = relatedQuery.overlaps('tags', data.tags);
-    }
+    // Add filters for industries if they exist
     if (data.industries?.length) {
       relatedQuery = relatedQuery.overlaps('industries', data.industries);
     }

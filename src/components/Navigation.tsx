@@ -3,7 +3,7 @@
 
 import Link from 'next/link';
 import { useRouter, usePathname } from 'next/navigation';
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
+import { createClient } from '@/utils/supabase/client';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import ThemeToggle from './ThemeToggle';
@@ -27,7 +27,7 @@ export default function Navigation() {
   const router = useRouter();
   const pathname = usePathname();
   const [user, setUser] = useState<SupabaseUser | null>(null);
-  const supabase = createClientComponentClient();
+  const supabase = createClient();
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
 

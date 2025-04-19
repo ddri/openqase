@@ -1,4 +1,4 @@
-import { createServerClient } from '@/lib/supabase-server';
+import { createClient } from '@/utils/supabase/server';
 import type { Database } from '@/types/supabase';
 import { PostgrestSingleResponse, PostgrestResponse } from '@supabase/supabase-js';
 
@@ -6,10 +6,12 @@ type Tables = Database['public']['Tables']
 type PersonaRow = Tables['personas']['Row']
 type CaseStudyRow = Tables['case_studies']['Row']
 
-export interface RelatedCaseStudy extends Pick<CaseStudyRow, 'id' | 'slug' | 'title' | 'description' | 'industries' | 'published_at'> {}
+export interface RelatedCaseStudy extends Pick<CaseStudyRow, 'id' | 'slug' | 'title' | 'description' | 'industries'> {
+  published_at?: string;
+}
 
 export async function getPersona(slug: string) {
-  const supabase = createServerClient();
+  const supabase = await createClient();
   
   const { data: persona } = await supabase
     .from('personas')
@@ -19,9 +21,9 @@ export async function getPersona(slug: string) {
 
   return persona;
 }
-
 export async function getCaseStudiesByPersona(personaId: string): Promise<CaseStudyRow[]> {
-  const supabase = createServerClient();
+  const supabase = await createClient();
+  
   
   const { data: caseStudies } = await supabase
     .from('case_studies')

@@ -68,10 +68,8 @@ create table algorithms (
     slug text unique not null,
     name text not null,
     description text,
-    complexity text,
     prerequisites text[],
     use_cases text[],
-    quantum_advantage text,
     published boolean default false,
     created_at timestamp with time zone default now(),
     updated_at timestamp with time zone default now()
@@ -100,7 +98,6 @@ create table personas (
     role text,
     industry text[],
     key_interests text[],
-    technical_level text,
     created_at timestamp with time zone default now()
 );
 ```
@@ -149,9 +146,6 @@ create policy "Users can manage own progress"
 ```
 
 Features enabled by user progress tracking:
-- Learning progress visualization
-- Content resume functionality
-- Progress reporting
 - Content recommendation engine
 - Usage analytics
 
@@ -317,7 +311,7 @@ create policy "Users can update own preferences"
 - < 2s Time to Interactive
 
 ### Dependencies
-- Next.js 14+
+- Next.js 15+
 - React Query/SWR
 - Supabase Client
 - TypeScript 5+

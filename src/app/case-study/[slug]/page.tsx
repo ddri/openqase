@@ -17,7 +17,8 @@ const md = new MarkdownIt({
 type CaseStudy = Database['public']['Tables']['case_studies']['Row'];
 
 export default async function CaseStudyPage({ params }: { params: { slug: string } }) {
-  const slug = params.slug;
+  const resolvedParams = await params;
+  const slug = resolvedParams.slug;
   console.log('Fetching case study with slug:', slug);
 
   const { data: caseStudy, error } = await supabase

@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { supabase } from '@/lib/supabase';
 import { Database } from '@/types/supabase';
 import { createServerClient } from '@/lib/supabase-server';
 
@@ -26,6 +25,9 @@ export async function GET(request: Request) {
     
     const from = (page - 1) * pageSize;
     const to = from + pageSize - 1;
+    
+    // Use createServerClient to get authenticated client
+    const supabase = await createServerClient();
     
     let query = supabase
       .from('case_studies')
@@ -58,6 +60,7 @@ export async function GET(request: Request) {
     const { data, error, count } = await query;
 
     if (error) {
+      console.error('Error fetching case studies:', error);
       return NextResponse.json(
         { error: 'Failed to fetch case studies' },
         { status: 500 }

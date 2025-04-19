@@ -5,11 +5,22 @@ import { createServerClient } from '@/lib/supabase-server'
 import type { Database } from '@/types/supabase'
 import { notFound } from 'next/navigation'
 
-type BlogPost = Database['public']['Tables']['blog_posts']['Row']
+interface BlogPost {
+  id: string;
+  title: string;
+  slug: string;
+  description?: string;
+  content?: string;
+  category?: string;
+  published: boolean;
+  published_at?: string;
+  created_at: string;
+  updated_at: string;
+}
 
 // Fetch blog posts from database
 async function getBlogPosts() {
-  const supabase = createServerClient()
+  const supabase = await createServerClient()
   
   const { data, error } = await supabase
     .from('blog_posts')

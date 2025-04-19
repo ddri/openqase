@@ -1,7 +1,7 @@
 // src/middleware.ts
-import { createMiddlewareClient } from '@supabase/auth-helpers-nextjs'
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
+import { updateSession } from '@/utils/supabase/middleware'
 
 const protectedRoutes = [
   '/paths',
@@ -15,12 +15,12 @@ const adminRoutes = [
 ]
 
 export async function middleware(req: NextRequest) {
-  const res = NextResponse.next()
-  const supabase = createMiddlewareClient({ req, res })
+  // First, update the session using the new SSR package
+  const res = await updateSession(req)
   
-  // Refresh session if expired
-  const { data: { session } } = await supabase.auth.getSession()
-
+  // Get the URL from the response or create a new one
+  const url = res.url ? new URL(res.url) : new URL(req.url)
+  
   const isAuthPage = req.nextUrl.pathname.startsWith('/auth')
   const isAuthCallback = req.nextUrl.pathname === '/auth/callback'
   const isAdminRoute = adminRoutes.some(route => req.nextUrl.pathname.startsWith(route))
@@ -31,14 +31,14 @@ export async function middleware(req: NextRequest) {
     return res
   }
 
-  // Redirect from auth page if already logged in
-  if (isAuthPage && session) {
-    const redirectTo = req.nextUrl.searchParams.get('redirectTo') || '/'
-    return NextResponse.redirect(new URL(redirectTo, req.url))
-  }
-
-  // Check admin access for admin routes
+  // For admin routes, check if user has admin role
   if (isAdminRoute) {
+    // Create a supabase client to check admin status
+    const supabase = await import('@/utils/supabase/server').then(mod => mod.createClient())
+    
+    // Get the session
+    const { data: { session } } = await supabase.auth.getSession()
+    
     if (!session) {
       return NextResponse.redirect(new URL('/auth?redirectTo=/admin', req.url))
     }
@@ -55,11 +55,8 @@ export async function middleware(req: NextRequest) {
     }
   }
 
-  // Check auth for protected routes
-  if (isProtectedRoute && !session) {
-    return NextResponse.redirect(new URL('/auth?redirectTo=' + req.nextUrl.pathname, req.url))
-  }
-
+  // The updateSession middleware already handles redirecting unauthenticated users
+  // for protected routes, so we can just return the response
   return res
 }
 

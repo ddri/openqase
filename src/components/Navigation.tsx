@@ -20,7 +20,6 @@ import { Menu, X, User } from 'lucide-react';
 const navItems = [
   { href: '/paths', label: 'Learning Paths' },
   { href: '/case-study', label: 'Case Studies' },
-  { href: '/quantum-stack', label: 'Quantum Stack' },
 ];
 
 export default function Navigation() {

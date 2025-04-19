@@ -27,13 +27,11 @@ export default function CaseStudyList({ caseStudies }: CaseStudyListProps) {
       
       const query = searchQuery.toLowerCase();
       const industryMatch = cs.industry?.some(ind => ind.toLowerCase().includes(query)) || false;
-      const techMatch = cs.technologies?.some(tech => tech.toLowerCase().includes(query)) || false;
       
       return (
         cs.title.toLowerCase().includes(query) ||
         cs.description.toLowerCase().includes(query) ||
-        industryMatch ||
-        techMatch
+        industryMatch
       );
     })
     .sort((a, b) => {
@@ -54,7 +52,7 @@ export default function CaseStudyList({ caseStudies }: CaseStudyListProps) {
           <Input
             id="search"
             type="search"
-            placeholder="Search by title, description, industry, or technologies..."
+            placeholder="Search by title, description, or industry..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="w-full"
@@ -108,7 +106,7 @@ export default function CaseStudyList({ caseStudies }: CaseStudyListProps) {
             key={caseStudy.slug}
             title={caseStudy.title}
             description={caseStudy.description}
-            badges={[...(caseStudy.industry || []), ...(caseStudy.technologies || [])]}
+            badges={[...(caseStudy.industry || [])]}
             href={`/case-study/${caseStudy.slug}`}
           />
         ))}

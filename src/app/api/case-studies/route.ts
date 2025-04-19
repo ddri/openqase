@@ -16,7 +16,6 @@ export async function GET(request: Request) {
     const industry = searchParams.get('industry');
     const algorithm = searchParams.get('algorithm');
     const featured = searchParams.get('featured') === 'true';
-    const tags = searchParams.get('tags')?.split(',').filter(Boolean);
     const page = parseInt(searchParams.get('page') || '1');
     const pageSize = Math.min(
       parseInt(searchParams.get('pageSize') || String(DEFAULT_PAGE_SIZE)),
@@ -51,10 +50,6 @@ export async function GET(request: Request) {
 
     if (featured) {
       query = query.eq('featured', true);
-    }
-
-    if (tags?.length) {
-      query = query.contains('tags', tags);
     }
 
     const { data, error, count } = await query;
@@ -98,8 +93,7 @@ export async function POST(request: Request) {
     const title = formData.get('title') as string;
     const slug = formData.get('slug') as string;
     const description = formData.get('description') as string || null;
-    const content = formData.get('content') as string || null;
-    const mdx_content = formData.get('mdx_content') as string || null;
+    const main_content = formData.get('main_content') as string || null;
     const partner_companies = (formData.get('partner_companies') as string)
       ?.split(',')
       .map((s) => s.trim())
@@ -116,16 +110,6 @@ export async function POST(request: Request) {
       ?.split(',')
       .map((s) => s.trim())
       .filter(Boolean) || null;
-    const technologies = (formData.get('technologies') as string)
-      ?.split(',')
-      .map((s) => s.trim())
-      .filter(Boolean) || null;
-    const tags = (formData.get('tags') as string)
-      ?.split(',')
-      .map((s) => s.trim())
-      .filter(Boolean) || null;
-    const difficulty = formData.get('difficulty') as string || null;
-    const metrics = formData.get('metrics') ? JSON.parse(formData.get('metrics') as string) : null;
     const published = formData.get('published') === 'on';
     const featured = formData.get('featured') === 'on';
 
@@ -134,8 +118,7 @@ export async function POST(request: Request) {
       title,
       slug,
       description,
-      content,
-      mdx_content,
+      main_content,
       partner_companies,
       quantum_companies,
       url,
@@ -143,10 +126,6 @@ export async function POST(request: Request) {
       algorithms: algorithms || [],
       personas: personas || [],
       quantum_hardware,
-      technologies,
-      tags,
-      difficulty,
-      metrics,
       published,
       featured
     };

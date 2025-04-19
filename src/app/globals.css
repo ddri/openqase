@@ -403,11 +403,6 @@
     @apply mb-8;
   }
   
-  /* Tag container */
-  .tags-container {
-    @apply flex flex-wrap gap-2 mt-1;
-  }
-  
   /* Topic list with proper spacing */
   .topic-list {
     @apply space-y-2 mb-6;
@@ -420,29 +415,6 @@
   /* Case study sidebar - darker, more subtle background */
   .case-study-sidebar {
     @apply bg-surface-tertiary border-l border-border p-6 h-full;
-  }
-  
-  /* Metric item in sidebar */
-  .metric-item {
-    @apply flex justify-between items-center py-2 border-b border-border/50 last:border-0;
-  }
-  
-  .metric-label {
-    @apply text-[15px] text-foreground/80;
-  }
-  
-  .metric-value {
-    @apply text-[15px] font-[500];
-  }
-  
-  /* Badge for technologies */
-  .tech-badge {
-    @apply inline-flex px-3 py-1 text-[13px] bg-surface-secondary border border-border/60 rounded-full mr-2 mb-2;
-  }
-  
-  /* Badge for difficulty */
-  .difficulty-badge {
-    @apply inline-flex px-3 py-1 text-[13px] text-primary-foreground bg-primary rounded-full;
   }
 }
 

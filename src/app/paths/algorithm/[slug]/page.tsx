@@ -68,7 +68,7 @@ export default async function AlgorithmPage({ params }: AlgorithmPageProps) {
 
   console.log('Case studies query result:', { caseStudies, error: caseStudiesError });
 
-  const content = algorithm.mdx_content ? md.render(algorithm.mdx_content) : '';
+  const content = algorithm.main_content ? md.render(algorithm.main_content) : '';
   console.log('Rendered content length:', content.length);
 
   return (

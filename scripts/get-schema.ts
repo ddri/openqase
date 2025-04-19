@@ -15,10 +15,8 @@ async function getTableInfo() {
   const tables = [
     'algorithms',
     'case_studies',
-    'case_study_relations',
     'industries',
     'personas',
-    'stack_layers',
     'user_preferences'
   ]
 

@@ -1,23 +1,26 @@
-import { createClient, SupabaseClient } from '@supabase/supabase-js';
+import { cookies } from 'next/headers';
+import { createServerClient } from '@supabase/ssr';
 import { Database } from '@/types/supabase';
-import { getAsyncCookieHandler } from './cookies';
+import type { SupabaseClient } from '@supabase/supabase-js';
 
-export const createServerClient = async (): Promise<SupabaseClient<Database>> => {
-  const cookieHandler = await getAsyncCookieHandler();
+export async function createServerClient(): Promise<SupabaseClient<Database>> {
+  const cookieStore = await cookies();
   
-  if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
-    throw new Error('Missing Supabase environment variables');
-  }
-  
-  return createClient<Database>(
-    process.env.NEXT_PUBLIC_SUPABASE_URL,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+  return createServerClient<Database>(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     {
       cookies: {
-        get(name: string) {
-          return cookieHandler.get(name);
+        get: (name) => {
+          return cookieStore.get(name)?.value;
+        },
+        set: (name, value, options) => {
+          // This is only used for server actions, not needed for server components
+        },
+        remove: (name, options) => {
+          // This is only used for server actions, not needed for server components
         },
       },
     }
   );
-}; 
+}

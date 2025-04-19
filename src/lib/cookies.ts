@@ -10,7 +10,8 @@ export const getAsyncCookieHandler = async () => {
   
   return {
     async get(name: string) {
-      return cookieStore.get(name)?.value
+      const cookie = cookieStore.get(name)
+      return cookie?.value
     },
     // Note: set/remove are not implemented for server components
     // as they should be handled through middleware or client components

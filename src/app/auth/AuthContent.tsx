@@ -2,17 +2,17 @@
 
 import { Auth } from '@supabase/auth-ui-react'
 import { ThemeSupa } from '@supabase/auth-ui-shared'
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import { useSearchParams, useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { toast } from '@/components/ui/use-toast'
 import { Loader2 } from 'lucide-react'
 import { ErrorBoundary } from '@/components/ui/ErrorBoundary'
+import { createClient } from '@/utils/supabase/client'
 
 export function AuthContent({ redirectTo }: { redirectTo?: string }) {
   const searchParams = useSearchParams()
   const router = useRouter()
-  const supabase = createClientComponentClient()
+  const supabase = createClient()
   const redirectToParam = searchParams.get('redirectTo') || '/'
   const [isLoading, setIsLoading] = useState(true)
 

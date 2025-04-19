@@ -1,11 +1,12 @@
 // src/app/quantum-stack/[id]/page.tsx
-import { supabase } from '@/lib/supabase';
+import { createClient } from '@/utils/supabase/server';
 import { StackLayer } from '@/lib/types';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 
 async function getStackLayer(id: string): Promise<StackLayer | null> {
+  const supabase = await createClient();
   const { data, error } = await supabase
     .from('stack_layers')
     .select('*')
@@ -36,7 +37,8 @@ interface PageProps {
 }
 
 export default async function StackLayerPage({ params }: PageProps) {
-  const stackLayer = await getStackLayer(params.id);
+  const resolvedParams = await params;
+  const stackLayer = await getStackLayer(resolvedParams.id);
 
   if (!stackLayer) {
     notFound();

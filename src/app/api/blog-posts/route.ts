@@ -1,7 +1,6 @@
-import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs'
-import { cookies } from 'next/headers'
 import { NextResponse } from 'next/server'
 import type { Database } from '@/types/supabase'
+import { createClient } from '@/utils/supabase/server'
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url)
@@ -10,7 +9,7 @@ export async function GET(request: Request) {
   const limit = parseInt(searchParams.get('limit') || '10')
   const offset = (page - 1) * limit
 
-  const supabase = createRouteHandlerClient<Database>({ cookies })
+  const supabase = await createClient()
 
   try {
     let query = supabase
@@ -46,7 +45,7 @@ export async function GET(request: Request) {
 }
 
 export async function POST(request: Request) {
-  const supabase = createRouteHandlerClient<Database>({ cookies })
+  const supabase = await createClient()
 
   try {
     const {

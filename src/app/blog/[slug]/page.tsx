@@ -4,7 +4,18 @@ import type { Database } from '@/types/supabase';
 import { Badge } from '@/components/ui/badge';
 import Link from "next/link"
 
-type BlogPost = Database['public']['Tables']['blog_posts']['Row'];
+interface BlogPost {
+  id: string;
+  title: string;
+  slug: string;
+  description?: string;
+  content?: string;
+  category?: string;
+  published: boolean;
+  published_at?: string;
+  created_at: string;
+  updated_at: string;
+}
 
 interface BlogPostPageProps {
   params: {
@@ -13,12 +24,13 @@ interface BlogPostPageProps {
 }
 
 export default async function BlogPostPage({ params }: BlogPostPageProps) {
-  const supabase = createServerClient();
+  const resolvedParams = await params;
+  const supabase = await createServerClient();
   
   const { data: post, error } = await supabase
     .from('blog_posts')
     .select('*')
-    .eq('slug', params.slug)
+    .eq('slug', resolvedParams.slug)
     .eq('published', true)
     .single();
 

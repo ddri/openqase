@@ -1,6 +1,6 @@
 // src/app/paths/industry/[slug]/page.tsx
 import { cookies } from 'next/headers';
-import { createServerClient } from '@/lib/supabase-server';
+import { createClient } from '@/utils/supabase/server';
 import { Database } from '@/types/supabase';
 import LearningPathLayout from '@/components/ui/learning-path-layout';
 import { Badge } from '@/components/ui/badge';
@@ -17,9 +17,17 @@ interface PageParams {
   };
 }
 
+interface CaseStudy {
+  id: string;
+  title: string;
+  slug: string;
+  description: string | null;
+  industries: string[];
+}
+
 export async function generateMetadata({ params }: PageParams) {
   const resolvedParams = await params;
-  const supabase = createServerClient() as SupabaseClient<Database>;
+  const supabase = await createClient();
   const { data: industry } = await supabase
     .from('industries')
     .select('*')
@@ -34,7 +42,7 @@ export async function generateMetadata({ params }: PageParams) {
 
 export default async function IndustryPage({ params }: PageParams) {
   const resolvedParams = await params;
-  const supabase = createServerClient() as SupabaseClient<Database>;
+  const supabase = await createClient();
   
   console.log('Fetching industry with slug:', resolvedParams.slug);
   const { data: industry, error: industryError } = await supabase
@@ -53,12 +61,20 @@ export default async function IndustryPage({ params }: PageParams) {
   }
 
   console.log('Fetching case studies for industry:', industry.name);
-  const { data: caseStudies, error: caseStudiesError } = await supabase
-    .from('case_studies')
-    .select('*')
-    .contains('industries', [industry.name]);
-
-  if (caseStudiesError) {
+  
+  // Use the API route instead of direct Supabase query
+  const response = await fetch(`${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/api/case-studies?industry=${encodeURIComponent(industry.name)}`, {
+    cache: 'no-store'
+  });
+  
+  let caseStudies: CaseStudy[] = [];
+  let caseStudiesError = null;
+  
+  if (response.ok) {
+    const data = await response.json();
+    caseStudies = data.items;
+  } else {
+    caseStudiesError = await response.json();
     console.error('Error fetching case studies:', caseStudiesError);
   }
 

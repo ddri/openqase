@@ -1,6 +1,6 @@
 // src/app/paths/persona/[slug]/page.tsx
 import { notFound } from 'next/navigation';
-import { createServerClient } from '@/lib/supabase-server';
+import { createClient } from '@/utils/supabase/server';
 import { Database } from '@/types/supabase';
 import LearningPathLayout from '@/components/ui/learning-path-layout';
 import ContentCard from '@/components/ui/content-card';
@@ -30,8 +30,8 @@ interface PageParams {
 // Get metadata for the page
 export async function generateMetadata({ params }: PageParams) {
   const resolvedParams = await params;
-  const supabase = createServerClient() as SupabaseClient<Database>;
-
+  const supabase = await createClient();
+  
   const { data: persona } = await supabase
     .from('personas')
     .select()
@@ -55,8 +55,8 @@ export async function generateMetadata({ params }: PageParams) {
 
 export default async function PersonaPage({ params }: PageParams) {
   const resolvedParams = await params;
-  const supabase = createServerClient() as SupabaseClient<Database>;
-
+  const supabase = await createClient();
+  
   // Step 1: Get the persona
   const { data: persona, error: personaError } = await supabase
     .from('personas')
@@ -76,19 +76,29 @@ export default async function PersonaPage({ params }: PageParams) {
     notFound();
   }
 
-  // Step 2: Get related case studies
+  // Step 2: Get related case studies using the API route
   let caseStudies: CaseStudy[] = [];
   
   if (persona.related_case_studies?.length > 0) {
-    const { data: relatedCaseStudies, error: caseStudiesError } = await supabase
-      .from('case_studies')
-      .select()
-      .in('slug', persona.related_case_studies);
-    
-    if (caseStudiesError) {
-      console.error('Error fetching case studies:', caseStudiesError);
-    } else if (relatedCaseStudies) {
-      caseStudies = relatedCaseStudies;
+    try {
+      // Use the API route instead of direct Supabase query
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/api/case-studies`,
+        { cache: 'no-store' }
+      );
+      
+      if (response.ok) {
+        const data = await response.json();
+        // Filter case studies to only include those related to this persona
+        caseStudies = data.items.filter((cs: CaseStudy) =>
+          persona.related_case_studies?.includes(cs.slug)
+        );
+      } else {
+        const error = await response.json();
+        console.error('Error fetching case studies:', error);
+      }
+    } catch (error) {
+      console.error('Error fetching case studies:', error);
     }
   }
 
@@ -178,8 +188,7 @@ export default async function PersonaPage({ params }: PageParams) {
                       <div className="flex flex-wrap gap-2">
                         {[
                           ...(caseStudy.industries || []),
-                          ...(caseStudy.quantum_hardware || []),
-                          ...(caseStudy.classical_hardware || [])
+                          ...(caseStudy.quantum_hardware || [])
                         ].map((badge) => (
                           <Badge key={badge} variant="outline" className="text-sm">
                             {badge}

@@ -47,10 +47,10 @@ const features: FeatureCard[] = [
     focus: "Problem-solution mapping"
   },
   {
-    title: "Implementation Guidance",
-    description: "Step-by-step guidance for implementing quantum computing solutions in your organization.",
+    title: "Simplified Content",
+    description: "Clear, focused information about quantum computing applications without overwhelming technical details.",
     icon: <ArrowRight className="w-6 h-6" />,
-    focus: "Technical execution"
+    focus: "Accessible information"
   }
 ];
 
@@ -194,7 +194,7 @@ export default function HomePage() {
               </p>
             </div>
             <Button variant="ghost" asChild className="gap-2">
-              <Link href="/case-studies">
+              <Link href="/case-study">
                 View All Case Studies
                 <ArrowRight className="h-4 w-4" />
               </Link>

@@ -14,9 +14,9 @@ type Algorithm = Database['public']['Tables']['algorithms']['Row'];
 type CaseStudy = Database['public']['Tables']['case_studies']['Row'];
 
 interface IndustryPageProps {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 }
 
 export default async function EditIndustryPage({ params }: IndustryPageProps) {
@@ -48,6 +48,10 @@ export default async function EditIndustryPage({ params }: IndustryPageProps) {
     notFound();
   }
 
+  // This means at this point, if !isNew is true, then industry must be defined
+  // Use a more explicit type annotation to help TypeScript understand our intent
+  const industryData: Industry = !isNew ? industry as Industry : {} as Industry;
+
   return (
     <div className="container mx-auto py-8">
       <div className="flex items-center mb-6">
@@ -64,7 +68,7 @@ export default async function EditIndustryPage({ params }: IndustryPageProps) {
       </h1>
 
       <form action="/api/industries" method="POST" className="space-y-8">
-        {!isNew && <input type="hidden" name="id" value={industry.id} />}
+        {!isNew && <input type="hidden" name="id" value={industryData.id} />}
 
         <Card>
           <CardHeader>
@@ -77,7 +81,7 @@ export default async function EditIndustryPage({ params }: IndustryPageProps) {
                 type="text"
                 name="name"
                 id="name"
-                defaultValue={industry?.name}
+                defaultValue={isNew ? '' : industryData.name}
                 required
               />
             </div>
@@ -88,7 +92,7 @@ export default async function EditIndustryPage({ params }: IndustryPageProps) {
                 type="text"
                 name="slug"
                 id="slug"
-                defaultValue={industry?.slug}
+                defaultValue={isNew ? '' : industryData.slug}
                 required
               />
             </div>
@@ -99,7 +103,7 @@ export default async function EditIndustryPage({ params }: IndustryPageProps) {
                 name="description"
                 id="description"
                 rows={5}
-                defaultValue={industry?.description || ''}
+                defaultValue={isNew ? '' : (industryData.description || '')}
               />
             </div>
 
@@ -109,7 +113,7 @@ export default async function EditIndustryPage({ params }: IndustryPageProps) {
                 type="text"
                 name="icon"
                 id="icon"
-                defaultValue={industry?.icon || ''}
+                defaultValue={isNew ? '' : (industryData.icon || '')}
                 placeholder="Icon name or SVG path"
               />
               <p className="text-sm text-muted-foreground">

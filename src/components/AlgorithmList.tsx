@@ -39,7 +39,10 @@ export default function AlgorithmList({ algorithms }: AlgorithmListProps) {
         b_slug: b.slug
       });
       if (sortBy === 'created_at') {
-        return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
+        // Handle null created_at values
+        const dateA = a.created_at ? new Date(a.created_at).getTime() : 0;
+        const dateB = b.created_at ? new Date(b.created_at).getTime() : 0;
+        return dateB - dateA;
       }
       return a.name.localeCompare(b.name);
     });

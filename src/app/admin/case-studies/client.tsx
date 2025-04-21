@@ -30,15 +30,19 @@ const columns: ColumnDef<CaseStudy>[] = [
   {
     accessorKey: 'actions',
     header: '',
-    cell: ({ row }) => (
-      <div className="flex justify-end">
-        <Button variant="ghost" size="sm" asChild>
-          <Link href={`/admin/case-studies/${row.original.slug}/edit`}>
-            Edit
-          </Link>
-        </Button>
-      </div>
-    )
+    cell: ({ row }) => {
+      console.log("Case study row:", row.original);
+      console.log("Edit link:", `/admin/case-studies/${row.original.id}`);
+      return (
+        <div className="flex justify-end">
+          <Button variant="ghost" size="sm" asChild>
+            <Link href={`/admin/case-studies/${row.original.id}`}>
+              Edit
+            </Link>
+          </Button>
+        </div>
+      );
+    }
   }
 ]
 

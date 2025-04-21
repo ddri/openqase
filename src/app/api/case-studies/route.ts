@@ -15,7 +15,8 @@ export async function GET(request: Request) {
     const { searchParams } = new URL(request.url);
     const industry = searchParams.get('industry');
     const algorithm = searchParams.get('algorithm');
-    const featured = searchParams.get('featured') === 'true';
+    // Note: featured property doesn't exist in the database schema
+    // const featured = searchParams.get('featured') === 'true';
     const page = parseInt(searchParams.get('page') || '1');
     const pageSize = Math.min(
       parseInt(searchParams.get('pageSize') || String(DEFAULT_PAGE_SIZE)),
@@ -48,9 +49,10 @@ export async function GET(request: Request) {
       query = query.contains('algorithms', [algorithm]);
     }
 
-    if (featured) {
-      query = query.eq('featured', true);
-    }
+    // Note: featured property doesn't exist in the database schema
+    // if (featured) {
+    //   query = query.eq('featured', true);
+    // }
 
     const { data, error, count } = await query;
 
@@ -111,7 +113,8 @@ export async function POST(request: Request) {
       .map((s) => s.trim())
       .filter(Boolean) || null;
     const published = formData.get('published') === 'on';
-    const featured = formData.get('featured') === 'on';
+    // Note: featured property doesn't exist in the database schema
+    // const featured = formData.get('featured') === 'on';
 
     // Prepare the data object with correct types
     const baseData: Omit<CaseStudyInsert, 'published_at' | 'created_at' | 'updated_at'> = {
@@ -126,8 +129,8 @@ export async function POST(request: Request) {
       algorithms: algorithms || [],
       personas: personas || [],
       quantum_hardware,
-      published,
-      featured
+      published
+      // Note: featured property doesn't exist in the database schema
     };
 
     let result;

@@ -2,6 +2,42 @@
 
 This document describes the database schema for the OpenQASE platform. The database is organized around several core entities that manage quantum algorithms, case studies, industries, and user data.
 
+## Type Organization
+
+All database types are centralized in `@/types/supabase.ts`. This is the single source of truth for database types in the application.
+
+### Importing Types
+
+```typescript
+// Import the Database type
+import type { Database } from '@/types/supabase';
+
+// Define table types
+type Tables = Database['public']['Tables']
+type AlgorithmRow = Tables['algorithms']['Row']
+type AlgorithmInsert = Tables['algorithms']['Insert']
+type AlgorithmUpdate = Tables['algorithms']['Update']
+```
+
+### Type Usage Examples
+
+```typescript
+// In API routes
+export async function GET(request: Request) {
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from('algorithms')
+    .select('*')
+    .returns<AlgorithmRow[]>();
+}
+
+// In components
+interface AlgorithmListProps {
+  algorithms: AlgorithmRow[];
+  onUpdate: (algorithm: AlgorithmUpdate) => Promise<void>;
+}
+```
+
 ## Table: algorithms
 Stores information about quantum algorithms and their applications.
 
@@ -17,7 +53,6 @@ Stores information about quantum algorithms and their applications.
 | created_at | string | Timestamp of when the record was created |
 | updated_at | string | Timestamp of when the record was last updated |
 | main_content | string | Main content in markdown format describing the algorithm |
-| key_applications | object | Array of key applications for this algorithm |
 | ts_content | string | TypeScript content related to the algorithm |
 
 ## Table: case_studies
@@ -58,7 +93,6 @@ Catalogs different industries and their quantum computing applications.
 | icon | string | Icon identifier for the industry |
 | created_at | string | Timestamp of when the record was created |
 | main_content | string | Main content in markdown format about the industry |
-| key_applications | object | Array of key quantum computing applications in this industry |
 | ts_content | string | TypeScript content related to the industry |
 
 ## Table: personas
@@ -72,8 +106,6 @@ Defines user personas for targeting content and experiences.
 | description | string | Description of the persona |
 | role | string | Professional role of the persona |
 | industry | object | Related industry information |
-| key_interests | object | Array of key interests for this persona |
-| technical_level | string | Technical expertise level |
 | created_at | string | Timestamp of when the record was created |
 | main_content | string | Main content in markdown format about the persona |
 | expertise | object | Areas of expertise |

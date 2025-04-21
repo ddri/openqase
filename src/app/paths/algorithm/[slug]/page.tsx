@@ -18,9 +18,9 @@ const md = new MarkdownIt({
 type Algorithm = Database['public']['Tables']['algorithms']['Row'];
 
 interface AlgorithmPageProps {
-  params: {
+  params: Promise<{
     slug: string;
-  };
+  }>;
 }
 
 export default async function AlgorithmPage({ params }: AlgorithmPageProps) {

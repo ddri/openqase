@@ -8,7 +8,6 @@ export interface Database {
           description: string | null;
           role: string | null;
           industry_focus: string | null;
-          key_interests: string[] | null;
           created_at: string;
           updated_at: string;
         };

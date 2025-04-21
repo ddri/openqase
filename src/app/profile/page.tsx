@@ -74,8 +74,14 @@ export default function ProfilePage() {
         .eq('user_id', user.id)
         .single()
 
-      if (data) {
-        setEmailPrefs(data.email_preferences)
+      if (data && data.email_preferences) {
+        // Use a safer type assertion with default values
+        const prefs = data.email_preferences as Record<string, boolean>;
+        setEmailPrefs({
+          marketing: prefs.marketing || false,
+          social: prefs.social || false,
+          security: prefs.security || true
+        });
       }
     }
 
@@ -89,7 +95,7 @@ export default function ProfilePage() {
     const { error } = await supabase
       .from('user_preferences')
       .upsert({
-        user_id: user.id,
+        id: user.id, // Use 'id' instead of 'user_id' based on the error message
         email_preferences: { ...emailPrefs, [key]: value }
       })
 

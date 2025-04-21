@@ -31,8 +31,7 @@ export default function PersonaList({ personas }: PersonaListProps) {
       return (
         (persona.name?.toLowerCase().includes(query) ?? false) ||
         (persona.description?.toLowerCase().includes(query) ?? false) ||
-        (persona.role?.toLowerCase().includes(query) ?? false) ||
-        (persona.key_interests?.some(interest => interest.toLowerCase().includes(query)) ?? false)
+        (persona.role?.toLowerCase().includes(query) ?? false)
       );
     })
     .sort((a, b) => {
@@ -53,7 +52,7 @@ export default function PersonaList({ personas }: PersonaListProps) {
           <Input
             id="search"
             type="search"
-            placeholder="Search by name, description, role, or interests..."
+            placeholder="Search by name, description, or role..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="w-full"
@@ -108,8 +107,7 @@ export default function PersonaList({ personas }: PersonaListProps) {
             title={persona.name || 'Untitled Persona'}
             description={persona.description || ''}
             badges={[
-              ...(persona.role ? [persona.role] : []),
-              ...(persona.key_interests || [])
+              ...(persona.role ? [persona.role] : [])
             ]}
             href={`/paths/persona/${persona.slug}`}
           />

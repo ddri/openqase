@@ -14,9 +14,9 @@ type Persona = Database['public']['Tables']['personas']['Row'];
 type Industry = Database['public']['Tables']['industries']['Row'];
 
 interface PersonaPageProps {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 }
 
 export default async function EditPersonaPage({ params }: PersonaPageProps) {
@@ -43,13 +43,9 @@ export default async function EditPersonaPage({ params }: PersonaPageProps) {
     notFound();
   }
 
-  // Technical level options
-  const technicalLevels = [
-    { value: 'beginner', label: 'Beginner' },
-    { value: 'intermediate', label: 'Intermediate' },
-    { value: 'advanced', label: 'Advanced' },
-    { value: 'expert', label: 'Expert' }
-  ];
+  // This means at this point, if !isNew is true, then persona must be defined
+  // Use a more explicit type annotation to help TypeScript understand our intent
+  const personaData: Persona = !isNew ? persona as Persona : {} as Persona;
 
   return (
     <div className="container mx-auto py-8">
@@ -67,7 +63,7 @@ export default async function EditPersonaPage({ params }: PersonaPageProps) {
       </h1>
 
       <form action="/api/personas" method="POST" className="space-y-8">
-        {!isNew && <input type="hidden" name="id" value={persona.id} />}
+        {!isNew && <input type="hidden" name="id" value={personaData.id} />}
 
         <Tabs defaultValue="basic" className="w-full">
           <TabsList>
@@ -88,7 +84,7 @@ export default async function EditPersonaPage({ params }: PersonaPageProps) {
                     type="text"
                     name="name"
                     id="name"
-                    defaultValue={persona?.name}
+                    defaultValue={isNew ? '' : personaData.name}
                     required
                   />
                 </div>
@@ -99,7 +95,7 @@ export default async function EditPersonaPage({ params }: PersonaPageProps) {
                     type="text"
                     name="slug"
                     id="slug"
-                    defaultValue={persona?.slug}
+                    defaultValue={isNew ? '' : personaData.slug}
                     required
                   />
                 </div>
@@ -110,7 +106,7 @@ export default async function EditPersonaPage({ params }: PersonaPageProps) {
                     name="description"
                     id="description"
                     rows={5}
-                    defaultValue={persona?.description || ''}
+                    defaultValue={isNew ? '' : (personaData.description || '')}
                   />
                 </div>
               </CardContent>
@@ -129,26 +125,9 @@ export default async function EditPersonaPage({ params }: PersonaPageProps) {
                     type="text"
                     name="role"
                     id="role"
-                    defaultValue={persona?.role || ''}
+                    defaultValue={isNew ? '' : (personaData.role || '')}
                     placeholder="e.g., CTO, Researcher, Developer"
                   />
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="technical_level">Technical Level</Label>
-                  <select
-                    name="technical_level"
-                    id="technical_level"
-                    className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                    defaultValue={persona?.technical_level || ''}
-                  >
-                    <option value="">Select a technical level</option>
-                    {technicalLevels.map(level => (
-                      <option key={level.value} value={level.value}>
-                        {level.label}
-                      </option>
-                    ))}
-                  </select>
                 </div>
               </CardContent>
             </Card>
@@ -161,20 +140,6 @@ export default async function EditPersonaPage({ params }: PersonaPageProps) {
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="space-y-2">
-                  <Label htmlFor="key_interests">Key Interests</Label>
-                  <Input
-                    type="text"
-                    name="key_interests"
-                    id="key_interests"
-                    defaultValue={persona?.key_interests?.join(', ') || ''}
-                    placeholder="Comma-separated list"
-                  />
-                  <p className="text-sm text-muted-foreground">
-                    Enter comma-separated list of key interests for this persona
-                  </p>
-                </div>
-
-                <div className="space-y-2">
                   <Label>Industries</Label>
                   <div className="grid grid-cols-2 gap-2 max-h-60 overflow-y-auto">
                     {industries?.map((industry) => (
@@ -184,7 +149,7 @@ export default async function EditPersonaPage({ params }: PersonaPageProps) {
                           name="industry[]"
                           id={`industry-${industry.slug}`}
                           value={industry.slug}
-                          defaultChecked={persona?.industry?.includes(industry.slug)}
+                          defaultChecked={isNew ? false : (personaData.industry?.includes(industry.slug) || false)}
                           className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
                         />
                         <Label htmlFor={`industry-${industry.slug}`}>{industry.name}</Label>

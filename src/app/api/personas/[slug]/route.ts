@@ -3,10 +3,11 @@ import { supabase } from '@/lib/supabase';
 
 export async function GET(
   request: Request,
-  { params }: { params: { slug: string } }
+  { params }: { params: Promise<{ slug: string }> }
 ) {
   try {
-    const { slug } = params;
+    const resolvedParams = await params;
+    const { slug } = resolvedParams;
 
     // First get the persona
     const { data: persona, error: personaError } = await supabase
@@ -14,10 +15,12 @@ export async function GET(
       .select(`
         *,
         industry,
-        key_interests
       `)
       .eq('slug', slug)
       .single();
+    
+    // Ensure persona is treated as an object
+    const personaData = persona as Record<string, any>;
 
     if (personaError) {
       if (personaError.code === 'PGRST116') {
@@ -53,13 +56,13 @@ export async function GET(
       console.error('Error fetching related cases:', casesError);
       // Don't fail the whole request if related cases fail
       return NextResponse.json({
-        ...persona,
+        ...personaData,
         related_cases: []
       });
     }
 
     return NextResponse.json({
-      ...persona,
+      ...personaData,
       related_cases: relatedCases
     });
   } catch (error) {

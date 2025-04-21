@@ -32,9 +32,9 @@ export default async function CaseStudyPage() {
     algorithms: item.algorithms || [],
     industries: item.industries || [],
     personas: item.personas || [],
-    qubits_used: item.qubits_used || null,
+    // qubits_used property doesn't exist in the database schema
     quantum_hardware: item.quantum_hardware || [],
-    classical_hardware: [],
+    // classical_hardware property doesn't exist in the CaseStudy interface
     published: item.published,
     published_at: item.published_at,
     created_at: item.created_at,

@@ -162,7 +162,7 @@ export class ApiClient {
     }
   }
 
-  static async updateUserPreferences(preferences: Partial<Database['public']['Tables']['user_preferences']['Update']>): Promise<ApiResponse<Database['public']['Tables']['user_preferences']['Row']>> {
+  static async updateUserPreferences(preferences: Partial<Database['public']['Tables']['user_preferences']['Update']> & { id: string }): Promise<ApiResponse<Database['public']['Tables']['user_preferences']['Row']>> {
     try {
       const { data, error } = await supabase
         .from('user_preferences')

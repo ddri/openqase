@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/utils/supabase/server';
-import { Database } from '@/lib/database.types';
+import type { Database } from '@/types/supabase';
 
 type Tables = Database['public']['Tables']
 type AlgorithmRow = Tables['algorithms']['Row']

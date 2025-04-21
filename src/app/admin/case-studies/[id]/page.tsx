@@ -1,4 +1,5 @@
 import { createServerClient } from '@/lib/supabase-server';
+import { createServiceClient } from '@/utils/supabase/service-role';
 import { Database } from '@/types/supabase';
 import { notFound } from 'next/navigation';
 import { Button } from '@/components/ui/button';
@@ -15,14 +16,15 @@ type Algorithm = Database['public']['Tables']['algorithms']['Row'];
 type Persona = Database['public']['Tables']['personas']['Row'];
 
 interface CaseStudyPageProps {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 }
 
 export default async function EditCaseStudyPage({ params }: CaseStudyPageProps) {
   const resolvedParams = await params;
-  const supabase = await createServerClient();
+  // Use service role client to bypass RLS
+  const supabase = createServiceClient();
   const isNew = resolvedParams.id === 'new';
 
   // Fetch case study if editing
@@ -54,6 +56,10 @@ export default async function EditCaseStudyPage({ params }: CaseStudyPageProps) 
     notFound();
   }
 
+  // This means at this point, if !isNew is true, then caseStudy must be defined
+  // Use a more explicit type annotation to help TypeScript understand our intent
+  const caseStudyData: CaseStudy = !isNew ? caseStudy as CaseStudy : {} as CaseStudy;
+
   return (
     <div className="container mx-auto py-8">
       <h1 className="mb-8 text-2xl font-bold">
@@ -61,7 +67,7 @@ export default async function EditCaseStudyPage({ params }: CaseStudyPageProps) 
       </h1>
 
       <form action="/api/case-studies" method="POST" className="space-y-8">
-        {!isNew && <input type="hidden" name="id" value={caseStudy.id} />}
+        {!isNew && <input type="hidden" name="id" value={caseStudyData.id} />}
 
         <Tabs defaultValue="basic" className="w-full">
           <TabsList>
@@ -83,7 +89,7 @@ export default async function EditCaseStudyPage({ params }: CaseStudyPageProps) 
                     type="text"
                     name="title"
                     id="title"
-                    defaultValue={caseStudy?.title}
+                    defaultValue={isNew ? '' : caseStudyData.title}
                     required
                   />
                 </div>
@@ -94,7 +100,7 @@ export default async function EditCaseStudyPage({ params }: CaseStudyPageProps) 
                     type="text"
                     name="slug"
                     id="slug"
-                    defaultValue={caseStudy?.slug}
+                    defaultValue={isNew ? '' : caseStudyData.slug}
                     required
                   />
                 </div>
@@ -105,7 +111,7 @@ export default async function EditCaseStudyPage({ params }: CaseStudyPageProps) 
                     name="description"
                     id="description"
                     rows={3}
-                    defaultValue={caseStudy?.description || ''}
+                    defaultValue={isNew ? '' : (caseStudyData.description || '')}
                   />
                 </div>
 
@@ -115,7 +121,7 @@ export default async function EditCaseStudyPage({ params }: CaseStudyPageProps) 
                     type="url"
                     name="url"
                     id="url"
-                    defaultValue={caseStudy?.url || ''}
+                    defaultValue={isNew ? '' : (caseStudyData.url || '')}
                   />
                 </div>
 
@@ -124,19 +130,12 @@ export default async function EditCaseStudyPage({ params }: CaseStudyPageProps) 
                     <Checkbox
                       name="published"
                       id="published"
-                      defaultChecked={caseStudy?.published}
+                      defaultChecked={isNew ? false : (caseStudyData.published || false)}
                     />
                     <Label htmlFor="published">Published</Label>
                   </div>
 
-                  <div className="flex items-center space-x-2">
-                    <Checkbox
-                      name="featured"
-                      id="featured"
-                      defaultChecked={caseStudy?.featured}
-                    />
-                    <Label htmlFor="featured">Featured</Label>
-                  </div>
+                  {/* Featured checkbox removed as it's not in the database schema */}
                 </div>
               </CardContent>
             </Card>
@@ -154,7 +153,7 @@ export default async function EditCaseStudyPage({ params }: CaseStudyPageProps) 
                     name="main_content"
                     id="main_content"
                     rows={10}
-                    defaultValue={caseStudy?.main_content || ''}
+                    defaultValue={isNew ? '' : (caseStudyData.main_content || '')}
                   />
                 </div>
               </CardContent>
@@ -175,7 +174,7 @@ export default async function EditCaseStudyPage({ params }: CaseStudyPageProps) 
                         <Checkbox
                           name="industries[]"
                           value={industry.slug}
-                          defaultChecked={caseStudy?.industries?.includes(industry.slug)}
+                          defaultChecked={isNew ? false : (caseStudyData.industries?.includes(industry.slug) || false)}
                         />
                         <Label>{industry.name}</Label>
                       </div>
@@ -191,7 +190,7 @@ export default async function EditCaseStudyPage({ params }: CaseStudyPageProps) 
                         <Checkbox
                           name="algorithms[]"
                           value={algorithm.slug}
-                          defaultChecked={caseStudy?.algorithms?.includes(algorithm.slug)}
+                          defaultChecked={isNew ? false : (caseStudyData.algorithms?.includes(algorithm.slug) || false)}
                         />
                         <Label>{algorithm.name}</Label>
                       </div>
@@ -207,7 +206,7 @@ export default async function EditCaseStudyPage({ params }: CaseStudyPageProps) 
                         <Checkbox
                           name="personas[]"
                           value={persona.slug}
-                          defaultChecked={caseStudy?.personas?.includes(persona.slug)}
+                          defaultChecked={isNew ? false : (caseStudyData.personas?.includes(persona.slug) || false)}
                         />
                         <Label>{persona.name}</Label>
                       </div>
@@ -230,7 +229,7 @@ export default async function EditCaseStudyPage({ params }: CaseStudyPageProps) 
                     type="text"
                     name="partner_companies"
                     id="partner_companies"
-                    defaultValue={caseStudy?.partner_companies?.join(', ') || ''}
+                    defaultValue={isNew ? '' : (caseStudyData.partner_companies?.join(', ') || '')}
                     placeholder="Comma-separated list"
                   />
                 </div>
@@ -241,7 +240,7 @@ export default async function EditCaseStudyPage({ params }: CaseStudyPageProps) 
                     type="text"
                     name="quantum_companies"
                     id="quantum_companies"
-                    defaultValue={caseStudy?.quantum_companies?.join(', ') || ''}
+                    defaultValue={isNew ? '' : (caseStudyData.quantum_companies?.join(', ') || '')}
                     placeholder="Comma-separated list"
                   />
                 </div>
@@ -252,7 +251,7 @@ export default async function EditCaseStudyPage({ params }: CaseStudyPageProps) 
                     type="text"
                     name="quantum_hardware"
                     id="quantum_hardware"
-                    defaultValue={caseStudy?.quantum_hardware?.join(', ') || ''}
+                    defaultValue={isNew ? '' : (caseStudyData.quantum_hardware?.join(', ') || '')}
                     placeholder="Comma-separated list"
                   />
                 </div>

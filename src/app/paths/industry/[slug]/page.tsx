@@ -12,9 +12,9 @@ import { SupabaseClient } from '@supabase/supabase-js';
 const md = new MarkdownIt();
 
 interface PageParams {
-  params: {
+  params: Promise<{
     slug: string;
-  };
+  }>;
 }
 
 interface CaseStudy {

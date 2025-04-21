@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createServerClient } from '@/lib/supabase-server';
-import { Database } from '@/lib/database.types';
+import type { Database } from '@/types/supabase';
 
 type Tables = Database['public']['Tables']
 type PersonaRow = Tables['personas']['Row']
@@ -64,13 +64,6 @@ export async function POST(request: Request) {
     const slug = formData.get('slug') as string;
     const description = formData.get('description') as string || null;
     const role = formData.get('role') as string || null;
-    const technical_level = formData.get('technical_level') as string || null;
-    
-    // Process array fields
-    const key_interests = (formData.get('key_interests') as string)
-      ?.split(',')
-      .map((s) => s.trim())
-      .filter(Boolean) || null;
     
     const industry = formData.getAll('industry[]') as string[];
 
@@ -80,8 +73,6 @@ export async function POST(request: Request) {
       slug,
       description,
       role,
-      technical_level,
-      key_interests,
       industry: industry.length > 0 ? industry : null
     };
 

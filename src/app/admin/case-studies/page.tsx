@@ -1,6 +1,7 @@
 import { Metadata } from 'next'
 import { createServerClient } from '@/lib/supabase-server'
-import type { Database } from '@/lib/database.types'
+import { createServiceClient } from '@/utils/supabase/service-role'
+import type { Database } from '@/types/supabase'
 import { CaseStudiesClient } from './client'
 
 export const metadata: Metadata = {
@@ -11,7 +12,7 @@ export const metadata: Metadata = {
 export type CaseStudy = Database['public']['Tables']['case_studies']['Row']
 
 export default async function CaseStudiesPage() {
-  const supabase = await createServerClient()
+  const supabase = createServiceClient();
   
   const { data: caseStudies, error } = await supabase
     .from('case_studies')

@@ -27,9 +27,9 @@ interface IndustryListItem {
 }
 
 interface AlgorithmPageProps {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 }
 
 export default async function EditAlgorithmPage({ params }: AlgorithmPageProps) {
@@ -61,6 +61,10 @@ export default async function EditAlgorithmPage({ params }: AlgorithmPageProps) 
     notFound();
   }
 
+  // This means at this point, if !isNew is true, then algorithm must be defined
+  // Use a more explicit type annotation to help TypeScript understand our intent
+  const algorithmData: Algorithm = !isNew ? algorithm as Algorithm : {} as Algorithm;
+
   return (
     <div className="container mx-auto py-8">
       <div className="flex items-center mb-6">
@@ -77,7 +81,7 @@ export default async function EditAlgorithmPage({ params }: AlgorithmPageProps) 
       </h1>
 
       <form action="/api/algorithms" method="POST" className="space-y-8">
-        {!isNew && <input type="hidden" name="id" value={algorithm.id} />}
+        {!isNew && <input type="hidden" name="id" value={algorithmData.id} />}
 
         <Tabs defaultValue="basic" className="w-full">
           <TabsList>
@@ -98,7 +102,7 @@ export default async function EditAlgorithmPage({ params }: AlgorithmPageProps) 
                     type="text"
                     name="name"
                     id="name"
-                    defaultValue={algorithm?.name}
+                    defaultValue={isNew ? '' : algorithmData.name}
                     required
                   />
                 </div>
@@ -109,7 +113,7 @@ export default async function EditAlgorithmPage({ params }: AlgorithmPageProps) 
                     type="text"
                     name="slug"
                     id="slug"
-                    defaultValue={algorithm?.slug}
+                    defaultValue={isNew ? '' : algorithmData.slug}
                     required
                   />
                 </div>
@@ -120,7 +124,7 @@ export default async function EditAlgorithmPage({ params }: AlgorithmPageProps) 
                     name="description"
                     id="description"
                     rows={5}
-                    defaultValue={algorithm?.description || ''}
+                    defaultValue={isNew ? '' : (algorithmData.description || '')}
                   />
                 </div>
 
@@ -128,7 +132,7 @@ export default async function EditAlgorithmPage({ params }: AlgorithmPageProps) 
                   <Checkbox
                     name="published"
                     id="published"
-                    defaultChecked={algorithm?.published}
+                    defaultChecked={isNew ? false : (algorithmData.published || false)}
                   />
                   <Label htmlFor="published">Published</Label>
                 </div>
@@ -148,7 +152,7 @@ export default async function EditAlgorithmPage({ params }: AlgorithmPageProps) 
                     type="text"
                     name="use_cases"
                     id="use_cases"
-                    defaultValue={algorithm?.use_cases?.join(', ') || ''}
+                    defaultValue={isNew ? '' : (algorithmData.use_cases?.join(', ') || '')}
                     placeholder="Comma-separated list"
                   />
                   <p className="text-sm text-muted-foreground">
@@ -168,7 +172,7 @@ export default async function EditAlgorithmPage({ params }: AlgorithmPageProps) 
                 <div className="space-y-2">
                   <Label>Related Case Studies</Label>
                   <div className="grid grid-cols-2 gap-2 max-h-60 overflow-y-auto">
-                    {caseStudies?.map((caseStudy: CaseStudy) => (
+                    {caseStudies?.map((caseStudy: CaseStudyListItem) => (
                       <div key={caseStudy.id} className="flex items-center space-x-2">
                         <Checkbox
                           name="related_case_studies[]"

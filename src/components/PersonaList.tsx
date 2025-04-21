@@ -4,8 +4,10 @@ import { useState } from 'react';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Label } from '@/components/ui/label';
-import type { Persona } from '@/lib/types';
+import type { Database } from '@/types/supabase';
 import ContentCard from '@/components/ui/content-card';
+
+type Persona = Database['public']['Tables']['personas']['Row'];
 
 interface PersonaListProps {
   personas: Persona[];
@@ -14,10 +16,10 @@ interface PersonaListProps {
 export default function PersonaList({ personas }: PersonaListProps) {
   const [searchQuery, setSearchQuery] = useState('');
   const [roleFilter, setRoleFilter] = useState('all');
-  const [sortBy, setSortBy] = useState<'title' | 'lastUpdated'>('title');
+  const [sortBy, setSortBy] = useState<'name' | 'created_at'>('name');
 
-  // Get unique roles for filtering
-  const roles = Array.from(new Set(personas.map(p => p.role))).sort();
+  // Get unique roles for filtering, excluding null values
+  const roles = Array.from(new Set(personas.map(p => p.role).filter(Boolean))).sort();
 
   // Filter and sort personas
   const filteredPersonas = personas
@@ -27,17 +29,16 @@ export default function PersonaList({ personas }: PersonaListProps) {
       
       const query = searchQuery.toLowerCase();
       return (
-        persona.title.toLowerCase().includes(query) ||
-        persona.description.toLowerCase().includes(query) ||
-        persona.role.toLowerCase().includes(query) ||
-        persona.expertise.some((exp: string) => exp.toLowerCase().includes(query))
+        (persona.name?.toLowerCase().includes(query) ?? false) ||
+        (persona.description?.toLowerCase().includes(query) ?? false) ||
+        (persona.role?.toLowerCase().includes(query) ?? false)
       );
     })
     .sort((a, b) => {
-      if (sortBy === 'lastUpdated') {
-        return new Date(b.lastUpdated).getTime() - new Date(a.lastUpdated).getTime();
+      if (sortBy === 'created_at') {
+        return new Date(b.created_at || 0).getTime() - new Date(a.created_at || 0).getTime();
       }
-      return a.title.localeCompare(b.title);
+      return (a.name || '').localeCompare(b.name || '');
     });
 
   return (
@@ -51,7 +52,7 @@ export default function PersonaList({ personas }: PersonaListProps) {
           <Input
             id="search"
             type="search"
-            placeholder="Search by title, description, role, or expertise..."
+            placeholder="Search by name, description, or role..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="w-full"
@@ -68,7 +69,7 @@ export default function PersonaList({ personas }: PersonaListProps) {
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">All Roles</SelectItem>
-              {roles.map(role => (
+              {roles.map(role => role && (
                 <SelectItem key={role} value={role}>
                   {role}
                 </SelectItem>
@@ -81,13 +82,13 @@ export default function PersonaList({ personas }: PersonaListProps) {
           <Label htmlFor="sort" className="text-sm font-medium mb-1.5 block">
             Sort by
           </Label>
-          <Select value={sortBy} onValueChange={(value: 'title' | 'lastUpdated') => setSortBy(value)}>
+          <Select value={sortBy} onValueChange={(value: 'name' | 'created_at') => setSortBy(value)}>
             <SelectTrigger id="sort" className="w-full">
               <SelectValue placeholder="Sort by" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="title">Title (A-Z)</SelectItem>
-              <SelectItem value="lastUpdated">Last Updated</SelectItem>
+              <SelectItem value="name">Name (A-Z)</SelectItem>
+              <SelectItem value="created_at">Created Date</SelectItem>
             </SelectContent>
           </Select>
         </div>
@@ -103,9 +104,11 @@ export default function PersonaList({ personas }: PersonaListProps) {
         {filteredPersonas.map((persona) => (
           <ContentCard
             key={persona.slug}
-            title={persona.title}
-            description={persona.description}
-            badges={[persona.role, ...persona.expertise]}
+            title={persona.name || 'Untitled Persona'}
+            description={persona.description || ''}
+            badges={[
+              ...(persona.role ? [persona.role] : [])
+            ]}
             href={`/paths/persona/${persona.slug}`}
           />
         ))}

@@ -1,192 +1,189 @@
 // src/app/paths/persona/[slug]/page.tsx
-import React from 'react';
-import { promises as fs } from 'fs';
-import path from 'path';
-import matter from 'gray-matter';
 import { notFound } from 'next/navigation';
-import { MDXRemote } from 'next-mdx-remote/rsc';
+import { createClient } from '@/utils/supabase/server';
+import { Database } from '@/types/supabase';
+import LearningPathLayout from '@/components/ui/learning-path-layout';
+import ContentCard from '@/components/ui/content-card';
+import { cookies } from 'next/headers';
+import AuthGate from '@/components/auth/AuthGate';
 import { Badge } from '@/components/ui/badge';
-import { Card } from '@/components/ui/card';
 import Link from 'next/link';
-import { CaseStudy } from '@/lib/types';
+import { SupabaseClient } from '@supabase/supabase-js';
+import MarkdownIt from 'markdown-it';
 
-// Components for MDX
-const components = {
- h1: ({ children }: { children: React.ReactNode }) => (
-    <h1 className="text-4xl font-bold text-[var(--text-primary)] mb-6">{children}</h1>
- ),
- h2: ({ children }: { children: React.ReactNode }) => (
-  <h2 className="text-2xl font-semibold text-[var(--text-primary)] mt-8 mb-4">{children}</h2>
- ),
- p: ({ children }: { children: React.ReactNode }) => (
-  <p className="text-[var(--text-secondary)] mb-4">{children}</p>
- ),
-};
+// Initialize markdown-it
+const md = new MarkdownIt({
+  html: true,
+  linkify: true,
+  typographer: true
+});
 
-async function getPersona(slug: string) {
- try {
-   const filePath = path.join(process.cwd(), 'content', 'persona', `${slug}.mdx`);
-   const fileContent = await fs.readFile(filePath, 'utf8');
-   const { data, content } = matter(fileContent);
-   
-   // Add debug logging to help us verify
-   console.log('Loading persona MDX:', slug);
-   console.log('Content found:', !!content);
-   
-   return {
-     frontmatter: data,
-     content,
-     source: content // For MDXRemote compatibility
-   };
- } catch (error) {
-   console.error('Error loading persona:', error);
-   return null;
- }
+type Persona = Database['public']['Tables']['personas']['Row'];
+type CaseStudy = Database['public']['Tables']['case_studies']['Row'];
+
+interface PageParams {
+  params: Promise<{
+    slug: string;
+  }>;
 }
 
-async function getCaseStudy(slug: string) {
- try {
-   const filePath = path.join(process.cwd(), 'content', 'case-study', `${slug}.mdx`);
-   const fileContent = await fs.readFile(filePath, 'utf8');
-   const { data, content } = matter(fileContent);
-   return {
-     frontmatter: data,
-     content,
-     slug,
-   };
- } catch (error) {
-   console.error('Error loading case study:', error);
-   return null;
- }
+// Get metadata for the page
+export async function generateMetadata({ params }: PageParams) {
+  const resolvedParams = await params;
+  const supabase = await createClient();
+  
+  const { data: persona } = await supabase
+    .from('personas')
+    .select()
+    .eq('slug', resolvedParams.slug)
+    .single();
+
+  console.log('Metadata query result:', { persona });
+
+  if (!persona) {
+    return {
+      title: 'Not Found',
+      description: 'The page you are looking for does not exist.',
+    };
+  }
+
+  return {
+    title: persona.name,
+    description: persona.description,
+  };
 }
 
-// Generate static paths
-export async function generateStaticParams() {
- const contentDirectory = path.join(process.cwd(), 'content', 'persona');
- const files = await fs.readdir(contentDirectory);
- 
- return files
-   .filter(file => file.endsWith('.mdx'))
-   .map(file => ({
-     slug: file.replace('.mdx', ''),
-   }));
-}
+export default async function PersonaPage({ params }: PageParams) {
+  const resolvedParams = await params;
+  const supabase = await createClient();
+  
+  // Step 1: Get the persona
+  const { data: persona, error: personaError } = await supabase
+    .from('personas')
+    .select()
+    .eq('slug', resolvedParams.slug)
+    .single();
 
-// Get metadata for the page with Promise params
-export async function generateMetadata(props: { params: Promise<{ slug: string }> }) {
- // Await the params before using
- const resolvedParams = await props.params;
- const slug = resolvedParams.slug;
- const persona = await getPersona(slug);
- 
- if (!persona) {
-   return {
-     title: 'Not Found',
-     description: 'Page not found'
-   };
- }
+  console.log('Fetched persona data:', {
+    slug: resolvedParams.slug,
+    persona,
+    mdxContent: persona?.main_content,
+    error: personaError
+  });
 
- return {
-   title: `${persona.frontmatter.title} | OpenQase Quantum Computing`,
-   description: persona.frontmatter.description,
-   keywords: persona.frontmatter.keywords,
- };
-}
+  if (personaError || !persona) {
+    console.error('Error fetching persona:', personaError);
+    notFound();
+  }
 
-// Updated to handle params as a Promise
-export default async function PersonaPage(props: { params: Promise<{ slug: string }> }) {
- // Await the params before using
- const resolvedParams = await props.params;
- const slug = resolvedParams.slug;
- const persona = await getPersona(slug);
- 
- if (!persona) {
-   notFound();
- }
-   
- // Get related case studies
- const caseStudies = await Promise.all(
-   persona.frontmatter.relatedCaseStudies.map(async (studySlug: string) => {
-     const study = await getCaseStudy(studySlug);
-     if (!study) return null;
-     return study;
-   })
- ).then(studies => studies.filter(Boolean)); // Remove any null results
+  // Step 2: Get related case studies using the API route
+  let caseStudies: CaseStudy[] = [];
+  
+  if (persona.related_case_studies && persona.related_case_studies.length > 0) {
+    try {
+      // Use the API route instead of direct Supabase query
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/api/case-studies`,
+        { cache: 'no-store' }
+      );
+      
+      if (response.ok) {
+        const data = await response.json();
+        // Filter case studies to only include those related to this persona
+        caseStudies = data.items.filter((cs: CaseStudy) =>
+          persona.related_case_studies?.includes(cs.slug)
+        );
+      } else {
+        const error = await response.json();
+        console.error('Error fetching case studies:', error);
+      }
+    } catch (error) {
+      console.error('Error fetching case studies:', error);
+    }
+  }
 
- return (
-   <main className="min-h-screen">
-     <div className="container-outer section-spacing">
-       {/* Back link */}
-       <div className="mb-6 sm:mb-8">
-         <Link
-           href="/paths/persona"
-           className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
-         >
-           <span>←</span>
-           <span>Back to Persona</span>
-         </Link>
-       </div>
+  // Render markdown content
+  const renderedContent = persona.main_content ? md.render(persona.main_content) : '';
 
-       {/* Header Section */}
-       <div className="mb-8 sm:mb-12">
-         <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-primary mb-4 tracking-tight">
-           {persona.frontmatter.title}
-         </h1>
-         <Badge className="persona-role-badge text-base">
-           {persona.frontmatter.role}
-         </Badge>
-       </div>
+  return (
+    <AuthGate
+      title="Access Persona Details"
+      description="Get exclusive access to detailed quantum computing learning paths."
+    >
+      <LearningPathLayout
+        title={persona.name}
+        description={persona.description || ''}
+        backLinkText="Back to Personas"
+        backLinkHref="/paths/persona"
+      >
+        <div className="prose prose-gray dark:prose-invert max-w-none">
+          {/* Role and Technical Background */}
+          <div className="flex flex-wrap gap-2 mb-8">
+            {persona.role && (
+              <Badge variant="outline" className="text-base">
+                {persona.role}
+              </Badge>
+            )}
+          </div>
 
-       {/* Main Content + Sidebar */}
-       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12">
-         {/* Main Content */}
-         <div className="lg:col-span-8">
-           <article className="prose prose-lg dark:prose-invert max-w-none">
-             <MDXRemote source={persona.source} components={components} />
-           </article>
-         </div>
+          {/* Main Content */}
+          {renderedContent && (
+            <div 
+              className="mb-8"
+              dangerouslySetInnerHTML={{ __html: renderedContent }}
+            />
+          )}
 
-         {/* Right Sidebar - Case Studies */}
-         <aside className="lg:col-span-4">
-           <div className="sticky top-24">
-             <h2 className="text-2xl font-semibold mb-4">
-               Related Case Studies
-             </h2>
-             <div className="grid gap-4">
-               {caseStudies.map((study) => (
-                 <Link
-                   key={study.slug}
-                   href={`/case-study/${study.slug}`}
-                   className="group block"
-                 >
-                   <Card className="h-full transition-all duration-200 hover:shadow-md hover:border-border-hover">
-                     <div className="p-4 sm:p-6">
-                       <h3 className="font-medium text-lg mb-2 group-hover:text-primary transition-colors">
-                         {study.frontmatter.title}
-                       </h3>
-                       <p className="text-muted-foreground text-sm mb-4">
-                         {study.frontmatter.description}
-                       </p>
-                       <div className="flex flex-wrap gap-2">
-                         {study.frontmatter.tags.map((tag: string) => (
-                           <Badge 
-                             key={tag} 
-                             variant="secondary"
-                             className="text-xs"
-                           >
-                             {tag}
-                           </Badge>
-                         ))}
-                       </div>
-                     </div>
-                   </Card>
-                 </Link>
-               ))}
-             </div>
-           </div>
-         </aside>
-       </div>
-     </div>
-   </main>
- );
+          {/* Industries */}
+          {persona.industry && persona.industry.length > 0 && (
+            <div className="mb-8">
+              <h2 className="text-xl font-semibold mb-4">Industry Focus</h2>
+              <div className="flex flex-wrap gap-2">
+                {persona.industry.map((industry: string) => (
+                  <Badge key={industry} variant="secondary">
+                    {industry}
+                  </Badge>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Related Case Studies */}
+          {caseStudies.length > 0 && (
+            <div>
+              <h2 className="text-xl font-semibold mb-4">Related Case Studies</h2>
+              <div className="grid grid-cols-1 gap-6">
+                {caseStudies.map((caseStudy) => (
+                  <Link 
+                    key={caseStudy.id} 
+                    href={`/case-study/${caseStudy.slug}`}
+                    className="block group"
+                  >
+                    <div className="p-6 rounded-lg border border-border bg-card/50 transition-all duration-200 hover:bg-accent/5 hover:border-border-hover">
+                      <h3 className="text-lg font-semibold mb-2 group-hover:text-primary">
+                        {caseStudy.title}
+                      </h3>
+                      <p className="text-muted-foreground mb-4">
+                        {caseStudy.description}
+                      </p>
+                      <div className="flex flex-wrap gap-2">
+                        {[
+                          ...(caseStudy.industries || []),
+                          ...(caseStudy.quantum_hardware || [])
+                        ].map((badge) => (
+                          <Badge key={badge} variant="outline" className="text-sm">
+                            {badge}
+                          </Badge>
+                        ))}
+                      </div>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      </LearningPathLayout>
+    </AuthGate>
+  );
 }

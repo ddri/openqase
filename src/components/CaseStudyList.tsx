@@ -17,28 +17,29 @@ export default function CaseStudyList({ caseStudies }: CaseStudyListProps) {
   const [sortBy, setSortBy] = useState<'title' | 'lastUpdated'>('title');
 
   // Get unique industries for filtering
-  const industries = Array.from(new Set(caseStudies.map(cs => cs.industry?.[0] || 'Unknown'))).filter(i => i !== 'Unknown').sort();
+  const industries = Array.from(new Set(caseStudies.map(cs => cs.industries?.[0] || 'Unknown'))).filter(i => i !== 'Unknown').sort();
 
   // Filter and sort case studies
   const filteredCaseStudies = caseStudies
     .filter(cs => {
-      if (industryFilter !== 'all' && !cs.industry?.includes(industryFilter)) return false;
+      if (industryFilter !== 'all' && !cs.industries?.includes(industryFilter)) return false;
       if (!searchQuery) return true;
       
       const query = searchQuery.toLowerCase();
-      const industryMatch = cs.industry?.some(ind => ind.toLowerCase().includes(query)) || false;
-      const techMatch = cs.technologies?.some(tech => tech.toLowerCase().includes(query)) || false;
+      const industryMatch = cs.industries?.some(ind => ind.toLowerCase().includes(query)) || false;
       
       return (
         cs.title.toLowerCase().includes(query) ||
-        cs.description.toLowerCase().includes(query) ||
-        industryMatch ||
-        techMatch
+        (cs.description?.toLowerCase().includes(query) || false) ||
+        industryMatch
       );
     })
     .sort((a, b) => {
       if (sortBy === 'lastUpdated') {
-        return new Date(b.lastUpdated).getTime() - new Date(a.lastUpdated).getTime();
+        // Handle null lastUpdated values
+        const dateA = a.lastUpdated ? new Date(a.lastUpdated).getTime() : 0;
+        const dateB = b.lastUpdated ? new Date(b.lastUpdated).getTime() : 0;
+        return dateB - dateA;
       }
       return a.title.localeCompare(b.title);
     });
@@ -54,7 +55,7 @@ export default function CaseStudyList({ caseStudies }: CaseStudyListProps) {
           <Input
             id="search"
             type="search"
-            placeholder="Search by title, description, industry, or technologies..."
+            placeholder="Search by title, description, or industry..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="w-full"
@@ -107,9 +108,9 @@ export default function CaseStudyList({ caseStudies }: CaseStudyListProps) {
           <ContentCard
             key={caseStudy.slug}
             title={caseStudy.title}
-            description={caseStudy.description}
-            badges={[...(caseStudy.industry || []), ...(caseStudy.technologies || [])]}
-            href={`/paths/case-study/${caseStudy.slug}`}
+            description={caseStudy.description || ''}
+            badges={[...(caseStudy.industries || [])]}
+            href={`/case-study/${caseStudy.slug}`}
           />
         ))}
       </div>

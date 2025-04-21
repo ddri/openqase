@@ -1,15 +1,29 @@
 // src/app/paths/algorithm/page.tsx
-import { getAllContent } from '@/lib/mdx';
+import { createClient } from '@/utils/supabase/server';
 import AlgorithmList from '@/components/AlgorithmList';
 import LearningPathLayout from '@/components/ui/learning-path-layout';
-import type { Algorithm } from '@/lib/types';
+import type { Database } from '@/types/supabase';
+
+type Algorithm = Database['public']['Tables']['algorithms']['Row'];
+
+async function getAlgorithms() {
+  const supabase = await createClient();
+  
+  const { data, error } = await supabase
+    .from('algorithms')
+    .select()
+    .order('name');
+
+  if (error) {
+    console.error('Error fetching algorithms:', error);
+    return [];
+  }
+
+  return (data as unknown) as Algorithm[];
+}
 
 export default async function AlgorithmsPage() {
-  const algorithmContent = await getAllContent<Algorithm>('algorithm');
-  const algorithms = algorithmContent.map(content => ({
-    ...content.frontmatter,
-    slug: content.slug
-  }));
+  const algorithms = await getAlgorithms();
 
   return (
     <LearningPathLayout title="Quantum Algorithms">

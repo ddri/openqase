@@ -3,6 +3,56 @@
 ## Overview
 This document outlines the complete database structure for OpenQASE, including user preferences, content management, and relationships between different entities.
 
+## Type Safety and Organization
+
+The database schema is fully typed using TypeScript types generated from the Supabase schema. These types are centralized in `@/types/supabase.ts` and should be used consistently throughout the application.
+
+### Type Definitions
+
+```typescript
+// Import the Database type
+import type { Database } from '@/types/supabase';
+
+// Define table types
+type Tables = Database['public']['Tables']
+type CaseStudyRow = Tables['case_studies']['Row']
+type CaseStudyInsert = Tables['case_studies']['Insert']
+type CaseStudyUpdate = Tables['case_studies']['Update']
+```
+
+### Type Safety in API Routes
+
+```typescript
+// Example API route with type safety
+export async function POST(request: Request) {
+  const supabase = await createClient();
+  const formData = await request.formData();
+  
+  const caseStudy: CaseStudyInsert = {
+    title: formData.get('title') as string,
+    description: formData.get('description') as string,
+    // ... other fields
+  };
+
+  const { data, error } = await supabase
+    .from('case_studies')
+    .insert(caseStudy)
+    .select()
+    .single();
+}
+```
+
+### Type Safety in Components
+
+```typescript
+// Example component with type safety
+interface CaseStudyListProps {
+  caseStudies: CaseStudyRow[];
+  onUpdate: (caseStudy: CaseStudyUpdate) => Promise<void>;
+  onDelete: (id: string) => Promise<void>;
+}
+```
+
 ## Core Tables (MVP)
 
 ### 1. User Preferences (`user_preferences`)
@@ -97,7 +147,6 @@ create table personas (
     description text,
     role text,
     industry text[],
-    key_interests text[],
     created_at timestamp with time zone default now()
 );
 ```

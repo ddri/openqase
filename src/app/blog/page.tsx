@@ -18,22 +18,12 @@ interface BlogPost {
   updated_at: string;
 }
 
-// Fetch blog posts from database
+// Blog functionality is not yet implemented
+// The blog_posts table doesn't exist in the database schema
+// This is a placeholder for future implementation
 async function getBlogPosts() {
-  const supabase = await createServerClient()
-  
-  const { data, error } = await supabase
-    .from('blog_posts')
-    .select()
-    .match({ published: true })
-    .order('published_at', { ascending: false })
-
-  if (error) {
-    console.error('Error fetching blog posts:', error)
-    return []
-  }
-
-  return data as BlogPost[]
+  // Return empty array for now
+  return [] as BlogPost[]
 }
 
 export default async function BlogPage() {
@@ -49,38 +39,12 @@ export default async function BlogPage() {
         </p>
       </div>
 
-      {/* Search and Filter */}
-      <div className="max-w-5xl mx-auto mb-12">
-        <div className="flex gap-4 items-center">
-          <Input 
-            placeholder="Search articles..." 
-            className="max-w-sm"
-          />
-          <select className="border rounded-md px-3 py-2 bg-background">
-            <option value="">All Categories</option>
-            <option value="tutorial">Tutorials</option>
-            <option value="news">News</option>
-            <option value="case-study">Case Studies</option>
-            <option value="community">Community</option>
-          </select>
-        </div>
-      </div>
-
-      {/* Blog Posts Grid */}
-      <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {posts.map((post) => (
-          <Link key={post.slug} href={`/blog/${post.slug}`}>
-            <Card className="h-full hover:shadow-md transition-all">
-              <CardHeader>
-                <div className="text-sm text-muted-foreground mb-2">
-                  {post.category} • {post.published_at ? new Date(post.published_at).toLocaleDateString() : ''}
-                </div>
-                <CardTitle className="mb-2">{post.title}</CardTitle>
-                <CardDescription>{post.description}</CardDescription>
-              </CardHeader>
-            </Card>
-          </Link>
-        ))}
+      {/* Coming Soon Message */}
+      <div className="max-w-3xl mx-auto text-center mb-16 p-8 border rounded-lg">
+        <h2 className="text-2xl font-bold mb-4">Coming Soon</h2>
+        <p className="text-muted-foreground">
+          Our blog is currently under development. Check back soon for articles, tutorials, and case studies.
+        </p>
       </div>
 
       {/* Newsletter Signup */}
@@ -94,8 +58,8 @@ export default async function BlogPage() {
           </CardHeader>
           <CardContent>
             <form className="flex gap-4 max-w-md mx-auto">
-              <Input 
-                type="email" 
+              <Input
+                type="email"
                 placeholder="Enter your email"
                 className="flex-grow"
               />
@@ -108,4 +72,4 @@ export default async function BlogPage() {
       </div>
     </div>
   )
-} 
+}

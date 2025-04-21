@@ -72,15 +72,6 @@ export function PersonasClient({ data }: PersonasClientProps) {
       )
     },
     {
-      accessorKey: 'technical_level',
-      header: 'Technical Level',
-      cell: ({ row }) => (
-        <div className="flex items-center">
-          {row.original.technical_level || 'N/A'}
-        </div>
-      )
-    },
-    {
       accessorKey: 'description',
       header: 'Description',
       cell: ({ row }) => (

@@ -4,8 +4,13 @@ import { useState } from 'react';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Label } from '@/components/ui/label';
-import type { Industry } from '@/types/supabase';
+import type { Database } from '@/types/supabase';
 import ContentCard from '@/components/ui/content-card';
+
+// Define Industry type from Database with additional properties
+type Industry = Database['public']['Tables']['industries']['Row'] & {
+  sector?: string; // Add sector property which appears to be used but not in the DB schema
+};
 
 interface IndustryListProps {
   industries: Industry[];
@@ -29,16 +34,15 @@ export default function IndustryList({ industries }: IndustryListProps) {
       return (
         industry.name.toLowerCase().includes(query) ||
         industry.description?.toLowerCase().includes(query) ||
-        (industry.sector || '').toLowerCase().includes(query) ||
-        industry.key_applications?.some(app => 
-          app.title.toLowerCase().includes(query) || 
-          app.description.toLowerCase().includes(query)
-        )
+        (industry.sector || '').toLowerCase().includes(query)
       );
     })
     .sort((a, b) => {
       if (sortBy === 'created_at') {
-        return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
+        // Handle null created_at values
+        const dateA = a.created_at ? new Date(a.created_at).getTime() : 0;
+        const dateB = b.created_at ? new Date(b.created_at).getTime() : 0;
+        return dateB - dateA;
       }
       return a.name.localeCompare(b.name);
     });
@@ -54,7 +58,7 @@ export default function IndustryList({ industries }: IndustryListProps) {
           <Input
             id="search"
             type="search"
-            placeholder="Search by name, description, sector, or applications..."
+            placeholder="Search by name, description, or sector..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="w-full"
@@ -110,7 +114,6 @@ export default function IndustryList({ industries }: IndustryListProps) {
             description={industry.description || ''}
             badges={[
               industry.sector || 'Other',
-              ...(industry.key_applications?.map(app => app.title) || [])
             ]}
             href={`/paths/industry/${industry.slug}`}
           />

@@ -1,6 +1,6 @@
 import { Metadata } from 'next'
 import { createClient } from '@/utils/supabase/server'
-import type { Database } from '@/lib/database.types'
+import type { Database } from '@/types/supabase'
 import { AlgorithmsClient } from './client'
 
 export const metadata: Metadata = {

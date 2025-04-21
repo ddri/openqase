@@ -1,10 +1,43 @@
+/**
+ * Application-wide Type Definitions
+ * 
+ * This file contains application-specific types and interfaces that are used across the application.
+ * It serves as a central location for shared types that are not directly from the database schema.
+ * Database types are imported from '@/types/supabase' when needed.
+ */
+
 import type { Database } from '@/types/supabase';
 
-// Type definitions
+// ============================================================================
+// Core Type Definitions
+// ============================================================================
+
 export type ContentType = 'algorithm' | 'case-study' | 'industry' | 'persona';
 export type MaturityLevel = 'Emerging' | 'Growing' | 'Established';
 
-// Common interfaces
+// ============================================================================
+// Database Type Aliases
+// ============================================================================
+
+export type DbPersona = Database['public']['Tables']['personas']['Row'];
+export type DbCaseStudy = Database['public']['Tables']['case_studies']['Row'];
+export type DbAlgorithm = Database['public']['Tables']['algorithms']['Row'];
+export type DbIndustry = Database['public']['Tables']['industries']['Row'];
+
+// ============================================================================
+// Base Interfaces
+// ============================================================================
+
+export interface BaseContent {
+  type: ContentType;
+  id: string;
+  slug: string;
+  title: string;
+  description: string | null;
+  created_at: string | null;
+  updated_at: string | null;
+}
+
 export interface Application {
   title: string;
   description: string;
@@ -18,24 +51,10 @@ export interface RelatedContent {
   personas?: string[];
 }
 
-// Database types - using the Database type directly
-export type DbPersona = Database['public']['Tables']['personas']['Row'];
-export type DbCaseStudy = Database['public']['Tables']['case_studies']['Row'];
-export type DbAlgorithm = Database['public']['Tables']['algorithms']['Row'];
-export type DbIndustry = Database['public']['Tables']['industries']['Row'];
+// ============================================================================
+// Content Type Interfaces
+// ============================================================================
 
-// Base content interface
-export interface BaseContent {
-  type: ContentType;
-  id: string;
-  slug: string;
-  title: string;
-  description: string | null;
-  created_at: string;
-  updated_at: string;
-}
-
-// Content type interfaces
 export interface CaseStudy extends BaseContent {
   type: 'case-study';
   main_content: string | null;
@@ -46,9 +65,9 @@ export interface CaseStudy extends BaseContent {
   industries: string[];
   personas: string[];
   quantum_hardware: string[];
-  published: boolean;
+  published: boolean | null;
   published_at: string | null;
-  lastUpdated: string;
+  lastUpdated: string | null;
 }
 
 export interface Algorithm extends BaseContent {
@@ -67,16 +86,16 @@ export interface Persona extends BaseContent {
   type: 'persona';
   role: string | null;
   industry: string[];
-  key_interests: string[];
-  technical_level: string | null;
 }
 
-// Type for content maps
+// ============================================================================
+// Content Store Types
+// ============================================================================
+
 export interface ContentMap<T extends BaseContent> {
   [slug: string]: T;
 }
 
-// Type for the complete content store
 export interface ContentStore {
   algorithm: ContentMap<Algorithm>;
   case_study: ContentMap<CaseStudy>;
@@ -84,13 +103,20 @@ export interface ContentStore {
   persona: ContentMap<Persona>;
 }
 
+// ============================================================================
+// Component Props Types
+// ============================================================================
+
 export interface LearningPathLayoutProps {
   children: React.ReactNode;
   title: string;
   description?: string;
 }
 
-// Type guards
+// ============================================================================
+// Type Guards
+// ============================================================================
+
 export function isCaseStudy(content: BaseContent): content is CaseStudy {
   return content.type === 'case-study';
 }

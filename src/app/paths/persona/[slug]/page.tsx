@@ -22,9 +22,9 @@ type Persona = Database['public']['Tables']['personas']['Row'];
 type CaseStudy = Database['public']['Tables']['case_studies']['Row'];
 
 interface PageParams {
-  params: {
+  params: Promise<{
     slug: string;
-  };
+  }>;
 }
 
 // Get metadata for the page
@@ -79,7 +79,7 @@ export default async function PersonaPage({ params }: PageParams) {
   // Step 2: Get related case studies using the API route
   let caseStudies: CaseStudy[] = [];
   
-  if (persona.related_case_studies?.length > 0) {
+  if (persona.related_case_studies && persona.related_case_studies.length > 0) {
     try {
       // Use the API route instead of direct Supabase query
       const response = await fetch(
@@ -124,11 +124,6 @@ export default async function PersonaPage({ params }: PageParams) {
                 {persona.role}
               </Badge>
             )}
-            {persona.technical_level && (
-              <Badge variant="outline" className="text-base">
-                {persona.technical_level}
-              </Badge>
-            )}
           </div>
 
           {/* Main Content */}
@@ -147,20 +142,6 @@ export default async function PersonaPage({ params }: PageParams) {
                 {persona.industry.map((industry: string) => (
                   <Badge key={industry} variant="secondary">
                     {industry}
-                  </Badge>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* Key Interests */}
-          {persona.key_interests && persona.key_interests.length > 0 && (
-            <div className="mb-8">
-              <h2 className="text-xl font-semibold mb-4">Key Interests</h2>
-              <div className="flex flex-wrap gap-2">
-                {persona.key_interests.map((interest: string) => (
-                  <Badge key={interest} variant="secondary">
-                    {interest}
                   </Badge>
                 ))}
               </div>

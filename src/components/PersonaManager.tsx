@@ -6,11 +6,9 @@ import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
 import { Plus, Edit, Save, Trash } from 'lucide-react';
-import { Database } from '../types/database.types';
+import type { Database } from '@/types/supabase';
 
-type DbPersona = Database['public']['Tables']['personas']['Row'] & {
-  key_interests: string[];
-};
+type DbPersona = Database['public']['Tables']['personas']['Row'];
 type PersonaInsert = Database['public']['Tables']['personas']['Insert'];
 type PersonaUpdate = Database['public']['Tables']['personas']['Update'];
 
@@ -24,7 +22,6 @@ export function PersonaManager({ onSave, onDelete, personas }: PersonaManagerPro
   const [personaList, setPersonaList] = useState<DbPersona[]>(personas);
   const [selectedPersona, setSelectedPersona] = useState<DbPersona | null>(null);
   const [isEditing, setIsEditing] = useState(false);
-  const [newExpertise, setNewExpertise] = useState('');
 
   const handleSave = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -35,8 +32,7 @@ export function PersonaManager({ onSave, onDelete, personas }: PersonaManagerPro
       name: formData.get('name') as string,
       description: formData.get('description') as string,
       role: formData.get('role') as string,
-      industry_focus: formData.get('industry_focus') as string,
-      key_interests: selectedPersona.key_interests
+      industry: [formData.get('industry_focus') as string].filter(Boolean),
     };
 
     await onSave(personaData);
@@ -47,32 +43,6 @@ export function PersonaManager({ onSave, onDelete, personas }: PersonaManagerPro
     await onDelete(id);
     setSelectedPersona(null);
     setIsEditing(false);
-  };
-
-  const handleAddInterest = () => {
-    if (!selectedPersona) return;
-    setSelectedPersona({
-      ...selectedPersona,
-      key_interests: [...selectedPersona.key_interests, '']
-    });
-  };
-
-  const handleInterestChange = (index: number, value: string) => {
-    if (!selectedPersona) return;
-    const newInterests = [...selectedPersona.key_interests];
-    newInterests[index] = value;
-    setSelectedPersona({
-      ...selectedPersona,
-      key_interests: newInterests
-    });
-  };
-
-  const handleRemoveInterest = (indexToRemove: number) => {
-    if (!selectedPersona) return;
-    setSelectedPersona({
-      ...selectedPersona,
-      key_interests: selectedPersona.key_interests.filter((_: string, index: number) => index !== indexToRemove)
-    });
   };
 
   return (
@@ -86,10 +56,13 @@ export function PersonaManager({ onSave, onDelete, personas }: PersonaManagerPro
               name: '',
               description: '',
               role: '',
-              industry_focus: '',
-              key_interests: [],
+              industry: [],
               created_at: new Date().toISOString(),
-              updated_at: new Date().toISOString()
+              main_content: null,
+              persona_type: null,
+              related_case_studies: null,
+              slug: '',
+              ts_content: null
             });
             setIsEditing(true);
           }}
@@ -133,36 +106,10 @@ export function PersonaManager({ onSave, onDelete, personas }: PersonaManagerPro
             <input
               type="text"
               name="industry_focus"
-              defaultValue={selectedPersona.industry_focus || ''}
+              defaultValue={selectedPersona.industry?.[0] || ''}
               className="input input-bordered w-full"
+              placeholder="Enter primary industry"
             />
-          </div>
-          <div>
-            <label className="label">Key Interests</label>
-            {selectedPersona.key_interests.map((interest: string, index: number) => (
-              <div key={index} className="flex gap-2 mb-2">
-                <input
-                  type="text"
-                  value={interest}
-                  onChange={(e) => handleInterestChange(index, e.target.value)}
-                  className="input input-bordered flex-1"
-                />
-                <button
-                  type="button"
-                  onClick={() => handleRemoveInterest(index)}
-                  className="btn btn-error"
-                >
-                  Remove
-                </button>
-              </div>
-            ))}
-            <button
-              type="button"
-              onClick={handleAddInterest}
-              className="btn btn-secondary"
-            >
-              Add Interest
-            </button>
           </div>
           <div className="flex justify-end gap-2">
             <button type="submit" className="btn btn-primary">
@@ -192,18 +139,8 @@ export function PersonaManager({ onSave, onDelete, personas }: PersonaManagerPro
                 <h3 className="card-title">{persona.name}</h3>
                 <p>{persona.description}</p>
                 {persona.role && <p>Role: {persona.role}</p>}
-                {persona.industry_focus && (
-                  <p>Industry: {persona.industry_focus}</p>
-                )}
-                {persona.key_interests.length > 0 && (
-                  <div>
-                    <p className="font-semibold">Key Interests:</p>
-                    <ul className="list-disc list-inside">
-                      {persona.key_interests.map((interest: string, index: number) => (
-                        <li key={index}>{interest}</li>
-                      ))}
-                    </ul>
-                  </div>
+                {persona.industry && persona.industry.length > 0 && (
+                  <p>Industry: {persona.industry.join(', ')}</p>
                 )}
                 <div className="card-actions justify-end">
                   <button

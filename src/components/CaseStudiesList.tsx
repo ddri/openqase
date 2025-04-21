@@ -28,7 +28,7 @@ export function CaseStudiesList() {
           <h3 className="mb-2 text-xl font-semibold">{caseStudy.title}</h3>
           <p className="mb-4 text-gray-600">{caseStudy.description}</p>
           <div className="flex flex-wrap gap-2">
-            {caseStudy.industries.map((industry: string) => (
+            {caseStudy.industries?.map((industry: string) => (
               <span
                 key={industry}
                 className="rounded-full bg-blue-100 px-3 py-1 text-sm text-blue-800"

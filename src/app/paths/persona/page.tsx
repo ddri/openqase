@@ -1,15 +1,29 @@
 // src/app/paths/persona/page.tsx
-import { getAllContent } from '@/lib/mdx';
+import { createClient } from '@/utils/supabase/server';
 import PersonaList from '@/components/PersonaList';
 import LearningPathLayout from '@/components/ui/learning-path-layout';
-import type { Persona } from '@/lib/types';
+import type { Database } from '@/types/supabase';
+
+type Persona = Database['public']['Tables']['personas']['Row'];
+
+async function getPersonas() {
+  const supabase = await createClient();
+  
+  const { data, error } = await supabase
+    .from('personas')
+    .select('*')
+    .order('name');
+
+  if (error) {
+    console.error('Error fetching personas:', error);
+    return [];
+  }
+
+  return (data as unknown) as Persona[];
+}
 
 export default async function PersonasPage() {
-  const personaContent = await getAllContent<Persona>('persona');
-  const personas = personaContent.map(content => ({
-    ...content.frontmatter,
-    slug: content.slug
-  }));
+  const personas = await getPersonas();
 
   return (
     <LearningPathLayout title="Quantum Personas">

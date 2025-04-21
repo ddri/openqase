@@ -22,7 +22,6 @@ OpenQASE uses Supabase Authentication with Next.js middleware for a secure, sess
   const protectedRoutes = [
     '/paths',
     '/case-study',
-    '/quantum-stack',
     '/profile'
   ]
   ```
@@ -71,7 +70,6 @@ OpenQASE uses Supabase Authentication with Next.js middleware for a secure, sess
 The following routes require authentication:
 - `/paths/*` - Learning paths and content
 - `/case-study/*` - Case studies
-- `/quantum-stack/*` - Quantum stack documentation
 - `/profile` - User profile
 
 ## Implementation Examples
@@ -111,7 +109,6 @@ export default function ProtectedLayout({ children }) {
 Different sections use customized warning messages:
 - Learning Paths: "Start Your Quantum Journey"
 - Case Studies: "Unlock Real-World Quantum Applications"
-- Quantum Stack: "Explore the Quantum Technology Stack"
 - Individual Paths: "Access Learning Path Content"
 
 ## Security Considerations

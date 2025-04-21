@@ -2,15 +2,23 @@
 
 import { ReactNode } from 'react';
 import AuthGate from '@/components/auth/AuthGate';
+import { ArrowLeft } from 'lucide-react';
+import Link from 'next/link';
 
 interface LearningPathLayoutProps {
   title: string;
   children: ReactNode;
+  description?: string;
+  backLinkText?: string;
+  backLinkHref?: string;
 }
 
 export default function LearningPathLayout({
   title,
-  children
+  children,
+  description,
+  backLinkText = "Back to Learning Paths",
+  backLinkHref = "/paths"
 }: LearningPathLayoutProps) {
   return (
     <AuthGate
@@ -19,9 +27,21 @@ export default function LearningPathLayout({
     >
       <main className="min-h-screen">
         <div className="container-outer section-spacing">
-          <h1 className="text-4xl font-bold text-[hsl(var(--primary))] mb-8">
-            {title}
-          </h1>
+          <div className="mb-8">
+            <Link
+              href={backLinkHref}
+              className="group inline-flex items-center gap-1 text-sm font-medium text-muted-foreground hover:text-foreground"
+            >
+              <ArrowLeft className="h-4 w-4" />
+              <span>{backLinkText}</span>
+            </Link>
+          </div>
+          <div className="mb-8">
+            <h1 className="text-3xl font-bold sm:text-4xl mb-4">{title}</h1>
+            {description && (
+              <p className="text-muted-foreground text-lg">{description}</p>
+            )}
+          </div>
           {children}
         </div>
       </main>

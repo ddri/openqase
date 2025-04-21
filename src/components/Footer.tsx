@@ -89,11 +89,6 @@ export default function Footer() {
                   Learning Paths
                 </Link>
               </li>
-              <li>
-                <Link href="/quantum-stack" className="text-muted-foreground hover:text-accent transition-colors">
-                  Quantum Stack
-                </Link>
-              </li>
             </ul>
           </FooterSection>
 

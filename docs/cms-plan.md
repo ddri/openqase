@@ -144,7 +144,7 @@ Improve form state management:
 
 2. Improve form navigation:
    - Add confirmation dialogs for unsaved changes
-   - Add progress indicators for multi-step forms
+   - Ensure clear visual indication of the current tab
 
 ## Best Practices
 
@@ -161,8 +161,8 @@ Improve form state management:
    - Timestamp of last save
 
 3. **Error Handling**:
-   - Retry failed saves
-   - Store unsaved changes locally
+   - Retry failed saves when network connectivity is restored
+   - Clearly communicate errors to users
    - Provide manual save option as fallback
 
 ### Save Confirmation
@@ -186,8 +186,8 @@ Improve form state management:
 
 1. **Performance**:
    - Optimize API calls for auto-save
-   - Consider using WebSockets for real-time updates
-   - Implement request throttling/debouncing
+   - Implement request throttling/debouncing for field changes
+   - Use efficient state management to minimize unnecessary re-renders
 
 2. **Security**:
    - Ensure proper authentication for all API calls
@@ -197,6 +197,7 @@ Improve form state management:
 3. **Accessibility**:
    - Ensure status messages are announced to screen readers
    - Maintain focus management during save operations
+   - Keep the interface simple and intuitive
 
 ## Next Steps
 

@@ -180,7 +180,12 @@ export function AlgorithmForm({ algorithm, caseStudies, industries, isNew }: Alg
       payload.append('name', values.name)
       payload.append('slug', values.slug)
       payload.append('description', values.description || '')
+      payload.append('main_content', values.main_content || '')
+      
+      // Log the published state before sending
+      console.log('Client-side published state:', values.published);
       payload.append('published', values.published ? 'on' : '')
+      console.log('Form data published value:', payload.get('published'));
       
       // Handle array fields
       if (values.use_cases && values.use_cases.length > 0) {
@@ -215,6 +220,10 @@ export function AlgorithmForm({ algorithm, caseStudies, industries, isNew }: Alg
         throw new Error('Please fill in all required fields');
       }
       
+      // Log the payload for debugging
+      console.log('Submitting algorithm with published state:', values.published);
+      console.log('Form data published value:', payload.get('published'));
+      
       // Submit the form data
       const response = await fetch('/api/algorithms', {
         method: 'POST',
@@ -222,11 +231,13 @@ export function AlgorithmForm({ algorithm, caseStudies, industries, isNew }: Alg
       })
       
       if (!response.ok) {
+        console.error('Failed to save algorithm:', await response.text());
         throw new Error('Failed to save algorithm')
       }
       
       // Get the response data
       const data = await response.json()
+      console.log('API response:', data);
       
       // If this is a new algorithm, update the ID to prevent creating duplicates
       if (isNew && data.id) {
@@ -324,11 +335,138 @@ export function AlgorithmForm({ algorithm, caseStudies, industries, isNew }: Alg
           {isNew ? 'Add New Algorithm' : 'Edit Algorithm'}
         </h1>
         
-        {lastSaved && (
-          <div className="text-sm text-muted-foreground">
-            Last saved: {lastSaved}
+        <div className="flex items-center space-x-4">
+          {lastSaved && (
+            <div className="text-sm text-muted-foreground">
+              Last saved: {lastSaved}
+            </div>
+          )}
+          
+          <div className="flex items-center">
+            <Button
+              type="button"
+              variant={values.published ? "default" : "outline"}
+              size="sm"
+              onClick={async () => {
+                // If trying to publish, validate content
+                if (!values.published) {
+                  const isValid = validateContent();
+                  if (!isValid) {
+                    setShowValidationModal(true);
+                    return;
+                  }
+                  
+                  console.log('Before publishing - current state:', { ...values });
+                  
+                  // If valid, publish
+                  setValues(prev => {
+                    console.log('Setting published=true, prev state:', prev);
+                    return {
+                      ...prev,
+                      published: true
+                    };
+                  });
+                  
+                  // Need to wait for state update to complete
+                  setTimeout(async () => {
+                    // Log state after setting published to true
+                    console.log('After setting published=true, current values:', { ...values });
+                    
+                    // Save the form with the published state
+                    const event = new Event('submit') as any;
+                    event.preventDefault = () => {};
+                    
+                    // Create a payload manually to ensure published is set
+                    const payload = new FormData();
+                    if (values.id) {
+                      payload.append('id', values.id);
+                    }
+                    payload.append('name', values.name);
+                    payload.append('slug', values.slug);
+                    payload.append('description', values.description || '');
+                    payload.append('main_content', values.main_content || '');
+                    payload.append('published', 'on'); // Force published to be true
+                    
+                    // Handle array fields
+                    if (values.use_cases && values.use_cases.length > 0) {
+                      payload.append('use_cases', values.use_cases.join(', '));
+                    }
+                    
+                    // Handle relationships
+                    values.related_case_studies.forEach(slug => {
+                      payload.append('related_case_studies[]', slug);
+                    });
+                    
+                    values.related_industries.forEach(slug => {
+                      payload.append('related_industries[]', slug);
+                    });
+                    
+                    console.log('Manual payload published value:', payload.get('published'));
+                    
+                    // Submit the form data
+                    const response = await fetch('/api/algorithms', {
+                      method: 'POST',
+                      body: payload,
+                    });
+                    
+                    if (!response.ok) {
+                      console.error('Failed to save algorithm:', await response.text());
+                      toast({
+                        variant: 'destructive',
+                        title: 'Error',
+                        description: 'Failed to publish algorithm',
+                        duration: 5000,
+                      });
+                    } else {
+                      const data = await response.json();
+                      console.log('API response after manual publish:', data);
+                      
+                      // Update the last saved timestamp
+                      setLastSaved(new Date().toLocaleTimeString());
+                      
+                      toast({
+                        title: 'Published',
+                        description: 'Content is now published and visible to users',
+                        duration: 3000,
+                      });
+                    }
+                  }, 100);
+                  
+                  toast({
+                    title: 'Published',
+                    description: 'Content is now published and visible to users',
+                    duration: 3000,
+                  });
+                } else {
+                  // If unpublishing
+                  setValues(prev => ({
+                    ...prev,
+                    published: false
+                  }));
+                  
+                  // Save the form with the unpublished state
+                  const event = new Event('submit') as any;
+                  event.preventDefault = () => {};
+                  
+                  // Log the current state before submission
+                  console.log('Unpublishing algorithm with state:', { ...values, published: false });
+                  
+                  // Wait for the submission to complete
+                  await handleSubmit(event);
+                  
+                  toast({
+                    title: 'Unpublished',
+                    description: 'Content is now in draft mode',
+                    duration: 3000,
+                  });
+                }
+              }}
+              className="min-w-[100px] bg-green-600 hover:bg-green-700 text-white"
+            >
+              {values.published ? 'Published ✓' : 'Publish'}
+            </Button>
           </div>
-        )}
+        </div>
       </div>
       
       {/* Content Completeness Indicator */}
@@ -357,6 +495,13 @@ export function AlgorithmForm({ algorithm, caseStudies, industries, isNew }: Alg
             <TabsTrigger value="basic" className="relative">
               Basic Info
               {!isTabComplete('basic') && (
+                <span className="absolute top-0 right-0 h-2 w-2 rounded-full bg-red-500"
+                      title="This tab has incomplete required fields" />
+              )}
+            </TabsTrigger>
+            <TabsTrigger value="content" className="relative">
+              Content
+              {!isTabComplete('content') && (
                 <span className="absolute top-0 right-0 h-2 w-2 rounded-full bg-red-500"
                       title="This tab has incomplete required fields" />
               )}
@@ -431,43 +576,43 @@ export function AlgorithmForm({ algorithm, caseStudies, industries, isNew }: Alg
                 </div>
 
                 <div className="p-4 border rounded-md bg-gray-50 mt-6">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <h3 className="font-medium">Content Status</h3>
-                      <p className="text-sm text-gray-500">
-                        Draft content can be saved with incomplete fields.
-                        Published content must be complete.
-                      </p>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <span className={!values.published ? "font-medium" : "text-gray-500"}>
-                        Draft
-                      </span>
-                      <Checkbox
-                        name="published"
-                        id="published"
-                        checked={values.published}
-                        onCheckedChange={(checked) => {
-                          // If trying to publish, validate content
-                          if (checked === true) {
-                            const isValid = validateContent();
-                            if (!isValid) {
-                              setShowValidationModal(true);
-                              return;
-                            }
-                          }
-                          
-                          setValues(prev => ({
-                            ...prev,
-                            published: checked === true
-                          }))
-                        }}
-                      />
-                      <span className={values.published ? "font-medium" : "text-gray-500"}>
-                        Published
-                      </span>
-                    </div>
+                  <div>
+                    <h3 className="font-medium">Content Status</h3>
+                    <p className="text-sm text-gray-500">
+                      Draft content can be saved with incomplete fields.
+                      Published content must be complete.
+                    </p>
                   </div>
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          <TabsContent value="content">
+            <Card>
+              <CardHeader>
+                <CardTitle>Main Content</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="main_content" className="flex items-center">
+                    Main Content <span className="text-red-500 ml-1">*</span>
+                  </Label>
+                  <Textarea
+                    name="main_content"
+                    id="main_content"
+                    rows={15}
+                    value={values.main_content}
+                    onChange={handleChange}
+                    className={errors.main_content ? "border-red-500" : ""}
+                    placeholder="Enter the detailed content for this algorithm..."
+                  />
+                  {errors.main_content && (
+                    <p className="text-sm text-red-500 mt-1">{errors.main_content}</p>
+                  )}
+                  <p className="text-sm text-muted-foreground">
+                    This is the main content that will be displayed on the algorithm page.
+                  </p>
                 </div>
               </CardContent>
             </Card>
@@ -560,12 +705,31 @@ export function AlgorithmForm({ algorithm, caseStudies, industries, isNew }: Alg
           </TabsContent>
         </Tabs>
 
-        <div className="flex justify-between items-center mt-6">
-          <div className="text-sm">
-            {isSaving && <span className="text-blue-500">Saving...</span>}
+        <div className="flex justify-between items-center mt-8 py-4 border-t">
+          <div className="flex items-center">
+            <div className="text-sm mr-2">
+              {isSaving && <span className="text-blue-500">Saving...</span>}
+            </div>
+            <div className="text-sm text-muted-foreground">
+              {values.published ?
+                <span className="flex items-center text-green-600">
+                  <span className="inline-block w-2 h-2 rounded-full bg-green-600 mr-2"></span>
+                  Published
+                </span> :
+                <span className="flex items-center text-amber-600">
+                  <span className="inline-block w-2 h-2 rounded-full bg-amber-600 mr-2"></span>
+                  Draft
+                </span>
+              }
+            </div>
           </div>
-          <Button type="submit" disabled={isSubmitting || isSaving}>
-            {isSubmitting ? 'Saving...' : 'Save'}
+          <Button
+            type="submit"
+            disabled={isSubmitting || isSaving}
+            size="lg"
+            className="px-8"
+          >
+            {isSubmitting ? 'Saving...' : 'Save Draft'}
           </Button>
         </div>
       </form>

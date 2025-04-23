@@ -191,8 +191,10 @@ export type Database = {
           id: string
           main_content: string | null
           name: string
+          published: boolean | null
           slug: string
           ts_content: unknown | null
+          updated_at: string | null
         }
         Insert: {
           created_at?: string | null
@@ -201,8 +203,10 @@ export type Database = {
           id?: string
           main_content?: string | null
           name: string
+          published?: boolean | null
           slug: string
           ts_content?: unknown | null
+          updated_at?: string | null
         }
         Update: {
           created_at?: string | null
@@ -211,8 +215,10 @@ export type Database = {
           id?: string
           main_content?: string | null
           name?: string
+          published?: boolean | null
           slug?: string
           ts_content?: unknown | null
+          updated_at?: string | null
         }
         Relationships: []
       }
@@ -225,10 +231,12 @@ export type Database = {
           main_content: string | null
           name: string
           persona_type: string | null
+          published: boolean | null
           related_case_studies: string[] | null
           role: string | null
           slug: string
           ts_content: unknown | null
+          updated_at: string | null
         }
         Insert: {
           created_at?: string | null
@@ -238,10 +246,12 @@ export type Database = {
           main_content?: string | null
           name: string
           persona_type?: string | null
+          published?: boolean | null
           related_case_studies?: string[] | null
           role?: string | null
           slug: string
           ts_content?: unknown | null
+          updated_at?: string | null
         }
         Update: {
           created_at?: string | null
@@ -251,10 +261,12 @@ export type Database = {
           main_content?: string | null
           name?: string
           persona_type?: string | null
+          published?: boolean | null
           related_case_studies?: string[] | null
           role?: string | null
           slug?: string
           ts_content?: unknown | null
+          updated_at?: string | null
         }
         Relationships: []
       }

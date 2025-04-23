@@ -64,6 +64,10 @@ export async function POST(request: Request) {
     const slug = formData.get('slug') as string;
     const description = formData.get('description') as string || null;
     const role = formData.get('role') as string || null;
+    const published = formData.get('published') === 'on';
+    
+    console.log('Published value from form:', formData.get('published'));
+    console.log('Interpreted published value:', published);
     
     const industry = formData.getAll('industry[]') as string[];
 
@@ -73,30 +77,49 @@ export async function POST(request: Request) {
       slug,
       description,
       role,
+      published,
       industry: industry.length > 0 ? industry : null
     };
 
     let result;
     if (id) {
       // Update existing persona
+      console.log('Updating persona with data:', { ...baseData, published });
+      
+      // Log the exact data being sent to the database
+      console.log('Exact update data being sent to database:', {
+        ...baseData,
+        updated_at: new Date().toISOString(),
+        published: published // Explicitly log the published flag
+      });
+      
       const { data: updatedData, error } = await supabase
         .from('personas')
         .update({
           ...baseData,
+          updated_at: new Date().toISOString(),
         })
         .eq('id', id)
         .select('*')
         .single();
         
       if (error) {
+        console.error('Error updating persona:', error);
         return NextResponse.json(
           { error: error.message },
           { status: 400 }
         );
       }
+      
+      console.log('Updated persona data:', updatedData);
       result = updatedData;
     } else {
       // Create new persona
+      console.log('Inserting new persona with data:', { ...baseData, published });
+      
+      // Double-check the published value
+      console.log('Final published value before insert:', baseData.published);
+      
       const { data: insertedData, error } = await supabase
         .from('personas')
         .insert({
@@ -106,11 +129,14 @@ export async function POST(request: Request) {
         .single();
         
       if (error) {
+        console.error('Error inserting persona:', error);
         return NextResponse.json(
           { error: error.message },
           { status: 400 }
         );
       }
+      
+      console.log('Inserted persona data:', insertedData);
       result = insertedData;
     }
 

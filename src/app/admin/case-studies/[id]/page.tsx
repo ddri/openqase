@@ -1,31 +1,31 @@
-import { createServerClient } from '@/lib/supabase-server';
-import { createServiceClient } from '@/utils/supabase/service-role';
-import { Database } from '@/types/supabase';
-import { notFound } from 'next/navigation';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
-import { Checkbox } from '@/components/ui/checkbox';
-import { Label } from '@/components/ui/label';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Metadata } from 'next'
+import { createServerClient } from '@/lib/supabase-server'
+import { createServiceClient } from '@/utils/supabase/service-role'
+import { Database } from '@/types/supabase'
+import { notFound } from 'next/navigation'
+import { CaseStudyForm } from './client'
 
-type CaseStudy = Database['public']['Tables']['case_studies']['Row'];
-type Industry = Database['public']['Tables']['industries']['Row'];
-type Algorithm = Database['public']['Tables']['algorithms']['Row'];
-type Persona = Database['public']['Tables']['personas']['Row'];
+export const metadata: Metadata = {
+  title: 'Edit Case Study - OpenQASE Admin',
+  description: 'Create or edit a case study'
+}
+
+type CaseStudy = Database['public']['Tables']['case_studies']['Row']
+type Industry = Database['public']['Tables']['industries']['Row']
+type Algorithm = Database['public']['Tables']['algorithms']['Row']
+type Persona = Database['public']['Tables']['personas']['Row']
 
 interface CaseStudyPageProps {
   params: Promise<{
-    id: string;
-  }>;
+    id: string
+  }>
 }
 
 export default async function EditCaseStudyPage({ params }: CaseStudyPageProps) {
-  const resolvedParams = await params;
+  const resolvedParams = await params
   // Use service role client to bypass RLS
-  const supabase = createServiceClient();
-  const isNew = resolvedParams.id === 'new';
+  const supabase = createServiceClient()
+  const isNew = resolvedParams.id === 'new'
 
   // Fetch case study if editing
   const { data: caseStudy } = !isNew
@@ -34,238 +34,35 @@ export default async function EditCaseStudyPage({ params }: CaseStudyPageProps) 
         .select('*')
         .eq('id', resolvedParams.id)
         .single()
-    : { data: null };
+    : { data: null }
 
   // Fetch related data for dropdowns
   const { data: industries } = await supabase
     .from('industries')
-    .select('slug, name')
-    .order('name');
+    .select('id, slug, name')
+    .order('name')
 
   const { data: algorithms } = await supabase
     .from('algorithms')
-    .select('slug, name')
-    .order('name');
+    .select('id, slug, name')
+    .order('name')
 
   const { data: personas } = await supabase
     .from('personas')
-    .select('slug, name')
-    .order('name');
+    .select('id, slug, name')
+    .order('name')
 
   if (!isNew && !caseStudy) {
-    notFound();
+    notFound()
   }
 
-  // This means at this point, if !isNew is true, then caseStudy must be defined
-  // Use a more explicit type annotation to help TypeScript understand our intent
-  const caseStudyData: CaseStudy = !isNew ? caseStudy as CaseStudy : {} as CaseStudy;
-
   return (
-    <div className="container mx-auto py-8">
-      <h1 className="mb-8 text-2xl font-bold">
-        {isNew ? 'Add New Case Study' : 'Edit Case Study'}
-      </h1>
-
-      <form action="/api/case-studies" method="POST" className="space-y-8">
-        {!isNew && <input type="hidden" name="id" value={caseStudyData.id} />}
-
-        <Tabs defaultValue="basic" className="w-full">
-          <TabsList>
-            <TabsTrigger value="basic">Basic Info</TabsTrigger>
-            <TabsTrigger value="content">Content</TabsTrigger>
-            <TabsTrigger value="classifications">Classifications</TabsTrigger>
-            <TabsTrigger value="technical">Technical Details</TabsTrigger>
-          </TabsList>
-
-          <TabsContent value="basic">
-            <Card>
-              <CardHeader>
-                <CardTitle>Basic Information</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="title">Title</Label>
-                  <Input
-                    type="text"
-                    name="title"
-                    id="title"
-                    defaultValue={isNew ? '' : caseStudyData.title}
-                    required
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="slug">Slug</Label>
-                  <Input
-                    type="text"
-                    name="slug"
-                    id="slug"
-                    defaultValue={isNew ? '' : caseStudyData.slug}
-                    required
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="description">Description</Label>
-                  <Textarea
-                    name="description"
-                    id="description"
-                    rows={3}
-                    defaultValue={isNew ? '' : (caseStudyData.description || '')}
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="url">URL</Label>
-                  <Input
-                    type="url"
-                    name="url"
-                    id="url"
-                    defaultValue={isNew ? '' : (caseStudyData.url || '')}
-                  />
-                </div>
-
-                <div className="flex items-center space-x-4">
-                  <div className="flex items-center space-x-2">
-                    <Checkbox
-                      name="published"
-                      id="published"
-                      defaultChecked={isNew ? false : (caseStudyData.published || false)}
-                    />
-                    <Label htmlFor="published">Published</Label>
-                  </div>
-
-                  {/* Featured checkbox removed as it's not in the database schema */}
-                </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
-
-          <TabsContent value="content">
-            <Card>
-              <CardHeader>
-                <CardTitle>Content</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="main_content">Main Content</Label>
-                  <Textarea
-                    name="main_content"
-                    id="main_content"
-                    rows={10}
-                    defaultValue={isNew ? '' : (caseStudyData.main_content || '')}
-                  />
-                </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
-
-          <TabsContent value="classifications">
-            <Card>
-              <CardHeader>
-                <CardTitle>Classifications</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-6">
-                <div className="space-y-2">
-                  <Label>Industries</Label>
-                  <div className="grid grid-cols-2 gap-2">
-                    {industries?.map((industry: Pick<Industry, 'slug' | 'name'>) => (
-                      <div key={industry.slug} className="flex items-center space-x-2">
-                        <Checkbox
-                          name="industries[]"
-                          value={industry.slug}
-                          defaultChecked={isNew ? false : (caseStudyData.industries?.includes(industry.slug) || false)}
-                        />
-                        <Label>{industry.name}</Label>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="space-y-2">
-                  <Label>Algorithms</Label>
-                  <div className="grid grid-cols-2 gap-2">
-                    {algorithms?.map((algorithm: Pick<Algorithm, 'slug' | 'name'>) => (
-                      <div key={algorithm.slug} className="flex items-center space-x-2">
-                        <Checkbox
-                          name="algorithms[]"
-                          value={algorithm.slug}
-                          defaultChecked={isNew ? false : (caseStudyData.algorithms?.includes(algorithm.slug) || false)}
-                        />
-                        <Label>{algorithm.name}</Label>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="space-y-2">
-                  <Label>Personas</Label>
-                  <div className="grid grid-cols-2 gap-2">
-                    {personas?.map((persona: Pick<Persona, 'slug' | 'name'>) => (
-                      <div key={persona.slug} className="flex items-center space-x-2">
-                        <Checkbox
-                          name="personas[]"
-                          value={persona.slug}
-                          defaultChecked={isNew ? false : (caseStudyData.personas?.includes(persona.slug) || false)}
-                        />
-                        <Label>{persona.name}</Label>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
-
-          <TabsContent value="technical">
-            <Card>
-              <CardHeader>
-                <CardTitle>Technical Details</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="partner_companies">Partner Companies</Label>
-                  <Input
-                    type="text"
-                    name="partner_companies"
-                    id="partner_companies"
-                    defaultValue={isNew ? '' : (caseStudyData.partner_companies?.join(', ') || '')}
-                    placeholder="Comma-separated list"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="quantum_companies">Quantum Companies</Label>
-                  <Input
-                    type="text"
-                    name="quantum_companies"
-                    id="quantum_companies"
-                    defaultValue={isNew ? '' : (caseStudyData.quantum_companies?.join(', ') || '')}
-                    placeholder="Comma-separated list"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="quantum_hardware">Quantum Hardware</Label>
-                  <Input
-                    type="text"
-                    name="quantum_hardware"
-                    id="quantum_hardware"
-                    defaultValue={isNew ? '' : (caseStudyData.quantum_hardware?.join(', ') || '')}
-                    placeholder="Comma-separated list"
-                  />
-                </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
-        </Tabs>
-
-        <div className="flex justify-end space-x-4">
-          <Button type="submit" variant="default">
-            {isNew ? 'Create Case Study' : 'Update Case Study'}
-          </Button>
-        </div>
-      </form>
-    </div>
-  );
-} 
+    <CaseStudyForm
+      caseStudy={caseStudy}
+      algorithms={algorithms || []}
+      industries={industries || []}
+      personas={personas || []}
+      isNew={isNew}
+    />
+  )
+}

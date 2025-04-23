@@ -6,7 +6,7 @@ import { Plus, Trash2, AlertCircle } from 'lucide-react'
 import { DataTable } from '@/components/ui/data-table'
 import { ColumnDef } from '@tanstack/react-table'
 import type { Algorithm } from './page'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -27,6 +27,12 @@ export function AlgorithmsClient({ data }: AlgorithmsClientProps) {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
   const [algorithmToDelete, setAlgorithmToDelete] = useState<Algorithm | null>(null)
   const [isDeleting, setIsDeleting] = useState(false)
+  
+  // Refresh data when component mounts or when returning to this page
+  useEffect(() => {
+    // Update state with the latest data from props
+    setAlgorithms(data);
+  }, [data]);
 
   const handleDelete = async (algorithm: Algorithm) => {
     setAlgorithmToDelete(algorithm)

@@ -64,36 +64,59 @@ export async function POST(request: Request) {
     const slug = formData.get('slug') as string;
     const description = formData.get('description') as string || null;
     const icon = formData.get('icon') as string || null;
+    const published = formData.get('published') === 'on';
+    
+    console.log('Published value from form:', formData.get('published'));
+    console.log('Interpreted published value:', published);
 
     // Prepare the data object
     const baseData: IndustryInsert = {
       name,
       slug,
       description,
-      icon
+      icon,
+      published
     };
 
     let result;
     if (id) {
       // Update existing industry
+      console.log('Updating industry with data:', { ...baseData, published });
+      
+      // Log the exact data being sent to the database
+      console.log('Exact update data being sent to database:', {
+        ...baseData,
+        updated_at: new Date().toISOString(),
+        published: published // Explicitly log the published flag
+      });
+      
       const { data: updatedData, error } = await supabase
         .from('industries')
         .update({
           ...baseData,
+          updated_at: new Date().toISOString(),
         })
         .eq('id', id)
         .select('*')
         .single();
         
       if (error) {
+        console.error('Error updating industry:', error);
         return NextResponse.json(
           { error: error.message },
           { status: 400 }
         );
       }
+      
+      console.log('Updated industry data:', updatedData);
       result = updatedData;
     } else {
       // Create new industry
+      console.log('Inserting new industry with data:', { ...baseData, published });
+      
+      // Double-check the published value
+      console.log('Final published value before insert:', baseData.published);
+      
       const { data: insertedData, error } = await supabase
         .from('industries')
         .insert({
@@ -103,11 +126,14 @@ export async function POST(request: Request) {
         .single();
         
       if (error) {
+        console.error('Error inserting industry:', error);
         return NextResponse.json(
           { error: error.message },
           { status: 400 }
         );
       }
+      
+      console.log('Inserted industry data:', insertedData);
       result = insertedData;
     }
 

@@ -34,8 +34,7 @@ export async function GET(request: Request) {
       .select(`
         *,
         industries (*),
-        algorithms (*),
-        count(*) over() as total_count
+        algorithms (*)
       `, { count: 'exact' })
       .eq('published', true)
       .order('published_at', { ascending: false })
@@ -64,8 +63,8 @@ export async function GET(request: Request) {
       );
     }
 
-    // Remove the total_count from each row and put it in the response metadata
-    const items = data?.map(({ total_count, ...item }: any) => item as CaseStudyRow) || [];
+    // Process the items
+    const items = data || [];
     
     return NextResponse.json({
       items,

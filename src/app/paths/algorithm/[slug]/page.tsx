@@ -32,6 +32,7 @@ export default async function AlgorithmPage({ params }: AlgorithmPageProps) {
     .from('algorithms')
     .select()
     .eq('slug', resolvedParams.slug)
+    .eq('published', true)  // Only fetch published algorithms
     .single();
 
   console.log('Algorithm query result:', { algorithm, error });
@@ -49,8 +50,9 @@ export default async function AlgorithmPage({ params }: AlgorithmPageProps) {
   
   try {
     // Use the API route instead of direct Supabase query
+    // Use the algorithm's slug instead of name for the query
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/api/case-studies?algorithm=${encodeURIComponent(algorithm.name)}`,
+      `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/api/case-studies?algorithm=${encodeURIComponent(algorithm.slug)}`,
       { cache: 'no-store' }
     );
     

@@ -12,6 +12,7 @@ async function getAlgorithms() {
   const { data, error } = await supabase
     .from('algorithms')
     .select()
+    .eq('published', true)  // Only fetch published algorithms
     .order('name');
 
   if (error) {

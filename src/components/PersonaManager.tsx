@@ -60,9 +60,11 @@ export function PersonaManager({ onSave, onDelete, personas }: PersonaManagerPro
               created_at: new Date().toISOString(),
               main_content: null,
               persona_type: null,
+              published: false,
               related_case_studies: null,
               slug: '',
-              ts_content: null
+              ts_content: null,
+              updated_at: new Date().toISOString()
             });
             setIsEditing(true);
           }}

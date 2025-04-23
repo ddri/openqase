@@ -7,31 +7,6 @@ export type Json =
   | Json[]
 
 export type Database = {
-  graphql_public: {
-    Tables: {
-      [_ in never]: never
-    }
-    Views: {
-      [_ in never]: never
-    }
-    Functions: {
-      graphql: {
-        Args: {
-          operationName?: string
-          query?: string
-          variables?: Json
-          extensions?: Json
-        }
-        Returns: Json
-      }
-    }
-    Enums: {
-      [_ in never]: never
-    }
-    CompositeTypes: {
-      [_ in never]: never
-    }
-  }
   public: {
     Tables: {
       algorithms: {
@@ -75,6 +50,42 @@ export type Database = {
           use_cases?: string[] | null
         }
         Relationships: []
+      }
+      algorithm_case_study_relations: {
+        Row: {
+          id: string
+          algorithm_id: string
+          case_study_id: string
+          created_at: string | null
+        }
+        Insert: {
+          id?: string
+          algorithm_id: string
+          case_study_id: string
+          created_at?: string | null
+        }
+        Update: {
+          id?: string
+          algorithm_id?: string
+          case_study_id?: string
+          created_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "algorithm_case_study_relations_algorithm_id_fkey"
+            columns: ["algorithm_id"]
+            isOneToOne: false
+            referencedRelation: "algorithms"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "algorithm_case_study_relations_case_study_id_fkey"
+            columns: ["case_study_id"]
+            isOneToOne: false
+            referencedRelation: "case_studies"
+            referencedColumns: ["id"]
+          }
+        ]
       }
       case_studies: {
         Row: {
@@ -169,7 +180,7 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "case_studies"
             referencedColumns: ["id"]
-          },
+          }
         ]
       }
       industries: {
@@ -180,8 +191,10 @@ export type Database = {
           id: string
           main_content: string | null
           name: string
+          published: boolean | null
           slug: string
           ts_content: unknown | null
+          updated_at: string | null
         }
         Insert: {
           created_at?: string | null
@@ -190,8 +203,10 @@ export type Database = {
           id?: string
           main_content?: string | null
           name: string
+          published?: boolean | null
           slug: string
           ts_content?: unknown | null
+          updated_at?: string | null
         }
         Update: {
           created_at?: string | null
@@ -200,8 +215,10 @@ export type Database = {
           id?: string
           main_content?: string | null
           name?: string
+          published?: boolean | null
           slug?: string
           ts_content?: unknown | null
+          updated_at?: string | null
         }
         Relationships: []
       }
@@ -214,10 +231,12 @@ export type Database = {
           main_content: string | null
           name: string
           persona_type: string | null
+          published: boolean | null
           related_case_studies: string[] | null
           role: string | null
           slug: string
           ts_content: unknown | null
+          updated_at: string | null
         }
         Insert: {
           created_at?: string | null
@@ -227,10 +246,12 @@ export type Database = {
           main_content?: string | null
           name: string
           persona_type?: string | null
+          published?: boolean | null
           related_case_studies?: string[] | null
           role?: string | null
           slug: string
           ts_content?: unknown | null
+          updated_at?: string | null
         }
         Update: {
           created_at?: string | null
@@ -240,10 +261,12 @@ export type Database = {
           main_content?: string | null
           name?: string
           persona_type?: string | null
+          published?: boolean | null
           related_case_studies?: string[] | null
           role?: string | null
           slug?: string
           ts_content?: unknown | null
+          updated_at?: string | null
         }
         Relationships: []
       }
@@ -285,7 +308,7 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "stack_layers"
             referencedColumns: ["id"]
-          },
+          }
         ]
       }
       user_preferences: {
@@ -326,10 +349,6 @@ export type Database = {
       setup_admin_role: {
         Args: { admin_email: string }
         Returns: undefined
-      }
-      verify_initial_setup: {
-        Args: Record<PropertyKey, never>
-        Returns: boolean
       }
     }
     Enums: {
@@ -447,11 +466,7 @@ export type CompositeTypes<
     : never
 
 export const Constants = {
-  graphql_public: {
-    Enums: {},
-  },
   public: {
     Enums: {},
   },
 } as const
-

@@ -1,4 +1,4 @@
-import { createClient } from '@/utils/supabase/server';
+import { createServiceRoleSupabaseClient } from '@/lib/supabase-server';
 import { Database } from '@/types/supabase';
 import { notFound } from 'next/navigation';
 import { AlgorithmForm } from './client';
@@ -26,7 +26,7 @@ interface AlgorithmPageProps {
 
 export default async function EditAlgorithmPage({ params }: AlgorithmPageProps) {
   const resolvedParams = await params;
-  const supabase = await createClient();
+  const supabase = createServiceRoleSupabaseClient();
   const isNew = resolvedParams.id === 'new';
 
   // Fetch algorithm if editing
@@ -38,16 +38,24 @@ export default async function EditAlgorithmPage({ params }: AlgorithmPageProps) 
         .single()
     : { data: null };
 
-  // Fetch related data for relationships
+  // Fetch related data for relationships using service client to bypass RLS
+  
+  // Log for debugging
+  console.log('Fetching case studies for algorithm form...');
+  
   const { data: caseStudies } = await supabase
     .from('case_studies')
     .select('id, title, slug')
     .order('title');
+    
+  console.log(`Found ${caseStudies?.length || 0} case studies`);
 
   const { data: industries } = await supabase
     .from('industries')
     .select('id, name, slug')
     .order('name');
+    
+  console.log(`Found ${industries?.length || 0} industries`);
 
   if (!isNew && !algorithm) {
     notFound();

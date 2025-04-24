@@ -1,7 +1,7 @@
 // src/middleware.ts
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
-import { updateSession } from '@/utils/supabase/middleware'
+import { updateSession } from '@/lib/supabase-middleware'
 
 const protectedRoutes = [
   '/paths',
@@ -33,7 +33,8 @@ export async function middleware(req: NextRequest) {
   // For admin routes, check if user has admin role
   if (isAdminRoute) {
     // Create a supabase client to check admin status
-    const supabase = await import('@/utils/supabase/server').then(mod => mod.createClient())
+    const { createServerSupabaseClient } = await import('@/lib/supabase')
+    const supabase = await createServerSupabaseClient()
     
     // Get the session
     const { data: { session } } = await supabase.auth.getSession()

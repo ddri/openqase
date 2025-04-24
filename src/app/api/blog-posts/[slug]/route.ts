@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 import type { Database } from '@/types/supabase'
-import { createClient } from '@/utils/supabase/server'
+import { createServerSupabaseClient } from '@/lib/supabase'
 
 // NOTE: Blog functionality is not yet implemented
 // The blog_posts table doesn't exist in the database schema

@@ -1,7 +1,6 @@
 import { Metadata } from 'next'
-import { createServerClient } from '@/lib/supabase-server'
-import { createServiceClient } from '@/utils/supabase/service-role'
-import { Database } from '@/types/supabase'
+import { createServiceRoleSupabaseClient } from '@/lib/supabase-server'
+import type { Database } from '@/types/supabase'
 import { notFound } from 'next/navigation'
 import { CaseStudyForm } from './client'
 
@@ -24,7 +23,7 @@ interface CaseStudyPageProps {
 export default async function EditCaseStudyPage({ params }: CaseStudyPageProps) {
   const resolvedParams = await params
   // Use service role client to bypass RLS
-  const supabase = createServiceClient()
+  const supabase = createServiceRoleSupabaseClient()
   const isNew = resolvedParams.id === 'new'
 
   // Fetch case study if editing

@@ -1,6 +1,6 @@
 # Admin Publishing Workflow Documentation
 
-This document outlines how the publishing workflow is implemented for content types in the admin panel, using Algorithms as the reference implementation. The same patterns can be applied to other content types like Personas, Industries, and Case Studies.
+This document outlines how the publishing workflow is implemented for content types in the admin panel, using Algorithms as the reference implementation. The same patterns can be applied to other content types like Personas, Industries, Blog posts, and Case Studies.
 
 ## Table of Contents
 
@@ -1026,3 +1026,576 @@ We have successfully implemented a consistent publishing workflow across all con
 - Proper relationship management with other content types
 
 This implementation provides a better user experience for content editors and ensures that only complete content is published to the site.
+
+### Standardization Plan
+
+To ensure consistency across all content types (Algorithms, Industries, Personas, Case Studies, and Blog), we will implement the following standardization plan:
+
+#### 1. API Routes Standardization
+
+All API routes will follow this consistent pattern:
+
+- **GET Handler**:
+  - Use the regular client (`createClient()`) for fetching content
+  - Include an `includeUnpublished` parameter to control visibility of unpublished content
+  - Implement consistent pagination and filtering
+
+- **POST/PUT Handler**:
+  - Use the service role client (`createServiceClient()`) for all write operations to bypass RLS
+  - Accept FormData consistently for all form submissions
+  - Handle array fields and relationships consistently
+  - Implement consistent error handling and response formats
+
+- **DELETE Handler**:
+  - Use the service role client (`createServiceClient()`) for delete operations to bypass RLS
+  - Implement proper cleanup of related data
+
+#### 2. Database & RLS Standardization
+
+- All content tables will have consistent RLS policies:
+  - "Public can view published content" for SELECT operations
+  - "Admins can manage content" for ALL operations using `auth.jwt() ->> 'role' = 'admin'`
+- Junction tables will use the same RLS pattern for admin access
+
+#### 3. Client Components Standardization
+
+- Create reusable components for common functionality:
+  - `ContentCompleteness`: For tracking completion percentage
+  - `ValidationModal`: For displaying validation issues
+  - `PublishButton`: For handling publishing/unpublishing
+  - `AutoSaveTabs`: For tab navigation with auto-save
+  - `RelationshipSelector`: For managing relationships
+
+#### 4. Implementation Plan
+
+1. Create a shared utility function in `src/utils/content-management.ts` that handles all CRUD operations for any content type
+2. Refactor all API routes to use this shared utility
+3. Update all client components to follow the same pattern
+4. Ensure all database tables have consistent RLS policies
+
+By implementing this standardization plan, we will ensure that all content types are managed in exactly the same way, making the codebase more maintainable and the user experience more consistent.
+
+## Comprehensive CMS Publishing Workflow Standardization Plan
+
+Based on the analysis of our current implementation, we've created a comprehensive implementation plan to standardize the publishing workflow across all content types (Algorithms, Personas, Industries, Case Studies, and Blog).
+
+### Executive Summary
+
+The current CMS implementation has successfully implemented publishing workflows for Algorithms, Personas, Industries, and Case Studies, with plans for Blog content. However, there are inconsistencies in implementation patterns across content types. This standardization plan aims to:
+
+1. Create reusable components and utilities for common functionality
+2. Standardize database schema and RLS policies
+3. Implement consistent API route patterns
+4. Apply these standards to all content types, including the new Blog implementation
+
+By implementing this plan, we will achieve:
+- Reduced code duplication
+- Improved maintainability
+- Consistent user experience
+- Easier onboarding for new developers
+- Simplified addition of new content types in the future
+
+### Implementation Plan
+
+#### Phase 1: Shared Utilities (2 weeks)
+
+1. Create a content management utility (`src/utils/content-management.ts`) with functions for:
+   - Fetching content items with filtering and pagination
+   - Fetching single content items with relationships
+   - Creating/updating content items
+   - Managing relationships in junction tables
+   - Deleting content items
+   - Updating published status
+
+2. Create a form validation utility (`src/utils/form-validation.ts`) with:
+   - Validation framework for form values
+   - Completion percentage calculation
+   - Common validators (required, minLength, isSlug, etc.)
+
+#### Phase 2: Database & RLS Standardization (1 week)
+
+1. Audit database schema to ensure consistency:
+   - All content tables have `published`, `updated_at`, and `published_at` fields
+   - Consistent triggers for updating timestamps
+   - Junction tables for many-to-many relationships
+
+2. Standardize RLS policies:
+   - "Public can view published content" for SELECT operations
+   - "Admins can manage content" for ALL operations
+   - Consistent policies for junction tables
+
+#### Phase 3: API Routes Standardization (2 weeks)
+
+1. Create a template for standardized API routes with:
+   - GET handler for fetching content (single item or list)
+   - POST handler for creating/updating content
+   - DELETE handler for removing content
+   - PATCH handler for updating published status
+
+2. Refactor existing API routes to use the template and shared utilities:
+   - `/api/algorithms/route.ts`
+   - `/api/personas/route.ts`
+   - `/api/industries/route.ts`
+   - `/api/case-studies/route.ts`
+
+#### Phase 4: Client Components Standardization (3 weeks)
+
+1. Create reusable components for common functionality:
+   - `ContentCompleteness`: Display completion percentage
+   - `ValidationModal`: Show validation issues
+   - `PublishButton`: Handle publishing/unpublishing
+   - `AutoSaveTabs`: Tab navigation with auto-save
+   - `RelationshipSelector`: Manage relationships
+
+2. Create a base form component (`src/components/admin/BaseContentForm.tsx`) that:
+   - Manages form state
+   - Handles validation
+   - Implements auto-save
+   - Tracks content completeness
+   - Manages publishing workflow
+
+3. Refactor existing client components to use the base form and reusable components:
+   - `src/app/admin/algorithms/[id]/client.tsx`
+   - `src/app/admin/personas/[id]/client.tsx`
+   - `src/app/admin/industries/[id]/client.tsx`
+   - `src/app/admin/case-studies/[id]/client.tsx`
+
+#### Phase 5: Blog Implementation (2 weeks)
+
+1. Create database schema for blog posts:
+   - `blog_posts` table with standard fields
+   - Junction tables for relationships
+   - RLS policies following the standard pattern
+
+2. Implement API routes for blog posts:
+   - Use the standardized API route template
+   - Customize for blog-specific fields and relationships
+
+3. Create client components for blog management:
+   - List view with filtering and search
+   - Edit form using the base form component
+   - Markdown editor for content
+
+4. Update navigation and dashboard to include blog management
+
+### Testing & Validation
+
+1. Create test cases for each standardized component and utility
+2. Verify that existing functionality works with the new standardized approach
+3. Test the publishing workflow for each content type
+4. Validate that RLS policies work correctly for different user roles
+
+### Timeline & Dependencies
+
+Total implementation time: 10 weeks (including parallel testing)
+
+### Next Steps
+
+1. Review and approve this standardization plan
+2. Set up a development branch for implementation
+3. Begin with Phase 1 (Shared Utilities)
+4. Schedule regular reviews to track progress and adjust as needed
+## Blog Implementation
+
+This section outlines the implementation plan for adding Blog publishing functionality to the CMS, following the same patterns used for other content types like Case Studies and Algorithms. Note that blog posts will use Markdown for content formatting.
+
+### 1. Database Schema Updates
+
+```mermaid
+erDiagram
+    blog_posts {
+        uuid id PK
+        text slug UK
+        text title
+        text description
+        text content
+        text author
+        text featured_image
+        text category
+        text[] tags
+        boolean published
+        boolean featured
+        timestamp published_at
+        timestamp created_at
+        timestamp updated_at
+        tsvector ts_content
+    }
+    blog_posts ||--o{ blog_post_relations : has
+    blog_post_relations {
+        uuid id PK
+        uuid blog_post_id FK
+        uuid related_blog_post_id FK
+        text relation_type
+        timestamp created_at
+    }
+```
+
+We need to create a new `blog_posts` table in the Supabase database:
+
+```sql
+-- Create blog_posts table
+create table blog_posts (
+    id uuid default uuid_generate_v4() primary key,
+    slug text unique not null,
+    title text not null,
+    description text,
+    content text,
+    author text,
+    featured_image text,
+    category text,
+    tags text[],
+    published boolean default false,
+    featured boolean default false,
+    published_at timestamp with time zone,
+    created_at timestamp with time zone default now(),
+    updated_at timestamp with time zone default now(),
+    ts_content tsvector
+);
+
+-- Create indexes for blog posts
+create index blog_posts_slug_idx on blog_posts (slug);
+create index blog_posts_tags_idx on blog_posts using gin (tags);
+create index blog_posts_ts_content_idx on blog_posts using gin (ts_content);
+
+-- Create trigger for updating ts_content
+create trigger blog_posts_ts_content_update
+before insert or update on blog_posts
+for each row execute function update_ts_content();
+
+-- Create trigger for updating updated_at
+create trigger update_blog_posts_updated_at
+before update on blog_posts
+for each row execute function update_updated_at_column();
+
+-- Enable RLS
+alter table blog_posts enable row level security;
+
+-- Create RLS policies
+create policy "Public can view published blog posts"
+    on blog_posts for select
+    using (published = true);
+
+create policy "Admins can manage blog posts"
+    on blog_posts for all
+    using (auth.jwt() ->> 'role' = 'admin');
+
+-- Create blog_post_relations table for related posts
+create table blog_post_relations (
+    id uuid default uuid_generate_v4() primary key,
+    blog_post_id uuid references blog_posts(id) on delete cascade,
+    related_blog_post_id uuid references blog_posts(id) on delete cascade,
+    relation_type text not null,
+    created_at timestamp with time zone default now(),
+    unique(blog_post_id, related_blog_post_id)
+);
+
+-- Enable RLS on relations table
+alter table blog_post_relations enable row level security;
+
+-- Create RLS policy for relations
+create policy "Admins can manage blog_post_relations"
+  on blog_post_relations
+  for all
+  using (auth.jwt() ->> 'role' = 'admin');
+```
+
+### 2. TypeScript Type Updates
+
+Update the TypeScript types in `@/types/supabase.ts` to include the new blog_posts table:
+
+```typescript
+// For blog posts
+blog_posts: {
+  Row: {
+    id: string;
+    slug: string;
+    title: string;
+    description: string | null;
+    content: string | null;
+    author: string | null;
+    featured_image: string | null;
+    category: string | null;
+    tags: string[] | null;
+    published: boolean;
+    featured: boolean;
+    published_at: string | null;
+    created_at: string;
+    updated_at: string;
+    ts_content: unknown | null;
+  }
+  Insert: {
+    id?: string;
+    slug: string;
+    title: string;
+    description?: string | null;
+    content?: string | null;
+    author?: string | null;
+    featured_image?: string | null;
+    category?: string | null;
+    tags?: string[] | null;
+    published?: boolean;
+    featured?: boolean;
+    published_at?: string | null;
+    created_at?: string;
+    updated_at?: string;
+    ts_content?: unknown | null;
+  }
+  Update: {
+    id?: string;
+    slug?: string;
+    title?: string;
+    description?: string | null;
+    content?: string | null;
+    author?: string | null;
+    featured_image?: string | null;
+    category?: string | null;
+    tags?: string[] | null;
+    published?: boolean;
+    featured?: boolean;
+    published_at?: string | null;
+    created_at?: string;
+    updated_at?: string;
+    ts_content?: unknown | null;
+  }
+}
+
+// For blog post relations
+blog_post_relations: {
+  Row: {
+    id: string;
+    blog_post_id: string;
+    related_blog_post_id: string;
+    relation_type: string;
+    created_at: string;
+  }
+  Insert: {
+    id?: string;
+    blog_post_id: string;
+    related_blog_post_id: string;
+    relation_type: string;
+    created_at?: string;
+  }
+  Update: {
+    id?: string;
+    blog_post_id?: string;
+    related_blog_post_id?: string;
+    relation_type?: string;
+    created_at?: string;
+  }
+}
+```
+
+### 3. Navigation Updates
+
+#### 3.1. Primary Navigation
+
+Update the `navItems` array in `src/components/Navigation.tsx`:
+
+```typescript
+const navItems = [
+  { href: '/paths', label: 'Learning Paths' },
+  { href: '/case-study', label: 'Case Studies' },
+  { href: '/blog', label: 'Blog' },
+];
+```
+
+#### 3.2. Admin Sidebar Navigation
+
+Update the `navItems` array in `src/app/admin/layout.tsx`:
+
+```typescript
+import {
+  LayoutDashboard,
+  FileText,
+  Briefcase,
+  Users,
+  BookOpen,
+  Settings,
+  PenTool
+} from 'lucide-react';
+
+const navItems = [
+  { href: '/admin', label: 'Dashboard', icon: <LayoutDashboard className="h-5 w-5" /> },
+  { href: '/admin/case-studies', label: 'Case Studies', icon: <FileText className="h-5 w-5" /> },
+  { href: '/admin/algorithms', label: 'Algorithms', icon: <BookOpen className="h-5 w-5" /> },
+  { href: '/admin/industries', label: 'Industries', icon: <Briefcase className="h-5 w-5" /> },
+  { href: '/admin/personas', label: 'Personas', icon: <Users className="h-5 w-5" /> },
+  { href: '/admin/blog', label: 'Blog', icon: <PenTool className="h-5 w-5" /> },
+  { href: '/admin/settings', label: 'Settings', icon: <Settings className="h-5 w-5" /> },
+];
+```
+
+### 4. Admin Dashboard Updates
+
+Update the `contentCards` array in `src/app/admin/page.tsx`:
+
+```typescript
+import { FileText, BookOpen, Briefcase, Users, PenTool } from 'lucide-react';
+
+// Fetch counts for different content types
+const [
+  caseStudiesResponse,
+  algorithmsResponse,
+  industriesResponse,
+  personasResponse,
+  blogPostsResponse
+] = await Promise.all([
+  supabase.from('case_studies').select('id', { count: 'exact', head: true }),
+  supabase.from('algorithms').select('id', { count: 'exact', head: true }),
+  supabase.from('industries').select('id', { count: 'exact', head: true }),
+  supabase.from('personas').select('id', { count: 'exact', head: true }),
+  supabase.from('blog_posts').select('id', { count: 'exact', head: true })
+]);
+
+const contentCounts = {
+  caseStudies: caseStudiesResponse.count || 0,
+  algorithms: algorithmsResponse.count || 0,
+  industries: industriesResponse.count || 0,
+  personas: personasResponse.count || 0,
+  blogPosts: blogPostsResponse.count || 0
+};
+
+const contentCards = [
+  {
+    title: 'Case Studies',
+    count: contentCounts.caseStudies,
+    icon: <FileText className="h-8 w-8 text-blue-500" />,
+    href: '/admin/case-studies',
+    description: 'Manage case studies and success stories'
+  },
+  {
+    title: 'Algorithms',
+    count: contentCounts.algorithms,
+    icon: <BookOpen className="h-8 w-8 text-purple-500" />,
+    href: '/admin/algorithms',
+    description: 'Manage quantum algorithm descriptions'
+  },
+  {
+    title: 'Industries',
+    count: contentCounts.industries,
+    icon: <Briefcase className="h-8 w-8 text-green-500" />,
+    href: '/admin/industries',
+    description: 'Manage industry categories'
+  },
+  {
+    title: 'Personas',
+    count: contentCounts.personas,
+    icon: <Users className="h-8 w-8 text-orange-500" />,
+    href: '/admin/personas',
+    description: 'Manage user personas'
+  },
+  {
+    title: 'Blog Posts',
+    count: contentCounts.blogPosts,
+    icon: <PenTool className="h-8 w-8 text-pink-500" />,
+    href: '/admin/blog',
+    description: 'Manage blog posts and articles'
+  }
+];
+```
+
+Also update the Quick Actions section:
+
+```typescript
+<Card>
+  <CardHeader>
+    <CardTitle className="text-lg">Create New Content</CardTitle>
+  </CardHeader>
+  <CardContent className="space-y-2">
+    <Link href="/admin/case-studies/new" className="block text-blue-500 hover:underline">
+      New Case Study
+    </Link>
+    <Link href="/admin/algorithms/new" className="block text-blue-500 hover:underline">
+      New Algorithm
+    </Link>
+    <Link href="/admin/industries/new" className="block text-blue-500 hover:underline">
+      New Industry
+    </Link>
+    <Link href="/admin/personas/new" className="block text-blue-500 hover:underline">
+      New Persona
+    </Link>
+    <Link href="/admin/blog/new" className="block text-blue-500 hover:underline">
+      New Blog Post
+    </Link>
+  </CardContent>
+</Card>
+```
+
+### 5. Admin Blog Management Implementation
+
+#### 5.1. Blog List Page
+
+Create a new file `src/app/admin/blog/page.tsx` that fetches and displays blog posts.
+
+#### 5.2. Blog List Client Component
+
+Create a new file `src/app/admin/blog/client.tsx` with a client component that handles:
+- Displaying a list of blog posts
+- Searching and filtering
+- Deleting blog posts
+- Showing publish status
+
+#### 5.3. Blog Post Edit Page
+
+Create a new file `src/app/admin/blog/[id]/page.tsx` that fetches a specific blog post for editing.
+
+#### 5.4. Blog Post Edit Client Component
+
+Create a new file `src/app/admin/blog/[id]/client.tsx` with a client component that implements:
+- Form state management
+- Tab navigation with auto-save
+- Content validation
+- Publishing workflow
+- Content completeness tracking
+- Markdown editor for blog content
+
+### 6. API Routes Implementation
+
+#### 6.1. Update the GET Handler
+
+Update `src/app/api/blog-posts/route.ts` to fetch blog posts and handle filtering.
+
+#### 6.2. Update the POST Handler
+
+Implement the POST handler to create and update blog posts.
+
+#### 6.3. Add a DELETE Handler
+
+Implement the DELETE handler to remove blog posts.
+
+### 7. Frontend Blog Pages Implementation
+
+#### 7.1. Update the Blog List Page
+
+Update `src/app/blog/page.tsx` to display published blog posts.
+
+#### 7.2. Update the Blog Post Detail Page
+
+Update `src/app/blog/[slug]/page.tsx` to display a single blog post with markdown rendering.
+
+### 8. Implementation Process
+
+```mermaid
+flowchart TD
+    A[1. Database Schema Updates] --> B[2. TypeScript Type Updates]
+    B --> C[3. Navigation Updates]
+    C --> D[4. Admin Dashboard Updates]
+    D --> E[5. Admin Blog Management Implementation]
+    E --> F[6. API Routes Implementation]
+    F --> G[7. Frontend Blog Pages Implementation]
+    G --> H[8. Testing and Validation]
+```
+
+### 9. Future Enhancements
+
+After the initial implementation, we can consider these enhancements:
+
+1. **Rich Text Editor**: Enhance the markdown editor with preview and formatting tools
+2. **Image Upload**: Add support for uploading and managing images
+3. **Categories Management**: Create a separate table for blog categories
+4. **Tags Management**: Create a separate table for blog tags
+5. **Related Posts**: Implement a system for suggesting related posts
+6. **Comments**: Add a commenting system for blog posts
+7. **Analytics**: Track views and engagement for blog posts
+8. **SEO Optimization**: Add metadata fields for SEO
+9. **Social Sharing**: Add social sharing buttons

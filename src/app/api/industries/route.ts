@@ -1,152 +1,134 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createServerClient } from '@/lib/supabase-server';
-import type { Database } from '@/types/supabase';
+import { 
+  fetchContentItems, 
+  fetchContentItem, 
+  saveContentItem, 
+  deleteContentItem,
+  updatePublishedStatus
+} from '@/utils/content-management';
 
-type Tables = Database['public']['Tables']
-type IndustryRow = Tables['industries']['Row']
-type IndustryInsert = Tables['industries']['Insert']
-type IndustryUpdate = Tables['industries']['Update']
+// Define the content type for this API route
+const CONTENT_TYPE = 'industries';
 
-export async function GET(request: Request) {
+/**
+ * GET handler for fetching industries
+ */
+export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
+    const slug = searchParams.get('slug');
     const page = parseInt(searchParams.get('page') || '1');
     const pageSize = parseInt(searchParams.get('pageSize') || '10');
+    const includeUnpublished = searchParams.get('includeUnpublished') === 'true';
     
-    const from = (page - 1) * pageSize;
-    const to = from + pageSize - 1;
+    // Handle single industry request
+    if (slug) {
+      const { data, error } = await fetchContentItem({
+        contentType: CONTENT_TYPE as any,
+        identifier: slug,
+        identifierType: 'slug',
+        includeUnpublished
+      });
+      
+      if (error || !data) {
+        return NextResponse.json(
+          { error: 'Industry not found' },
+          { status: 404 }
+        );
+      }
+      
+      return NextResponse.json(data);
+    }
     
-    // Use createServerClient to get authenticated client
-    const supabase = await createServerClient();
+    // Handle list request
+    const filters: Record<string, any> = {};
     
-    let query = supabase
-      .from('industries')
-      .select('*', { count: 'exact' })
-      .order('name')
-      .range(from, to);
+    const { data, error, count } = await fetchContentItems({
+      contentType: CONTENT_TYPE as any,
+      includeUnpublished,
+      page,
+      pageSize,
+      filters,
+      orderBy: 'name',
+      orderDirection: 'asc'
+    });
     
-    const { data, error, count } = await query;
-
     if (error) {
-      console.error('Error fetching industries:', error);
       return NextResponse.json(
-        { error: 'Failed to fetch industries' },
+        { error: 'Error fetching industries' },
         { status: 500 }
       );
     }
-
+    
     return NextResponse.json({
-      items: data || [],
-      metadata: {
-        total: count || 0,
+      items: data,
+      pagination: {
         page,
         pageSize,
+        totalItems: count,
         totalPages: Math.ceil((count || 0) / pageSize)
       }
     });
   } catch (error) {
-    console.error('Industries API Error:', error);
+    console.error('Error in industries GET handler:', error);
     return NextResponse.json(
-      { error: 'Internal server error' },
+      { error: 'Failed to fetch industries' },
       { status: 500 }
     );
   }
 }
 
+/**
+ * POST handler for creating or updating industries
+ */
 export async function POST(request: Request) {
   try {
     const formData = await request.formData();
-    const supabase = await createServerClient();
-
+    
     // Get form data
-    const id = formData.get('id') as string;
+    const id = formData.get('id') as string || null;
     const name = formData.get('name') as string;
     const slug = formData.get('slug') as string;
     const description = formData.get('description') as string || null;
     const icon = formData.get('icon') as string || null;
     const published = formData.get('published') === 'on';
     
-    console.log('Published value from form:', formData.get('published'));
-    console.log('Interpreted published value:', published);
-
     // Prepare the data object
-    const baseData: IndustryInsert = {
+    const data = {
       name,
       slug,
       description,
       icon,
       published
     };
-
-    let result;
-    if (id) {
-      // Update existing industry
-      console.log('Updating industry with data:', { ...baseData, published });
-      
-      // Log the exact data being sent to the database
-      console.log('Exact update data being sent to database:', {
-        ...baseData,
-        updated_at: new Date().toISOString(),
-        published: published // Explicitly log the published flag
-      });
-      
-      const { data: updatedData, error } = await supabase
-        .from('industries')
-        .update({
-          ...baseData,
-          updated_at: new Date().toISOString(),
-        })
-        .eq('id', id)
-        .select('*')
-        .single();
-        
-      if (error) {
-        console.error('Error updating industry:', error);
-        return NextResponse.json(
-          { error: error.message },
-          { status: 400 }
-        );
-      }
-      
-      console.log('Updated industry data:', updatedData);
-      result = updatedData;
-    } else {
-      // Create new industry
-      console.log('Inserting new industry with data:', { ...baseData, published });
-      
-      // Double-check the published value
-      console.log('Final published value before insert:', baseData.published);
-      
-      const { data: insertedData, error } = await supabase
-        .from('industries')
-        .insert({
-          ...baseData,
-        })
-        .select('*')
-        .single();
-        
-      if (error) {
-        console.error('Error inserting industry:', error);
-        return NextResponse.json(
-          { error: error.message },
-          { status: 400 }
-        );
-      }
-      
-      console.log('Inserted industry data:', insertedData);
-      result = insertedData;
+    
+    // Save the industry
+    const { data: savedItem, error } = await saveContentItem({
+      contentType: CONTENT_TYPE as any,
+      data,
+      id
+    });
+    
+    if (error || !savedItem) {
+      return NextResponse.json(
+        { error: 'Failed to save industry' },
+        { status: 500 }
+      );
     }
-
-    return NextResponse.json(result);
+    
+    return NextResponse.json(savedItem);
   } catch (error) {
-    console.error('Error handling industry submission:', error);
+    console.error('Error in industries POST handler:', error);
     return NextResponse.json(
-      { error: 'Internal server error' },
+      { error: 'Failed to save industry' },
       { status: 500 }
     );
   }
 }
 
+/**
+ * DELETE handler for removing industries
+ */
 export async function DELETE(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
@@ -154,45 +136,75 @@ export async function DELETE(request: NextRequest) {
     
     if (!id) {
       return NextResponse.json(
-        { error: 'Industry ID is required' },
+        { error: 'ID is required' },
         { status: 400 }
       );
     }
     
-    const supabase = await createServerClient();
+    const { success, error } = await deleteContentItem({
+      contentType: CONTENT_TYPE as any,
+      id
+    });
     
-    // Check if the industry exists
-    const { data: industry, error: fetchError } = await supabase
-      .from('industries')
-      .select('id')
-      .eq('id', id)
-      .single();
-      
-    if (fetchError || !industry) {
+    if (!success) {
       return NextResponse.json(
-        { error: 'Industry not found' },
-        { status: 404 }
-      );
-    }
-    
-    // Delete the industry
-    const { error: deleteError } = await supabase
-      .from('industries')
-      .delete()
-      .eq('id', id);
-      
-    if (deleteError) {
-      return NextResponse.json(
-        { error: deleteError.message },
-        { status: 400 }
+        { error: 'Failed to delete industry' },
+        { status: 500 }
       );
     }
     
     return NextResponse.json({ success: true });
   } catch (error) {
-    console.error('Error deleting industry:', error);
+    console.error('Error in industries DELETE handler:', error);
     return NextResponse.json(
-      { error: 'Internal server error' },
+      { error: 'Failed to delete industry' },
+      { status: 500 }
+    );
+  }
+}
+
+/**
+ * PATCH handler for updating published status
+ */
+export async function PATCH(request: NextRequest) {
+  try {
+    const { searchParams } = new URL(request.url);
+    const id = searchParams.get('id');
+    const body = await request.json();
+    const { published } = body;
+    
+    if (!id) {
+      return NextResponse.json(
+        { error: 'ID is required' },
+        { status: 400 }
+      );
+    }
+    
+    if (published === undefined) {
+      return NextResponse.json(
+        { error: 'Published status is required' },
+        { status: 400 }
+      );
+    }
+    
+    const { data, error } = await updatePublishedStatus({
+      contentType: CONTENT_TYPE as any,
+      id,
+      published
+    });
+    
+    if (error) {
+      return NextResponse.json(
+        { error: 'Failed to update published status for industry' },
+        { status: 500 }
+      );
+    }
+    
+    return NextResponse.json(data);
+  } catch (error) {
+    console.error('Error in industries PATCH handler:', error);
+    return NextResponse.json(
+      { error: 'Failed to update industry' },
       { status: 500 }
     );
   }

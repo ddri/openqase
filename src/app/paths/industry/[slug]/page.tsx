@@ -1,6 +1,6 @@
 // src/app/paths/industry/[slug]/page.tsx
 import { cookies } from 'next/headers';
-import { createClient } from '@/utils/supabase/server';
+import { createServerSupabaseClient } from '@/lib/supabase-server';
 import { Database } from '@/types/supabase';
 import LearningPathLayout from '@/components/ui/learning-path-layout';
 import { Badge } from '@/components/ui/badge';
@@ -27,7 +27,7 @@ interface CaseStudy {
 
 export async function generateMetadata({ params }: PageParams) {
   const resolvedParams = await params;
-  const supabase = await createClient();
+  const supabase = await createServerSupabaseClient();
   const { data: industry } = await supabase
     .from('industries')
     .select('*')
@@ -42,7 +42,7 @@ export async function generateMetadata({ params }: PageParams) {
 
 export default async function IndustryPage({ params }: PageParams) {
   const resolvedParams = await params;
-  const supabase = await createClient();
+  const supabase = await createServerSupabaseClient();
   
   console.log('Fetching industry with slug:', resolvedParams.slug);
   const { data: industry, error: industryError } = await supabase

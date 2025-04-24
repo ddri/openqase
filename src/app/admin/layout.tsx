@@ -5,7 +5,8 @@ import {
   Briefcase,
   Users,
   BookOpen,
-  Settings
+  Settings,
+  PenTool
 } from 'lucide-react';
 
 export default function AdminLayout({
@@ -19,6 +20,7 @@ export default function AdminLayout({
     { href: '/admin/algorithms', label: 'Algorithms', icon: <BookOpen className="h-5 w-5" /> },
     { href: '/admin/industries', label: 'Industries', icon: <Briefcase className="h-5 w-5" /> },
     { href: '/admin/personas', label: 'Personas', icon: <Users className="h-5 w-5" /> },
+    { href: '/admin/blog', label: 'Blog', icon: <PenTool className="h-5 w-5" /> },
     { href: '/admin/settings', label: 'Settings', icon: <Settings className="h-5 w-5" /> },
   ];
 

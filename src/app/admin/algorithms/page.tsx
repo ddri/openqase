@@ -1,5 +1,5 @@
 import { Metadata } from 'next'
-import { createClient } from '@/utils/supabase/server'
+import { createServiceRoleSupabaseClient } from '@/lib/supabase-server'
 import type { Database } from '@/types/supabase'
 import { AlgorithmsClient } from './client'
 
@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 export type Algorithm = Database['public']['Tables']['algorithms']['Row']
 
 export default async function AlgorithmsPage() {
-  const supabase = await createClient()
+  const supabase = createServiceRoleSupabaseClient()
   
   const { data: algorithms, error } = await supabase
     .from('algorithms')

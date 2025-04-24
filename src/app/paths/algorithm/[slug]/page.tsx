@@ -1,6 +1,6 @@
 // src/app/paths/algorithm/[slug]/page.tsx
 import { notFound } from 'next/navigation';
-import { createClient } from '@/utils/supabase/server';
+import { createServerSupabaseClient } from '@/lib/supabase-server';
 import type { Database } from '@/types/supabase';
 import LearningPathLayout from '@/components/ui/learning-path-layout';
 import { Badge } from '@/components/ui/badge';
@@ -25,7 +25,7 @@ interface AlgorithmPageProps {
 
 export default async function AlgorithmPage({ params }: AlgorithmPageProps) {
   const resolvedParams = await params;
-  const supabase = await createClient();
+  const supabase = await createServerSupabaseClient();
   
   console.log('Fetching algorithm with slug:', resolvedParams.slug);
   const { data: algorithm, error } = await supabase

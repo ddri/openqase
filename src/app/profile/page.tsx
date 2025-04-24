@@ -8,7 +8,7 @@ import { Label } from '@/components/ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Switch } from '@/components/ui/switch'
 import { toast } from '@/components/ui/use-toast'
-import { createClient } from '@/utils/supabase/client'
+import { createBrowserSupabaseClient } from '@/lib/supabase-browser'
 import { User } from '@supabase/supabase-js'
 import { useRouter } from 'next/navigation'
 
@@ -27,7 +27,7 @@ export default function ProfilePage() {
     social: false,
     security: true
   })
-  const supabase = createClient()
+  const supabase = createBrowserSupabaseClient()
   const router = useRouter()
 
   // Check auth and load user
@@ -256,4 +256,4 @@ export default function ProfilePage() {
       </div>
     </div>
   )
-} 
+}

@@ -1,10 +1,10 @@
 // src/app/case-study/page.tsx
 import CaseStudyList from '@/components/CaseStudyList';
-import { createServiceClient } from '@/utils/supabase/service-role';
+import { createServiceRoleSupabaseClient } from '@/lib/supabase-server';
 import type { CaseStudy } from '@/lib/types';
 
 export default async function CaseStudyPage() {
-  const supabase = createServiceClient();
+  const supabase = createServiceRoleSupabaseClient();
   
   // Fetch case studies directly using the service role client
   const { data, error } = await supabase

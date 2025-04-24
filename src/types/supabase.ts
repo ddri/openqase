@@ -341,6 +341,99 @@ export type Database = {
         }
         Relationships: []
       }
+      blog_posts: {
+        Row: {
+          id: string
+          slug: string
+          title: string
+          description: string | null
+          content: string | null
+          author: string | null
+          featured_image: string | null
+          category: string | null
+          tags: string[] | null
+          published: boolean
+          featured: boolean
+          published_at: string | null
+          created_at: string
+          updated_at: string
+          ts_content: unknown | null
+        }
+        Insert: {
+          id?: string
+          slug: string
+          title: string
+          description?: string | null
+          content?: string | null
+          author?: string | null
+          featured_image?: string | null
+          category?: string | null
+          tags?: string[] | null
+          published?: boolean
+          featured?: boolean
+          published_at?: string | null
+          created_at?: string
+          updated_at?: string
+          ts_content?: unknown | null
+        }
+        Update: {
+          id?: string
+          slug?: string
+          title?: string
+          description?: string | null
+          content?: string | null
+          author?: string | null
+          featured_image?: string | null
+          category?: string | null
+          tags?: string[] | null
+          published?: boolean
+          featured?: boolean
+          published_at?: string | null
+          created_at?: string
+          updated_at?: string
+          ts_content?: unknown | null
+        }
+        Relationships: []
+      }
+      blog_post_relations: {
+        Row: {
+          id: string
+          blog_post_id: string
+          related_blog_post_id: string
+          relation_type: string
+          created_at: string | null
+        }
+        Insert: {
+          id?: string
+          blog_post_id: string
+          related_blog_post_id: string
+          relation_type: string
+          created_at?: string | null
+        }
+        Update: {
+          id?: string
+          blog_post_id?: string
+          related_blog_post_id?: string
+          relation_type?: string
+          created_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "blog_post_relations_blog_post_id_fkey"
+            columns: ["blog_post_id"]
+            isOneToOne: false
+            referencedRelation: "blog_posts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "blog_post_relations_related_blog_post_id_fkey"
+            columns: ["related_blog_post_id"]
+            isOneToOne: false
+            referencedRelation: "blog_posts"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
     }
     Views: {
       [_ in never]: never

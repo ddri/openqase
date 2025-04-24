@@ -1,7 +1,7 @@
 // src/app/paths/persona/[slug]/page.tsx
 import { notFound } from 'next/navigation';
-import { createClient } from '@/utils/supabase/server';
-import { Database } from '@/types/supabase';
+import { createServerSupabaseClient } from '@/lib/supabase-server';
+import type { Database } from '@/types/supabase';
 import LearningPathLayout from '@/components/ui/learning-path-layout';
 import ContentCard from '@/components/ui/content-card';
 import { cookies } from 'next/headers';
@@ -30,7 +30,7 @@ interface PageParams {
 // Get metadata for the page
 export async function generateMetadata({ params }: PageParams) {
   const resolvedParams = await params;
-  const supabase = await createClient();
+  const supabase = await createServerSupabaseClient();
   
   const { data: persona } = await supabase
     .from('personas')
@@ -55,7 +55,7 @@ export async function generateMetadata({ params }: PageParams) {
 
 export default async function PersonaPage({ params }: PageParams) {
   const resolvedParams = await params;
-  const supabase = await createClient();
+  const supabase = await createServerSupabaseClient();
   
   // Step 1: Get the persona
   const { data: persona, error: personaError } = await supabase

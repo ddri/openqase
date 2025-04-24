@@ -1,7 +1,7 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import Link from "next/link"
-import { createServerClient } from '@/lib/supabase-server'
+import { createServerSupabaseClient } from '../../lib/supabase-server'
 import type { Database } from '@/types/supabase'
 import { notFound } from 'next/navigation'
 
@@ -11,24 +11,35 @@ interface BlogPost {
   slug: string;
   description?: string;
   content?: string;
+  author?: string;
   category?: string;
+  tags?: string[];
   published: boolean;
   published_at?: string;
   created_at: string;
   updated_at: string;
 }
 
-// Blog functionality is not yet implemented
-// The blog_posts table doesn't exist in the database schema
-// This is a placeholder for future implementation
 async function getBlogPosts() {
-  // Return empty array for now
-  return [] as BlogPost[]
+  const supabase = await createServerSupabaseClient();
+  
+  const { data, error } = await supabase
+    .from('blog_posts')
+    .select('*')
+    .eq('published', true)
+    .order('published_at', { ascending: false });
+    
+  if (error) {
+    console.error('Error fetching blog posts:', error);
+    return [];
+  }
+  
+  return data as BlogPost[];
 }
 
 export default async function BlogPage() {
-  const posts = await getBlogPosts()
-
+  const posts = await getBlogPosts();
+  
   return (
     <div className="container mx-auto px-4 py-12">
       {/* Hero Section */}
@@ -38,15 +49,41 @@ export default async function BlogPage() {
           Insights, tutorials, and updates from the quantum computing community.
         </p>
       </div>
-
-      {/* Coming Soon Message */}
-      <div className="max-w-3xl mx-auto text-center mb-16 p-8 border rounded-lg">
-        <h2 className="text-2xl font-bold mb-4">Coming Soon</h2>
-        <p className="text-muted-foreground">
-          Our blog is currently under development. Check back soon for articles, tutorials, and case studies.
-        </p>
-      </div>
-
+      
+      {/* Blog Posts */}
+      {posts.length === 0 ? (
+        <div className="max-w-3xl mx-auto text-center mb-16 p-8 border rounded-lg">
+          <h2 className="text-2xl font-bold mb-4">Coming Soon</h2>
+          <p className="text-muted-foreground">
+            Our blog is currently under development. Check back soon for articles, tutorials, and case studies.
+          </p>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+          {posts.map((post) => (
+            <Link href={`/blog/${post.slug}`} key={post.id}>
+              <Card className="h-full hover:shadow-md transition-shadow">
+                <CardHeader>
+                  <CardTitle className="line-clamp-2">{post.title}</CardTitle>
+                  <CardDescription>
+                    {post.published_at && new Date(post.published_at).toLocaleDateString()}
+                    {post.category && ` • ${post.category}`}
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-muted-foreground line-clamp-3">
+                    {post.description}
+                  </p>
+                  {post.author && (
+                    <p className="text-sm mt-4">By {post.author}</p>
+                  )}
+                </CardContent>
+              </Card>
+            </Link>
+          ))}
+        </div>
+      )}
+      
       {/* Newsletter Signup */}
       <div className="max-w-3xl mx-auto mt-16 text-center">
         <Card>
@@ -71,5 +108,5 @@ export default async function BlogPage() {
         </Card>
       </div>
     </div>
-  )
+  );
 }

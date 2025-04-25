@@ -95,7 +95,13 @@ We're actively working to deprecate API routes in favor of Server Actions and di
    * Implemented Server Actions for saving, publishing, and unpublishing case studies
    * Added proper handling of relationships with industries, algorithms, and personas
 
-3. **Next Steps for API Route Deprecation**:
+3. **Removed Unused Legacy Code**:
+   * Removed `src/app/admin/algorithms/[id]/client-standardized.tsx` which was causing type errors but wasn't being used
+   * Removed `src/app/api/user/preferences/route.ts` which was trying to import a non-existent `getCurrentUser` function
+   * Fixed `createServiceRoleSupabaseClient()` usage in case-studies API route by adding the `await` keyword
+   * These changes resolved build errors while aligning with our plan to deprecate API routes
+
+4. **Next Steps for API Route Deprecation**:
    * Continue replacing API route usage with direct Supabase calls in Server Components
    * Implement Server Actions for any remaining admin interfaces
    * Eventually remove redundant API routes once all client-side fetch calls are replaced
@@ -178,6 +184,18 @@ To ensure consistent relationship handling across all content types, we'll follo
    - [ ] Share the standardized approach with the team
 
 This standardization will ensure consistent, maintainable code across all content types and make future development more efficient.
+
+### Remaining Tasks
+
+1. **Complete Documentation and Knowledge Sharing**:
+   - Document the standardized approach in a developer guide
+   - Create examples of proper relationship handling for future reference
+   - Share the standardized approach with the team
+
+2. **Continue API Route Deprecation**:
+   - Replace remaining API routes with Server Actions
+   - Ensure all createServiceRoleSupabaseClient() calls are properly awaited
+   - Remove redundant API routes once all client-side fetch calls are replaced
 6.  **(Optional) Enhance Publishing Workflow:**
     *   Migrate schema: `published boolean` -> `status text` ('draft', 'review', 'published').
     *   Update logic and UI to handle statuses.

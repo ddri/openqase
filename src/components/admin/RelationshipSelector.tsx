@@ -117,12 +117,6 @@ export function RelationshipSelector({
   
   const isMaxReached = maxItems ? selectedItems.length >= maxItems : false;
   
-  // Debug logging
-  useEffect(() => {
-    console.log(`RelationshipSelector "${label}" - Available items:`, items);
-    console.log(`RelationshipSelector "${label}" - Selected items:`, selectedItems);
-  }, [items, selectedItems, label]);
-  
   return (
     <div className={cn('space-y-2', className)}>
       <div className="flex justify-between">

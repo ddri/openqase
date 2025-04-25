@@ -76,26 +76,22 @@ export default async function PersonaPage({ params }: PageParams) {
     notFound();
   }
 
-  // Step 2: Get related case studies using the API route
+  // Step 2: Get related case studies directly using Supabase
   let caseStudies: CaseStudy[] = [];
   
   if (persona.related_case_studies && persona.related_case_studies.length > 0) {
     try {
-      // Use the API route instead of direct Supabase query
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/api/case-studies`,
-        { cache: 'no-store' }
-      );
-      
-      if (response.ok) {
-        const data = await response.json();
-        // Filter case studies to only include those related to this persona
-        caseStudies = data.items.filter((cs: CaseStudy) =>
-          persona.related_case_studies?.includes(cs.slug)
-        );
+      // Fetch case studies directly using Supabase
+      const { data: caseStudyData, error: caseStudyError } = await supabase
+        .from('case_studies')
+        .select('*')
+        .in('id', persona.related_case_studies)
+        .eq('published', true);
+        
+      if (caseStudyError) {
+        console.error('Error fetching case studies:', caseStudyError);
       } else {
-        const error = await response.json();
-        console.error('Error fetching case studies:', error);
+        caseStudies = caseStudyData || [];
       }
     } catch (error) {
       console.error('Error fetching case studies:', error);

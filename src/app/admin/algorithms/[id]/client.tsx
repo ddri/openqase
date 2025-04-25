@@ -44,8 +44,8 @@ export function AlgorithmForm({ algorithm, caseStudies, industries, isNew }: Alg
     main_content: isNew ? '' : algorithm?.main_content || '',
     quantum_advantage: isNew ? '' : algorithm?.quantum_advantage || '',
     use_cases: isNew ? [] : algorithm?.use_cases || [],
-    related_case_studies: isNew ? [] : algorithm?.related_case_studies?.map((cs: any) => cs.slug) || [],
-    related_industries: isNew ? [] : algorithm?.related_industries?.map((ind: any) => ind.slug) || [],
+    related_case_studies: isNew ? [] : algorithm?.related_case_studies?.map((cs: any) => cs.id) || [],
+    related_industries: isNew ? [] : algorithm?.related_industries?.map((ind: any) => ind.id) || [],
     published: isNew ? false : algorithm?.published || false,
   });
   const [isDirty, setIsDirty] = useState(false);
@@ -330,7 +330,7 @@ export function AlgorithmForm({ algorithm, caseStudies, industries, isNew }: Alg
               selectedItems={values.related_case_studies}
               onChange={(selectedItems) => handleChange('related_case_studies', selectedItems)}
               itemLabelKey="title"
-              itemValueKey="slug"
+              itemValueKey="id"
               label="Related Case Studies"
               placeholder="Select case studies..."
               required={true}
@@ -341,7 +341,7 @@ export function AlgorithmForm({ algorithm, caseStudies, industries, isNew }: Alg
               selectedItems={values.related_industries}
               onChange={(selectedItems) => handleChange('related_industries', selectedItems)}
               itemLabelKey="name"
-              itemValueKey="slug"
+              itemValueKey="id"
               label="Related Industries"
               placeholder="Select industries..."
             />

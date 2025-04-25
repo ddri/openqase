@@ -78,7 +78,7 @@ export async function GET(request: NextRequest) {
         console.log('Handling algorithm filter for case studies:', algorithm);
         
         // Get the algorithm ID first
-        const serviceClient = createServiceRoleSupabaseClient();
+        const serviceClient = await createServiceRoleSupabaseClient();
         const { data: algorithmData, error: algorithmError } = await serviceClient
           .from('algorithms')
           .select('id, name')
@@ -153,7 +153,7 @@ export async function GET(request: NextRequest) {
         console.log('Handling industry filter for case studies:', industry);
         
         // Get the industry ID first
-        const serviceClient = createServiceRoleSupabaseClient();
+        const serviceClient = await createServiceRoleSupabaseClient();
         const { data: industryData, error: industryError } = await serviceClient
           .from('industries')
           .select('id, name')
@@ -209,7 +209,7 @@ export async function GET(request: NextRequest) {
         console.log('Handling persona filter for case studies:', persona);
         
         // Get the persona ID first
-        const serviceClient = createServiceRoleSupabaseClient();
+        const serviceClient = await createServiceRoleSupabaseClient();
         const { data: personaData, error: personaError } = await serviceClient
           .from('personas')
           .select('id, name')

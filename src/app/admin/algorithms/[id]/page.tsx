@@ -40,22 +40,15 @@ export default async function EditAlgorithmPage({ params }: AlgorithmPageProps) 
 
   // Fetch related data for relationships using service client to bypass RLS
   
-  // Log for debugging
-  console.log('Fetching case studies for algorithm form...');
-  
   const { data: caseStudies } = await supabase
     .from('case_studies')
     .select('id, title, slug')
     .order('title');
-    
-  console.log(`Found ${caseStudies?.length || 0} case studies`);
 
   const { data: industries } = await supabase
     .from('industries')
     .select('id, name, slug')
     .order('name');
-    
-  console.log(`Found ${industries?.length || 0} industries`);
 
   if (!isNew && !algorithm) {
     notFound();

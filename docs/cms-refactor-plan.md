@@ -79,6 +79,21 @@ We've fixed issues with the blog display pages:
    * Fixed import paths to use relative paths instead of aliases that were causing TypeScript errors
    * This resolved the "TypeError: createServerClient is not defined" errors that were preventing blog posts from displaying
 
+### API Route Deprecation Progress
+
+We're actively working to deprecate API routes in favor of Server Actions and direct Supabase calls in Server Components (SSR), as outlined in the refactoring plan:
+
+1. **Fixed Case Studies Display Issues**:
+   * Updated content-management.ts to correctly import createBrowserSupabaseClient from @/lib/supabase-browser
+   * Modified industry, algorithm, and persona pages to use direct Supabase calls instead of API routes
+   * Added proper type assertions and mappings to handle TypeScript errors with junction tables
+   * This resolved the "TypeError: serviceClient.from is not a function" errors
+
+2. **Next Steps for API Route Deprecation**:
+   * Continue replacing API route usage with direct Supabase calls in Server Components
+   * Implement Server Actions for remaining admin interfaces
+   * Eventually remove redundant API routes once all client-side fetch calls are replaced
+
 ### Next Steps
 
 1. Apply the single-page form pattern to:

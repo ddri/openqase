@@ -8,17 +8,25 @@ export async function savePersona(values: any): Promise<any> {
     console.log("Saving persona with values:", JSON.stringify(values, null, 2));
     
     const supabase = createServiceRoleSupabaseClient();
+    
+    // Store the original industry array
+    const industryIds = values.industry || [];
+    
+    // Remove industry from values to avoid storing it directly in the persona record
+    const personaValues = { ...values };
+    delete personaValues.industry;
+    
+    // Upsert the persona
     const { data, error } = await supabase
       .from('personas')
       .upsert({
-        id: values.id,
-        name: values.name,
-        slug: values.slug,
-        description: values.description,
-        role: values.role,
-        main_content: values.main_content,
-        industry: values.industry,
-        published: values.published,
+        id: personaValues.id,
+        name: personaValues.name,
+        slug: personaValues.slug,
+        description: personaValues.description,
+        role: personaValues.role,
+        main_content: personaValues.main_content,
+        published: personaValues.published,
       })
       .select()
       .single();
@@ -27,6 +35,30 @@ export async function savePersona(values: any): Promise<any> {
       console.error("Error saving persona:", error);
       console.error("Error details:", JSON.stringify(error, null, 2));
       throw new Error(error.message || "Failed to save persona");
+    }
+    
+    // Handle industry relationships (delete and re-create)
+    let industryError = await supabase
+      .from('persona_industry_relations' as any)
+      .delete()
+      .eq('persona_id', data?.id);
+
+    if (industryError && industryError.error) {
+        console.error("Error deleting industry relationships:", industryError.error);
+        throw new Error(industryError.error.message || "Failed to delete industry relationships");
+    }
+
+    if (industryIds.length > 0) {
+      for (const industryId of industryIds) {
+          let insertError = await supabase
+              .from('persona_industry_relations' as any)
+              .insert({ persona_id: data?.id, industry_id: industryId });
+
+          if (insertError && insertError.error) {
+              console.error("Error inserting industry relationship:", insertError.error);
+              throw new Error(insertError.error.message || "Failed to insert industry relationship");
+          }
+      }
     }
     
     console.log("Persona saved successfully:", JSON.stringify(data, null, 2));

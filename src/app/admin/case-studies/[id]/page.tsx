@@ -34,6 +34,43 @@ export default async function EditCaseStudyPage({ params }: CaseStudyPageProps) 
         .eq('id', resolvedParams.id)
         .single()
     : { data: null }
+    
+  // Fetch relationships if editing
+  let algorithmIds: string[] = []
+  let industryIds: string[] = []
+  let personaIds: string[] = []
+  
+  if (!isNew && caseStudy) {
+    // Fetch algorithm relationships
+    const { data: algorithmRelations } = await supabase
+      .from('algorithm_case_study_relations')
+      .select('algorithm_id')
+      .eq('case_study_id', caseStudy.id)
+    
+    if (algorithmRelations) {
+      algorithmIds = algorithmRelations.map(relation => relation.algorithm_id as string)
+    }
+    
+    // Fetch industry relationships
+    const { data: industryRelations } = await supabase
+      .from('case_study_industry_relations' as any)
+      .select('industry_id')
+      .eq('case_study_id', caseStudy.id)
+    
+    if (industryRelations) {
+      industryIds = industryRelations.map((relation: any) => relation.industry_id)
+    }
+    
+    // Fetch persona relationships
+    const { data: personaRelations } = await supabase
+      .from('case_study_persona_relations' as any)
+      .select('persona_id')
+      .eq('case_study_id', caseStudy.id)
+    
+    if (personaRelations) {
+      personaIds = personaRelations.map((relation: any) => relation.persona_id)
+    }
+  }
 
   // Fetch related data for dropdowns
   const { data: industries } = await supabase
@@ -53,6 +90,13 @@ export default async function EditCaseStudyPage({ params }: CaseStudyPageProps) 
 
   if (!isNew && !caseStudy) {
     notFound()
+  }
+
+  // If editing, add the relationship IDs to the case study data
+  if (!isNew && caseStudy) {
+    caseStudy.algorithms = algorithmIds;
+    caseStudy.industries = industryIds;
+    caseStudy.personas = personaIds;
   }
 
   return (

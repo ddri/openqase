@@ -6,7 +6,7 @@ To standardize, simplify, and modernize the `/admin` CMS architecture by leverag
 
 ## Current Architecture Summary
 
-*   **Framework:** Next.js (App Router)
+*   **Framework:** Next.js 15 (App Router)
 *   **Structure:**
     *   Admin UI: `src/app/admin/[content-type]/` (Server + Client Components)
     *   API Routes: `src/app/api/[content-type]/` (Called by client components)
@@ -20,7 +20,7 @@ To standardize, simplify, and modernize the `/admin` CMS architecture by leverag
 
 ## Weaknesses / Areas for Improvement
 
-*   Redundant API layer (vs. Server Actions).
+*   Redundant API layer (vs. Server Actions). We are removing the API layer once safe to do so.
 *   Lack of input validation (Zod).
 *   Scalability concerns (pagination, basic publishing).
 *   Developer Experience issues (duplicate Supabase utils, manual cache invalidation).
@@ -54,7 +54,7 @@ To standardize, simplify, and modernize the `/admin` CMS architecture by leverag
         * ✅ Personas (completed)
         * ✅ Algorithms (completed)
         * ✅ Industries (completed)
-        * ⬜ Case Studies (pending)
+        * ✅ Case Studies (completed)
         * ✅ Blog Posts (completed)
 
 ## Implementation Notes (April 2025)
@@ -89,9 +89,15 @@ We're actively working to deprecate API routes in favor of Server Actions and di
    * Added proper type assertions and mappings to handle TypeScript errors with junction tables
    * This resolved the "TypeError: serviceClient.from is not a function" errors
 
-2. **Next Steps for API Route Deprecation**:
+2. **Updated Case Studies Admin Interface**:
+   * Replaced tabbed interface with single-page scrollable form
+   * Removed autosave functionality that was causing duplicate slug errors
+   * Implemented Server Actions for saving, publishing, and unpublishing case studies
+   * Added proper handling of relationships with industries, algorithms, and personas
+
+3. **Next Steps for API Route Deprecation**:
    * Continue replacing API route usage with direct Supabase calls in Server Components
-   * Implement Server Actions for remaining admin interfaces
+   * Implement Server Actions for any remaining admin interfaces
    * Eventually remove redundant API routes once all client-side fetch calls are replaced
 
 ### Next Steps
@@ -99,16 +105,79 @@ We're actively working to deprecate API routes in favor of Server Actions and di
 1. Apply the single-page form pattern to:
    * ✅ Algorithms admin (completed)
    * ✅ Industries admin (completed)
-   * ⬜ Case Studies admin (pending)
+   * ✅ Case Studies admin (completed)
    * ✅ Blog Posts admin (completed)
 
 2. Ensure proper handling of relationships for each content type:
    * ✅ Algorithms ↔ Case Studies
    * ✅ Algorithms ↔ Industries
-   * ⬜ Case Studies ↔ Related Case Studies
+   * ✅ Case Studies ↔ Industries
+   * ✅ Case Studies ↔ Algorithms
+   * ✅ Case Studies ↔ Personas
    * ✅ Blog Posts ↔ Related Blog Posts
 
 3. ✅ Test the publishing workflow for each content type to ensure it works correctly
+
+### Standardized Relationship Handling
+
+After analyzing the different approaches used across content types, we've decided to standardize on the following approach for handling relationships:
+
+1. **Use Junction Tables** for all many-to-many relationships
+   - This provides better scalability and flexibility than storing arrays directly in records
+   - Each relationship type should have its own junction table (e.g., `algorithm_case_study_relations`)
+
+2. **Use ID-based RelationshipSelectors**
+   - All RelationshipSelector components should use `itemValueKey="id"`
+   - This provides direct handling without needing conversion between slugs and IDs
+   - This approach is already used in Case Studies and Blog Posts
+
+3. **Direct ID Handling in Server Actions**
+   - Server Actions should directly use the IDs from the form values
+   - No need for slug-to-ID conversion logic
+
+This standardization will be applied to all content types, including updating the Algorithms admin interface to match this pattern.
+
+**Note about Industries**: The Industries content type doesn't currently have any relationships to manage (it's only referenced by other content types). If relationships are added to Industries in the future, they should follow this standardized approach.
+
+### Implementation Plan for Relationship Standardization
+
+To ensure consistent relationship handling across all content types, we'll follow this implementation plan:
+
+1. **Audit Current Implementation**
+   - ✅ Analyze how each content type handles relationships
+   - ✅ Document the differences and decide on a standard approach
+   - ✅ Update cms-refactor-plan.md with the standardized approach
+
+2. **Update Algorithms Admin Interface**
+   - ✅ Modify `src/app/admin/algorithms/[id]/client.tsx` to use "id" as itemValueKey in RelationshipSelectors
+   - ✅ Update `src/app/admin/algorithms/[id]/actions.ts` to remove slug-to-ID conversion logic
+   - ✅ Test the updated implementation thoroughly
+
+3. **Verify Case Studies Implementation**
+   - ✅ Confirm that Case Studies is already using the standardized approach
+   - ✅ Fix any bugs in the Case Studies relationship handling
+
+4. **Verify Blog Posts Implementation**
+   - ✅ Confirm that Blog Posts is already using the standardized approach
+   - ✅ Test the Blog Posts relationship handling
+
+5. **Update Personas Implementation**
+   - ✅ Evaluate if Personas should be migrated to use junction tables
+   - ✅ Create persona_industry_relations junction table
+   - ✅ Update RelationshipSelector to use "id" as itemValueKey
+   - ✅ Update page.tsx to fetch relationships from junction table
+   - ✅ Update actions.ts to handle relationships using junction table
+
+6. **Fix Case Studies Implementation**
+   - ✅ Update page.tsx to fetch relationships from the correct junction tables
+   - ✅ Add relationship IDs to the caseStudy object before passing to the form
+
+7. **Documentation and Knowledge Sharing**
+   - [ ] Document the standardized approach in a developer guide
+   - [ ] Create examples of proper relationship handling for future reference
+   - [ ] Share the standardized approach with the team
+
+This standardization will ensure consistent, maintainable code across all content types and make future development more efficient.
 6.  **(Optional) Enhance Publishing Workflow:**
     *   Migrate schema: `published boolean` -> `status text` ('draft', 'review', 'published').
     *   Update logic and UI to handle statuses.

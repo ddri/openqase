@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useTransition } from 'react';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -11,43 +11,51 @@ import { Textarea } from '@/components/ui/textarea';
 import { ContentCompleteness } from '@/components/admin/ContentCompleteness';
 import { PublishButton } from '@/components/admin/PublishButton';
 import { createContentValidationRules, calculateCompletionPercentage, validateFormValues } from '@/utils/form-validation';
-import { useTransition } from 'react';
 import { ArrowLeft, Save, Loader2 } from 'lucide-react';
 import { toast } from '@/components/ui/use-toast';
-import { savePersona, publishPersona, unpublishPersona } from './actions';
+import { saveCaseStudy, publishCaseStudy, unpublishCaseStudy } from './actions';
 
-interface PersonaFormProps {
-  persona: any | null;
+interface CaseStudyFormProps {
+  caseStudy: any | null;
+  algorithms: any[];
   industries: any[];
+  personas: any[];
   isNew: boolean;
 }
 
 /**
- * PersonaForm Component
+ * CaseStudyForm Component
  *
- * A simplified form for personas with all fields on a single page.
+ * A simplified form for case studies with all fields on a single page.
  *
- * @param persona - Initial persona data
+ * @param caseStudy - Initial case study data
+ * @param algorithms - Available algorithms for relationships
  * @param industries - Available industries for relationships
- * @param isNew - Whether this is a new persona
+ * @param personas - Available personas for relationships
+ * @param isNew - Whether this is a new case study
  */
-export function PersonaForm({ persona, industries, isNew }: PersonaFormProps) {
+export function CaseStudyForm({ caseStudy, algorithms, industries, personas, isNew }: CaseStudyFormProps) {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const [values, setValues] = useState({
-    id: isNew ? undefined : persona?.id,
-    name: isNew ? '' : persona?.name || '',
-    slug: isNew ? '' : persona?.slug || '',
-    description: isNew ? '' : persona?.description || '',
-    role: isNew ? '' : persona?.role || '',
-    main_content: isNew ? '' : persona?.main_content || '',
-    industry: isNew ? [] : persona?.industry || [],
-    published: isNew ? false : persona?.published || false,
+    id: isNew ? undefined : caseStudy?.id,
+    title: isNew ? '' : caseStudy?.title || '',
+    slug: isNew ? '' : caseStudy?.slug || '',
+    description: isNew ? '' : caseStudy?.description || '',
+    main_content: isNew ? '' : caseStudy?.main_content || '',
+    url: isNew ? '' : caseStudy?.url || '',
+    partner_companies: isNew ? [] : caseStudy?.partner_companies || [],
+    quantum_companies: isNew ? [] : caseStudy?.quantum_companies || [],
+    quantum_hardware: isNew ? [] : caseStudy?.quantum_hardware || [],
+    algorithms: isNew ? [] : caseStudy?.algorithms || [],
+    industries: isNew ? [] : caseStudy?.industries || [],
+    personas: isNew ? [] : caseStudy?.personas || [],
+    published: isNew ? false : caseStudy?.published || false,
   });
   const [isDirty, setIsDirty] = useState(false);
   
-  // Validation rules for personas
-  const validationRules = createContentValidationRules('persona');
+  // Validation rules for case studies
+  const validationRules = createContentValidationRules('case_study');
   const completionPercentage = calculateCompletionPercentage({ values, validationRules });
   
   // Handle field change
@@ -65,18 +73,18 @@ export function PersonaForm({ persona, industries, isNew }: PersonaFormProps) {
     
     startTransition(async () => {
       try {
-        const result = await savePersona(values);
+        const result = await saveCaseStudy(values);
         
-        // If this was a new persona and we got an ID back, redirect to edit page
+        // If this was a new case study and we got an ID back, redirect to edit page
         if (isNew && result?.id) {
-          router.push(`/admin/personas/${result.id}`);
+          router.push(`/admin/case-studies/${result.id}`);
         }
         
         setIsDirty(false);
         
         toast({
           title: 'Saved',
-          description: 'Persona saved successfully',
+          description: 'Case study saved successfully',
           duration: 3000,
         });
       } catch (error) {
@@ -85,7 +93,7 @@ export function PersonaForm({ persona, industries, isNew }: PersonaFormProps) {
         toast({
           variant: 'destructive',
           title: 'Error',
-          description: 'Failed to save persona',
+          description: 'Failed to save case study',
           duration: 5000,
         });
       }
@@ -98,7 +106,7 @@ export function PersonaForm({ persona, industries, isNew }: PersonaFormProps) {
       toast({
         variant: 'destructive',
         title: 'Error',
-        description: 'Cannot publish persona without saving first',
+        description: 'Cannot publish case study without saving first',
         duration: 3000,
       });
       return;
@@ -107,16 +115,16 @@ export function PersonaForm({ persona, industries, isNew }: PersonaFormProps) {
     startTransition(async () => {
       try {
         // First save the content
-        await savePersona(values);
+        await saveCaseStudy(values);
         
         // Then publish it
-        await publishPersona(values.id!);
+        await publishCaseStudy(values.id!);
         
         setValues(prev => ({ ...prev, published: true }));
         
         toast({
           title: 'Published',
-          description: 'Persona is now published and visible to users',
+          description: 'Case study is now published and visible to users',
           duration: 3000,
         });
       } catch (error) {
@@ -125,7 +133,7 @@ export function PersonaForm({ persona, industries, isNew }: PersonaFormProps) {
         toast({
           variant: 'destructive',
           title: 'Error',
-          description: 'Failed to publish persona',
+          description: 'Failed to publish case study',
           duration: 5000,
         });
       }
@@ -138,13 +146,13 @@ export function PersonaForm({ persona, industries, isNew }: PersonaFormProps) {
     
     startTransition(async () => {
       try {
-        await unpublishPersona(values.id!);
+        await unpublishCaseStudy(values.id!);
         
         setValues(prev => ({ ...prev, published: false }));
         
         toast({
           title: 'Unpublished',
-          description: 'Persona is now unpublished and hidden from users',
+          description: 'Case study is now unpublished and hidden from users',
           duration: 3000,
         });
       } catch (error) {
@@ -153,7 +161,7 @@ export function PersonaForm({ persona, industries, isNew }: PersonaFormProps) {
         toast({
           variant: 'destructive',
           title: 'Error',
-          description: 'Failed to unpublish persona',
+          description: 'Failed to unpublish case study',
           duration: 5000,
         });
       }
@@ -176,7 +184,7 @@ export function PersonaForm({ persona, industries, isNew }: PersonaFormProps) {
         <Button
           variant="ghost"
           size="sm"
-          onClick={() => router.push('/admin/personas')}
+          onClick={() => router.push('/admin/case-studies')}
           className="flex items-center"
         >
           <ArrowLeft className="mr-2 h-4 w-4" />
@@ -228,12 +236,12 @@ export function PersonaForm({ persona, industries, isNew }: PersonaFormProps) {
           <CardContent className="space-y-4">
             <div className="grid grid-cols-1 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="name">Name</Label>
+                <Label htmlFor="title">Title</Label>
                 <Input
-                  id="name"
-                  value={values.name}
-                  onChange={(e) => handleChange('name', e.target.value)}
-                  placeholder="Persona name"
+                  id="title"
+                  value={values.title}
+                  onChange={(e) => handleChange('title', e.target.value)}
+                  placeholder="Case study title"
                 />
               </div>
               
@@ -243,7 +251,7 @@ export function PersonaForm({ persona, industries, isNew }: PersonaFormProps) {
                   id="slug"
                   value={values.slug}
                   onChange={(e) => handleChange('slug', e.target.value)}
-                  placeholder="persona-slug"
+                  placeholder="case-study-slug"
                 />
               </div>
               
@@ -253,59 +261,136 @@ export function PersonaForm({ persona, industries, isNew }: PersonaFormProps) {
                   id="description"
                   value={values.description}
                   onChange={(e) => handleChange('description', e.target.value)}
-                  placeholder="Brief description of the persona"
+                  placeholder="Brief description of the case study"
                   rows={3}
+                />
+              </div>
+              
+              <div className="space-y-2">
+                <Label htmlFor="url">URL</Label>
+                <Input
+                  id="url"
+                  value={values.url}
+                  onChange={(e) => handleChange('url', e.target.value)}
+                  placeholder="https://example.com/case-study"
                 />
               </div>
             </div>
           </CardContent>
         </Card>
         
-        {/* Details Section */}
+        {/* Content Section */}
         <Card>
           <CardHeader>
-            <CardTitle>Details</CardTitle>
+            <CardTitle>Content</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="role">Role</Label>
-              <Input
-                id="role"
-                value={values.role}
-                onChange={(e) => handleChange('role', e.target.value)}
-                placeholder="Role or job title"
-              />
-            </div>
-            
             <div className="space-y-2">
               <Label htmlFor="main_content">Main Content</Label>
               <Textarea
                 id="main_content"
                 value={values.main_content}
                 onChange={(e) => handleChange('main_content', e.target.value)}
-                placeholder="Detailed content about this persona"
-                rows={6}
+                placeholder="Detailed content about the case study"
+                rows={15}
               />
             </div>
           </CardContent>
         </Card>
         
-        {/* Interests & Industries Section */}
+        {/* Classifications Section */}
         <Card>
           <CardHeader>
-            <CardTitle>Interests & Industries</CardTitle>
+            <CardTitle>Classifications</CardTitle>
           </CardHeader>
-          <CardContent className="space-y-4">
+          <CardContent className="space-y-6">
             <RelationshipSelector
               items={industries}
-              selectedItems={values.industry}
-              onChange={(selectedItems) => handleChange('industry', selectedItems)}
+              selectedItems={values.industries}
+              onChange={(selectedItems) => handleChange('industries', selectedItems)}
               itemLabelKey="name"
-              itemValueKey="id"
+              itemValueKey="slug"
               label="Industries"
               placeholder="Select industries..."
               required={true}
             />
+            
+            <RelationshipSelector
+              items={algorithms}
+              selectedItems={values.algorithms}
+              onChange={(selectedItems) => handleChange('algorithms', selectedItems)}
+              itemLabelKey="name"
+              itemValueKey="slug"
+              label="Algorithms"
+              placeholder="Select algorithms..."
+              required={true}
+            />
+            
+            <RelationshipSelector
+              items={personas}
+              selectedItems={values.personas}
+              onChange={(selectedItems) => handleChange('personas', selectedItems)}
+              itemLabelKey="name"
+              itemValueKey="slug"
+              label="Personas"
+              placeholder="Select personas..."
+            />
+          </CardContent>
+        </Card>
+        
+        {/* Technical Details Section */}
+        <Card>
+          <CardHeader>
+            <CardTitle>Technical Details</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="partner_companies">Partner Companies</Label>
+              <Input
+                id="partner_companies"
+                value={values.partner_companies.join(', ')}
+                onChange={(e) => {
+                  const companies = e.target.value
+                    .split(',')
+                    .map(item => item.trim())
+                    .filter(Boolean);
+                   handleChange('partner_companies', companies);
+                }}
+                placeholder="Company A, Company B, etc."
+              />
+            </div>
+            
+            <div className="space-y-2">
+              <Label htmlFor="quantum_companies">Quantum Companies</Label>
+              <Input
+                id="quantum_companies"
+                value={values.quantum_companies.join(', ')}
+                onChange={(e) => {
+                  const companies = e.target.value
+                    .split(',')
+                    .map(item => item.trim())
+                    .filter(Boolean);
+                  handleChange('quantum_companies', companies);
+                }}
+                placeholder="Quantum Company A, Quantum Company B, etc."
+              />
+            </div>
+            
+            <div className="space-y-2">
+              <Label htmlFor="quantum_hardware">Quantum Hardware</Label>
+              <Input
+                id="quantum_hardware"
+                value={values.quantum_hardware.join(', ')}
+                onChange={(e) => {
+                  const hardware = e.target.value
+                    .split(',')
+                    .map(item => item.trim())
+                    .filter(Boolean);
+                  handleChange('quantum_hardware', hardware);
+                }}
+                placeholder="Hardware A, Hardware B, etc."
+              />
+            </div>
           </CardContent>
         </Card>
       </form>
@@ -313,4 +398,4 @@ export function PersonaForm({ persona, industries, isNew }: PersonaFormProps) {
   );
 }
 
-export default PersonaForm;
+export default CaseStudyForm;

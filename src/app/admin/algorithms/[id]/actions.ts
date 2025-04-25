@@ -39,29 +39,8 @@ export async function saveAlgorithm(values: any): Promise<any> {
 
     // If there are related case studies
     if (values.related_case_studies && values.related_case_studies.length > 0) {
-        // First, get the case study IDs from their slugs if needed
-        let caseStudyIds = values.related_case_studies;
-        
-        // If the first item looks like a slug (not a UUID), fetch the IDs
-        if (caseStudyIds[0] && typeof caseStudyIds[0] === 'string' &&
-            !caseStudyIds[0].match(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i)) {
-            
-            const { data: caseStudies, error: fetchError } = await supabase
-                .from('case_studies')
-                .select('id, slug')
-                .in('slug', caseStudyIds);
-                
-            if (fetchError) {
-                console.error("Error fetching case studies by slug:", fetchError);
-                throw new Error(fetchError.message || "Failed to fetch case studies");
-            }
-            
-            // Map slugs to IDs
-            caseStudyIds = caseStudies.map(cs => cs.id);
-        }
-        
-        // Insert relationships with proper IDs
-        for (const caseStudyId of caseStudyIds) {
+        // Insert relationships with IDs
+        for (const caseStudyId of values.related_case_studies) {
             let insertError = await supabase
                 .from('algorithm_case_study_relations' as any)
                 .insert({ algorithm_id: data?.id, case_study_id: caseStudyId });
@@ -86,29 +65,8 @@ export async function saveAlgorithm(values: any): Promise<any> {
 
     // If there are related industries
     if (values.related_industries && values.related_industries.length > 0) {
-        // First, get the industry IDs from their slugs if needed
-        let industryIds = values.related_industries;
-        
-        // If the first item looks like a slug (not a UUID), fetch the IDs
-        if (industryIds[0] && typeof industryIds[0] === 'string' &&
-            !industryIds[0].match(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i)) {
-            
-            const { data: industries, error: fetchError } = await supabase
-                .from('industries')
-                .select('id, slug')
-                .in('slug', industryIds);
-                
-            if (fetchError) {
-                console.error("Error fetching industries by slug:", fetchError);
-                throw new Error(fetchError.message || "Failed to fetch industries");
-            }
-            
-            // Map slugs to IDs
-            industryIds = industries.map(ind => ind.id);
-        }
-        
-        // Insert relationships with proper IDs
-        for (const industryId of industryIds) {
+        // Insert relationships with IDs
+        for (const industryId of values.related_industries) {
             let insertError = await supabase
                 .from('algorithm_industry_relations' as any)
                 .insert({ algorithm_id: data?.id, industry_id: industryId });

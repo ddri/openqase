@@ -8,6 +8,10 @@ module.exports = {
 	  './src/app/**/*.{js,ts,jsx,tsx,mdx}',
 	],
 	theme: {
+	  container: {
+		center: true,
+		padding: '1rem', // Default padding, adjust as needed
+	  },
 	  extend: {
 		fontFamily: {
 		  sans: ['var(--font-sans)'],

@@ -16,6 +16,7 @@ export async function savePersona(values: any): Promise<any> {
         slug: values.slug,
         description: values.description,
         role: values.role,
+        main_content: values.main_content,
         industry: values.industry,
         published: values.published,
       })

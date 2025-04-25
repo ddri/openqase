@@ -1,4 +1,5 @@
-import { createBrowserSupabaseClient, createServiceRoleSupabaseClient } from '@/lib/supabase-server';
+import { createBrowserSupabaseClient } from '@/lib/supabase-browser';
+import { createServiceRoleSupabaseClient } from '@/lib/supabase-server';
 import { PostgrestError } from '@supabase/supabase-js';
 
 /**

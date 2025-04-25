@@ -40,6 +40,7 @@ export function PersonaForm({ persona, industries, isNew }: PersonaFormProps) {
     slug: isNew ? '' : persona?.slug || '',
     description: isNew ? '' : persona?.description || '',
     role: isNew ? '' : persona?.role || '',
+    main_content: isNew ? '' : persona?.main_content || '',
     industry: isNew ? [] : persona?.industry || [],
     published: isNew ? false : persona?.published || false,
   });
@@ -273,6 +274,17 @@ export function PersonaForm({ persona, industries, isNew }: PersonaFormProps) {
                 value={values.role}
                 onChange={(e) => handleChange('role', e.target.value)}
                 placeholder="Role or job title"
+              />
+            </div>
+            
+            <div className="space-y-2">
+              <Label htmlFor="main_content">Main Content</Label>
+              <Textarea
+                id="main_content"
+                value={values.main_content}
+                onChange={(e) => handleChange('main_content', e.target.value)}
+                placeholder="Detailed content about this persona"
+                rows={6}
               />
             </div>
           </CardContent>

@@ -1,15 +1,18 @@
 'use client';
 
-import React from 'react';
-import { BaseContentForm } from '@/components/admin/BaseContentForm';
+import React, { useState, useTransition } from 'react';
+import { useRouter } from 'next/navigation';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { RelationshipSelector } from '@/components/admin/RelationshipSelector';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import { createContentValidationRules } from '@/utils/form-validation';
-import { useTransition } from 'react';
-import { useFormStatus } from 'react-dom';
-import { Database } from '@/types/supabase';
+import { ContentCompleteness } from '@/components/admin/ContentCompleteness';
+import { PublishButton } from '@/components/admin/PublishButton';
+import { createContentValidationRules, calculateCompletionPercentage, validateFormValues } from '@/utils/form-validation';
+import { ArrowLeft, Save, Loader2 } from 'lucide-react';
+import { toast } from '@/components/ui/use-toast';
 import { saveCaseStudy, publishCaseStudy, unpublishCaseStudy } from './actions';
 
 interface CaseStudyFormProps {
@@ -20,29 +23,11 @@ interface CaseStudyFormProps {
   isNew: boolean;
 }
 
-interface SaveCaseStudyResult {
-  id: string;
-  title: string;
-  slug: string;
-  description: string;
-  main_content: string;
-  url: string;
-  partner_companies: string[];
-  quantum_companies: string[];
-  quantum_hardware: string[];
-  algorithms: string[];
-  industries: string[];
-  personas: string[];
-  published: boolean;
-}
-
-type FieldName = "title" | "slug" | "description" | "url" | "partner_companies" | "quantum_companies" | "quantum_hardware" | "algorithms" | "industries" | "personas" | "published" | "main_content";
-
 /**
  * CaseStudyForm Component
- * 
- * An implementation of the BaseContentForm for case studies.
- * 
+ *
+ * A simplified form for case studies with all fields on a single page.
+ *
  * @param caseStudy - Initial case study data
  * @param algorithms - Available algorithms for relationships
  * @param industries - Available industries for relationships
@@ -50,10 +35,9 @@ type FieldName = "title" | "slug" | "description" | "url" | "partner_companies" 
  * @param isNew - Whether this is a new case study
  */
 export function CaseStudyForm({ caseStudy, algorithms, industries, personas, isNew }: CaseStudyFormProps) {
+  const router = useRouter();
   const [isPending, startTransition] = useTransition();
-
-  // Initial values for the form
-  const initialValues = {
+  const [values, setValues] = useState({
     id: isNew ? undefined : caseStudy?.id,
     title: isNew ? '' : caseStudy?.title || '',
     slug: isNew ? '' : caseStudy?.slug || '',
@@ -67,64 +51,189 @@ export function CaseStudyForm({ caseStudy, algorithms, industries, personas, isN
     industries: isNew ? [] : caseStudy?.industries || [],
     personas: isNew ? [] : caseStudy?.personas || [],
     published: isNew ? false : caseStudy?.published || false,
-  };
+  });
+  const [isDirty, setIsDirty] = useState(false);
   
   // Validation rules for case studies
   const validationRules = createContentValidationRules('case_study');
+  const completionPercentage = calculateCompletionPercentage({ values, validationRules });
   
-  // Tab configuration
-  const tabs = [
-    { value: 'basic', label: 'Basic Info' },
-    { value: 'content', label: 'Content' },
-    { value: 'classifications', label: 'Classifications' },
-    { value: 'technical', label: 'Technical Details' },
-  ];
+  // Handle field change
+  const handleChange = (field: string, value: any) => {
+    setValues(prev => ({
+      ...prev,
+      [field]: value
+    }));
+    setIsDirty(true);
+  };
   
-  // Server Actions are imported from ./actions.ts
-
-  // Update handleSave to use the Server Action
-  const handleSave = async (values: typeof initialValues) => {
-    startTransition(() => {
-      saveCaseStudy(values)
-         .catch((error) => {
-          console.error("Error in handleSave:", error);
-          // Handle error appropriately (e.g., display an error message)
+  // Handle form submission
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    startTransition(async () => {
+      try {
+        const result = await saveCaseStudy(values);
+        
+        // If this was a new case study and we got an ID back, redirect to edit page
+        if (isNew && result?.id) {
+          router.push(`/admin/case-studies/${result.id}`);
+        }
+        
+        setIsDirty(false);
+        
+        toast({
+          title: 'Saved',
+          description: 'Case study saved successfully',
+          duration: 3000,
         });
+      } catch (error) {
+        console.error("Error in handleSave:", error);
+        
+        toast({
+          variant: 'destructive',
+          title: 'Error',
+          description: 'Failed to save case study',
+          duration: 5000,
+        });
+      }
     });
   };
   
-  // Update handlePublish to use the Server Action
-  const handlePublish = async (values: typeof initialValues) => {
-    startTransition(() => {
-      publishCaseStudy(values.id)
-        .catch((error) => {
-          console.error("Error in handlePublish:", error);
-          // Handle error appropriately (e.g., display an error message)
+  // Handle publishing
+  const handlePublish = async () => {
+    if (!values.id) {
+      toast({
+        variant: 'destructive',
+        title: 'Error',
+        description: 'Cannot publish case study without saving first',
+        duration: 3000,
+      });
+      return;
+    }
+    
+    startTransition(async () => {
+      try {
+        // First save the content
+        await saveCaseStudy(values);
+        
+        // Then publish it
+        await publishCaseStudy(values.id!);
+        
+        setValues(prev => ({ ...prev, published: true }));
+        
+        toast({
+          title: 'Published',
+          description: 'Case study is now published and visible to users',
+          duration: 3000,
         });
+      } catch (error) {
+        console.error("Error in handlePublish:", error);
+        
+        toast({
+          variant: 'destructive',
+          title: 'Error',
+          description: 'Failed to publish case study',
+          duration: 5000,
+        });
+      }
     });
   };
   
-  // Update handleUnpublish to use the Server Action
-  const handleUnpublish = async (values: typeof initialValues) => {
-    startTransition(() => {
-      unpublishCaseStudy(values.id)
-        .catch((error) => {
-          console.error("Error in handleUnpublish:", error);
-          // Handle error appropriately (e.g., display an error message)
+  // Handle unpublishing
+  const handleUnpublish = async () => {
+    if (!values.id) return;
+    
+    startTransition(async () => {
+      try {
+        await unpublishCaseStudy(values.id!);
+        
+        setValues(prev => ({ ...prev, published: false }));
+        
+        toast({
+          title: 'Unpublished',
+          description: 'Case study is now unpublished and hidden from users',
+          duration: 3000,
         });
+      } catch (error) {
+        console.error("Error in handleUnpublish:", error);
+        
+        toast({
+          variant: 'destructive',
+          title: 'Error',
+          description: 'Failed to unpublish case study',
+          duration: 5000,
+        });
+      }
     });
   };
   
-  // Render tab content
-  const renderTabContent = (tabValue: string, values: typeof initialValues, onChange: (field: FieldName, value: any) => void) => {
-    const handleChange = (field: FieldName, value: any) => {
-        onChange(field, value);
-    };
-
-    switch (tabValue) {
-      case 'basic':
-        return (
-          <div className="space-y-4">
+  // Validate content before publishing
+  const validateContent = () => {
+    const issues = validateFormValues({
+      values,
+      validationRules
+    });
+    
+    return Object.keys(issues).length === 0 ? true : issues;
+  };
+  
+  return (
+    <div className="space-y-6">
+      <div className="flex justify-between items-center">
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={() => router.push('/admin/case-studies')}
+          className="flex items-center"
+        >
+          <ArrowLeft className="mr-2 h-4 w-4" />
+          Back
+        </Button>
+        
+        <div className="flex items-center gap-2">
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            onClick={handleSubmit}
+            disabled={isPending || !isDirty}
+            className="min-w-[100px]"
+          >
+            {isPending ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Saving...
+              </>
+            ) : (
+              <>
+                <Save className="mr-2 h-4 w-4" />
+                Save
+              </>
+            )}
+          </Button>
+          
+          <PublishButton
+            isPublished={values.published}
+            onPublish={handlePublish}
+            onUnpublish={handleUnpublish}
+            validateContent={validateContent}
+            disabled={isPending}
+            onTabChange={() => {}}
+            getTabLabel={() => ''}
+          />
+        </div>
+      </div>
+      
+      <ContentCompleteness percentage={completionPercentage} />
+      
+      <form onSubmit={handleSubmit} className="space-y-6">
+        {/* Basic Info Section */}
+        <Card>
+          <CardHeader>
+            <CardTitle>Basic Info</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
             <div className="grid grid-cols-1 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="title">Title</Label>
@@ -167,12 +276,15 @@ export function CaseStudyForm({ caseStudy, algorithms, industries, personas, isN
                 />
               </div>
             </div>
-          </div>
-        );
+          </CardContent>
+        </Card>
         
-      case 'content':
-        return (
-          <div className="space-y-4">
+        {/* Content Section */}
+        <Card>
+          <CardHeader>
+            <CardTitle>Content</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="main_content">Main Content</Label>
               <Textarea
@@ -183,18 +295,21 @@ export function CaseStudyForm({ caseStudy, algorithms, industries, personas, isN
                 rows={15}
               />
             </div>
-          </div>
-        );
+          </CardContent>
+        </Card>
         
-      case 'classifications':
-        return (
-          <div className="space-y-6">
+        {/* Classifications Section */}
+        <Card>
+          <CardHeader>
+            <CardTitle>Classifications</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-6">
             <RelationshipSelector
               items={industries}
               selectedItems={values.industries}
               onChange={(selectedItems) => handleChange('industries', selectedItems)}
               itemLabelKey="name"
-              itemValueKey="slug"
+              itemValueKey="id"
               label="Industries"
               placeholder="Select industries..."
               required={true}
@@ -205,7 +320,7 @@ export function CaseStudyForm({ caseStudy, algorithms, industries, personas, isN
               selectedItems={values.algorithms}
               onChange={(selectedItems) => handleChange('algorithms', selectedItems)}
               itemLabelKey="name"
-              itemValueKey="slug"
+              itemValueKey="id"
               label="Algorithms"
               placeholder="Select algorithms..."
               required={true}
@@ -216,16 +331,19 @@ export function CaseStudyForm({ caseStudy, algorithms, industries, personas, isN
               selectedItems={values.personas}
               onChange={(selectedItems) => handleChange('personas', selectedItems)}
               itemLabelKey="name"
-              itemValueKey="slug"
+              itemValueKey="id"
               label="Personas"
               placeholder="Select personas..."
             />
-          </div>
-        );
+          </CardContent>
+        </Card>
         
-      case 'technical':
-        return (
-          <div className="space-y-4">
+        {/* Technical Details Section */}
+        <Card>
+          <CardHeader>
+            <CardTitle>Technical Details</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="partner_companies">Partner Companies</Label>
               <Input
@@ -273,27 +391,10 @@ export function CaseStudyForm({ caseStudy, algorithms, industries, personas, isN
                 placeholder="Hardware A, Hardware B, etc."
               />
             </div>
-          </div>
-        );
-        
-      default:
-        return null;
-    }
-  };
-  
-  return (
-    <BaseContentForm
-      initialValues={initialValues}
-      onSave={handleSave}
-      onPublish={handlePublish}
-      onUnpublish={handleUnpublish}
-      validationRules={validationRules}
-      tabs={tabs}
-      renderTabContent={renderTabContent}
-      backUrl="/admin/case-studies"
-      isNew={isNew}
-      contentType="Case Study"
-    />
+          </CardContent>
+        </Card>
+      </form>
+    </div>
   );
 }
 

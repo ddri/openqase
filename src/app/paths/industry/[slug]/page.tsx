@@ -1,6 +1,6 @@
 // src/app/paths/industry/[slug]/page.tsx
 import { cookies } from 'next/headers';
-import { createClient } from '@/utils/supabase/server';
+import { createServerSupabaseClient } from '@/lib/supabase-server';
 import { Database } from '@/types/supabase';
 import LearningPathLayout from '@/components/ui/learning-path-layout';
 import { Badge } from '@/components/ui/badge';
@@ -27,7 +27,7 @@ interface CaseStudy {
 
 export async function generateMetadata({ params }: PageParams) {
   const resolvedParams = await params;
-  const supabase = await createClient();
+  const supabase = await createServerSupabaseClient();
   const { data: industry } = await supabase
     .from('industries')
     .select('*')
@@ -42,7 +42,7 @@ export async function generateMetadata({ params }: PageParams) {
 
 export default async function IndustryPage({ params }: PageParams) {
   const resolvedParams = await params;
-  const supabase = await createClient();
+  const supabase = await createServerSupabaseClient();
   
   console.log('Fetching industry with slug:', resolvedParams.slug);
   const { data: industry, error: industryError } = await supabase
@@ -62,20 +62,59 @@ export default async function IndustryPage({ params }: PageParams) {
 
   console.log('Fetching case studies for industry:', industry.name);
   
-  // Use the API route instead of direct Supabase query
-  const response = await fetch(`${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/api/case-studies?industry=${encodeURIComponent(industry.name)}`, {
-    cache: 'no-store'
-  });
-  
+  // Fetch case studies directly using Supabase
   let caseStudies: CaseStudy[] = [];
   let caseStudiesError = null;
   
-  if (response.ok) {
-    const data = await response.json();
-    caseStudies = data.items;
-  } else {
-    caseStudiesError = await response.json();
-    console.error('Error fetching case studies:', caseStudiesError);
+  try {
+    // First get the industry ID
+    const { data: industryData, error: industryError } = await supabase
+      .from('industries')
+      .select('id, name')
+      .eq('name', industry.name)
+      .single();
+    
+    if (industryError || !industryData) {
+      console.error('Error finding industry:', industryError);
+      caseStudiesError = { error: 'Industry not found' };
+    } else {
+      // Get case studies related to this industry using the junction table
+      const { data: relations, error: relationsError } = await supabase
+        .from('case_study_industry_relations' as any)
+        .select('case_study_id')
+        .eq('industry_id', industryData.id);
+        
+      if (relationsError) {
+        console.error('Error finding case study relations:', relationsError);
+        caseStudiesError = { error: 'Error fetching case studies' };
+      } else if (relations && relations.length > 0) {
+        const caseStudyIds = relations.map((relation: any) => relation.case_study_id);
+        
+        // Fetch the actual case studies
+        const { data: caseStudyData, error: caseStudyError } = await supabase
+          .from('case_studies')
+          .select('*')
+          .in('id', caseStudyIds)
+          .eq('published', true);
+          
+        if (caseStudyError) {
+          console.error('Error fetching case studies:', caseStudyError);
+          caseStudiesError = { error: 'Error fetching case studies' };
+        } else {
+          // Map the database results to the expected CaseStudy type
+          caseStudies = (caseStudyData || []).map(cs => ({
+            id: cs.id,
+            title: cs.title,
+            slug: cs.slug,
+            description: cs.description || '',
+            industries: cs.industries || []
+          }));
+        }
+      }
+    }
+  } catch (error) {
+    console.error('Error fetching case studies:', error);
+    caseStudiesError = { error: 'Failed to fetch case studies' };
   }
 
   return (

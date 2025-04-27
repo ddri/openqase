@@ -1,5 +1,5 @@
 // src/app/paths/persona/page.tsx
-import { createClient } from '@/utils/supabase/server';
+import { createServerSupabaseClient } from '@/lib/supabase-server';
 import PersonaList from '@/components/PersonaList';
 import LearningPathLayout from '@/components/ui/learning-path-layout';
 import type { Database } from '@/types/supabase';
@@ -7,11 +7,12 @@ import type { Database } from '@/types/supabase';
 type Persona = Database['public']['Tables']['personas']['Row'];
 
 async function getPersonas() {
-  const supabase = await createClient();
+  const supabase = await createServerSupabaseClient();
   
   const { data, error } = await supabase
     .from('personas')
     .select('*')
+    .eq('published', true)  // Only fetch published personas
     .order('name');
 
   if (error) {

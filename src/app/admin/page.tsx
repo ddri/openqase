@@ -1,7 +1,7 @@
 import { Metadata } from 'next';
-import { createServerClient } from '@/lib/supabase-server';
+import { createServerSupabaseClient } from '@/lib/supabase-server';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { FileText, BookOpen, Briefcase, Users } from 'lucide-react';
+import { FileText, BookOpen, Briefcase, Users, PenTool } from 'lucide-react';
 import Link from 'next/link';
 
 export const metadata: Metadata = {
@@ -10,26 +10,29 @@ export const metadata: Metadata = {
 };
 
 export default async function AdminDashboard() {
-  const supabase = await createServerClient();
+  const supabase = await createServerSupabaseClient();
   
   // Fetch counts for different content types
   const [
     caseStudiesResponse,
     algorithmsResponse,
     industriesResponse,
-    personasResponse
+    personasResponse,
+    blogPostsResponse
   ] = await Promise.all([
     supabase.from('case_studies').select('id', { count: 'exact', head: true }),
     supabase.from('algorithms').select('id', { count: 'exact', head: true }),
     supabase.from('industries').select('id', { count: 'exact', head: true }),
-    supabase.from('personas').select('id', { count: 'exact', head: true })
+    supabase.from('personas').select('id', { count: 'exact', head: true }),
+    supabase.from('blog_posts').select('id', { count: 'exact', head: true })
   ]);
 
   const contentCounts = {
     caseStudies: caseStudiesResponse.count || 0,
     algorithms: algorithmsResponse.count || 0,
     industries: industriesResponse.count || 0,
-    personas: personasResponse.count || 0
+    personas: personasResponse.count || 0,
+    blogPosts: blogPostsResponse.count || 0
   };
 
   const contentCards = [
@@ -60,6 +63,13 @@ export default async function AdminDashboard() {
       icon: <Users className="h-8 w-8 text-orange-500" />,
       href: '/admin/personas',
       description: 'Manage user personas'
+    },
+    {
+      title: 'Blog Posts',
+      count: contentCounts.blogPosts,
+      icon: <PenTool className="h-8 w-8 text-pink-500" />,
+      href: '/admin/blog',
+      description: 'Manage blog posts and articles'
     }
   ];
 
@@ -108,6 +118,9 @@ export default async function AdminDashboard() {
               </Link>
               <Link href="/admin/personas/new" className="block text-blue-500 hover:underline">
                 New Persona
+              </Link>
+              <Link href="/admin/blog/new" className="block text-blue-500 hover:underline">
+                New Blog Post
               </Link>
             </CardContent>
           </Card>

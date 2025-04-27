@@ -7,12 +7,12 @@ import { useEffect, useState } from 'react'
 import { toast } from '@/components/ui/use-toast'
 import { Loader2 } from 'lucide-react'
 import { ErrorBoundary } from '@/components/ui/ErrorBoundary'
-import { createClient } from '@/utils/supabase/client'
+import { createBrowserSupabaseClient } from '@/lib/supabase-browser'
 
 export function AuthContent({ redirectTo }: { redirectTo?: string }) {
   const searchParams = useSearchParams()
   const router = useRouter()
-  const supabase = createClient()
+  const supabase = createBrowserSupabaseClient()
   const redirectToParam = searchParams.get('redirectTo') || '/'
   const [isLoading, setIsLoading] = useState(true)
 
@@ -97,4 +97,4 @@ export function AuthContent({ redirectTo }: { redirectTo?: string }) {
       </div>
     </ErrorBoundary>
   )
-} 
+}

@@ -1,4 +1,4 @@
-import { createClient } from '@/utils/supabase/server';
+import { createServiceRoleSupabaseClient } from '@/lib/supabase-server';
 import { Database } from '@/types/supabase';
 import { notFound } from 'next/navigation';
 import { PersonaForm } from './client';
@@ -14,7 +14,7 @@ interface PersonaPageProps {
 
 export default async function EditPersonaPage({ params }: PersonaPageProps) {
   const resolvedParams = await params;
-  const supabase = await createClient();
+  const supabase = createServiceRoleSupabaseClient();
   const isNew = resolvedParams.id === 'new';
 
   // Fetch persona if editing
@@ -31,6 +31,21 @@ export default async function EditPersonaPage({ params }: PersonaPageProps) {
     .from('industries')
     .select('id, name, slug')
     .order('name');
+    
+  // Fetch industry relationships if editing
+  let industryIds: string[] = [];
+  
+  if (!isNew && persona) {
+    // Fetch industry relationships from the junction table
+    const { data: industryRelations } = await supabase
+      .from('persona_industry_relations' as any)
+      .select('industry_id')
+      .eq('persona_id', persona.id);
+    
+    if (industryRelations) {
+      industryIds = industryRelations.map((relation: any) => relation.industry_id);
+    }
+  }
 
   if (!isNew && !persona) {
     notFound();
@@ -39,6 +54,11 @@ export default async function EditPersonaPage({ params }: PersonaPageProps) {
   // This means at this point, if !isNew is true, then persona must be defined
   // Use a more explicit type annotation to help TypeScript understand our intent
   const personaData: Persona = !isNew ? persona as Persona : {} as Persona;
+  
+  // Add the industry IDs to the persona data
+  if (!isNew) {
+    personaData.industry = industryIds;
+  }
 
   return (
     <PersonaForm

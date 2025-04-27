@@ -23,9 +23,9 @@ async function getContentCounts() {
 
   try {
     const [personaCount, industryCount, algorithmCount] = await Promise.all([
-      supabase.from('personas').select('id', { count: 'exact', head: true }),
-      supabase.from('industries').select('id', { count: 'exact', head: true }),
-      supabase.from('algorithms').select('id', { count: 'exact', head: true })
+      supabase.from('personas').select('id', { count: 'exact', head: true }).eq('published', true),
+      supabase.from('industries').select('id', { count: 'exact', head: true }).eq('published', true),
+      supabase.from('algorithms').select('id', { count: 'exact', head: true }).eq('published', true)
     ]);
 
     counts.persona = personaCount.count || 0;

@@ -1,4 +1,4 @@
-import { createClient } from '@/utils/supabase/server';
+import { createServerSupabaseClient } from '@/lib/supabase';
 import type { Database } from '@/types/supabase';
 import { PostgrestSingleResponse, PostgrestResponse } from '@supabase/supabase-js';
 
@@ -11,8 +11,8 @@ export interface RelatedCaseStudy extends Pick<CaseStudyRow, 'id' | 'slug' | 'ti
 }
 
 export async function getPersona(slug: string) {
-  const supabase = await createClient();
-  
+  const supabase = await createServerSupabaseClient();
+
   const { data: persona } = await supabase
     .from('personas')
     .select('*, related_case_studies:case_studies(*)')
@@ -22,9 +22,9 @@ export async function getPersona(slug: string) {
   return persona;
 }
 export async function getCaseStudiesByPersona(personaId: string): Promise<CaseStudyRow[]> {
-  const supabase = await createClient();
-  
-  
+  const supabase = await createServerSupabaseClient();
+
+
   const { data: caseStudies } = await supabase
     .from('case_studies')
     .select('*')
@@ -33,4 +33,4 @@ export async function getCaseStudiesByPersona(personaId: string): Promise<CaseSt
     .order('published_at', { ascending: false }) as PostgrestResponse<CaseStudyRow>;
 
   return caseStudies || [];
-} 
+}

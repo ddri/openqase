@@ -1,4 +1,4 @@
-import { createClient } from '@/utils/supabase/server';
+import { createServiceRoleSupabaseClient } from '@/lib/supabase-server';
 import { Database } from '@/types/supabase';
 import { notFound } from 'next/navigation';
 import { IndustryForm } from './client';
@@ -13,7 +13,7 @@ interface IndustryPageProps {
 
 export default async function EditIndustryPage({ params }: IndustryPageProps) {
   const resolvedParams = await params;
-  const supabase = await createClient();
+  const supabase = createServiceRoleSupabaseClient();
   const isNew = resolvedParams.id === 'new';
 
   // Fetch industry if editing

@@ -3,7 +3,6 @@ import './globals.css';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import Navigation from '@/components/Navigation';
-import AlphaBanner from '@/components/ui/AlphaBanner';
 import { Toaster } from '@/components/ui/toaster';
 import Footer from '@/components/Footer';
 import Providers from '@/components/Providers';
@@ -32,7 +31,6 @@ export default function RootLayout({
       <body className="min-h-screen antialiased">
         <Providers>
           <div className="min-h-screen flex flex-col">
-            <AlphaBanner />
             <Navigation />
             <main className="flex-grow">
               <GlobalErrorBoundary>

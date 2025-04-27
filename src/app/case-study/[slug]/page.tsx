@@ -1,6 +1,6 @@
 // src/app/case-study/[slug]/page.tsx
 import { notFound } from 'next/navigation';
-import { supabase } from '@/lib/supabase';
+import { createServerSupabaseClient } from '@/lib/supabase-server';
 import type { Database } from '@/types/supabase';
 import LearningPathLayout from '@/components/ui/learning-path-layout';
 import { Badge } from '@/components/ui/badge';
@@ -21,6 +21,7 @@ export default async function CaseStudyPage({ params }: { params: Promise<{ slug
   const slug = resolvedParams.slug;
   console.log('Fetching case study with slug:', slug);
 
+  const supabase = await createServerSupabaseClient();
   const { data: caseStudy, error } = await supabase
     .from('case_studies')
     .select('*')

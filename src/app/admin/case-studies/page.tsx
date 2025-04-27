@@ -1,6 +1,5 @@
 import { Metadata } from 'next'
-import { createServerClient } from '@/lib/supabase-server'
-import { createServiceClient } from '@/utils/supabase/service-role'
+import { createServiceRoleSupabaseClient } from '@/lib/supabase-server'
 import type { Database } from '@/types/supabase'
 import { CaseStudiesClient } from './client'
 
@@ -12,7 +11,7 @@ export const metadata: Metadata = {
 export type CaseStudy = Database['public']['Tables']['case_studies']['Row']
 
 export default async function CaseStudiesPage() {
-  const supabase = createServiceClient();
+  const supabase = createServiceRoleSupabaseClient();
   
   const { data: caseStudies, error } = await supabase
     .from('case_studies')
@@ -25,4 +24,4 @@ export default async function CaseStudiesPage() {
   }
 
   return <CaseStudiesClient data={caseStudies || []} />
-} 
+}

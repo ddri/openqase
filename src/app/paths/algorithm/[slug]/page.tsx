@@ -1,6 +1,6 @@
 // src/app/paths/algorithm/[slug]/page.tsx
 import { notFound } from 'next/navigation';
-import { createClient } from '@/utils/supabase/server';
+import { createServerSupabaseClient } from '@/lib/supabase-server';
 import type { Database } from '@/types/supabase';
 import LearningPathLayout from '@/components/ui/learning-path-layout';
 import { Badge } from '@/components/ui/badge';
@@ -16,6 +16,13 @@ const md = new MarkdownIt({
 });
 
 type Algorithm = Database['public']['Tables']['algorithms']['Row'];
+type CaseStudy = {
+  id: string;
+  title: string;
+  slug: string;
+  description: string;
+  industries: string[];
+};
 
 interface AlgorithmPageProps {
   params: Promise<{
@@ -25,7 +32,7 @@ interface AlgorithmPageProps {
 
 export default async function AlgorithmPage({ params }: AlgorithmPageProps) {
   const resolvedParams = await params;
-  const supabase = await createClient();
+  const supabase = await createServerSupabaseClient();
   
   console.log('Fetching algorithm with slug:', resolvedParams.slug);
   const { data: algorithm, error } = await supabase
@@ -42,30 +49,61 @@ export default async function AlgorithmPage({ params }: AlgorithmPageProps) {
     notFound();
   }
 
-  // Fetch related case studies using the API route
+  // Fetch related case studies directly using Supabase
   console.log('Fetching case studies for algorithm:', algorithm.name);
   
-  let caseStudies = [];
+  let caseStudies: CaseStudy[] = [];
   let caseStudiesError = null;
   
   try {
-    // Use the API route instead of direct Supabase query
-    // Use the algorithm's slug instead of name for the query
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/api/case-studies?algorithm=${encodeURIComponent(algorithm.slug)}`,
-      { cache: 'no-store' }
-    );
+    // First get the algorithm ID
+    const { data: algorithmData, error: algorithmError } = await supabase
+      .from('algorithms')
+      .select('id, name')
+      .eq('slug', algorithm.slug)
+      .single();
     
-    if (response.ok) {
-      const data = await response.json();
-      caseStudies = data.items;
+    if (algorithmError || !algorithmData) {
+      console.error('Error finding algorithm:', algorithmError);
+      caseStudiesError = { error: 'Algorithm not found' };
     } else {
-      caseStudiesError = await response.json();
-      console.error('Error fetching case studies:', caseStudiesError);
+      // Get case studies related to this algorithm using the junction table
+      const { data: relations, error: relationsError } = await supabase
+        .from('algorithm_case_study_relations' as any)
+        .select('case_study_id')
+        .eq('algorithm_id', algorithmData.id);
+        
+      if (relationsError) {
+        console.error('Error finding case study relations:', relationsError);
+        caseStudiesError = { error: 'Error fetching case studies' };
+      } else if (relations && relations.length > 0) {
+        const caseStudyIds = relations.map((relation: any) => relation.case_study_id);
+        
+        // Fetch the actual case studies
+        const { data: caseStudyData, error: caseStudyError } = await supabase
+          .from('case_studies')
+          .select('*')
+          .in('id', caseStudyIds)
+          .eq('published', true);
+          
+        if (caseStudyError) {
+          console.error('Error fetching case studies:', caseStudyError);
+          caseStudiesError = { error: 'Error fetching case studies' };
+        } else {
+          // Map the database results to the expected CaseStudy type
+          caseStudies = (caseStudyData || []).map(cs => ({
+            id: cs.id,
+            title: cs.title,
+            slug: cs.slug,
+            description: cs.description || '',
+            industries: cs.industries || []
+          }));
+        }
+      }
     }
   } catch (error) {
-    caseStudiesError = error;
     console.error('Error fetching case studies:', error);
+    caseStudiesError = { error: 'Failed to fetch case studies' };
   }
 
   console.log('Case studies query result:', { caseStudies, error: caseStudiesError });

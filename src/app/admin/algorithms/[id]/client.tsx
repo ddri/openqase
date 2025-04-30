@@ -47,6 +47,8 @@ export function AlgorithmForm({ algorithm, caseStudies, industries, isNew }: Alg
     related_case_studies: isNew ? [] : algorithm?.related_case_studies?.map((cs: any) => cs.id) || [],
     related_industries: isNew ? [] : algorithm?.related_industries?.map((ind: any) => ind.id) || [],
     published: isNew ? false : algorithm?.published || false,
+    steps: isNew ? '' : algorithm?.steps || '',
+    academic_references: isNew ? '' : algorithm?.academic_references || '',
   });
   const [isDirty, setIsDirty] = useState(false);
   
@@ -279,6 +281,50 @@ export function AlgorithmForm({ algorithm, caseStudies, industries, isNew }: Alg
                 onChange={(e) => handleChange('main_content', e.target.value)}
                 placeholder="Detailed content about the algorithm"
                 rows={15}
+              />
+            </div>
+          </CardContent>
+        </Card>
+        
+        {/* Steps Section */}
+        <Card>
+          <CardHeader>
+            <CardTitle>Implementation Steps</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="steps">Steps</Label>
+              <p className="text-sm text-muted-foreground">
+                Use the format: &lt;step title="Step Title"&gt;Step content in markdown&lt;/step&gt;
+              </p>
+              <Textarea
+                id="steps"
+                value={values.steps}
+                onChange={(e) => handleChange('steps', e.target.value)}
+                placeholder='<step title="Step 1">First step content...</step>'
+                rows={10}
+              />
+            </div>
+          </CardContent>
+        </Card>
+        
+        {/* References Section */}
+        <Card>
+          <CardHeader>
+            <CardTitle>Academic References</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="academic_references">References</Label>
+              <p className="text-sm text-muted-foreground">
+                Use the format: [^1]: Reference text. Use [^1] in main content to cite.
+              </p>
+              <Textarea
+                id="academic_references"
+                value={values.academic_references}
+                onChange={(e) => handleChange('academic_references', e.target.value)}
+                placeholder="[^1]: Author, Title, Journal (Year)"
+                rows={8}
               />
             </div>
           </CardContent>

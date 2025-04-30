@@ -2,6 +2,10 @@
 
 import { createServiceRoleSupabaseClient } from '@/lib/supabase-server';
 import { revalidatePath } from 'next/cache';
+import { Database } from '@/types/supabase';
+
+// Define a type for the expected structure of the returned persona data
+type PersonaData = Database['public']['Tables']['personas']['Row'] | null;
 
 export async function savePersona(values: any): Promise<any> {
   try {
@@ -24,12 +28,13 @@ export async function savePersona(values: any): Promise<any> {
         name: personaValues.name,
         slug: personaValues.slug,
         description: personaValues.description,
-        role: personaValues.role,
+        expertise: personaValues.expertise,
         main_content: personaValues.main_content,
+        recommended_reading: personaValues.recommended_reading,
         published: personaValues.published,
       })
       .select()
-      .single();
+      .single<PersonaData>();
     
     if (error) {
       console.error("Error saving persona:", error);
@@ -39,7 +44,7 @@ export async function savePersona(values: any): Promise<any> {
     
     // Handle industry relationships (delete and re-create)
     let industryError = await supabase
-      .from('persona_industry_relations' as any)
+      .from('persona_industry_relations')
       .delete()
       .eq('persona_id', data?.id);
 
@@ -48,11 +53,11 @@ export async function savePersona(values: any): Promise<any> {
         throw new Error(industryError.error.message || "Failed to delete industry relationships");
     }
 
-    if (industryIds.length > 0) {
+    if (industryIds.length > 0 && data?.id) {
       for (const industryId of industryIds) {
           let insertError = await supabase
-              .from('persona_industry_relations' as any)
-              .insert({ persona_id: data?.id, industry_id: industryId });
+              .from('persona_industry_relations')
+              .insert({ persona_id: data.id, industry_id: industryId });
 
           if (insertError && insertError.error) {
               console.error("Error inserting industry relationship:", insertError.error);
@@ -63,6 +68,10 @@ export async function savePersona(values: any): Promise<any> {
     
     console.log("Persona saved successfully:", JSON.stringify(data, null, 2));
     revalidatePath('/admin/personas');
+    revalidatePath('/paths/persona');
+    if (data?.slug) {
+      revalidatePath(`/paths/persona/${data.slug}`);
+    }
     
     // Return the saved data
     return data;

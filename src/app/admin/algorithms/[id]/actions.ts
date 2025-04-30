@@ -17,6 +17,8 @@ export async function saveAlgorithm(values: any): Promise<any> {
         quantum_advantage: values.quantum_advantage,
         use_cases: values.use_cases,
         published: values.published,
+        steps: values.steps || '',
+        academic_references: values.academic_references || '',
       })
       .select()
       .single();

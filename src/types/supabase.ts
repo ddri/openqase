@@ -9,66 +9,24 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      algorithms: {
-        Row: {
-          created_at: string | null
-          description: string | null
-          id: string
-          main_content: string | null
-          name: string
-          published: boolean | null
-          quantum_advantage: string | null
-          slug: string
-          ts_content: unknown | null
-          updated_at: string | null
-          use_cases: string[] | null
-        }
-        Insert: {
-          created_at?: string | null
-          description?: string | null
-          id?: string
-          main_content?: string | null
-          name: string
-          published?: boolean | null
-          quantum_advantage?: string | null
-          slug: string
-          ts_content?: unknown | null
-          updated_at?: string | null
-          use_cases?: string[] | null
-        }
-        Update: {
-          created_at?: string | null
-          description?: string | null
-          id?: string
-          main_content?: string | null
-          name?: string
-          published?: boolean | null
-          quantum_advantage?: string | null
-          slug?: string
-          ts_content?: unknown | null
-          updated_at?: string | null
-          use_cases?: string[] | null
-        }
-        Relationships: []
-      }
       algorithm_case_study_relations: {
         Row: {
-          id: string
-          algorithm_id: string
-          case_study_id: string
+          algorithm_id: string | null
+          case_study_id: string | null
           created_at: string | null
+          id: string
         }
         Insert: {
-          id?: string
-          algorithm_id: string
-          case_study_id: string
+          algorithm_id?: string | null
+          case_study_id?: string | null
           created_at?: string | null
+          id?: string
         }
         Update: {
-          id?: string
-          algorithm_id?: string
-          case_study_id?: string
+          algorithm_id?: string | null
+          case_study_id?: string | null
           created_at?: string | null
+          id?: string
         }
         Relationships: [
           {
@@ -84,8 +42,188 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "case_studies"
             referencedColumns: ["id"]
-          }
+          },
         ]
+      }
+      algorithm_industry_relations: {
+        Row: {
+          algorithm_id: string | null
+          created_at: string | null
+          id: string
+          industry_id: string | null
+        }
+        Insert: {
+          algorithm_id?: string | null
+          created_at?: string | null
+          id?: string
+          industry_id?: string | null
+        }
+        Update: {
+          algorithm_id?: string | null
+          created_at?: string | null
+          id?: string
+          industry_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "algorithm_industry_relations_algorithm_id_fkey"
+            columns: ["algorithm_id"]
+            isOneToOne: false
+            referencedRelation: "algorithms"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "algorithm_industry_relations_industry_id_fkey"
+            columns: ["industry_id"]
+            isOneToOne: false
+            referencedRelation: "industries"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      algorithms: {
+        Row: {
+          academic_references: string | null
+          created_at: string | null
+          description: string | null
+          id: string
+          main_content: string | null
+          name: string
+          published: boolean | null
+          published_at: string | null
+          quantum_advantage: string | null
+          slug: string
+          steps: string | null
+          ts_content: unknown | null
+          updated_at: string | null
+          use_cases: string[] | null
+        }
+        Insert: {
+          academic_references?: string | null
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          main_content?: string | null
+          name: string
+          published?: boolean | null
+          published_at?: string | null
+          quantum_advantage?: string | null
+          slug: string
+          steps?: string | null
+          ts_content?: unknown | null
+          updated_at?: string | null
+          use_cases?: string[] | null
+        }
+        Update: {
+          academic_references?: string | null
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          main_content?: string | null
+          name?: string
+          published?: boolean | null
+          published_at?: string | null
+          quantum_advantage?: string | null
+          slug?: string
+          steps?: string | null
+          ts_content?: unknown | null
+          updated_at?: string | null
+          use_cases?: string[] | null
+        }
+        Relationships: []
+      }
+      blog_post_relations: {
+        Row: {
+          blog_post_id: string | null
+          created_at: string | null
+          id: string
+          related_blog_post_id: string | null
+          relation_type: string
+        }
+        Insert: {
+          blog_post_id?: string | null
+          created_at?: string | null
+          id?: string
+          related_blog_post_id?: string | null
+          relation_type: string
+        }
+        Update: {
+          blog_post_id?: string | null
+          created_at?: string | null
+          id?: string
+          related_blog_post_id?: string | null
+          relation_type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "blog_post_relations_blog_post_id_fkey"
+            columns: ["blog_post_id"]
+            isOneToOne: false
+            referencedRelation: "blog_posts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "blog_post_relations_related_blog_post_id_fkey"
+            columns: ["related_blog_post_id"]
+            isOneToOne: false
+            referencedRelation: "blog_posts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      blog_posts: {
+        Row: {
+          author: string | null
+          category: string | null
+          content: string | null
+          created_at: string | null
+          description: string | null
+          featured: boolean | null
+          featured_image: string | null
+          id: string
+          published: boolean | null
+          published_at: string | null
+          slug: string
+          tags: string[] | null
+          title: string
+          ts_content: unknown | null
+          updated_at: string | null
+        }
+        Insert: {
+          author?: string | null
+          category?: string | null
+          content?: string | null
+          created_at?: string | null
+          description?: string | null
+          featured?: boolean | null
+          featured_image?: string | null
+          id?: string
+          published?: boolean | null
+          published_at?: string | null
+          slug: string
+          tags?: string[] | null
+          title: string
+          ts_content?: unknown | null
+          updated_at?: string | null
+        }
+        Update: {
+          author?: string | null
+          category?: string | null
+          content?: string | null
+          created_at?: string | null
+          description?: string | null
+          featured?: boolean | null
+          featured_image?: string | null
+          id?: string
+          published?: boolean | null
+          published_at?: string | null
+          slug?: string
+          tags?: string[] | null
+          title?: string
+          ts_content?: unknown | null
+          updated_at?: string | null
+        }
+        Relationships: []
       }
       case_studies: {
         Row: {
@@ -144,6 +282,78 @@ export type Database = {
         }
         Relationships: []
       }
+      case_study_industry_relations: {
+        Row: {
+          case_study_id: string | null
+          created_at: string | null
+          id: string
+          industry_id: string | null
+        }
+        Insert: {
+          case_study_id?: string | null
+          created_at?: string | null
+          id?: string
+          industry_id?: string | null
+        }
+        Update: {
+          case_study_id?: string | null
+          created_at?: string | null
+          id?: string
+          industry_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "case_study_industry_relations_case_study_id_fkey"
+            columns: ["case_study_id"]
+            isOneToOne: false
+            referencedRelation: "case_studies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "case_study_industry_relations_industry_id_fkey"
+            columns: ["industry_id"]
+            isOneToOne: false
+            referencedRelation: "industries"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      case_study_persona_relations: {
+        Row: {
+          case_study_id: string | null
+          created_at: string | null
+          id: string
+          persona_id: string | null
+        }
+        Insert: {
+          case_study_id?: string | null
+          created_at?: string | null
+          id?: string
+          persona_id?: string | null
+        }
+        Update: {
+          case_study_id?: string | null
+          created_at?: string | null
+          id?: string
+          persona_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "case_study_persona_relations_case_study_id_fkey"
+            columns: ["case_study_id"]
+            isOneToOne: false
+            referencedRelation: "case_studies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "case_study_persona_relations_persona_id_fkey"
+            columns: ["persona_id"]
+            isOneToOne: false
+            referencedRelation: "personas"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       case_study_relations: {
         Row: {
           case_study_id: string | null
@@ -180,7 +390,7 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "case_studies"
             referencedColumns: ["id"]
-          }
+          },
         ]
       }
       industries: {
@@ -192,6 +402,7 @@ export type Database = {
           main_content: string | null
           name: string
           published: boolean | null
+          published_at: string | null
           slug: string
           ts_content: unknown | null
           updated_at: string | null
@@ -204,6 +415,7 @@ export type Database = {
           main_content?: string | null
           name: string
           published?: boolean | null
+          published_at?: string | null
           slug: string
           ts_content?: unknown | null
           updated_at?: string | null
@@ -216,24 +428,60 @@ export type Database = {
           main_content?: string | null
           name?: string
           published?: boolean | null
+          published_at?: string | null
           slug?: string
           ts_content?: unknown | null
           updated_at?: string | null
         }
         Relationships: []
       }
+      persona_industry_relations: {
+        Row: {
+          created_at: string | null
+          id: string
+          industry_id: string | null
+          persona_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          industry_id?: string | null
+          persona_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          industry_id?: string | null
+          persona_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "persona_industry_relations_industry_id_fkey"
+            columns: ["industry_id"]
+            isOneToOne: false
+            referencedRelation: "industries"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "persona_industry_relations_persona_id_fkey"
+            columns: ["persona_id"]
+            isOneToOne: false
+            referencedRelation: "personas"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       personas: {
         Row: {
           created_at: string | null
           description: string | null
+          expertise: string[] | null
           id: string
-          industry: string[] | null
           main_content: string | null
           name: string
-          persona_type: string | null
           published: boolean | null
-          related_case_studies: string[] | null
-          role: string | null
+          published_at: string | null
+          recommended_reading: string | null
           slug: string
           ts_content: unknown | null
           updated_at: string | null
@@ -241,14 +489,13 @@ export type Database = {
         Insert: {
           created_at?: string | null
           description?: string | null
+          expertise?: string[] | null
           id?: string
-          industry?: string[] | null
           main_content?: string | null
           name: string
-          persona_type?: string | null
           published?: boolean | null
-          related_case_studies?: string[] | null
-          role?: string | null
+          published_at?: string | null
+          recommended_reading?: string | null
           slug: string
           ts_content?: unknown | null
           updated_at?: string | null
@@ -256,14 +503,13 @@ export type Database = {
         Update: {
           created_at?: string | null
           description?: string | null
+          expertise?: string[] | null
           id?: string
-          industry?: string[] | null
           main_content?: string | null
           name?: string
-          persona_type?: string | null
           published?: boolean | null
-          related_case_studies?: string[] | null
-          role?: string | null
+          published_at?: string | null
+          recommended_reading?: string | null
           slug?: string
           ts_content?: unknown | null
           updated_at?: string | null
@@ -308,7 +554,7 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "stack_layers"
             referencedColumns: ["id"]
-          }
+          },
         ]
       }
       user_preferences: {
@@ -341,99 +587,6 @@ export type Database = {
         }
         Relationships: []
       }
-      blog_posts: {
-        Row: {
-          id: string
-          slug: string
-          title: string
-          description: string | null
-          content: string | null
-          author: string | null
-          featured_image: string | null
-          category: string | null
-          tags: string[] | null
-          published: boolean
-          featured: boolean
-          published_at: string | null
-          created_at: string
-          updated_at: string
-          ts_content: unknown | null
-        }
-        Insert: {
-          id?: string
-          slug: string
-          title: string
-          description?: string | null
-          content?: string | null
-          author?: string | null
-          featured_image?: string | null
-          category?: string | null
-          tags?: string[] | null
-          published?: boolean
-          featured?: boolean
-          published_at?: string | null
-          created_at?: string
-          updated_at?: string
-          ts_content?: unknown | null
-        }
-        Update: {
-          id?: string
-          slug?: string
-          title?: string
-          description?: string | null
-          content?: string | null
-          author?: string | null
-          featured_image?: string | null
-          category?: string | null
-          tags?: string[] | null
-          published?: boolean
-          featured?: boolean
-          published_at?: string | null
-          created_at?: string
-          updated_at?: string
-          ts_content?: unknown | null
-        }
-        Relationships: []
-      }
-      blog_post_relations: {
-        Row: {
-          id: string
-          blog_post_id: string
-          related_blog_post_id: string
-          relation_type: string
-          created_at: string | null
-        }
-        Insert: {
-          id?: string
-          blog_post_id: string
-          related_blog_post_id: string
-          relation_type: string
-          created_at?: string | null
-        }
-        Update: {
-          id?: string
-          blog_post_id?: string
-          related_blog_post_id?: string
-          relation_type?: string
-          created_at?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "blog_post_relations_blog_post_id_fkey"
-            columns: ["blog_post_id"]
-            isOneToOne: false
-            referencedRelation: "blog_posts"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "blog_post_relations_related_blog_post_id_fkey"
-            columns: ["related_blog_post_id"]
-            isOneToOne: false
-            referencedRelation: "blog_posts"
-            referencedColumns: ["id"]
-          }
-        ]
-      }
     }
     Views: {
       [_ in never]: never
@@ -442,6 +595,10 @@ export type Database = {
       setup_admin_role: {
         Args: { admin_email: string }
         Returns: undefined
+      }
+      verify_initial_setup: {
+        Args: Record<PropertyKey, never>
+        Returns: boolean
       }
     }
     Enums: {
@@ -563,3 +720,4 @@ export const Constants = {
     Enums: {},
   },
 } as const
+

@@ -10,6 +10,8 @@ import { Badge } from '@/components/ui/badge';
 import Link from 'next/link';
 import { SupabaseClient } from '@supabase/supabase-js';
 import MarkdownIt from 'markdown-it';
+import { RecommendedReadingRenderer } from '@/components/ui/RecommendedReadingRenderer';
+import { processContentWithLinks } from '@/utils/contentProcessing';
 
 // Initialize markdown-it
 const md = new MarkdownIt({
@@ -76,30 +78,48 @@ export default async function PersonaPage({ params }: PageParams) {
     notFound();
   }
 
-  // Step 2: Get related case studies directly using Supabase
+  // Step 2: Get related case studies using the join table
   let caseStudies: CaseStudy[] = [];
   
-  if (persona.related_case_studies && persona.related_case_studies.length > 0) {
-    try {
-      // Fetch case studies directly using Supabase
+  try {
+    // Get relations from the join table
+    console.log(`[PersonaPage] Checking relations for persona ID: ${persona.id}`);
+    const { data: relations, error: relationsError } = await supabase
+      .from('case_study_persona_relations')
+      .select('case_study_id')
+      .eq('persona_id', persona.id);
+
+    if (relationsError) {
+      console.error('Error fetching case study relations for persona:', relationsError);
+    } else if (relations && relations.length > 0) {
+      console.log(`[PersonaPage] Found ${relations.length} relations:`, relations);
+      const caseStudyIds = relations.map((relation: any) => relation.case_study_id);
+      console.log(`[PersonaPage] Extracted case study IDs:`, caseStudyIds);
+      
+      // Fetch the actual published case studies using the IDs
       const { data: caseStudyData, error: caseStudyError } = await supabase
         .from('case_studies')
         .select('*')
-        .in('id', persona.related_case_studies)
+        .in('id', caseStudyIds)
         .eq('published', true);
-        
+
       if (caseStudyError) {
-        console.error('Error fetching case studies:', caseStudyError);
+        console.error('Error fetching related case studies:', caseStudyError);
       } else {
+        console.log(`[PersonaPage] Fetched ${caseStudyData?.length ?? 0} published case studies:`, caseStudyData);
         caseStudies = caseStudyData || [];
       }
-    } catch (error) {
-      console.error('Error fetching case studies:', error);
+    } else {
+      console.log(`[PersonaPage] No relations found for persona ID: ${persona.id}`);
     }
+  } catch (error) {
+    console.error('Error processing related case studies fetch:', error);
   }
 
-  // Render markdown content
-  const renderedContent = persona.main_content ? md.render(persona.main_content) : '';
+  // Render markdown content, processing links for recommended reading
+  const renderedContent = persona.main_content 
+    ? processContentWithLinks(md.render(persona.main_content), 'reading-')
+    : '';
 
   return (
     <AuthGate
@@ -113,14 +133,16 @@ export default async function PersonaPage({ params }: PageParams) {
         backLinkHref="/paths/persona"
       >
         <div className="prose prose-gray dark:prose-invert max-w-none">
-          {/* Role and Technical Background */}
-          <div className="flex flex-wrap gap-2 mb-8">
-            {persona.role && (
-              <Badge variant="outline" className="text-base">
-                {persona.role}
-              </Badge>
-            )}
-          </div>
+          {/* Expertise Badges (previously Role) */}
+          {persona.expertise && persona.expertise.length > 0 && (
+            <div className="flex flex-wrap gap-2 mb-8">
+              {persona.expertise.map((item: string) => (
+                <Badge key={item} variant="outline" className="text-base">
+                  {item}
+                </Badge>
+              ))}
+            </div>
+          )}
 
           {/* Main Content */}
           {renderedContent && (
@@ -130,8 +152,15 @@ export default async function PersonaPage({ params }: PageParams) {
             />
           )}
 
-          {/* Industries */}
-          {persona.industry && persona.industry.length > 0 && (
+          {/* Recommended Reading Section Wrapper for spacing */}
+          {persona.recommended_reading && (
+            <div className="mb-8">
+              <RecommendedReadingRenderer readingMarkup={persona.recommended_reading} />
+            </div>
+          )}
+
+          {/* Industries Section - REMOVED as industry field was dropped from personas table */}
+          {/* {persona.industry && persona.industry.length > 0 && (
             <div className="mb-8">
               <h2 className="text-xl font-semibold mb-4">Industry Focus</h2>
               <div className="flex flex-wrap gap-2">
@@ -142,7 +171,7 @@ export default async function PersonaPage({ params }: PageParams) {
                 ))}
               </div>
             </div>
-          )}
+          )} */}
 
           {/* Related Case Studies */}
           {caseStudies.length > 0 && (

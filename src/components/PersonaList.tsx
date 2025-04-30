@@ -7,6 +7,7 @@ import { Label } from '@/components/ui/label';
 import type { Database } from '@/types/supabase';
 import ContentCard from '@/components/ui/content-card';
 
+// Explicitly import the Row type
 type Persona = Database['public']['Tables']['personas']['Row'];
 
 interface PersonaListProps {
@@ -15,23 +16,18 @@ interface PersonaListProps {
 
 export default function PersonaList({ personas }: PersonaListProps) {
   const [searchQuery, setSearchQuery] = useState('');
-  const [roleFilter, setRoleFilter] = useState('all');
   const [sortBy, setSortBy] = useState<'name' | 'created_at'>('name');
-
-  // Get unique roles for filtering, excluding null values
-  const roles = Array.from(new Set(personas.map(p => p.role).filter(Boolean))).sort();
 
   // Filter and sort personas
   const filteredPersonas = personas
     .filter(persona => {
-      if (roleFilter !== 'all' && persona.role !== roleFilter) return false;
       if (!searchQuery) return true;
       
       const query = searchQuery.toLowerCase();
       return (
         (persona.name?.toLowerCase().includes(query) ?? false) ||
         (persona.description?.toLowerCase().includes(query) ?? false) ||
-        (persona.role?.toLowerCase().includes(query) ?? false)
+        (persona.expertise?.some(e => e.toLowerCase().includes(query)) ?? false)
       );
     })
     .sort((a, b) => {
@@ -52,30 +48,11 @@ export default function PersonaList({ personas }: PersonaListProps) {
           <Input
             id="search"
             type="search"
-            placeholder="Search by name, description, or role..."
+            placeholder="Search by name, description, or expertise..."
             value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchQuery(e.target.value)}
             className="w-full"
           />
-        </div>
-        
-        <div className="w-full sm:w-[200px]">
-          <Label htmlFor="role" className="text-sm font-medium mb-1.5 block">
-            Role
-          </Label>
-          <Select value={roleFilter} onValueChange={setRoleFilter}>
-            <SelectTrigger id="role" className="w-full">
-              <SelectValue placeholder="Filter by role" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All Roles</SelectItem>
-              {roles.map(role => role && (
-                <SelectItem key={role} value={role}>
-                  {role}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
         </div>
 
         <div className="w-full sm:w-[200px]">
@@ -106,9 +83,7 @@ export default function PersonaList({ personas }: PersonaListProps) {
             key={persona.slug}
             title={persona.name || 'Untitled Persona'}
             description={persona.description || ''}
-            badges={[
-              ...(persona.role ? [persona.role] : [])
-            ]}
+            badges={persona.expertise || []}
             href={`/paths/persona/${persona.slug}`}
           />
         ))}

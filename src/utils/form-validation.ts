@@ -262,12 +262,6 @@ export function createContentValidationRules(contentType: 'algorithm' | 'persona
       return [
         ...commonRules,
         {
-          field: 'role',
-          tab: 'basic',
-          label: 'Role is required',
-          validator: validators.required
-        },
-        {
           field: 'industry',
           tab: 'relationships',
           label: 'At least one industry is required',

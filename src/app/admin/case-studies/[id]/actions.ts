@@ -53,7 +53,7 @@ export async function saveCaseStudy(values: any): Promise<any> {
 
     // Handle algorithm relationships (delete and re-create)
     let algorithmError = await supabase
-      .from('case_study_algorithm_relations' as any)
+      .from('algorithm_case_study_relations' as any)
       .delete()
       .eq('case_study_id', data?.id);
 
@@ -65,7 +65,7 @@ export async function saveCaseStudy(values: any): Promise<any> {
     if (values.algorithms && Array.isArray(values.algorithms)) {
       for (const algorithmId of values.algorithms) {
           let insertError = await supabase
-              .from('case_study_algorithm_relations' as any)
+              .from('algorithm_case_study_relations' as any)
               .insert({ case_study_id: data?.id, algorithm_id: algorithmId });
 
           if (insertError && insertError.error) {

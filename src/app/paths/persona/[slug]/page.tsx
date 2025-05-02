@@ -10,8 +10,6 @@ import { Badge } from '@/components/ui/badge';
 import Link from 'next/link';
 import { SupabaseClient } from '@supabase/supabase-js';
 import MarkdownIt from 'markdown-it';
-import { RecommendedReadingRenderer } from '@/components/ui/RecommendedReadingRenderer';
-import { processContentWithLinks } from '@/utils/contentProcessing';
 
 // Initialize markdown-it
 const md = new MarkdownIt({
@@ -116,10 +114,8 @@ export default async function PersonaPage({ params }: PageParams) {
     console.error('Error processing related case studies fetch:', error);
   }
 
-  // Render markdown content, processing links for recommended reading
-  const renderedContent = persona.main_content 
-    ? processContentWithLinks(md.render(persona.main_content), 'reading-')
-    : '';
+  // Render main markdown content (no longer needs link processing for reading)
+  const renderedContent = persona.main_content ? md.render(persona.main_content) : '';
 
   return (
     <AuthGate
@@ -132,7 +128,7 @@ export default async function PersonaPage({ params }: PageParams) {
         backLinkText="Back to Personas"
         backLinkHref="/paths/persona"
       >
-        <div className="prose prose-gray dark:prose-invert max-w-none">
+        <div className="max-w-none">
           {/* Expertise Badges (previously Role) */}
           {persona.expertise && persona.expertise.length > 0 && (
             <div className="flex flex-wrap gap-2 mb-8">
@@ -147,15 +143,20 @@ export default async function PersonaPage({ params }: PageParams) {
           {/* Main Content */}
           {renderedContent && (
             <div 
-              className="mb-8"
+              className="prose prose-gray dark:prose-invert max-w-none mb-8"
               dangerouslySetInnerHTML={{ __html: renderedContent }}
             />
           )}
 
-          {/* Recommended Reading Section Wrapper for spacing */}
+          {/* Recommended Reading Section - Remove prose classes from this div */}
           {persona.recommended_reading && (
             <div className="mb-8">
-              <RecommendedReadingRenderer readingMarkup={persona.recommended_reading} />
+              <h2 className="text-xl font-semibold mb-4 border-b pb-2">Recommended Reading</h2>
+              <div 
+                // Removed: prose prose-gray dark:prose-invert max-w-none
+                className="prose-a:text-[var(--primary)] prose-a:hover:underline" // Keep link styling
+                dangerouslySetInnerHTML={{ __html: md.render(persona.recommended_reading) }}
+              />
             </div>
           )}
 

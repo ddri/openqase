@@ -8,11 +8,12 @@ import { RelationshipSelector } from '@/components/admin/RelationshipSelector';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { ContentCompleteness } from '@/components/admin/ContentCompleteness';
 import { PublishButton } from '@/components/admin/PublishButton';
 import { createContentValidationRules, calculateCompletionPercentage, validateFormValues } from '@/utils/form-validation';
 import { useTransition } from 'react';
-import { ArrowLeft, Save, Loader2 } from 'lucide-react';
+import { ArrowLeft, Save, Loader2, Info } from 'lucide-react';
 import { toast } from '@/components/ui/use-toast';
 import { savePersona, publishPersona, unpublishPersona } from './actions';
 
@@ -201,163 +202,175 @@ export function PersonaForm({ persona, industries, isNew }: PersonaFormProps) {
   };
   
   return (
-    <div className="space-y-6">
-      <div className="flex justify-between items-center">
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={() => router.push('/admin/personas')}
-          className="flex items-center"
-        >
-          <ArrowLeft className="mr-2 h-4 w-4" />
-          Back
-        </Button>
-        
-        <div className="flex items-center gap-2">
+    <TooltipProvider>
+      <div className="space-y-6">
+        <div className="flex justify-between items-center">
           <Button
-            type="button"
-            variant="outline"
+            variant="ghost"
             size="sm"
-            onClick={handleSubmit}
-            disabled={isPending || !isDirty}
-            className="min-w-[100px]"
+            onClick={() => router.push('/admin/personas')}
+            className="flex items-center"
           >
-            {isPending ? (
-              <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Saving...
-              </>
-            ) : (
-              <>
-                <Save className="mr-2 h-4 w-4" />
-                Save
-              </>
-            )}
+            <ArrowLeft className="mr-2 h-4 w-4" />
+            Back
           </Button>
           
-          <PublishButton
-            isPublished={values.published}
-            onPublish={handlePublish}
-            onUnpublish={handleUnpublish}
-            validateContent={validateContent}
-            disabled={isPending}
-            onTabChange={() => {}}
-            getTabLabel={() => ''}
-          />
-        </div>
-      </div>
-      
-      <ContentCompleteness percentage={completionPercentage} />
-      
-      <form onSubmit={handleSubmit} className="space-y-6">
-        {/* Basic Info Section */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Basic Info</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="grid grid-cols-1 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="name">Name</Label>
-                <Input
-                  id="name"
-                  value={values.name}
-                  onChange={(e) => handleChange('name', e.target.value)}
-                  placeholder="Persona name"
-                />
-              </div>
-              
-              <div className="space-y-2">
-                <Label htmlFor="slug">Slug</Label>
-                <Input
-                  id="slug"
-                  value={values.slug}
-                  onChange={(e) => handleChange('slug', e.target.value)}
-                  placeholder="persona-slug"
-                />
-              </div>
-              
-              <div className="space-y-2">
-                <Label htmlFor="description">Description</Label>
-                <Textarea
-                  id="description"
-                  value={values.description}
-                  onChange={(e) => handleChange('description', e.target.value)}
-                  placeholder="Short description of the persona"
-                  rows={3}
-                />
-              </div>
-              
-              <div className="space-y-2">
-                <Label htmlFor="expertise">Expertise (comma-separated)</Label>
-                <Input
-                  id="expertise"
-                  // Bind directly to the local string state
-                  value={expertiseInputString}
-                  onChange={(e) => {
-                    // Update the local string state directly
-                    setExpertiseInputString(e.target.value);
-                    setIsDirty(true); // Mark form as dirty
-                  }}
-                  placeholder="e.g., Risk Modeling, Derivative Pricing"
-                />
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-        
-        {/* Details Section */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Details</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="main_content">Main Content</Label>
-              <Textarea
-                id="main_content"
-                value={values.main_content}
-                onChange={(e) => handleChange('main_content', e.target.value)}
-                placeholder="Detailed persona information in Markdown..."
-                rows={15}
-                className="font-mono text-sm"
-              />
-            </div>
+          <div className="flex items-center gap-2">
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={handleSubmit}
+              disabled={isPending || !isDirty}
+              className="min-w-[100px]"
+            >
+              {isPending ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Saving...
+                </>
+              ) : (
+                <>
+                  <Save className="mr-2 h-4 w-4" />
+                  Save
+                </>
+              )}
+            </Button>
             
-            <div className="space-y-2">
-              <Label htmlFor="recommended_reading">Recommended Reading</Label>
-              <Textarea
-                id="recommended_reading"
-                value={values.recommended_reading}
-                onChange={(e) => handleChange('recommended_reading', e.target.value)}
-                placeholder="Enter references using Markdown format, e.g.:\n[^1]: Reading item title or description...\n[^2]: Another item..."
-                rows={10}
-                className="font-mono text-sm"
-              />
-            </div>
-          </CardContent>
-        </Card>
-        
-        {/* Interests & Industries Section */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Interests & Industries</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <RelationshipSelector
-              items={industries}
-              selectedItems={values.industry}
-              onChange={(selectedItems) => handleChange('industry', selectedItems)}
-              itemLabelKey="name"
-              itemValueKey="id"
-              label="Industries"
-              placeholder="Select industries..."
-              required={true}
+            <PublishButton
+              isPublished={values.published}
+              onPublish={handlePublish}
+              onUnpublish={handleUnpublish}
+              validateContent={validateContent}
+              disabled={isPending}
+              onTabChange={() => {}}
+              getTabLabel={() => ''}
             />
-          </CardContent>
-        </Card>
-      </form>
-    </div>
+          </div>
+        </div>
+        
+        <ContentCompleteness percentage={completionPercentage} />
+        
+        <form onSubmit={handleSubmit} className="space-y-6">
+          {/* Basic Info Section */}
+          <Card>
+            <CardHeader>
+              <CardTitle>Basic Info</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="grid grid-cols-1 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="name">Name</Label>
+                  <Input
+                    id="name"
+                    value={values.name}
+                    onChange={(e) => handleChange('name', e.target.value)}
+                    placeholder="Persona name"
+                  />
+                </div>
+                
+                <div className="space-y-2">
+                  <Label htmlFor="slug">Slug</Label>
+                  <Input
+                    id="slug"
+                    value={values.slug}
+                    onChange={(e) => handleChange('slug', e.target.value)}
+                    placeholder="persona-slug"
+                  />
+                </div>
+                
+                <div className="space-y-2">
+                  <Label htmlFor="description">Description</Label>
+                  <Textarea
+                    id="description"
+                    value={values.description}
+                    onChange={(e) => handleChange('description', e.target.value)}
+                    placeholder="Short description of the persona"
+                    rows={3}
+                  />
+                </div>
+                
+                <div className="space-y-2">
+                  <Label htmlFor="expertise">Expertise (comma-separated)</Label>
+                  <Input
+                    id="expertise"
+                    // Bind directly to the local string state
+                    value={expertiseInputString}
+                    onChange={(e) => {
+                      // Update the local string state directly
+                      setExpertiseInputString(e.target.value);
+                      setIsDirty(true); // Mark form as dirty
+                    }}
+                    placeholder="e.g., Risk Modeling, Derivative Pricing"
+                  />
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+          
+          {/* Details Section */}
+          <Card>
+            <CardHeader>
+              <CardTitle>Details</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="main_content">Main Content</Label>
+                <Textarea
+                  id="main_content"
+                  value={values.main_content}
+                  onChange={(e) => handleChange('main_content', e.target.value)}
+                  placeholder="Detailed persona information in Markdown..."
+                  rows={15}
+                  className="font-mono text-sm"
+                />
+              </div>
+              
+              <div className="space-y-2">
+                <div className="flex items-center gap-2">
+                  <Label htmlFor="recommended_reading">Recommended Reading</Label>
+                  <Tooltip delayDuration={100}>
+                    <TooltipTrigger asChild>
+                      <Info className="h-4 w-4 text-muted-foreground cursor-help" />
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>Use standard Markdown format.<br />Example link: `[Google](https://google.com)`</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </div>
+                <Textarea
+                  id="recommended_reading"
+                  value={values.recommended_reading}
+                  onChange={(e) => handleChange('recommended_reading', e.target.value)}
+                  placeholder="Enter recommended reading content using standard Markdown (e.g., includes links like [Link Text](https://example.com))..."
+                  rows={10}
+                  className="font-mono text-sm"
+                />
+              </div>
+            </CardContent>
+          </Card>
+          
+          {/* Interests & Industries Section */}
+          <Card>
+            <CardHeader>
+              <CardTitle>Interests & Industries</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <RelationshipSelector
+                items={industries}
+                selectedItems={values.industry}
+                onChange={(selectedItems) => handleChange('industry', selectedItems)}
+                itemLabelKey="name"
+                itemValueKey="id"
+                label="Industries"
+                placeholder="Select industries..."
+                required={true}
+              />
+            </CardContent>
+          </Card>
+        </form>
+      </div>
+    </TooltipProvider>
   );
 }
 

@@ -181,52 +181,64 @@ export function CaseStudyForm({ caseStudy, algorithms, industries, personas, isN
   
   return (
     <div className="space-y-10 max-w-5xl mx-auto pb-24">
-      <div className="flex justify-between items-center">
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={() => router.push('/admin/case-studies')}
-          className="flex items-center"
-        >
-          <ArrowLeft className="mr-2 h-4 w-4" />
-          Back
-        </Button>
-        
-        <div className="flex items-center gap-2">
+      {/* Add better spacing from the top navigation */}
+      <div className="pt-6 mb-8 bg-background pb-4 border-b border-border">
+        <div className="flex justify-between items-center mb-6">
           <Button
-            type="button"
-            variant="outline"
+            variant="ghost"
             size="sm"
-            onClick={handleSubmit}
-            disabled={isPending || !isDirty}
-            className="min-w-[100px]"
+            onClick={() => router.push('/admin/case-studies')}
+            className="flex items-center"
           >
-            {isPending ? (
-              <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Saving...
-              </>
-            ) : (
-              <>
-                <Save className="mr-2 h-4 w-4" />
-                Save
-              </>
-            )}
+            <ArrowLeft className="mr-2 h-4 w-4" />
+            Back to Case Studies
           </Button>
           
-          <PublishButton
-            isPublished={values.published}
-            onPublish={handlePublish}
-            onUnpublish={handleUnpublish}
-            validateContent={validateContent}
-            disabled={isPending}
-            onTabChange={() => {}}
-            getTabLabel={() => ''}
-          />
+          <div className="flex items-center gap-3">
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={handleSubmit}
+              disabled={isPending || !isDirty}
+              className="min-w-[100px]"
+            >
+              {isPending ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Saving...
+                </>
+              ) : (
+                <>
+                  <Save className="mr-2 h-4 w-4" />
+                  Save
+                </>
+              )}
+            </Button>
+            
+            <PublishButton
+              isPublished={values.published}
+              onPublish={handlePublish}
+              onUnpublish={handleUnpublish}
+              validateContent={validateContent}
+              disabled={isPending}
+              onTabChange={() => {}}
+              getTabLabel={() => ''}
+            />
+          </div>
+        </div>
+        
+        {/* Progress bar section */}
+        <div>
+          <div className="flex justify-between items-center text-sm mb-2">
+            <span className="text-muted-foreground">Content Completeness</span>
+            <span className="font-medium">{completionPercentage}%</span>
+          </div>
+          <ContentCompleteness percentage={completionPercentage} showLabel={false} />
         </div>
       </div>
       
-      <ContentCompleteness percentage={completionPercentage} />
+      {/* No need for spacing div anymore */}
       
       <form onSubmit={handleSubmit} className="space-y-10">
         {/* Basic Info Section */}

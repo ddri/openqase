@@ -11,6 +11,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { ContentCompleteness } from '@/components/admin/ContentCompleteness';
 import { PublishButton } from '@/components/admin/PublishButton';
 import { TagInput } from '@/components/ui/tag-input';
+import { ResourceLinksEditor } from '@/components/admin/ResourceLinksEditor';
 import { createContentValidationRules, calculateCompletionPercentage, validateFormValues } from '@/utils/form-validation';
 import { ArrowLeft, Save, Loader2 } from 'lucide-react';
 import { toast } from '@/components/ui/use-toast';
@@ -53,6 +54,7 @@ export function CaseStudyForm({ caseStudy, algorithms, industries, personas, isN
     personas: isNew ? [] : caseStudy?.personas || [],
     published: isNew ? false : caseStudy?.published || false,
     academic_references: isNew ? '' : caseStudy?.academic_references || '',
+    resource_links: isNew ? [] : caseStudy?.resource_links || [],
   });
   const [isDirty, setIsDirty] = useState(false);
   
@@ -72,6 +74,8 @@ export function CaseStudyForm({ caseStudy, algorithms, industries, personas, isN
   // Handle form submission
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    console.log('Submitting case study with resource links:', values.resource_links);
     
     startTransition(async () => {
       try {
@@ -307,6 +311,25 @@ export function CaseStudyForm({ caseStudy, algorithms, industries, personas, isN
                 onChange={(e) => handleChange('main_content', e.target.value)}
                 placeholder="Detailed content about the case study"
                 rows={15}
+              />
+            </div>
+          </CardContent>
+        </Card>
+        
+        {/* Resource Links Section */}
+        <Card className="shadow-sm">
+          <CardHeader className="p-6">
+            <CardTitle>Resource Links</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-6 p-6 pt-0">
+            <div className="space-y-3">
+              <Label>External Resources</Label>
+              <p className="text-sm text-muted-foreground mb-4">
+                Add links to external resources related to this case study, such as press releases, company websites, or project pages.
+              </p>
+              <ResourceLinksEditor
+                links={values.resource_links}
+                onChange={(newLinks) => handleChange('resource_links', newLinks)}
               />
             </div>
           </CardContent>

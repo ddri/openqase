@@ -9,7 +9,54 @@ import Link from 'next/link';
 import MarkdownIt from 'markdown-it';
 import { SupabaseClient } from '@supabase/supabase-js';
 
-const md = new MarkdownIt();
+const md = new MarkdownIt({
+  html: true,
+  linkify: true,
+  typographer: true,
+  breaks: true
+});
+
+// Function to fix bullet points in markdown content
+function preprocessMarkdown(content: string): string {
+  // Fix lists: ensure there's a space after each dash at the beginning of a line
+  // and add a newline before lists if needed
+  const fixedContent = content
+    .replace(/^-([^\s])/gm, '- $1')  // Add space after dash at line start if missing
+    .replace(/([^\n])\n^-\s/gm, '$1\n\n- '); // Add blank line before list starts
+    
+  return fixedContent;
+}
+
+// Customize renderer to improve table formatting
+const defaultRender = md.renderer.rules.table_open || function(tokens, idx, options, env, self) {
+  return self.renderToken(tokens, idx, options);
+};
+
+md.renderer.rules.table_open = function(tokens, idx, options, env, self) {
+  // Add a div wrapper with a class around the table
+  return '<div class="table-container">' + defaultRender(tokens, idx, options, env, self);
+};
+
+md.renderer.rules.table_close = function(tokens, idx, options, env, self) {
+  // Close both the table and the wrapper div
+  return '</table></div>';
+};
+
+// Customize cell rendering for numeric detection
+const defaultCellRender = md.renderer.rules.td_open || function(tokens, idx, options, env, self) {
+  return self.renderToken(tokens, idx, options);
+};
+
+md.renderer.rules.td_open = function(tokens, idx, options, env, self) {
+  // Check if cell content might be numeric
+  const content = tokens[idx+1]?.content;
+  const isNumeric = content && !isNaN(parseFloat(content)) && content.trim() !== '';
+  
+  if (isNumeric) {
+    return '<td class="numeric">';
+  }
+  return defaultCellRender(tokens, idx, options, env, self);
+};
 
 interface PageParams {
   params: Promise<{
@@ -117,6 +164,13 @@ export default async function IndustryPage({ params }: PageParams) {
     caseStudiesError = { error: 'Failed to fetch case studies' };
   }
 
+  // Preprocess and render industry main content if available
+  let processedContent = '';
+  if (industry.main_content) {
+    const preprocessedContent = preprocessMarkdown(industry.main_content);
+    processedContent = md.render(preprocessedContent);
+  }
+
   return (
     <LearningPathLayout 
       title={industry.name}
@@ -128,7 +182,7 @@ export default async function IndustryPage({ params }: PageParams) {
           <p className="text-lg text-muted-foreground">{industry.description}</p>
           {industry.main_content && (
             <div className="prose dark:prose-invert max-w-none mt-8"
-              dangerouslySetInnerHTML={{ __html: md.render(industry.main_content) }}
+              dangerouslySetInnerHTML={{ __html: processedContent }}
             />
           )}
         </div>

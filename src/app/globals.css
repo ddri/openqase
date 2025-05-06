@@ -616,29 +616,74 @@ nav a.active {
 
 /* Hover effect */
 .prose tbody tr:hover {
-  background-color: hsl(var(--muted) / 0.5);
+  background-color: hsl(var(--surface-secondary));
 }
 
-/* Responsive container */
 .prose .table-container {
-  max-width: 100%;
   overflow-x: auto;
   margin: 1.5rem 0;
   border-radius: 0.5rem;
   border: 1px solid hsl(var(--border));
+  max-width: 100%;
 }
 
-/* Special cell styling */
+/* Preserve code block styling within tables */
 .prose td code {
-  background-color: hsl(var(--muted) / 0.5);
+  background-color: hsl(var(--muted));
   padding: 0.2rem 0.4rem;
   border-radius: 0.25rem;
   font-size: 0.85em;
 }
 
-/* Align numbers to the right */
+/* Right-align numeric cells */
 .prose td.numeric,
 .prose th.numeric {
   text-align: right;
   font-variant-numeric: tabular-nums;
+}
+
+/* Add proper bullet list styling */
+.prose ul {
+  list-style-type: disc;
+  padding-left: 1.5rem;
+  margin: 1.5rem 0;
+}
+
+.prose ol {
+  list-style-type: decimal;
+  padding-left: 1.5rem;
+  margin: 1.5rem 0;
+}
+
+.prose li {
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+  position: relative;
+}
+
+.prose li > ul,
+.prose li > ol {
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+/* Ensure nested lists display properly */
+.prose li > ul {
+  list-style-type: circle;
+}
+
+.prose li > ul > li > ul {
+  list-style-type: square;
+}
+
+/* Add proper spacing around list content */
+.prose li p {
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+/* Enhance visibility of list markers */
+.prose ul li::marker,
+.prose ol li::marker {
+  color: hsl(var(--text-secondary));
 }

@@ -17,6 +17,48 @@ const md = new MarkdownIt({
   breaks: true
 });
 
+// Function to fix bullet points in markdown content
+function preprocessMarkdown(content: string): string {
+  // Fix lists: ensure there's a space after each dash at the beginning of a line
+  // and add a newline before lists if needed
+  const fixedContent = content
+    .replace(/^-([^\s])/gm, '- $1')  // Add space after dash at line start if missing
+    .replace(/([^\n])\n^-\s/gm, '$1\n\n- '); // Add blank line before list starts
+    
+  return fixedContent;
+}
+
+// Customize renderer to improve table formatting
+const defaultRender = md.renderer.rules.table_open || function(tokens, idx, options, env, self) {
+  return self.renderToken(tokens, idx, options);
+};
+
+md.renderer.rules.table_open = function(tokens, idx, options, env, self) {
+  // Add a div wrapper with a class around the table
+  return '<div class="table-container">' + defaultRender(tokens, idx, options, env, self);
+};
+
+md.renderer.rules.table_close = function(tokens, idx, options, env, self) {
+  // Close both the table and the wrapper div
+  return '</table></div>';
+};
+
+// Customize cell rendering for numeric detection
+const defaultCellRender = md.renderer.rules.td_open || function(tokens, idx, options, env, self) {
+  return self.renderToken(tokens, idx, options);
+};
+
+md.renderer.rules.td_open = function(tokens, idx, options, env, self) {
+  // Check if cell content might be numeric
+  const content = tokens[idx+1]?.content;
+  const isNumeric = content && !isNaN(parseFloat(content)) && content.trim() !== '';
+  
+  if (isNumeric) {
+    return '<td class="numeric">';
+  }
+  return defaultCellRender(tokens, idx, options, env, self);
+};
+
 // Enhanced markdown rendering with standard typography classes
 const enhanceTypography = (htmlContent: string): string => {
   // Add typography enhancements for headings
@@ -135,8 +177,11 @@ export default async function AlgorithmPage({ params }: AlgorithmPageProps) {
   // Process content with enhanced typography and references
   let processedContent = '';
   if (algorithm.main_content) {
+    // Preprocess the markdown content to fix list formatting
+    const preprocessedContent = preprocessMarkdown(algorithm.main_content);
+    
     // First render markdown to HTML
-    const htmlContent = md.render(algorithm.main_content);
+    const htmlContent = md.render(preprocessedContent);
     // Then process references 
     const contentWithReferences = processContentWithReferences(htmlContent);
     // Finally enhance the typography

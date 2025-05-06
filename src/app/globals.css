@@ -575,3 +575,70 @@ nav a.active {
 .container-mobile {
   @apply px-4 sm:px-6 lg:px-8;
 }
+
+/* Enhanced Markdown Table Styles */
+.prose table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.5rem 0;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  text-align: left;
+  overflow: hidden;
+  border: 1px solid hsl(var(--border));
+  border-radius: 0.5rem;
+}
+
+.prose th {
+  background-color: hsl(var(--muted));
+  color: hsl(var(--text-primary));
+  font-weight: 600;
+  text-transform: none;
+  letter-spacing: normal;
+  padding: 0.75rem 1rem;
+  border-bottom: 2px solid hsl(var(--border));
+}
+
+.prose td {
+  padding: 0.75rem 1rem;
+  border: 1px solid hsl(var(--border));
+  vertical-align: middle;
+}
+
+/* Zebra striping for better readability */
+.prose tbody tr:nth-child(odd) {
+  background-color: hsl(var(--background));
+}
+
+.prose tbody tr:nth-child(even) {
+  background-color: hsl(var(--card));
+}
+
+/* Hover effect */
+.prose tbody tr:hover {
+  background-color: hsl(var(--muted) / 0.5);
+}
+
+/* Responsive container */
+.prose .table-container {
+  max-width: 100%;
+  overflow-x: auto;
+  margin: 1.5rem 0;
+  border-radius: 0.5rem;
+  border: 1px solid hsl(var(--border));
+}
+
+/* Special cell styling */
+.prose td code {
+  background-color: hsl(var(--muted) / 0.5);
+  padding: 0.2rem 0.4rem;
+  border-radius: 0.25rem;
+  font-size: 0.85em;
+}
+
+/* Align numbers to the right */
+.prose td.numeric,
+.prose th.numeric {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}

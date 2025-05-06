@@ -180,7 +180,7 @@ export function CaseStudyForm({ caseStudy, algorithms, industries, personas, isN
   };
   
   return (
-    <div className="space-y-6">
+    <div className="space-y-10 max-w-5xl mx-auto pb-24">
       <div className="flex justify-between items-center">
         <Button
           variant="ghost"
@@ -228,15 +228,15 @@ export function CaseStudyForm({ caseStudy, algorithms, industries, personas, isN
       
       <ContentCompleteness percentage={completionPercentage} />
       
-      <form onSubmit={handleSubmit} className="space-y-6">
+      <form onSubmit={handleSubmit} className="space-y-10">
         {/* Basic Info Section */}
-        <Card>
-          <CardHeader>
+        <Card className="shadow-sm">
+          <CardHeader className="p-6">
             <CardTitle>Basic Info</CardTitle>
           </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="grid grid-cols-1 gap-4">
-              <div className="space-y-2">
+          <CardContent className="space-y-6 p-6 pt-0">
+            <div className="grid grid-cols-1 gap-6">
+              <div className="space-y-3">
                 <Label htmlFor="title">Title</Label>
                 <Input
                   id="title"
@@ -246,7 +246,7 @@ export function CaseStudyForm({ caseStudy, algorithms, industries, personas, isN
                 />
               </div>
               
-              <div className="space-y-2">
+              <div className="space-y-3">
                 <Label htmlFor="slug">Slug</Label>
                 <Input
                   id="slug"
@@ -256,7 +256,7 @@ export function CaseStudyForm({ caseStudy, algorithms, industries, personas, isN
                 />
               </div>
               
-              <div className="space-y-2">
+              <div className="space-y-3">
                 <Label htmlFor="description">Description</Label>
                 <Textarea
                   id="description"
@@ -267,7 +267,7 @@ export function CaseStudyForm({ caseStudy, algorithms, industries, personas, isN
                 />
               </div>
               
-              <div className="space-y-2">
+              <div className="space-y-3">
                 <Label htmlFor="url">URL</Label>
                 <Input
                   id="url"
@@ -281,12 +281,12 @@ export function CaseStudyForm({ caseStudy, algorithms, industries, personas, isN
         </Card>
         
         {/* Content Section */}
-        <Card>
-          <CardHeader>
+        <Card className="shadow-sm">
+          <CardHeader className="p-6">
             <CardTitle>Content</CardTitle>
           </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="space-y-2">
+          <CardContent className="space-y-6 p-6 pt-0">
+            <div className="space-y-3">
               <Label htmlFor="main_content">Main Content</Label>
               <Textarea
                 id="main_content"
@@ -300,11 +300,11 @@ export function CaseStudyForm({ caseStudy, algorithms, industries, personas, isN
         </Card>
         
         {/* Classifications Section */}
-        <Card>
-          <CardHeader>
+        <Card className="shadow-sm">
+          <CardHeader className="p-6">
             <CardTitle>Classifications</CardTitle>
           </CardHeader>
-          <CardContent className="space-y-6">
+          <CardContent className="space-y-8 p-6 pt-0">
             <RelationshipSelector
               items={industries}
               selectedItems={values.industries}
@@ -340,12 +340,12 @@ export function CaseStudyForm({ caseStudy, algorithms, industries, personas, isN
         </Card>
         
         {/* Technical Details Section */}
-        <Card>
-          <CardHeader>
+        <Card className="shadow-sm">
+          <CardHeader className="p-6">
             <CardTitle>Technical Details</CardTitle>
           </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="space-y-2">
+          <CardContent className="space-y-8 p-6 pt-0">
+            <div className="space-y-3">
               <Label htmlFor="partner_companies">Partner Companies</Label>
               <TagInput
                 tags={values.partner_companies}
@@ -354,7 +354,7 @@ export function CaseStudyForm({ caseStudy, algorithms, industries, personas, isN
               />
             </div>
             
-            <div className="space-y-2">
+            <div className="space-y-3">
               <Label htmlFor="quantum_companies">Quantum Companies</Label>
               <TagInput
                 tags={values.quantum_companies}
@@ -363,7 +363,7 @@ export function CaseStudyForm({ caseStudy, algorithms, industries, personas, isN
               />
             </div>
             
-            <div className="space-y-2">
+            <div className="space-y-3">
               <Label htmlFor="quantum_hardware">Quantum Hardware</Label>
               <TagInput
                 tags={values.quantum_hardware}

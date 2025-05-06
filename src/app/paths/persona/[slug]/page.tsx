@@ -15,8 +15,51 @@ import MarkdownIt from 'markdown-it';
 const md = new MarkdownIt({
   html: true,
   linkify: true,
-  typographer: true
+  typographer: true,
+  breaks: true
 });
+
+// Function to fix bullet points in markdown content
+function preprocessMarkdown(content: string): string {
+  // Fix lists: ensure there's a space after each dash at the beginning of a line
+  // and add a newline before lists if needed
+  const fixedContent = content
+    .replace(/^-([^\s])/gm, '- $1')  // Add space after dash at line start if missing
+    .replace(/([^\n])\n^-\s/gm, '$1\n\n- '); // Add blank line before list starts
+    
+  return fixedContent;
+}
+
+// Customize renderer to improve table formatting
+const defaultRender = md.renderer.rules.table_open || function(tokens, idx, options, env, self) {
+  return self.renderToken(tokens, idx, options);
+};
+
+md.renderer.rules.table_open = function(tokens, idx, options, env, self) {
+  // Add a div wrapper with a class around the table
+  return '<div class="table-container">' + defaultRender(tokens, idx, options, env, self);
+};
+
+md.renderer.rules.table_close = function(tokens, idx, options, env, self) {
+  // Close both the table and the wrapper div
+  return '</table></div>';
+};
+
+// Customize cell rendering for numeric detection
+const defaultCellRender = md.renderer.rules.td_open || function(tokens, idx, options, env, self) {
+  return self.renderToken(tokens, idx, options);
+};
+
+md.renderer.rules.td_open = function(tokens, idx, options, env, self) {
+  // Check if cell content might be numeric
+  const content = tokens[idx+1]?.content;
+  const isNumeric = content && !isNaN(parseFloat(content)) && content.trim() !== '';
+  
+  if (isNumeric) {
+    return '<td class="numeric">';
+  }
+  return defaultCellRender(tokens, idx, options, env, self);
+};
 
 type Persona = Database['public']['Tables']['personas']['Row'];
 type CaseStudy = Database['public']['Tables']['case_studies']['Row'];
@@ -114,8 +157,19 @@ export default async function PersonaPage({ params }: PageParams) {
     console.error('Error processing related case studies fetch:', error);
   }
 
-  // Render main markdown content (no longer needs link processing for reading)
-  const renderedContent = persona.main_content ? md.render(persona.main_content) : '';
+  // Preprocess and render markdown content
+  let renderedContent = '';
+  let renderedRecommendedReading = '';
+  
+  if (persona.main_content) {
+    const preprocessedContent = preprocessMarkdown(persona.main_content);
+    renderedContent = md.render(preprocessedContent);
+  }
+  
+  if (persona.recommended_reading) {
+    const preprocessedReading = preprocessMarkdown(persona.recommended_reading);
+    renderedRecommendedReading = md.render(preprocessedReading);
+  }
 
   return (
     <AuthGate
@@ -155,7 +209,7 @@ export default async function PersonaPage({ params }: PageParams) {
               <div 
                 // Removed: prose prose-gray dark:prose-invert max-w-none
                 className="prose-a:text-[var(--primary)] prose-a:hover:underline" // Keep link styling
-                dangerouslySetInnerHTML={{ __html: md.render(persona.recommended_reading) }}
+                dangerouslySetInnerHTML={{ __html: renderedRecommendedReading }}
               />
             </div>
           )}

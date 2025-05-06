@@ -52,6 +52,7 @@ export function CaseStudyForm({ caseStudy, algorithms, industries, personas, isN
     industries: isNew ? [] : caseStudy?.industries || [],
     personas: isNew ? [] : caseStudy?.personas || [],
     published: isNew ? false : caseStudy?.published || false,
+    academic_references: isNew ? '' : caseStudy?.academic_references || '',
   });
   const [isDirty, setIsDirty] = useState(false);
   
@@ -306,6 +307,28 @@ export function CaseStudyForm({ caseStudy, algorithms, industries, personas, isN
                 onChange={(e) => handleChange('main_content', e.target.value)}
                 placeholder="Detailed content about the case study"
                 rows={15}
+              />
+            </div>
+          </CardContent>
+        </Card>
+        
+        {/* Academic References Section */}
+        <Card className="shadow-sm">
+          <CardHeader className="p-6">
+            <CardTitle>Academic References</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-6 p-6 pt-0">
+            <div className="space-y-3">
+              <Label htmlFor="academic_references">References</Label>
+              <p className="text-sm text-muted-foreground">
+                Use the format: [^1]: Reference text. Use [^1] in main content to cite.
+              </p>
+              <Textarea
+                id="academic_references"
+                value={values.academic_references}
+                onChange={(e) => handleChange('academic_references', e.target.value)}
+                placeholder="[^1]: Author, Title, Journal (Year)"
+                rows={8}
               />
             </div>
           </CardContent>

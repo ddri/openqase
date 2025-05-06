@@ -243,6 +243,7 @@ export type Database = {
           title: string
           updated_at: string | null
           url: string | null
+          academic_references: string | null
         }
         Insert: {
           algorithms?: string[] | null
@@ -261,6 +262,7 @@ export type Database = {
           title: string
           updated_at?: string | null
           url?: string | null
+          academic_references?: string | null
         }
         Update: {
           algorithms?: string[] | null
@@ -279,6 +281,7 @@ export type Database = {
           title?: string
           updated_at?: string | null
           url?: string | null
+          academic_references?: string | null
         }
         Relationships: []
       }

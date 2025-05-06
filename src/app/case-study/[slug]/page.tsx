@@ -5,6 +5,7 @@ import type { Database } from '@/types/supabase';
 import LearningPathLayout from '@/components/ui/learning-path-layout';
 import { Badge } from '@/components/ui/badge';
 import MarkdownIt from 'markdown-it';
+import { ReferencesRenderer, processContentWithReferences } from '@/components/ui/ReferencesRenderer';
 
 // Initialize markdown-it with GFM features enabled
 const md = new MarkdownIt({
@@ -13,6 +14,37 @@ const md = new MarkdownIt({
   typographer: true,
   breaks: true
 });
+
+// Customize renderer to improve table formatting
+const defaultRender = md.renderer.rules.table_open || function(tokens, idx, options, env, self) {
+  return self.renderToken(tokens, idx, options);
+};
+
+md.renderer.rules.table_open = function(tokens, idx, options, env, self) {
+  // Add a div wrapper with a class around the table
+  return '<div class="table-container">' + defaultRender(tokens, idx, options, env, self);
+};
+
+md.renderer.rules.table_close = function(tokens, idx, options, env, self) {
+  // Close both the table and the wrapper div
+  return '</table></div>';
+};
+
+// Customize cell rendering for numeric detection
+const defaultCellRender = md.renderer.rules.td_open || function(tokens, idx, options, env, self) {
+  return self.renderToken(tokens, idx, options);
+};
+
+md.renderer.rules.td_open = function(tokens, idx, options, env, self) {
+  // Check if cell content might be numeric
+  const content = tokens[idx+1]?.content;
+  const isNumeric = content && !isNaN(parseFloat(content)) && content.trim() !== '';
+  
+  if (isNumeric) {
+    return '<td class="numeric">';
+  }
+  return defaultCellRender(tokens, idx, options, env, self);
+};
 
 type CaseStudy = Database['public']['Tables']['case_studies']['Row'];
 
@@ -36,7 +68,17 @@ export default async function CaseStudyPage({ params }: { params: Promise<{ slug
     return notFound();
   }
 
-  const content = caseStudy.main_content ? md.render(caseStudy.main_content) : '';
+  // Process content with references if available
+  let processedContent = '';
+  if (caseStudy.main_content) {
+    // Process citations in content if there are references
+    if (caseStudy.academic_references) {
+      const processedMarkdown = processContentWithReferences(caseStudy.main_content);
+      processedContent = md.render(processedMarkdown);
+    } else {
+      processedContent = md.render(caseStudy.main_content);
+    }
+  }
 
   return (
     <LearningPathLayout
@@ -48,7 +90,12 @@ export default async function CaseStudyPage({ params }: { params: Promise<{ slug
       <div className="prose dark:prose-invert max-w-none">
         <div className="grid gap-6 md:grid-cols-[2fr,1fr]">
           <div>
-            <div dangerouslySetInnerHTML={{ __html: content }} />
+            <div dangerouslySetInnerHTML={{ __html: processedContent }} />
+            
+            {/* Display References Section if available */}
+            {caseStudy.academic_references && (
+              <ReferencesRenderer referencesMarkup={caseStudy.academic_references} />
+            )}
           </div>
           <div className="space-y-6">
             {caseStudy.partner_companies && caseStudy.partner_companies.length > 0 && (

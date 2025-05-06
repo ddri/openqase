@@ -15,6 +15,17 @@ const md = new MarkdownIt({
   breaks: true
 });
 
+// Function to fix bullet points in markdown content
+function preprocessMarkdown(content: string): string {
+  // Fix lists: ensure there's a space after each dash at the beginning of a line
+  // and add a newline before lists if needed
+  const fixedContent = content
+    .replace(/^-([^\s])/gm, '- $1')  // Add space after dash at line start if missing
+    .replace(/([^\n])\n^-\s/gm, '$1\n\n- '); // Add blank line before list starts
+    
+  return fixedContent;
+}
+
 // Customize renderer to improve table formatting
 const defaultRender = md.renderer.rules.table_open || function(tokens, idx, options, env, self) {
   return self.renderToken(tokens, idx, options);
@@ -71,12 +82,15 @@ export default async function CaseStudyPage({ params }: { params: Promise<{ slug
   // Process content with references if available
   let processedContent = '';
   if (caseStudy.main_content) {
+    // Preprocess the markdown content to fix list formatting
+    const preprocessedContent = preprocessMarkdown(caseStudy.main_content);
+    
     // Process citations in content if there are references
     if (caseStudy.academic_references) {
-      const processedMarkdown = processContentWithReferences(caseStudy.main_content);
+      const processedMarkdown = processContentWithReferences(preprocessedContent);
       processedContent = md.render(processedMarkdown);
     } else {
-      processedContent = md.render(caseStudy.main_content);
+      processedContent = md.render(preprocessedContent);
     }
   }
 

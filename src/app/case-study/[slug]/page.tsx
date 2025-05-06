@@ -73,6 +73,7 @@ export default async function CaseStudyPage({ params }: { params: Promise<{ slug
     .single();
 
   console.log('Case study query result:', { caseStudy, error });
+  console.log('Resource links:', caseStudy?.resource_links);
 
   if (error || !caseStudy) {
     console.error('Error fetching case study:', error);
@@ -169,6 +170,27 @@ export default async function CaseStudyPage({ params }: { params: Promise<{ slug
                       {algorithm}
                     </Badge>
                   ))}
+                </div>
+              </div>
+            )}
+            
+            {caseStudy.resource_links && caseStudy.resource_links.length > 0 && (
+              <div>
+                <h3 className="text-lg font-semibold mb-2">Resource Links</h3>
+                <div className="flex flex-col space-y-2">
+                  {caseStudy.resource_links
+                    .sort((a, b) => a.order - b.order)
+                    .map((link, index) => (
+                      <a 
+                        key={index} 
+                        href={link.url} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="text-primary hover:underline flex items-center"
+                      >
+                        {link.label || link.url}
+                      </a>
+                    ))}
                 </div>
               </div>
             )}

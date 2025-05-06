@@ -244,6 +244,11 @@ export type Database = {
           updated_at: string | null
           url: string | null
           academic_references: string | null
+          resource_links: {
+            url: string
+            label: string
+            order: number
+          }[] | null
         }
         Insert: {
           algorithms?: string[] | null
@@ -263,6 +268,11 @@ export type Database = {
           updated_at?: string | null
           url?: string | null
           academic_references?: string | null
+          resource_links?: {
+            url: string
+            label: string
+            order: number
+          }[] | null
         }
         Update: {
           algorithms?: string[] | null
@@ -282,6 +292,11 @@ export type Database = {
           updated_at?: string | null
           url?: string | null
           academic_references?: string | null
+          resource_links?: {
+            url: string
+            label: string
+            order: number
+          }[] | null
         }
         Relationships: []
       }

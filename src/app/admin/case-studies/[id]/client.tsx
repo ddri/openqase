@@ -10,6 +10,7 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { ContentCompleteness } from '@/components/admin/ContentCompleteness';
 import { PublishButton } from '@/components/admin/PublishButton';
+import { TagInput } from '@/components/ui/tag-input';
 import { createContentValidationRules, calculateCompletionPercentage, validateFormValues } from '@/utils/form-validation';
 import { ArrowLeft, Save, Loader2 } from 'lucide-react';
 import { toast } from '@/components/ui/use-toast';
@@ -346,49 +347,28 @@ export function CaseStudyForm({ caseStudy, algorithms, industries, personas, isN
           <CardContent className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="partner_companies">Partner Companies</Label>
-              <Input
-                id="partner_companies"
-                value={values.partner_companies.join(', ')}
-                onChange={(e) => {
-                  const companies = e.target.value
-                    .split(',')
-                    .map(item => item.trim())
-                    .filter(Boolean);
-                   handleChange('partner_companies', companies);
-                }}
-                placeholder="Company A, Company B, etc."
+              <TagInput
+                tags={values.partner_companies}
+                onTagsChange={(newTags) => handleChange('partner_companies', newTags)}
+                placeholder="Add partner company..."
               />
             </div>
             
             <div className="space-y-2">
               <Label htmlFor="quantum_companies">Quantum Companies</Label>
-              <Input
-                id="quantum_companies"
-                value={values.quantum_companies.join(', ')}
-                onChange={(e) => {
-                  const companies = e.target.value
-                    .split(',')
-                    .map(item => item.trim())
-                    .filter(Boolean);
-                  handleChange('quantum_companies', companies);
-                }}
-                placeholder="Quantum Company A, Quantum Company B, etc."
+              <TagInput
+                tags={values.quantum_companies}
+                onTagsChange={(newTags) => handleChange('quantum_companies', newTags)}
+                placeholder="Add quantum company..."
               />
             </div>
             
             <div className="space-y-2">
               <Label htmlFor="quantum_hardware">Quantum Hardware</Label>
-              <Input
-                id="quantum_hardware"
-                value={values.quantum_hardware.join(', ')}
-                onChange={(e) => {
-                  const hardware = e.target.value
-                    .split(',')
-                    .map(item => item.trim())
-                    .filter(Boolean);
-                  handleChange('quantum_hardware', hardware);
-                }}
-                placeholder="Hardware A, Hardware B, etc."
+              <TagInput
+                tags={values.quantum_hardware}
+                onTagsChange={(newTags) => handleChange('quantum_hardware', newTags)}
+                placeholder="Add quantum hardware..."
               />
             </div>
           </CardContent>

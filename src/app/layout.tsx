@@ -4,7 +4,7 @@ import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import Navigation from '@/components/Navigation';
 import { Toaster } from '@/components/ui/toaster';
-import Footer from '@/components/Footer';
+import FooterWrapper from '@/components/FooterWrapper';
 import Providers from '@/components/Providers';
 import { GlobalErrorBoundary } from '@/components/error-boundary/GlobalErrorBoundary';
 
@@ -37,7 +37,8 @@ export default function RootLayout({
                 {children}
               </GlobalErrorBoundary>
             </main>
-            <Footer />
+            {/* Footer is only shown on non-admin routes */}
+            <FooterWrapper />
           </div>
           <Toaster />
         </Providers>

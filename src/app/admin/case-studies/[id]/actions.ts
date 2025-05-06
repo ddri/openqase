@@ -19,6 +19,7 @@ export async function saveCaseStudy(values: any): Promise<any> {
         quantum_hardware: values.quantum_hardware,
         published: values.published,
         academic_references: values.academic_references || null,
+        resource_links: values.resource_links || null,
       })
       .select()
       .single();

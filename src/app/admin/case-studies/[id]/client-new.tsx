@@ -10,6 +10,7 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { ContentCompleteness } from '@/components/admin/ContentCompleteness';
 import { PublishButton } from '@/components/admin/PublishButton';
+import { TagInput } from '@/components/ui/tag-input';
 import { createContentValidationRules, calculateCompletionPercentage, validateFormValues } from '@/utils/form-validation';
 import { ArrowLeft, Save, Loader2 } from 'lucide-react';
 import { toast } from '@/components/ui/use-toast';
@@ -179,63 +180,75 @@ export function CaseStudyForm({ caseStudy, algorithms, industries, personas, isN
   };
   
   return (
-    <div className="space-y-6">
-      <div className="flex justify-between items-center">
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={() => router.push('/admin/case-studies')}
-          className="flex items-center"
-        >
-          <ArrowLeft className="mr-2 h-4 w-4" />
-          Back
-        </Button>
-        
-        <div className="flex items-center gap-2">
+    <div className="space-y-10 max-w-5xl mx-auto pb-24">
+      {/* Add better spacing from the top navigation */}
+      <div className="pt-6 mb-8 bg-background pb-4 border-b border-border">
+        <div className="flex justify-between items-center mb-6">
           <Button
-            type="button"
-            variant="outline"
+            variant="ghost"
             size="sm"
-            onClick={handleSubmit}
-            disabled={isPending || !isDirty}
-            className="min-w-[100px]"
+            onClick={() => router.push('/admin/case-studies')}
+            className="flex items-center"
           >
-            {isPending ? (
-              <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Saving...
-              </>
-            ) : (
-              <>
-                <Save className="mr-2 h-4 w-4" />
-                Save
-              </>
-            )}
+            <ArrowLeft className="mr-2 h-4 w-4" />
+            Back to Case Studies
           </Button>
           
-          <PublishButton
-            isPublished={values.published}
-            onPublish={handlePublish}
-            onUnpublish={handleUnpublish}
-            validateContent={validateContent}
-            disabled={isPending}
-            onTabChange={() => {}}
-            getTabLabel={() => ''}
-          />
+          <div className="flex items-center gap-3">
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={handleSubmit}
+              disabled={isPending || !isDirty}
+              className="min-w-[100px]"
+            >
+              {isPending ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Saving...
+                </>
+              ) : (
+                <>
+                  <Save className="mr-2 h-4 w-4" />
+                  Save
+                </>
+              )}
+            </Button>
+            
+            <PublishButton
+              isPublished={values.published}
+              onPublish={handlePublish}
+              onUnpublish={handleUnpublish}
+              validateContent={validateContent}
+              disabled={isPending}
+              onTabChange={() => {}}
+              getTabLabel={() => ''}
+            />
+          </div>
+        </div>
+        
+        {/* Progress bar section */}
+        <div>
+          <div className="flex justify-between items-center text-sm mb-2">
+            <span className="text-muted-foreground">Content Completeness</span>
+            <span className="font-medium">{completionPercentage}%</span>
+          </div>
+          <ContentCompleteness percentage={completionPercentage} showLabel={false} />
         </div>
       </div>
       
-      <ContentCompleteness percentage={completionPercentage} />
+      {/* No need for spacing div anymore */}
       
-      <form onSubmit={handleSubmit} className="space-y-6">
+      <form onSubmit={handleSubmit} className="space-y-10">
         {/* Basic Info Section */}
-        <Card>
-          <CardHeader>
+        <Card className="shadow-sm">
+          <CardHeader className="p-6">
             <CardTitle>Basic Info</CardTitle>
           </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="grid grid-cols-1 gap-4">
-              <div className="space-y-2">
+          <CardContent className="space-y-6 p-6 pt-0">
+            <div className="grid grid-cols-1 gap-6">
+              <div className="space-y-3">
                 <Label htmlFor="title">Title</Label>
                 <Input
                   id="title"
@@ -245,7 +258,7 @@ export function CaseStudyForm({ caseStudy, algorithms, industries, personas, isN
                 />
               </div>
               
-              <div className="space-y-2">
+              <div className="space-y-3">
                 <Label htmlFor="slug">Slug</Label>
                 <Input
                   id="slug"
@@ -255,7 +268,7 @@ export function CaseStudyForm({ caseStudy, algorithms, industries, personas, isN
                 />
               </div>
               
-              <div className="space-y-2">
+              <div className="space-y-3">
                 <Label htmlFor="description">Description</Label>
                 <Textarea
                   id="description"
@@ -266,7 +279,7 @@ export function CaseStudyForm({ caseStudy, algorithms, industries, personas, isN
                 />
               </div>
               
-              <div className="space-y-2">
+              <div className="space-y-3">
                 <Label htmlFor="url">URL</Label>
                 <Input
                   id="url"
@@ -280,12 +293,12 @@ export function CaseStudyForm({ caseStudy, algorithms, industries, personas, isN
         </Card>
         
         {/* Content Section */}
-        <Card>
-          <CardHeader>
+        <Card className="shadow-sm">
+          <CardHeader className="p-6">
             <CardTitle>Content</CardTitle>
           </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="space-y-2">
+          <CardContent className="space-y-6 p-6 pt-0">
+            <div className="space-y-3">
               <Label htmlFor="main_content">Main Content</Label>
               <Textarea
                 id="main_content"
@@ -299,11 +312,11 @@ export function CaseStudyForm({ caseStudy, algorithms, industries, personas, isN
         </Card>
         
         {/* Classifications Section */}
-        <Card>
-          <CardHeader>
+        <Card className="shadow-sm">
+          <CardHeader className="p-6">
             <CardTitle>Classifications</CardTitle>
           </CardHeader>
-          <CardContent className="space-y-6">
+          <CardContent className="space-y-8 p-6 pt-0">
             <RelationshipSelector
               items={industries}
               selectedItems={values.industries}
@@ -339,56 +352,35 @@ export function CaseStudyForm({ caseStudy, algorithms, industries, personas, isN
         </Card>
         
         {/* Technical Details Section */}
-        <Card>
-          <CardHeader>
+        <Card className="shadow-sm">
+          <CardHeader className="p-6">
             <CardTitle>Technical Details</CardTitle>
           </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="space-y-2">
+          <CardContent className="space-y-8 p-6 pt-0">
+            <div className="space-y-3">
               <Label htmlFor="partner_companies">Partner Companies</Label>
-              <Input
-                id="partner_companies"
-                value={values.partner_companies.join(', ')}
-                onChange={(e) => {
-                  const companies = e.target.value
-                    .split(',')
-                    .map(item => item.trim())
-                    .filter(Boolean);
-                   handleChange('partner_companies', companies);
-                }}
-                placeholder="Company A, Company B, etc."
+              <TagInput
+                tags={values.partner_companies}
+                onTagsChange={(newTags) => handleChange('partner_companies', newTags)}
+                placeholder="Add partner company..."
               />
             </div>
             
-            <div className="space-y-2">
+            <div className="space-y-3">
               <Label htmlFor="quantum_companies">Quantum Companies</Label>
-              <Input
-                id="quantum_companies"
-                value={values.quantum_companies.join(', ')}
-                onChange={(e) => {
-                  const companies = e.target.value
-                    .split(',')
-                    .map(item => item.trim())
-                    .filter(Boolean);
-                  handleChange('quantum_companies', companies);
-                }}
-                placeholder="Quantum Company A, Quantum Company B, etc."
+              <TagInput
+                tags={values.quantum_companies}
+                onTagsChange={(newTags) => handleChange('quantum_companies', newTags)}
+                placeholder="Add quantum company..."
               />
             </div>
             
-            <div className="space-y-2">
+            <div className="space-y-3">
               <Label htmlFor="quantum_hardware">Quantum Hardware</Label>
-              <Input
-                id="quantum_hardware"
-                value={values.quantum_hardware.join(', ')}
-                onChange={(e) => {
-                  const hardware = e.target.value
-                    .split(',')
-                    .map(item => item.trim())
-                    .filter(Boolean);
-                  handleChange('quantum_hardware', hardware);
-                }}
-                placeholder="Hardware A, Hardware B, etc."
+              <TagInput
+                tags={values.quantum_hardware}
+                onTagsChange={(newTags) => handleChange('quantum_hardware', newTags)}
+                placeholder="Add quantum hardware..."
               />
             </div>
           </CardContent>

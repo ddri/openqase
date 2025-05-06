@@ -46,13 +46,13 @@ export default function AdminLayout({
             ))}
           </ul>
         </nav>
-        <div className="p-4 border-t border-border text-xs text-muted-foreground">
-          <p>OpenQASE Admin v1.0</p>
+        <div className="p-4 pt-6 mt-auto border-t border-border text-xs text-muted-foreground">
+          <p className="opacity-70">OpenQASE Admin v1.0</p>
         </div>
       </div>
       
       {/* Main content */}
-      <div className="flex-1 overflow-auto">
+      <div className="flex-1 overflow-auto pb-20">
         {children}
       </div>
     </div>

@@ -114,9 +114,21 @@ export default async function CaseStudyPage({ params }: { params: Promise<{ slug
           <div className="space-y-6">
             {caseStudy.partner_companies && caseStudy.partner_companies.length > 0 && (
               <div>
-                <h3 className="text-lg font-semibold mb-2">Companies</h3>
+                <h3 className="text-lg font-semibold mb-2">Partner Companies</h3>
                 <div className="flex flex-wrap gap-2">
                   {caseStudy.partner_companies.map((company: string) => (
+                    <Badge key={company} variant="outline">
+                      {company}
+                    </Badge>
+                  ))}
+                </div>
+              </div>
+            )}
+            {caseStudy.quantum_companies && caseStudy.quantum_companies.length > 0 && (
+              <div>
+                <h3 className="text-lg font-semibold mb-2">Quantum Companies</h3>
+                <div className="flex flex-wrap gap-2">
+                  {caseStudy.quantum_companies.map((company: string) => (
                     <Badge key={company} variant="outline">
                       {company}
                     </Badge>

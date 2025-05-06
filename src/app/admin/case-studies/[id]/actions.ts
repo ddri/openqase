@@ -18,6 +18,7 @@ export async function saveCaseStudy(values: any): Promise<any> {
         quantum_companies: values.quantum_companies,
         quantum_hardware: values.quantum_hardware,
         published: values.published,
+        academic_references: values.academic_references || null,
       })
       .select()
       .single();

@@ -50,7 +50,6 @@ export function CaseStudyForm({ caseStudy, algorithms, industries, personas, isN
     slug: isNew ? '' : caseStudy?.slug || '',
     description: isNew ? '' : caseStudy?.description || '',
     main_content: isNew ? '' : caseStudy?.main_content || '',
-    url: isNew ? '' : caseStudy?.url || '',
     partner_companies: isNew ? [] : caseStudy?.partner_companies || [],
     quantum_companies: isNew ? [] : caseStudy?.quantum_companies || [],
     quantum_hardware: isNew ? [] : caseStudy?.quantum_hardware || [],
@@ -371,19 +370,10 @@ export function CaseStudyForm({ caseStudy, algorithms, industries, personas, isN
                   id="description"
                   value={values.description}
                   onChange={(e) => handleChange('description', e.target.value)}
-                  placeholder="Brief description of the case study"
-                  rows={3}
+                  placeholder="Enter a brief description (for SEO and previews)"
+                  className="min-h-[100px]"
                 />
-              </div>
-              
-              <div className="space-y-3">
-                <Label htmlFor="url">URL</Label>
-                <Input
-                  id="url"
-                  value={values.url}
-                  onChange={(e) => handleChange('url', e.target.value)}
-                  placeholder="https://example.com/case-study"
-                />
+                {/* Validation message for description can be added here if needed */}
               </div>
             </div>
           </CardContent>

@@ -65,6 +65,7 @@ export interface CaseStudy extends BaseContent {
   industries: string[];
   personas: string[];
   quantum_hardware: string[];
+  quantum_software: string[];
   published: boolean | null;
   published_at: string | null;
   lastUpdated: string | null;

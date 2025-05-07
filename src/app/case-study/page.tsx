@@ -34,6 +34,7 @@ export default async function CaseStudyPage() {
     personas: item.personas || [],
     // qubits_used property doesn't exist in the database schema
     quantum_hardware: item.quantum_hardware || [],
+    quantum_software: item.quantum_software || [],
     // classical_hardware property doesn't exist in the CaseStudy interface
     published: item.published,
     published_at: item.published_at,

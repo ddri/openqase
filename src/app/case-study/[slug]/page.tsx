@@ -1,11 +1,21 @@
 // src/app/case-study/[slug]/page.tsx
 import { notFound } from 'next/navigation';
 import { createServerSupabaseClient } from '@/lib/supabase-server';
-import type { Database } from '@/types/supabase';
+import type { Database } from '@/types/supabase'; // Using the main Database type
 import LearningPathLayout from '@/components/ui/learning-path-layout';
 import { Badge } from '@/components/ui/badge';
 import MarkdownIt from 'markdown-it';
 import { ReferencesRenderer, processContentWithReferences } from '@/components/ui/ReferencesRenderer';
+
+// export const dynamic = 'force-dynamic'; // REMOVED - Restore default caching
+
+// Define a more accurate type for the case study data we expect after fetching relations
+type EnrichedCaseStudy = Database['public']['Tables']['case_studies']['Row'] & {
+  case_study_industry_relations?: { industries: { id: string; name: string; slug?: string | null } | null }[];
+  algorithm_case_study_relations?: { algorithms: { id: string; name: string; slug?: string | null } | null }[];
+  case_study_persona_relations?: { personas: { id: string; name: string; slug?: string | null } | null }[];
+  // quantum_software is assumed to be a direct TEXT[] field as previously discussed
+};
 
 // Initialize markdown-it with GFM features enabled
 const md = new MarkdownIt({
@@ -46,37 +56,36 @@ const defaultCellRender = md.renderer.rules.td_open || function(tokens, idx, opt
   return self.renderToken(tokens, idx, options);
 };
 
-md.renderer.rules.td_open = function(tokens, idx, options, env, self) {
-  // Check if cell content might be numeric
-  const content = tokens[idx+1]?.content;
-  const isNumeric = content && !isNaN(parseFloat(content)) && content.trim() !== '';
-  
-  if (isNumeric) {
-    return '<td class="numeric">';
-  }
-  return defaultCellRender(tokens, idx, options, env, self);
-};
-
-type CaseStudy = Database['public']['Tables']['case_studies']['Row'];
+// No longer using the commented out LocalCaseStudyType alias here
 
 export default async function CaseStudyPage({ params }: { params: Promise<{ slug: string }> }) {
   const resolvedParams = await params;
   const slug = resolvedParams.slug;
-  console.log('Fetching case study with slug:', slug);
+  // console.log('Fetching case study with slug:', slug); // REMOVED
 
   const supabase = await createServerSupabaseClient();
-  const { data: caseStudy, error } = await supabase
+  const { data, error } = await supabase
     .from('case_studies')
-    .select('*')
+    .select(`
+      *,
+      case_study_industry_relations(industries(id, name, slug)),
+      algorithm_case_study_relations(algorithms(id, name, slug)),
+      case_study_persona_relations(personas(id, name, slug))
+    `)
     .eq('slug', slug)
     .eq('published', true)
     .single();
 
-  console.log('Case study query result:', { caseStudy, error });
-  console.log('Resource links:', caseStudy?.resource_links);
+  const caseStudy = data as EnrichedCaseStudy | null; // Cast to our enriched type
+
+  // console.log('Case study query result (with relations):', JSON.stringify(caseStudy, null, 2)); // REMOVED
+  // console.log('Industries from DB relations:', caseStudy?.case_study_industry_relations); // REMOVED
+  // console.log('Personas from DB relations:', caseStudy?.case_study_persona_relations); // REMOVED
+  // console.log('Algorithms from DB relations:', caseStudy?.algorithm_case_study_relations); // REMOVED
+  // console.log('Quantum Software (direct field):', caseStudy?.quantum_software); // REMOVED
 
   if (error || !caseStudy) {
-    console.error('Error fetching case study:', error);
+    // console.error('Error fetching case study:', error); // REMOVED - Let notFound() handle it
     return notFound();
   }
 
@@ -149,36 +158,96 @@ export default async function CaseStudyPage({ params }: { params: Promise<{ slug
                 </div>
               </div>
             )}
-            {caseStudy.industries && caseStudy.industries.length > 0 && (
+            {caseStudy.quantum_software && caseStudy.quantum_software.length > 0 && (
               <div>
-                <h3 className="text-lg font-semibold mb-2">Industries</h3>
+                <h3 className="text-lg font-semibold mb-2">Quantum Software</h3>
                 <div className="flex flex-wrap gap-2">
-                  {caseStudy.industries.map((industry: string) => (
-                    <Badge key={industry} variant="outline">
-                      {industry}
+                  {caseStudy.quantum_software.map((software: string) => (
+                    <Badge key={software} variant="outline">
+                      {software}
                     </Badge>
                   ))}
                 </div>
               </div>
             )}
-            {caseStudy.algorithms && caseStudy.algorithms.length > 0 && (
-              <div>
-                <h3 className="text-lg font-semibold mb-2">Algorithms</h3>
-                <div className="flex flex-wrap gap-2">
-                  {caseStudy.algorithms.map((algorithm: string) => (
-                    <Badge key={algorithm} variant="outline">
-                      {algorithm}
-                    </Badge>
-                  ))}
-                </div>
+            <div>
+              <h3 className="text-lg font-semibold mb-2">Industries</h3>
+              <div className="flex flex-wrap gap-2">
+                {(() => {
+                  if (caseStudy.case_study_industry_relations && caseStudy.case_study_industry_relations.length > 0) {
+                    const naIndustry = caseStudy.case_study_industry_relations.find(rel => rel.industries?.slug === 'not-applicable');
+                    if (naIndustry && naIndustry.industries) {
+                      return <p className="text-sm text-muted-foreground">Not Applicable</p>;
+                    }
+                    const actualIndustries = caseStudy.case_study_industry_relations.filter(rel => rel.industries?.slug !== 'not-applicable');
+                    if (actualIndustries.length > 0) {
+                      return actualIndustries.map((relation) =>
+                        relation.industries ? (
+                          <Badge key={relation.industries.id} variant="outline">
+                            {relation.industries.name}
+                          </Badge>
+                        ) : null
+                      );
+                    }
+                  }
+                  return <p className="text-sm text-muted-foreground">None</p>;
+                })()}
               </div>
-            )}
+            </div>
+            <div>
+              <h3 className="text-lg font-semibold mb-2">Algorithms</h3>
+              <div className="flex flex-wrap gap-2">
+                {(() => {
+                  if (caseStudy.algorithm_case_study_relations && caseStudy.algorithm_case_study_relations.length > 0) {
+                    const naAlgorithm = caseStudy.algorithm_case_study_relations.find(rel => rel.algorithms?.slug === 'not-applicable');
+                    if (naAlgorithm && naAlgorithm.algorithms) {
+                      return <p className="text-sm text-muted-foreground">Not Applicable</p>;
+                    }
+                    const actualAlgorithms = caseStudy.algorithm_case_study_relations.filter(rel => rel.algorithms?.slug !== 'not-applicable');
+                    if (actualAlgorithms.length > 0) {
+                      return actualAlgorithms.map((relation) =>
+                        relation.algorithms ? (
+                          <Badge key={relation.algorithms.id} variant="outline">
+                            {relation.algorithms.name}
+                          </Badge>
+                        ) : null
+                      );
+                    }
+                  }
+                  return <p className="text-sm text-muted-foreground">None</p>;
+                })()}
+              </div>
+            </div>
+            <div>
+              <h3 className="text-lg font-semibold mb-2">Personas</h3>
+              <div className="flex flex-wrap gap-2">
+                {(() => {
+                  if (caseStudy.case_study_persona_relations && caseStudy.case_study_persona_relations.length > 0) {
+                    const naPersona = caseStudy.case_study_persona_relations.find(rel => rel.personas?.slug === 'not-applicable');
+                    if (naPersona && naPersona.personas) {
+                      return <p className="text-sm text-muted-foreground">Not Applicable</p>;
+                    }
+                    const actualPersonas = caseStudy.case_study_persona_relations.filter(rel => rel.personas?.slug !== 'not-applicable');
+                    if (actualPersonas.length > 0) {
+                      return actualPersonas.map((relation) =>
+                        relation.personas ? (
+                          <Badge key={relation.personas.id} variant="outline">
+                            {relation.personas.name}
+                          </Badge>
+                        ) : null
+                      );
+                    }
+                  }
+                  return <p className="text-sm text-muted-foreground">None</p>;
+                })()}
+              </div>
+            </div>
             
-            {caseStudy.resource_links && caseStudy.resource_links.length > 0 && (
+            {caseStudy.resource_links && Array.isArray(caseStudy.resource_links) && caseStudy.resource_links.length > 0 && (
               <div>
                 <h3 className="text-lg font-semibold mb-2">Resource Links</h3>
                 <div className="flex flex-col space-y-2">
-                  {caseStudy.resource_links
+                  {(caseStudy.resource_links as Array<{url: string, label?: string, order: number}>) // Type assertion for safety within map
                     .sort((a, b) => a.order - b.order)
                     .map((link, index) => (
                       <a 

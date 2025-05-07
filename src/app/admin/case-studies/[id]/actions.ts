@@ -32,7 +32,6 @@ export async function saveCaseStudy(values: any): Promise<any> {
       published: values.published,
       academic_references: values.academic_references || null,
       resource_links: values.resource_links || null,
-      url: values.url || null,
     };
 
     const { data, error } = await supabase

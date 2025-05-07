@@ -6,6 +6,10 @@ import { revalidatePath } from 'next/cache';
 export async function saveCaseStudy(values: any): Promise<any> {
   try {
     const supabase = createServiceRoleSupabaseClient();
+    
+    // Extract not applicable states if present
+    const notApplicableStates = values.notApplicableStates || {};
+    
     const { data, error } = await supabase
       .from('case_studies')
       .upsert({
@@ -40,7 +44,8 @@ export async function saveCaseStudy(values: any): Promise<any> {
         throw new Error(industryError.error.message || "Failed to delete industry relationships");
     }
 
-    if (values.industries && Array.isArray(values.industries)) {
+    // Only add relationships if not marked as N/A and there are items to add
+    if (!notApplicableStates.industries && values.industries && Array.isArray(values.industries) && values.industries.length > 0) {
       for (const industryId of values.industries) {
           let insertError = await supabase
               .from('case_study_industry_relations' as any)
@@ -64,7 +69,8 @@ export async function saveCaseStudy(values: any): Promise<any> {
         throw new Error(algorithmError.error.message || "Failed to delete algorithm relationships");
     }
 
-    if (values.algorithms && Array.isArray(values.algorithms)) {
+    // Only add relationships if not marked as N/A and there are items to add
+    if (!notApplicableStates.algorithms && values.algorithms && Array.isArray(values.algorithms) && values.algorithms.length > 0) {
       for (const algorithmId of values.algorithms) {
           let insertError = await supabase
               .from('algorithm_case_study_relations' as any)
@@ -88,7 +94,8 @@ export async function saveCaseStudy(values: any): Promise<any> {
         throw new Error(personaError.error.message || "Failed to delete persona relationships");
     }
 
-    if (values.personas && Array.isArray(values.personas)) {
+    // Only add relationships if not marked as N/A and there are items to add
+    if (!notApplicableStates.personas && values.personas && Array.isArray(values.personas) && values.personas.length > 0) {
       for (const personaId of values.personas) {
           let insertError = await supabase
               .from('case_study_persona_relations' as any)

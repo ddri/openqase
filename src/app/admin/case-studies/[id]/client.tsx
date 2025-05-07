@@ -58,6 +58,13 @@ export function CaseStudyForm({ caseStudy, algorithms, industries, personas, isN
   });
   const [isDirty, setIsDirty] = useState(false);
   
+  // Track "Not Applicable" states separately
+  const [notApplicableStates, setNotApplicableStates] = useState({
+    algorithms: false,
+    industries: false,
+    personas: false
+  });
+  
   // Validation rules for case studies
   const validationRules = createContentValidationRules('case_study');
   const completionPercentage = calculateCompletionPercentage({ values, validationRules });
@@ -71,6 +78,15 @@ export function CaseStudyForm({ caseStudy, algorithms, industries, personas, isN
     setIsDirty(true);
   };
   
+  // Handle not applicable change
+  const handleNotApplicableChange = (field: string, isNotApplicable: boolean) => {
+    setNotApplicableStates(prev => ({
+      ...prev,
+      [field]: isNotApplicable
+    }));
+    setIsDirty(true);
+  };
+  
   // Handle form submission
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -79,7 +95,11 @@ export function CaseStudyForm({ caseStudy, algorithms, industries, personas, isN
     
     startTransition(async () => {
       try {
-        const result = await saveCaseStudy(values);
+        // Include notApplicableStates in the data sent to the server
+        const result = await saveCaseStudy({
+          ...values,
+          notApplicableStates
+        });
         
         // If this was a new case study and we got an ID back, redirect to edit page
         if (isNew && result?.id) {
@@ -176,9 +196,27 @@ export function CaseStudyForm({ caseStudy, algorithms, industries, personas, isN
   
   // Validate content before publishing
   const validateContent = () => {
+    // Create custom validators for fields that can be marked as N/A
+    const industriesValidator = (value: any): boolean => 
+      (Array.isArray(value) && value.length > 0) || notApplicableStates.industries;
+    
+    const algorithmsValidator = (value: any): boolean => 
+      (Array.isArray(value) && value.length > 0) || notApplicableStates.algorithms;
+    
+    // Find the rules for these fields
+    const modifiedRules = validationRules.map(rule => {
+      if (rule.field === 'industries') {
+        return { ...rule, validator: industriesValidator };
+      }
+      if (rule.field === 'algorithms') {
+        return { ...rule, validator: algorithmsValidator };
+      }
+      return rule;
+    });
+    
     const issues = validateFormValues({
       values,
-      validationRules
+      validationRules: modifiedRules
     });
     
     return Object.keys(issues).length === 0 ? true : issues;
@@ -372,6 +410,8 @@ export function CaseStudyForm({ caseStudy, algorithms, industries, personas, isN
               label="Industries"
               placeholder="Select industries..."
               required={true}
+              notApplicable={notApplicableStates.industries}
+              onNotApplicableChange={(isNA) => handleNotApplicableChange('industries', isNA)}
             />
             
             <RelationshipSelector
@@ -383,6 +423,8 @@ export function CaseStudyForm({ caseStudy, algorithms, industries, personas, isN
               label="Algorithms"
               placeholder="Select algorithms..."
               required={true}
+              notApplicable={notApplicableStates.algorithms}
+              onNotApplicableChange={(isNA) => handleNotApplicableChange('algorithms', isNA)}
             />
             
             <RelationshipSelector
@@ -393,6 +435,8 @@ export function CaseStudyForm({ caseStudy, algorithms, industries, personas, isN
               itemValueKey="id"
               label="Personas"
               placeholder="Select personas..."
+              notApplicable={notApplicableStates.personas}
+              onNotApplicableChange={(isNA) => handleNotApplicableChange('personas', isNA)}
             />
           </CardContent>
         </Card>

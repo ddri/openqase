@@ -70,19 +70,29 @@ For each page/section listed below, document:
 **Goal:** Improve readability, establish clear visual hierarchy, and introduce more visual interest through font choices.
 
 1.  **Font Selection & Pairing:**
-    *   [ ] **Action:** Research and select a primary heading font.
+    *   [x] **Action:** Research and select a primary heading font. **-> Chosen: Montserrat**
         *   *Considerations:* Characterful sans-serif, good for impact, legible at large sizes.
-    *   [ ] **Action:** Research and select a body text font.
+    *   [x] **Action:** Research and select a body text font. **-> Chosen: Open Sans**
         *   *Considerations:* Highly legible sans-serif, good for long-form reading, pairs well with the heading font.
     *   [ ] **Example Pairings to Consider (from Claude):**
-        *   **Option 1:** Headings: Roboto Slab (semibold/bold) | Body: Inter (Technical, contemporary)
-        *   **Option 2:** Headings: Source Sans Pro (semibold/bold) | Body: IBM Plex Sans (Professional, clear, designed for technical content)
-        *   **Option 3:** Headings: Montserrat (medium/semibold) | Body: Open Sans (Clean, professional, good contrast)
-    *   [ ] **Action:** Define fallback fonts for web safety.
-    *   [ ] **Action:** Implement the chosen fonts in the CSS.
+        *   ~~Option 1: Headings: Roboto Slab (semibold/bold) | Body: Inter (Technical, contemporary)~~ 
+        *   ~~Option 2: Headings: Source Sans Pro (semibold/bold) | Body: IBM Plex Sans (Professional, clear, designed for technical content)~~ 
+        *   **Selected -> Option 3:** Headings: Montserrat (medium/semibold) | Body: Open Sans (Clean, professional, good contrast)
+    *   [ ] **Action: Load Chosen Fonts (`src/app/layout.tsx`)**
+        *   Import `Montserrat` and `Open_Sans` from `next/font/google`.
+        *   Load required weights (e.g., Montserrat: 400, 500, 600, 700; Open Sans: 400, 600, 700).
+        *   Expose fonts via CSS variables (e.g., `--font-montserrat`, `--font-open-sans`).
+        *   Apply variables to `<html>` tag.
+    *   [ ] **Action: Define fallback fonts for web safety.** (Ensure fallback stack remains in CSS variable definitions).
+    *   [ ] **Action: Implement Initial Font Swap (`src/app/globals.css`) - Gentle Start**
+        *   Update `--font-sans` definition in `:root` to use `var(--font-open-sans), system-ui, ...`.
+        *   Update `--font-heading` definition in `:root` to use `var(--font-montserrat), system-ui, ...`.
+    *   [ ] **Action: Initial Review & Minor Adjustments**
+        *   Visually inspect site after font swap.
+        *   Make minimal adjustments to base `font-size`, `line-height`, or `letter-spacing` in `globals.css` only if needed for immediate readability/balance.
 
-2.  **Font Size & Weight Hierarchy:**
-    *   [ ] **Action:** Increase the main page title ("Quantum Brilliance and Pawsey Supercomputing Centre") significantly. Define a specific, impactful size (e.g., 48px, 60px). Use a bold or extra-bold weight.
+2.  **Font Size & Weight Hierarchy (Full Scale Implementation - Phase I.b):**
+    *   [ ] **Action:** Increase the main page title ("Quantum Brilliance and Pawsey Supercomputing Centre") significantly. Define a specific, impactful size (e.g., 48px, 60px). Use a bold or extra-bold weight (Montserrat 600 or 700).
     *   [ ] **Action:** Define sizes and weights for H2 ("Overview," "Problem Statement") and H3 (potential sub-headings). Ensure they are distinct from each other and body text.
     *   [ ] **Action:** Increase the base body font size for improved readability (e.g., to 16px or 18px).
     *   [ ] **Action:** Review and adjust font weights for secondary text elements (e.g., captions, labels in the sidebar) to ensure they are de-emphasized appropriately but still legible.

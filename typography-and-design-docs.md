@@ -1330,6 +1330,10 @@ The `<AuthGate>` component provides a user-friendly prompt when authentication i
 
 This summary consolidates observations about the effective typography used across the audited pages and components.
 
+*Update Log:*
+*   *[Insert Date]*: Initial audit findings.
+*   *[Insert Date]*: Proposed new typographic scale based on 18px base body and Major Third ratio.
+
 **1. Base Font:**
 *   **Primary Font:** Inter (loaded via `next/font/google` in `layout.tsx` and applied via `--font-inter` -> `--font-sans` CSS variable to the `body`).
 *   **Heading Font:** Also defaults to Inter (via `--font-heading: var(--font-sans)`).
@@ -1339,72 +1343,61 @@ This summary consolidates observations about the effective typography used acros
 
 **2. Heading Styles:**
 A mix of semantic HTML headings (`h1`-`h6`) and custom classes are used. Styling is primarily via Tailwind utilities, often defined in `globals.css` within `@layer base` or applied directly in components.
-*   **Global H1-H6 (`globals.css`):**
+
+*   **Previous Global H1-H6 (`globals.css` - Effective styles, noting redundancy):**
     *   Base: `font-medium tracking-tight text-foreground`.
-    *   `h1`: Responsive `text-2xl` to `text-4xl` (or `text-3xl` to `text-4xl` - *redundancy noted*), `font-[600]` (semibold), `leading-tight`, specific `letter-spacing`.
-    *   `h2`: Responsive `text-xl` to `text-3xl` (or `text-2xl` to `text-3xl` - *redundancy noted*), `font-[600]` (semibold), `leading-tight`, `mb-4`, specific `letter-spacing`.
-    *   `h3`: Responsive `text-lg` to `text-2xl`, `font-[500]` (medium), `leading-snug`, `mb-2`.
-    *   `h4`: Responsive `text-base` to `text-xl`, `font-[500]` (medium), `mb-2`.
+    *   `h1`: Responsive `text-2xl` (1.5rem/24px) / `text-3xl` (1.875rem/30px) / `text-4xl` (2.25rem/36px). `font-[600]` (semibold). `leading-tight`.
+    *   `h2`: Responsive `text-xl` (1.25rem/20px) / `text-2xl` (1.5rem/24px) / `text-3xl` (1.875rem/30px). `font-[600]` (semibold). `leading-tight`, `mb-4`.
+    *   `h3`: Responsive `text-lg` (1.125rem/18px) / `text-xl` (1.25rem/20px) / `text-2xl` (1.5rem/24px). `font-[500]` (medium). `leading-snug`, `mb-2`.
+    *   `h4`: Responsive `text-base` (1rem/16px) / `text-lg` (1.125rem/18px) / `text-xl` (1.25rem/20px). `font-[500]` (medium). `mb-2`.
     *   `h5, h6`: Default styles likely smaller, inheriting base styles.
-*   **Specific Title Classes (`globals.css`):**
-    *   `.case-study-title`: `text-2xl md:text-3xl font-[600] mb-1 letter-spacing`.
-    *   `.section-title`: `text-2xl font-[600] mb-6 pb-1 letter-spacing`.
-    *   `.sidebar-title`: `text-lg font-[500] mb-4 letter-spacing`.
-    *   `.card-title`: `text-xl font-[500] tracking-tight letter-spacing`.
-*   **Page-Specific Headings (Examples):**
-    *   Landing Page Hero H1: `text-4xl md:text-6xl font-bold`.
-    *   Admin Dashboard H1: `text-3xl font-bold`.
-    *   Learning Path Page H1: `text-2xl sm:text-3xl md:text-4xl font-bold`.
-    *   Individual Algorithm/Industry/Persona Page Title (via Layout): Likely H1 equivalent, prominent size, bold.
-    *   Individual Algorithm Steps H2: `text-3xl font-semibold`.
-    *   Sidebar H3s (e.g., Case Study page): `text-lg font-semibold`.
+
+*   **Proposed Global H1-H4 Styles (Based on 18px base, 1.25 ratio):**
+    *   **Font:** Montserrat (via `--font-heading`).
+    *   `h1`: `text-[2.8125rem]` (45px). `font-bold` (700). `leading-tight`.
+    *   `h2`: `text-[2.25rem]` (36px). `font-semibold` (600). `leading-tight`.
+    *   `h3`: `text-[1.75rem]` (28px). `font-semibold` (600). `leading-snug`.
+    *   `h4`: `text-[1.375rem]` (22px). `font-medium` (500). `leading-snug`.
+    *   *(Note: Base `font-medium`, `tracking-tight`, `text-foreground` from previous styles likely retained).* 
+    *   *(Note: Spacing (`mb-*`) should be reviewed after size changes).* 
+
+*   **Specific Title Classes (`globals.css`):** (These may need adjustment after global changes)
+    *   `.case-study-title`: Previously `text-2xl md:text-3xl font-[600]`.
+    *   `.section-title`: Previously `text-2xl font-[600]`.
+    *   `.sidebar-title`: Previously `text-lg font-[500]`.
+    *   `.card-title`: Previously `text-xl font-[500]`.
+
 *   **Inconsistencies/Observations:**
-    *   Redundant definitions for `h1`/`h2` in `globals.css`.
-    *   Actual heading usage on pages sometimes uses direct Tailwind sizes/weights that differ slightly from the global `@apply` styles (e.g., Landing Page Hero H1).
-    *   Font weights vary: `medium` (500), `semibold` (600), `bold` (700) are all used for different heading levels/contexts.
+    *   Redundant definitions for `h1`/`h2` in `globals.css` (to be removed).
+    *   Previous heading usage sometimes differed from global definitions.
 
 **3. Paragraph Styles:**
-*   **Global `<p>` (`globals.css`):** `leading-relaxed mb-4`. Size definition has *redundancy*: initially `text-[15px] sm:text-base`, later `text-base`. Assumed effective default is `text-base` (1rem / 16px).
-*   **Variations:**
-    *   Landing Page Hero Subtitle: `text-xl md:text-2xl text-muted-foreground`.
-    *   Page Subtitles (e.g., Learning Paths, Admin): `text-base sm:text-lg text-muted-foreground`.
-    *   Individual Page Descriptions (e.g., Algorithm): `text-lg text-[var(--text-primary)] leading-7`.
-    *   Card Descriptions: `text-base leading-relaxed text-text-secondary font-normal` (via `.description-text` class or direct styling).
-    *   Sidebar text (e.g., "None"): `text-sm text-muted-foreground`.
-*   **Color:** Typically default `text-foreground` or `text-muted-foreground` / `text-text-secondary` depending on context.
+*   **Previous Global `<p>` (`globals.css`):** `leading-relaxed mb-4`. Effective size likely `text-base` (1rem / 16px).
+*   **Proposed Global `<p>` Styles:**
+    *   **Font:** Open Sans (via `--font-sans`).
+    *   **Size:** `text-[1.125rem]` (18px).
+    *   **Line Height:** `leading-[1.7]` (approx).
+    *   *(Note: `mb-4` likely retained).* 
+*   **Variations:** Previous variations existed (e.g., larger subtitles, smaller sidebar text). These page/component-specific styles will still apply but may need review against the new base size.
 
 **4. Link Styles:**
-*   **Global `<a>`:** No specific global style beyond inheriting `text-foreground`.
-*   **Navigation Links (`Navigation.tsx`, `.nav-link`):** `text-base font-medium`. Color `text-muted-foreground`, hover `text-foreground`, active `text-primary`.
-*   **Footer Links (`Footer.tsx`):** `text-muted-foreground`, hover `text-accent`.
-*   **Subtle Links (`.subtle-link`):** `text-foreground/80`, hover `text-foreground`, underline on hover.
-*   **Markdown Links (`.prose a`):** Styled by Tailwind Typography, typically inheriting color or using an accent color. Explicit `prose-a:text-[var(--primary)] prose-a:font-medium ...` used on Algorithm page.
-*   **Admin Quick Action Links:** `text-blue-500 hover:underline`.
+*   *(No changes proposed to specific link styles in this step, but visual appearance might change due to surrounding text size changes).* 
 
 **5. List Styles:**
-*   **Global:** No specific global `ul`/`ol` styles defined outside `.prose`.
-*   **Markdown Lists (`.prose ul/ol/li`):** Styled extensively by Tailwind Typography for margins, padding, list style type (disc, circle, square, decimal), and marker color (`text-secondary`).
-*   **Custom Spacing:** `.list-spacing > * + *` utility adds margin between list items.
+*   *(No changes proposed to list styles in this step, but visual appearance might change due to surrounding text size changes, especially within `.prose` context).* 
 
 **6. Badge Styles:**
-*   Primarily uses Shadcn UI `<Badge>` component.
-*   **Styling:** Controlled by `variant` prop (`default`, `secondary`, `outline`, `destructive`) which applies different Tailwind classes (often using CSS variables for colors).
-*   **Typography:** Size is typically `text-xs` or `text-sm`, font weight depends on variant (often `font-semibold`).
+*   *(No changes proposed to badge styles/typography in this step).* 
 
 **7. Markdown Typography (`.prose` vs. Custom):**
-*   **Tailwind Typography Plugin (`.prose`):** Used on Individual Industry (`prose dark:prose-invert`) and Persona (`prose prose-gray dark:prose-invert`) pages for main content. Provides a comprehensive set of styles for all standard Markdown elements.
-*   **Custom (`enhanceTypography` function - Algorithm Page):** Injects specific Tailwind-like classes directly onto HTML elements rendered from Markdown. Offers fine-grained control but requires maintenance.
-*   **Minimal Styling (Persona Recommended Reading):** `.prose` class is *omitted*, relying on inherited styles or specific selectors (`prose-a:...`) for links only. This can lead to unstyled elements (headings, lists) if present.
-*   **Inconsistency:** The method for styling Markdown content varies significantly between different content types.
+*   *(No changes proposed to the *method* of styling Markdown in this step, but the resulting sizes/spacing within `.prose` will change based on the new base font size).* 
 
 **8. Admin Portal Typography:**
-*   Generally uses sizes and weights appropriate for an interface (e.g., `text-xl` sidebar title, `text-3xl` dashboard title, `text-lg` card titles, `text-sm` card descriptions).
-*   Sidebar navigation uses smaller, normal-weight text.
-*   Uses Inter font, consistent with the main site.
+*   *(Admin styles are separate and not targeted in this specific update, but will inherit the new base fonts).* 
 
 **9. General Observations:**
-*   **Font Consistency:** Inter is used universally.
-*   **Responsiveness:** Text sizes are frequently responsive using Tailwind's breakpoint prefixes (sm:, md:, lg:).
-*   **Styling Method:** Heavy reliance on Tailwind utility classes, either applied directly or via `@apply` in `globals.css`.
-*   **Theming:** CSS custom properties are fundamental for colors, border-radius, and are well-integrated with Tailwind configuration.
-*   **Potential Issues:** Redundancy in global heading/paragraph styles in `globals.css`. Inconsistent Markdown styling approach across different content types.
+*   **Font Consistency:** Now Montserrat (Headings) / Open Sans (Body).
+*   **Responsiveness:** New heading/paragraph sizes defined without responsive variants initially. Existing responsive overrides on specific pages/components will still apply but may need review.
+*   **Styling Method:** Still primarily Tailwind.
+*   **Theming:** Unchanged.
+*   **Potential Issues:** Need to address previous redundancies. Need to review specific component/page styles against new base typography. Markdown appearance will change.

@@ -186,3 +186,51 @@ This document outlines the plan to enhance the user experience (UX) and user int
     *   [x] `export const dynamic = 'force-dynamic';` was removed from `page.tsx`.
 
 **Conclusion:** The feature implementation was successful. The primary challenge revolved around data fetching for related entities on the public page, which was ultimately traced to missing RLS policies on the junction tables. The admin interface now correctly saves the new software field and manages the "Not Applicable" state for classifications, and the public page accurately reflects this data. 
+
+## VIII. Feature: Clickable Classification Badges
+
+**Goal:** To allow users to click on Industry, Algorithm, and Persona badges on the public case study page and be navigated to a relevant listing page that displays all content (e.g., other case studies, learning paths) associated with that specific classification item.
+
+**Phase 1: Define Destination Routes & Page Structure**
+
+1.  [ ] **Action:** Determine and document the URL structure for the listing pages.
+    *   **Examples:**
+        *   Industries: `/industries/[slug]` (e.g., `/industries/pharmaceuticals`)
+        *   Algorithms: `/algorithms/[slug]` (e.g., `/algorithms/grovers-algorithm`)
+        *   Personas: `/personas/[slug]` (e.g., `/personas/research-scientist`)
+    *   **Consideration:** Ensure these routes don't conflict with existing routes. Decide if these will be new top-level directories or nested. Top-level is suggested for initial simplicity.
+
+2.  [ ] **Action:** Design the basic layout and functionality of these new listing pages (`[slug].tsx` pages for industries, algorithms, personas).
+    *   **Content:** Each page should display the name of the classification item (e.g., "Pharmaceuticals") as a title.
+    *   **Functionality:** It needs to fetch and display a list of all case studies (and potentially other content types like Learning Paths in the future) that are tagged with this specific classification item.
+    *   **Display:** Consider using existing card components for the list.
+
+**Phase 2: Implement Backend/Data Fetching for Listing Pages**
+
+1.  [ ] **Action:** For each new listing page type (Industry, Algorithm, Persona):
+    *   Create a new server component page (e.g., `src/app/industries/[slug]/page.tsx`).
+    *   Implement data fetching logic within this page:
+        *   Get the `slug` from the URL parameters.
+        *   Query Supabase to find the `id` of the classification item from its `slug`.
+        *   Query the relevant junction table (e.g., `case_study_industry_relations`) for all `case_study_id`s associated with that `id`.
+        *   Fetch the details of those case studies from the `case_studies` table (ensure only published case studies are shown).
+        *   **Optimization:** Explore direct Supabase queries using joins or views for efficiency.
+
+**Phase 3: Update Case Study Page Badge Display**
+
+1.  [ ] **Action:** Modify `src/app/case-study/[slug]/page.tsx`.
+    *   In the rendering logic for Industries, Algorithms, and Personas:
+        *   Ensure the `slug` for each item is available.
+        *   Wrap each `Badge` component (for actual classification items, not for "Not Applicable" or "None" text) with a Next.js `<Link>` component.
+        *   Construct the `href` for the `<Link>` dynamically using the defined URL structure (Phase 1) and the item's `slug`.
+
+2.  [ ] **Action:** Style the linked badges to provide clear visual cues of interactivity (e.g., pointer cursor, hover effect) while maintaining badge appearance. Consider using `<Badge as="a" ...>` for semantic correctness and styling.
+
+**Phase 4: Testing & Refinement**
+
+1.  [ ] **Action:** Thoroughly test functionality:
+    *   Clicking badges navigates to the correct listing page.
+    *   Listing pages display the correct title and associated case studies.
+    *   Links handle various slug characters correctly.
+2.  [ ] **Action:** Test responsive behavior of listing pages.
+3.  [ ] **Action:** Review and refine styling for linked badges and new listing pages. 

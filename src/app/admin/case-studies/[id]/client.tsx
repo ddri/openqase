@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useTransition } from 'react';
+import React, { useState, useTransition, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -16,6 +16,11 @@ import { createContentValidationRules, calculateCompletionPercentage, validateFo
 import { ArrowLeft, Save, Loader2 } from 'lucide-react';
 import { toast } from '@/components/ui/use-toast';
 import { saveCaseStudy, publishCaseStudy, unpublishCaseStudy } from './actions';
+
+// Define IDs for "Not Applicable" records
+const NOT_APPLICABLE_ALGORITHM_ID = '5bb7190e-d0df-46cc-a459-2eea19856fb1';
+const NOT_APPLICABLE_INDUSTRY_ID = '4cd2a6a0-6dc1-49ba-893c-f24eebaf384a';
+const NOT_APPLICABLE_PERSONA_ID = 'd1c1c7e7-2847-4bf3-b165-3bd84a99f3a6';
 
 interface CaseStudyFormProps {
   caseStudy: any | null;
@@ -49,21 +54,32 @@ export function CaseStudyForm({ caseStudy, algorithms, industries, personas, isN
     partner_companies: isNew ? [] : caseStudy?.partner_companies || [],
     quantum_companies: isNew ? [] : caseStudy?.quantum_companies || [],
     quantum_hardware: isNew ? [] : caseStudy?.quantum_hardware || [],
-    algorithms: isNew ? [] : caseStudy?.algorithms || [],
-    industries: isNew ? [] : caseStudy?.industries || [],
-    personas: isNew ? [] : caseStudy?.personas || [],
+    quantum_software: isNew ? [] : caseStudy?.quantum_software || [],
+    algorithms: isNew ? [] : (caseStudy?.algorithms || []),
+    industries: isNew ? [] : (caseStudy?.industries || []),
+    personas: isNew ? [] : (caseStudy?.personas || []),
     published: isNew ? false : caseStudy?.published || false,
     academic_references: isNew ? '' : caseStudy?.academic_references || '',
     resource_links: isNew ? [] : caseStudy?.resource_links || [],
   });
   const [isDirty, setIsDirty] = useState(false);
   
-  // Track "Not Applicable" states separately
   const [notApplicableStates, setNotApplicableStates] = useState({
     algorithms: false,
     industries: false,
     personas: false
   });
+
+  // Effect to initialize notApplicableStates based on loaded caseStudy data
+  useEffect(() => {
+    if (caseStudy && !isNew) {
+      setNotApplicableStates({
+        algorithms: (caseStudy.algorithms || []).includes(NOT_APPLICABLE_ALGORITHM_ID),
+        industries: (caseStudy.industries || []).includes(NOT_APPLICABLE_INDUSTRY_ID),
+        personas: (caseStudy.personas || []).includes(NOT_APPLICABLE_PERSONA_ID),
+      });
+    }
+  }, [caseStudy, isNew]);
   
   // Validation rules for case studies
   const validationRules = createContentValidationRules('case_study');
@@ -79,11 +95,49 @@ export function CaseStudyForm({ caseStudy, algorithms, industries, personas, isN
   };
   
   // Handle not applicable change
-  const handleNotApplicableChange = (field: string, isNotApplicable: boolean) => {
+  const handleNotApplicableChange = (field: 'algorithms' | 'industries' | 'personas', isNotApplicable: boolean) => {
     setNotApplicableStates(prev => ({
       ...prev,
       [field]: isNotApplicable
     }));
+
+    let newSelectedItems: string[] = [];
+    if (isNotApplicable) {
+      if (field === 'algorithms') newSelectedItems = [NOT_APPLICABLE_ALGORITHM_ID];
+      else if (field === 'industries') newSelectedItems = [NOT_APPLICABLE_INDUSTRY_ID];
+      else if (field === 'personas') newSelectedItems = [NOT_APPLICABLE_PERSONA_ID];
+    }
+    // When unchecking N/A, values[field] is already an array of selected items,
+    // so we just need to ensure the N/A ID is not in it if it was previously.
+    // However, RelationshipSelector's onChange should provide the correct list without N/A ID.
+    // For now, if unchecking, we set to empty, relying on user to re-select or RelationshipSelector to repopulate.
+    // A more robust solution might involve RelationshipSelector handling the N/A ID itself.
+    
+    // If unchecking, we reset to the current selections, excluding the N/A ID if present.
+    // If checking, we set to only the N/A ID.
+    setValues(prev => {
+      let currentSelection = prev[field] || [];
+      if (isNotApplicable) {
+        // If N/A is checked, set the value to be only the N/A ID for that field
+        if (field === 'algorithms') return { ...prev, algorithms: [NOT_APPLICABLE_ALGORITHM_ID] };
+        if (field === 'industries') return { ...prev, industries: [NOT_APPLICABLE_INDUSTRY_ID] };
+        if (field === 'personas') return { ...prev, personas: [NOT_APPLICABLE_PERSONA_ID] };
+      } else {
+        // If N/A is unchecked, remove the N/A ID from the selection if it exists.
+        // The RelationshipSelector should ideally handle providing the list of actual selections.
+        // For now, we filter out the N/A ID.
+        let idToRemove = '';
+        if (field === 'algorithms') idToRemove = NOT_APPLICABLE_ALGORITHM_ID;
+        else if (field === 'industries') idToRemove = NOT_APPLICABLE_INDUSTRY_ID;
+        else if (field === 'personas') idToRemove = NOT_APPLICABLE_PERSONA_ID;
+        
+        const updatedSelection = Array.isArray(currentSelection) 
+                               ? currentSelection.filter(id => id !== idToRemove) 
+                               : [];
+        return { ...prev, [field]: updatedSelection };
+      }
+      return prev; // Should not happen
+    });
     setIsDirty(true);
   };
   
@@ -471,6 +525,15 @@ export function CaseStudyForm({ caseStudy, algorithms, industries, personas, isN
                 tags={values.quantum_hardware}
                 onTagsChange={(newTags) => handleChange('quantum_hardware', newTags)}
                 placeholder="Add quantum hardware..."
+              />
+            </div>
+            
+            <div className="space-y-3">
+              <Label htmlFor="quantum_software">Quantum Software</Label>
+              <TagInput
+                tags={values.quantum_software}
+                onTagsChange={(newTags) => handleChange('quantum_software', newTags)}
+                placeholder="Add quantum software..."
               />
             </div>
           </CardContent>

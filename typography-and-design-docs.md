@@ -1399,3 +1399,4 @@ Styling is primarily via Tailwind utilities, defined in `globals.css` within `@l
 *   **Styling Method:** Primarily Tailwind CSS, with global styles in `globals.css` and component-specific styling.
 *   **Theming:** The core theming system (CSS variables for light/dark/graphite) remains unchanged.
 *   **Refinements:** Significant iteration was done on the Case Study page's sidebar titles and Markdown heading hierarchy to achieve desired visual balance.
+*   **Linking Convention (Case Study Sidebar):** Classification badges (Industries, Algorithms, Personas) link to their respective detail pages using the `/paths/[classification]/[slug]` structure.

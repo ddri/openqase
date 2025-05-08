@@ -58,6 +58,16 @@ md.renderer.rules.td_open = function(tokens, idx, options, env, self) {
   return defaultCellRender(tokens, idx, options, env, self);
 };
 
+// Define enriched types
+type EnrichedIndustry = Database['public']['Tables']['industries']['Row'] & {
+  algorithm_industry_relations?: { algorithms: { id: string; name: string; slug?: string | null } | null }[];
+  persona_industry_relations?: { personas: { id: string; name: string; slug?: string | null } | null }[];
+};
+
+type EnrichedCaseStudyForIndustryPage = Database['public']['Tables']['case_studies']['Row'] & {
+  case_study_industry_relations?: { industries: { id: string; name: string; slug?: string | null } | null }[];
+};
+
 interface PageParams {
   params: Promise<{
     slug: string;
@@ -92,11 +102,19 @@ export default async function IndustryPage({ params }: PageParams) {
   const supabase = await createServerSupabaseClient();
   
   console.log('Fetching industry with slug:', resolvedParams.slug);
-  const { data: industry, error: industryError } = await supabase
+  // Fetch industry along with related algorithms and personas
+  const { data: industryData, error: industryError } = await supabase
     .from('industries')
-    .select('*')
+    .select(`
+      *,
+      algorithm_industry_relations(algorithms(id, name, slug)),
+      persona_industry_relations(personas(id, name, slug))
+    `)
     .eq('slug', resolvedParams.slug)
     .single();
+
+  // Cast to enriched type
+  const industry = industryData as EnrichedIndustry | null;
 
   if (industryError) {
     console.error('Error fetching industry:', industryError);
@@ -140,7 +158,7 @@ export default async function IndustryPage({ params }: PageParams) {
         // Fetch the actual case studies
         const { data: caseStudyData, error: caseStudyError } = await supabase
           .from('case_studies')
-          .select('*')
+          .select('*, case_study_industry_relations(industries(id, name, slug))')
           .in('id', caseStudyIds)
           .eq('published', true);
           
@@ -149,12 +167,12 @@ export default async function IndustryPage({ params }: PageParams) {
           caseStudiesError = { error: 'Error fetching case studies' };
         } else {
           // Map the database results to the expected CaseStudy type
-          caseStudies = (caseStudyData || []).map(cs => ({
+          caseStudies = (caseStudyData as EnrichedCaseStudyForIndustryPage[] || []).map(cs => ({
             id: cs.id,
             title: cs.title,
             slug: cs.slug,
             description: cs.description || '',
-            industries: cs.industries || []
+            industries: cs.case_study_industry_relations?.map(rel => rel.industries?.name).filter(Boolean) as string[] || [],
           }));
         }
       }
@@ -177,31 +195,113 @@ export default async function IndustryPage({ params }: PageParams) {
       backLinkText="Back to Industries"
       backLinkHref="/paths/industry"
     >
-      <div className="space-y-8">
-        <div className="flex flex-col gap-4">
-          <p className="text-lg text-muted-foreground">{industry.description}</p>
-          {industry.main_content && (
-            <div className="prose dark:prose-invert max-w-none mt-8"
-              dangerouslySetInnerHTML={{ __html: processedContent }}
-            />
+      <div className="grid gap-12 md:grid-cols-[2fr,1fr]">
+        <div className="space-y-8">
+          <div className="flex flex-col gap-4">
+            <p className="text-lg text-muted-foreground">{industry.description}</p>
+            {industry.main_content && (
+              <div className="prose dark:prose-invert max-w-none mt-8"
+                dangerouslySetInnerHTML={{ __html: processedContent }}
+              />
+            )}
+          </div>
+
+          {caseStudies && caseStudies.length > 0 && (
+            <>
+              <hr className="my-8 border-border" />
+              <div className="space-y-4">
+                <h2 className="text-2xl font-bold">Related Case Studies</h2>
+                <div className="grid grid-cols-1 gap-6">
+                  {caseStudies.map((study) => (
+                    <Link key={study.id} href={`/case-study/${study.slug}`} className="block group">
+                      <div className="p-6 rounded-lg border border-border bg-card/50 transition-all duration-200 hover:bg-accent/5 hover:border-border-hover">
+                        <h3 className="text-lg font-semibold mb-2 group-hover:text-primary">
+                          {study.title}
+                        </h3>
+                        <p className="text-muted-foreground mb-4">
+                          {study.description}
+                        </p>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            </>
           )}
         </div>
 
-        {caseStudies && caseStudies.length > 0 && (
-          <div className="space-y-4">
-            <h2 className="text-2xl font-bold">Related Case Studies</h2>
-            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-              {caseStudies.map((study) => (
-                <Card key={study.id} className="p-4">
-                  <Link href={`/case-study/${study.slug}`} className="hover:underline">
-                    <h3 className="font-semibold">{study.title}</h3>
-                  </Link>
-                  <p className="text-sm text-muted-foreground mt-2">{study.description}</p>
-                </Card>
-              ))}
+        <div className="space-y-6">
+          {/* Algorithms Section */}
+          {industry.algorithm_industry_relations && (
+            <div>
+              <h3 className="sidebar-title">Algorithms</h3>
+              <div className="flex flex-wrap gap-2">
+                {(() => {
+                  const relations = industry.algorithm_industry_relations || [];
+                  if (relations.length === 0) {
+                    return <p className="text-sm text-muted-foreground">None</p>;
+                  }
+                  const naItem = relations.find(rel => rel.algorithms?.slug === 'not-applicable');
+                  if (naItem && relations.length === 1) {
+                    return <p className="text-sm text-muted-foreground">Not Applicable</p>;
+                  }
+                  const actualItems = relations.filter(rel => rel.algorithms?.slug !== 'not-applicable');
+                  if (actualItems.length === 0) {
+                    // Handles case where only 'Not Applicable' was present or other relations were null/invalid
+                    return naItem ? <p className="text-sm text-muted-foreground">Not Applicable</p> : <p className="text-sm text-muted-foreground">None</p>;
+                  }
+                  return actualItems.map((relation) =>
+                    relation.algorithms ? (
+                      <Link key={relation.algorithms.id} href={`/paths/algorithm/${relation.algorithms?.slug}`} passHref>
+                        <Badge
+                          variant="outline"
+                          className="text-[14px] border-border hover:bg-muted-foreground/20 cursor-pointer"
+                        >
+                          {relation.algorithms.name}
+                        </Badge>
+                      </Link>
+                    ) : null
+                  );
+                })()}
+              </div>
             </div>
-          </div>
-        )}
+          )}
+
+          {/* Personas Section */}
+          {industry.persona_industry_relations && (
+            <div>
+              <h3 className="sidebar-title">Personas</h3>
+              <div className="flex flex-wrap gap-2">
+                {(() => {
+                  const relations = industry.persona_industry_relations || [];
+                  if (relations.length === 0) {
+                    return <p className="text-sm text-muted-foreground">None</p>;
+                  }
+                  const naItem = relations.find(rel => rel.personas?.slug === 'not-applicable');
+                  if (naItem && relations.length === 1) {
+                    return <p className="text-sm text-muted-foreground">Not Applicable</p>;
+                  }
+                  const actualItems = relations.filter(rel => rel.personas?.slug !== 'not-applicable');
+                  if (actualItems.length === 0) {
+                     return naItem ? <p className="text-sm text-muted-foreground">Not Applicable</p> : <p className="text-sm text-muted-foreground">None</p>;
+                  }
+                  return actualItems.map((relation) =>
+                    relation.personas ? (
+                      <Link key={relation.personas.id} href={`/paths/persona/${relation.personas?.slug}`} passHref>
+                        <Badge
+                          variant="outline"
+                          className="text-[14px] border-border hover:bg-muted-foreground/20 cursor-pointer"
+                        >
+                          {relation.personas.name}
+                        </Badge>
+                      </Link>
+                    ) : null
+                  );
+                })()}
+              </div>
+            </div>
+          )}
+        </div>
       </div>
     </LearningPathLayout>
   );

@@ -90,6 +90,11 @@ type CaseStudy = {
   industries: string[];
 };
 
+// Define an enriched type for CaseStudy that includes relations
+type EnrichedCaseStudyForAlgorithmPage = Database['public']['Tables']['case_studies']['Row'] & {
+  case_study_industry_relations?: { industries: { id: string; name: string; slug?: string | null } | null }[];
+};
+
 interface AlgorithmPageProps {
   params: Promise<{
     slug: string;
@@ -148,7 +153,7 @@ export default async function AlgorithmPage({ params }: AlgorithmPageProps) {
         // Fetch the actual case studies
         const { data: caseStudyData, error: caseStudyError } = await supabase
           .from('case_studies')
-          .select('*')
+          .select('*, case_study_industry_relations(industries(id, name, slug))')
           .in('id', caseStudyIds)
           .eq('published', true);
           
@@ -157,12 +162,12 @@ export default async function AlgorithmPage({ params }: AlgorithmPageProps) {
           caseStudiesError = { error: 'Error fetching case studies' };
         } else {
           // Map the database results to the expected CaseStudy type
-          caseStudies = (caseStudyData || []).map(cs => ({
+          caseStudies = (caseStudyData as EnrichedCaseStudyForAlgorithmPage[] || []).map(cs => ({
             id: cs.id,
             title: cs.title,
             slug: cs.slug,
             description: cs.description || '',
-            industries: cs.industries || []
+            industries: cs.case_study_industry_relations?.map(rel => rel.industries?.name).filter(Boolean) as string[] || []
           }));
         }
       }
@@ -218,13 +223,15 @@ export default async function AlgorithmPage({ params }: AlgorithmPageProps) {
               
               {algorithm.steps && (
                 <div className="my-12">
-                  <h2 className="mt-10 scroll-m-20 border-b border-[var(--border)] pb-2 text-3xl font-semibold tracking-tight text-[var(--text-primary)]">Implementation Steps</h2>
+                  <hr className="my-8 border-border" />
+                  <h2 className="mt-10 scroll-m-20 text-3xl font-semibold tracking-tight text-[var(--text-primary)]">Implementation Steps</h2>
                   <StepsRenderer stepsMarkup={algorithm.steps} />
                 </div>
               )}
               
               {algorithm.academic_references && (
                 <div className="my-12">
+                  <hr className="my-8 border-border" />
                   <ReferencesRenderer referencesMarkup={algorithm.academic_references} />
                 </div>
               )}

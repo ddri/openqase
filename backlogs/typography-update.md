@@ -115,6 +115,7 @@ For each page/section listed below, document:
     *   [x] **Action:** Iteratively refine `.sidebar-title` on the Case Study page for size, weight, case, and color to ensure it functions as a label and does not compete with main content headings. Final: `text-xs font-semibold uppercase tracking-wider text-text-secondary`.
     *   [x] **Action:** Adjust badge text size in the Case Study sidebar to `text-[14px]`.
     *   [x] **Action:** Correct HTML structure on Case Study page to prevent `.prose` styles from incorrectly targeting sidebar headings.
+    *   [x] **Action:** Ensured classification badges (Industries, Algorithms, Personas) in the Case Study sidebar correctly link to `/paths/[classification]/[slug]`, while other badges are non-interactive.
 
 ## II. Visual Hierarchy & Layout Refinement
 

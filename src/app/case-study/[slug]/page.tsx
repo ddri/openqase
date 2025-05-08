@@ -6,6 +6,7 @@ import LearningPathLayout from '@/components/ui/learning-path-layout';
 import { Badge } from '@/components/ui/badge';
 import MarkdownIt from 'markdown-it';
 import { ReferencesRenderer, processContentWithReferences } from '@/components/ui/ReferencesRenderer';
+import Link from 'next/link';
 
 // export const dynamic = 'force-dynamic'; // REMOVED - Restore default caching
 
@@ -111,8 +112,8 @@ export default async function CaseStudyPage({ params }: { params: Promise<{ slug
       backLinkText="Back to Case Studies"
       backLinkHref="/case-study"
     >
-      <div className="prose dark:prose-invert max-w-none">
-        <div className="grid gap-6 md:grid-cols-[2fr,1fr]">
+      <div className="grid gap-6 md:grid-cols-[2fr,1fr]">
+        <div className="prose dark:prose-invert max-w-none">
           <div>
             <div dangerouslySetInnerHTML={{ __html: processedContent }} />
             
@@ -121,149 +122,172 @@ export default async function CaseStudyPage({ params }: { params: Promise<{ slug
               <ReferencesRenderer referencesMarkup={caseStudy.academic_references} />
             )}
           </div>
-          <div className="space-y-6">
-            {caseStudy.partner_companies && caseStudy.partner_companies.length > 0 && (
-              <div>
-                <h3 className="text-lg font-semibold mb-2">Partner Companies</h3>
-                <div className="flex flex-wrap gap-2">
-                  {caseStudy.partner_companies.map((company: string) => (
-                    <Badge key={company} variant="outline">
+        </div>
+        <div className="space-y-6">
+          {caseStudy.partner_companies && caseStudy.partner_companies.length > 0 && (
+            <div>
+              <h3 className="sidebar-title">Partner Companies</h3>
+              <div className="flex flex-wrap gap-2">
+                {caseStudy.partner_companies.map((company: string) => (
+                  <Link key={company} href={`/partners/${company}`} passHref>
+                    <Badge variant="outline" className="text-[14px] border-border hover:bg-muted-foreground/20 cursor-pointer">
                       {company}
                     </Badge>
-                  ))}
-                </div>
+                  </Link>
+                ))}
               </div>
-            )}
-            {caseStudy.quantum_companies && caseStudy.quantum_companies.length > 0 && (
-              <div>
-                <h3 className="text-lg font-semibold mb-2">Quantum Companies</h3>
-                <div className="flex flex-wrap gap-2">
-                  {caseStudy.quantum_companies.map((company: string) => (
-                    <Badge key={company} variant="outline">
+            </div>
+          )}
+          {caseStudy.quantum_companies && caseStudy.quantum_companies.length > 0 && (
+            <div>
+              <h3 className="sidebar-title">Quantum Companies</h3>
+              <div className="flex flex-wrap gap-2">
+                {caseStudy.quantum_companies.map((company: string) => (
+                  <Link key={company} href={`/quantum-companies/${company}`} passHref>
+                    <Badge variant="outline" className="text-[14px] border-border hover:bg-muted-foreground/20 cursor-pointer">
                       {company}
                     </Badge>
-                  ))}
-                </div>
+                  </Link>
+                ))}
               </div>
-            )}
-            {caseStudy.quantum_hardware && caseStudy.quantum_hardware.length > 0 && (
-              <div>
-                <h3 className="text-lg font-semibold mb-2">Quantum Hardware</h3>
-                <div className="flex flex-wrap gap-2">
-                  {caseStudy.quantum_hardware.map((hardware: string) => (
-                    <Badge key={hardware} variant="outline">
+            </div>
+          )}
+          {caseStudy.quantum_hardware && caseStudy.quantum_hardware.length > 0 && (
+            <div>
+              <h3 className="sidebar-title">Quantum Hardware</h3>
+              <div className="flex flex-wrap gap-2">
+                {caseStudy.quantum_hardware.map((hardware: string) => (
+                  <Link key={hardware} href={`/quantum-hardware/${hardware}`} passHref>
+                    <Badge variant="outline" className="text-[14px] border-border hover:bg-muted-foreground/20 cursor-pointer">
                       {hardware}
                     </Badge>
-                  ))}
-                </div>
+                  </Link>
+                ))}
               </div>
-            )}
-            {caseStudy.quantum_software && caseStudy.quantum_software.length > 0 && (
-              <div>
-                <h3 className="text-lg font-semibold mb-2">Quantum Software</h3>
-                <div className="flex flex-wrap gap-2">
-                  {caseStudy.quantum_software.map((software: string) => (
-                    <Badge key={software} variant="outline">
+            </div>
+          )}
+          {caseStudy.quantum_software && caseStudy.quantum_software.length > 0 && (
+            <div>
+              <h3 className="sidebar-title">Quantum Software</h3>
+              <div className="flex flex-wrap gap-2">
+                {caseStudy.quantum_software.map((software: string) => (
+                  <Link key={software} href={`/quantum-software/${software}`} passHref>
+                    <Badge variant="outline" className="text-[14px] border-border hover:bg-muted-foreground/20 cursor-pointer">
                       {software}
                     </Badge>
-                  ))}
-                </div>
+                  </Link>
+                ))}
               </div>
-            )}
-            <div>
-              <h3 className="text-lg font-semibold mb-2">Industries</h3>
-              <div className="flex flex-wrap gap-2">
-                {(() => {
-                  if (caseStudy.case_study_industry_relations && caseStudy.case_study_industry_relations.length > 0) {
-                    const naIndustry = caseStudy.case_study_industry_relations.find(rel => rel.industries?.slug === 'not-applicable');
-                    if (naIndustry && naIndustry.industries) {
-                      return <p className="text-sm text-muted-foreground">Not Applicable</p>;
-                    }
-                    const actualIndustries = caseStudy.case_study_industry_relations.filter(rel => rel.industries?.slug !== 'not-applicable');
-                    if (actualIndustries.length > 0) {
-                      return actualIndustries.map((relation) =>
-                        relation.industries ? (
-                          <Badge key={relation.industries.id} variant="outline">
+            </div>
+          )}
+          <div>
+            <h3 className="sidebar-title">Industries</h3>
+            <div className="flex flex-wrap gap-2">
+              {(() => {
+                if (caseStudy.case_study_industry_relations && caseStudy.case_study_industry_relations.length > 0) {
+                  const naIndustry = caseStudy.case_study_industry_relations.find(rel => rel.industries?.slug === 'not-applicable');
+                  if (naIndustry && naIndustry.industries) {
+                    return <p className="text-sm text-muted-foreground">Not Applicable</p>;
+                  }
+                  const actualIndustries = caseStudy.case_study_industry_relations.filter(rel => rel.industries?.slug !== 'not-applicable');
+                  if (actualIndustries.length > 0) {
+                    return actualIndustries.map((relation) =>
+                      relation.industries ? (
+                        <Link key={relation.industries.id} href={`/industries/${relation.industries?.slug}`} passHref>
+                          <Badge
+                            variant="outline"
+                            className="text-[14px] border-border hover:bg-muted-foreground/20 cursor-pointer"
+                          >
                             {relation.industries.name}
                           </Badge>
-                        ) : null
-                      );
-                    }
+                        </Link>
+                      ) : null
+                    );
                   }
-                  return <p className="text-sm text-muted-foreground">None</p>;
-                })()}
-              </div>
+                }
+                return <p className="text-sm text-muted-foreground">None</p>;
+              })()}
             </div>
-            <div>
-              <h3 className="text-lg font-semibold mb-2">Algorithms</h3>
-              <div className="flex flex-wrap gap-2">
-                {(() => {
-                  if (caseStudy.algorithm_case_study_relations && caseStudy.algorithm_case_study_relations.length > 0) {
-                    const naAlgorithm = caseStudy.algorithm_case_study_relations.find(rel => rel.algorithms?.slug === 'not-applicable');
-                    if (naAlgorithm && naAlgorithm.algorithms) {
-                      return <p className="text-sm text-muted-foreground">Not Applicable</p>;
-                    }
-                    const actualAlgorithms = caseStudy.algorithm_case_study_relations.filter(rel => rel.algorithms?.slug !== 'not-applicable');
-                    if (actualAlgorithms.length > 0) {
-                      return actualAlgorithms.map((relation) =>
-                        relation.algorithms ? (
-                          <Badge key={relation.algorithms.id} variant="outline">
+          </div>
+          <div>
+            <h3 className="sidebar-title">Algorithms</h3>
+            <div className="flex flex-wrap gap-2">
+              {(() => {
+                if (caseStudy.algorithm_case_study_relations && caseStudy.algorithm_case_study_relations.length > 0) {
+                  const naAlgorithm = caseStudy.algorithm_case_study_relations.find(rel => rel.algorithms?.slug === 'not-applicable');
+                  if (naAlgorithm && naAlgorithm.algorithms) {
+                    return <p className="text-sm text-muted-foreground">Not Applicable</p>;
+                  }
+                  const actualAlgorithms = caseStudy.algorithm_case_study_relations.filter(rel => rel.algorithms?.slug !== 'not-applicable');
+                  if (actualAlgorithms.length > 0) {
+                    return actualAlgorithms.map((relation) =>
+                      relation.algorithms ? (
+                        <Link key={relation.algorithms.id} href={`/algorithms/${relation.algorithms?.slug}`} passHref>
+                          <Badge
+                            variant="outline"
+                            className="text-[14px] border-border hover:bg-muted-foreground/20 cursor-pointer"
+                          >
                             {relation.algorithms.name}
                           </Badge>
-                        ) : null
-                      );
-                    }
+                        </Link>
+                      ) : null
+                    );
                   }
-                  return <p className="text-sm text-muted-foreground">None</p>;
-                })()}
-              </div>
+                }
+                return <p className="text-sm text-muted-foreground">None</p>;
+              })()}
             </div>
-            <div>
-              <h3 className="text-lg font-semibold mb-2">Personas</h3>
-              <div className="flex flex-wrap gap-2">
-                {(() => {
-                  if (caseStudy.case_study_persona_relations && caseStudy.case_study_persona_relations.length > 0) {
-                    const naPersona = caseStudy.case_study_persona_relations.find(rel => rel.personas?.slug === 'not-applicable');
-                    if (naPersona && naPersona.personas) {
-                      return <p className="text-sm text-muted-foreground">Not Applicable</p>;
-                    }
-                    const actualPersonas = caseStudy.case_study_persona_relations.filter(rel => rel.personas?.slug !== 'not-applicable');
-                    if (actualPersonas.length > 0) {
-                      return actualPersonas.map((relation) =>
-                        relation.personas ? (
-                          <Badge key={relation.personas.id} variant="outline">
+          </div>
+          <div>
+            <h3 className="sidebar-title">Personas</h3>
+            <div className="flex flex-wrap gap-2">
+              {(() => {
+                if (caseStudy.case_study_persona_relations && caseStudy.case_study_persona_relations.length > 0) {
+                  const naPersona = caseStudy.case_study_persona_relations.find(rel => rel.personas?.slug === 'not-applicable');
+                  if (naPersona && naPersona.personas) {
+                    return <p className="text-sm text-muted-foreground">Not Applicable</p>;
+                  }
+                  const actualPersonas = caseStudy.case_study_persona_relations.filter(rel => rel.personas?.slug !== 'not-applicable');
+                  if (actualPersonas.length > 0) {
+                    return actualPersonas.map((relation) =>
+                      relation.personas ? (
+                        <Link key={relation.personas.id} href={`/personas/${relation.personas?.slug}`} passHref>
+                          <Badge
+                            variant="outline"
+                            className="text-[14px] border-border hover:bg-muted-foreground/20 cursor-pointer"
+                          >
                             {relation.personas.name}
                           </Badge>
-                        ) : null
-                      );
-                    }
+                        </Link>
+                      ) : null
+                    );
                   }
-                  return <p className="text-sm text-muted-foreground">None</p>;
-                })()}
+                }
+                return <p className="text-sm text-muted-foreground">None</p>;
+              })()}
+            </div>
+          </div>
+          
+          {caseStudy.resource_links && Array.isArray(caseStudy.resource_links) && caseStudy.resource_links.length > 0 && (
+            <div>
+              <h3 className="sidebar-title">Resource Links</h3>
+              <div className="flex flex-col space-y-2">
+                {(caseStudy.resource_links as Array<{url: string, label?: string, order: number}>) // Type assertion for safety within map
+                  .sort((a, b) => a.order - b.order)
+                  .map((link, index) => (
+                    <a 
+                      key={index} 
+                      href={link.url} 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="text-primary hover:underline flex items-center"
+                    >
+                      {link.label || link.url}
+                    </a>
+                  ))}
               </div>
             </div>
-            
-            {caseStudy.resource_links && Array.isArray(caseStudy.resource_links) && caseStudy.resource_links.length > 0 && (
-              <div>
-                <h3 className="text-lg font-semibold mb-2">Resource Links</h3>
-                <div className="flex flex-col space-y-2">
-                  {(caseStudy.resource_links as Array<{url: string, label?: string, order: number}>) // Type assertion for safety within map
-                    .sort((a, b) => a.order - b.order)
-                    .map((link, index) => (
-                      <a 
-                        key={index} 
-                        href={link.url} 
-                        target="_blank" 
-                        rel="noopener noreferrer"
-                        className="text-primary hover:underline flex items-center"
-                      >
-                        {link.label || link.url}
-                      </a>
-                    ))}
-                </div>
-              </div>
-            )}
-          </div>
+          )}
         </div>
       </div>
     </LearningPathLayout>

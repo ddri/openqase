@@ -129,11 +129,9 @@ export default async function CaseStudyPage({ params }: { params: Promise<{ slug
               <h3 className="sidebar-title">Partner Companies</h3>
               <div className="flex flex-wrap gap-2">
                 {caseStudy.partner_companies.map((company: string) => (
-                  <Link key={company} href={`/partners/${company}`} passHref>
-                    <Badge variant="outline" className="text-[14px] border-border hover:bg-muted-foreground/20 cursor-pointer">
-                      {company}
-                    </Badge>
-                  </Link>
+                  <Badge key={company} variant="outline" className="text-[14px] border-border">
+                    {company}
+                  </Badge>
                 ))}
               </div>
             </div>
@@ -143,11 +141,9 @@ export default async function CaseStudyPage({ params }: { params: Promise<{ slug
               <h3 className="sidebar-title">Quantum Companies</h3>
               <div className="flex flex-wrap gap-2">
                 {caseStudy.quantum_companies.map((company: string) => (
-                  <Link key={company} href={`/quantum-companies/${company}`} passHref>
-                    <Badge variant="outline" className="text-[14px] border-border hover:bg-muted-foreground/20 cursor-pointer">
-                      {company}
-                    </Badge>
-                  </Link>
+                  <Badge key={company} variant="outline" className="text-[14px] border-border">
+                    {company}
+                  </Badge>
                 ))}
               </div>
             </div>
@@ -157,11 +153,9 @@ export default async function CaseStudyPage({ params }: { params: Promise<{ slug
               <h3 className="sidebar-title">Quantum Hardware</h3>
               <div className="flex flex-wrap gap-2">
                 {caseStudy.quantum_hardware.map((hardware: string) => (
-                  <Link key={hardware} href={`/quantum-hardware/${hardware}`} passHref>
-                    <Badge variant="outline" className="text-[14px] border-border hover:bg-muted-foreground/20 cursor-pointer">
-                      {hardware}
-                    </Badge>
-                  </Link>
+                  <Badge key={hardware} variant="outline" className="text-[14px] border-border">
+                    {hardware}
+                  </Badge>
                 ))}
               </div>
             </div>
@@ -171,11 +165,9 @@ export default async function CaseStudyPage({ params }: { params: Promise<{ slug
               <h3 className="sidebar-title">Quantum Software</h3>
               <div className="flex flex-wrap gap-2">
                 {caseStudy.quantum_software.map((software: string) => (
-                  <Link key={software} href={`/quantum-software/${software}`} passHref>
-                    <Badge variant="outline" className="text-[14px] border-border hover:bg-muted-foreground/20 cursor-pointer">
-                      {software}
-                    </Badge>
-                  </Link>
+                  <Badge key={software} variant="outline" className="text-[14px] border-border">
+                    {software}
+                  </Badge>
                 ))}
               </div>
             </div>
@@ -193,7 +185,7 @@ export default async function CaseStudyPage({ params }: { params: Promise<{ slug
                   if (actualIndustries.length > 0) {
                     return actualIndustries.map((relation) =>
                       relation.industries ? (
-                        <Link key={relation.industries.id} href={`/industries/${relation.industries?.slug}`} passHref>
+                        <Link key={relation.industries.id} href={`/paths/industry/${relation.industries?.slug}`} passHref>
                           <Badge
                             variant="outline"
                             className="text-[14px] border-border hover:bg-muted-foreground/20 cursor-pointer"
@@ -222,7 +214,7 @@ export default async function CaseStudyPage({ params }: { params: Promise<{ slug
                   if (actualAlgorithms.length > 0) {
                     return actualAlgorithms.map((relation) =>
                       relation.algorithms ? (
-                        <Link key={relation.algorithms.id} href={`/algorithms/${relation.algorithms?.slug}`} passHref>
+                        <Link key={relation.algorithms.id} href={`/paths/algorithm/${relation.algorithms?.slug}`} passHref>
                           <Badge
                             variant="outline"
                             className="text-[14px] border-border hover:bg-muted-foreground/20 cursor-pointer"
@@ -251,7 +243,7 @@ export default async function CaseStudyPage({ params }: { params: Promise<{ slug
                   if (actualPersonas.length > 0) {
                     return actualPersonas.map((relation) =>
                       relation.personas ? (
-                        <Link key={relation.personas.id} href={`/personas/${relation.personas?.slug}`} passHref>
+                        <Link key={relation.personas.id} href={`/paths/persona/${relation.personas?.slug}`} passHref>
                           <Badge
                             variant="outline"
                             className="text-[14px] border-border hover:bg-muted-foreground/20 cursor-pointer"

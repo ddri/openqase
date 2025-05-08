@@ -143,6 +143,26 @@ For each page/section listed below, document:
 5.  **"Back to Case Studies" Link:**
     *   [ ] **Action:** Evaluate if the styling of the "Back to Case Studies" link needs adjustment for better visual prominence or integration.
 
+6.  **Persona Detail Page Sidebar & Metadata Enhancement (`src/app/paths/persona/[slug]/page.tsx`)**
+    *   [x] **Action:** Restructure the Persona detail page layout to support a two-column grid (main content + sidebar), similar to the Case Study page.
+    *   [x] **Action:** Create the new sidebar container `div`.
+    *   [x] **Action (Expertise Badges):**
+        *   [x] Move the rendering logic for `persona.expertise` badges into the new sidebar.
+        *   [x] Add a `<h3>` with class `sidebar-title` (e.g., "Expertise") above these badges.
+        *   [x] Style these badges as non-interactive (e.g., `variant="outline"`, `text-[14px]`, `border-border`), adjusting their current `text-base` styling.
+    *   [x] **Action (Industries Section):**
+        *   [x] Update the Supabase query to fetch related industries for the persona (e.g., via `persona_industry_relations(industries(id, name, slug))`).
+        *   [x] Add a `<h3>` with class `sidebar-title` (e.g., "Industries") for this new section.
+        *   [x] Render fetched industries as `<Badge>` components wrapped in `<Link>` components, linking to `/paths/industry/[slug]`.
+        *   [x] Style these linkable badges consistent with other interactive classification badges (e.g., `variant="outline"`, `text-[14px]`, `border-border`, `hover:bg-muted-foreground/20`, `cursor-pointer`).
+        *   [x] Implement logic to display "None" or similar if no industries are related.
+
+7. **Section Separators on Detail Pages (HR Implementation)**
+    *   [x] **Action (Persona Page):** Add `<hr className="my-8 border-border" />` before the "Recommended Reading" and "Related Case Studies" section titles on `src/app/paths/persona/[slug]/page.tsx` to improve visual separation.
+    *   [x] **Action (Persona Page):** Remove redundant `border-b` from "Recommended Reading" `<h2>` after adding HR.
+    *   [x] **Action (Case Study Page):** Add `<hr className="my-8 border-border" />` before the `<ReferencesRenderer />` component call on `src/app/case-study/[slug]/page.tsx`.
+    *   [x] **Action (Global):** Attempted to fix double-line issue by adding `@apply border-none;` to `.prose h2` in `globals.css`.
+
 ## III. Color & Contrast
 
 **Goal:** Ensure accessibility, optimal readability, and a thematically appropriate visual tone.
@@ -242,3 +262,8 @@ For each page/section listed below, document:
     *   [x] Investigated Next.js caching (`export const dynamic = 'force-dynamic';` was temporarily added).
     *   [x] **Root Cause Identified:** Missing `SELECT` Row Level Security (RLS) policies on the junction tables (`case_study_industry_relations`, `algorithm_case_study_relations`) for the `public` role (or `anon` role used by the public page). The `case_study_persona_relations` table *had* the correct `SELECT` policy, which is why Personas were working.
     *   [x] **Solution:** User added `SELECT` RLS policies for the `public` role (with `USING (true)`) to `
+
+## VIII. Known Issues / Follow-up Tasks
+
+*   [ ] **Investigate Double Line Before References (Case Study Page):** Despite adding an `<hr>` and removing borders via `.prose h2` styles, a double line still appears before the References section on `/case-study/[slug]`. 
+    *   *Next Steps:* Inspect the `<ReferencesRenderer />` component (`src/components/ui/ReferencesRenderer.tsx`?) to see if it internally renders a heading with a border or its own separator.

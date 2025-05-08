@@ -119,7 +119,10 @@ export default async function CaseStudyPage({ params }: { params: Promise<{ slug
             
             {/* Display References Section if available */}
             {caseStudy.academic_references && (
-              <ReferencesRenderer referencesMarkup={caseStudy.academic_references} />
+              <>
+                <hr className="my-8 border-border" />
+                <ReferencesRenderer referencesMarkup={caseStudy.academic_references} />
+              </>
             )}
           </div>
         </div>

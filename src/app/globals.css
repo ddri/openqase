@@ -301,7 +301,7 @@
   }
   .prose h2 {
     /* Style like H3: 28px semibold */
-    @apply text-[1.75rem] font-semibold mb-4 mt-10; /* Adjust margins as needed */
+    @apply text-[1.75rem] font-semibold mb-4 mt-10 border-none; /* Added border-none */
   }
   .prose h3 {
     /* Style like H4: 22px medium */

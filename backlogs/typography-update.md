@@ -267,3 +267,22 @@ For each page/section listed below, document:
 
 *   [ ] **Investigate Double Line Before References (Case Study Page):** Despite adding an `<hr>` and removing borders via `.prose h2` styles, a double line still appears before the References section on `/case-study/[slug]`. 
     *   *Next Steps:* Inspect the `<ReferencesRenderer />` component (`src/components/ui/ReferencesRenderer.tsx`?) to see if it internally renders a heading with a border or its own separator.
+
+## IX. Algorithm Detail Page Alignment (`src/app/paths/algorithm/[slug]/page.tsx`)
+
+**Goal:** Align the structure, styling, and sidebar content of the Algorithm detail page with the patterns established for Persona and Industry detail pages.
+
+*   [ ] **Action:** Change the page layout from the 12-column structure (`lg:grid-cols-12`) to the standard two-column grid (`md:grid-cols-[2fr,1fr]`).
+*   [ ] **Action (Markdown Styling):**
+    *   [ ] Remove the `enhanceTypography` function and its application to the rendered Markdown (`processedContent`).
+    *   [ ] Apply the standard Tailwind Typography classes (e.g., `prose dark:prose-invert max-w-none`) to the `div` directly wrapping the `dangerouslySetInnerHTML` for the main Markdown content.
+*   [ ] **Action (Sidebar Content):**
+    *   [ ] Remove the existing "Related Case Studies" section from the sidebar.
+    *   [ ] Update the main Supabase query fetching the `algorithm` data to include related Industries and Personas (e.g., via `algorithm_industry_relations(industries(id, name, slug))` and `algorithm_persona_relations(personas(id, name, slug))`). *Requires checking/confirming existence of these relations/tables.*
+    *   [ ] Define an `EnrichedAlgorithm` type to include these relations and cast the fetched data.
+    *   [ ] Add a "Related Industries" section to the sidebar, rendering linkable badges (`/paths/industry/[slug]`) based on fetched relations. Include "None"/"Not Applicable" logic.
+    *   [ ] Add a "Related Personas" section to the sidebar, rendering linkable badges (`/paths/persona/[slug]`) based on fetched relations. Include "None"/"Not Applicable" logic.
+    *   [ ] Ensure consistent use of `<h3 class="sidebar-title">` and badge styling.
+*   [ ] **Action (Main Content Structure):**
+    *   [ ] Ensure the "Implementation Steps" and "Academic References" sections (including their preceding `<hr>`) are placed correctly within the main content column, *after* the `.prose`-wrapped Markdown content `div`.
+    *   [ ] Decide if/where to add a "Related Case Studies" section back into the main content column (e.g., at the bottom, after References, styled consistently).

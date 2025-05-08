@@ -74,33 +74,47 @@ For each page/section listed below, document:
         *   *Considerations:* Characterful sans-serif, good for impact, legible at large sizes.
     *   [x] **Action:** Research and select a body text font. **-> Chosen: Open Sans**
         *   *Considerations:* Highly legible sans-serif, good for long-form reading, pairs well with the heading font.
-    *   [ ] **Example Pairings to Consider (from Claude):**
+    *   [x] **Example Pairings to Consider (from Claude):**
         *   ~~Option 1: Headings: Roboto Slab (semibold/bold) | Body: Inter (Technical, contemporary)~~ 
         *   ~~Option 2: Headings: Source Sans Pro (semibold/bold) | Body: IBM Plex Sans (Professional, clear, designed for technical content)~~ 
         *   **Selected -> Option 3:** Headings: Montserrat (medium/semibold) | Body: Open Sans (Clean, professional, good contrast)
-    *   [ ] **Action: Load Chosen Fonts (`src/app/layout.tsx`)**
+    *   [x] **Action: Load Chosen Fonts (`src/app/layout.tsx`)**
         *   Import `Montserrat` and `Open_Sans` from `next/font/google`.
         *   Load required weights (e.g., Montserrat: 400, 500, 600, 700; Open Sans: 400, 600, 700).
         *   Expose fonts via CSS variables (e.g., `--font-montserrat`, `--font-open-sans`).
         *   Apply variables to `<html>` tag.
-    *   [ ] **Action: Define fallback fonts for web safety.** (Ensure fallback stack remains in CSS variable definitions).
-    *   [ ] **Action: Implement Initial Font Swap (`src/app/globals.css`) - Gentle Start**
+    *   [x] **Action: Define fallback fonts for web safety.** (Ensured fallback stack remains in CSS variable definitions in `globals.css`).
+    *   [x] **Action: Implement Initial Font Swap (`src/app/globals.css`) - Gentle Start**
         *   Update `--font-sans` definition in `:root` to use `var(--font-open-sans), system-ui, ...`.
         *   Update `--font-heading` definition in `:root` to use `var(--font-montserrat), system-ui, ...`.
-    *   [ ] **Action: Initial Review & Minor Adjustments**
-        *   Visually inspect site after font swap.
-        *   Make minimal adjustments to base `font-size`, `line-height`, or `letter-spacing` in `globals.css` only if needed for immediate readability/balance.
+    *   [x] **Action: Initial Review & Minor Adjustments**
+        *   Visually inspected site after font swap.
+        *   Made adjustments to base `font-size` (to 1.125rem/18px), `line-height` (to 1.7), and global heading definitions. Addressed initial feedback on text feeling too small.
 
 2.  **Font Size & Weight Hierarchy (Full Scale Implementation - Phase I.b):**
-    *   [ ] **Action:** Increase the main page title ("Quantum Brilliance and Pawsey Supercomputing Centre") significantly. Define a specific, impactful size (e.g., 48px, 60px). Use a bold or extra-bold weight (Montserrat 600 or 700).
-    *   [ ] **Action:** Define sizes and weights for H2 ("Overview," "Problem Statement") and H3 (potential sub-headings). Ensure they are distinct from each other and body text.
-    *   [ ] **Action:** Increase the base body font size for improved readability (e.g., to 16px or 18px).
-    *   [ ] **Action:** Review and adjust font weights for secondary text elements (e.g., captions, labels in the sidebar) to ensure they are de-emphasized appropriately but still legible.
+    *   [x] **Action:** Increase the main page title ("Quantum Brilliance and Pawsey Supercomputing Centre") significantly. Define a specific, impactful size (e.g., 48px, 60px). Use a bold or extra-bold weight (Montserrat 600 or 700).
+        *   *Implemented as global H1 style: `text-[3.5rem]` (56px), `font-bold` (700), Montserrat.* 
+    *   [x] **Action:** Define sizes and weights for H2 ("Overview," "Problem Statement") and H3 (potential sub-headings). Ensure they are distinct from each other and body text.
+        *   *Implemented as global styles: H2 (`text-[2.25rem]` med), H3 (`text-[1.75rem]` semibold), H4 (`text-[1.375rem]` med), Montserrat. Specific `.prose` overrides created for case study page.* 
+    *   [x] **Action:** Increase the base body font size for improved readability (e.g., to 16px or 18px).
+        *   *Implemented: Base body `text-[1.125rem]` (18px), Open Sans.*
+    *   [x] **Action:** Review and adjust font weights for secondary text elements (e.g., captions, labels in the sidebar) to ensure they are de-emphasized appropriately but still legible.
+        *   *Specific Review & Adjustments for Case Study Sidebar:* `.sidebar-title` refined to `text-xs font-semibold uppercase tracking-wider text-text-secondary`. Badge text size set to `text-[14px]`.
+        *   *Broader review of other secondary elements across pages pending Phase II.*
 
 3.  **Line Height (Leading) & Spacing:**
-    *   [ ] **Action:** Set an appropriate line height for body text (e.g., 1.5 - 1.7).
-    *   [ ] **Action:** Increase spacing (margins) above all headings (H1, H2, H3) to improve separation from preceding content.
-    *   [ ] **Action:** Ensure adequate paragraph spacing.
+    *   [x] **Action:** Set an appropriate line height for body text (e.g., 1.5 - 1.7).
+        *   *Implemented: `leading-[1.7]` for body text.*
+    *   [x] **Action:** Increase spacing (margins) above all headings (H1, H2, H3) to improve separation from preceding content.
+        *   *Partially implemented: New global heading styles in `globals.css` include default bottom margins (`mb-4` for H2, `mb-2` for H3/H4). Top margins primarily handled by `.prose` styles or direct page layout. Full review of top margins pending.*
+    *   [x] **Action:** Ensure adequate paragraph spacing.
+        *   *Implemented: `p` tag retains `mb-4`.*
+
+4.  **Case Study Page Specific Refinements (Phase I.c - Emergent from review):**
+    *   [x] **Action:** Define specific overrides for `.prose h1, .prose h2, .prose h3, .prose h4` within `globals.css` to create a distinct hierarchy for Markdown content on the Case Study page, different from global headings.
+    *   [x] **Action:** Iteratively refine `.sidebar-title` on the Case Study page for size, weight, case, and color to ensure it functions as a label and does not compete with main content headings. Final: `text-xs font-semibold uppercase tracking-wider text-text-secondary`.
+    *   [x] **Action:** Adjust badge text size in the Case Study sidebar to `text-[14px]`.
+    *   [x] **Action:** Correct HTML structure on Case Study page to prevent `.prose` styles from incorrectly targeting sidebar headings.
 
 ## II. Visual Hierarchy & Layout Refinement
 

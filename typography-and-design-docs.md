@@ -1332,72 +1332,70 @@ This summary consolidates observations about the effective typography used acros
 
 *Update Log:*
 *   *[Insert Date]*: Initial audit findings.
-*   *[Insert Date]*: Proposed new typographic scale based on 18px base body and Major Third ratio.
+*   *[Current Date]*: Updated to reflect Phase I changes: New fonts (Montserrat/Open Sans), new typographic scale, and refinements on Case Study page.
 
 **1. Base Font:**
-*   **Primary Font:** Inter (loaded via `next/font/google` in `layout.tsx` and applied via `--font-inter` -> `--font-sans` CSS variable to the `body`).
-*   **Heading Font:** Also defaults to Inter (via `--font-heading: var(--font-sans)`).
+*   **Primary Font (Body):** Open Sans (loaded via `next/font/google` in `layout.tsx` and applied via `--font-open-sans` -> `--font-sans` CSS variable to the `body`).
+*   **Heading Font:** Montserrat (loaded via `next/font/google` in `layout.tsx` and applied via `--font-montserrat` -> `--font-heading` CSS variable).
 *   **Fallback:** Standard system sans-serif stack (`system-ui`, `-apple-system`, etc.).
 *   **Features:** `font-feature-settings: "salt" 1;` applied globally to `body` and `h1-h6`.
 *   **Antialiasing:** Applied globally to `body`.
 
 **2. Heading Styles:**
-A mix of semantic HTML headings (`h1`-`h6`) and custom classes are used. Styling is primarily via Tailwind utilities, often defined in `globals.css` within `@layer base` or applied directly in components.
+Styling is primarily via Tailwind utilities, defined in `globals.css` within `@layer base`.
 
-*   **Previous Global H1-H6 (`globals.css` - Effective styles, noting redundancy):**
+*   **Global H1-H4 Styles (Implemented in Phase I):**
+    *   **Font:** Montserrat (via `--font-heading`).
+    *   Base for H1-H4: `font-medium tracking-tight text-foreground`. (Note: individual weights below override the base `font-medium` here).
+    *   `h1`: `text-[3.5rem]` (56px). `font-bold` (700). `leading-tight`.
+    *   `h2`: `text-[2.25rem]` (36px). `font-medium` (500). `leading-tight mb-4`. (Weight reduced from semibold during refinements).
+    *   `h3`: `text-[1.75rem]` (28px). `font-semibold` (600). `leading-snug mb-2`.
+    *   `h4`: `text-[1.375rem]` (22px). `font-medium` (500). `leading-snug mb-2`.
+    *   `h5, h6`: Inherit base heading styles, effectively smaller.
+
+*   **Specific Title Class Refinements (Case Study Page):**
+    *   `.sidebar-title`: `text-xs` (13.5px), `font-semibold` (600), `uppercase`, `tracking-wider`, `text-text-secondary`, `mb-4`. (Applied to `<h3>` in the sidebar).
+
+*   **Previous Styles (Archived for reference - were based on Inter):**
     *   Base: `font-medium tracking-tight text-foreground`.
     *   `h1`: Responsive `text-2xl` (1.5rem/24px) / `text-3xl` (1.875rem/30px) / `text-4xl` (2.25rem/36px). `font-[600]` (semibold). `leading-tight`.
     *   `h2`: Responsive `text-xl` (1.25rem/20px) / `text-2xl` (1.5rem/24px) / `text-3xl` (1.875rem/30px). `font-[600]` (semibold). `leading-tight`, `mb-4`.
     *   `h3`: Responsive `text-lg` (1.125rem/18px) / `text-xl` (1.25rem/20px) / `text-2xl` (1.5rem/24px). `font-[500]` (medium). `leading-snug`, `mb-2`.
     *   `h4`: Responsive `text-base` (1rem/16px) / `text-lg` (1.125rem/18px) / `text-xl` (1.25rem/20px). `font-[500]` (medium). `mb-2`.
-    *   `h5, h6`: Default styles likely smaller, inheriting base styles.
-
-*   **Proposed Global H1-H4 Styles (Based on 18px base, 1.25 ratio):**
-    *   **Font:** Montserrat (via `--font-heading`).
-    *   `h1`: `text-[2.8125rem]` (45px). `font-bold` (700). `leading-tight`.
-    *   `h2`: `text-[2.25rem]` (36px). `font-semibold` (600). `leading-tight`.
-    *   `h3`: `text-[1.75rem]` (28px). `font-semibold` (600). `leading-snug`.
-    *   `h4`: `text-[1.375rem]` (22px). `font-medium` (500). `leading-snug`.
-    *   *(Note: Base `font-medium`, `tracking-tight`, `text-foreground` from previous styles likely retained).* 
-    *   *(Note: Spacing (`mb-*`) should be reviewed after size changes).* 
-
-*   **Specific Title Classes (`globals.css`):** (These may need adjustment after global changes)
-    *   `.case-study-title`: Previously `text-2xl md:text-3xl font-[600]`.
-    *   `.section-title`: Previously `text-2xl font-[600]`.
-    *   `.sidebar-title`: Previously `text-lg font-[500]`.
-    *   `.card-title`: Previously `text-xl font-[500]`.
-
-*   **Inconsistencies/Observations:**
-    *   Redundant definitions for `h1`/`h2` in `globals.css` (to be removed).
-    *   Previous heading usage sometimes differed from global definitions.
+    *   Specific Title Classes: `.case-study-title` (e.g., `text-2xl md:text-3xl font-[600]`), `.section-title` (e.g., `text-2xl font-[600]`), `.sidebar-title` (e.g., `text-lg font-[500]`), `.card-title` (e.g., `text-xl font-[500]`).
 
 **3. Paragraph Styles:**
-*   **Previous Global `<p>` (`globals.css`):** `leading-relaxed mb-4`. Effective size likely `text-base` (1rem / 16px).
-*   **Proposed Global `<p>` Styles:**
+*   **Global `<p>` Styles (Implemented in Phase I):**
     *   **Font:** Open Sans (via `--font-sans`).
     *   **Size:** `text-[1.125rem]` (18px).
-    *   **Line Height:** `leading-[1.7]` (approx).
-    *   *(Note: `mb-4` likely retained).* 
-*   **Variations:** Previous variations existed (e.g., larger subtitles, smaller sidebar text). These page/component-specific styles will still apply but may need review against the new base size.
+    *   **Line Height:** `leading-[1.7]`.
+    *   **Spacing:** `mb-4` (retained from previous styles).
+*   **Previous Global `<p>`:** `leading-relaxed mb-4`. Effective size likely `text-base` (1rem / 16px).
 
 **4. Link Styles:**
-*   *(No changes proposed to specific link styles in this step, but visual appearance might change due to surrounding text size changes).* 
+*   Standard link styling is primarily through Tailwind utilities (`text-primary`, `hover:underline`, etc.) or specific component styles (e.g., `.subtle-link`). Not directly targeted by the initial font/scale overhaul but appearance may be affected by context.
 
 **5. List Styles:**
-*   *(No changes proposed to list styles in this step, but visual appearance might change due to surrounding text size changes, especially within `.prose` context).* 
+*   Primarily styled within the `.prose` scope (Tailwind Typography plugin) or with direct Tailwind utilities. Not directly targeted by the initial font/scale overhaul but appearance may be affected.
 
 **6. Badge Styles:**
-*   *(No changes proposed to badge styles/typography in this step).* 
+*   Generally styled by Shadcn UI `<Badge>` component variants and Tailwind utilities.
+*   **Case Study Page Specific Refinement:** Sidebar badges use `text-[14px]`.
 
 **7. Markdown Typography (`.prose` vs. Custom):**
-*   *(No changes proposed to the *method* of styling Markdown in this step, but the resulting sizes/spacing within `.prose` will change based on the new base font size).* 
+*   **Case Study Page Specific (`.prose` overrides in `globals.css`):**
+    *   `.prose h1`: Styled like global H2 (`text-[2.25rem] font-medium`).
+    *   `.prose h2`: Styled like global H3 (`text-[1.75rem] font-semibold`).
+    *   `.prose h3`: Styled like global H4 (`text-[1.375rem] font-medium`).
+    *   `.prose h4`: Styled slightly larger than body (`text-[1.25rem] font-medium`).
+*   Other pages might use Tailwind Typography plugin defaults (`.prose`) or other custom Markdown rendering solutions. This results in varying typographic outputs for Markdown across different sections.
 
 **8. Admin Portal Typography:**
-*   *(Admin styles are separate and not targeted in this specific update, but will inherit the new base fonts).* 
+*   Admin styles are generally separate (defined in `src/app/admin/layout.tsx` and specific admin pages). It will inherit the new base fonts (Open Sans for body, Montserrat for headings if `font-heading` utilities are used). The specific sizes and weights used within the admin panel were not part of this initial overhaul.
 
 **9. General Observations:**
-*   **Font Consistency:** Now Montserrat (Headings) / Open Sans (Body).
-*   **Responsiveness:** New heading/paragraph sizes defined without responsive variants initially. Existing responsive overrides on specific pages/components will still apply but may need review.
-*   **Styling Method:** Still primarily Tailwind.
-*   **Theming:** Unchanged.
-*   **Potential Issues:** Need to address previous redundancies. Need to review specific component/page styles against new base typography. Markdown appearance will change.
+*   **Font Consistency:** New system uses Montserrat for headings and Open Sans for body text.
+*   **Responsiveness:** The new global H1-H4 and paragraph styles are defined as single sizes. Pages rely on existing Tailwind responsive prefixes (e.g., `sm:`, `md:`) for specific overrides where needed, or the Tailwind Typography plugin's responsive behavior.
+*   **Styling Method:** Primarily Tailwind CSS, with global styles in `globals.css` and component-specific styling.
+*   **Theming:** The core theming system (CSS variables for light/dark/graphite) remains unchanged.
+*   **Refinements:** Significant iteration was done on the Case Study page's sidebar titles and Markdown heading hierarchy to achieve desired visual balance.

@@ -184,14 +184,14 @@
   }
   
   h1 {
-    /* Proposed: 45px (2.8125rem), bold(700), tight leading */
-    @apply text-[2.8125rem] font-bold leading-tight;
+    /* Proposed: 56px (3.5rem), bold(700), tight leading */
+    @apply text-[3.5rem] font-bold leading-tight;
     /* Removed letter-spacing, can be added back if needed */
   }
   
   h2 {
-    /* Proposed: 36px (2.25rem), semibold(600), tight leading, mb-4 */
-    @apply text-[2.25rem] font-semibold leading-tight mb-4;
+    /* Proposed: 36px (2.25rem), medium(500), tight leading, mb-4 */
+    @apply text-[2.25rem] font-medium leading-tight mb-4;
     /* Removed letter-spacing, can be added back if needed */
   }
   
@@ -287,6 +287,24 @@
   /* Text balance for better readability */
   .text-balance {
     text-wrap: balance;
+  }
+
+  /* Add specific overrides for headings within .prose */
+  .prose h1 {
+    /* Style like H2: 36px medium */
+    @apply text-[2.25rem] font-medium mb-6 mt-12; /* Adjust margins as needed */
+  }
+  .prose h2 {
+    /* Style like H3: 28px semibold */
+    @apply text-[1.75rem] font-semibold mb-4 mt-10; /* Adjust margins as needed */
+  }
+  .prose h3 {
+    /* Style like H4: 22px medium */
+    @apply text-[1.375rem] font-medium mb-3 mt-8; /* Adjust margins as needed */
+  }
+  .prose h4 {
+    /* Style slightly larger than body: 20px medium */
+    @apply text-[1.25rem] font-medium mb-2 mt-6; /* Adjust margins as needed */
   }
 }
 

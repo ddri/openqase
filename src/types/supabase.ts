@@ -7,6 +7,31 @@ export type Json =
   | Json[]
 
 export type Database = {
+  graphql_public: {
+    Tables: {
+      [_ in never]: never
+    }
+    Views: {
+      [_ in never]: never
+    }
+    Functions: {
+      graphql: {
+        Args: {
+          operationName?: string
+          query?: string
+          variables?: Json
+          extensions?: Json
+        }
+        Returns: Json
+      }
+    }
+    Enums: {
+      [_ in never]: never
+    }
+    CompositeTypes: {
+      [_ in never]: never
+    }
+  }
   public: {
     Tables: {
       algorithm_case_study_relations: {
@@ -87,6 +112,7 @@ export type Database = {
           created_at: string | null
           description: string | null
           id: string
+          is_system_record: boolean | null
           main_content: string | null
           name: string
           published: boolean | null
@@ -103,6 +129,7 @@ export type Database = {
           created_at?: string | null
           description?: string | null
           id?: string
+          is_system_record?: boolean | null
           main_content?: string | null
           name: string
           published?: boolean | null
@@ -119,6 +146,7 @@ export type Database = {
           created_at?: string | null
           description?: string | null
           id?: string
+          is_system_record?: boolean | null
           main_content?: string | null
           name?: string
           published?: boolean | null
@@ -227,58 +255,58 @@ export type Database = {
       }
       case_studies: {
         Row: {
+          academic_references: string | null
           algorithms: string[] | null
           created_at: string | null
           description: string | null
           id: string
-          industries: string[] | null
           main_content: string | null
           partner_companies: string[] | null
-          personas: string[] | null
           published: boolean | null
           published_at: string | null
           quantum_companies: string[] | null
           quantum_hardware: string[] | null
+          quantum_software: string[] | null
+          resource_links: Json | null
           slug: string
           title: string
           updated_at: string | null
-          url: string | null
         }
         Insert: {
+          academic_references?: string | null
           algorithms?: string[] | null
           created_at?: string | null
           description?: string | null
           id?: string
-          industries?: string[] | null
           main_content?: string | null
           partner_companies?: string[] | null
-          personas?: string[] | null
           published?: boolean | null
           published_at?: string | null
           quantum_companies?: string[] | null
           quantum_hardware?: string[] | null
+          quantum_software?: string[] | null
+          resource_links?: Json | null
           slug: string
           title: string
           updated_at?: string | null
-          url?: string | null
         }
         Update: {
+          academic_references?: string | null
           algorithms?: string[] | null
           created_at?: string | null
           description?: string | null
           id?: string
-          industries?: string[] | null
           main_content?: string | null
           partner_companies?: string[] | null
-          personas?: string[] | null
           published?: boolean | null
           published_at?: string | null
           quantum_companies?: string[] | null
           quantum_hardware?: string[] | null
+          quantum_software?: string[] | null
+          resource_links?: Json | null
           slug?: string
           title?: string
           updated_at?: string | null
-          url?: string | null
         }
         Relationships: []
       }
@@ -399,6 +427,7 @@ export type Database = {
           description: string | null
           icon: string | null
           id: string
+          is_system_record: boolean | null
           main_content: string | null
           name: string
           published: boolean | null
@@ -412,6 +441,7 @@ export type Database = {
           description?: string | null
           icon?: string | null
           id?: string
+          is_system_record?: boolean | null
           main_content?: string | null
           name: string
           published?: boolean | null
@@ -425,6 +455,7 @@ export type Database = {
           description?: string | null
           icon?: string | null
           id?: string
+          is_system_record?: boolean | null
           main_content?: string | null
           name?: string
           published?: boolean | null
@@ -477,6 +508,7 @@ export type Database = {
           description: string | null
           expertise: string[] | null
           id: string
+          is_system_record: boolean | null
           main_content: string | null
           name: string
           published: boolean | null
@@ -491,6 +523,7 @@ export type Database = {
           description?: string | null
           expertise?: string[] | null
           id?: string
+          is_system_record?: boolean | null
           main_content?: string | null
           name: string
           published?: boolean | null
@@ -505,6 +538,7 @@ export type Database = {
           description?: string | null
           expertise?: string[] | null
           id?: string
+          is_system_record?: boolean | null
           main_content?: string | null
           name?: string
           published?: boolean | null
@@ -716,6 +750,9 @@ export type CompositeTypes<
     : never
 
 export const Constants = {
+  graphql_public: {
+    Enums: {},
+  },
   public: {
     Enums: {},
   },

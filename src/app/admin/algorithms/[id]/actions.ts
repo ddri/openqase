@@ -79,8 +79,38 @@ export async function saveAlgorithm(values: any): Promise<any> {
             }
         }
     }
+
+    // Handle persona relationships (delete and re-create)
+    let personaError = await supabase
+      .from('persona_algorithm_relations' as any)
+      .delete()
+      .eq('algorithm_id', data?.id);
+
+    if (personaError && personaError.error) {
+        console.error("Error deleting persona relationships:", personaError.error);
+        throw new Error(personaError.error.message || "Failed to delete persona relationships");
+    }
+
+    // If there are related personas
+    if (values.related_personas && values.related_personas.length > 0) {
+        // Insert relationships with IDs
+        for (const personaId of values.related_personas) {
+            let insertError = await supabase
+                .from('persona_algorithm_relations' as any)
+                .insert({ algorithm_id: data?.id, persona_id: personaId });
+
+            if (insertError && insertError.error) {
+                console.error("Error inserting persona relationship:", insertError.error);
+                throw new Error(insertError.error.message || "Failed to insert persona relationship");
+            }
+        }
+    }
     
     revalidatePath('/admin/algorithms');
+    revalidatePath('/paths/algorithm');
+    if (data?.slug) {
+      revalidatePath(`/paths/algorithm/${data.slug}`);
+    }
     
     // Return the saved data
     return data;

@@ -20,6 +20,7 @@ interface AlgorithmFormProps {
   algorithm: any | null;
   caseStudies: any[];
   industries: any[];
+  personas: any[];
   isNew: boolean;
 }
 
@@ -31,9 +32,10 @@ interface AlgorithmFormProps {
  * @param algorithm - Initial algorithm data
  * @param caseStudies - Available case studies for relationships
  * @param industries - Available industries for relationships
+ * @param personas - Available personas for relationships
  * @param isNew - Whether this is a new algorithm
  */
-export function AlgorithmForm({ algorithm, caseStudies, industries, isNew }: AlgorithmFormProps) {
+export function AlgorithmForm({ algorithm, caseStudies, industries, personas, isNew }: AlgorithmFormProps) {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const [values, setValues] = useState({
@@ -44,8 +46,9 @@ export function AlgorithmForm({ algorithm, caseStudies, industries, isNew }: Alg
     main_content: isNew ? '' : algorithm?.main_content || '',
     quantum_advantage: isNew ? '' : algorithm?.quantum_advantage || '',
     use_cases: isNew ? [] : algorithm?.use_cases || [],
-    related_case_studies: isNew ? [] : algorithm?.related_case_studies?.map((cs: any) => cs.id) || [],
-    related_industries: isNew ? [] : algorithm?.related_industries?.map((ind: any) => ind.id) || [],
+    related_case_studies: isNew ? [] : algorithm?.related_case_studies || [],
+    related_industries: isNew ? [] : algorithm?.related_industries || [],
+    related_personas: isNew ? [] : algorithm?.related_personas || [],
     published: isNew ? false : algorithm?.published || false,
     steps: isNew ? '' : algorithm?.steps || '',
     academic_references: isNew ? '' : algorithm?.academic_references || '',
@@ -390,6 +393,16 @@ export function AlgorithmForm({ algorithm, caseStudies, industries, isNew }: Alg
               itemValueKey="id"
               label="Related Industries"
               placeholder="Select industries..."
+            />
+
+            <RelationshipSelector
+              items={personas}
+              selectedItems={values.related_personas}
+              onChange={(selectedItems) => handleChange('related_personas', selectedItems)}
+              itemLabelKey="name"
+              itemValueKey="id"
+              label="Related Personas"
+              placeholder="Select personas..."
             />
           </CardContent>
         </Card>

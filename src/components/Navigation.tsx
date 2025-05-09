@@ -7,6 +7,7 @@ import { createBrowserSupabaseClient } from '@/lib/supabase-browser';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import ThemeToggle from './ThemeToggle';
+import { useTheme } from 'next-themes';
 import { useEffect, useState } from 'react';
 import type { User as SupabaseUser } from '@supabase/supabase-js';
 import {
@@ -26,10 +27,16 @@ const navItems = [
 export default function Navigation() {
   const router = useRouter();
   const pathname = usePathname();
+  const { theme } = useTheme();
+  const [mounted, setMounted] = useState(false);
   const [user, setUser] = useState<SupabaseUser | null>(null);
   const supabase = createBrowserSupabaseClient();
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     const getUser = async () => {
@@ -69,8 +76,20 @@ export default function Navigation() {
         <div className="flex h-16 items-center">
           {/* Logo and Desktop Navigation */}
           <div className="flex items-center space-x-8">
-            <Link href="/" className="flex items-center">
-              <span className="text-xl font-bold">openQase</span>
+            <Link href="/" className="flex items-center text-foreground hover:text-foreground">
+              {mounted ? (
+                <img
+                  src={theme === 'dark' ? '/openqase-light.svg' : '/openqase-dark.svg'}
+                  alt="openQase Logo"
+                  className="h-8 w-auto"
+                />
+              ) : (
+                <img
+                  src='/openqase-dark.svg'
+                  alt="openQase Logo"
+                  className="h-8 w-auto"
+                />
+              )}
             </Link>
 
             {/* Desktop Navigation */}

@@ -50,8 +50,8 @@
     --radius: 0.5rem;
 
     /* Anthropic-inspired typography */
-    --font-sans: var(--font-inter), system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    --font-heading: var(--font-sans);
+    --font-sans: var(--font-open-sans), system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --font-heading: var(--font-montserrat), system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 
     --header-height: 4rem;
     --banner-height: 2.5rem;
@@ -171,36 +171,49 @@
   }
   
   body {
-    @apply bg-background text-foreground font-sans text-base antialiased;
+    /* Apply base font size (18px) and line height */
+    @apply bg-background text-foreground font-sans text-[1.125rem] leading-[1.7] antialiased;
     font-feature-settings: "salt" 1;
   }
 
-  /* Responsive typography */
+  /* Responsive typography - UPDATED with new scale */
   h1, h2, h3, h4, h5, h6 {
-    @apply font-medium tracking-tight text-foreground;
+    /* Apply base heading font and common styles */
+    @apply font-heading font-medium tracking-tight text-foreground;
     font-feature-settings: "salt" 1;
   }
   
   h1 {
-    @apply text-2xl sm:text-3xl md:text-4xl font-[600] leading-tight;
-    letter-spacing: -0.02em;
+    /* Proposed: 56px (3.5rem), bold(700), tight leading */
+    @apply text-[3.5rem] font-bold leading-tight;
+    /* Removed letter-spacing, can be added back if needed */
   }
   
   h2 {
-    @apply text-xl sm:text-2xl md:text-3xl font-[600] leading-tight mb-4;
-    letter-spacing: -0.01em;
+    /* Proposed: 36px (2.25rem), medium(500), tight leading, mb-4 */
+    @apply text-[2.25rem] font-medium leading-tight mb-4;
+    /* Removed letter-spacing, can be added back if needed */
   }
   
   h3 {
-    @apply text-lg sm:text-xl md:text-2xl font-[500] leading-snug mb-2;
+    /* Proposed: 28px (1.75rem), semibold(600), snug leading, mb-2 */
+    @apply text-[1.75rem] font-semibold leading-snug mb-2;
   }
   
   h4 {
-    @apply text-base sm:text-lg md:text-xl font-[500] mb-2;
+    /* Proposed: 22px (1.375rem), medium(500), snug leading, mb-2 */
+    @apply text-[1.375rem] font-medium leading-snug mb-2;
   }
   
   p {
-    @apply leading-relaxed mb-4 text-[15px] sm:text-base;
+    /* Base styles already applied to body, ensure mb-4 remains */
+    /* Keep leading/size on body, apply margin here */
+    @apply mb-4;
+  }
+
+  /* Sidebar heading - smaller than main headings */
+  .sidebar-title {
+    @apply text-xs font-semibold uppercase tracking-wider text-text-secondary mb-4;
   }
 
   /* Container classes */
@@ -280,61 +293,23 @@
   .text-balance {
     text-wrap: balance;
   }
-}
 
-@layer base {
-  /* Anthropic-inspired typography */
-  h1, h2, h3, h4, h5, h6 {
-    @apply font-medium tracking-tight text-foreground;
-    font-feature-settings: "salt" 1;
+  /* Add specific overrides for headings within .prose */
+  .prose h1 {
+    /* Style like H2: 36px medium */
+    @apply text-[2.25rem] font-medium mb-6 mt-12; /* Adjust margins as needed */
   }
-  
-  h1 {
-    @apply text-3xl md:text-4xl font-[600] leading-tight;
-    letter-spacing: -0.01em;
+  .prose h2 {
+    /* Style like H3: 28px semibold */
+    @apply text-[1.75rem] font-semibold mb-4 mt-10 border-none; /* Added border-none */
   }
-  
-  h2 {
-    @apply text-2xl md:text-3xl font-[600] leading-tight mb-4;
-    letter-spacing: -0.01em;
+  .prose h3 {
+    /* Style like H4: 22px medium */
+    @apply text-[1.375rem] font-medium mb-3 mt-8; /* Adjust margins as needed */
   }
-  
-  h3 {
-    @apply text-xl md:text-2xl font-[500] leading-snug mb-2;
-  }
-  
-  h4 {
-    @apply text-lg md:text-xl font-[500] mb-2;
-  }
-  
-  p {
-    @apply leading-relaxed mb-4 text-base; /* Changed from text-[15px] to text-base (16px) */
-  }
-
-  /* Specific styles for case study headings */
-  .case-study-title {
-    @apply text-2xl md:text-3xl font-[600] mb-1;
-    letter-spacing: -0.01em;
-  }
-  
-  .section-title {
-    @apply text-2xl font-[600] mb-6 pb-1;
-    letter-spacing: -0.01em;
-  }
-  
-  /* Sidebar heading - smaller than main headings */
-  .sidebar-title {
-    @apply text-lg font-[500] mb-4;
-    letter-spacing: -0.01em;
-  }
-  
-  /* Tag styling */
-  .tag-label {
-    @apply font-[500] text-foreground;
-  }
-  
-  .tag {
-    @apply text-[15px] text-foreground/80;
+  .prose h4 {
+    /* Style slightly larger than body: 20px medium */
+    @apply text-[1.25rem] font-medium mb-2 mt-6; /* Adjust margins as needed */
   }
 }
 
@@ -574,4 +549,116 @@ nav a.active {
 /* Mobile-first container padding */
 .container-mobile {
   @apply px-4 sm:px-6 lg:px-8;
+}
+
+/* Enhanced Markdown Table Styles */
+.prose table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.5rem 0;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  text-align: left;
+  overflow: hidden;
+  border: 1px solid hsl(var(--border));
+  border-radius: 0.5rem;
+}
+
+.prose th {
+  background-color: hsl(var(--muted));
+  color: hsl(var(--text-primary));
+  font-weight: 600;
+  text-transform: none;
+  letter-spacing: normal;
+  padding: 0.75rem 1rem;
+  border-bottom: 2px solid hsl(var(--border));
+}
+
+.prose td {
+  padding: 0.75rem 1rem;
+  border: 1px solid hsl(var(--border));
+  vertical-align: middle;
+}
+
+/* Zebra striping for better readability */
+.prose tbody tr:nth-child(odd) {
+  background-color: hsl(var(--background));
+}
+
+.prose tbody tr:nth-child(even) {
+  background-color: hsl(var(--card));
+}
+
+/* Hover effect */
+.prose tbody tr:hover {
+  background-color: hsl(var(--surface-secondary));
+}
+
+.prose .table-container {
+  overflow-x: auto;
+  margin: 1.5rem 0;
+  border-radius: 0.5rem;
+  border: 1px solid hsl(var(--border));
+  max-width: 100%;
+}
+
+/* Preserve code block styling within tables */
+.prose td code {
+  background-color: hsl(var(--muted));
+  padding: 0.2rem 0.4rem;
+  border-radius: 0.25rem;
+  font-size: 0.85em;
+}
+
+/* Right-align numeric cells */
+.prose td.numeric,
+.prose th.numeric {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Add proper bullet list styling */
+.prose ul {
+  list-style-type: disc;
+  padding-left: 1.5rem;
+  margin: 1.5rem 0;
+}
+
+.prose ol {
+  list-style-type: decimal;
+  padding-left: 1.5rem;
+  margin: 1.5rem 0;
+}
+
+.prose li {
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+  position: relative;
+}
+
+.prose li > ul,
+.prose li > ol {
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+/* Ensure nested lists display properly */
+.prose li > ul {
+  list-style-type: circle;
+}
+
+.prose li > ul > li > ul {
+  list-style-type: square;
+}
+
+/* Add proper spacing around list content */
+.prose li p {
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+/* Enhance visibility of list markers */
+.prose ul li::marker,
+.prose ol li::marker {
+  color: hsl(var(--text-secondary));
 }

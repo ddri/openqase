@@ -75,8 +75,8 @@ export default async function LearningPathsPage() {
     >
       <main className="min-h-screen">
         <div className="container-outer section-spacing">
-          <div className="max-w-2xl mx-auto text-center mb-12 md:mb-16">
-            <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-4">
+          <div className="max-w-3xl mx-auto text-center mb-12 md:mb-16">
+            <h1 className="mb-6">
               Choose Your Learning Path
             </h1>
             <p className="text-base sm:text-lg text-muted-foreground">
@@ -121,26 +121,6 @@ export default async function LearningPathsPage() {
                 </Card>
               </Link>
             ))}
-          </div>
-
-          <div className="max-w-3xl mx-auto">
-            <Card className="bg-card/50">
-              <CardHeader>
-                <div className="text-center">
-                  <h2 className="text-xl sm:text-2xl font-semibold mb-4">
-                    Not Sure Where to Start?
-                  </h2>
-                  <p className="text-muted-foreground mb-6">
-                    We recommend starting with the Persona-based learning path to get content tailored to your role and experience level.
-                  </p>
-                  <Button asChild size="lg">
-                    <Link href="/paths/persona">
-                      Explore Persona Paths
-                    </Link>
-                  </Button>
-                </div>
-              </CardHeader>
-            </Card>
           </div>
         </div>
       </main>

@@ -60,7 +60,7 @@ export default function HomePage() {
       {/* Hero Section */}
       <section className="flex min-h-screen items-center justify-center bg-background text-center px-4">
         <div className="max-w-4xl mx-auto space-y-8">
-          <h1 className="text-4xl md:text-6xl font-bold tracking-tight">
+          <h1 className="tracking-tight">
             Discover the Business Value of{' '}
             <span className="text-primary block mt-2">
               Quantum Computing
@@ -95,7 +95,7 @@ export default function HomePage() {
       <section className="py-24 px-4">
         <div className="container max-w-7xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold tracking-tight">Choose Your Learning Path</h2>
+            <h2 className="tracking-tight">Choose Your Learning Path</h2>
             <p className="text-xl text-muted-foreground mt-4">
               Navigate quantum computing knowledge in the way that's most relevant to you, whether by role, industry, or technical approach.
             </p>
@@ -160,8 +160,8 @@ export default function HomePage() {
       <section className="py-24">
         <div className="container max-w-7xl">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold mb-4">Why Choose OpenQASE?</h2>
-            <p className="text-muted-foreground text-lg">
+            <h2 className="mb-4">Why Choose OpenQASE?</h2>
+            <p className="text-muted-foreground">
               A comprehensive platform for learning and implementing quantum computing solutions
             </p>
           </div>
@@ -175,7 +175,7 @@ export default function HomePage() {
                 <div className="text-primary mb-4">
                   {feature.icon}
                 </div>
-                <h3 className="text-xl font-semibold mb-2">{feature.title}</h3>
+                <h3 className="font-semibold mb-2">{feature.title}</h3>
                 <p className="text-muted-foreground">{feature.description}</p>
               </div>
             ))}
@@ -188,7 +188,7 @@ export default function HomePage() {
         <div className="container max-w-7xl mx-auto">
           <div className="flex justify-between items-center mb-16">
             <div>
-              <h2 className="text-3xl font-bold tracking-tight">Featured Case Studies</h2>
+              <h2 className="tracking-tight">Featured Case Studies</h2>
               <p className="text-xl text-muted-foreground mt-4">
                 Real-world examples of quantum computing solving business problems across industries.
               </p>

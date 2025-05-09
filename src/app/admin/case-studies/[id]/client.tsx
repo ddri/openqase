@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useTransition } from 'react';
+import React, { useState, useTransition, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -11,10 +11,16 @@ import { Textarea } from '@/components/ui/textarea';
 import { ContentCompleteness } from '@/components/admin/ContentCompleteness';
 import { PublishButton } from '@/components/admin/PublishButton';
 import { TagInput } from '@/components/ui/tag-input';
+import { ResourceLinksEditor } from '@/components/admin/ResourceLinksEditor';
 import { createContentValidationRules, calculateCompletionPercentage, validateFormValues } from '@/utils/form-validation';
 import { ArrowLeft, Save, Loader2 } from 'lucide-react';
 import { toast } from '@/components/ui/use-toast';
 import { saveCaseStudy, publishCaseStudy, unpublishCaseStudy } from './actions';
+
+// Define IDs for "Not Applicable" records
+const NOT_APPLICABLE_ALGORITHM_ID = '5bb7190e-d0df-46cc-a459-2eea19856fb1';
+const NOT_APPLICABLE_INDUSTRY_ID = '4cd2a6a0-6dc1-49ba-893c-f24eebaf384a';
+const NOT_APPLICABLE_PERSONA_ID = 'd1c1c7e7-2847-4bf3-b165-3bd84a99f3a6';
 
 interface CaseStudyFormProps {
   caseStudy: any | null;
@@ -44,16 +50,35 @@ export function CaseStudyForm({ caseStudy, algorithms, industries, personas, isN
     slug: isNew ? '' : caseStudy?.slug || '',
     description: isNew ? '' : caseStudy?.description || '',
     main_content: isNew ? '' : caseStudy?.main_content || '',
-    url: isNew ? '' : caseStudy?.url || '',
     partner_companies: isNew ? [] : caseStudy?.partner_companies || [],
     quantum_companies: isNew ? [] : caseStudy?.quantum_companies || [],
     quantum_hardware: isNew ? [] : caseStudy?.quantum_hardware || [],
-    algorithms: isNew ? [] : caseStudy?.algorithms || [],
-    industries: isNew ? [] : caseStudy?.industries || [],
-    personas: isNew ? [] : caseStudy?.personas || [],
+    quantum_software: isNew ? [] : caseStudy?.quantum_software || [],
+    algorithms: isNew ? [] : (caseStudy?.algorithms || []),
+    industries: isNew ? [] : (caseStudy?.industries || []),
+    personas: isNew ? [] : (caseStudy?.personas || []),
     published: isNew ? false : caseStudy?.published || false,
+    academic_references: isNew ? '' : caseStudy?.academic_references || '',
+    resource_links: isNew ? [] : caseStudy?.resource_links || [],
   });
   const [isDirty, setIsDirty] = useState(false);
+  
+  const [notApplicableStates, setNotApplicableStates] = useState({
+    algorithms: false,
+    industries: false,
+    personas: false
+  });
+
+  // Effect to initialize notApplicableStates based on loaded caseStudy data
+  useEffect(() => {
+    if (caseStudy && !isNew) {
+      setNotApplicableStates({
+        algorithms: (caseStudy.algorithms || []).includes(NOT_APPLICABLE_ALGORITHM_ID),
+        industries: (caseStudy.industries || []).includes(NOT_APPLICABLE_INDUSTRY_ID),
+        personas: (caseStudy.personas || []).includes(NOT_APPLICABLE_PERSONA_ID),
+      });
+    }
+  }, [caseStudy, isNew]);
   
   // Validation rules for case studies
   const validationRules = createContentValidationRules('case_study');
@@ -68,13 +93,66 @@ export function CaseStudyForm({ caseStudy, algorithms, industries, personas, isN
     setIsDirty(true);
   };
   
+  // Handle not applicable change
+  const handleNotApplicableChange = (field: 'algorithms' | 'industries' | 'personas', isNotApplicable: boolean) => {
+    setNotApplicableStates(prev => ({
+      ...prev,
+      [field]: isNotApplicable
+    }));
+
+    let newSelectedItems: string[] = [];
+    if (isNotApplicable) {
+      if (field === 'algorithms') newSelectedItems = [NOT_APPLICABLE_ALGORITHM_ID];
+      else if (field === 'industries') newSelectedItems = [NOT_APPLICABLE_INDUSTRY_ID];
+      else if (field === 'personas') newSelectedItems = [NOT_APPLICABLE_PERSONA_ID];
+    }
+    // When unchecking N/A, values[field] is already an array of selected items,
+    // so we just need to ensure the N/A ID is not in it if it was previously.
+    // However, RelationshipSelector's onChange should provide the correct list without N/A ID.
+    // For now, if unchecking, we set to empty, relying on user to re-select or RelationshipSelector to repopulate.
+    // A more robust solution might involve RelationshipSelector handling the N/A ID itself.
+    
+    // If unchecking, we reset to the current selections, excluding the N/A ID if present.
+    // If checking, we set to only the N/A ID.
+    setValues(prev => {
+      let currentSelection = prev[field] || [];
+      if (isNotApplicable) {
+        // If N/A is checked, set the value to be only the N/A ID for that field
+        if (field === 'algorithms') return { ...prev, algorithms: [NOT_APPLICABLE_ALGORITHM_ID] };
+        if (field === 'industries') return { ...prev, industries: [NOT_APPLICABLE_INDUSTRY_ID] };
+        if (field === 'personas') return { ...prev, personas: [NOT_APPLICABLE_PERSONA_ID] };
+      } else {
+        // If N/A is unchecked, remove the N/A ID from the selection if it exists.
+        // The RelationshipSelector should ideally handle providing the list of actual selections.
+        // For now, we filter out the N/A ID.
+        let idToRemove = '';
+        if (field === 'algorithms') idToRemove = NOT_APPLICABLE_ALGORITHM_ID;
+        else if (field === 'industries') idToRemove = NOT_APPLICABLE_INDUSTRY_ID;
+        else if (field === 'personas') idToRemove = NOT_APPLICABLE_PERSONA_ID;
+        
+        const updatedSelection = Array.isArray(currentSelection) 
+                               ? currentSelection.filter(id => id !== idToRemove) 
+                               : [];
+        return { ...prev, [field]: updatedSelection };
+      }
+      return prev; // Should not happen
+    });
+    setIsDirty(true);
+  };
+  
   // Handle form submission
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
+    console.log('Submitting case study with resource links:', values.resource_links);
+    
     startTransition(async () => {
       try {
-        const result = await saveCaseStudy(values);
+        // Include notApplicableStates in the data sent to the server
+        const result = await saveCaseStudy({
+          ...values,
+          notApplicableStates
+        });
         
         // If this was a new case study and we got an ID back, redirect to edit page
         if (isNew && result?.id) {
@@ -171,9 +249,27 @@ export function CaseStudyForm({ caseStudy, algorithms, industries, personas, isN
   
   // Validate content before publishing
   const validateContent = () => {
+    // Create custom validators for fields that can be marked as N/A
+    const industriesValidator = (value: any): boolean => 
+      (Array.isArray(value) && value.length > 0) || notApplicableStates.industries;
+    
+    const algorithmsValidator = (value: any): boolean => 
+      (Array.isArray(value) && value.length > 0) || notApplicableStates.algorithms;
+    
+    // Find the rules for these fields
+    const modifiedRules = validationRules.map(rule => {
+      if (rule.field === 'industries') {
+        return { ...rule, validator: industriesValidator };
+      }
+      if (rule.field === 'algorithms') {
+        return { ...rule, validator: algorithmsValidator };
+      }
+      return rule;
+    });
+    
     const issues = validateFormValues({
       values,
-      validationRules
+      validationRules: modifiedRules
     });
     
     return Object.keys(issues).length === 0 ? true : issues;
@@ -274,19 +370,10 @@ export function CaseStudyForm({ caseStudy, algorithms, industries, personas, isN
                   id="description"
                   value={values.description}
                   onChange={(e) => handleChange('description', e.target.value)}
-                  placeholder="Brief description of the case study"
-                  rows={3}
+                  placeholder="Enter a brief description (for SEO and previews)"
+                  className="min-h-[100px]"
                 />
-              </div>
-              
-              <div className="space-y-3">
-                <Label htmlFor="url">URL</Label>
-                <Input
-                  id="url"
-                  value={values.url}
-                  onChange={(e) => handleChange('url', e.target.value)}
-                  placeholder="https://example.com/case-study"
-                />
+                {/* Validation message for description can be added here if needed */}
               </div>
             </div>
           </CardContent>
@@ -311,6 +398,47 @@ export function CaseStudyForm({ caseStudy, algorithms, industries, personas, isN
           </CardContent>
         </Card>
         
+        {/* Resource Links Section */}
+        <Card className="shadow-sm">
+          <CardHeader className="p-6">
+            <CardTitle>Resource Links</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-6 p-6 pt-0">
+            <div className="space-y-3">
+              <Label>External Resources</Label>
+              <p className="text-sm text-muted-foreground mb-4">
+                Add links to external resources related to this case study, such as press releases, company websites, or project pages.
+              </p>
+              <ResourceLinksEditor
+                links={values.resource_links}
+                onChange={(newLinks) => handleChange('resource_links', newLinks)}
+              />
+            </div>
+          </CardContent>
+        </Card>
+        
+        {/* Academic References Section */}
+        <Card className="shadow-sm">
+          <CardHeader className="p-6">
+            <CardTitle>Academic References</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-6 p-6 pt-0">
+            <div className="space-y-3">
+              <Label htmlFor="academic_references">References</Label>
+              <p className="text-sm text-muted-foreground">
+                Use the format: [^1]: Reference text. Use [^1] in main content to cite.
+              </p>
+              <Textarea
+                id="academic_references"
+                value={values.academic_references}
+                onChange={(e) => handleChange('academic_references', e.target.value)}
+                placeholder="[^1]: Author, Title, Journal (Year)"
+                rows={8}
+              />
+            </div>
+          </CardContent>
+        </Card>
+        
         {/* Classifications Section */}
         <Card className="shadow-sm">
           <CardHeader className="p-6">
@@ -326,6 +454,8 @@ export function CaseStudyForm({ caseStudy, algorithms, industries, personas, isN
               label="Industries"
               placeholder="Select industries..."
               required={true}
+              notApplicable={notApplicableStates.industries}
+              onNotApplicableChange={(isNA) => handleNotApplicableChange('industries', isNA)}
             />
             
             <RelationshipSelector
@@ -337,6 +467,8 @@ export function CaseStudyForm({ caseStudy, algorithms, industries, personas, isN
               label="Algorithms"
               placeholder="Select algorithms..."
               required={true}
+              notApplicable={notApplicableStates.algorithms}
+              onNotApplicableChange={(isNA) => handleNotApplicableChange('algorithms', isNA)}
             />
             
             <RelationshipSelector
@@ -347,6 +479,8 @@ export function CaseStudyForm({ caseStudy, algorithms, industries, personas, isN
               itemValueKey="id"
               label="Personas"
               placeholder="Select personas..."
+              notApplicable={notApplicableStates.personas}
+              onNotApplicableChange={(isNA) => handleNotApplicableChange('personas', isNA)}
             />
           </CardContent>
         </Card>
@@ -381,6 +515,15 @@ export function CaseStudyForm({ caseStudy, algorithms, industries, personas, isN
                 tags={values.quantum_hardware}
                 onTagsChange={(newTags) => handleChange('quantum_hardware', newTags)}
                 placeholder="Add quantum hardware..."
+              />
+            </div>
+            
+            <div className="space-y-3">
+              <Label htmlFor="quantum_software">Quantum Software</Label>
+              <TagInput
+                tags={values.quantum_software}
+                onTagsChange={(newTags) => handleChange('quantum_software', newTags)}
+                placeholder="Add quantum software..."
               />
             </div>
           </CardContent>

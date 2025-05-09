@@ -345,6 +345,11 @@ export async function POST(request: Request) {
       quantumHardwareString.split(',').map(item => item.trim()).filter(Boolean) : 
       [];
     
+    const quantumSoftwareString = formData.get('quantum_software') as string;
+    const quantumSoftware = quantumSoftwareString ? 
+      quantumSoftwareString.split(',').map(item => item.trim()).filter(Boolean) : 
+      [];
+    
     // Handle relationships
     const algorithms = formData.getAll('algorithms[]') as string[];
     const industries = formData.getAll('industries[]') as string[];
@@ -360,6 +365,7 @@ export async function POST(request: Request) {
       partner_companies: partnerCompanies,
       quantum_companies: quantumCompanies,
       quantum_hardware: quantumHardware,
+      quantum_software: quantumSoftware,
       published
     };
     

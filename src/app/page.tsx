@@ -102,56 +102,47 @@ export default function HomePage() {
           </div>
 
           <div className="grid gap-8 md:grid-cols-3">
-            <Card className="relative flex flex-col bg-card hover:shadow-lg transition-all duration-200 hover:-translate-y-1">
-              <CardHeader>
-                <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10">
-                  <User className="h-6 w-6 text-primary" />
-                </div>
-                <CardTitle>Persona Path</CardTitle>
-                <CardDescription className="mb-4">
-                  Content tailored to your professional role, from business executives to technical practitioners.
-                </CardDescription>
-              </CardHeader>
-              <div className="mt-auto p-6 pt-0">
-                <Button asChild className="w-full">
-                  <Link href="/paths/persona">Explore Path</Link>
-                </Button>
-              </div>
-            </Card>
+            <Link href="/paths/persona" className="group block h-full">
+              <Card className={cn("h-full card-link-hover-effect", "flex flex-col")}>
+                <CardHeader className="flex-grow">
+                  <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10">
+                    <User className="h-6 w-6 text-primary" />
+                  </div>
+                  <CardTitle>Persona Path</CardTitle>
+                  <CardDescription className="mb-4">
+                    Content tailored to your professional role, from business executives to technical practitioners.
+                  </CardDescription>
+                </CardHeader>
+              </Card>
+            </Link>
 
-            <Card className="relative flex flex-col bg-card hover:shadow-lg transition-all duration-200 hover:-translate-y-1">
-              <CardHeader>
-                <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10">
-                  <Building2 className="h-6 w-6 text-primary" />
-                </div>
-                <CardTitle>Industry Path</CardTitle>
-                <CardDescription className="mb-4">
-                  Explore quantum applications specific to your industry, including challenges, opportunities, and success metrics.
-                </CardDescription>
-              </CardHeader>
-              <div className="mt-auto p-6 pt-0">
-                <Button asChild className="w-full">
-                  <Link href="/paths/industry">Explore Path</Link>
-                </Button>
-              </div>
-            </Card>
+            <Link href="/paths/industry" className="group block h-full">
+              <Card className={cn("h-full card-link-hover-effect", "flex flex-col")}>
+                <CardHeader className="flex-grow">
+                  <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10">
+                    <Building2 className="h-6 w-6 text-primary" />
+                  </div>
+                  <CardTitle>Industry Path</CardTitle>
+                  <CardDescription className="mb-4">
+                    Explore quantum applications specific to your industry, including challenges, opportunities, and success metrics.
+                  </CardDescription>
+                </CardHeader>
+              </Card>
+            </Link>
 
-            <Card className="relative flex flex-col bg-card hover:shadow-lg transition-all duration-200 hover:-translate-y-1">
-              <CardHeader>
-                <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10">
-                  <CircuitBoard className="h-6 w-6 text-primary" />
-                </div>
-                <CardTitle>Algorithm Path</CardTitle>
-                <CardDescription className="mb-4">
-                  Discover different quantum algorithms and understand their applications across industries.
-                </CardDescription>
-              </CardHeader>
-              <div className="mt-auto p-6 pt-0">
-                <Button asChild className="w-full">
-                  <Link href="/paths/algorithm">Explore Path</Link>
-                </Button>
-              </div>
-            </Card>
+            <Link href="/paths/algorithm" className="group block h-full">
+              <Card className={cn("h-full card-link-hover-effect", "flex flex-col")}>
+                <CardHeader className="flex-grow">
+                  <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10">
+                    <CircuitBoard className="h-6 w-6 text-primary" />
+                  </div>
+                  <CardTitle>Algorithm Path</CardTitle>
+                  <CardDescription className="mb-4">
+                    Discover different quantum algorithms and understand their applications across industries.
+                  </CardDescription>
+                </CardHeader>
+              </Card>
+            </Link>
           </div>
         </div>
       </section>

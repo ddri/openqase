@@ -88,8 +88,7 @@ export default async function LearningPathsPage() {
             {paths.map((path) => (
               <Link key={path.title} href={path.href} className="group">
                 <Card className={cn(
-                  "h-full transition-all duration-200",
-                  "hover:shadow-sm hover:border-border-hover hover:bg-accent/5"
+                  "h-full card-link-hover-effect"
                 )}>
                   <CardHeader className="h-full flex flex-col">
                     <div className="flex items-center justify-between mb-4">

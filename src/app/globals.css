@@ -335,7 +335,9 @@
   /* Make card descriptions larger and more prominent */
   .description-text, 
   div[class*="CardDescription"] {
-    @apply text-base leading-relaxed text-text-secondary font-normal;
+    /* Inherit size from body (18px), adjust line-height/color if needed */
+    /* Removed text-base, it will now inherit from body */
+    @apply leading-relaxed text-text-secondary font-normal; 
   }
   
   /* Subtle links styling */

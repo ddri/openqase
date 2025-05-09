@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { Github, Twitter, Linkedin, MessageCircle, ChevronDown } from 'lucide-react'
 import { useState } from 'react'
 import { cn } from '@/lib/utils'
+import { useTheme } from 'next-themes'
 
 interface FooterSectionProps {
   title: string
@@ -41,6 +42,8 @@ function FooterSection({ title, children }: FooterSectionProps) {
 }
 
 export default function Footer() {
+  const { theme } = useTheme()
+
   return (
     <footer className="border-t border-border bg-background">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
@@ -49,22 +52,22 @@ export default function Footer() {
           <FooterSection title="About Us">
             <ul className="space-y-2">
               <li>
-                <Link href="/about" className="text-muted-foreground hover:text-accent transition-colors">
+                <Link href="/about" className="text-base text-muted-foreground hover:text-accent transition-colors">
                   About openQase
                 </Link>
               </li>
               <li>
-                <Link href="/about#mission" className="text-muted-foreground hover:text-accent transition-colors">
+                <Link href="/about#mission" className="text-base text-muted-foreground hover:text-accent transition-colors">
                   Our Mission
                 </Link>
               </li>
               <li>
-                <Link href="/about#team" className="text-muted-foreground hover:text-accent transition-colors">
+                <Link href="/about#team" className="text-base text-muted-foreground hover:text-accent transition-colors">
                   Team
                 </Link>
               </li>
               <li>
-                <Link href="/contact" className="text-muted-foreground hover:text-accent transition-colors">
+                <Link href="/contact" className="text-base text-muted-foreground hover:text-accent transition-colors">
                   Contact Us
                 </Link>
               </li>
@@ -75,17 +78,17 @@ export default function Footer() {
           <FooterSection title="Resources">
             <ul className="space-y-2">
               <li>
-                <Link href="/blog" className="text-muted-foreground hover:text-accent transition-colors">
+                <Link href="/blog" className="text-base text-muted-foreground hover:text-accent transition-colors">
                   Blog
                 </Link>
               </li>
               <li>
-                <Link href="/case-study" className="text-muted-foreground hover:text-accent transition-colors">
+                <Link href="/case-study" className="text-base text-muted-foreground hover:text-accent transition-colors">
                   Case Studies
                 </Link>
               </li>
               <li>
-                <Link href="/paths" className="text-muted-foreground hover:text-accent transition-colors">
+                <Link href="/paths" className="text-base text-muted-foreground hover:text-accent transition-colors">
                   Learning Paths
                 </Link>
               </li>
@@ -100,7 +103,7 @@ export default function Footer() {
                   href="https://github.com/ddri/openqase"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-muted-foreground hover:text-accent transition-colors inline-flex items-center gap-2"
+                  className="text-base text-muted-foreground hover:text-accent transition-colors inline-flex items-center gap-2"
                 >
                   <Github className="h-4 w-4" />
                   <span>GitHub</span>
@@ -111,10 +114,10 @@ export default function Footer() {
                   href="https://twitter.com/openqase"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-muted-foreground hover:text-accent transition-colors inline-flex items-center gap-2"
+                  className="text-base text-muted-foreground hover:text-accent transition-colors inline-flex items-center gap-2"
                 >
                   <Twitter className="h-4 w-4" />
-                  <span>Twitter</span>
+                  <span>Threads</span>
                 </Link>
               </li>
               <li>
@@ -122,7 +125,7 @@ export default function Footer() {
                   href="https://linkedin.com/company/openqase"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-muted-foreground hover:text-accent transition-colors inline-flex items-center gap-2"
+                  className="text-base text-muted-foreground hover:text-accent transition-colors inline-flex items-center gap-2"
                 >
                   <Linkedin className="h-4 w-4" />
                   <span>LinkedIn</span>
@@ -133,7 +136,7 @@ export default function Footer() {
                   href="https://discord.gg/openqase"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-muted-foreground hover:text-accent transition-colors inline-flex items-center gap-2"
+                  className="text-base text-muted-foreground hover:text-accent transition-colors inline-flex items-center gap-2"
                 >
                   <MessageCircle className="h-4 w-4" />
                   <span>Discord</span>
@@ -146,17 +149,17 @@ export default function Footer() {
           <FooterSection title="Legal">
             <ul className="space-y-2">
               <li>
-                <Link href="/privacy" className="text-muted-foreground hover:text-accent transition-colors">
+                <Link href="/privacy" className="text-base text-muted-foreground hover:text-accent transition-colors">
                   Privacy Policy
                 </Link>
               </li>
               <li>
-                <Link href="/terms" className="text-muted-foreground hover:text-accent transition-colors">
+                <Link href="/terms" className="text-base text-muted-foreground hover:text-accent transition-colors">
                   Terms of Use
                 </Link>
               </li>
               <li>
-                <Link href="/cookies" className="text-muted-foreground hover:text-accent transition-colors">
+                <Link href="/cookies" className="text-base text-muted-foreground hover:text-accent transition-colors">
                   Cookie Policy
                 </Link>
               </li>
@@ -166,6 +169,13 @@ export default function Footer() {
 
         {/* Bottom Section */}
         <div className="mt-8 md:mt-12 pt-4 md:pt-8 border-t border-border">
+          <div className="flex justify-center mb-6">
+            <img
+              src={'/openqase-wordmark-sm2.svg'}
+              alt="openQase Wordmark"
+              className="h-10 w-auto"
+            />
+          </div>
           <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-center md:text-left">
             <p className="text-muted-foreground text-sm">
               © {new Date().getFullYear()} openQase. All rights reserved.

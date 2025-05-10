@@ -128,6 +128,57 @@
     --ring: 22 100% 50%;  /* orange-500 */
   }
 
+  /* Paper theme (Deduxer-inspired Monochromatic) */
+  [data-theme='paper'] {
+    --background: 0 0% 96%;  /* Very light neutral gray */
+    --foreground: 0 0% 8%;     /* Very dark gray / almost black text */
+    
+    --card: 0 0% 98%;  /* Almost white card background */
+    --card-foreground: 0 0% 8%;
+    --card-background: 0 0% 98% / 0.9;
+    --card-border: 0 0% 90%;  /* Subtle light gray border */
+    --card-hover-border: 0 0% 8%; /* Black border on hover */
+    --card-hover-background: 0 0% 98% / 0.05; /* Subtle effect, nearly transparent */
+    
+    --text-primary: 0 0% 8%; /* Very dark gray / almost black */
+    --text-secondary: 0 0% 35%; /* Medium-dark gray */
+    --text-tertiary: 0 0% 50%; /* Medium gray */
+    
+    --surface-primary: 0 0% 98%; /* Almost white */
+    --surface-secondary: 0 0% 94%;   /* Slightly darker than background for subtle separation */
+    --surface-tertiary: 0 0% 90%;    /* Light gray for sidebars, etc. */
+    
+    --popover: 0 0% 100%; /* Pure white popover */
+    --popover-foreground: 0 0% 8%;
+    
+    --primary: 0 0% 8%; /* Black for primary actions */
+    --primary-foreground: 0 0% 100%; /* White text on black */
+    
+    --secondary: 0 0% 90%; /* Light gray for secondary buttons */
+    --secondary-foreground: 0 0% 20%; /* Dark gray text on light gray buttons */
+    
+    --muted: 0 0% 92%; /* Light gray for muted backgrounds */
+    --muted-foreground: 0 0% 50%; /* Medium gray for muted text */
+    
+    --accent: 0 0% 8%; /* Black for accent (same as primary) */
+    --accent-foreground: 0 0% 100%; /* White text for accent backgrounds */
+    
+    --destructive: 0 84.2% 60.2%; /* Keeping current destructive red for consistency */
+    --destructive-foreground: 0 0% 100%; /* White text on destructive red */
+    
+    --border: 0 0% 90%; /* Light gray for general borders */
+    --input: 0 0% 90%;  /* Light gray for inputs */
+    --ring: 0 0% 8%; /* Black focus ring */
+    --radius: 0.5rem;
+
+    /* Font variables inherit from :root or can be redefined if paper theme needs different fonts */
+    --font-sans: var(--font-open-sans), system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --font-heading: var(--font-montserrat), system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
+    --header-height: 4rem;
+    --banner-height: 2.5rem;
+  }
+
   /* Make sure main content has appropriate z-index to not overlap with nav */
   main {
     position: relative;

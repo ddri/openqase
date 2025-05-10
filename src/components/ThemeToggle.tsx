@@ -21,6 +21,7 @@ export default function ThemeToggle() {
   const cycleTheme = () => {
     if (theme === 'light') setTheme('dark');
     else if (theme === 'dark') setTheme('graphite');
+    else if (theme === 'graphite') setTheme('paper');
     else setTheme('light');
   };
 
@@ -31,9 +32,9 @@ export default function ThemeToggle() {
       onClick={cycleTheme}
       className="touch-target"
     >
-      {theme === 'light' && <Sun className="h-5 w-5" />}
+      {(theme === 'light' || theme === 'paper') && <Sun className="h-5 w-5" />}
       {theme === 'dark' && <Moon className="h-5 w-5" />}
-      {(theme === 'graphite' || !theme) && <Monitor className="h-5 w-5" />}
+      {(theme === 'graphite' || (!theme && mounted)) && <Monitor className="h-5 w-5" />}
       <span className="sr-only">Toggle theme</span>
     </Button>
   );

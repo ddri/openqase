@@ -61,7 +61,7 @@ export default function ContactPage() {
       <div className="container-outer section-spacing">
         {/* Hero Section */}
         <div className="max-w-3xl mx-auto text-center mb-12 md:mb-16">
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 md:mb-6 tracking-tight">
+          <h1 className="mb-4 md:mb-6 tracking-tight">
             Contact Us
           </h1>
           <p className="text-lg sm:text-xl text-muted-foreground">
@@ -74,8 +74,8 @@ export default function ContactPage() {
           {/* Contact Form */}
           <Card>
             <CardHeader className="space-y-2">
-              <CardTitle className="text-2xl">Send us a Message</CardTitle>
-              <CardDescription className="text-base">
+              <CardTitle className="text-xl">Send us a Message</CardTitle>
+              <CardDescription>
                 Fill out the form below and we'll get back to you as soon as possible.
               </CardDescription>
             </CardHeader>
@@ -146,8 +146,8 @@ export default function ContactPage() {
             {/* Community Links */}
             <Card>
               <CardHeader className="space-y-2">
-                <CardTitle className="text-2xl">Join Our Community</CardTitle>
-                <CardDescription className="text-base">
+                <CardTitle className="text-xl">Join Our Community</CardTitle>
+                <CardDescription>
                   Connect with us on social media and join our community platforms.
                 </CardDescription>
               </CardHeader>
@@ -196,29 +196,29 @@ export default function ContactPage() {
             {/* FAQ Section */}
             <Card>
               <CardHeader className="space-y-2">
-                <CardTitle className="text-2xl">Frequently Asked Questions</CardTitle>
-                <CardDescription className="text-base">
+                <CardTitle className="text-xl">Frequently Asked Questions</CardTitle>
+                <CardDescription>
                   Quick answers to common questions.
                 </CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="space-y-6">
                   <div>
-                    <h3 className="text-lg font-medium mb-2">How can I contribute?</h3>
+                    <h3 className="mb-2">How can I contribute?</h3>
                     <p className="text-muted-foreground">
                       We welcome contributions from the community! You can contribute by submitting case studies,
                       improving documentation, or helping with code. Check out our GitHub repository for more details.
                     </p>
                   </div>
                   <div>
-                    <h3 className="text-lg font-medium mb-2">I found a bug. Where should I report it?</h3>
+                    <h3 className="mb-2">I found a bug. Where should I report it?</h3>
                     <p className="text-muted-foreground">
                       Please report any bugs or issues on our GitHub repository's issue tracker. Make sure to
                       include as much detail as possible to help us understand and fix the problem.
                     </p>
                   </div>
                   <div>
-                    <h3 className="text-lg font-medium mb-2">Can I suggest new features?</h3>
+                    <h3 className="mb-2">Can I suggest new features?</h3>
                     <p className="text-muted-foreground">
                       Absolutely! We love hearing new ideas from the community. You can suggest features
                       through our GitHub repository or by reaching out to us directly through this form.

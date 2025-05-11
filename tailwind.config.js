@@ -1,13 +1,17 @@
 // tailwind.config.js
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-	darkMode: ['class', '[data-theme="dark"]'],
+	darkMode: ['[data-theme="dark"]'],
 	content: [
 	  './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
 	  './src/components/**/*.{js,ts,jsx,tsx,mdx}',
 	  './src/app/**/*.{js,ts,jsx,tsx,mdx}',
 	],
 	theme: {
+	  container: {
+		center: true,
+		padding: '1rem', // Default padding, adjust as needed
+	  },
 	  extend: {
 		fontFamily: {
 		  sans: ['var(--font-sans)'],
@@ -87,4 +91,4 @@ module.exports = {
 	  },
 	},
 	plugins: [require('tailwindcss-animate')],
-  }
+}

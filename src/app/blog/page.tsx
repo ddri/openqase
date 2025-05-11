@@ -1,23 +1,46 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import Link from "next/link"
-import { getAllContent } from "@/lib/mdx"
-import { BlogPost } from "@/lib/types"
+import { createServerSupabaseClient } from '../../lib/supabase-server'
+import type { Database } from '@/types/supabase'
+import { notFound } from 'next/navigation'
+import { format } from 'date-fns';
 
-// Fetch blog posts from MDX files
+interface BlogPost {
+  id: string;
+  title: string;
+  slug: string;
+  description?: string;
+  content?: string;
+  author?: string;
+  category?: string;
+  tags?: string[];
+  published: boolean;
+  published_at?: string;
+  created_at: string;
+  updated_at: string;
+}
+
 async function getBlogPosts() {
-  try {
-    const posts = await getAllContent<BlogPost>('blog');
-    return posts.filter(post => post.frontmatter.published);
-  } catch (error) {
+  const supabase = await createServerSupabaseClient();
+  
+  const { data, error } = await supabase
+    .from('blog_posts')
+    .select('*')
+    .eq('published', true)
+    .order('published_at', { ascending: false });
+    
+  if (error) {
     console.error('Error fetching blog posts:', error);
     return [];
   }
+  
+  return data as BlogPost[];
 }
 
 export default async function BlogPage() {
   const posts = await getBlogPosts();
-
+  
   return (
     <div className="container mx-auto px-4 py-12">
       {/* Hero Section */}
@@ -27,46 +50,41 @@ export default async function BlogPage() {
           Insights, tutorials, and updates from the quantum computing community.
         </p>
       </div>
-
-      {/* Search and Filter */}
-      <div className="max-w-5xl mx-auto mb-12">
-        <div className="flex gap-4 items-center">
-          <Input 
-            placeholder="Search articles..." 
-            className="max-w-sm"
-          />
-          <select className="border rounded-md px-3 py-2 bg-background">
-            <option value="">All Categories</option>
-            <option value="tutorial">Tutorials</option>
-            <option value="news">News</option>
-            <option value="case-study">Case Studies</option>
-            <option value="community">Community</option>
-          </select>
+      
+      {/* Blog Posts */}
+      {posts.length === 0 ? (
+        <div className="max-w-3xl mx-auto text-center mb-16 p-8 border rounded-lg">
+          <h2 className="text-2xl font-bold mb-4">Coming Soon</h2>
+          <p className="text-muted-foreground">
+            Our blog is currently under development. Check back soon for articles, tutorials, and case studies.
+          </p>
         </div>
-      </div>
-
-      {/* Blog Posts Grid */}
-      <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {posts.map((post) => (
-          <Link key={post.slug} href={`/blog/${post.slug}`}>
-            <Card className="h-full hover:bg-accent/5 transition-colors">
-              <CardHeader>
-                <div className="text-sm text-muted-foreground mb-2">
-                  {post.frontmatter.category} • {post.frontmatter.date}
-                </div>
-                <CardTitle className="text-xl mb-2">{post.frontmatter.title}</CardTitle>
-                <CardDescription>{post.frontmatter.description}</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="text-sm text-accent hover:underline">
-                  Read more →
-                </div>
-              </CardContent>
-            </Card>
-          </Link>
-        ))}
-      </div>
-
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+          {posts.map((post) => (
+            <Link href={`/blog/${post.slug}`} key={post.id} className="group">
+              <Card className="h-full card-link-hover-effect">
+                <CardHeader>
+                  <CardTitle className="line-clamp-2">{post.title}</CardTitle>
+                  <CardDescription>
+                    {post.published_at && format(new Date(post.published_at), 'dd/MM/yyyy')}
+                    {post.category && ` • ${post.category}`}
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-muted-foreground line-clamp-3">
+                    {post.description}
+                  </p>
+                  {post.author && (
+                    <p className="text-sm mt-4">By {post.author}</p>
+                  )}
+                </CardContent>
+              </Card>
+            </Link>
+          ))}
+        </div>
+      )}
+      
       {/* Newsletter Signup */}
       <div className="max-w-3xl mx-auto mt-16 text-center">
         <Card>
@@ -78,8 +96,8 @@ export default async function BlogPage() {
           </CardHeader>
           <CardContent>
             <form className="flex gap-4 max-w-md mx-auto">
-              <Input 
-                type="email" 
+              <Input
+                type="email"
                 placeholder="Enter your email"
                 className="flex-grow"
               />
@@ -91,5 +109,5 @@ export default async function BlogPage() {
         </Card>
       </div>
     </div>
-  )
-} 
+  );
+}

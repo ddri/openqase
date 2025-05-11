@@ -2,17 +2,17 @@
 
 import { Auth } from '@supabase/auth-ui-react'
 import { ThemeSupa } from '@supabase/auth-ui-shared'
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import { useSearchParams, useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { toast } from '@/components/ui/use-toast'
 import { Loader2 } from 'lucide-react'
 import { ErrorBoundary } from '@/components/ui/ErrorBoundary'
+import { createBrowserSupabaseClient } from '@/lib/supabase-browser'
 
 export function AuthContent({ redirectTo }: { redirectTo?: string }) {
   const searchParams = useSearchParams()
   const router = useRouter()
-  const supabase = createClientComponentClient()
+  const supabase = createBrowserSupabaseClient()
   const redirectToParam = searchParams.get('redirectTo') || '/'
   const [isLoading, setIsLoading] = useState(true)
 
@@ -42,7 +42,6 @@ export function AuthContent({ redirectTo }: { redirectTo?: string }) {
           title: 'Success',
           description: 'Successfully signed in',
         })
-        router.replace(redirectToParam)
       } else if (event === 'SIGNED_OUT') {
         toast({
           title: 'Signed out',
@@ -98,4 +97,4 @@ export function AuthContent({ redirectTo }: { redirectTo?: string }) {
       </div>
     </ErrorBoundary>
   )
-} 
+}

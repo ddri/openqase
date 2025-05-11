@@ -4,10 +4,10 @@ export default function AboutPage() {
       <div className="container-outer section-spacing">
         {/* Hero Section */}
         <div className="max-w-3xl mx-auto text-center mb-12">
-          <h1 className="text-4xl font-bold mb-4">
+          <h1 className="mb-4">
             About OpenQASE
           </h1>
-          <p className="text-lg text-muted-foreground">
+          <p className="text-muted-foreground">
             OpenQASE (Open Quantum Applications and Studies Explorer) is a comprehensive knowledge platform dedicated to documenting and sharing quantum computing business case studies and applications.
           </p>
         </div>
@@ -17,7 +17,7 @@ export default function AboutPage() {
           <div className="lg:col-span-8">
             {/* Mission Section */}
             <section className="mb-12">
-              <h2 className="text-2xl font-semibold mb-4">Our Mission</h2>
+              <h2 className="mb-4">Our Mission</h2>
               <div className="space-y-4">
                 <p className="text-muted-foreground">
                   OpenQASE aims to become the definitive resource for quantum computing business applications by bridging the gap between theoretical quantum research and practical business implementation.
@@ -33,14 +33,14 @@ export default function AboutPage() {
 
             {/* Our Approach Section */}
             <section className="mb-12">
-              <h2 className="text-2xl font-semibold mb-4">Our Approach</h2>
+              <h2 className="mb-4">Our Approach</h2>
               <p className="text-muted-foreground mb-8">
                 The Learning Paths concept is central to OpenQASE's approach to making quantum computing accessible to diverse audiences. The platform offers three distinct navigation journeys:
               </p>
               <div className="grid gap-8 md:grid-cols-3">
                 <div>
                   <div className="mb-3">
-                    <h3 className="text-lg font-medium">Persona Path</h3>
+                    <h3>Persona Path</h3>
                   </div>
                   <p className="text-muted-foreground">
                     Content tailored to your professional role, ensuring business leaders receive strategic insights while technical practitioners get implementation details.
@@ -48,7 +48,7 @@ export default function AboutPage() {
                 </div>
                 <div>
                   <div className="mb-3">
-                    <h3 className="text-lg font-medium">Industry Path</h3>
+                    <h3>Industry Path</h3>
                   </div>
                   <p className="text-muted-foreground">
                     Content organized around specific business sectors, helping professionals understand quantum computing applications relevant to their industry.
@@ -56,7 +56,7 @@ export default function AboutPage() {
                 </div>
                 <div>
                   <div className="mb-3">
-                    <h3 className="text-lg font-medium">Algorithm Path</h3>
+                    <h3>Algorithm Path</h3>
                   </div>
                   <p className="text-muted-foreground">
                     Content organized around quantum algorithms and techniques, helping match business problems with appropriate quantum solutions.
@@ -67,13 +67,13 @@ export default function AboutPage() {
 
             {/* Case Studies Section */}
             <section className="mb-12">
-              <h2 className="text-2xl font-semibold mb-4">Case Studies: Our Core Content</h2>
+              <h2 className="mb-4">Case Studies: Our Core Content</h2>
               <div className="space-y-4">
                 <p className="text-muted-foreground">
                   The Case Studies section forms the core content foundation of OpenQASE, providing documented examples of real-world quantum computing implementations. Each case study details actual quantum computing deployments, including the business context, problem description, implementation approach, and outcomes.
                 </p>
                 <p className="text-muted-foreground">
-                  Our case studies include quantifiable metrics on how quantum computing solutions affected business outcomes, ROI considerations, and comparative advantages over classical approaches. They provide practical information on implementation approaches, technical requirements, integration challenges, and solution architectures.
+                  Our case studies focus on the business context, problem description, and outcomes of quantum computing implementations. They provide information on the industries served, algorithms used, and partner companies involved, making it easy to understand the practical value of quantum computing.
                 </p>
                 <p className="text-muted-foreground">
                   All case studies are structured to balance technical depth with business relevance, ensuring they serve both decision-makers and implementers while providing concrete examples of quantum computing's practical value.
@@ -83,7 +83,7 @@ export default function AboutPage() {
 
             {/* Our Vision Section */}
             <section>
-              <h2 className="text-2xl font-semibold mb-4">Our Vision</h2>
+              <h2 className="mb-4">Our Vision</h2>
               <p className="text-muted-foreground mb-6">
                 OpenQASE aims to become the definitive resource for quantum computing business applications by:
               </p>
@@ -116,7 +116,7 @@ export default function AboutPage() {
           <aside className="mt-12 lg:mt-0 lg:col-span-4">
             {/* Join Our Community Section */}
             <div className="rounded-lg border bg-card p-6 mb-8">
-              <h3 className="text-lg font-semibold mb-4">Join Our Community</h3>
+              <h3 className="mb-4">Join Our Community</h3>
               <p className="text-muted-foreground mb-6">
                 Connect with other professionals exploring quantum computing applications in business contexts.
               </p>
@@ -127,7 +127,7 @@ export default function AboutPage() {
 
             {/* Our Team Section */}
             <div className="rounded-lg border bg-card p-6 mb-8">
-              <h3 className="text-lg font-semibold mb-4">Our Team</h3>
+              <h3 className="mb-4">Our Team</h3>
               <p className="text-muted-foreground mb-4">
                 OpenQASE is developed by a multidisciplinary team with expertise in:
               </p>
@@ -161,7 +161,7 @@ export default function AboutPage() {
 
             {/* Contact Us Section */}
             <div className="rounded-lg border bg-card p-6">
-              <h3 className="text-lg font-semibold mb-4">Contact Us</h3>
+              <h3 className="mb-4">Contact Us</h3>
               <p className="text-muted-foreground mb-6">
                 Have questions or want to contribute a case study? We'd love to hear from you!
               </p>

@@ -3,50 +3,47 @@
 @tailwind utilities;
 
 @layer base {
-  /* Light theme - faded paper look */
+  /* Light theme - Cool, Modern & Vibrant */
   :root {
-    /* Warmer, more muted paper background - less white */
-    --background: 35 30% 90%;  /* Darker, more muted paper */
-    --foreground: 30 15% 15%; /* Darker text for better readability on paper */
+    --background: 220 25% 92%;  /* Cooler, neutral very light gray */
+    --foreground: 0 0% 10%;     /* Neutral dark gray text */
     
-    --card: 35 25% 92%;  /* Slightly darker card background */
-    --card-foreground: 30 15% 15%;
-    --card-background: 35 25% 92% / 0.9;
-    --card-border: 35 25% 83%;  /* Subtle border */
-    --card-hover-border: 210 90% 50%;
-    --card-hover-background: 210 90% 50% / 0.05;
+    --card: 0 0% 96%;  /* Very light neutral gray card (almost white) */
+    --card-foreground: 0 0% 10%;
+    --card-background: 0 0% 96% / 0.9;
+    --card-border: 220 15% 85%;  /* Cool light gray border */
+    --card-hover-border: 230 100% 50%; /* Electric blue */
+    --card-hover-background: 230 100% 50% / 0.05;
     
-    --text-primary: 30 15% 15%; /* Darker text for headings */
-    --text-secondary: 30 15% 20%; /* Much darker text for paragraphs */
-    --text-tertiary: 30 10% 30%; /* Much darker text for tertiary elements */
+    --text-primary: 0 0% 10%; /* Neutral dark gray */
+    --text-secondary: 0 0% 25%; /* Slightly lighter dark gray */
+    --text-tertiary: 0 0% 40%; /* Medium gray for tertiary text */
     
-    --surface-primary: 35 25% 92%;
-    --surface-secondary: 35 25% 87%;   /* Slightly darker for secondary surfaces */
-    --surface-tertiary: 35 25% 83%;    /* Darker for sidebar */
+    --surface-primary: 0 0% 96%; /* Same as card */
+    --surface-secondary: 220 20% 90%;   /* Slightly darker cool gray than background */
+    --surface-tertiary: 220 20% 86%;    /* Darker cool gray for sidebar, etc. */
     
-    --popover: 35 25% 92%;
-    --popover-foreground: 30 15% 15%;
+    --popover: 0 0% 98%; /* Very light, almost white popover */
+    --popover-foreground: 0 0% 10%;
     
-    /* Keep the blue accent */
-    --primary: 210 90% 50%;
-    --primary-foreground: 210 20% 98%;
+    --primary: 230 100% 50%; /* Electric blue */
+    --primary-foreground: 0 0% 100%; /* White text on electric blue */
     
-    --secondary: 35 25% 87%;
-    --secondary-foreground: 30 15% 15%;
+    --secondary: 0 0% 88%; /* Neutral light gray for secondary buttons/elements */
+    --secondary-foreground: 0 0% 15%; /* Dark text on light gray secondary */
     
-    --muted: 35 25% 87%;
-    --muted-foreground: 30 15% 30%; /* Darker muted text */
+    --muted: 220 20% 90%; /* Cool light gray */
+    --muted-foreground: 0 0% 40%; /* Medium gray text */
     
-    /* Blue accent */
-    --accent: 210 90% 50%;
-    --accent-foreground: 220 30% 15%;
+    --accent: 230 100% 50%; /* Electric blue */
+    --accent-foreground: 0 0% 100%; /* White text for accent backgrounds */
     
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive: 0 84.2% 60.2%; /* Keeping current destructive red */
+    --destructive-foreground: 0 0% 100%; /* White text on destructive red */
     
-    --border: 35 25% 83%;
-    --input: 35 25% 83%;
-    --ring: 210 90% 50%;
+    --border: 220 15% 85%; /* Cool light gray */
+    --input: 220 15% 85%;  /* Cool light gray */
+    --ring: 230 100% 50%; /* Electric blue */
     --radius: 0.5rem;
 
     /* Anthropic-inspired typography */
@@ -59,45 +56,45 @@
 
   /* Dark theme - improved with graphite grey instead of near-black */
   [data-theme='dark'] {
-    --background: 220 10% 17%; /* Graphite grey instead of near-black */
+    --background: 220 10% 12%; /* Darker Charcoal (cool tone) */
     --foreground: 210 40% 98%;
     
-    --card: 220 10% 22%; /* Slightly lighter graphite grey */
+    --card: 220 10% 17%; /* Slightly lighter than new background */
     --card-foreground: 210 40% 98%;
-    --card-background: 220 10% 22% / 0.9;
-    --card-border: 220 10% 28%;
-    --card-hover-border: 27 100% 65%;
-    --card-hover-background: 27 100% 65% / 0.1;
+    --card-background: 220 10% 17% / 0.9; /* Adjusted card background */
+    --card-border: 220 10% 23%;  /* Adjusted card border */
+    --card-hover-border: 25 100% 60%; 
+    --card-hover-background: 25 100% 60% / 0.1;
     
     --text-primary: 210 40% 98%;
-    --text-secondary: 215 20% 75%; /* Increased contrast for better readability */
-    --text-tertiary: 215 16% 65%; /* Increased contrast for better readability */
+    --text-secondary: 215 20% 75%; 
+    --text-tertiary: 215 16% 65%; 
     
-    --surface-primary: 220 10% 22%;
-    --surface-secondary: 220 10% 28%;
-    --surface-tertiary: 220 10% 34%;
+    --surface-primary: 220 10% 17%; /* Adjusted surface */
+    --surface-secondary: 220 10% 23%; /* Adjusted surface */
+    --surface-tertiary: 220 10% 29%; /* Adjusted surface */
     
-    --popover: 220 10% 22%;
+    --popover: 220 10% 17%; /* Adjusted popover */
     --popover-foreground: 210 40% 98%;
     
-    --primary: 27 100% 65%;
-    --primary-foreground: 220 10% 17%;
+    --primary: 25 100% 60%;
+    --primary-foreground: 220 10% 12%; /* To contrast with new darker orange */
     
-    --secondary: 220 10% 28%;
+    --secondary: 220 10% 23%; /* Adjusted secondary */
     --secondary-foreground: 210 40% 98%;
     
-    --muted: 220 10% 28%;
-    --muted-foreground: 215 20% 75%; /* Increased contrast */
+    --muted: 220 10% 23%; /* Adjusted muted */
+    --muted-foreground: 215 20% 75%; 
     
-    --accent: 27 100% 65%;
-    --accent-foreground: 210 40% 98%;
+    --accent: 25 100% 60%;
+    --accent-foreground: 210 40% 98%; 
     
-    --destructive: 0 62.8% 45%; /* Brighter for better visibility */
+    --destructive: 0 62.8% 45%; 
     --destructive-foreground: 210 40% 98%;
     
-    --border: 220 10% 34%;
-    --input: 220 10% 34%;
-    --ring: 27 100% 65%;
+    --border: 220 10% 29%; /* Adjusted border */
+    --input: 220 10% 29%; /* Adjusted input */
+    --ring: 25 100% 60%; 
     --radius: 0.5rem;
   }
   
@@ -129,6 +126,57 @@
     --border: 240 5% 30%;  /* zinc-700 */
     --input: 240 5% 30%;
     --ring: 22 100% 50%;  /* orange-500 */
+  }
+
+  /* Paper theme (Deduxer-inspired Monochromatic) */
+  [data-theme='paper'] {
+    --background: 0 0% 96%;  /* Very light neutral gray */
+    --foreground: 0 0% 8%;     /* Very dark gray / almost black text */
+    
+    --card: 0 0% 98%;  /* Almost white card background */
+    --card-foreground: 0 0% 8%;
+    --card-background: 0 0% 98% / 0.9;
+    --card-border: 0 0% 90%;  /* Subtle light gray border */
+    --card-hover-border: 0 0% 8%; /* Black border on hover */
+    --card-hover-background: 0 0% 98% / 0.05; /* Subtle effect, nearly transparent */
+    
+    --text-primary: 0 0% 8%; /* Very dark gray / almost black */
+    --text-secondary: 0 0% 35%; /* Medium-dark gray */
+    --text-tertiary: 0 0% 50%; /* Medium gray */
+    
+    --surface-primary: 0 0% 98%; /* Almost white */
+    --surface-secondary: 0 0% 94%;   /* Slightly darker than background for subtle separation */
+    --surface-tertiary: 0 0% 90%;    /* Light gray for sidebars, etc. */
+    
+    --popover: 0 0% 100%; /* Pure white popover */
+    --popover-foreground: 0 0% 8%;
+    
+    --primary: 0 0% 8%; /* Black for primary actions */
+    --primary-foreground: 0 0% 100%; /* White text on black */
+    
+    --secondary: 0 0% 90%; /* Light gray for secondary buttons */
+    --secondary-foreground: 0 0% 20%; /* Dark gray text on light gray buttons */
+    
+    --muted: 0 0% 92%; /* Light gray for muted backgrounds */
+    --muted-foreground: 0 0% 50%; /* Medium gray for muted text */
+    
+    --accent: 0 0% 8%; /* Black for accent (same as primary) */
+    --accent-foreground: 0 0% 100%; /* White text for accent backgrounds */
+    
+    --destructive: 0 84.2% 60.2%; /* Keeping current destructive red for consistency */
+    --destructive-foreground: 0 0% 100%; /* White text on destructive red */
+    
+    --border: 0 0% 90%; /* Light gray for general borders */
+    --input: 0 0% 90%;  /* Light gray for inputs */
+    --ring: 0 0% 8%; /* Black focus ring */
+    --radius: 0.5rem;
+
+    /* Font variables inherit from :root or can be redefined if paper theme needs different fonts */
+    --font-sans: var(--font-open-sans), system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --font-heading: var(--font-montserrat), system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
+    --header-height: 4rem;
+    --banner-height: 2.5rem;
   }
 
   /* Make sure main content has appropriate z-index to not overlap with nav */
@@ -335,7 +383,9 @@
   /* Make card descriptions larger and more prominent */
   .description-text, 
   div[class*="CardDescription"] {
-    @apply text-base leading-relaxed text-text-secondary font-normal;
+    /* Inherit size from body (18px), adjust line-height/color if needed */
+    /* Removed text-base, it will now inherit from body */
+    @apply leading-relaxed text-text-secondary font-normal; 
   }
   
   /* Subtle links styling */
@@ -390,6 +440,13 @@
   /* Case study sidebar - darker, more subtle background */
   .case-study-sidebar {
     @apply bg-surface-tertiary border-l border-border p-6 h-full;
+  }
+
+  .card-link-hover-effect {
+    @apply transition-all duration-200;
+  }
+  .group:hover .card-link-hover-effect {
+    @apply -translate-y-1 shadow-lg border-[hsl(var(--card-hover-border))] bg-accent/5;
   }
 }
 

@@ -20,6 +20,7 @@ export async function saveBlogPost(values: any): Promise<any> {
         tags: values.tags,
         published: values.published,
         featured: values.featured,
+        published_at: values.published_at,
       })
       .select()
       .single();
@@ -43,7 +44,7 @@ export async function saveBlogPost(values: any): Promise<any> {
     for (const relatedPostId of values.related_posts) {
         let insertError = await supabase
             .from('blog_post_relations' as any)
-            .insert({ blog_post_id: data?.id, related_post_id: relatedPostId });
+            .insert({ blog_post_id: data?.id, related_blog_post_id: relatedPostId, relation_type: 'related' });
 
         if (insertError && insertError.error) {
             console.error("Error inserting related post relationship:", insertError.error);

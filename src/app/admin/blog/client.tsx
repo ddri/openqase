@@ -68,19 +68,15 @@ export function BlogPostsList({ initialBlogPosts }: BlogPostsListProps) {
   
   // Sort blog posts
   const sortedBlogPosts = [...filteredBlogPosts].sort((a, b) => {
-    if (sortField === 'title' || sortField === 'category') {
-      const aValue = a[sortField]?.toLowerCase() || '';
-      const bValue = b[sortField]?.toLowerCase() || '';
-      return sortDirection === 'asc' 
-        ? aValue.localeCompare(bValue)
-        : bValue.localeCompare(aValue);
-    } else {
-      const aValue = a[sortField] || '';
-      const bValue = b[sortField] || '';
-      return sortDirection === 'asc' 
-        ? (aValue > bValue ? 1 : -1)
-        : (aValue < bValue ? 1 : -1);
+    // Sort by published_at (desc), then created_at (desc)
+    const aDate = a.published_at || a.created_at;
+    const bDate = b.published_at || b.created_at;
+    if (aDate && bDate) {
+      return sortDirection === 'asc'
+        ? (aDate > bDate ? 1 : -1)
+        : (aDate < bDate ? 1 : -1);
     }
+    return 0;
   });
   
   // Handle sort toggle
@@ -249,7 +245,7 @@ export function BlogPostsList({ initialBlogPosts }: BlogPostsListProps) {
                 </div>
               </TableHead>
               <TableHead>
-                <div 
+                <div
                   className="flex items-center cursor-pointer"
                   onClick={() => handleSort('category')}
                 >
@@ -260,11 +256,11 @@ export function BlogPostsList({ initialBlogPosts }: BlogPostsListProps) {
               <TableHead>Author</TableHead>
               <TableHead>Tags</TableHead>
               <TableHead>
-                <div 
+                <div
                   className="flex items-center cursor-pointer"
-                  onClick={() => handleSort('updated_at')}
+                  onClick={() => handleSort('date')}
                 >
-                  Last Updated
+                  Date
                   <ArrowUpDown className="ml-2 h-4 w-4" />
                 </div>
               </TableHead>
@@ -280,104 +276,122 @@ export function BlogPostsList({ initialBlogPosts }: BlogPostsListProps) {
                 </TableCell>
               </TableRow>
             ) : (
-              sortedBlogPosts.map((post) => (
-                <TableRow key={post.id}>
-                  <TableCell className="font-medium">
-                    <div className="flex items-center">
-                      {post.featured && (
-                        <Star className="mr-2 h-4 w-4 text-yellow-500" />
-                      )}
-                      <Link 
-                        href={`/admin/blog/${post.id}`}
-                        className="hover:underline"
-                      >
-                        {post.title}
-                      </Link>
-                    </div>
-                  </TableCell>
-                  <TableCell>{post.category || '-'}</TableCell>
-                  <TableCell>{post.author || '-'}</TableCell>
-                  <TableCell>
-                    <div className="flex flex-wrap gap-1">
-                      {post.tags && post.tags.length > 0 ? (
-                        post.tags.slice(0, 3).map((tag: string, index: number) => (
-                          <Badge key={index} variant="outline">
-                            {tag}
-                          </Badge>
-                        ))
-                      ) : (
-                        '-'
-                      )}
-                      {post.tags && post.tags.length > 3 && (
-                        <Badge variant="outline">+{post.tags.length - 3}</Badge>
-                      )}
-                    </div>
-                  </TableCell>
-                  <TableCell>
-                    {/* Use client-side only rendering for dates to avoid hydration errors */}
-                    {typeof window !== 'undefined'
-                      ? new Date(post.updated_at).toLocaleDateString()
-                      : post.updated_at?.split('T')[0] || ''}
-                  </TableCell>
-                  <TableCell>
-                    <Badge variant={post.published ? "default" : "outline"}>
-                      {post.published ? 'Published' : 'Draft'}
-                    </Badge>
-                  </TableCell>
-                  <TableCell className="text-right">
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" size="sm">
-                          <MoreHorizontal className="h-4 w-4" />
-                          <span className="sr-only">Open menu</span>
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end">
-                        <DropdownMenuItem onClick={() => router.push(`/admin/blog/${post.id}`)}>
-                          <Pencil className="mr-2 h-4 w-4" />
-                          Edit
-                        </DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => handlePublishToggle(post)}>
-                          {post.published ? (
-                            <>
-                              <EyeOff className="mr-2 h-4 w-4" />
-                              Unpublish
-                            </>
-                          ) : (
-                            <>
-                              <Eye className="mr-2 h-4 w-4" />
-                              Publish
-                            </>
-                          )}
-                        </DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => handleFeaturedToggle(post)}>
-                          {post.featured ? (
-                            <>
-                              <StarOff className="mr-2 h-4 w-4" />
-                              Unfeature
-                            </>
-                          ) : (
-                            <>
-                              <Star className="mr-2 h-4 w-4" />
-                              Feature
-                            </>
-                          )}
-                        </DropdownMenuItem>
-                        <DropdownMenuItem 
-                          onClick={() => {
-                            setBlogPostToDelete(post);
-                            setIsDeleteDialogOpen(true);
-                          }}
-                          className="text-red-600"
+              sortedBlogPosts.map((post) => {
+                // Determine status
+                const now = new Date();
+                let status = 'Draft';
+                if (post.published) {
+                  if (post.published_at && new Date(post.published_at) > now) {
+                    status = 'Scheduled';
+                  } else {
+                    status = 'Published';
+                  }
+                }
+                // Determine date to show
+                const dateToShow = post.published_at || post.created_at;
+                const dateLabel = status === 'Draft' ? 'Created' : 'Published';
+                return (
+                  <TableRow key={post.id}>
+                    <TableCell className="font-medium">
+                      <div className="flex items-center">
+                        {post.featured && (
+                          <Star className="mr-2 h-4 w-4 text-yellow-500" />
+                        )}
+                        <Link 
+                          href={`/admin/blog/${post.id}`}
+                          className="hover:underline"
                         >
-                          <Trash2 className="mr-2 h-4 w-4" />
-                          Delete
-                        </DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                  </TableCell>
-                </TableRow>
-              ))
+                          {post.title}
+                        </Link>
+                      </div>
+                    </TableCell>
+                    <TableCell>{post.category || '-'}</TableCell>
+                    <TableCell>{post.author || '-'}</TableCell>
+                    <TableCell>
+                      <div className="flex flex-wrap gap-1">
+                        {post.tags && post.tags.length > 0 ? (
+                          post.tags.slice(0, 3).map((tag: string, index: number) => (
+                            <Badge key={index} variant="outline">
+                              {tag}
+                            </Badge>
+                          ))
+                        ) : (
+                          '-'
+                        )}
+                        {post.tags && post.tags.length > 3 && (
+                          <Badge variant="outline">+{post.tags.length - 3}</Badge>
+                        )}
+                      </div>
+                    </TableCell>
+                    <TableCell>
+                      {dateToShow ? new Date(dateToShow).toLocaleDateString() : '-'}
+                    </TableCell>
+                    <TableCell>
+                      {status === 'Published' && (
+                        <span className="inline-block px-2 py-1 rounded bg-orange-600 text-white text-xs font-semibold">Published</span>
+                      )}
+                      {status === 'Draft' && (
+                        <span className="inline-block px-2 py-1 rounded bg-muted text-foreground text-xs font-semibold border">Draft</span>
+                      )}
+                      {status === 'Scheduled' && (
+                        <span className="inline-block px-2 py-1 rounded bg-blue-600 text-white text-xs font-semibold">Scheduled</span>
+                      )}
+                    </TableCell>
+                    <TableCell className="text-right">
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button variant="ghost" size="sm">
+                            <MoreHorizontal className="h-4 w-4" />
+                            <span className="sr-only">Open menu</span>
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                          <DropdownMenuItem onClick={() => router.push(`/admin/blog/${post.id}`)}>
+                            <Pencil className="mr-2 h-4 w-4" />
+                            Edit
+                          </DropdownMenuItem>
+                          <DropdownMenuItem onClick={() => handlePublishToggle(post)}>
+                            {post.published ? (
+                              <>
+                                <EyeOff className="mr-2 h-4 w-4" />
+                                Unpublish
+                              </>
+                            ) : (
+                              <>
+                                <Eye className="mr-2 h-4 w-4" />
+                                Publish
+                              </>
+                            )}
+                          </DropdownMenuItem>
+                          <DropdownMenuItem onClick={() => handleFeaturedToggle(post)}>
+                            {post.featured ? (
+                              <>
+                                <StarOff className="mr-2 h-4 w-4" />
+                                Unfeature
+                              </>
+                            ) : (
+                              <>
+                                <Star className="mr-2 h-4 w-4" />
+                                Feature
+                              </>
+                            )}
+                          </DropdownMenuItem>
+                          <DropdownMenuItem 
+                            onClick={() => {
+                              setBlogPostToDelete(post);
+                              setIsDeleteDialogOpen(true);
+                            }}
+                            className="text-red-600"
+                          >
+                            <Trash2 className="mr-2 h-4 w-4" />
+                            Delete
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    </TableCell>
+                  </TableRow>
+                );
+              })
             )}
           </TableBody>
         </Table>

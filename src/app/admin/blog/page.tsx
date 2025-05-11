@@ -9,7 +9,8 @@ export default async function BlogPostsPage() {
   const { data: blogPosts } = await supabase
     .from('blog_posts')
     .select('*')
-    .order('updated_at', { ascending: false });
+    .order('published_at', { ascending: false, nullsFirst: false })
+    .order('created_at', { ascending: false });
   
   return (
     <div className="container mx-auto py-8">

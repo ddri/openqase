@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
+import { createBrowserSupabaseClient } from '@/lib/supabase-browser';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
@@ -16,7 +16,7 @@ interface AuthGateProps {
 
 export default function AuthGate({ children, title, description }: AuthGateProps) {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
-  const supabase = createClientComponentClient();
+  const supabase = createBrowserSupabaseClient();
   const pathname = usePathname();
 
   useEffect(() => {
@@ -75,4 +75,4 @@ export default function AuthGate({ children, title, description }: AuthGateProps
       </Card>
     </div>
   );
-} 
+}

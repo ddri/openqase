@@ -1,8 +1,5 @@
 // src/app/paths/page.tsx
 
-import { promises as fs } from 'fs';
-import path from 'path';
-import matter from 'gray-matter';
 import { Card, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import Link from 'next/link';
@@ -10,6 +7,12 @@ import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { Users, Building2, Atom } from 'lucide-react';
 import AuthGate from '@/components/auth/AuthGate';
+import { createClient } from '@supabase/supabase-js';
+
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+);
 
 async function getContentCounts() {
   const counts = {
@@ -19,21 +22,17 @@ async function getContentCounts() {
   };
 
   try {
-    const personaDir = path.join(process.cwd(), 'content', 'persona');
-    const industryDir = path.join(process.cwd(), 'content', 'industry');
-    const algorithmDir = path.join(process.cwd(), 'content', 'algorithm');
-
-    const [personaFiles, industryFiles, algorithmFiles] = await Promise.all([
-      fs.readdir(personaDir),
-      fs.readdir(industryDir),
-      fs.readdir(algorithmDir),
+    const [personaCount, industryCount, algorithmCount] = await Promise.all([
+      supabase.from('personas').select('id', { count: 'exact', head: true }).eq('published', true),
+      supabase.from('industries').select('id', { count: 'exact', head: true }).eq('published', true),
+      supabase.from('algorithms').select('id', { count: 'exact', head: true }).eq('published', true)
     ]);
 
-    counts.persona = personaFiles.filter(f => f.endsWith('.mdx')).length;
-    counts.industry = industryFiles.filter(f => f.endsWith('.mdx')).length;
-    counts.algorithm = algorithmFiles.filter(f => f.endsWith('.mdx')).length;
+    counts.persona = personaCount.count || 0;
+    counts.industry = industryCount.count || 0;
+    counts.algorithm = algorithmCount.count || 0;
   } catch (error) {
-    console.error('Error counting content files:', error);
+    console.error('Error counting content:', error);
   }
 
   return counts;
@@ -76,9 +75,8 @@ export default async function LearningPathsPage() {
     >
       <main className="min-h-screen">
         <div className="container-outer section-spacing">
-          {/* Header Section */}
-          <div className="max-w-2xl mx-auto text-center mb-12 md:mb-16">
-            <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-4">
+          <div className="max-w-3xl mx-auto text-center mb-12 md:mb-16">
+            <h1 className="mb-6">
               Choose Your Learning Path
             </h1>
             <p className="text-base sm:text-lg text-muted-foreground">
@@ -86,13 +84,11 @@ export default async function LearningPathsPage() {
             </p>
           </div>
 
-          {/* Path Cards */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-12 md:mb-16">
             {paths.map((path) => (
               <Link key={path.title} href={path.href} className="group">
                 <Card className={cn(
-                  "h-full transition-all duration-200",
-                  "hover:shadow-sm hover:border-border-hover hover:bg-accent/5"
+                  "h-full card-link-hover-effect"
                 )}>
                   <CardHeader className="h-full flex flex-col">
                     <div className="flex items-center justify-between mb-4">
@@ -124,27 +120,6 @@ export default async function LearningPathsPage() {
                 </Card>
               </Link>
             ))}
-          </div>
-
-          {/* CTA Section */}
-          <div className="max-w-3xl mx-auto">
-            <Card className="bg-card/50">
-              <CardHeader>
-                <div className="text-center">
-                  <h2 className="text-xl sm:text-2xl font-semibold mb-4">
-                    Not Sure Where to Start?
-                  </h2>
-                  <p className="text-muted-foreground mb-6">
-                    We recommend starting with the Persona-based learning path to get content tailored to your role and experience level.
-                  </p>
-                  <Button asChild size="lg">
-                    <Link href="/paths/persona">
-                      Explore Persona Paths
-                    </Link>
-                  </Button>
-                </div>
-              </CardHeader>
-            </Card>
           </div>
         </div>
       </main>

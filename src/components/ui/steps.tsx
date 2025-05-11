@@ -13,7 +13,7 @@ const Step = ({
 }: StepProps) => {
   return (
     <div className="mb-8">
-      <div className="flex items-baseline gap-2">
+      <div className="flex items-baseline gap-3">
         <span className="text-[hsl(var(--primary))] font-medium text-lg">
           Step {number}.
         </span>
@@ -21,7 +21,7 @@ const Step = ({
           {title}
         </h3>
       </div>
-      <div className="mt-4 text-[var(--text-secondary)] leading-relaxed">
+      <div className="mt-4 text-[var(--text-secondary)] leading-7">
         {children}
       </div>
     </div>

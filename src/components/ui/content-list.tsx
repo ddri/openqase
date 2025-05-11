@@ -45,10 +45,10 @@ export default function ContentList<T extends BaseContent>({
     // Apply search filter
     if (searchQuery) {
       const query = searchQuery.toLowerCase();
-      filtered = filtered.filter(item => 
+      filtered = filtered.filter(item =>
         item.title.toLowerCase().includes(query) ||
-        item.description.toLowerCase().includes(query) ||
-        item.keywords?.some(keyword => keyword.toLowerCase().includes(query))
+        (item.description?.toLowerCase().includes(query) || false)
+        // Remove keywords search as it's not in BaseContent
       );
     }
 
@@ -58,7 +58,10 @@ export default function ContentList<T extends BaseContent>({
         case 'title':
           return a.title.localeCompare(b.title);
         case 'lastUpdated':
-          return new Date(b.lastUpdated).getTime() - new Date(a.lastUpdated).getTime();
+          // Use updated_at instead of lastUpdated
+          const dateA = a.updated_at ? new Date(a.updated_at).getTime() : 0;
+          const dateB = b.updated_at ? new Date(b.updated_at).getTime() : 0;
+          return dateB - dateA;
         default:
           return 0;
       }
@@ -125,7 +128,7 @@ export default function ContentList<T extends BaseContent>({
                     {item.title}
                   </CardTitle>
                   <CardDescription className="line-clamp-3 mb-4">
-                    {item.description}
+                    {item.description || ''}
                   </CardDescription>
                 </div>
                 

@@ -24,9 +24,9 @@ export default function ContentCard({
   const remainingCount = sortedBadges.length - 3;
 
   return (
-    <Link href={href}>
+    <Link href={href} className="group block">
       <Card className={cn(
-        "h-[320px] hover:bg-accent/15 hover:shadow-lg transition-all",
+        "h-[320px] card-link-hover-effect",
         "flex flex-col p-6"
       )}>
         <div className="flex flex-col h-full">

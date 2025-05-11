@@ -1,302 +1,342 @@
 // src/app/paths/algorithm/[slug]/page.tsx
-import { promises as fs } from 'fs';
-import path from 'path';
 import { notFound } from 'next/navigation';
-import matter from 'gray-matter';
-import { MDXRemote } from 'next-mdx-remote/rsc';
+import { createServerSupabaseClient } from '@/lib/supabase-server';
+import type { Database } from '@/types/supabase';
+import LearningPathLayout from '@/components/ui/learning-path-layout';
 import { Badge } from '@/components/ui/badge';
-import { Card } from '@/components/ui/card';
-import { Steps, Step } from '@/components/ui/steps';
+import AuthGate from '@/components/auth/AuthGate';
+import MarkdownIt from 'markdown-it';
+import { StepsRenderer } from '@/components/ui/StepsRenderer';
+import { ReferencesRenderer, processContentWithReferences } from '@/components/ui/ReferencesRenderer';
 import Link from 'next/link';
-import { cn } from '@/lib/utils';
-import { ArrowLeft } from 'lucide-react';
 
-interface ComponentProps extends React.HTMLAttributes<HTMLElement> {
-  className?: string;
+// Initialize markdown-it with GFM features enabled
+const md = new MarkdownIt({
+  html: true,
+  linkify: true,
+  typographer: true,
+  breaks: true
+});
+
+// Function to fix bullet points in markdown content
+function preprocessMarkdown(content: string): string {
+  // Fix lists: ensure there's a space after each dash at the beginning of a line
+  // and add a newline before lists if needed
+  const fixedContent = content
+    .replace(/^-([^\s])/gm, '- $1')  // Add space after dash at line start if missing
+    .replace(/([^\n])\n^-\s/gm, '$1\n\n- '); // Add blank line before list starts
+    
+  return fixedContent;
 }
 
-const components = {
-  Steps,
-  Step,
-  h1: ({ className, ...props }: ComponentProps) => (
-    <h1
-      className={cn(
-        'mt-2 scroll-m-20 text-4xl font-bold tracking-tight',
-        className
-      )}
-      {...props}
-    />
-  ),
-  h2: ({ className, ...props }: ComponentProps) => (
-    <h2
-      className={cn(
-        'mt-10 scroll-m-20 border-b pb-1 text-3xl font-semibold tracking-tight first:mt-0',
-        className
-      )}
-      {...props}
-    />
-  ),
-  h3: ({ className, ...props }: ComponentProps) => (
-    <h3
-      className={cn(
-        'mt-8 scroll-m-20 text-2xl font-semibold tracking-tight',
-        className
-      )}
-      {...props}
-    />
-  ),
-  h4: ({ className, ...props }: ComponentProps) => (
-    <h4
-      className={cn(
-        'mt-8 scroll-m-20 text-xl font-semibold tracking-tight',
-        className
-      )}
-      {...props}
-    />
-  ),
-  h5: ({ className, ...props }: ComponentProps) => (
-    <h5
-      className={cn(
-        'mt-8 scroll-m-20 text-lg font-semibold tracking-tight',
-        className
-      )}
-      {...props}
-    />
-  ),
-  h6: ({ className, ...props }: ComponentProps) => (
-    <h6
-      className={cn(
-        'mt-8 scroll-m-20 text-base font-semibold tracking-tight',
-        className
-      )}
-      {...props}
-    />
-  ),
-  p: ({ className, ...props }: ComponentProps) => (
-    <p
-      className={cn('leading-7 [&:not(:first-child)]:mt-6', className)}
-      {...props}
-    />
-  ),
-  ul: ({ className, ...props }: ComponentProps) => (
-    <ul className={cn('my-6 ml-6 list-disc', className)} {...props} />
-  ),
-  ol: ({ className, ...props }: ComponentProps) => (
-    <ol className={cn('my-6 ml-6 list-decimal', className)} {...props} />
-  ),
-  li: ({ className, ...props }: ComponentProps) => (
-    <li className={cn('mt-2', className)} {...props} />
-  ),
-  blockquote: ({ className, ...props }: ComponentProps) => (
-    <blockquote
-      className={cn(
-        'mt-6 border-l-2 pl-6 italic [&>*]:text-muted-foreground',
-        className
-      )}
-      {...props}
-    />
-  ),
-  img: ({
-    className,
-    alt,
-    ...props
-  }: React.ImgHTMLAttributes<HTMLImageElement>) => (
-    // eslint-disable-next-line @next/next/no-img-element
-    <img
-      className={cn('rounded-md border', className)}
-      alt={alt}
-      {...props}
-    />
-  ),
-  hr: ({ ...props }) => <hr className="my-4 md:my-8" {...props} />,
-  table: ({ className, ...props }: React.HTMLAttributes<HTMLTableElement>) => (
-    <div className="my-6 w-full overflow-y-auto">
-      <table className={cn('w-full', className)} {...props} />
-    </div>
-  ),
-  tr: ({ className, ...props }: React.HTMLAttributes<HTMLTableRowElement>) => (
-    <tr
-      className={cn('m-0 border-t p-0 even:bg-muted', className)}
-      {...props}
-    />
-  ),
-  th: ({ className, ...props }: ComponentProps) => (
-    <th
-      className={cn(
-        'border px-4 py-2 text-left font-bold [&[align=center]]:text-center [&[align=right]]:text-right',
-        className
-      )}
-      {...props}
-    />
-  ),
-  td: ({ className, ...props }: ComponentProps) => (
-    <td
-      className={cn(
-        'border px-4 py-2 text-left [&[align=center]]:text-center [&[align=right]]:text-right',
-        className
-      )}
-      {...props}
-    />
-  ),
-  pre: ({ className, ...props }: ComponentProps) => (
-    <pre
-      className={cn(
-        'mb-4 mt-6 overflow-x-auto rounded-lg border bg-black py-4',
-        className
-      )}
-      {...props}
-    />
-  ),
-  code: ({ className, ...props }: ComponentProps) => (
-    <code
-      className={cn(
-        'relative rounded border px-[0.3rem] py-[0.2rem] font-mono text-sm',
-        className
-      )}
-      {...props}
-    />
-  ),
-  References: ({ className, ...props }: ComponentProps) => (
-    <div className="mt-8 space-y-4 text-sm" {...props} />
-  ),
-  Reference: ({ className, id, ...props }: ComponentProps & { id: string }) => (
-    <div id={id} className="reference-item" {...props} />
-  ),
-  a: ({ className, ...props }: ComponentProps) => (
-    <a
-      className={cn(
-        'font-medium underline underline-offset-4',
-        className
-      )}
-      {...props}
-    />
-  ),
-  div: ({ className, children, id }: { className?: string; children: React.ReactNode; id?: string }) => {
-    switch (className) {
-      case 'references-section':
-        return (
-          <div className="mt-12 pt-8 border-t border-[var(--border)] bg-[var(--muted)] rounded-lg p-6">
-            <h2 className="text-2xl font-semibold text-[var(--text-primary)] mb-6">References</h2>
-            {children}
-          </div>
-        );
-      case 'reference-item':
-        return (
-          <div id={id} className="mb-4 pl-8 -indent-8 text-[var(--text-secondary)]">
-            {children}
-          </div>
-        );
-      default:
-        return <div className={className}>{children}</div>;
-    }
-  }
+// Customize renderer to improve table formatting
+const defaultRender = md.renderer.rules.table_open || function(tokens, idx, options, env, self) {
+  return self.renderToken(tokens, idx, options);
 };
 
-export async function generateStaticParams() {
-  const contentDirectory = path.join(process.cwd(), 'content', 'algorithm');
-  const files = await fs.readdir(contentDirectory);
+md.renderer.rules.table_open = function(tokens, idx, options, env, self) {
+  // Add a div wrapper with a class around the table
+  return '<div class="table-container">' + defaultRender(tokens, idx, options, env, self);
+};
+
+md.renderer.rules.table_close = function(tokens, idx, options, env, self) {
+  // Close both the table and the wrapper div
+  return '</table></div>';
+};
+
+// Customize cell rendering for numeric detection
+const defaultCellRender = md.renderer.rules.td_open || function(tokens, idx, options, env, self) {
+  return self.renderToken(tokens, idx, options);
+};
+
+md.renderer.rules.td_open = function(tokens, idx, options, env, self) {
+  // Check if cell content might be numeric
+  const content = tokens[idx+1]?.content;
+  const isNumeric = content && !isNaN(parseFloat(content)) && content.trim() !== '';
   
-  return files
-    .filter(file => file.endsWith('.mdx'))
-    .map(file => ({
-      slug: file.replace('.mdx', ''),
-    }));
-}
-
-async function getAlgorithm(slug: string) {
-  try {
-    const filePath = path.join(process.cwd(), 'content', 'algorithm', `${slug}.mdx`);
-    const fileContent = await fs.readFile(filePath, 'utf8');
-    const { data, content } = matter(fileContent);
-    
-    return {
-      frontmatter: data,
-      content,
-    };
-  } catch (error) {
-    return null;
+  if (isNumeric) {
+    return '<td class="numeric">';
   }
+  return defaultCellRender(tokens, idx, options, env, self);
+};
+
+// Define enriched types
+type EnrichedAlgorithm = Database['public']['Tables']['algorithms']['Row'] & {
+  steps?: string;
+  academic_references?: string;
+  algorithm_industry_relations?: { industries: { id: string; name: string; slug?: string | null } | null }[];
+  persona_algorithm_relations?: { personas: { id: string; name: string; slug?: string | null } | null }[];
+};
+
+type CaseStudy = {
+  id: string;
+  title: string;
+  slug: string;
+  description: string;
+  industries: string[];
+};
+
+// Define an enriched type for CaseStudy that includes relations
+type EnrichedCaseStudyForAlgorithmPage = Database['public']['Tables']['case_studies']['Row'] & {
+  case_study_industry_relations?: { industries: { id: string; name: string; slug?: string | null } | null }[];
+};
+
+interface AlgorithmPageProps {
+  params: Promise<{
+    slug: string;
+  }>;
 }
 
-export async function generateMetadata(props: { params: Promise<{ slug: string }> }) {
-  const resolvedParams = await props.params;
-  const algorithm = await getAlgorithm(resolvedParams.slug);
+export default async function AlgorithmPage({ params }: AlgorithmPageProps) {
+  const resolvedParams = await params;
+  const supabase = await createServerSupabaseClient();
   
-  if (!algorithm) {
-    return {
-      title: 'Not Found',
-      description: 'Page not found'
-    };
-  }
+  console.log('Fetching algorithm with slug:', resolvedParams.slug);
+  const { data: algorithmData, error } = await supabase
+    .from('algorithms')
+    .select(`
+      *,
+      algorithm_industry_relations(industries(id, name, slug)),
+      persona_algorithm_relations(personas(id, name, slug))
+    `)
+    .eq('slug', resolvedParams.slug)
+    .eq('published', true)  // Only fetch published algorithms
+    .single();
 
-  return {
-    title: `${algorithm.frontmatter.title} | OpenQase Quantum Computing`,
-    description: algorithm.frontmatter.description,
-    keywords: algorithm.frontmatter.keywords,
-  };
-}
+  const algorithm = algorithmData as EnrichedAlgorithm | null; // Cast to enriched type
 
-export default async function Page(props: { params: Promise<{ slug: string }> }) {
-  const resolvedParams = await props.params;
-  const algorithm = await getAlgorithm(resolvedParams.slug);
+  console.log('Algorithm query result:', { algorithm, error });
 
-  if (!algorithm) {
+  if (error || !algorithm) {
+    console.error('Failed to fetch algorithm:', error);
     notFound();
   }
 
+  // Fetch related case studies directly using Supabase
+  console.log('Fetching case studies for algorithm:', algorithm.name);
+  
+  let caseStudies: CaseStudy[] = [];
+  let caseStudiesError = null;
+  
+  try {
+    // First get the algorithm ID
+    const { data: algorithmData, error: algorithmError } = await supabase
+      .from('algorithms')
+      .select('id, name')
+      .eq('slug', algorithm.slug)
+      .single();
+    
+    if (algorithmError || !algorithmData) {
+      console.error('Error finding algorithm:', algorithmError);
+      caseStudiesError = { error: 'Algorithm not found' };
+    } else {
+      // Get case studies related to this algorithm using the junction table
+      const { data: relations, error: relationsError } = await supabase
+        .from('algorithm_case_study_relations' as any)
+        .select('case_study_id')
+        .eq('algorithm_id', algorithmData.id);
+        
+      if (relationsError) {
+        console.error('Error finding case study relations:', relationsError);
+        caseStudiesError = { error: 'Error fetching case studies' };
+      } else if (relations && relations.length > 0) {
+        const caseStudyIds = relations.map((relation: any) => relation.case_study_id);
+        
+        // Fetch the actual case studies
+        const { data: caseStudyData, error: caseStudyError } = await supabase
+          .from('case_studies')
+          .select('*, case_study_industry_relations(industries(id, name, slug))')
+          .in('id', caseStudyIds)
+          .eq('published', true);
+          
+        if (caseStudyError) {
+          console.error('Error fetching case studies:', caseStudyError);
+          caseStudiesError = { error: 'Error fetching case studies' };
+        } else {
+          // Map the database results to the expected CaseStudy type
+          caseStudies = (caseStudyData as EnrichedCaseStudyForAlgorithmPage[] || []).map(cs => ({
+            id: cs.id,
+            title: cs.title,
+            slug: cs.slug,
+            description: cs.description || '',
+            industries: cs.case_study_industry_relations?.map(rel => rel.industries?.name).filter(Boolean) as string[] || []
+          }));
+        }
+      }
+    }
+  } catch (error) {
+    console.error('Error fetching case studies:', error);
+    caseStudiesError = { error: 'Failed to fetch case studies' };
+  }
+
+  console.log('Case studies query result:', { caseStudies, error: caseStudiesError });
+
+  // Process content with enhanced typography and references
+  let processedContent = '';
+  if (algorithm.main_content) {
+    // Preprocess the markdown content to fix list formatting
+    const preprocessedContent = preprocessMarkdown(algorithm.main_content);
+    
+    // First render markdown to HTML
+    const htmlContent = md.render(preprocessedContent);
+    // Then process references 
+    const contentWithReferences = processContentWithReferences(htmlContent);
+    // Assign directly without enhancing typography
+    processedContent = contentWithReferences;
+  }
+
   return (
-    <main className="min-h-screen">
-      <div className="container-outer section-spacing">
-        <div className="mb-8">
-          <Link
-            href="/paths/algorithm"
-            className="group inline-flex items-center gap-1 text-sm font-medium text-muted-foreground hover:text-foreground"
-          >
-            <ArrowLeft className="h-4 w-4" />
-            <span>Back to Algorithms</span>
-          </Link>
-        </div>
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold sm:text-4xl">{algorithm.frontmatter.title}</h1>
-        </div>
-        <div className="grid grid-cols-1 gap-12 lg:grid-cols-12">
-          <div className="lg:col-span-8">
-            <div className="prose prose-gray dark:prose-invert max-w-none">
-              <MDXRemote source={algorithm.content} components={components} />
-            </div>
+    <AuthGate
+      title="Access Algorithm Details"
+      description="Get exclusive access to detailed quantum algorithm explanations and implementations."
+    >
+      <LearningPathLayout 
+        title={algorithm.name}
+        backLinkText="Back to Algorithms"
+        backLinkHref="/paths/algorithm"
+      >
+        <div className="grid gap-12 md:grid-cols-[2fr,1fr]">
+          <div>
+            <article className="max-w-none text-[var(--text-secondary)]">
+              <p className="text-lg text-[var(--text-primary)] mb-8 leading-7">{algorithm.description}</p>
+              
+              <div className="flex flex-wrap gap-2 mb-8">
+                {algorithm.use_cases?.map((app: string) => (
+                  <Badge key={app} variant="outline" className="bg-[var(--surface-secondary)] border-[var(--border)] text-[var(--text-secondary)]">
+                    {app}
+                  </Badge>
+                ))}
+              </div>
+              
+              <div 
+                className="prose dark:prose-invert max-w-none prose-headings:text-[var(--text-primary)] prose-p:text-[var(--text-secondary)] prose-strong:text-[var(--text-primary)] prose-a:text-[var(--primary)] prose-a:font-medium prose-a:no-underline prose-a:hover:underline"
+                dangerouslySetInnerHTML={{ __html: processedContent }} 
+              />
+            </article>
+            
+            {algorithm.steps && (
+              <div className="my-12">
+                <hr className="my-8 border-border" /> 
+                <h2 className="mt-10 scroll-m-20 text-3xl font-semibold tracking-tight text-[var(--text-primary)]">Implementation Steps</h2> 
+                <StepsRenderer stepsMarkup={algorithm.steps} />
+              </div>
+            )}
+            
+            {algorithm.academic_references && (
+              <div className="my-12">
+                <hr className="my-8 border-border" /> 
+                <ReferencesRenderer referencesMarkup={algorithm.academic_references} />
+              </div>
+            )}
+
+            {/* Related Case Studies Section (at the bottom of main content) */}
+            {caseStudies.length > 0 && (
+              <div className="mt-12"> {/* Add margin top */}
+                <hr className="my-8 border-border" />
+                <h2 className="text-2xl font-bold mb-6">Related Case Studies</h2> {/* Consistent H2 style */}
+                <div className="grid grid-cols-1 gap-6">
+                  {caseStudies.map((cs) => (
+                    <Link key={cs.id} href={`/case-study/${cs.slug}`} className="block group">
+                      <div className="p-6 rounded-lg border border-border bg-card/50 transition-all duration-200 hover:bg-accent/5 hover:border-border-hover">
+                        <h3 className="text-lg font-semibold mb-2 group-hover:text-primary">
+                          {cs.title}
+                        </h3>
+                        <p className="text-muted-foreground mb-4 line-clamp-3"> {/* Added line-clamp */}
+                          {cs.description}
+                        </p>
+                        {/* Display Industries if available */}
+                        {cs.industries && cs.industries.length > 0 && (
+                           <div className="flex flex-wrap gap-2">
+                              {cs.industries.map((industryName) => (
+                                 <Badge key={industryName} variant="outline" className="text-sm">
+                                    {industryName}
+                                 </Badge>
+                              ))}
+                           </div>
+                        )}
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
-          <div className="lg:col-span-4">
+          
+          <div>
             <div className="sticky top-8 space-y-8">
-              <div>
-                <h3 className="mb-4 text-lg font-semibold">Prerequisites</h3>
-                <div className="space-y-2">
-                  {algorithm.frontmatter.prerequisites?.map((prerequisite: string) => (
-                    <div
-                      key={prerequisite}
-                      className="rounded-lg border p-4 hover:bg-muted/50"
-                    >
-                      <p className="text-sm">{prerequisite}</p>
-                    </div>
-                  ))}
+              {/* Related Industries Section */}
+              {algorithm.algorithm_industry_relations && (
+                <div>
+                  <h3 className="sidebar-title">Related Industries</h3>
+                  <div className="flex flex-wrap gap-2">
+                    {(() => {
+                      const relations = algorithm.algorithm_industry_relations || [];
+                      if (relations.length === 0) {
+                        return <p className="text-sm text-muted-foreground">None</p>;
+                      }
+                      const naItem = relations.find(rel => rel.industries?.slug === 'not-applicable');
+                      if (naItem && relations.length === 1) {
+                        return <p className="text-sm text-muted-foreground">Not Applicable</p>;
+                      }
+                      const actualItems = relations.filter(rel => rel.industries?.slug !== 'not-applicable');
+                      if (actualItems.length === 0) {
+                        return naItem ? <p className="text-sm text-muted-foreground">Not Applicable</p> : <p className="text-sm text-muted-foreground">None</p>;
+                      }
+                      return actualItems.map((relation) =>
+                        relation.industries ? (
+                          <Link key={relation.industries.id} href={`/paths/industry/${relation.industries?.slug}`} passHref>
+                            <Badge
+                              variant="outline"
+                              className="text-[14px] border-border hover:bg-muted-foreground/20 cursor-pointer"
+                            >
+                              {relation.industries.name}
+                            </Badge>
+                          </Link>
+                        ) : null
+                      );
+                    })()}
+                  </div>
                 </div>
-              </div>
-              <div>
-                <h3 className="mb-4 text-lg font-semibold">Applications</h3>
-                <div className="space-y-2">
-                  {algorithm.frontmatter.keyApplications?.map((application: string) => (
-                    <div
-                      key={application}
-                      className="rounded-lg border p-4 hover:bg-muted/50"
-                    >
-                      <p className="text-sm">{application}</p>
-                    </div>
-                  ))}
+              )}
+
+              {/* Related Personas Section */}
+              {algorithm.persona_algorithm_relations && (
+                <div>
+                  <h3 className="sidebar-title">Related Personas</h3>
+                  <div className="flex flex-wrap gap-2">
+                    {(() => {
+                      const relations = algorithm.persona_algorithm_relations || [];
+                      if (relations.length === 0) {
+                        return <p className="text-sm text-muted-foreground">None</p>;
+                      }
+                      const naItem = relations.find(rel => rel.personas?.slug === 'not-applicable');
+                      if (naItem && relations.length === 1) {
+                        return <p className="text-sm text-muted-foreground">Not Applicable</p>;
+                      }
+                      const actualItems = relations.filter(rel => rel.personas?.slug !== 'not-applicable');
+                      if (actualItems.length === 0) {
+                        return naItem ? <p className="text-sm text-muted-foreground">Not Applicable</p> : <p className="text-sm text-muted-foreground">None</p>;
+                      }
+                      return actualItems.map((relation) =>
+                        relation.personas ? (
+                          <Link key={relation.personas.id} href={`/paths/persona/${relation.personas?.slug}`} passHref>
+                            <Badge
+                              variant="outline"
+                              className="text-[14px] border-border hover:bg-muted-foreground/20 cursor-pointer"
+                            >
+                              {relation.personas.name}
+                            </Badge>
+                          </Link>
+                        ) : null
+                      );
+                    })()}
+                  </div>
                 </div>
-              </div>
+              )}
             </div>
           </div>
         </div>
-      </div>
-    </main>
+      </LearningPathLayout>
+    </AuthGate>
   );
 }

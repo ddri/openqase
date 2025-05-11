@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { Auth } from '@supabase/auth-ui-react'
 import { ThemeSupa } from '@supabase/auth-ui-shared'
-import { supabase } from '@/lib/supabase'
+import { supabase } from '@/lib/supabase-browser'
 
 export type AuthView = 'sign_in' | 'sign_up' | 'forgotten_password' | 'update_password'
 

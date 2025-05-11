@@ -8,7 +8,7 @@ export default function AboutPage() {
             About OpenQASE
           </h1>
           <p className="text-muted-foreground">
-            OpenQASE (Open Quantum Applications and Studies Explorer) is a comprehensive knowledge platform dedicated to documenting and sharing quantum computing business case studies and applications.
+            OpenQASE is a comprehensive knowledge platform dedicated to documenting and sharing quantum computing business case studies and applications.
           </p>
         </div>
 
@@ -20,7 +20,7 @@ export default function AboutPage() {
               <h2 className="mb-4">Our Mission</h2>
               <div className="space-y-4">
                 <p className="text-muted-foreground">
-                  OpenQASE aims to become the definitive resource for quantum computing business applications by bridging the gap between theoretical quantum research and practical business implementation.
+                  OpenQase aims to become the definitive resource for quantum computing business applications by bridging the gap between theoretical quantum research and practical business implementation.
                 </p>
                 <p className="text-muted-foreground">
                   Despite significant advances in quantum computing technology, there remains a substantial gap between theoretical quantum research and practical business applications. Many organizations and professionals struggle to understand how quantum computing can solve real-world business problems, identify relevant use cases for their specific industry, navigate the complex technical landscape of quantum algorithms, and find comprehensive, accessible resources that bridge theoretical concepts with business value.
@@ -35,7 +35,7 @@ export default function AboutPage() {
             <section className="mb-12">
               <h2 className="mb-4">Our Approach</h2>
               <p className="text-muted-foreground mb-8">
-                The Learning Paths concept is central to OpenQASE's approach to making quantum computing accessible to diverse audiences. The platform offers three distinct navigation journeys:
+                The Learning Paths concept is central to OpenQase's approach to making quantum computing accessible to diverse audiences. The platform offers three distinct navigation journeys:
               </p>
               <div className="grid gap-8 md:grid-cols-3">
                 <div>

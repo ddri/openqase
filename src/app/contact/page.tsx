@@ -163,14 +163,15 @@ export default function ContactPage() {
                     <span>Follow us on GitHub</span>
                   </Link>
                   <Link 
-                    href="https://twitter.com/openqase"
+                    href="https://threads.com/openqase"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="flex items-center gap-3 text-muted-foreground hover:text-foreground transition-colors p-2 hover:bg-accent/5 rounded-lg"
                   >
                     <Twitter className="h-5 w-5" />
-                    <span>Follow us on Twitter</span>
+                    <span>Follow us on Threads</span>
                   </Link>
+                  {/*
                   <Link 
                     href="https://linkedin.com/company/openqase"
                     target="_blank"
@@ -180,6 +181,8 @@ export default function ContactPage() {
                     <Linkedin className="h-5 w-5" />
                     <span>Connect on LinkedIn</span>
                   </Link>
+                  */}
+                  {/*
                   <Link 
                     href="https://discord.gg/openqase"
                     target="_blank"
@@ -189,6 +192,7 @@ export default function ContactPage() {
                     <MessageCircle className="h-5 w-5" />
                     <span>Join our Discord</span>
                   </Link>
+                  */}
                 </div>
               </CardContent>
             </Card>

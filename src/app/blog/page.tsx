@@ -4,6 +4,7 @@ import Link from "next/link"
 import { createServerSupabaseClient } from '../../lib/supabase-server'
 import type { Database } from '@/types/supabase'
 import { notFound } from 'next/navigation'
+import { format } from 'date-fns';
 
 interface BlogPost {
   id: string;
@@ -61,12 +62,12 @@ export default async function BlogPage() {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
           {posts.map((post) => (
-            <Link href={`/blog/${post.slug}`} key={post.id}>
-              <Card className="h-full hover:shadow-md transition-shadow">
+            <Link href={`/blog/${post.slug}`} key={post.id} className="group">
+              <Card className="h-full card-link-hover-effect">
                 <CardHeader>
                   <CardTitle className="line-clamp-2">{post.title}</CardTitle>
                   <CardDescription>
-                    {post.published_at && new Date(post.published_at).toLocaleDateString()}
+                    {post.published_at && format(new Date(post.published_at), 'dd/MM/yyyy')}
                     {post.category && ` • ${post.category}`}
                   </CardDescription>
                 </CardHeader>

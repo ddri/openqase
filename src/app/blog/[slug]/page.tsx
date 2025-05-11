@@ -5,6 +5,7 @@ import { Badge } from '@/components/ui/badge';
 import Link from "next/link";
 import { Metadata } from 'next';
 import ReactMarkdown from 'react-markdown';
+import { format } from 'date-fns';
 
 interface BlogPost {
   id: string;
@@ -65,7 +66,35 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
   if (!blogPost || error) {
     notFound();
   }
-  
+
+  // Fetch related blog posts
+  let relatedPosts: BlogPost[] = [];
+  if (blogPost.id) {
+    // Get related_blog_post_id values from blog_post_relations
+    const { data: relations } = await supabase
+      .from('blog_post_relations')
+      .select('related_blog_post_id')
+      .eq('blog_post_id', blogPost.id)
+      .eq('relation_type', 'related');
+    if (relations && relations.length > 0) {
+      const relatedIds = relations.map((rel: any) => rel.related_blog_post_id);
+      if (relatedIds.length > 0) {
+        const { data: relatedData } = await supabase
+          .from('blog_posts')
+          .select('*')
+          .in('id', relatedIds)
+          .eq('published', true);
+        if (relatedData) {
+          // Ensure description is always a string
+          relatedPosts = relatedData.map((post: any) => ({
+            ...post,
+            description: post.description ?? '',
+          }));
+        }
+      }
+    }
+  }
+
   return (
     <div className="container mx-auto px-4 py-12">
       <div className="max-w-3xl mx-auto">
@@ -82,7 +111,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
           
           <div className="flex items-center text-muted-foreground mb-4">
             {blogPost.published_at && (
-              <span className="mr-4">{new Date(blogPost.published_at).toLocaleDateString()}</span>
+              <span className="mr-4">{format(new Date(blogPost.published_at), 'dd/MM/yyyy')}</span>
             )}
             {blogPost.author && (
               <span>By {blogPost.author}</span>
@@ -108,6 +137,29 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
             <ReactMarkdown>{blogPost.content}</ReactMarkdown>
           )}
         </div>
+        {/* Related Blog Posts Section */}
+        {relatedPosts.length > 0 && (
+          <>
+            <hr className="my-8 border-border" />
+            <div className="space-y-4">
+              <h2 className="text-2xl font-bold">Related Blog Posts</h2>
+              <div className="grid grid-cols-1 gap-6">
+                {relatedPosts.map((post) => (
+                  <Link key={post.id} href={`/blog/${post.slug}`} className="block group">
+                    <div className="p-6 rounded-lg border border-border bg-card/50 transition-all duration-200 hover:bg-accent/5 hover:border-border-hover">
+                      <h3 className="text-lg font-semibold mb-2 group-hover:text-primary">
+                        {post.title}
+                      </h3>
+                      <p className="text-muted-foreground mb-4">
+                        {post.description}
+                      </p>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          </>
+        )}
       </div>
     </div>
   );

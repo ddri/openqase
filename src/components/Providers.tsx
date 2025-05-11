@@ -25,7 +25,7 @@ export default function Providers({ children }: { children: ReactNode }) {
         attribute="data-theme"
         defaultTheme="system"
         enableSystem
-        themes={['light', 'dark', 'graphite']}
+        themes={['light', 'dark', 'graphite', 'paper']}
       >
         <AuthProvider>
           {children}

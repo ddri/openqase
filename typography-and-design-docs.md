@@ -1402,3 +1402,50 @@ Styling is primarily via Tailwind utilities, defined in `globals.css` within `@l
 *   **Implementation:** Implemented using an `<hr>` HTML element.
 *   **Styling:** Styled with Tailwind CSS for consistent appearance, e.g., `<hr className="my-8 border-border" />`. The `my-*` utility provides vertical spacing, and `border-border` uses the theme's standard border color.
 *   **Placement:** Placed *before* the heading (`<h2>`, `<h3>`) of the section being introduced.
+
+## D. Theme System & Color Palettes
+
+### 1. Overview
+
+The design system supports multiple themes using CSS custom properties and the `data-theme` attribute on the `<html>` element. Themes are defined in `src/app/globals.css` and are selectable via the UI theme toggle. Each theme provides a distinct color palette and visual mood, while maintaining consistent typography and layout.
+
+**Current Themes:**
+- **Light (Default):** Cool, modern, and vibrant. Light gray background, dark gray text, and a strong electric blue accent.
+- **Dark:** Charcoal graphite background, high-contrast white text, and a deep orange accent.
+- **Graphite:** Very dark (zinc-inspired) background, white text, and orange accent. Used for a more technical or "pro" look.
+- **Paper:** Minimalist, monochromatic theme inspired by Deduxer. Very light neutral gray background, almost black text, and black/gray accents. Primary actions use black with white text. Cards and surfaces are white or near-white with subtle gray borders. This theme is designed for a clean, editorial, or "studio" feel.
+
+### 2. Paper Theme (Deduxer-Inspired)
+
+**Palette:**
+- `--background`: `0 0% 96%` (very light neutral gray)
+- `--foreground`, `--text-primary`: `0 0% 8%` (very dark gray, almost black)
+- `--text-secondary`: `0 0% 35%` (medium-dark gray)
+- `--text-tertiary`: `0 0% 50%` (medium gray)
+- `--card`: `0 0% 98%` (almost white)
+- `--card-border`: `0 0% 90%` (subtle light gray)
+- `--primary`, `--accent`: `0 0% 8%` (black for primary actions and accents)
+- `--primary-foreground`, `--accent-foreground`: `0 0% 100%` (white text on black)
+- `--secondary`: `0 0% 90%` (light gray for secondary buttons)
+- `--secondary-foreground`: `0 0% 20%` (dark gray text on light gray)
+- `--muted`: `0 0% 92%` (light gray for muted backgrounds)
+- `--muted-foreground`: `0 0% 50%` (medium gray for muted text)
+- `--border`, `--input`: `0 0% 90%` (light gray for borders and inputs)
+- `--ring`: `0 0% 8%` (black focus ring)
+
+**Design Intent:**
+- Inspired by the Deduxer studio look: minimalist, editorial, and highly readable.
+- Uses only black, white, and grays for a timeless, neutral, and professional feel.
+- Primary actions (e.g., buttons) are black with white text for maximum contrast.
+- Cards and surfaces are white or near-white, with subtle separation from the background.
+- All text is high-contrast and easy to read.
+
+**How to Use:**
+- Selectable via the theme toggle in the UI (cycles through light, dark, graphite, and paper).
+- Applies when `data-theme="paper"` is set on the `<html>` element.
+
+### 3. Theme Implementation Notes
+- All themes are defined in `src/app/globals.css` using CSS custom properties.
+- Tailwind CSS utilities are mapped to these variables via the Tailwind config, so all components and utilities respect the active theme.
+- The theme toggle is implemented in `src/components/ThemeToggle.tsx` and the available themes are registered in `src/components/Providers.tsx`.
+- The system is designed for easy addition of new themes or further refinement of existing ones.

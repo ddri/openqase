@@ -8,6 +8,7 @@ import { toast } from '@/components/ui/use-toast'
 import { Loader2 } from 'lucide-react'
 import { ErrorBoundary } from '@/components/ui/ErrorBoundary'
 import { createBrowserSupabaseClient } from '@/lib/supabase-browser'
+import type { AuthChangeEvent, Session } from '@supabase/supabase-js'
 
 export function AuthContent({ redirectTo }: { redirectTo?: string }) {
   const searchParams = useSearchParams()
@@ -36,16 +37,22 @@ export function AuthContent({ redirectTo }: { redirectTo?: string }) {
     }
     checkAuth()
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event: AuthChangeEvent, session: Session | null) => {
       if (event === 'SIGNED_IN') {
         toast({
           title: 'Success',
           description: 'Successfully signed in',
         })
+        router.replace(redirectToParam)
       } else if (event === 'SIGNED_OUT') {
         toast({
           title: 'Signed out',
           description: 'You have been signed out',
+        })
+      } else if (event as string === 'USER_SIGNED_UP') {
+        toast({
+          title: 'Account created',
+          description: 'Please check your email to confirm your account.',
         })
       }
     })

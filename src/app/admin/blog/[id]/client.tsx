@@ -48,6 +48,7 @@ export function BlogPostForm({ blogPost, relatedPosts, isNew }: BlogPostFormProp
     related_posts: isNew ? [] : blogPost?.related_posts?.map((post: any) => post.id) || [],
     published: isNew ? false : blogPost?.published || false,
     featured: isNew ? false : blogPost?.featured || false,
+    published_at: isNew ? null : blogPost?.published_at || null,
   });
   const [isDirty, setIsDirty] = useState(false);
   
@@ -176,55 +177,63 @@ export function BlogPostForm({ blogPost, relatedPosts, isNew }: BlogPostFormProp
   };
   
   return (
-    <div className="space-y-6">
-      <div className="flex justify-between items-center">
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={() => router.push('/admin/blog')}
-          className="flex items-center"
-        >
-          <ArrowLeft className="mr-2 h-4 w-4" />
-          Back
-        </Button>
-        
-        <div className="flex items-center gap-2">
+    <div className="space-y-10 max-w-5xl mx-auto pb-24">
+      {/* Top controls and progress bar, styled like case study edit page */}
+      <div className="pt-6 mb-8 bg-background pb-4 border-b border-border">
+        <div className="flex justify-between items-center mb-6">
           <Button
-            type="button"
-            variant="outline"
+            variant="ghost"
             size="sm"
-            onClick={handleSubmit}
-            disabled={isPending || !isDirty}
-            className="min-w-[100px]"
+            onClick={() => router.push('/admin/blog')}
+            className="flex items-center"
           >
-            {isPending ? (
-              <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Saving...
-              </>
-            ) : (
-              <>
-                <Save className="mr-2 h-4 w-4" />
-                Save
-              </>
-            )}
+            <ArrowLeft className="mr-2 h-4 w-4" />
+            Back
           </Button>
-          
-          <PublishButton
-            isPublished={values.published}
-            onPublish={handlePublish}
-            onUnpublish={handleUnpublish}
-            validateContent={validateContent}
-            disabled={isPending}
-            onTabChange={() => {}}
-            getTabLabel={() => ''}
-          />
+
+          <div className="flex items-center gap-3">
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={handleSubmit}
+              disabled={isPending || !isDirty}
+              className="min-w-[100px]"
+            >
+              {isPending ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Saving...
+                </>
+              ) : (
+                <>
+                  <Save className="mr-2 h-4 w-4" />
+                  Save
+                </>
+              )}
+            </Button>
+            <PublishButton
+              isPublished={values.published}
+              onPublish={handlePublish}
+              onUnpublish={handleUnpublish}
+              validateContent={validateContent}
+              disabled={isPending}
+              onTabChange={() => {}}
+              getTabLabel={() => ''}
+            />
+          </div>
+        </div>
+        {/* Progress bar section */}
+        <div>
+          <div className="flex justify-between items-center text-sm mb-2">
+            <span className="text-muted-foreground">Content Completeness</span>
+            <span className="font-medium">{completionPercentage}%</span>
+          </div>
+          <ContentCompleteness percentage={completionPercentage} showLabel={false} />
         </div>
       </div>
-      
-      <ContentCompleteness percentage={completionPercentage} />
-      
-      <form onSubmit={handleSubmit} className="space-y-6">
+      {/* Form starts here */}
+      <form onSubmit={handleSubmit} className="space-y-10">
         {/* Basic Info Section */}
         <Card>
           <CardHeader>
@@ -285,6 +294,20 @@ export function BlogPostForm({ blogPost, relatedPosts, isNew }: BlogPostFormProp
                     handleChange('tags', tags);
                   }}
                   placeholder="tag1, tag2, tag3"
+                />
+              </div>
+
+              {/* Publish Date Picker */}
+              <div className="space-y-2">
+                <Label htmlFor="published_at">Publish Date</Label>
+                <Input
+                  id="published_at"
+                  type="date"
+                  value={values.published_at || ''}
+                  onChange={(e) => {
+                    handleChange('published_at', e.target.value);
+                  }}
+                  placeholder="YYYY-MM-DD"
                 />
               </div>
               

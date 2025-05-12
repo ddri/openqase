@@ -5,10 +5,10 @@ export default function AboutPage() {
         {/* Hero Section */}
         <div className="max-w-3xl mx-auto text-center mb-12">
           <h1 className="mb-4">
-            About OpenQASE
+            About OpenQase
           </h1>
           <p className="text-muted-foreground">
-            OpenQASE is a comprehensive knowledge platform dedicated to documenting and sharing quantum computing business case studies and applications.
+            OpenQase is a comprehensive knowledge platform dedicated to documenting and sharing quantum computing business case studies and their related applications.
           </p>
         </div>
 
@@ -26,7 +26,7 @@ export default function AboutPage() {
                   Despite significant advances in quantum computing technology, there remains a substantial gap between theoretical quantum research and practical business applications. Many organizations and professionals struggle to understand how quantum computing can solve real-world business problems, identify relevant use cases for their specific industry, navigate the complex technical landscape of quantum algorithms, and find comprehensive, accessible resources that bridge theoretical concepts with business value.
                 </p>
                 <p className="text-muted-foreground">
-                  OpenQASE addresses these challenges through a structured, accessible platform that connects quantum computing concepts with tangible business applications through carefully curated content and intuitive navigation options.
+                  OpenQase addresses these challenges through a structured, accessible platform that connects quantum computing concepts with tangible business applications through community curated content and related concept navigation.
                 </p>
               </div>
             </section>
@@ -70,7 +70,7 @@ export default function AboutPage() {
               <h2 className="mb-4">Case Studies: Our Core Content</h2>
               <div className="space-y-4">
                 <p className="text-muted-foreground">
-                  The Case Studies section forms the core content foundation of OpenQASE, providing documented examples of real-world quantum computing implementations. Each case study details actual quantum computing deployments, including the business context, problem description, implementation approach, and outcomes.
+                  The Case Studies section forms the core content foundation of OpenQase, providing documented examples of real-world quantum computing implementations. Each case study details actual quantum computing deployments, including the business context, problem description, implementation approach, and outcomes.
                 </p>
                 <p className="text-muted-foreground">
                   Our case studies focus on the business context, problem description, and outcomes of quantum computing implementations. They provide information on the industries served, algorithms used, and partner companies involved, making it easy to understand the practical value of quantum computing.
@@ -85,7 +85,7 @@ export default function AboutPage() {
             <section>
               <h2 className="mb-4">Our Vision</h2>
               <p className="text-muted-foreground mb-6">
-                OpenQASE aims to become the definitive resource for quantum computing business applications by:
+                OpenQase aims to become the definitive resource for quantum computing business applications by:
               </p>
               <ul className="space-y-4">
                 <li className="flex gap-2">
@@ -106,7 +106,7 @@ export default function AboutPage() {
                 </li>
                 <li className="flex gap-2">
                   <span className="font-medium">Building Community:</span>
-                  <span className="text-muted-foreground">Creating a central hub for sharing implementation experiences, best practices, and outcomes.</span>
+                  <span className="text-muted-foreground">Creating an accessible community for curating and sharing the implementation experiences, best practices, and outcomes of quantum computing partnerships in this early stage of the wider industry.</span>
                 </li>
               </ul>
             </section>
@@ -129,7 +129,7 @@ export default function AboutPage() {
             <div className="rounded-lg border bg-card p-6 mb-8">
               <h3 className="mb-4">Our Team</h3>
               <p className="text-muted-foreground mb-4">
-                OpenQASE is developed by a multidisciplinary team with expertise in:
+                OpenQase is developed by a multidisciplinary team with expertise in:
               </p>
               <ul className="space-y-3">
                 <li className="flex items-center gap-3">

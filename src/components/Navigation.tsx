@@ -17,6 +17,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Menu, X, User } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
 
 const navItems = [
   { href: '/paths', label: 'Learning Paths' },
@@ -90,6 +91,7 @@ export default function Navigation() {
                   className="h-8 w-auto"
                 />
               )}
+              <Badge variant="outline" className="ml-2 self-center">BETA</Badge>
             </Link>
 
             {/* Desktop Navigation */}

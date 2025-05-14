@@ -53,3 +53,5 @@ docs/node_modules
 docs/build
 docs/.docusaurus
 docs/.cache-loader # Docusaurus uses this sometimes
+# Sentry Config File
+.env.sentry-build-plugin

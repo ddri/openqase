@@ -135,10 +135,10 @@ export default function Navigation() {
             ) : (
               <div className="flex items-center gap-4">
                 <Button variant="ghost" asChild>
-                  <Link href="/auth">Sign In</Link>
+                  <Link href="/auth?view=sign_in">Sign In</Link>
                 </Button>
                 <Button asChild>
-                  <Link href="/auth">Get Started</Link>
+                  <Link href="/auth?view=sign_up">Get Started</Link>
                 </Button>
               </div>
             )}
@@ -200,10 +200,10 @@ export default function Navigation() {
                 ) : (
                   <div className="flex items-center gap-4">
                     <Button variant="ghost" asChild>
-                      <Link href="/auth">Sign In</Link>
+                      <Link href="/auth?view=sign_in">Sign In</Link>
                     </Button>
                     <Button asChild>
-                      <Link href="/auth">Get Started</Link>
+                      <Link href="/auth?view=sign_up">Get Started</Link>
                     </Button>
                   </div>
                 )}

@@ -47,6 +47,7 @@ next-env.d.ts
 *.njsproj
 *.sln
 *.sw?
+.roo/
 
 # Docusaurus in /docs
 docs/node_modules

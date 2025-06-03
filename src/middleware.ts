@@ -131,9 +131,9 @@ export const config = {
   matcher: [
     '/auth/:path*',
     '/admin/:path*',
-    '/paths/:path*',
-    '/case-study/:path*',
     '/profile',
-    '/api/:path*'
+    '/api/:path*',
+    // Note: Removed /paths/:path* and /case-study/:path* to allow static generation
+    // These pages will implement auth checks at the component level when needed
   ]
 }

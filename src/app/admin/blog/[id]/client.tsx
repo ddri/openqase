@@ -1,7 +1,8 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { RelationshipSelector } from '@/components/admin/RelationshipSelector';
@@ -376,10 +377,12 @@ export function BlogPostForm({ blogPost, relatedPosts, isNew }: BlogPostFormProp
                   <div className="p-4 border rounded-md mt-2 flex items-center justify-center">
                     {/* Use client-side only rendering to avoid hydration errors */}
                     {typeof window !== 'undefined' && (
-                      <img
+                      <Image
                         src={values.featured_image}
                         alt="Featured Image Preview"
                         className="max-h-40 object-contain"
+                        width={160}
+                        height={160}
                         onError={(e) => {
                           (e.target as HTMLImageElement).src = '/placeholder-image.svg';
                         }}

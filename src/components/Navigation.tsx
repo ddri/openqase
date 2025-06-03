@@ -2,6 +2,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { useRouter, usePathname } from 'next/navigation';
 import { createBrowserSupabaseClient } from '@/lib/supabase-browser';
 import { Button } from '@/components/ui/button';
@@ -79,16 +80,20 @@ export default function Navigation() {
           <div className="flex items-center space-x-8">
             <Link href="/" className="flex items-center text-foreground hover:text-foreground">
               {mounted ? (
-                <img
+                <Image
                   src={theme === 'dark' ? '/openqase-light.svg' : '/openqase-dark.svg'}
                   alt="openQase Logo"
                   className="h-8 w-auto"
+                  width={32}
+                  height={32}
                 />
               ) : (
-                <img
+                <Image
                   src='/openqase-dark.svg'
                   alt="openQase Logo"
                   className="h-8 w-auto"
+                  width={32}
+                  height={32}
                 />
               )}
               <Badge variant="outline" className="ml-2 self-center">BETA</Badge>

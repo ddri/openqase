@@ -29,7 +29,7 @@ const features: FeatureCard[] = [
     focus: "Practical implementations"
   },
   {
-    title: "Role-Based Learning",
+    title: "Role-based Learning",
     description: "Tailored learning paths designed for different professional roles and expertise levels.",
     icon: <Users className="w-6 h-6" />,
     focus: "Professional relevance"
@@ -68,7 +68,7 @@ export default function HomePage() {
           </h1>
 
           <p className="text-xl md:text-2xl text-muted-foreground max-w-3xl mx-auto">
-            OpenQASE provides structured learning paths and real-world case studies to help you understand how quantum computing solves business problems.
+            OpenQase provides structured learning paths and real-world case studies to help you understand how quantum computing solves business problems.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center mt-8">
@@ -151,7 +151,7 @@ export default function HomePage() {
       <section className="py-24">
         <div className="container max-w-7xl">
           <div className="text-center mb-16">
-            <h2 className="mb-4">Why Choose OpenQASE?</h2>
+            <h2 className="mb-4">Why Support OpenQase?</h2>
             <p className="text-muted-foreground">
               A comprehensive platform for learning and implementing quantum computing solutions
             </p>

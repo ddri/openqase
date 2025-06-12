@@ -8,6 +8,7 @@ import { toast } from '@/components/ui/use-toast'
 import { Loader2 } from 'lucide-react'
 import { ErrorBoundary } from '@/components/ui/ErrorBoundary'
 import { createBrowserSupabaseClient } from '@/lib/supabase-browser'
+import type { AuthChangeEvent, Session } from '@supabase/supabase-js'
 
 export function AuthContent({ redirectTo }: { redirectTo?: string }) {
   const searchParams = useSearchParams()
@@ -15,6 +16,10 @@ export function AuthContent({ redirectTo }: { redirectTo?: string }) {
   const supabase = createBrowserSupabaseClient()
   const redirectToParam = searchParams.get('redirectTo') || '/'
   const [isLoading, setIsLoading] = useState(true)
+  const viewParam = searchParams.get('view')
+
+  // Determine the auth view: 'sign_up' or 'sign_in'
+  const authView = viewParam === 'sign_up' ? 'sign_up' : 'sign_in';
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -36,16 +41,22 @@ export function AuthContent({ redirectTo }: { redirectTo?: string }) {
     }
     checkAuth()
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event: AuthChangeEvent, session: Session | null) => {
       if (event === 'SIGNED_IN') {
         toast({
           title: 'Success',
           description: 'Successfully signed in',
         })
+        router.replace(redirectToParam)
       } else if (event === 'SIGNED_OUT') {
         toast({
           title: 'Signed out',
           description: 'You have been signed out',
+        })
+      } else if (event as string === 'USER_SIGNED_UP') {
+        toast({
+          title: 'Account created',
+          description: 'Please check your email to confirm your account.',
         })
       }
     })
@@ -66,9 +77,13 @@ export function AuthContent({ redirectTo }: { redirectTo?: string }) {
       <div className="container relative min-h-[calc(100vh-4rem)] flex items-center justify-center py-12">
         <div className="w-full max-w-md">
           <div className="mb-8">
-            <h1 className="text-3xl font-bold tracking-tight">Welcome back</h1>
+            <h1 className="text-3xl font-bold tracking-tight">
+              {authView === 'sign_up' ? 'Create an account' : 'Welcome back'}
+            </h1>
             <p className="text-muted-foreground mt-2">
-              Sign in to your account to access all features
+              {authView === 'sign_up'
+                ? 'Get started by creating your account to access all features.'
+                : 'Sign in to your account to access all features'}
             </p>
           </div>
 
@@ -87,7 +102,7 @@ export function AuthContent({ redirectTo }: { redirectTo?: string }) {
                 },
               }}
               providers={[]}
-              view="sign_in"
+              view={authView}
               showLinks={true}
               redirectTo={`${window.location.origin}/auth/callback?redirectTo=${redirectToParam}`}
               onlyThirdPartyProviders={false}

@@ -25,8 +25,8 @@ const openSans = Open_Sans({
 });
 
 export const metadata: Metadata = {
-  title: 'OpenQASE',
-  description: 'Open Quantum Algorithm Study Environment',
+  title: 'OpenQase',
+  description: 'Open repository for Quantum Computing business cases.',
 };
 
 export default function RootLayout({

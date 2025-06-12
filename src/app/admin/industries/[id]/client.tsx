@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -294,10 +295,12 @@ export function IndustryForm({ industry, isNew }: IndustryFormProps) {
                 <div className="mt-4">
                   <Label>Icon Preview</Label>
                   <div className="p-4 border rounded-md mt-2 flex items-center justify-center">
-                    <img
+                    <Image
                       src={values.icon.startsWith('http') ? values.icon : `/icons/${values.icon}`}
                       alt="Icon Preview"
                       className="h-16 w-16 object-contain"
+                      width={64}
+                      height={64}
                       onError={(e) => {
                         (e.target as HTMLImageElement).src = '/placeholder-icon.svg';
                       }}

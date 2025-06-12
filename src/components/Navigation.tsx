@@ -2,6 +2,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { useRouter, usePathname } from 'next/navigation';
 import { createBrowserSupabaseClient } from '@/lib/supabase-browser';
 import { Button } from '@/components/ui/button';
@@ -17,6 +18,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Menu, X, User } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
 
 const navItems = [
   { href: '/paths', label: 'Learning Paths' },
@@ -78,18 +80,23 @@ export default function Navigation() {
           <div className="flex items-center space-x-8">
             <Link href="/" className="flex items-center text-foreground hover:text-foreground">
               {mounted ? (
-                <img
+                <Image
                   src={theme === 'dark' ? '/openqase-light.svg' : '/openqase-dark.svg'}
                   alt="openQase Logo"
                   className="h-8 w-auto"
+                  width={32}
+                  height={32}
                 />
               ) : (
-                <img
+                <Image
                   src='/openqase-dark.svg'
                   alt="openQase Logo"
                   className="h-8 w-auto"
+                  width={32}
+                  height={32}
                 />
               )}
+              <Badge variant="outline" className="ml-2 self-center">BETA</Badge>
             </Link>
 
             {/* Desktop Navigation */}
@@ -135,10 +142,10 @@ export default function Navigation() {
             ) : (
               <div className="flex items-center gap-4">
                 <Button variant="ghost" asChild>
-                  <Link href="/auth">Sign In</Link>
+                  <Link href="/auth?view=sign_in">Sign In</Link>
                 </Button>
                 <Button asChild>
-                  <Link href="/auth">Join Free</Link>
+                  <Link href="/auth?view=sign_up">Get Started</Link>
                 </Button>
               </div>
             )}
@@ -200,10 +207,10 @@ export default function Navigation() {
                 ) : (
                   <div className="flex items-center gap-4">
                     <Button variant="ghost" asChild>
-                      <Link href="/auth">Sign In</Link>
+                      <Link href="/auth?view=sign_in">Sign In</Link>
                     </Button>
                     <Button asChild>
-                      <Link href="/auth">Join Free</Link>
+                      <Link href="/auth?view=sign_up">Get Started</Link>
                     </Button>
                   </div>
                 )}

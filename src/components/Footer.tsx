@@ -2,6 +2,7 @@
 
 // src/components/Footer.tsx
 import Link from 'next/link'
+import Image from 'next/image'
 import { Github, Twitter, Linkedin, MessageCircle, ChevronDown } from 'lucide-react'
 import { useState } from 'react'
 import { cn } from '@/lib/utils'
@@ -174,10 +175,12 @@ export default function Footer() {
         {/* Bottom Section */}
         <div className="mt-8 md:mt-12 pt-4 md:pt-8 border-t border-border">
           <div className="flex justify-center mb-6">
-            <img
+            <Image
               src={'/openqase-wordmark-sm2.svg'}
               alt="openQase Wordmark"
               className="h-10 w-auto"
+              width={120}
+              height={40}
             />
           </div>
           <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-center md:text-left">

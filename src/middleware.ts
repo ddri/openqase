@@ -2,6 +2,7 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 import { updateSession } from '@/lib/supabase-middleware'
+import { requireAuthForContent } from '@/lib/auth-config'
 
 const protectedRoutes = [
   '/paths',
@@ -24,21 +25,20 @@ export async function middleware(req: NextRequest) {
   const isAuthCallback = req.nextUrl.pathname === '/auth/callback'
   const isAdminRoute = adminRoutes.some(route => req.nextUrl.pathname.startsWith(route))
   const isProtectedRoute = protectedRoutes.some(route => req.nextUrl.pathname.startsWith(route))
+  const authRequired = requireAuthForContent()
 
   // Handle auth callback - must come first
   if (isAuthCallback) {
     return res
   }
 
-  // For admin routes, check if user has admin role
+  // Get user session for auth checks
+  const { createServerSupabaseClient } = await import('@/lib/supabase')
+  const supabase = await createServerSupabaseClient()
+  const { data: { session } } = await supabase.auth.getSession()
+
+  // For admin routes, check if user has admin role (always protected)
   if (isAdminRoute) {
-    // Create a supabase client to check admin status
-    const { createServerSupabaseClient } = await import('@/lib/supabase')
-    const supabase = await createServerSupabaseClient()
-    
-    // Get the session
-    const { data: { session } } = await supabase.auth.getSession()
-    
     if (!session) {
       return NextResponse.redirect(new URL('/auth?redirectTo=/admin', req.url))
     }
@@ -55,8 +55,11 @@ export async function middleware(req: NextRequest) {
     }
   }
 
-  // The updateSession middleware already handles redirecting unauthenticated users
-  // for protected routes, so we can just return the response
+  // For content routes, only require auth if feature flag is enabled
+  if (isProtectedRoute && authRequired && !session) {
+    return NextResponse.redirect(new URL('/auth?redirectTo=' + req.nextUrl.pathname, req.url))
+  }
+
   return res
 }
 

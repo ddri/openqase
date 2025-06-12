@@ -187,8 +187,8 @@ export default async function AlgorithmPage({ params }: AlgorithmPageProps) {
 
   return (
     <AuthGate
-      title="Access Algorithm Details"
-      description="Get exclusive access to detailed quantum algorithm explanations and implementations."
+      title="Unlock Enhanced Algorithm Features"
+      description="Sign up to access interactive examples, save implementations, and track your algorithm learning progress."
     >
       <LearningPathLayout 
         title={algorithm.name}

@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Lock } from 'lucide-react';
+import { requireAuthForContentClient } from '@/lib/auth-config';
 
 interface AuthGateProps {
   children: React.ReactNode;
@@ -18,6 +19,7 @@ export default function AuthGate({ children, title, description }: AuthGateProps
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
   const supabase = createBrowserSupabaseClient();
   const pathname = usePathname();
+  const authRequired = requireAuthForContentClient();
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -33,6 +35,11 @@ export default function AuthGate({ children, title, description }: AuthGateProps
 
     return () => subscription.unsubscribe();
   }, [supabase.auth]);
+
+  // If auth is not required by feature flag, always show content
+  if (!authRequired) {
+    return children;
+  }
 
   // Show nothing while checking auth status
   if (isAuthenticated === null) {
@@ -63,13 +70,13 @@ export default function AuthGate({ children, title, description }: AuthGateProps
               <Link href={`/auth?redirectTo=${pathname}`}>Sign In</Link>
             </Button>
             <Button asChild size="lg" variant="outline">
-              <Link href={`/auth?redirectTo=${pathname}`}>Create Account</Link>
+              <Link href={`/auth?redirectTo=${pathname}`}>Join Free</Link>
             </Button>
           </div>
         </CardContent>
         <CardFooter>
           <p className="text-sm text-muted-foreground mx-auto">
-            Join our community to access exclusive quantum computing resources
+            Create an account to save your progress, bookmark content, and get personalized recommendations
           </p>
         </CardFooter>
       </Card>

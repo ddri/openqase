@@ -8,7 +8,7 @@ export default function AboutPage() {
             About OpenQase
           </h1>
           <p className="text-muted-foreground">
-            OpenQase is a comprehensive knowledge platform dedicated to documenting and sharing quantum computing business case studies and their related applications.
+            OpenQASE is a comprehensive knowledge platform dedicated to documenting and sharing quantum computing business case studies and applications.
           </p>
         </div>
 

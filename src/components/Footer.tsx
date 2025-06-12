@@ -2,6 +2,7 @@
 
 // src/components/Footer.tsx
 import Link from 'next/link'
+import Image from 'next/image'
 import { Github, Twitter, Linkedin, MessageCircle, ChevronDown } from 'lucide-react'
 import { useState } from 'react'
 import { cn } from '@/lib/utils'
@@ -53,7 +54,7 @@ export default function Footer() {
             <ul className="space-y-2">
               <li>
                 <Link href="/about" className="text-base text-muted-foreground hover:text-accent transition-colors">
-                  About openQase
+                  About OpenQase
                 </Link>
               </li>
               <li>
@@ -111,7 +112,7 @@ export default function Footer() {
               </li>
               <li>
                 <Link 
-                  href="https://twitter.com/openqase"
+                  href="https://www.threads.com/@openqase"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-base text-muted-foreground hover:text-accent transition-colors inline-flex items-center gap-2"
@@ -120,6 +121,7 @@ export default function Footer() {
                   <span>Threads</span>
                 </Link>
               </li>
+              {/* 
               <li>
                 <Link 
                   href="https://linkedin.com/company/openqase"
@@ -131,6 +133,8 @@ export default function Footer() {
                   <span>LinkedIn</span>
                 </Link>
               </li>
+              */}
+              {/*
               <li>
                 <Link 
                   href="https://discord.gg/openqase"
@@ -142,6 +146,7 @@ export default function Footer() {
                   <span>Discord</span>
                 </Link>
               </li>
+              */}
             </ul>
           </FooterSection>
 
@@ -170,15 +175,17 @@ export default function Footer() {
         {/* Bottom Section */}
         <div className="mt-8 md:mt-12 pt-4 md:pt-8 border-t border-border">
           <div className="flex justify-center mb-6">
-            <img
+            <Image
               src={'/openqase-wordmark-sm2.svg'}
               alt="openQase Wordmark"
               className="h-10 w-auto"
+              width={120}
+              height={40}
             />
           </div>
           <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-center md:text-left">
             <p className="text-muted-foreground text-sm">
-              © {new Date().getFullYear()} openQase. All rights reserved.
+              © {new Date().getFullYear()} OpenQase. All rights reserved.
             </p>
             <p className="text-muted-foreground text-sm">
               Built with ❤️ by the quantum computing community

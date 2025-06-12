@@ -138,7 +138,7 @@ export default function Navigation() {
                   <Link href="/auth">Sign In</Link>
                 </Button>
                 <Button asChild>
-                  <Link href="/auth">Get Started</Link>
+                  <Link href="/auth">Join Free</Link>
                 </Button>
               </div>
             )}
@@ -203,7 +203,7 @@ export default function Navigation() {
                       <Link href="/auth">Sign In</Link>
                     </Button>
                     <Button asChild>
-                      <Link href="/auth">Get Started</Link>
+                      <Link href="/auth">Join Free</Link>
                     </Button>
                   </div>
                 )}

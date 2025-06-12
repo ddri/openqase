@@ -75,7 +75,7 @@ export function AuthContent({ redirectTo }: { redirectTo?: string }) {
           <div className="mb-8">
             <h1 className="text-3xl font-bold tracking-tight">Welcome back</h1>
             <p className="text-muted-foreground mt-2">
-              Sign in to your account to access all features
+              Sign in to unlock progress tracking, personalized content, and enhanced learning features
             </p>
           </div>
 

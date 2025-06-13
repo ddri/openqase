@@ -70,8 +70,8 @@ export default async function LearningPathsPage() {
 
   return (
     <AuthGate
-      title="Start Your Quantum Journey"
-      description="Access personalized learning paths designed to take you from quantum computing basics to advanced applications, tailored to your role and interests."
+      title="Get Personalized Learning Paths"
+      description="Sign up to unlock progress tracking, personalized recommendations, and curated content based on your interests and goals."
     >
       <main className="min-h-screen">
         <div className="container-outer section-spacing">

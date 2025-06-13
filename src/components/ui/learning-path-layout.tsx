@@ -22,8 +22,8 @@ export default function LearningPathLayout({
 }: LearningPathLayoutProps) {
   return (
     <AuthGate
-      title="Access Learning Path Content"
-      description="Sign in to access detailed learning paths and resources tailored to your needs."
+      title="Enhance Your Learning Experience"
+      description="Sign up to track progress, save your favorite paths, and get personalized learning recommendations."
     >
       <main className="min-h-screen">
         <div className="container-outer section-spacing">

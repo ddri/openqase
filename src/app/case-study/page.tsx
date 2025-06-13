@@ -1,10 +1,10 @@
 // src/app/case-study/page.tsx
 import CaseStudyList from '@/components/CaseStudyList';
-import { createServiceRoleSupabaseClient } from '@/lib/supabase-server';
+import { createServerSupabaseClient } from '@/lib/supabase-server';
 import type { CaseStudy } from '@/lib/types';
 
 export default async function CaseStudyPage() {
-  const supabase = createServiceRoleSupabaseClient();
+  const supabase = await createServerSupabaseClient();
   
   // Fetch case studies directly using the service role client
   const { data, error } = await supabase
@@ -28,14 +28,12 @@ export default async function CaseStudyPage() {
     main_content: item.main_content,
     partner_companies: item.partner_companies || [],
     quantum_companies: item.quantum_companies || [],
-    url: item.url,
+    url: `/case-study/${item.slug}`, // Generate URL from slug
     algorithms: item.algorithms || [],
-    industries: item.industries || [],
-    personas: item.personas || [],
-    // qubits_used property doesn't exist in the database schema
+    industries: [], // Would need to join with case_study_industry_relations
+    personas: [], // Would need to join with case_study_persona_relations
     quantum_hardware: item.quantum_hardware || [],
     quantum_software: item.quantum_software || [],
-    // classical_hardware property doesn't exist in the CaseStudy interface
     published: item.published,
     published_at: item.published_at,
     created_at: item.created_at,

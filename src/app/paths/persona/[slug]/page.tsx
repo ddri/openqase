@@ -1,6 +1,6 @@
 // src/app/paths/persona/[slug]/page.tsx
 import { notFound } from 'next/navigation';
-import { createServerSupabaseClient } from '@/lib/supabase-server';
+import { createServerSupabaseClient, createServiceRoleSupabaseClient } from '@/lib/supabase-server';
 import type { Database } from '@/types/supabase';
 import LearningPathLayout from '@/components/ui/learning-path-layout';
 import ContentCard from '@/components/ui/content-card';
@@ -89,7 +89,7 @@ export async function generateMetadata({ params }: PageParams) {
   
   const { data: persona } = await supabase
     .from('personas')
-    .select()
+    .select('name, description')
     .eq('slug', resolvedParams.slug)
     .single();
 
@@ -107,6 +107,23 @@ export async function generateMetadata({ params }: PageParams) {
     description: persona.description,
   };
 }
+
+// Generate static params for all published personas
+export async function generateStaticParams() {
+  const supabase = createServiceRoleSupabaseClient();
+  
+  const { data: personas } = await supabase
+    .from('personas')
+    .select('slug')
+    .eq('published', true);
+
+  return personas?.map((persona) => ({
+    slug: persona.slug,
+  })) || [];
+}
+
+// Revalidate the page every 5 minutes for more frequent content updates
+export const revalidate = 300;
 
 export default async function PersonaPage({ params }: PageParams) {
   const resolvedParams = await params;
@@ -155,7 +172,14 @@ export default async function PersonaPage({ params }: PageParams) {
       // Fetch the actual published case studies using the IDs
       const { data: caseStudyData, error: caseStudyError } = await supabase
         .from('case_studies')
-        .select('*, case_study_industry_relations(industries(id, name, slug))')
+        .select(`
+          id,
+          title,
+          slug,
+          description,
+          quantum_hardware,
+          case_study_industry_relations(industries(id, name, slug))
+        `)
         .in('id', caseStudyIds)
         .eq('published', true);
 

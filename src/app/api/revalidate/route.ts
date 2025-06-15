@@ -41,8 +41,13 @@ export async function POST(request: NextRequest) {
         break;
         
       case 'case-study':
+        // Revalidate specific case study page
+        if (slug) {
+          revalidatePath(`/case-study/${slug}`);
+        }
+        // Revalidate case study listing page
+        revalidatePath('/case-study');
         // Revalidate all learning path pages since case studies appear on them
-        revalidatePath('/case-study/[slug]', 'page');
         revalidatePath('/paths/persona/[slug]', 'page');
         revalidatePath('/paths/industry/[slug]', 'page');
         revalidatePath('/paths/algorithm/[slug]', 'page');
@@ -64,6 +69,16 @@ export async function POST(request: NextRequest) {
         // Revalidate all algorithm pages
         revalidatePath('/paths/algorithm/[slug]', 'page');
         revalidatePath('/paths/algorithm');
+        break;
+        
+      case 'all-case-studies':
+        // Revalidate all case study pages
+        revalidatePath('/case-study/[slug]', 'page');
+        revalidatePath('/case-study');
+        // Also revalidate learning paths since they show case studies
+        revalidatePath('/paths/persona/[slug]', 'page');
+        revalidatePath('/paths/industry/[slug]', 'page');
+        revalidatePath('/paths/algorithm/[slug]', 'page');
         break;
         
       default:

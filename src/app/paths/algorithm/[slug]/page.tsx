@@ -1,6 +1,6 @@
 // src/app/paths/algorithm/[slug]/page.tsx
 import { notFound } from 'next/navigation';
-import { createServerSupabaseClient } from '@/lib/supabase-server';
+import { createServerSupabaseClient, createServiceRoleSupabaseClient } from '@/lib/supabase-server';
 import type { Database } from '@/types/supabase';
 import LearningPathLayout from '@/components/ui/learning-path-layout';
 import { Badge } from '@/components/ui/badge';
@@ -87,6 +87,48 @@ interface AlgorithmPageProps {
   }>;
 }
 
+// Get metadata for the page
+export async function generateMetadata({ params }: AlgorithmPageProps) {
+  const resolvedParams = await params;
+  const supabase = await createServerSupabaseClient();
+  
+  const { data: algorithm } = await supabase
+    .from('algorithms')
+    .select('name, description')
+    .eq('slug', resolvedParams.slug)
+    .eq('published', true)
+    .single();
+
+  if (!algorithm) {
+    return {
+      title: 'Not Found',
+      description: 'The page you are looking for does not exist.',
+    };
+  }
+
+  return {
+    title: algorithm.name,
+    description: algorithm.description,
+  };
+}
+
+// Generate static params for all published algorithms
+export async function generateStaticParams() {
+  const supabase = createServiceRoleSupabaseClient();
+  
+  const { data: algorithms } = await supabase
+    .from('algorithms')
+    .select('slug')
+    .eq('published', true);
+
+  return algorithms?.map((algorithm) => ({
+    slug: algorithm.slug,
+  })) || [];
+}
+
+// Revalidate the page every 5 minutes for more frequent content updates
+export const revalidate = 300;
+
 export default async function AlgorithmPage({ params }: AlgorithmPageProps) {
   const resolvedParams = await params;
   const supabase = await createServerSupabaseClient();
@@ -145,7 +187,13 @@ export default async function AlgorithmPage({ params }: AlgorithmPageProps) {
         // Fetch the actual case studies
         const { data: caseStudyData, error: caseStudyError } = await supabase
           .from('case_studies')
-          .select('*, case_study_industry_relations(industries(id, name, slug))')
+          .select(`
+            id,
+            title,
+            slug,
+            description,
+            case_study_industry_relations(industries(id, name, slug))
+          `)
           .in('id', caseStudyIds)
           .eq('published', true);
           

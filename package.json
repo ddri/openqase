@@ -5,11 +5,15 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "build:static": "NEXT_STATIC_EXPORT=true next build",
+    "build:analyze": "ANALYZE=true next build",
     "start": "next start",
     "lint": "next lint",
     "type": "module",
     "migrate:content": "ts-node scripts/migrate-mdx-to-db.ts",
-    "setup-admin": "ts-node -r tsconfig-paths/register scripts/setup-admin.ts"
+    "setup-admin": "tsx scripts/setup-admin.ts",
+    "test-performance": "node scripts/page-load-performance.js",
+    "enable-dev-mode": "node scripts/enable-dev-mode.js"
   },
   "dependencies": {
     "@radix-ui/react-checkbox": "^1.3.2",
@@ -70,6 +74,7 @@
     "tsconfig-paths": "^4.2.0",
     "tsx": "^4.20.2",
     "typescript": "^5",
+    "webpack-bundle-analyzer": "^4.10.2",
     "zod": "^3.25.63"
   }
 }

@@ -2,7 +2,26 @@ import { withSentryConfig } from '@sentry/nextjs';
 // next.config.ts
 import type { NextConfig } from "next";
 
+// Simple static export when flag is set
+const isStaticExport = process.env.NEXT_STATIC_EXPORT === 'true';
+
 const nextConfig: NextConfig = {
+  // Enable static export when flag is set
+  ...(isStaticExport && {
+    output: 'export',
+    trailingSlash: true,
+    images: { unoptimized: true },
+    // Skip API routes and admin routes during static export
+    async generateBuildId() {
+      return 'static-export-build';
+    }
+  }),
+  
+  // Simple optimizations only
+  experimental: {
+    optimizePackageImports: ['lucide-react', '@radix-ui/react-icons'],
+  },
+  
   eslint: {
     ignoreDuringBuilds: true,
   },
@@ -11,6 +30,7 @@ const nextConfig: NextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
+  
   // Security Headers
   async headers() {
     return [
@@ -23,11 +43,13 @@ const nextConfig: NextConfig = {
             key: 'Content-Security-Policy',
             value: [
               "default-src 'self'",
-              "script-src 'self' 'unsafe-eval' 'unsafe-inline' https://www.googletagmanager.com https://js.sentry-cdn.com",
+              "script-src 'self' 'unsafe-eval' 'unsafe-inline' https://www.googletagmanager.com https://js.sentry-cdn.com https://vercel.live",
               "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
               "font-src 'self' https://fonts.gstatic.com",
               "img-src 'self' data: blob: https:",
               "connect-src 'self' https://*.supabase.co https://*.supabase.com https://o4507902208450560.ingest.us.sentry.io wss://*.supabase.co",
+              "worker-src 'self' blob:",
+              "frame-src 'self' https://vercel.live",
               "frame-ancestors 'none'",
               "base-uri 'self'",
               "form-action 'self'",

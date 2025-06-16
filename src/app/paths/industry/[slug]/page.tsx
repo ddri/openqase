@@ -1,6 +1,6 @@
 // src/app/paths/industry/[slug]/page.tsx
 import { cookies } from 'next/headers';
-import { createServerSupabaseClient } from '@/lib/supabase-server';
+import { createServerSupabaseClient, createServiceRoleSupabaseClient } from '@/lib/supabase-server';
 import { Database } from '@/types/supabase';
 import LearningPathLayout from '@/components/ui/learning-path-layout';
 import { Badge } from '@/components/ui/badge';
@@ -82,20 +82,46 @@ interface CaseStudy {
   industries: string[];
 }
 
+// Get metadata for the page
 export async function generateMetadata({ params }: PageParams) {
   const resolvedParams = await params;
   const supabase = await createServerSupabaseClient();
+  
   const { data: industry } = await supabase
     .from('industries')
-    .select('*')
+    .select('name, description')
     .eq('slug', resolvedParams.slug)
     .single();
 
+  if (!industry) {
+    return {
+      title: 'Not Found',
+      description: 'The page you are looking for does not exist.',
+    };
+  }
+
   return {
-    title: industry?.name || 'Industry Not Found',
-    description: industry?.description || '',
+    title: industry.name,
+    description: industry.description,
   };
 }
+
+// Generate static params for all published industries
+export async function generateStaticParams() {
+  const supabase = createServiceRoleSupabaseClient();
+  
+  const { data: industries } = await supabase
+    .from('industries')
+    .select('slug')
+    .eq('published', true);
+
+  return industries?.map((industry) => ({
+    slug: industry.slug,
+  })) || [];
+}
+
+// Revalidate the page every 5 minutes for more frequent content updates
+export const revalidate = 300;
 
 export default async function IndustryPage({ params }: PageParams) {
   const resolvedParams = await params;
@@ -158,7 +184,13 @@ export default async function IndustryPage({ params }: PageParams) {
         // Fetch the actual case studies
         const { data: caseStudyData, error: caseStudyError } = await supabase
           .from('case_studies')
-          .select('*, case_study_industry_relations(industries(id, name, slug))')
+          .select(`
+            id,
+            title,
+            slug,
+            description,
+            case_study_industry_relations(industries(id, name, slug))
+          `)
           .in('id', caseStudyIds)
           .eq('published', true);
           

@@ -1,6 +1,6 @@
 // src/app/case-study/[slug]/page.tsx
 import { notFound } from 'next/navigation';
-import { createServerSupabaseClient } from '@/lib/supabase-server';
+import { createServerSupabaseClient, createServiceRoleSupabaseClient } from '@/lib/supabase-server';
 import type { Database } from '@/types/supabase'; // Using the main Database type
 import LearningPathLayout from '@/components/ui/learning-path-layout';
 import { Badge } from '@/components/ui/badge';
@@ -17,6 +17,10 @@ type EnrichedCaseStudy = Database['public']['Tables']['case_studies']['Row'] & {
   case_study_persona_relations?: { personas: { id: string; name: string; slug?: string | null } | null }[];
   // quantum_software is assumed to be a direct TEXT[] field as previously discussed
 };
+
+interface CaseStudyPageProps {
+  params: Promise<{ slug: string }>;
+}
 
 // Initialize markdown-it with GFM features enabled
 const md = new MarkdownIt({
@@ -57,9 +61,51 @@ const defaultCellRender = md.renderer.rules.td_open || function(tokens, idx, opt
   return self.renderToken(tokens, idx, options);
 };
 
+// Get metadata for the page
+export async function generateMetadata({ params }: CaseStudyPageProps) {
+  const resolvedParams = await params;
+  const supabase = await createServerSupabaseClient();
+  
+  const { data: caseStudy } = await supabase
+    .from('case_studies')
+    .select('title, description')
+    .eq('slug', resolvedParams.slug)
+    .eq('published', true)
+    .single();
+
+  if (!caseStudy) {
+    return {
+      title: 'Not Found',
+      description: 'The page you are looking for does not exist.',
+    };
+  }
+
+  return {
+    title: caseStudy.title,
+    description: caseStudy.description || '',
+  };
+}
+
+// Generate static params for all published case studies
+export async function generateStaticParams() {
+  const supabase = createServiceRoleSupabaseClient();
+  
+  const { data: caseStudies } = await supabase
+    .from('case_studies')
+    .select('slug')
+    .eq('published', true);
+
+  return caseStudies?.map((caseStudy) => ({
+    slug: caseStudy.slug,
+  })) || [];
+}
+
+// Revalidate the page every 5 minutes for more frequent content updates
+export const revalidate = 300;
+
 // No longer using the commented out LocalCaseStudyType alias here
 
-export default async function CaseStudyPage({ params }: { params: Promise<{ slug: string }> }) {
+export default async function CaseStudyPage({ params }: CaseStudyPageProps) {
   const resolvedParams = await params;
   const slug = resolvedParams.slug;
   // console.log('Fetching case study with slug:', slug); // REMOVED

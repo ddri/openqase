@@ -17,11 +17,22 @@ interface AuthGateProps {
 
 export default function AuthGate({ children, title, description }: AuthGateProps) {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
-  const supabase = createBrowserSupabaseClient();
   const pathname = usePathname();
   const authRequired = requireAuthForContentClient();
 
+  // If auth is not required by feature flag, always show content immediately
+  if (!authRequired) {
+    return children;
+  }
+
+  const supabase = createBrowserSupabaseClient();
+
   useEffect(() => {
+    // Only run auth checks if auth is actually required
+    if (!authRequired) {
+      return;
+    }
+
     const checkAuth = async () => {
       const { data: { session } } = await supabase.auth.getSession();
       setIsAuthenticated(!!session);
@@ -34,12 +45,7 @@ export default function AuthGate({ children, title, description }: AuthGateProps
     });
 
     return () => subscription.unsubscribe();
-  }, [supabase.auth]);
-
-  // If auth is not required by feature flag, always show content
-  if (!authRequired) {
-    return children;
-  }
+  }, [supabase.auth, authRequired]);
 
   // Show nothing while checking auth status
   if (isAuthenticated === null) {

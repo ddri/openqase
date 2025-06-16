@@ -49,6 +49,7 @@ const nextConfig: NextConfig = {
               "img-src 'self' data: blob: https:",
               "connect-src 'self' https://*.supabase.co https://*.supabase.com https://o4507902208450560.ingest.us.sentry.io wss://*.supabase.co",
               "worker-src 'self' blob:",
+              "frame-src 'self' https://vercel.live",
               "frame-ancestors 'none'",
               "base-uri 'self'",
               "form-action 'self'",

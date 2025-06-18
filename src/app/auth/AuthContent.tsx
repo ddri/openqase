@@ -88,19 +88,21 @@ export function AuthContent({ redirectTo }: { redirectTo?: string }) {
           </div>
 
           <div className="bg-card rounded-lg border p-6">
-            <Auth
-              supabaseClient={supabase}
-              appearance={{
-                theme: ThemeSupa,
-                variables: {
-                  default: {
-                    colors: {
-                      brand: 'hsl(var(--primary))',
-                      brandAccent: 'hsl(var(--primary))',
-                    },
+                      <Auth
+            supabaseClient={supabase}
+            appearance={{
+              theme: ThemeSupa,
+              variables: {
+                default: {
+                  colors: {
+                    brand: 'hsl(var(--primary))',
+                    brandAccent: 'hsl(var(--primary))',
+                    inputText: 'hsl(var(--foreground))',
+                    inputPlaceholder: 'hsl(var(--muted-foreground))',
                   },
                 },
-              }}
+              },
+            }}
               providers={[]}
               view={authView}
               showLinks={true}

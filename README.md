@@ -49,40 +49,4 @@ content/
 └── persona/       # Role-based learning paths
 ```
 
-Each content type follows a specific frontmatter structure. For example:
-
-```mdx
----
-title: "Content Title"
-type: "algorithm"
-slug: "content-slug"
-description: "Brief description"
-keyApplications: ["application1", "application2"]
-prerequisites: ["prerequisite1", "prerequisite2"]
-keywords: ["keyword1", "keyword2"]
-lastUpdated: "2024-02-23"
----
-
-Content here...
-```
-
-## Development Notes
-
-- The project uses TypeScript for type safety
-- Components are organized in a modular structure
-- Content is statically generated at build time
-- Custom components can be used within MDX content
-
-## Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Submit a pull request
-
-Please ensure your content follows our MDX structure and includes all required frontmatter fields.
-
-## License
-
-[Add license information here]
-
+Each content type follows a specific frontmatter structure.

@@ -288,6 +288,52 @@ export async function GET(request: NextRequest) {
       orderDirection: 'desc'
     });
     
+    // Fetch relationships for each case study
+    if (data && data.length > 0) {
+      const serviceClient = await createServiceRoleSupabaseClient();
+      
+      for (const item of data) {
+        // Fetch industries
+        const { data: industryRelations } = await serviceClient
+          .from('case_study_industry_relations')
+          .select(`
+            industry_id,
+            industries:industries(id, slug, name)
+          `)
+          .eq('case_study_id', item.id);
+          
+        if (industryRelations) {
+          (item as any).related_industries = industryRelations.map(rel => rel.industries).filter(Boolean);
+        }
+        
+        // Fetch algorithms
+        const { data: algorithmRelations } = await serviceClient
+          .from('algorithm_case_study_relations')
+          .select(`
+            algorithm_id,
+            algorithms:algorithms(id, slug, name)
+          `)
+          .eq('case_study_id', item.id);
+          
+        if (algorithmRelations) {
+          (item as any).related_algorithms = algorithmRelations.map(rel => rel.algorithms).filter(Boolean);
+        }
+        
+        // Fetch personas
+        const { data: personaRelations } = await serviceClient
+          .from('case_study_persona_relations')
+          .select(`
+            persona_id,
+            personas:personas(id, slug, name)
+          `)
+          .eq('case_study_id', item.id);
+          
+        if (personaRelations) {
+          (item as any).related_personas = personaRelations.map(rel => rel.personas).filter(Boolean);
+        }
+      }
+    }
+    
     if (error) {
       return NextResponse.json(
         { error: 'Error fetching case studies' },

@@ -31,8 +31,8 @@ export function PersonaManager({ onSave, onDelete, personas }: PersonaManagerPro
     const personaData: PersonaInsert | PersonaUpdate = {
       name: formData.get('name') as string,
       description: formData.get('description') as string,
-      role: formData.get('role') as string,
-      industry: [formData.get('industry_focus') as string].filter(Boolean),
+      expertise: [formData.get('expertise') as string].filter(Boolean),
+      slug: formData.get('name')?.toString().toLowerCase().replace(/\s+/g, '-') || '',
     };
 
     await onSave(personaData);
@@ -50,24 +50,24 @@ export function PersonaManager({ onSave, onDelete, personas }: PersonaManagerPro
       <div className="flex justify-between">
         <h2 className="text-xl font-bold">Personas</h2>
         <button
-          onClick={() => {
-            setSelectedPersona({
-              id: '',
-              name: '',
-              description: '',
-              role: '',
-              industry: [],
-              created_at: new Date().toISOString(),
-              main_content: null,
-              persona_type: null,
-              published: false,
-              related_case_studies: null,
-              slug: '',
-              ts_content: null,
-              updated_at: new Date().toISOString()
-            });
-            setIsEditing(true);
-          }}
+                  onClick={() => {
+          setSelectedPersona({
+            id: '',
+            name: '',
+            description: '',
+            expertise: [],
+            created_at: new Date().toISOString(),
+            main_content: null,
+            is_system_record: false,
+            published: false,
+            published_at: null,
+            recommended_reading: null,
+            slug: '',
+            ts_content: null,
+            updated_at: new Date().toISOString()
+          });
+          setIsEditing(true);
+        }}
           className="btn btn-primary"
         >
           Add New Persona
@@ -95,22 +95,13 @@ export function PersonaManager({ onSave, onDelete, personas }: PersonaManagerPro
             />
           </div>
           <div>
-            <label className="label">Role</label>
+            <label className="label">Expertise</label>
             <input
               type="text"
-              name="role"
-              defaultValue={selectedPersona.role || ''}
+              name="expertise"
+              defaultValue={selectedPersona.expertise?.[0] || ''}
               className="input input-bordered w-full"
-            />
-          </div>
-          <div>
-            <label className="label">Industry Focus</label>
-            <input
-              type="text"
-              name="industry_focus"
-              defaultValue={selectedPersona.industry?.[0] || ''}
-              className="input input-bordered w-full"
-              placeholder="Enter primary industry"
+              placeholder="Enter primary expertise area"
             />
           </div>
           <div className="flex justify-end gap-2">
@@ -140,9 +131,8 @@ export function PersonaManager({ onSave, onDelete, personas }: PersonaManagerPro
               <div className="card-body">
                 <h3 className="card-title">{persona.name}</h3>
                 <p>{persona.description}</p>
-                {persona.role && <p>Role: {persona.role}</p>}
-                {persona.industry && persona.industry.length > 0 && (
-                  <p>Industry: {persona.industry.join(', ')}</p>
+                {persona.expertise && persona.expertise.length > 0 && (
+                  <p>Expertise: {persona.expertise.join(', ')}</p>
                 )}
                 <div className="card-actions justify-end">
                   <button

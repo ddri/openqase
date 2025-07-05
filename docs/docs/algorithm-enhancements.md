@@ -29,7 +29,7 @@ This document outlines the plan for enhancing the Algorithm pages in the admin C
 - **Simplicity:** This keeps the workflow fast and easy, especially for bulk entry and migration of existing content.
 - **Consistency:** It matches the Steps approach, so the authoring experience is uniform.
 - **Flexibility:** You can always refactor to a more dynamic, structured system later if/when you need features like citation management, validation, or export.
-- **Technical Feasibility:** Parsing inline/footnote markers and linking them to the correct reference is straightforward if you keep a consistent syntax (e.g., [1], [^1], or <ref id="1">).
+- **Technical Feasibility:** Parsing inline/footnote markers and linking them to the correct reference is straightforward if you keep a consistent syntax (e.g., [1], [^1], or `<ref id="1">`).
 - **Migration:** This approach makes it easy to migrate your old MDX content and maintain compatibility with your existing reference/citation style.
 
 

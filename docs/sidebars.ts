@@ -54,6 +54,8 @@ const sidebars: SidebarsConfig = {
       label: 'Backend (Supabase)',
       items: [
         'supabase-integration', // Explain src/lib/supabase-* utils, when to use each client
+        'api-documentation', // Unified API architecture: server-side queries + API routes
+        'api-quick-reference', // Quick reference card for common patterns
         'schema-overview', // High-level view of tables and relationships
         'migrations', // How database schema changes are managed (Supabase CLI, migrations dir)
         'database-seeding', // Any scripts for seeding data (e.g., setup-admin.ts)

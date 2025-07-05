@@ -105,6 +105,14 @@ export async function middleware(req: NextRequest) {
 
   // For admin routes, check if user has admin role
   if (isAdminRoute) {
+    // Check if dev mode is enabled to bypass authentication
+    const devMode = process.env.NEXT_PUBLIC_DEV_MODE === 'true'
+    
+    if (devMode) {
+      console.log('[MIDDLEWARE] Dev mode enabled - bypassing admin auth')
+      return res
+    }
+
     if (!session) {
       return NextResponse.redirect(new URL('/auth?redirectTo=/admin', req.url))
     }

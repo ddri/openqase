@@ -197,7 +197,7 @@ export function CaseStudyForm({ caseStudy, algorithms, industries, personas, isN
         await saveCaseStudy(values);
         
         // Then publish it
-        await publishCaseStudy(values.id!);
+        await publishCaseStudy(values.id!, values.slug);
         
         setValues(prev => ({ ...prev, published: true }));
         
@@ -225,7 +225,7 @@ export function CaseStudyForm({ caseStudy, algorithms, industries, personas, isN
     
     startTransition(async () => {
       try {
-        await unpublishCaseStudy(values.id!);
+        await unpublishCaseStudy(values.id!, values.slug);
         
         setValues(prev => ({ ...prev, published: false }));
         
@@ -318,8 +318,8 @@ export function CaseStudyForm({ caseStudy, algorithms, industries, personas, isN
               onUnpublish={handleUnpublish}
               validateContent={validateContent}
               disabled={isPending}
-              onTabChange={() => {}}
-              getTabLabel={() => ''}
+              onTabChange={(tab: string) => {}}
+              getTabLabel={(tab: string) => tab}
             />
           </div>
         </div>

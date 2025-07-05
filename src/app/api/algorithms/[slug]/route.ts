@@ -30,7 +30,8 @@ export async function GET(
       );
     }
 
-    // Then get related case studies
+    // TODO: Fix to use junction tables for algorithm-case study relationships
+    // Then get related case studies through algorithm_case_study_relations
     const { data: relatedCases, error: casesError } = await supabase
       .from('case_studies')
       .select(`
@@ -40,26 +41,15 @@ export async function GET(
         description,
         partner_companies,
         quantum_companies,
-        industries,
         quantum_hardware,
         published_at
       `)
-      .contains('algorithms', [slug])
       .eq('published', true)
       .order('published_at', { ascending: false })
       .limit(5);
 
-    // Get industries where this algorithm is commonly used
-    const { data: commonIndustries, error: industriesError } = await supabase
-      .from('case_studies')
-      .select('industries')
-      .contains('algorithms', [slug])
-      .eq('published', true);
-
-    // Extract unique industries from case studies
-    const uniqueIndustries = commonIndustries
-      ? [...new Set(commonIndustries.flatMap(c => c.industries || []))]
-      : [];
+    // TODO: Get industries through case_study_industry_relations junction table
+    const uniqueIndustries: string[] = [];
 
     if (casesError) {
       console.error('Error fetching related cases:', casesError);

@@ -1,7 +1,12 @@
 import { useCaseStudies } from '@/hooks/useApi';
 import { Database } from '@/types/supabase';
+import ContentCard from '@/components/ui/content-card';
 
-type CaseStudy = Database['public']['Tables']['case_studies']['Row'];
+type CaseStudy = Database['public']['Tables']['case_studies']['Row'] & {
+  related_industries?: Array<{ id: string; slug: string; name: string }>;
+  related_algorithms?: Array<{ id: string; slug: string; name: string }>;
+  related_personas?: Array<{ id: string; slug: string; name: string }>;
+};
 
 export function CaseStudiesList() {
   const { data, isLoading, error } = useCaseStudies();
@@ -14,31 +19,29 @@ export function CaseStudiesList() {
     return <div>Error loading case studies: {error.message}</div>;
   }
 
-  if (!data?.data?.data) {
+  if (!data?.items) {
     return <div>No case studies found.</div>;
   }
 
   return (
-    <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-      {data.data.data.map((caseStudy: CaseStudy) => (
-        <div
-          key={caseStudy.id}
-          className="rounded-lg border border-gray-200 p-6 shadow-sm transition-shadow hover:shadow-md"
-        >
-          <h3 className="mb-2 text-xl font-semibold">{caseStudy.title}</h3>
-          <p className="mb-4 text-gray-600">{caseStudy.description}</p>
-          <div className="flex flex-wrap gap-2">
-            {caseStudy.industries?.map((industry: string) => (
-              <span
-                key={industry}
-                className="rounded-full bg-blue-100 px-3 py-1 text-sm text-blue-800"
-              >
-                {industry}
-              </span>
-            ))}
-          </div>
-        </div>
-      ))}
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {data.items.map((caseStudy: CaseStudy) => {
+        // Combine related industries and algorithms into badges
+        const badges = [
+          ...(caseStudy.related_industries?.map(industry => industry.name) || []),
+          ...(caseStudy.related_algorithms?.map(algorithm => algorithm.name) || [])
+        ];
+
+        return (
+          <ContentCard
+            key={caseStudy.id}
+            title={caseStudy.title}
+            description={caseStudy.description || ''}
+            badges={badges}
+            href={`/case-study/${caseStudy.slug}`}
+          />
+        );
+      })}
     </div>
   );
 } 

@@ -93,15 +93,19 @@ export default async function EditCaseStudyPage({ params }: CaseStudyPageProps) 
   }
 
   // If editing, add the relationship IDs to the case study data
+  let caseStudyWithRelations = caseStudy;
   if (!isNew && caseStudy) {
-    caseStudy.algorithms = algorithmIds;
-    caseStudy.industries = industryIds;
-    caseStudy.personas = personaIds;
+    caseStudyWithRelations = {
+      ...caseStudy,
+      algorithmIds,
+      industryIds,
+      personaIds
+    } as any;
   }
 
   return (
     <CaseStudyForm
-      caseStudy={caseStudy}
+      caseStudy={caseStudyWithRelations}
       algorithms={algorithms || []}
       industries={industries || []}
       personas={personas || []}

@@ -41,7 +41,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
       .eq('blog_post_id', resolvedParams.id);
     
     if (relatedPostsData && relatedPostsData.length > 0) {
-      const relatedPostIds = relatedPostsData.map(rel => rel.related_blog_post_id);
+      const relatedPostIds = relatedPostsData.map(rel => rel.related_blog_post_id).filter((id): id is string => id !== null);
       
       const { data: relatedPosts } = await supabase
         .from('blog_posts')

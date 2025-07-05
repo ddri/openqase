@@ -63,11 +63,13 @@ export function PersonasClient({ data }: PersonasClientProps) {
       header: 'Name',
     },
     {
-      accessorKey: 'role',
-      header: 'Role',
+      accessorKey: 'expertise',
+      header: 'Expertise',
       cell: ({ row }) => (
         <div className="flex items-center">
-          {row.original.role || 'N/A'}
+          {row.original.expertise && row.original.expertise.length > 0 
+            ? row.original.expertise.join(', ') 
+            : 'N/A'}
         </div>
       )
     },

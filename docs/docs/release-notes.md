@@ -8,13 +8,13 @@ Keep track of new features, improvements, and bug fixes for OpenQase here.
 
 ### ✨ Features
 
-*   **Admin CMS Documentation:** Introduced a new developer documentation site using Docusaurus, hosted within the `/docs` directory of the main repository. Includes an initial guide for the refactored `/admin` CMS. ([#IssueID](link-to-pr-or-issue))
-*   **Example Docs Page:** Added a basic example page to demonstrate content creation in the new docs site. ([#IssueID](link-to-pr-or-issue))
+*   **Admin CMS Documentation:** Introduced a new developer documentation site using Docusaurus, hosted within the `/docs` directory of the main repository. Includes an initial guide for the refactored `/admin` CMS.
+*   **Example Docs Page:** Added a basic example page to demonstrate content creation in the new docs site.
 
 ### 🐛 Bug Fixes
 
-*   **Docs URL Structure:** Corrected the URL path for documentation pages to remove the duplicate `/docs/docs/` segment. Pages are now accessible at `/docs/[slug]`. ([#IssueID](link-to-pr-or-issue))
-*   **Docs Landing Page:** Replaced the default Docusaurus landing page with a redirect to the primary CMS guide. ([#IssueID](link-to-pr-or-issue))
+*   **Docs URL Structure:** Corrected the URL path for documentation pages to remove the duplicate `/docs/docs/` segment. Pages are now accessible at `/docs/[slug]`.
+*   **Docs Landing Page:** Replaced the default Docusaurus landing page with a redirect to the primary CMS guide.
 
 ### 🔧 Changes & Improvements
 
@@ -40,4 +40,4 @@ Keep track of new features, improvements, and bug fixes for OpenQase here.
 
 ---
 
-*Find older release notes [here](link-to-archive-if-needed).* 
+*Older release notes will be added here as the project evolves.* 

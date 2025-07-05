@@ -6,7 +6,7 @@ type Tables = Database['public']['Tables']
 type PersonaRow = Tables['personas']['Row']
 type CaseStudyRow = Tables['case_studies']['Row']
 
-export interface RelatedCaseStudy extends Pick<CaseStudyRow, 'id' | 'slug' | 'title' | 'description' | 'industries'> {
+export interface RelatedCaseStudy extends Pick<CaseStudyRow, 'id' | 'slug' | 'title' | 'description'> {
   published_at?: string;
 }
 

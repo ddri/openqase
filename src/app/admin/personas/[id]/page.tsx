@@ -53,11 +53,14 @@ export default async function EditPersonaPage({ params }: PersonaPageProps) {
 
   // This means at this point, if !isNew is true, then persona must be defined
   // Use a more explicit type annotation to help TypeScript understand our intent
-  const personaData: Persona = !isNew ? persona as Persona : {} as Persona;
+  let personaData: any = !isNew ? persona as Persona : {} as Persona;
   
   // Add the industry IDs to the persona data
   if (!isNew) {
-    personaData.industry = industryIds;
+    personaData = {
+      ...personaData,
+      industry: industryIds
+    };
   }
 
   return (

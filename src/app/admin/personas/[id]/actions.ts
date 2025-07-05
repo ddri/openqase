@@ -53,11 +53,11 @@ export async function savePersona(values: any): Promise<any> {
         throw new Error(industryError.error.message || "Failed to delete industry relationships");
     }
 
-    if (industryIds.length > 0 && data?.id) {
+    if (industryIds.length > 0 && data && data.id) {
       for (const industryId of industryIds) {
           let insertError = await supabase
               .from('persona_industry_relations')
-              .insert({ persona_id: data.id, industry_id: industryId });
+              .insert({ persona_id: data.id!, industry_id: industryId });
 
           if (insertError && insertError.error) {
               console.error("Error inserting industry relationship:", insertError.error);

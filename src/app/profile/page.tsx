@@ -14,7 +14,6 @@ import { useRouter } from 'next/navigation'
 
 interface EmailPreferences {
   marketing: boolean
-  social: boolean
   security: boolean
 }
 
@@ -24,7 +23,6 @@ export default function ProfilePage() {
   const [loading, setLoading] = useState(true)
   const [emailPrefs, setEmailPrefs] = useState<EmailPreferences>({
     marketing: false,
-    social: false,
     security: true
   })
   const supabase = createBrowserSupabaseClient()
@@ -79,7 +77,6 @@ export default function ProfilePage() {
         const prefs = data.email_preferences as Record<string, boolean>;
         setEmailPrefs({
           marketing: prefs.marketing || false,
-          social: prefs.social || false,
           security: prefs.security || true
         });
       }
@@ -213,24 +210,7 @@ export default function ProfilePage() {
                     onCheckedChange={(checked: boolean) => saveEmailPrefs('marketing', checked)}
                   />
                 </div>
-                <div className="flex items-center justify-between space-x-2">
-                  <div className="flex-1 space-y-1">
-                    <label
-                      htmlFor="social"
-                      className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                    >
-                      Social emails
-                    </label>
-                    <p className="text-sm text-muted-foreground">
-                      Receive emails for friend requests, follows, and more.
-                    </p>
-                  </div>
-                  <Switch
-                    id="social"
-                    checked={emailPrefs.social}
-                    onCheckedChange={(checked: boolean) => saveEmailPrefs('social', checked)}
-                  />
-                </div>
+
                 <div className="flex items-center justify-between space-x-2">
                   <div className="flex-1 space-y-1">
                     <label

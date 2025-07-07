@@ -3,6 +3,7 @@ import { z } from 'zod'
 import { Resend } from 'resend'
 import { createServerSupabaseClient } from '@/lib/supabase-server'
 import { rateLimiter, RATE_LIMITS } from '@/lib/rate-limiter'
+// import { trackNewsletterSignup } from '@/lib/analytics' // TODO: Add after database types are updated
 
 // Initialize Resend
 const resend = new Resend(process.env.RESEND_API_KEY)

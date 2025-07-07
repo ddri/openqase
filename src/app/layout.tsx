@@ -7,6 +7,7 @@ import { Toaster } from '@/components/ui/toaster';
 import FooterWrapper from '@/components/FooterWrapper';
 import Providers from '@/components/Providers';
 import { GlobalErrorBoundary } from '@/components/error-boundary/GlobalErrorBoundary';
+import { Analytics } from '@vercel/analytics/react';
 
 // Load Montserrat for headings
 const montserrat = Montserrat({
@@ -50,6 +51,7 @@ export default function RootLayout({
           </div>
           <Toaster />
         </Providers>
+        <Analytics />
       </body>
     </html>
   );

@@ -102,6 +102,15 @@
         ```
     *   Test one of the scripts, e.g., `npm run docs:start` from the root directory.
 
+**Latest Updates:**
+
+✅ **Newsletter System Documentation Added (July 2025):**
+   - Complete documentation for the newsletter subscription system
+   - Covers API endpoints, database schema, email integration with Resend
+   - Includes rate limiting, frontend integration examples, and deployment guide
+   - File: `docs/docs/newsletter-system.md`
+   - Added to Features section in `sidebars.ts`
+
 **Phase 3: Deployment & Refinement**
 
 10. **Discuss Deployment Strategy:**

@@ -77,6 +77,7 @@ const sidebars: SidebarsConfig = {
       label: 'Features',
       items: [
         'admin-cms-guide', // Existing guide - maybe rename to 'Admin CMS' later?
+        'newsletter-system', // Newsletter subscription system with Resend integration
         // Add pages for other major features if applicable
         // 'public-blog',
         // 'case-studies-feature',

@@ -5,8 +5,14 @@ import { createServerSupabaseClient } from '@/lib/supabase-server'
 import { rateLimiter, RATE_LIMITS } from '@/lib/rate-limiter'
 // import { trackNewsletterSignup } from '@/lib/analytics' // TODO: Add after database types are updated
 
-// Initialize Resend
-const resend = new Resend(process.env.RESEND_API_KEY)
+// Helper function to get Resend instance
+function getResendClient() {
+  const apiKey = process.env.RESEND_API_KEY
+  if (!apiKey) {
+    throw new Error('RESEND_API_KEY environment variable is not set')
+  }
+  return new Resend(apiKey)
+}
 
 // Email validation schema
 const newsletterSchema = z.object({
@@ -23,6 +29,14 @@ const unsubscribeSchema = z.object({
  * Subscribe to newsletter
  */
 export async function POST(request: Request) {
+  // Build-time safety check
+  if (!process.env.RESEND_API_KEY) {
+    return NextResponse.json(
+      { error: 'Newsletter service is not configured' },
+      { status: 503 }
+    )
+  }
+
   try {
     // Apply rate limiting
     const clientIP = request.headers.get('x-forwarded-for') || 
@@ -43,11 +57,11 @@ export async function POST(request: Request) {
         },
         { 
           status: 429,
-                  headers: {
-          'X-RateLimit-Limit': RATE_LIMITS.newsletter.limit.toString(),
-          'X-RateLimit-Remaining': rateLimitResult.remaining.toString(),
-          'Retry-After': rateLimitResult.retryAfter?.toString() || '300'
-        }
+          headers: {
+            'X-RateLimit-Limit': RATE_LIMITS.newsletter.limit.toString(),
+            'X-RateLimit-Remaining': rateLimitResult.remaining.toString(),
+            'Retry-After': rateLimitResult.retryAfter?.toString() || '300'
+          }
         }
       )
     }
@@ -66,10 +80,10 @@ export async function POST(request: Request) {
     const { email, source } = result.data
     const supabase = await createServerSupabaseClient()
 
-    // Check if email already exists
-    const { data: existing } = await supabase
+    // Check if email already exists (with type assertion for build safety)
+    const { data: existing } = await (supabase as any)
       .from('newsletter_subscriptions')
-      .select('id, status')
+      .select('id, status, metadata')
       .eq('email', email)
       .single()
 
@@ -82,7 +96,7 @@ export async function POST(request: Request) {
         })
       } else {
         // Reactivate subscription
-        const { error: updateError } = await supabase
+        const { error: updateError } = await (supabase as any)
           .from('newsletter_subscriptions')
           .update({ 
             status: 'active',
@@ -101,7 +115,7 @@ export async function POST(request: Request) {
       }
     } else {
       // Create new subscription
-      const { error: insertError } = await supabase
+      const { error: insertError } = await (supabase as any)
         .from('newsletter_subscriptions')
         .insert({
           email,
@@ -120,7 +134,7 @@ export async function POST(request: Request) {
 
     // Send welcome email via Resend
     try {
-      const { data: unsubscribeData } = await supabase
+      const { data: unsubscribeData } = await (supabase as any)
         .from('newsletter_subscriptions')
         .select('unsubscribe_token')
         .eq('email', email)
@@ -128,6 +142,7 @@ export async function POST(request: Request) {
 
       const unsubscribeUrl = `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/newsletter/unsubscribe?token=${unsubscribeData?.unsubscribe_token}`
 
+      const resend = getResendClient()
       await resend.emails.send({
         from: 'david@openqase.com',
         to: [email],
@@ -203,6 +218,14 @@ export async function POST(request: Request) {
  * Unsubscribe from newsletter
  */
 export async function DELETE(request: Request) {
+  // Build-time safety check
+  if (!process.env.RESEND_API_KEY) {
+    return NextResponse.json(
+      { error: 'Newsletter service is not configured' },
+      { status: 503 }
+    )
+  }
+
   try {
     const { searchParams } = new URL(request.url)
     const token = searchParams.get('token')
@@ -216,14 +239,14 @@ export async function DELETE(request: Request) {
 
     const supabase = await createServerSupabaseClient()
 
-    // Find subscription by token
-    const { data: subscription, error: findError } = await supabase
+    // Find subscription by token and update status
+    const { data: subscription, error: selectError } = await (supabase as any)
       .from('newsletter_subscriptions')
       .select('id, email, status')
       .eq('unsubscribe_token', token)
       .single()
 
-    if (findError || !subscription) {
+    if (selectError || !subscription) {
       return NextResponse.json(
         { error: 'Invalid unsubscribe token' },
         { status: 404 }
@@ -238,13 +261,11 @@ export async function DELETE(request: Request) {
     }
 
     // Update subscription status
-    const { error: updateError } = await supabase
+    const { error: updateError } = await (supabase as any)
       .from('newsletter_subscriptions')
       .update({ 
         status: 'unsubscribed',
-        metadata: { 
-          unsubscribed_at: new Date().toISOString()
-        }
+        updated_at: new Date().toISOString()
       })
       .eq('unsubscribe_token', token)
 
@@ -260,53 +281,51 @@ export async function DELETE(request: Request) {
       message: 'Successfully unsubscribed from newsletter.',
       email: subscription.email
     })
-    
   } catch (error) {
     console.error('Newsletter unsubscribe error:', error)
     return NextResponse.json(
-      { error: 'Failed to unsubscribe' },
+      { error: 'Failed to unsubscribe from newsletter' },
       { status: 500 }
     )
   }
 }
 
 /**
- * Get subscription status (for admin or checking)
+ * Get unsubscribe status (for unsubscribe page)
  */
 export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url)
-    const email = searchParams.get('email')
+    const token = searchParams.get('token')
     
-    if (!email) {
+    if (!token) {
       return NextResponse.json(
-        { error: 'Email parameter is required' },
+        { error: 'Unsubscribe token is required' },
         { status: 400 }
       )
     }
 
     const supabase = await createServerSupabaseClient()
 
-    const { data: subscription } = await supabase
+    // Find subscription by token
+    const { data: subscription, error: selectError } = await (supabase as any)
       .from('newsletter_subscriptions')
-      .select('email, status, subscription_date')
-      .eq('email', email)
+      .select('email, status')
+      .eq('unsubscribe_token', token)
       .single()
 
-    if (!subscription) {
-      return NextResponse.json({
-        subscribed: false,
-        email
-      })
+    if (selectError || !subscription) {
+      return NextResponse.json(
+        { error: 'Invalid unsubscribe token' },
+        { status: 404 }
+      )
     }
 
     return NextResponse.json({
-      subscribed: subscription.status === 'active',
       email: subscription.email,
       status: subscription.status,
-      subscriptionDate: subscription.subscription_date
+      alreadyUnsubscribed: subscription.status === 'unsubscribed'
     })
-    
   } catch (error) {
     console.error('Newsletter status check error:', error)
     return NextResponse.json(

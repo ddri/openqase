@@ -5,7 +5,7 @@ import { resolve } from 'path'
 // Load .env.local file
 config({ path: resolve(process.cwd(), '.env.local') })
 
-const ADMIN_EMAIL = 'davedri@gmail.com'
+const ADMIN_EMAIL = 'your-admin-email@example.com'
 
 if (!process.env.NEXT_PUBLIC_SUPABASE_URL) {
   throw new Error('Missing env.NEXT_PUBLIC_SUPABASE_URL')

@@ -40,7 +40,7 @@ NEXT_PUBLIC_SUPABASE_URL=http://127.0.0.1:54321
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your_anon_key_here
 
 # Admin configuration
-SUPABASE_AUTH_ADMIN_USER=davedri@gmail.com
+SUPABASE_AUTH_ADMIN_USER=your-admin-email@example.com
 `;
   
   fs.writeFileSync(envPath, envContent);

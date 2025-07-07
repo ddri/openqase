@@ -15,7 +15,7 @@ const CONTENT_TYPE = 'case_studies';
 // Define relationship configurations for case studies
 const RELATIONSHIP_CONFIG = {
   algorithms: {
-    junctionTable: 'case_study_algorithm_relations',
+    junctionTable: 'algorithm_case_study_relations',
     contentIdField: 'case_study_id',
     relatedIdField: 'algorithm_id',
     relatedTable: 'algorithms'

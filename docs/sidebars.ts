@@ -46,6 +46,7 @@ const sidebars: SidebarsConfig = {
         'authentication', // Middleware, Supabase Auth, user roles
         'data-fetching', // Patterns (Server Components, Server Actions, Tanstack Query?)
         'styling', // Tailwind CSS, shadcn/ui usage
+        'v040-architecture-modernization', // 0.4.0 CTO Plan: Static-first content architecture
       ],
     },
     // 3. Backend & Data

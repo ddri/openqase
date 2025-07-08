@@ -278,6 +278,16 @@ export async function GET(request: NextRequest) {
       }
     }
     
+    console.log('[CaseStudies API] About to call fetchContentItems with:', {
+      contentType: CONTENT_TYPE,
+      includeUnpublished,
+      page,
+      pageSize,
+      filters,
+      orderBy: 'updated_at',
+      orderDirection: 'desc'
+    });
+
     const { data, error, count } = await fetchContentItems({
       contentType: CONTENT_TYPE as any,
       includeUnpublished,
@@ -287,54 +297,69 @@ export async function GET(request: NextRequest) {
       orderBy: 'updated_at',
       orderDirection: 'desc'
     });
+
+    console.log('[CaseStudies API] fetchContentItems result:', {
+      dataLength: data?.length,
+      error: error?.message,
+      count
+    });
     
     // Fetch relationships for each case study
     if (data && data.length > 0) {
-      const serviceClient = await createServiceRoleSupabaseClient();
-      
-      for (const item of data) {
-        // Fetch industries
-        const { data: industryRelations } = await serviceClient
-          .from('case_study_industry_relations')
-          .select(`
-            industry_id,
-            industries:industries(id, slug, name)
-          `)
-          .eq('case_study_id', item.id);
-          
-        if (industryRelations) {
-          (item as any).related_industries = industryRelations.map(rel => rel.industries).filter(Boolean);
-        }
+      console.log('[CaseStudies API] About to create service role client for relationship fetching');
+      try {
+        const serviceClient = createServiceRoleSupabaseClient();
+        console.log('[CaseStudies API] Service role client created successfully');
         
-        // Fetch algorithms
-        const { data: algorithmRelations } = await serviceClient
-          .from('algorithm_case_study_relations')
-          .select(`
-            algorithm_id,
-            algorithms:algorithms(id, slug, name)
-          `)
-          .eq('case_study_id', item.id);
+        for (const item of data) {
+          // Fetch industries
+          const { data: industryRelations } = await serviceClient
+            .from('case_study_industry_relations')
+            .select(`
+              industry_id,
+              industries:industries(id, slug, name)
+            `)
+            .eq('case_study_id', item.id);
+            
+          if (industryRelations) {
+            (item as any).related_industries = industryRelations.map((rel: any) => rel.industries).filter(Boolean);
+          }
           
-        if (algorithmRelations) {
-          (item as any).related_algorithms = algorithmRelations.map(rel => rel.algorithms).filter(Boolean);
-        }
-        
-        // Fetch personas
-        const { data: personaRelations } = await serviceClient
-          .from('case_study_persona_relations')
-          .select(`
-            persona_id,
-            personas:personas(id, slug, name)
-          `)
-          .eq('case_study_id', item.id);
+          // Fetch algorithms
+          const { data: algorithmRelations } = await serviceClient
+            .from('algorithm_case_study_relations')
+            .select(`
+              algorithm_id,
+              algorithms:algorithms(id, slug, name)
+            `)
+            .eq('case_study_id', item.id);
+            
+          if (algorithmRelations) {
+            (item as any).related_algorithms = algorithmRelations.map((rel: any) => rel.algorithms).filter(Boolean);
+          }
           
-        if (personaRelations) {
-          (item as any).related_personas = personaRelations.map(rel => rel.personas).filter(Boolean);
+          // Fetch personas
+          const { data: personaRelations } = await serviceClient
+            .from('case_study_persona_relations')
+            .select(`
+              persona_id,
+              personas:personas(id, slug, name)
+            `)
+            .eq('case_study_id', item.id);
+            
+          if (personaRelations) {
+            (item as any).related_personas = personaRelations.map((rel: any) => rel.personas).filter(Boolean);
+          }
         }
+        console.log('[CaseStudies API] Finished fetching relationships for all case studies');
+      } catch (serviceRoleError) {
+        console.error('[CaseStudies API] Error creating service role client:', serviceRoleError);
+        // Continue without relationships rather than failing completely
       }
     }
     
     if (error) {
+      console.error('[CaseStudies API] Error from fetchContentItems:', error);
       return NextResponse.json(
         { error: 'Error fetching case studies' },
         { status: 500 }
@@ -351,7 +376,7 @@ export async function GET(request: NextRequest) {
       }
     });
   } catch (error) {
-    console.error('Error in case studies GET handler:', error);
+    console.error('[CaseStudies API] Unexpected error in GET handler:', error);
     return NextResponse.json(
       { error: 'Failed to fetch case studies' },
       { status: 500 }

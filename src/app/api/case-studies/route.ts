@@ -308,8 +308,9 @@ export async function GET(request: NextRequest) {
     if (data && data.length > 0) {
       console.log('[CaseStudies API] About to create service role client for relationship fetching');
       try {
-        const serviceClient = createServiceRoleSupabaseClient();
-        console.log('[CaseStudies API] Service role client created successfully');
+        const serviceClient = await createServiceRoleSupabaseClient();
+        console.log('[CaseStudies API] Service role client created successfully, type:', typeof serviceClient);
+        console.log('[CaseStudies API] Service role client has .from method:', typeof serviceClient.from);
         
         for (const item of data) {
           // Fetch industries

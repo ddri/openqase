@@ -143,6 +143,8 @@ export default async function PersonaPage({ params }: PageParams) {
     slug: resolvedParams.slug,
     persona,
     mdxContent: persona?.main_content,
+    industryRelations: persona?.persona_industry_relations,
+    industryRelationsLength: persona?.persona_industry_relations?.length,
     error: personaError
   });
 

@@ -1,8 +1,29 @@
-'use client';
-
+import { createServerSupabaseClient } from '@/lib/supabase-server';
 import { CaseStudiesList } from '@/components/CaseStudiesList';
+import type { Database } from '@/types/supabase';
 
-export default function CaseStudyPage() {
+type CaseStudy = Database['public']['Tables']['case_studies']['Row'];
+
+async function getCaseStudies() {
+  const supabase = await createServerSupabaseClient();
+  
+  const { data, error } = await supabase
+    .from('case_studies')
+    .select('*')
+    .eq('published', true)  // Only fetch published case studies
+    .order('updated_at', { ascending: false });
+
+  if (error) {
+    console.error('Error fetching case studies:', error);
+    return [];
+  }
+
+  return (data as unknown) as CaseStudy[];
+}
+
+export default async function CaseStudyPage() {
+  const caseStudies = await getCaseStudies();
+
   return (
     <main className="min-h-screen">
       <div className="container-outer section-spacing">
@@ -14,7 +35,7 @@ export default function CaseStudyPage() {
             Explore real-world applications of quantum computing across different industries and use cases.
           </p>
         </div>
-        <CaseStudiesList />
+        <CaseStudiesList caseStudies={caseStudies} />
       </div>
     </main>
   );

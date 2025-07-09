@@ -79,6 +79,7 @@ const sidebars: SidebarsConfig = {
       items: [
         'admin-cms-guide', // Existing guide - maybe rename to 'Admin CMS' later?
         'newsletter-system', // Newsletter subscription system with Resend integration
+        'email-preferences-system', // Email preferences management following Resend best practices
         // Add pages for other major features if applicable
         // 'public-blog',
         // 'case-studies-feature',

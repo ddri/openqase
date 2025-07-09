@@ -1,26 +1,11 @@
 import { notFound } from 'next/navigation';
-import { createServerSupabaseClient } from '../../../lib/supabase-server';
-import type { Database } from '@/types/supabase';
 import { Badge } from '@/components/ui/badge';
 import Link from "next/link";
 import { Metadata } from 'next';
 import ReactMarkdown from 'react-markdown';
 import { format } from 'date-fns';
-
-interface BlogPost {
-  id: string;
-  title: string;
-  slug: string;
-  description?: string;
-  content?: string;
-  author?: string;
-  category?: string;
-  tags?: string[];
-  published: boolean;
-  published_at?: string;
-  created_at: string;
-  updated_at: string;
-}
+import { getStaticContentWithRelationships, generateStaticParamsForContentType } from '@/lib/content-fetchers';
+import { EnrichedBlogPost } from '@/lib/types';
 
 interface BlogPostPageProps {
   params: Promise<{
@@ -28,16 +13,14 @@ interface BlogPostPageProps {
   }>;
 }
 
+export async function generateStaticParams() {
+  return generateStaticParamsForContentType('blog_posts');
+}
+
 export async function generateMetadata({ params }: BlogPostPageProps): Promise<Metadata> {
   const resolvedParams = await params;
-  const supabase = await createServerSupabaseClient();
   
-  const { data: blogPost } = await supabase
-    .from('blog_posts')
-    .select('*')
-    .eq('slug', resolvedParams.slug)
-    .eq('published', true)
-    .single();
+  const blogPost = await getStaticContentWithRelationships<EnrichedBlogPost>('blog_posts', resolvedParams.slug);
     
   if (!blogPost) {
     return {
@@ -48,52 +31,21 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
   
   return {
     title: `${blogPost.title} - OpenQASE Blog`,
-    description: blogPost.description,
+    description: blogPost.description || 'Blog post from OpenQASE',
   };
 }
 
 export default async function BlogPostPage({ params }: BlogPostPageProps) {
   const resolvedParams = await params;
-  const supabase = await createServerSupabaseClient();
   
-  const { data: blogPost, error } = await supabase
-    .from('blog_posts')
-    .select('*')
-    .eq('slug', resolvedParams.slug)
-    .eq('published', true)
-    .single();
+  const blogPost = await getStaticContentWithRelationships<EnrichedBlogPost>('blog_posts', resolvedParams.slug);
     
-  if (!blogPost || error) {
+  if (!blogPost) {
     notFound();
   }
 
-  // Fetch related blog posts
-  let relatedPosts: BlogPost[] = [];
-  if (blogPost.id) {
-    // Get related_blog_post_id values from blog_post_relations
-    const { data: relations } = await supabase
-      .from('blog_post_relations')
-      .select('related_blog_post_id')
-      .eq('blog_post_id', blogPost.id)
-      .eq('relation_type', 'related');
-    if (relations && relations.length > 0) {
-      const relatedIds = relations.map((rel: any) => rel.related_blog_post_id);
-      if (relatedIds.length > 0) {
-        const { data: relatedData } = await supabase
-          .from('blog_posts')
-          .select('*')
-          .in('id', relatedIds)
-          .eq('published', true);
-        if (relatedData) {
-          // Ensure description is always a string
-          relatedPosts = relatedData.map((post: any) => ({
-            ...post,
-            description: post.description ?? '',
-          }));
-        }
-      }
-    }
-  }
+  // Extract related blog posts from the relationships
+  const relatedPosts = blogPost.blog_post_relations?.map(relation => relation.related_blog_posts) || [];
 
   return (
     <div className="container mx-auto px-4 py-12">
@@ -137,6 +89,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
             <ReactMarkdown>{blogPost.content}</ReactMarkdown>
           )}
         </div>
+        
         {/* Related Blog Posts Section */}
         {relatedPosts.length > 0 && (
           <>

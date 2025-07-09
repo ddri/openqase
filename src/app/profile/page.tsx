@@ -12,19 +12,12 @@ import { createBrowserSupabaseClient } from '@/lib/supabase-browser'
 import { User } from '@supabase/supabase-js'
 import { useRouter } from 'next/navigation'
 
-interface EmailPreferences {
-  marketing: boolean
-  security: boolean
-}
-
 export default function ProfilePage() {
   const { theme, setTheme, themes } = useTheme()
   const [user, setUser] = useState<User | null>(null)
   const [loading, setLoading] = useState(true)
-  const [emailPrefs, setEmailPrefs] = useState<EmailPreferences>({
-    marketing: false,
-    security: true
-  })
+  const [marketingEmailsEnabled, setMarketingEmailsEnabled] = useState(false)
+  const [newsletterLoading, setNewsletterLoading] = useState(false)
   const supabase = createBrowserSupabaseClient()
   const router = useRouter()
 
@@ -62,51 +55,59 @@ export default function ProfilePage() {
     return () => subscription.unsubscribe()
   }, [supabase, router])
 
-  // Load email preferences from database
+  // Load newsletter subscription status
   useEffect(() => {
-    const loadEmailPrefs = async () => {
+    const loadNewsletterStatus = async () => {
       if (!user) return
-      const { data, error } = await supabase
-        .from('user_preferences')
-        .select('*')
-        .eq('user_id', user.id)
-        .single()
-
-      if (data && data.email_preferences) {
-        // Use a safer type assertion with default values
-        const prefs = data.email_preferences as Record<string, boolean>;
-        setEmailPrefs({
-          marketing: prefs.marketing || false,
-          security: prefs.security || true
-        });
+      
+      try {
+        const response = await fetch('/api/newsletter/subscription')
+        if (response.ok) {
+          const data = await response.json()
+          setMarketingEmailsEnabled(data.isSubscribed)
+        }
+      } catch (error) {
+        console.error('Error loading newsletter status:', error)
       }
     }
 
-    loadEmailPrefs()
-  }, [user, supabase])
+    loadNewsletterStatus()
+  }, [user])
 
-  // Save email preferences
-  const saveEmailPrefs = async (key: keyof EmailPreferences, value: boolean) => {
+  // Handle marketing emails toggle (newsletter subscription)
+  const handleMarketingEmailsToggle = async (enabled: boolean) => {
     if (!user) return
 
-    const { error } = await supabase
-      .from('user_preferences')
-      .upsert({
-        id: user.id, // Use 'id' instead of 'user_id' based on the error message
-        email_preferences: { ...emailPrefs, [key]: value }
+    setNewsletterLoading(true)
+    try {
+      const response = await fetch('/api/newsletter/subscription', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ subscribe: enabled }),
       })
 
-    if (error) {
-      toast({
-        title: 'Error',
-        description: 'Failed to save preferences. Please try again.',
-        variant: 'destructive'
-      })
-    } else {
+      if (!response.ok) {
+        throw new Error('Failed to update newsletter subscription')
+      }
+
+      const data = await response.json()
+      setMarketingEmailsEnabled(data.isSubscribed)
+      
       toast({
         title: 'Success',
-        description: 'Your preferences have been saved.'
+        description: data.message,
       })
+    } catch (error) {
+      console.error('Error updating newsletter subscription:', error)
+      toast({
+        title: 'Error',
+        description: 'Failed to update email preferences. Please try again.',
+        variant: 'destructive'
+      })
+    } finally {
+      setNewsletterLoading(false)
     }
   }
 
@@ -187,7 +188,7 @@ export default function ProfilePage() {
             <CardHeader>
               <CardTitle>Email Preferences</CardTitle>
               <CardDescription>
-                Control which emails you receive from us.
+                Manage your newsletter subscription. Security and account emails will always be sent.
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -201,33 +202,31 @@ export default function ProfilePage() {
                       Marketing emails
                     </label>
                     <p className="text-sm text-muted-foreground">
-                      Receive emails about new products, features, and more.
+                      Receive our newsletter with updates about quantum computing case studies, new algorithms, and platform updates.
                     </p>
                   </div>
                   <Switch
                     id="marketing"
-                    checked={emailPrefs.marketing}
-                    onCheckedChange={(checked: boolean) => saveEmailPrefs('marketing', checked)}
+                    checked={marketingEmailsEnabled}
+                    onCheckedChange={handleMarketingEmailsToggle}
+                    disabled={newsletterLoading}
                   />
                 </div>
 
-                <div className="flex items-center justify-between space-x-2">
-                  <div className="flex-1 space-y-1">
-                    <label
-                      htmlFor="security"
-                      className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                    >
-                      Security emails
-                    </label>
-                    <p className="text-sm text-muted-foreground">
-                      Receive emails about your account security and activity.
-                    </p>
+                <div className="rounded-lg border border-border bg-muted/50 p-4">
+                  <div className="flex items-start space-x-3">
+                    <div className="flex-shrink-0">
+                      <svg className="h-5 w-5 text-muted-foreground" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.623 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" />
+                      </svg>
+                    </div>
+                    <div className="space-y-1">
+                      <p className="text-sm font-medium">Security & Account Emails</p>
+                      <p className="text-xs text-muted-foreground">
+                        Important emails about your account security, password resets, and login notifications will always be sent and cannot be disabled.
+                      </p>
+                    </div>
                   </div>
-                  <Switch
-                    id="security"
-                    checked={emailPrefs.security}
-                    onCheckedChange={(checked: boolean) => saveEmailPrefs('security', checked)}
-                  />
                 </div>
               </div>
             </CardContent>

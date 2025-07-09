@@ -1,38 +1,121 @@
 # Data Fetching
 
-OpenQase employs several strategies for fetching data, primarily leveraging Next.js App Router features and Supabase.
+OpenQase v0.4.0 introduces a hybrid data fetching architecture that combines static generation for public content with dynamic patterns for admin functionality.
 
-## 1. Server Components (Primary Read Pattern)
+## 1. Unified Content Fetching (Public Content) 
 
-*   **Context:** Used for initial data loading in `page.tsx` and `layout.tsx` files rendered on the server.
+**NEW in v0.4.0** - Primary pattern for public content pages (`case-study`, `paths/algorithm`, `paths/persona`, `paths/industry`).
+
+* **Context:** Used for all public content pages that need to be statically generated for optimal performance.
+* **Mechanism:** Uses the unified content fetching system from `src/lib/content-fetchers.ts` that provides consistent APIs across all content types.
+* **Functions:**
+  * `getStaticContentWithRelationships()` - Fetches single content item with all relationships
+  * `getStaticContentList()` - Fetches content lists for listing pages
+  * `generateStaticParamsForContentType()` - Generates static params for build-time generation
+* **Benefits:** Eliminates N+1 queries, enables static generation, provides consistent API
+* **Example:** See [Unified Content Fetching](./unified-content-fetching.md) for comprehensive documentation
+
+```typescript
+// Modern pattern for content pages
+import { getStaticContentWithRelationships } from '@/lib/content-fetchers';
+
+export default async function AlgorithmPage({ params }: { params: { slug: string } }) {
+  const algorithm = await getStaticContentWithRelationships('algorithms', params.slug);
+  
+  if (!algorithm) {
+    notFound();
+  }
+  
+  // All relationships included in single query
+  return <div>{algorithm.name}</div>;
+}
+```
+
+## 2. Server Components (Admin & Complex Pages)
+
+*   **Context:** Used for admin pages, complex dynamic pages, and initial data loading in `page.tsx` and `layout.tsx` files rendered on the server.
 *   **Mechanism:** Server Components can directly use `async/await` to fetch data from Supabase before rendering.
-*   **Supabase Client:** Typically uses a server-side Supabase client obtained via helpers like `createServerSupabaseClient` (likely from `src/lib/supabase.ts` or `src/lib/supabase-server.ts`). This client uses the user's session cookie or service role keys where appropriate.
-*   **Example:** Loading a list of blog posts in `src/app/blog/page.tsx` or a single case study in `src/app/case-study/[slug]/page.tsx`. Fetching initial data for admin forms in `src/app/admin/[content-type]/[id]/page.tsx`.
-*   **Caching:** Leverages Next.js data caching. Cache invalidation is typically handled via `revalidatePath` or `revalidateTag` calls within Server Actions after data mutations. Pages can also opt-out of caching using `export const dynamic = 'force-dynamic';`.
+*   **Supabase Client:** Uses server-side Supabase client obtained via `createServerSupabaseClient` from `src/lib/supabase-server.ts`.
+*   **Example:** Loading admin forms in `src/app/admin/[content-type]/[id]/page.tsx`, complex dashboard pages.
+*   **Caching:** Leverages Next.js data caching. Cache invalidation handled via `revalidatePath` or `revalidateTag` calls within Server Actions.
 
-## 2. Server Actions (Mutations & Some Reads)
+## 3. Server Actions (Mutations & Admin Operations)
 
-*   **Context:** Used for handling data mutations (Create, Update, Delete) triggered by user interactions in Client Components (e.g., form submissions). Can also be used for server-side data fetching triggered from the client if needed, though less common for reads than Server Components.
-*   **Mechanism:** Client Components invoke functions marked with `"use server";` (defined in `.ts` files, often `actions.ts`). These functions execute securely on the server.
-*   **Supabase Client:** Typically uses the **service role client** (`createServiceRoleSupabaseClient` via helpers like `getSupabaseServiceClientRole` from `src/lib/supabase.ts`) to perform actions requiring elevated privileges, like writing to the database.
-*   **Example:** The `saveItem`, `publishItem`, `deleteItem` functions used in the Admin CMS (`src/app/admin/[content-type]/[id]/actions.ts`).
-*   **Cache Invalidation:** Server Actions are responsible for calling `revalidatePath` or `revalidateTag` after successful mutations to ensure data displayed by Server Components is updated.
+*   **Context:** Used for handling data mutations (Create, Update, Delete) triggered by user interactions in Client Components (e.g., form submissions, admin operations).
+*   **Mechanism:** Client Components invoke functions marked with `"use server";` (defined in `actions.ts` files).
+*   **Supabase Client:** Uses the **service role client** (`createServiceRoleSupabaseClient`) for elevated privileges required for admin operations.
+*   **Example:** The `saveItem`, `publishItem`, `deleteItem` functions in Admin CMS (`src/app/admin/[content-type]/[id]/actions.ts`).
+*   **Cache Invalidation:** Server Actions call `revalidatePath` or `revalidateTag` after mutations to update static content.
 
-## 3. Client-Side Fetching (TanStack Query)
+## 4. Client-Side Fetching (TanStack Query)
 
-*   **Context:** Used within Client Components (`"use client";`) for scenarios requiring client-side data fetching or state management, such as:
-    *   Fetching data based on user interaction *after* the initial page load.
-    *   Implementing features like pagination, infinite scrolling, or dynamic filtering on the client.
-    *   Managing complex client-side state derived from fetched data.
-*   **Mechanism:** Uses the [TanStack Query (React Query)](https://tanstack.com/query/latest) library (`@tanstack/react-query`) to manage fetching, caching, synchronization, and background updates of server state.
-*   **Supabase Client:** Queries typically use the browser-safe Supabase client (`createBrowserSupabaseClient` via helpers like `getSupabaseBrowserClient` from `src/lib/supabase-browser.ts`) to fetch data directly from the client.
-*   **Example:** Potentially used in interactive dashboards, complex search interfaces, or components requiring frequent data re-fetching based on client state. *(Actual usage needs confirmation from component code).*
+*   **Context:** Used within Client Components for scenarios requiring client-side data fetching or state management:
+    *   Interactive features after initial page load
+    *   Pagination, infinite scrolling, dynamic filtering
+    *   Complex client-side state management
+*   **Mechanism:** Uses [TanStack Query (React Query)](https://tanstack.com/query/latest) library for fetching, caching, and state management.
+*   **Supabase Client:** Uses browser-safe Supabase client (`createBrowserSupabaseClient`) for client-side operations.
+*   **Example:** Interactive admin dashboards, search interfaces, real-time features.
 
-## 4. API Routes (Legacy/Specific Cases)
+## 5. API Routes (Admin & External Integrations)
 
-*   **Context:** While the project aims to use Server Actions, traditional API routes might still exist in `src/app/api/` for specific use cases or legacy reasons.
-*   **Mechanism:** Client Components use `fetch` or libraries like `src/lib/api-client.ts` to make requests to these endpoints.
-*   **Supabase Client:** API Route handlers (`route.ts`) would typically use a server-side Supabase client.
-*   **Example:** Potentially used for endpoints called by external services or for functionalities not yet migrated to Server Actions.
+*   **Context:** Preserved for admin functionality, external integrations, and specific use cases requiring REST endpoints.
+*   **Mechanism:** Traditional REST API endpoints in `src/app/api/` that can be called via `fetch`.
+*   **Supabase Client:** API Route handlers use server-side Supabase client with appropriate permissions.
+*   **Example:** Admin API endpoints (`/api/case-studies`, `/api/algorithms`), external webhooks, third-party integrations.
 
-In summary, Server Components handle the bulk of initial data loading, Server Actions handle mutations and subsequent cache invalidation, and TanStack Query provides robust client-side data fetching capabilities where needed. 
+## Architecture Decision: Hybrid Approach
+
+OpenQase v0.4.0 employs a **hybrid architecture** that optimizes for different use cases:
+
+### Public Content (Static Generation)
+- **Pattern:** Unified Content Fetching System
+- **Performance:** 50-100ms load times (static files)
+- **Content Types:** Case studies, algorithms, personas, industries
+- **Benefits:** Maximum performance, SEO optimization, reduced database load
+
+### Admin Content (Dynamic Generation)
+- **Pattern:** Server Components + Server Actions + API Routes
+- **Performance:** Dynamic, real-time updates
+- **Content Types:** Admin forms, dashboards, user management
+- **Benefits:** Real-time updates, complex interactions, secure operations
+
+### Migration Status
+
+**✅ Migrated to Unified System (v0.4.0):**
+- Case studies (`/case-study/[slug]`)
+- Algorithms (`/paths/algorithm/[slug]`)  
+- Personas (`/paths/persona/[slug]`)
+- Industries (`/paths/industry/[slug]`)
+
+**🔄 Still Using Legacy Patterns:**
+- Admin pages (`/admin/*`)
+- Blog posts (`/blog/*`)
+- Complex interactive features
+
+**Performance Impact:**
+- **Before:** 30+ second page loads with multiple database queries
+- **After:** 50-100ms static page serving with pre-built relationships
+- **Build Time:** All content pages generated at build time
+
+## Best Practices
+
+### For Public Content
+1. **Use unified fetching functions** from `src/lib/content-fetchers.ts`
+2. **Implement `generateStaticParams`** for static generation
+3. **Remove ISR revalidation** (`export const revalidate`) for pure static generation
+4. **Handle null cases** with `notFound()` for missing content
+
+### For Admin Content
+1. **Use Server Components** for initial data loading
+2. **Implement Server Actions** for mutations with cache invalidation
+3. **Use service role client** for elevated privileges
+4. **Call `revalidatePath`** after mutations to update static content
+
+### For Interactive Features
+1. **Use TanStack Query** for client-side state management
+2. **Implement proper loading states** and error handling
+3. **Use browser client** for client-side operations
+4. **Consider performance implications** of client-side fetching
+
+This hybrid approach provides the best of both worlds: blazing-fast static content for users and powerful dynamic capabilities for content management. 

@@ -12,7 +12,7 @@ import type { Database } from '@/types/supabase';
 // Core Type Definitions
 // ============================================================================
 
-export type ContentType = 'algorithm' | 'case-study' | 'industry' | 'persona';
+export type ContentType = 'algorithm' | 'case-study' | 'industry' | 'persona' | 'blog-post';
 export type MaturityLevel = 'Emerging' | 'Growing' | 'Established';
 
 // ============================================================================
@@ -23,6 +23,7 @@ export type DbPersona = Database['public']['Tables']['personas']['Row'];
 export type DbCaseStudy = Database['public']['Tables']['case_studies']['Row'];
 export type DbAlgorithm = Database['public']['Tables']['algorithms']['Row'];
 export type DbIndustry = Database['public']['Tables']['industries']['Row'];
+export type DbBlogPost = Database['public']['Tables']['blog_posts']['Row'];
 
 // ============================================================================
 // Base Interfaces
@@ -49,6 +50,7 @@ export interface RelatedContent {
   case_studies?: string[];
   industries?: string[];
   personas?: string[];
+  blog_posts?: string[];
 }
 
 // ============================================================================
@@ -89,6 +91,38 @@ export interface Persona extends BaseContent {
   industry: string[];
 }
 
+export interface BlogPost extends BaseContent {
+  type: 'blog-post';
+  content: string | null;
+  author: string | null;
+  category: string | null;
+  tags: string[] | null;
+  featured_image: string | null;
+  featured: boolean | null;
+  published: boolean | null;
+  published_at: string | null;
+}
+
+// ============================================================================
+// Enriched Content Types (with relationships)
+// ============================================================================
+
+export interface EnrichedBlogPost extends BlogPost {
+  blog_post_relations?: {
+    related_blog_post_id: string;
+    related_blog_posts: {
+      id: string;
+      title: string;
+      slug: string;
+      description: string | null;
+      published_at: string | null;
+      author: string | null;
+      category: string | null;
+      tags: string[] | null;
+    };
+  }[];
+}
+
 // ============================================================================
 // Content Store Types
 // ============================================================================
@@ -102,6 +136,7 @@ export interface ContentStore {
   case_study: ContentMap<CaseStudy>;
   industry: ContentMap<Industry>;
   persona: ContentMap<Persona>;
+  blog_post: ContentMap<BlogPost>;
 }
 
 // ============================================================================
@@ -132,4 +167,8 @@ export function isIndustry(content: BaseContent): content is Industry {
 
 export function isPersona(content: BaseContent): content is Persona {
   return content.type === 'persona';
+}
+
+export function isBlogPost(content: BaseContent): content is BlogPost {
+  return content.type === 'blog-post';
 }

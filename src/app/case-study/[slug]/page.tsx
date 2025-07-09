@@ -1,7 +1,7 @@
 // src/app/case-study/[slug]/page.tsx
 import { notFound } from 'next/navigation';
-import { createServerSupabaseClient, createServiceRoleSupabaseClient } from '@/lib/supabase-server';
-import type { Database } from '@/types/supabase'; // Using the main Database type
+import { getStaticContentWithRelationships, generateStaticParamsForContentType } from '@/lib/content-fetchers';
+import type { Database } from '@/types/supabase';
 import LearningPathLayout from '@/components/ui/learning-path-layout';
 import { Badge } from '@/components/ui/badge';
 import MarkdownIt from 'markdown-it';
@@ -64,14 +64,11 @@ const defaultCellRender = md.renderer.rules.td_open || function(tokens, idx, opt
 // Get metadata for the page
 export async function generateMetadata({ params }: CaseStudyPageProps) {
   const resolvedParams = await params;
-  const supabase = await createServerSupabaseClient();
   
-  const { data: caseStudy } = await supabase
-    .from('case_studies')
-    .select('title, description')
-    .eq('slug', resolvedParams.slug)
-    .eq('published', true)
-    .single();
+  const caseStudy = await getStaticContentWithRelationships<{ title: string; description: string | null }>(
+    'case_studies',
+    resolvedParams.slug
+  );
 
   if (!caseStudy) {
     return {
@@ -88,51 +85,21 @@ export async function generateMetadata({ params }: CaseStudyPageProps) {
 
 // Generate static params for all published case studies
 export async function generateStaticParams() {
-  const supabase = createServiceRoleSupabaseClient();
-  
-  const { data: caseStudies } = await supabase
-    .from('case_studies')
-    .select('slug')
-    .eq('published', true);
-
-  return caseStudies?.map((caseStudy) => ({
-    slug: caseStudy.slug,
-  })) || [];
+  return await generateStaticParamsForContentType('case_studies');
 }
 
-// Revalidate the page every 5 minutes for more frequent content updates
-export const revalidate = 300;
-
-// No longer using the commented out LocalCaseStudyType alias here
+// Static generation - no revalidation needed
 
 export default async function CaseStudyPage({ params }: CaseStudyPageProps) {
   const resolvedParams = await params;
   const slug = resolvedParams.slug;
-  // console.log('Fetching case study with slug:', slug); // REMOVED
 
-  const supabase = await createServerSupabaseClient();
-  const { data, error } = await supabase
-    .from('case_studies')
-    .select(`
-      *,
-      case_study_industry_relations(industries(id, name, slug)),
-      algorithm_case_study_relations(algorithms(id, name, slug)),
-      case_study_persona_relations(personas(id, name, slug))
-    `)
-    .eq('slug', slug)
-    .eq('published', true)
-    .single();
+  const caseStudy = await getStaticContentWithRelationships<EnrichedCaseStudy>(
+    'case_studies',
+    slug
+  );
 
-  const caseStudy = data as EnrichedCaseStudy | null; // Cast to our enriched type
-
-  // console.log('Case study query result (with relations):', JSON.stringify(caseStudy, null, 2)); // REMOVED
-  // console.log('Industries from DB relations:', caseStudy?.case_study_industry_relations); // REMOVED
-  // console.log('Personas from DB relations:', caseStudy?.case_study_persona_relations); // REMOVED
-  // console.log('Algorithms from DB relations:', caseStudy?.algorithm_case_study_relations); // REMOVED
-  // console.log('Quantum Software (direct field):', caseStudy?.quantum_software); // REMOVED
-
-  if (error || !caseStudy) {
-    // console.error('Error fetching case study:', error); // REMOVED - Let notFound() handle it
+  if (!caseStudy) {
     return notFound();
   }
 

@@ -1,45 +1,15 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import Link from "next/link"
-import { createServerSupabaseClient } from '../../lib/supabase-server'
-import type { Database } from '@/types/supabase'
-import { notFound } from 'next/navigation'
 import { format } from 'date-fns';
-
-interface BlogPost {
-  id: string;
-  title: string;
-  slug: string;
-  description?: string;
-  content?: string;
-  author?: string;
-  category?: string;
-  tags?: string[];
-  published: boolean;
-  published_at?: string;
-  created_at: string;
-  updated_at: string;
-}
-
-async function getBlogPosts() {
-  const supabase = await createServerSupabaseClient();
-  
-  const { data, error } = await supabase
-    .from('blog_posts')
-    .select('*')
-    .eq('published', true)
-    .order('published_at', { ascending: false });
-    
-  if (error) {
-    console.error('Error fetching blog posts:', error);
-    return [];
-  }
-  
-  return data as BlogPost[];
-}
+import { getStaticContentList } from '@/lib/content-fetchers';
+import { DbBlogPost } from '@/lib/types';
 
 export default async function BlogPage() {
-  const posts = await getBlogPosts();
+  const posts = await getStaticContentList<DbBlogPost>('blog_posts', {
+    orderBy: 'published_at',
+    orderDirection: 'desc'
+  });
   
   return (
     <div className="container mx-auto px-4 py-12">

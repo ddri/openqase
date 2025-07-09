@@ -193,7 +193,7 @@ export default function HomePage() {
           </div>
 
           <div className="grid gap-8 md:grid-cols-3">
-            <Link href="/case-study/classiq-rolls-royce-computational-fluid-dynamics" className="group block h-full">
+            <Link href="/case-study/quantinuum-hsbc-financial-services-enhancement" className="group block h-full">
               <Card className={cn("h-full card-link-hover-effect", "flex flex-col overflow-hidden bg-card")}>
                 <div className="aspect-[2/1] bg-primary/5 relative">
                   <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_70%,#7c3aed11_0%,transparent_50%)] [mask-image:linear-gradient(to_bottom,white,transparent)] transition-opacity group-hover:opacity-75" />
@@ -202,17 +202,17 @@ export default function HomePage() {
                 <CardHeader>
                   <div className="flex gap-2 mb-4">
                     <Badge variant="outline" className="bg-card/75 backdrop-blur-sm">Finance</Badge>
-                    <Badge variant="outline" className="bg-card/75 backdrop-blur-sm">QAOA</Badge>
+                    <Badge variant="outline" className="bg-card/75 backdrop-blur-sm">Cybersecurity</Badge>
                   </div>
-                  <CardTitle className="line-clamp-2">Quantum Optimization for Financial Portfolio Management</CardTitle>
+                  <CardTitle className="line-clamp-2">Quantinuum & HSBC: Financial Services Enhancement</CardTitle>
                   <CardDescription className="line-clamp-3">
-                    How a major investment bank leveraged quantum algorithms to optimize portfolio allocation and risk management, resulting in a 15% performance improvement.
+                    How HSBC partnered with Quantinuum to explore quantum computing applications in cybersecurity, fraud detection, and natural language processing for banking.
                   </CardDescription>
                 </CardHeader>
               </Card>
             </Link>
 
-            <Link href="/case-study/classiq-rolls-royce-computational-fluid-dynamics" className="group block h-full">
+            <Link href="/case-study/quantinuum-google-deepmind-circuit-optimisation" className="group block h-full">
               <Card className={cn("h-full card-link-hover-effect", "flex flex-col overflow-hidden bg-card")}>
                 <div className="aspect-[2/1] bg-primary/5 relative">
                   <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_70%,#7c3aed11_0%,transparent_50%)] [mask-image:linear-gradient(to_bottom,white,transparent)] transition-opacity group-hover:opacity-75" />
@@ -220,18 +220,18 @@ export default function HomePage() {
                 </div>
                 <CardHeader>
                   <div className="flex gap-2 mb-4">
-                    <Badge variant="outline" className="bg-card/75 backdrop-blur-sm">Healthcare</Badge>
-                    <Badge variant="outline" className="bg-card/75 backdrop-blur-sm">VQE</Badge>
+                    <Badge variant="outline" className="bg-card/75 backdrop-blur-sm">Technology</Badge>
+                    <Badge variant="outline" className="bg-card/75 backdrop-blur-sm">AI Integration</Badge>
                   </div>
-                  <CardTitle className="line-clamp-2">Drug Discovery Acceleration with Quantum Computing</CardTitle>
+                  <CardTitle className="line-clamp-2">Quantinuum & Google DeepMind: AI for Quantum Circuit Optimization</CardTitle>
                   <CardDescription className="line-clamp-3">
-                    A pharmaceutical company's journey implementing quantum simulation to speed up molecular modeling, cutting research time by 40%.
+                    How Quantinuum and Google DeepMind developed AlphaTensor-Quantum to optimize quantum circuits, reducing T gate counts by up to 47% in cryptography applications.
                   </CardDescription>
                 </CardHeader>
               </Card>
             </Link>
 
-            <Link href="/case-study/classiq-rolls-royce-computational-fluid-dynamics" className="group block h-full">
+            <Link href="/case-study/quantinuum-mitsui-trading-co" className="group block h-full">
               <Card className={cn("h-full card-link-hover-effect", "flex flex-col overflow-hidden bg-card")}>
                 <div className="aspect-[2/1] bg-primary/5 relative">
                   <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_30%,#7c3aed11_0%,transparent_50%)] [mask-image:linear-gradient(to_bottom,white,transparent)] transition-opacity group-hover:opacity-75" />
@@ -239,12 +239,12 @@ export default function HomePage() {
                 </div>
                 <CardHeader>
                   <div className="flex gap-2 mb-4">
-                    <Badge variant="outline" className="bg-card/75 backdrop-blur-sm">Logistics</Badge>
-                    <Badge variant="outline" className="bg-card/75 backdrop-blur-sm">Quantum Annealing</Badge>
+                    <Badge variant="outline" className="bg-card/75 backdrop-blur-sm">Trading</Badge>
+                    <Badge variant="outline" className="bg-card/75 backdrop-blur-sm">Optimization</Badge>
                   </div>
-                  <CardTitle className="line-clamp-2">Supply Chain Optimization Using Quantum Annealing</CardTitle>
+                  <CardTitle className="line-clamp-2">Quantinuum & Mitsui Co: Global Trading Optimization</CardTitle>
                   <CardDescription className="line-clamp-3">
-                    How a global logistics company implemented quantum annealing to solve complex routing problems, reducing operational costs by 23%.
+                    How Mitsui & Co. partnered with Quantinuum to apply quantum computing to logistics optimization, commodity trading, and financial risk assessment.
                   </CardDescription>
                 </CardHeader>
               </Card>

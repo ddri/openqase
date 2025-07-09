@@ -81,7 +81,7 @@ export default function Navigation() {
             <Link href="/" className="flex items-center text-foreground hover:text-foreground">
               {mounted ? (
                 <Image
-                  src={theme === 'dark' || theme === 'graphite' ? '/openqase-light.svg' : '/openqase-dark.svg'}
+                  src={theme === 'dark' ? '/openqase-light.svg' : '/openqase-dark.svg'}
                   alt="OpenQase Logo"
                   className="h-8 w-auto"
                   width={32}
@@ -89,7 +89,7 @@ export default function Navigation() {
                 />
               ) : (
                 <Image
-                  src='/openqase-dark.svg'
+                  src='/openqase-light.svg'
                   alt="OpenQase Logo"
                   className="h-8 w-auto"
                   width={32}

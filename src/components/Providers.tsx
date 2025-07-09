@@ -25,9 +25,9 @@ export default function Providers({ children }: { children: ReactNode }) {
     <QueryClientProvider client={queryClient}>
       <ThemeProvider
         attribute="data-theme"
-        defaultTheme="system"
-        enableSystem
-        themes={['light', 'dark', 'graphite', 'paper']}
+        defaultTheme="dark"
+        enableSystem={false}
+        themes={['light', 'dark']}
       >
         <AuthProvider>
           {children}

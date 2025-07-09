@@ -7,6 +7,31 @@ import { DataTable } from '@/components/ui/data-table'
 import { ColumnDef } from '@tanstack/react-table'
 import type { CaseStudy } from './page'
 
+async function refreshCache() {
+  try {
+    // Note: For security, the token should be handled server-side
+    // This is a simplified example - in production, create a server action
+    const response = await fetch('/api/revalidate', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        // Remove auth for now - you'll need to set REVALIDATION_TOKEN in .env.local
+      },
+      body: JSON.stringify({ type: 'all-case-studies' })
+    });
+    
+    if (response.ok) {
+      alert('Cache refreshed successfully!');
+      window.location.reload(); // Refresh the admin page to see any changes
+    } else {
+      alert('Failed to refresh cache - check console for details');
+    }
+  } catch (error) {
+    console.error('Cache refresh error:', error);
+    alert('Error refreshing cache');
+  }
+}
+
 const columns: ColumnDef<CaseStudy>[] = [
   {
     accessorKey: 'title',
@@ -60,12 +85,17 @@ export function CaseStudiesClient({ data }: CaseStudiesClientProps) {
             Create and manage case studies showcasing quantum computing applications.
           </p>
         </div>
-        <Button asChild>
-          <Link href="/admin/case-studies/new">
-            <Plus className="w-4 h-4 mr-2" />
-            New Case Study
-          </Link>
-        </Button>
+        <div className="flex gap-2">
+          <Button onClick={refreshCache} variant="outline">
+            Refresh Cache
+          </Button>
+          <Button asChild>
+            <Link href="/admin/case-studies/new">
+              <Plus className="w-4 h-4 mr-2" />
+              New Case Study
+            </Link>
+          </Button>
+        </div>
       </div>
 
       <div className="bg-card rounded-lg border">

@@ -8,7 +8,7 @@ const RELATIONSHIP_MAPS: Record<ContentType, string> = {
   case_studies: `
     *,
     case_study_industry_relations(industries(id, name, slug)),
-    algorithm_case_study_relations(algorithms(id, name, slug, quantum_advantage, difficulty)),
+    algorithm_case_study_relations(algorithms(id, name, slug, quantum_advantage)),
     case_study_persona_relations(personas(id, name, slug))
   `,
   algorithms: `
@@ -20,7 +20,7 @@ const RELATIONSHIP_MAPS: Record<ContentType, string> = {
   personas: `
     *,
     persona_industry_relations(industries(id, name, slug)),
-    persona_algorithm_relations(algorithms(id, name, slug, difficulty)),
+    persona_algorithm_relations(algorithms(id, name, slug)),
     case_study_persona_relations(case_studies(id, title, slug, description, published_at))
   `,
   industries: `

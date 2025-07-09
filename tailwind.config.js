@@ -1,7 +1,7 @@
 // tailwind.config.js
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-	darkMode: ['[data-theme="dark"]'],
+	darkMode: ['selector', '[data-theme="dark"]'],
 	content: [
 	  './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
 	  './src/components/**/*.{js,ts,jsx,tsx,mdx}',

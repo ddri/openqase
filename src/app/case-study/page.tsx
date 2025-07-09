@@ -1,28 +1,14 @@
-import { createServerSupabaseClient } from '@/lib/supabase-server';
+import { getStaticContentList } from '@/lib/content-fetchers';
 import { CaseStudiesList } from '@/components/CaseStudiesList';
 import type { Database } from '@/types/supabase';
 
 type CaseStudy = Database['public']['Tables']['case_studies']['Row'];
 
-async function getCaseStudies() {
-  const supabase = await createServerSupabaseClient();
-  
-  const { data, error } = await supabase
-    .from('case_studies')
-    .select('*')
-    .eq('published', true)  // Only fetch published case studies
-    .order('updated_at', { ascending: false });
-
-  if (error) {
-    console.error('Error fetching case studies:', error);
-    return [];
-  }
-
-  return (data as unknown) as CaseStudy[];
-}
-
 export default async function CaseStudyPage() {
-  const caseStudies = await getCaseStudies();
+  const caseStudies = await getStaticContentList<CaseStudy>('case_studies', {
+    orderBy: 'updated_at',
+    orderDirection: 'desc'
+  });
 
   return (
     <main className="min-h-screen">

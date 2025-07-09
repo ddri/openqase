@@ -51,7 +51,7 @@ export function PersonaForm({ persona, industries, isNew }: PersonaFormProps) {
     expertise: isNew ? [] : persona?.expertise || [],
     main_content: isNew ? '' : persona?.main_content || '',
     recommended_reading: isNew ? '' : persona?.recommended_reading || '',
-    industry: isNew ? [] : (persona?.id ? [] : []),
+    industry: isNew ? [] : (persona?.industry || []),
     published: isNew ? false : persona?.published || false,
   });
   const [isDirty, setIsDirty] = useState(false);

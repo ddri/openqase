@@ -1,14 +1,12 @@
 // src/app/paths/persona/[slug]/page.tsx
 import { notFound } from 'next/navigation';
-import { createServerSupabaseClient, createServiceRoleSupabaseClient } from '@/lib/supabase-server';
+import { getStaticContentWithRelationships, generateStaticParamsForContentType } from '@/lib/content-fetchers';
 import type { Database } from '@/types/supabase';
 import LearningPathLayout from '@/components/ui/learning-path-layout';
 import ContentCard from '@/components/ui/content-card';
-import { cookies } from 'next/headers';
 import AuthGate from '@/components/auth/AuthGate';
 import { Badge } from '@/components/ui/badge';
 import Link from 'next/link';
-import { SupabaseClient } from '@supabase/supabase-js';
 import MarkdownIt from 'markdown-it';
 
 // Initialize markdown-it
@@ -19,16 +17,25 @@ const md = new MarkdownIt({
   breaks: true
 });
 
+// Define enriched types that match the actual relationship queries
+type EnrichedPersona = Database['public']['Tables']['personas']['Row'] & {
+  persona_industry_relations?: { industries: { id: string; name: string; slug?: string | null } | null }[];
+  case_study_persona_relations?: { case_studies: { id: string; title: string; slug: string; description: string; published_at: string } | null }[];
+};
+
+// Simple type for case studies from persona relations (only includes fetched fields)
+type PersonaRelatedCaseStudy = {
+  id: string;
+  title: string;
+  slug: string;
+  description: string;
+  published_at: string;
+};
+
 // Define an enriched type for CaseStudy that includes relations
 type EnrichedCaseStudyForPersonaPage = Database['public']['Tables']['case_studies']['Row'] & {
   case_study_industry_relations?: { industries: { id: string; name: string; slug?: string | null } | null }[];
   // Add other relations here if fetched in the future, e.g., for algorithms
-};
-
-// Define an enriched type for Persona that includes its related industries
-type EnrichedPersona = Database['public']['Tables']['personas']['Row'] & {
-  persona_industry_relations?: { industries: { id: string; name: string; slug?: string | null } | null }[];
-  // We can add other direct persona relations here if needed in the future
 };
 
 // Function to fix bullet points in markdown content
@@ -85,13 +92,8 @@ interface PageParams {
 // Get metadata for the page
 export async function generateMetadata({ params }: PageParams) {
   const resolvedParams = await params;
-  const supabase = await createServerSupabaseClient();
   
-  const { data: persona } = await supabase
-    .from('personas')
-    .select('name, description')
-    .eq('slug', resolvedParams.slug)
-    .single();
+  const persona = await getStaticContentWithRelationships('personas', resolvedParams.slug) as EnrichedPersona;
 
   console.log('Metadata query result:', { persona });
 
@@ -110,34 +112,14 @@ export async function generateMetadata({ params }: PageParams) {
 
 // Generate static params for all published personas
 export async function generateStaticParams() {
-  const supabase = createServiceRoleSupabaseClient();
-  
-  const { data: personas } = await supabase
-    .from('personas')
-    .select('slug')
-    .eq('published', true);
-
-  return personas?.map((persona) => ({
-    slug: persona.slug,
-  })) || [];
+  return generateStaticParamsForContentType('personas');
 }
-
-// Revalidate the page every 5 minutes for more frequent content updates
-export const revalidate = 300;
 
 export default async function PersonaPage({ params }: PageParams) {
   const resolvedParams = await params;
-  const supabase = await createServerSupabaseClient();
   
-  // Step 1: Get the persona and its related industries
-  const { data: personaData, error: personaError } = await supabase
-    .from('personas')
-    .select('*, persona_industry_relations(industries(id, name, slug))') // Fetch related industries
-    .eq('slug', resolvedParams.slug)
-    .single();
-
-  // Cast the fetched persona data to our enriched type
-  const persona = personaData as EnrichedPersona | null;
+  // Get the persona and its related industries and case studies
+  const persona = await getStaticContentWithRelationships('personas', resolvedParams.slug) as EnrichedPersona;
 
   console.log('Fetched persona data:', {
     slug: resolvedParams.slug,
@@ -145,58 +127,25 @@ export default async function PersonaPage({ params }: PageParams) {
     mdxContent: persona?.main_content,
     industryRelations: persona?.persona_industry_relations,
     industryRelationsLength: persona?.persona_industry_relations?.length,
-    error: personaError
+    caseStudyRelations: persona?.case_study_persona_relations,
+    caseStudyRelationsLength: persona?.case_study_persona_relations?.length,
   });
 
-  if (personaError || !persona) {
-    console.error('Error fetching persona:', personaError);
+  if (!persona) {
+    console.error('Error fetching persona');
     notFound();
   }
 
-  // Step 2: Get related case studies using the join table
-  let caseStudies: EnrichedCaseStudyForPersonaPage[] = [];
-  
-  try {
-    // Get relations from the join table
-    console.log(`[PersonaPage] Checking relations for persona ID: ${persona.id}`);
-    const { data: relations, error: relationsError } = await supabase
-      .from('case_study_persona_relations')
-      .select('case_study_id')
-      .eq('persona_id', persona.id);
+  // Extract related case studies from the persona data
+  const caseStudies: PersonaRelatedCaseStudy[] = persona.case_study_persona_relations?.map((relation: { case_studies: { id: string; title: string; slug: string; description: string; published_at: string } | null }) => ({
+    id: relation.case_studies!.id,
+    title: relation.case_studies!.title,
+    slug: relation.case_studies!.slug,
+    description: relation.case_studies!.description || '',
+    published_at: relation.case_studies!.published_at,
+  })).filter(cs => cs.id) || [];
 
-    if (relationsError) {
-      console.error('Error fetching case study relations for persona:', relationsError);
-    } else if (relations && relations.length > 0) {
-      console.log(`[PersonaPage] Found ${relations.length} relations:`, relations);
-      const caseStudyIds = relations.map((relation: any) => relation.case_study_id);
-      console.log(`[PersonaPage] Extracted case study IDs:`, caseStudyIds);
-      
-      // Fetch the actual published case studies using the IDs
-      const { data: caseStudyData, error: caseStudyError } = await supabase
-        .from('case_studies')
-        .select(`
-          id,
-          title,
-          slug,
-          description,
-          quantum_hardware,
-          case_study_industry_relations(industries(id, name, slug))
-        `)
-        .in('id', caseStudyIds)
-        .eq('published', true);
-
-      if (caseStudyError) {
-        console.error('Error fetching related case studies:', caseStudyError);
-      } else {
-        console.log(`[PersonaPage] Fetched ${caseStudyData?.length ?? 0} published case studies:`, caseStudyData);
-        caseStudies = (caseStudyData as EnrichedCaseStudyForPersonaPage[]) || [];
-      }
-    } else {
-      console.log(`[PersonaPage] No relations found for persona ID: ${persona.id}`);
-    }
-  } catch (error) {
-    console.error('Error processing related case studies fetch:', error);
-  }
+  console.log(`[PersonaPage] Extracted ${caseStudies.length} case studies from persona relations`);
 
   // Preprocess and render markdown content
   let renderedContent = '';
@@ -263,16 +212,7 @@ export default async function PersonaPage({ params }: PageParams) {
                         <p className="text-muted-foreground mb-4">
                           {caseStudy.description}
                         </p>
-                        <div className="flex flex-wrap gap-2">
-                          {[
-                            ...(caseStudy.case_study_industry_relations?.map(relation => relation.industries?.name).filter(Boolean) as string[] || []),
-                            ...(caseStudy.quantum_hardware || [])
-                          ].map((badgeName) => (
-                            <Badge key={badgeName} variant="outline" className="text-sm">
-                              {badgeName}
-                            </Badge>
-                          ))}
-                        </div>
+                        {/* Note: Industry and quantum hardware info not available in persona->case_study relationship */}
                       </div>
                     </Link>
                   ))}

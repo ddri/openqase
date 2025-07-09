@@ -1,6 +1,5 @@
 // src/app/paths/industry/[slug]/page.tsx
-import { cookies } from 'next/headers';
-import { createServerSupabaseClient, createServiceRoleSupabaseClient } from '@/lib/supabase-server';
+import { getStaticContentWithRelationships, generateStaticParamsForContentType } from '@/lib/content-fetchers';
 import { Database } from '@/types/supabase';
 import LearningPathLayout from '@/components/ui/learning-path-layout';
 import { Badge } from '@/components/ui/badge';
@@ -62,10 +61,16 @@ md.renderer.rules.td_open = function(tokens, idx, options, env, self) {
 type EnrichedIndustry = Database['public']['Tables']['industries']['Row'] & {
   algorithm_industry_relations?: { algorithms: { id: string; name: string; slug?: string | null } | null }[];
   persona_industry_relations?: { personas: { id: string; name: string; slug?: string | null } | null }[];
+  case_study_industry_relations?: { case_studies: { id: string; title: string; slug: string; description: string; published_at: string } | null }[];
 };
 
-type EnrichedCaseStudyForIndustryPage = Database['public']['Tables']['case_studies']['Row'] & {
-  case_study_industry_relations?: { industries: { id: string; name: string; slug?: string | null } | null }[];
+// Simple type for case studies from industry relations (only includes fetched fields)
+type IndustryRelatedCaseStudy = {
+  id: string;
+  title: string;
+  slug: string;
+  description: string;
+  published_at: string;
 };
 
 interface PageParams {
@@ -85,14 +90,9 @@ interface CaseStudy {
 // Get metadata for the page
 export async function generateMetadata({ params }: PageParams) {
   const resolvedParams = await params;
-  const supabase = await createServerSupabaseClient();
   
-  const { data: industry } = await supabase
-    .from('industries')
-    .select('name, description')
-    .eq('slug', resolvedParams.slug)
-    .single();
-
+  const industry = await getStaticContentWithRelationships('industries', resolvedParams.slug) as EnrichedIndustry;
+  
   if (!industry) {
     return {
       title: 'Not Found',
@@ -108,44 +108,15 @@ export async function generateMetadata({ params }: PageParams) {
 
 // Generate static params for all published industries
 export async function generateStaticParams() {
-  const supabase = createServiceRoleSupabaseClient();
-  
-  const { data: industries } = await supabase
-    .from('industries')
-    .select('slug')
-    .eq('published', true);
-
-  return industries?.map((industry) => ({
-    slug: industry.slug,
-  })) || [];
+  return generateStaticParamsForContentType('industries');
 }
-
-// Revalidate the page every 5 minutes for more frequent content updates
-export const revalidate = 300;
 
 export default async function IndustryPage({ params }: PageParams) {
   const resolvedParams = await params;
-  const supabase = await createServerSupabaseClient();
   
   console.log('Fetching industry with slug:', resolvedParams.slug);
-  // Fetch industry along with related algorithms and personas
-  const { data: industryData, error: industryError } = await supabase
-    .from('industries')
-    .select(`
-      *,
-      algorithm_industry_relations(algorithms(id, name, slug)),
-      persona_industry_relations(personas(id, name, slug))
-    `)
-    .eq('slug', resolvedParams.slug)
-    .single();
-
-  // Cast to enriched type
-  const industry = industryData as EnrichedIndustry | null;
-
-  if (industryError) {
-    console.error('Error fetching industry:', industryError);
-    return <div>Error loading industry</div>;
-  }
+  // Fetch industry along with related algorithms, personas, and case studies
+  const industry = await getStaticContentWithRelationships('industries', resolvedParams.slug) as EnrichedIndustry;
 
   if (!industry) {
     return <div>Industry not found</div>;
@@ -153,66 +124,14 @@ export default async function IndustryPage({ params }: PageParams) {
 
   console.log('Fetching case studies for industry:', industry.name);
   
-  // Fetch case studies directly using Supabase
-  let caseStudies: CaseStudy[] = [];
-  let caseStudiesError = null;
-  
-  try {
-    // First get the industry ID
-    const { data: industryData, error: industryError } = await supabase
-      .from('industries')
-      .select('id, name')
-      .eq('name', industry.name)
-      .single();
-    
-    if (industryError || !industryData) {
-      console.error('Error finding industry:', industryError);
-      caseStudiesError = { error: 'Industry not found' };
-    } else {
-      // Get case studies related to this industry using the junction table
-      const { data: relations, error: relationsError } = await supabase
-        .from('case_study_industry_relations' as any)
-        .select('case_study_id')
-        .eq('industry_id', industryData.id);
-        
-      if (relationsError) {
-        console.error('Error finding case study relations:', relationsError);
-        caseStudiesError = { error: 'Error fetching case studies' };
-      } else if (relations && relations.length > 0) {
-        const caseStudyIds = relations.map((relation: any) => relation.case_study_id);
-        
-        // Fetch the actual case studies
-        const { data: caseStudyData, error: caseStudyError } = await supabase
-          .from('case_studies')
-          .select(`
-            id,
-            title,
-            slug,
-            description,
-            case_study_industry_relations(industries(id, name, slug))
-          `)
-          .in('id', caseStudyIds)
-          .eq('published', true);
-          
-        if (caseStudyError) {
-          console.error('Error fetching case studies:', caseStudyError);
-          caseStudiesError = { error: 'Error fetching case studies' };
-        } else {
-          // Map the database results to the expected CaseStudy type
-          caseStudies = (caseStudyData as EnrichedCaseStudyForIndustryPage[] || []).map(cs => ({
-            id: cs.id,
-            title: cs.title,
-            slug: cs.slug,
-            description: cs.description || '',
-            industries: cs.case_study_industry_relations?.map(rel => rel.industries?.name).filter(Boolean) as string[] || [],
-          }));
-        }
-      }
-    }
-  } catch (error) {
-    console.error('Error fetching case studies:', error);
-    caseStudiesError = { error: 'Failed to fetch case studies' };
-  }
+  // Extract related case studies from the industry data
+  const caseStudies: IndustryRelatedCaseStudy[] = industry.case_study_industry_relations?.map((relation: { case_studies: { id: string; title: string; slug: string; description: string; published_at: string } | null }) => ({
+    id: relation.case_studies!.id,
+    title: relation.case_studies!.title,
+    slug: relation.case_studies!.slug,
+    description: relation.case_studies!.description || '',
+    published_at: relation.case_studies!.published_at,
+  })).filter(cs => cs.id) || [];
 
   // Preprocess and render industry main content if available
   let processedContent = '';

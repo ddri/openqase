@@ -54,48 +54,34 @@
     --banner-height: 2.5rem;
   }
 
-  /* Dark theme - improved with graphite grey instead of near-black */
+  /* Dark theme - consolidated from graphite theme */
   [data-theme='dark'] {
-    --background: 220 10% 12%; /* Darker Charcoal (cool tone) */
-    --foreground: 210 40% 98%;
+    --background: 240 5% 10%;  /* zinc-900 equivalent */
+    --foreground: 0 0% 98%;
     
-    --card: 220 10% 17%; /* Slightly lighter than new background */
-    --card-foreground: 210 40% 98%;
-    --card-background: 220 10% 17% / 0.9; /* Adjusted card background */
-    --card-border: 220 10% 23%;  /* Adjusted card border */
-    --card-hover-border: 25 100% 60%; 
-    --card-hover-background: 25 100% 60% / 0.1;
+    --card: 240 5% 15%;  /* zinc-800/50 equivalent */
+    --card-foreground: 0 0% 100%;
     
-    --text-primary: 210 40% 98%;
-    --text-secondary: 215 20% 75%; 
-    --text-tertiary: 215 16% 65%; 
+    /* Add missing text color variables */
+    --text-primary: 0 0% 98%;
+    --text-secondary: 240 5% 80%;
+    --text-tertiary: 240 5% 70%;
     
-    --surface-primary: 220 10% 17%; /* Adjusted surface */
-    --surface-secondary: 220 10% 23%; /* Adjusted surface */
-    --surface-tertiary: 220 10% 29%; /* Adjusted surface */
+    --primary: 22 100% 50%;  /* orange-500 */
+    --primary-foreground: 0 0% 100%;
     
-    --popover: 220 10% 17%; /* Adjusted popover */
-    --popover-foreground: 210 40% 98%;
+    --secondary: 240 5% 25%;
+    --secondary-foreground: 0 0% 98%;
     
-    --primary: 25 100% 60%;
-    --primary-foreground: 220 10% 12%; /* To contrast with new darker orange */
+    --accent: 22 100% 50%;  /* orange-500 */
+    --accent-foreground: 0 0% 98%;
     
-    --secondary: 220 10% 23%; /* Adjusted secondary */
-    --secondary-foreground: 210 40% 98%;
+    --muted: 240 5% 35%;
+    --muted-foreground: 240 5% 65%;  /* zinc-400 */
     
-    --muted: 220 10% 23%; /* Adjusted muted */
-    --muted-foreground: 215 20% 75%; 
-    
-    --accent: 25 100% 60%;
-    --accent-foreground: 210 40% 98%; 
-    
-    --destructive: 0 62.8% 45%; 
-    --destructive-foreground: 210 40% 98%;
-    
-    --border: 220 10% 29%; /* Adjusted border */
-    --input: 220 10% 29%; /* Adjusted input */
-    --ring: 25 100% 60%; 
-    --radius: 0.5rem;
+    --border: 240 5% 30%;  /* zinc-700 */
+    --input: 240 5% 30%;
+    --ring: 22 100% 50%;  /* orange-500 */
   }
   
   /* Graphite theme */

@@ -2,18 +2,19 @@ import { withSentryConfig } from '@sentry/nextjs';
 // next.config.ts
 import type { NextConfig } from "next";
 
-// Simple static export when flag is set
-const isStaticExport = process.env.NEXT_STATIC_EXPORT === 'true';
+// Hybrid approach: Static generation for public content, dynamic for admin
+// Use NEXT_STATIC_EXPORT=true for full static export (public sites only)
+const isFullStaticExport = process.env.NEXT_STATIC_EXPORT === 'true';
 
 const nextConfig: NextConfig = {
-  // Enable static export when flag is set
-  ...(isStaticExport && {
+  // Only use full static export when explicitly requested
+  ...(isFullStaticExport && {
     output: 'export',
     trailingSlash: true,
     images: { unoptimized: true },
-    // Skip API routes and admin routes during static export
+    // Custom build ID for static generation
     async generateBuildId() {
-      return 'static-export-build';
+      return `static-${Date.now()}`;
     }
   }),
   

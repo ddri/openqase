@@ -103,7 +103,7 @@ OpenQase v0.4.0 employs a **hybrid architecture** that optimizes for different u
 ### For Public Content
 1. **Use unified fetching functions** from `src/lib/content-fetchers.ts`
 2. **Implement `generateStaticParams`** for static generation
-3. **Remove ISR revalidation** (`export const revalidate`) for pure static generation
+3. **Use on-demand revalidation** via `revalidatePath()` instead of time-based ISR (`export const revalidate`)
 4. **Handle null cases** with `notFound()` for missing content
 
 ### For Admin Content

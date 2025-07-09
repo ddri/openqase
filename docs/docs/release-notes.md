@@ -81,6 +81,10 @@ OpenQase v0.4.0 introduces a revolutionary hybrid architecture that delivers 300
 - Eliminated cookies context errors during build-time generation
 - Fixed relationship fetching inconsistencies
 
+### ⚠️ Known Issues
+
+- **Admin Dropdown Transparency (Dark Mode)**: Dropdown menus in admin Classifications section have transparent backgrounds in dark mode, making options difficult to read. Workaround: Temporarily switch to light mode for admin tasks or highlight options with keyboard navigation. Fix planned for v0.4.1.
+
 ---
 
 ## v0.3.0 - Enhanced Content Management

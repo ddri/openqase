@@ -36,9 +36,9 @@ export default async function EditCaseStudyPage({ params }: CaseStudyPageProps) 
     : { data: null }
     
   // Fetch relationships if editing
-  let algorithmIds: string[] = []
-  let industryIds: string[] = []
-  let personaIds: string[] = []
+  let algorithms: string[] = []
+  let industries: string[] = []
+  let personas: string[] = []
   
   if (!isNew && caseStudy) {
     // Fetch algorithm relationships
@@ -48,7 +48,7 @@ export default async function EditCaseStudyPage({ params }: CaseStudyPageProps) 
       .eq('case_study_id', caseStudy.id)
     
     if (algorithmRelations) {
-      algorithmIds = algorithmRelations.map(relation => relation.algorithm_id as string)
+      algorithms = algorithmRelations.map(relation => relation.algorithm_id as string)
     }
     
     // Fetch industry relationships
@@ -58,7 +58,7 @@ export default async function EditCaseStudyPage({ params }: CaseStudyPageProps) 
       .eq('case_study_id', caseStudy.id)
     
     if (industryRelations) {
-      industryIds = industryRelations.map((relation: any) => relation.industry_id)
+      industries = industryRelations.map((relation: any) => relation.industry_id)
     }
     
     // Fetch persona relationships
@@ -68,22 +68,22 @@ export default async function EditCaseStudyPage({ params }: CaseStudyPageProps) 
       .eq('case_study_id', caseStudy.id)
     
     if (personaRelations) {
-      personaIds = personaRelations.map((relation: any) => relation.persona_id)
+      personas = personaRelations.map((relation: any) => relation.persona_id)
     }
   }
 
   // Fetch related data for dropdowns
-  const { data: industries } = await supabase
+  const { data: allIndustries } = await supabase
     .from('industries')
     .select('id, slug, name')
     .order('name')
 
-  const { data: algorithms } = await supabase
+  const { data: allAlgorithms } = await supabase
     .from('algorithms')
     .select('id, slug, name')
     .order('name')
 
-  const { data: personas } = await supabase
+  const { data: allPersonas } = await supabase
     .from('personas')
     .select('id, slug, name')
     .order('name')
@@ -97,18 +97,18 @@ export default async function EditCaseStudyPage({ params }: CaseStudyPageProps) 
   if (!isNew && caseStudy) {
     caseStudyWithRelations = {
       ...caseStudy,
-      algorithmIds,
-      industryIds,
-      personaIds
+      algorithms,
+      industries,
+      personas
     } as any;
   }
 
   return (
     <CaseStudyForm
       caseStudy={caseStudyWithRelations}
-      algorithms={algorithms || []}
-      industries={industries || []}
-      personas={personas || []}
+      algorithms={allAlgorithms || []}
+      industries={allIndustries || []}
+      personas={allPersonas || []}
       isNew={isNew}
     />
   )

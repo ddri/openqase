@@ -79,6 +79,7 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 - **[Release Notes](./docs/docs/release-notes.md)** - Latest changes and improvements
 - **[Migration Guide](./docs/docs/data-fetching.md#migration-status)** - Upgrading from legacy patterns
 - **[API Documentation](./docs/docs/api-documentation.md)** - REST API reference
+- **[Email Preferences System](./docs/docs/email-preferences-system.md)** - Newsletter management following Resend best practices
 
 ## 🔧 Content Management
 

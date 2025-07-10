@@ -34,8 +34,8 @@ export default function AuthGate({ children, title, description }: AuthGateProps
     }
 
     const checkAuth = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      setIsAuthenticated(!!session);
+      const { data: { user } } = await supabase.auth.getUser();
+      setIsAuthenticated(!!user);
     };
 
     checkAuth();

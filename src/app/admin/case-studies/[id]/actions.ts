@@ -57,22 +57,22 @@ export async function saveCaseStudy(values: any): Promise<any> {
     }
 
     if (!notApplicableStates.industries && values.industries && Array.isArray(values.industries) && values.industries.length > 0) {
-      // console.log('Attempting to insert industry relations for:', values.industries); // DEBUG LOG
-      for (const industryId of values.industries) {
-        // console.log('Inserting industry relation: case_study_id=' + data.id + ', industry_id=' + industryId); // DEBUG LOG
-        const { error: industryRelError } = await supabase
-          .from('case_study_industry_relations' as any)
-          .insert({ case_study_id: data.id, industry_id: industryId });
-        if (industryRelError) {
-          console.error('Error inserting industry relation:', industryRelError);
-          // throw new Error(industryRelError.message || "Failed to insert industry relation"); // Keep running
-        } else {
-          // console.log('Successfully inserted industry relation for industry_id=' + industryId); // DEBUG LOG
-        }
+      // Batch insert all industry relations at once
+      const industryRelations = values.industries.map(industryId => ({
+        case_study_id: data.id,
+        industry_id: industryId
+      }));
+      
+      const { error: industryRelError } = await supabase
+        .from('case_study_industry_relations' as any)
+        .insert(industryRelations);
+        
+      if (industryRelError) {
+        console.error('Error inserting industry relations:', industryRelError);
       }
     } else if (notApplicableStates.industries) {
       // If "Not Applicable" is checked for industries, insert the N/A record
-      const NOT_APPLICABLE_INDUSTRY_ID = '4cd2a6a0-6dc1-49ba-893c-f24eebaf384a'; // Make sure this is defined or fetched
+      const NOT_APPLICABLE_INDUSTRY_ID = '4cd2a6a0-6dc1-49ba-893c-f24eebaf384a';
       await supabase
         .from('case_study_industry_relations' as any)
         .insert({ case_study_id: data.id, industry_id: NOT_APPLICABLE_INDUSTRY_ID });
@@ -89,18 +89,18 @@ export async function saveCaseStudy(values: any): Promise<any> {
     }
 
     if (!notApplicableStates.algorithms && values.algorithms && Array.isArray(values.algorithms) && values.algorithms.length > 0) {
-      // console.log('Attempting to insert algorithm relations for:', values.algorithms); // DEBUG LOG
-      for (const algorithmId of values.algorithms) {
-        // console.log('Inserting algorithm relation: case_study_id=' + data.id + ', algorithm_id=' + algorithmId); // DEBUG LOG
-        const { error: algorithmRelError } = await supabase
-          .from('algorithm_case_study_relations' as any)
-          .insert({ case_study_id: data.id, algorithm_id: algorithmId });
-        if (algorithmRelError) {
-          console.error('Error inserting algorithm relation:', algorithmRelError);
-          // throw new Error(algorithmRelError.message || "Failed to insert algorithm relation");
-        } else {
-          // console.log('Successfully inserted algorithm relation for algorithm_id=' + algorithmId); // DEBUG LOG
-        }
+      // Batch insert all algorithm relations at once
+      const algorithmRelations = values.algorithms.map(algorithmId => ({
+        case_study_id: data.id,
+        algorithm_id: algorithmId
+      }));
+      
+      const { error: algorithmRelError } = await supabase
+        .from('algorithm_case_study_relations' as any)
+        .insert(algorithmRelations);
+        
+      if (algorithmRelError) {
+        console.error('Error inserting algorithm relations:', algorithmRelError);
       }
     } else if (notApplicableStates.algorithms) {
       const NOT_APPLICABLE_ALGORITHM_ID = '5bb7190e-d0df-46cc-a459-2eea19856fb1';
@@ -120,14 +120,18 @@ export async function saveCaseStudy(values: any): Promise<any> {
     }
     
     if (!notApplicableStates.personas && values.personas && Array.isArray(values.personas) && values.personas.length > 0) {
-      for (const personaId of values.personas) {
-        const { error: personaRelError } = await supabase
-          .from('case_study_persona_relations' as any)
-          .insert({ case_study_id: data.id, persona_id: personaId });
-        if (personaRelError) {
-          console.error('Error inserting persona relation:', personaRelError);
-          // throw new Error(personaRelError.message || "Failed to insert persona relation");
-        }
+      // Batch insert all persona relations at once
+      const personaRelations = values.personas.map(personaId => ({
+        case_study_id: data.id,
+        persona_id: personaId
+      }));
+      
+      const { error: personaRelError } = await supabase
+        .from('case_study_persona_relations' as any)
+        .insert(personaRelations);
+        
+      if (personaRelError) {
+        console.error('Error inserting persona relations:', personaRelError);
       }
     } else if (notApplicableStates.personas) {
       const NOT_APPLICABLE_PERSONA_ID = 'd1c1c7e7-2847-4bf3-b165-3bd84a99f3a6';

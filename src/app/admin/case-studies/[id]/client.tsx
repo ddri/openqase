@@ -144,19 +144,49 @@ export function CaseStudyForm({ caseStudy, algorithms, industries, personas, isN
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    console.log('Submitting case study with resource links:', values.resource_links);
+    console.log('[CLIENT] Starting case study save...');
+    console.log('[CLIENT] Form values:', {
+      id: values.id,
+      title: values.title,
+      relationshipsCount: {
+        industries: values.industries?.length || 0,
+        algorithms: values.algorithms?.length || 0,
+        personas: values.personas?.length || 0
+      },
+      notApplicableStates
+    });
     
     startTransition(async () => {
+      const submitStartTime = Date.now();
+      
       try {
+        console.log('[CLIENT] Calling saveCaseStudy action...');
+        
         // Include notApplicableStates in the data sent to the server
         const result = await saveCaseStudy({
           ...values,
           notApplicableStates
         });
         
+        const submitTime = Date.now() - submitStartTime;
+        console.log(`[CLIENT] Save completed in ${submitTime}ms`);
+        
+        if (result?.error) {
+          console.error('[CLIENT] Server returned error:', result.error);
+          throw new Error(result.error);
+        }
+        
+        if (!result?.caseStudy) {
+          console.error('[CLIENT] Server returned no case study data:', result);
+          throw new Error('Save operation did not return case study data');
+        }
+        
+        console.log('[CLIENT] Save successful:', result.caseStudy);
+        
         // If this was a new case study and we got an ID back, redirect to edit page
-        if (isNew && result?.id) {
-          router.push(`/admin/case-studies/${result.id}`);
+        if (isNew && result.caseStudy?.id) {
+          console.log('[CLIENT] Redirecting to edit page for new case study:', result.caseStudy.id);
+          router.push(`/admin/case-studies/${result.caseStudy.id}`);
         }
         
         setIsDirty(false);
@@ -166,14 +196,24 @@ export function CaseStudyForm({ caseStudy, algorithms, industries, personas, isN
           description: 'Case study saved successfully',
           duration: 3000,
         });
-      } catch (error) {
-        console.error("Error in handleSave:", error);
+      } catch (error: any) {
+        const submitTime = Date.now() - submitStartTime;
+        console.error(`[CLIENT] Save failed after ${submitTime}ms:`, {
+          error,
+          message: error?.message,
+          stack: error?.stack,
+          caseStudyId: values.id,
+          caseStudyTitle: values.title
+        });
+        
+        // Show specific error message if available
+        const errorMessage = error?.message || 'An unknown error occurred while saving';
         
         toast({
           variant: 'destructive',
-          title: 'Error',
-          description: 'Failed to save case study',
-          duration: 5000,
+          title: 'Save Failed',
+          description: errorMessage,
+          duration: 8000, // Longer duration for error messages
         });
       }
     });
@@ -191,13 +231,33 @@ export function CaseStudyForm({ caseStudy, algorithms, industries, personas, isN
       return;
     }
     
+    console.log('[CLIENT] Starting publish operation for case study:', values.id);
+    
     startTransition(async () => {
+      const publishStartTime = Date.now();
+      
       try {
+        console.log('[CLIENT] Saving case study before publishing...');
         // First save the content
-        await saveCaseStudy(values);
+        const saveResult = await saveCaseStudy({
+          ...values,
+          notApplicableStates
+        });
         
+        if (saveResult?.error) {
+          throw new Error(`Save failed: ${saveResult.error}`);
+        }
+        
+        console.log('[CLIENT] Save successful, now publishing...');
         // Then publish it
-        await publishCaseStudy(values.id!, values.slug);
+        const publishResult = await publishCaseStudy(values.id!, values.slug);
+        
+        if (publishResult?.error || !publishResult?.success) {
+          throw new Error(publishResult?.error || 'Publish operation failed');
+        }
+        
+        const publishTime = Date.now() - publishStartTime;
+        console.log(`[CLIENT] Publish completed successfully in ${publishTime}ms`);
         
         setValues(prev => ({ ...prev, published: true }));
         
@@ -206,14 +266,22 @@ export function CaseStudyForm({ caseStudy, algorithms, industries, personas, isN
           description: 'Case study is now published and visible to users',
           duration: 3000,
         });
-      } catch (error) {
-        console.error("Error in handlePublish:", error);
+      } catch (error: any) {
+        const publishTime = Date.now() - publishStartTime;
+        console.error(`[CLIENT] Publish failed after ${publishTime}ms:`, {
+          error,
+          message: error?.message,
+          caseStudyId: values.id,
+          caseStudySlug: values.slug
+        });
+        
+        const errorMessage = error?.message || 'An unknown error occurred while publishing';
         
         toast({
           variant: 'destructive',
-          title: 'Error',
-          description: 'Failed to publish case study',
-          duration: 5000,
+          title: 'Publish Failed',
+          description: errorMessage,
+          duration: 8000,
         });
       }
     });
@@ -223,9 +291,21 @@ export function CaseStudyForm({ caseStudy, algorithms, industries, personas, isN
   const handleUnpublish = async () => {
     if (!values.id) return;
     
+    console.log('[CLIENT] Starting unpublish operation for case study:', values.id);
+    
     startTransition(async () => {
+      const unpublishStartTime = Date.now();
+      
       try {
-        await unpublishCaseStudy(values.id!, values.slug);
+        console.log('[CLIENT] Calling unpublishCaseStudy action...');
+        const result = await unpublishCaseStudy(values.id!, values.slug);
+        
+        if (result?.error || !result?.success) {
+          throw new Error(result?.error || 'Unpublish operation failed');
+        }
+        
+        const unpublishTime = Date.now() - unpublishStartTime;
+        console.log(`[CLIENT] Unpublish completed successfully in ${unpublishTime}ms`);
         
         setValues(prev => ({ ...prev, published: false }));
         
@@ -234,14 +314,22 @@ export function CaseStudyForm({ caseStudy, algorithms, industries, personas, isN
           description: 'Case study is now unpublished and hidden from users',
           duration: 3000,
         });
-      } catch (error) {
-        console.error("Error in handleUnpublish:", error);
+      } catch (error: any) {
+        const unpublishTime = Date.now() - unpublishStartTime;
+        console.error(`[CLIENT] Unpublish failed after ${unpublishTime}ms:`, {
+          error,
+          message: error?.message,
+          caseStudyId: values.id,
+          caseStudySlug: values.slug
+        });
+        
+        const errorMessage = error?.message || 'An unknown error occurred while unpublishing';
         
         toast({
           variant: 'destructive',
-          title: 'Error',
-          description: 'Failed to unpublish case study',
-          duration: 5000,
+          title: 'Unpublish Failed',
+          description: errorMessage,
+          duration: 8000,
         });
       }
     });

@@ -42,11 +42,15 @@ export async function savePersona(values: any): Promise<any> {
       throw new Error(error.message || "Failed to save persona");
     }
     
+    if (!data?.id) {
+      throw new Error("Failed to save persona - no ID returned from database");
+    }
+
     // Handle industry relationships (delete and re-create)
     let industryError = await supabase
       .from('persona_industry_relations')
       .delete()
-      .eq('persona_id', data?.id);
+      .eq('persona_id', data.id);
 
     if (industryError && industryError.error) {
         console.error("Error deleting industry relationships:", industryError.error);
@@ -57,7 +61,7 @@ export async function savePersona(values: any): Promise<any> {
       for (const industryId of industryIds) {
           let insertError = await supabase
               .from('persona_industry_relations')
-              .insert({ persona_id: data.id!, industry_id: industryId });
+              .insert({ persona_id: data.id, industry_id: industryId });
 
           if (insertError && insertError.error) {
               console.error("Error inserting industry relationship:", insertError.error);

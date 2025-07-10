@@ -24,8 +24,8 @@ export function AuthContent({ redirectTo }: { redirectTo?: string }) {
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        const { data: { session } } = await supabase.auth.getSession()
-        if (session) {
+        const { data: { user } } = await supabase.auth.getUser()
+        if (user) {
           router.replace(redirectToParam)
         }
       } catch (error) {

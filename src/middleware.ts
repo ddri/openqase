@@ -57,8 +57,8 @@ export async function middleware(req: NextRequest) {
     const { createServerSupabaseClient } = await import('@/lib/supabase')
     const supabase = await createServerSupabaseClient()
     
-    // Get the session
-    const { data: { session } } = await supabase.auth.getSession()
+    // Get the user (more secure than getSession)
+    const { data: { user } } = await supabase.auth.getUser()
     
     // For GET requests, allow access without authentication for now
     // (This maintains current behavior while we add protection incrementally)
@@ -69,7 +69,7 @@ export async function middleware(req: NextRequest) {
     
     // For write operations (POST, PUT, PATCH, DELETE), require authentication
     if (['POST', 'PUT', 'PATCH', 'DELETE'].includes(req.method || '')) {
-      if (!session) {
+      if (!user) {
         console.log(`[MIDDLEWARE] Unauthorized ${req.method} request blocked`)
         return NextResponse.json(
           { error: 'Authentication required' }, 
@@ -81,7 +81,7 @@ export async function middleware(req: NextRequest) {
       const { data: userPreferences } = await supabase
         .from('user_preferences')
         .select('role')
-        .eq('id', session.user.id)
+        .eq('id', user.id)
         .single()
 
       if (!userPreferences || userPreferences.role !== 'admin') {
@@ -101,7 +101,7 @@ export async function middleware(req: NextRequest) {
   // Get user session for auth checks
   const { createServerSupabaseClient } = await import('@/lib/supabase')
   const supabase = await createServerSupabaseClient()
-  const { data: { session } } = await supabase.auth.getSession()
+  const { data: { user } } = await supabase.auth.getUser()
 
   // For admin routes, check if user has admin role
   if (isAdminRoute) {
@@ -113,7 +113,7 @@ export async function middleware(req: NextRequest) {
       return res
     }
 
-    if (!session) {
+    if (!user) {
       return NextResponse.redirect(new URL('/auth?redirectTo=/admin', req.url))
     }
 
@@ -121,7 +121,7 @@ export async function middleware(req: NextRequest) {
     const { data: userPreferences } = await supabase
       .from('user_preferences')
       .select('role')
-      .eq('id', session.user.id)
+      .eq('id', user.id)
       .single()
 
     if (!userPreferences || userPreferences.role !== 'admin') {
@@ -130,7 +130,7 @@ export async function middleware(req: NextRequest) {
   }
 
   // For content routes, only require auth if feature flag is enabled
-  if (isProtectedRoute && authRequired && !session) {
+  if (isProtectedRoute && authRequired && !user) {
     return NextResponse.redirect(new URL('/auth?redirectTo=' + req.nextUrl.pathname, req.url))
   }
 

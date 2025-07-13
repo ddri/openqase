@@ -68,6 +68,11 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
+                <Link href="/roadmap" className="text-base text-muted-foreground hover:text-accent transition-colors">
+                  Roadmap
+                </Link>
+              </li>
+              <li>
                 <Link href="/contact" className="text-base text-muted-foreground hover:text-accent transition-colors">
                   Contact Us
                 </Link>

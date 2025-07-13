@@ -1,3 +1,5 @@
+import { NewsletterSignup } from '@/components/ui/newsletter-signup'
+
 export default function AboutPage() {
   return (
     <main className="min-h-screen">
@@ -212,13 +214,17 @@ export default function AboutPage() {
               <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto">
                 Connect with other professionals exploring quantum computing applications in business contexts. Stay updated with the latest case studies, insights, and community discussions.
               </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center max-w-md mx-auto">
-                <button className="flex-1 bg-primary text-primary-foreground hover:bg-primary/90 px-6 py-3 rounded-lg font-medium transition-colors">
-                  Subscribe to Updates
-                </button>
-                <button className="flex-1 bg-background border border-border hover:bg-muted px-6 py-3 rounded-lg font-medium transition-colors">
-                  Explore Learning Paths
-                </button>
+              <div className="space-y-4">
+                <NewsletterSignup 
+                  buttonText="Subscribe to Updates"
+                  className="bg-primary text-primary-foreground hover:bg-primary/90 px-6 py-3 rounded-lg font-medium transition-colors"
+                  variant="inline"
+                />
+                <div className="flex justify-center">
+                  <button className="bg-background border border-border hover:bg-muted px-6 py-3 rounded-lg font-medium transition-colors">
+                    Explore Learning Paths
+                  </button>
+                </div>
               </div>
             </div>
           </section>

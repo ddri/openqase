@@ -4,9 +4,50 @@ import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { useNewsletter } from '@/hooks/useNewsletter'
 import { Loader2 } from 'lucide-react'
+import { cn } from '@/lib/utils'
 
-export function NewsletterSignup() {
+interface NewsletterSignupProps {
+  buttonText?: string
+  className?: string
+  variant?: 'default' | 'inline'
+}
+
+export function NewsletterSignup({ 
+  buttonText = 'Subscribe', 
+  className,
+  variant = 'default'
+}: NewsletterSignupProps) {
   const { email, setEmail, isSubscribing, handleSubscribe } = useNewsletter()
+
+  if (variant === 'inline') {
+    return (
+      <form onSubmit={handleSubscribe} className="flex flex-col sm:flex-row gap-2 items-center">
+        <Input
+          type="email"
+          placeholder="Enter your email"
+          className="flex-grow"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          disabled={isSubscribing}
+          required
+        />
+        <Button 
+          type="submit"
+          className={cn("px-6 py-2 font-medium", className)}
+          disabled={isSubscribing}
+        >
+          {isSubscribing ? (
+            <>
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              Subscribing...
+            </>
+          ) : (
+            buttonText
+          )}
+        </Button>
+      </form>
+    )
+  }
 
   return (
     <div className="max-w-4xl mx-auto mt-16">
@@ -27,7 +68,7 @@ export function NewsletterSignup() {
           />
           <Button 
             type="submit" 
-            className="px-6 py-2 font-medium"
+            className={cn("px-6 py-2 font-medium", className)}
             disabled={isSubscribing}
           >
             {isSubscribing ? (
@@ -36,7 +77,7 @@ export function NewsletterSignup() {
                 Subscribing...
               </>
             ) : (
-              'Subscribe'
+              buttonText
             )}
           </Button>
         </form>

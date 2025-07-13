@@ -20,7 +20,7 @@ async function testNewsletterServices() {
   console.log(`🧪 Testing API endpoint with: ${testEmail}`);
 
   try {
-    const response = await fetch('http://localhost:3001/api/newsletter', {
+    const response = await fetch('http://localhost:3000/api/newsletter', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

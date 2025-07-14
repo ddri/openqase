@@ -28,11 +28,6 @@ const openSans = Open_Sans({
 export const metadata: Metadata = {
   title: 'OpenQase',
   description: 'Open repository for Quantum Computing business cases.',
-  icons: {
-    icon: '/favicon.svg',
-    shortcut: '/favicon.svg',
-    apple: '/favicon.svg',
-  },
 };
 
 export default function RootLayout({

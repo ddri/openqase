@@ -34,7 +34,7 @@ export default function ContentCard({
             {title}
           </h3>
           
-          <p className="text-[var(--text-secondary)] mb-auto line-clamp-4 min-h-[5rem]">
+          <p className={`text-[var(--text-secondary)] mb-auto ${badges.length === 0 ? 'line-clamp-6' : 'line-clamp-4'} min-h-[5rem]`}>
             {description}
           </p>
 

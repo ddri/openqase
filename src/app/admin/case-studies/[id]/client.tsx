@@ -60,6 +60,7 @@ export function CaseStudyForm({ caseStudy, algorithms, industries, personas, isN
     published: isNew ? false : caseStudy?.published || false,
     academic_references: isNew ? '' : caseStudy?.academic_references || '',
     resource_links: isNew ? [] : caseStudy?.resource_links || [],
+    year: isNew ? new Date().getFullYear() : caseStudy?.year || new Date().getFullYear(),
   });
   const [isDirty, setIsDirty] = useState(false);
   
@@ -462,6 +463,22 @@ export function CaseStudyForm({ caseStudy, algorithms, industries, personas, isN
                   className="min-h-[100px]"
                 />
                 {/* Validation message for description can be added here if needed */}
+              </div>
+              
+              <div className="space-y-3">
+                <Label htmlFor="year">Year</Label>
+                <Input
+                  id="year"
+                  type="number"
+                  min="1990"
+                  max="2030"
+                  value={values.year}
+                  onChange={(e) => handleChange('year', parseInt(e.target.value) || new Date().getFullYear())}
+                  placeholder="Enter the year of the case study"
+                />
+                <p className="text-sm text-muted-foreground">
+                  The year when this case study was conducted or published (1990-2030)
+                </p>
               </div>
             </div>
           </CardContent>

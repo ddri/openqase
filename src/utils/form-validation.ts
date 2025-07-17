@@ -290,6 +290,12 @@ export function createContentValidationRules(contentType: 'algorithm' | 'persona
           validator: validators.required
         },
         {
+          field: 'year',
+          tab: 'basic',
+          label: 'Year must be between 1990 and 2030',
+          validator: validators.and(validators.isNumber, validators.min(1990), validators.max(2030))
+        },
+        {
           field: 'algorithms',
           tab: 'classifications',
           label: 'At least one algorithm is required',

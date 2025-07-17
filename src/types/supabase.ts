@@ -271,6 +271,7 @@ export type Database = {
           slug: string
           title: string
           updated_at: string | null
+          year: number
         }
         Insert: {
           academic_references?: string | null
@@ -289,6 +290,7 @@ export type Database = {
           slug: string
           title: string
           updated_at?: string | null
+          year?: number
         }
         Update: {
           academic_references?: string | null
@@ -307,6 +309,7 @@ export type Database = {
           slug?: string
           title?: string
           updated_at?: string | null
+          year?: number
         }
         Relationships: []
       }

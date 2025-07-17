@@ -140,6 +140,15 @@ export default async function CaseStudyPage({ params }: CaseStudyPageProps) {
           </div>
         </div>
         <div className="space-y-6">
+          <div>
+            <h3 className="sidebar-title">Year</h3>
+            <div className="flex items-center">
+              <Badge variant="outline" className="text-[14px] border-border">
+                {caseStudy.year}
+              </Badge>
+            </div>
+          </div>
+          
           {caseStudy.partner_companies && caseStudy.partner_companies.length > 0 && (
             <div>
               <h3 className="sidebar-title">Partner Companies</h3>

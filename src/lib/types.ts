@@ -71,6 +71,7 @@ export interface CaseStudy extends BaseContent {
   published: boolean | null;
   published_at: string | null;
   lastUpdated: string | null;
+  year: number;
 }
 
 export interface Algorithm extends BaseContent {

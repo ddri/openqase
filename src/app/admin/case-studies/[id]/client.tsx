@@ -469,9 +469,7 @@ export function CaseStudyForm({ caseStudy, algorithms, industries, personas, isN
                 <Label htmlFor="year">Year</Label>
                 <Input
                   id="year"
-                  type="number"
-                  min="1990"
-                  max="2030"
+                  type="text"
                   value={values.year}
                   onChange={(e) => handleChange('year', parseInt(e.target.value) || new Date().getFullYear())}
                   placeholder="Enter the year of the case study"

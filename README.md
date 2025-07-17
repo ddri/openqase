@@ -55,12 +55,22 @@ cp .env.example .env.local
 # Add your Supabase credentials
 ```
 
-4. **Run the development server:**
+4. **Set up local database:**
+```bash
+# Option A: Use the setup script (recommended)
+./scripts/setup-local.sh
+
+# Option B: Manual setup
+supabase start
+supabase db reset
+```
+
+5. **Run the development server:**
 ```bash
 npm run dev
 ```
 
-5. **Build for production:**
+6. **Build for production:**
 ```bash
 npm run build
 ```

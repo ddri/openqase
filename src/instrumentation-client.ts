@@ -27,4 +27,5 @@ Sentry.init({
   debug: false,
 });
 
+// Export required for Sentry navigation instrumentation
 export const onRouterTransitionStart = Sentry.captureRouterTransitionStart;

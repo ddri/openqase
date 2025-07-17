@@ -26,11 +26,6 @@ This document outlines the planned features, improvements, and priorities for th
     *   **Status**: Documented
 
 ### 🚀 **Feature Enhancements**
-*   **Search Functionality Enhancement**
-    *   Implement full-text search across all content types
-    *   Add search filters and advanced query capabilities
-    *   Status: Planned
-
 *   **Blog Migration Completion**  
     *   Complete blog posts migration to unified content fetching system
     *   Add blog-specific static generation optimizations
@@ -42,6 +37,58 @@ This document outlines the planned features, improvements, and priorities for th
     *   Advanced content validation and quality checks
     *   Status: Planned
 
+## OpenQase v0.5.0 - Global Search & Content Discovery (Q2 2025)
+
+### 🔍 **Global Search Implementation**
+*   **Navigation Search Bar**
+    *   Add search input to main navigation
+    *   Implement search suggestions/autocomplete
+    *   Keyboard shortcuts (Ctrl/Cmd + K)
+    *   Status: Planned for v0.5.0
+
+*   **Unified Search Page (`/search`)**
+    *   Create dedicated search results page
+    *   Display results from all content types (algorithms, case studies, personas, industries, blog posts)
+    *   Group results by content type with clear visual hierarchy
+    *   Implement result highlighting for search terms
+    *   Status: Planned for v0.5.0
+
+*   **Search API Endpoint**
+    *   Create `/api/search` endpoint using existing `searchContent` function
+    *   Support for multiple content types in single query
+    *   Add search result ranking and relevance scoring
+    *   Implement search result pagination
+    *   Status: Planned for v0.5.0
+
+*   **Enhanced Search Fields**
+    *   Expand search beyond title/description to include:
+      - Tags and categories
+      - Industry names and sectors
+      - Algorithm use cases
+      - Persona expertise areas
+      - Related content references
+    *   Implement fuzzy matching for better results
+    *   Status: Planned for v0.5.0
+
+### 🎯 **Search Experience Improvements**
+*   **Search Filters & Facets**
+    *   Filter results by content type
+    *   Filter by industry, algorithm type, persona role
+    *   Date range filtering for recent content
+    *   Status: Planned for v0.5.0
+
+*   **Search Analytics**
+    *   Track popular search terms
+    *   Monitor search result click-through rates
+    *   Identify content gaps based on search patterns
+    *   Status: Planned for v0.5.0
+
+*   **Performance Optimization**
+    *   Implement search result caching
+    *   Optimize database queries for search performance
+    *   Add search result preloading for better UX
+    *   Status: Planned for v0.5.0
+
 ## Mid-Term Goals (Q2-Q3 2025)
 
 ### 🏗️ **Architecture & Performance**
@@ -49,16 +96,27 @@ This document outlines the planned features, improvements, and priorities for th
     *   Edge caching for static content
     *   Smart invalidation strategies
     *   CDN integration optimization
+    *   Status: Planned for Q2-Q3 2025
+
+*   **Performance Monitoring & Optimization**
+    *   Implement real-time performance monitoring
+    *   Core Web Vitals tracking and alerting
+    *   Database query optimization and indexing
+    *   Image optimization and lazy loading
+    *   Bundle size optimization and code splitting
+    *   Status: Planned for Q2-Q3 2025
 
 *   **Analytics Integration**
     *   User behavior tracking
     *   Content performance metrics  
     *   Admin dashboard with insights
+    *   Status: Planned for Q2-Q3 2025
 
 *   **API Enhancements**
     *   GraphQL endpoint for complex queries
     *   Public API for third-party integrations
     *   Rate limiting and authentication
+    *   Status: Planned for Q2-Q3 2025
 
 ### 📱 **User Experience**
 *   **Mobile Optimization**
@@ -119,4 +177,5 @@ This document outlines the planned features, improvements, and priorities for th
 
 **Last Updated**: January 2025  
 **Current Version**: v0.4.0  
-**Next Release**: v0.4.1 (Bug fixes and minor enhancements) 
+**Next Release**: v0.4.1 (Bug fixes and minor enhancements)  
+**Planned Release**: v0.5.0 (Global Search & Content Discovery - Q2 2025) 

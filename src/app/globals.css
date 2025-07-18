@@ -13,7 +13,7 @@
     --card-background: 0 0% 96% / 0.9;
     --card-border: 220 12% 68%;  /* Darker card borders to match */
     --card-hover-border: 160 70% 32%; /* Emerald green */
-    --card-hover-background: 160 70% 32% / 0.08;
+    --card-hover-background: 160 70% 32% / 0.15;
     
     --text-primary: 0 0% 2%; /* Much darker primary text */
     --text-secondary: 0 0% 8%; /* Much darker secondary text */
@@ -432,7 +432,7 @@
     @apply transition-all duration-200;
   }
   .group:hover .card-link-hover-effect {
-    @apply -translate-y-1 shadow-lg border-[hsl(var(--card-hover-border))] bg-accent/5;
+    @apply -translate-y-1 shadow-lg border-[hsl(var(--card-hover-border))] bg-[hsl(var(--card-hover-background))];
   }
 }
 

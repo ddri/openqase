@@ -2,7 +2,7 @@
 'use client';
 
 import { Card, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
+import ContentCard from '@/components/ui/content-card';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
@@ -192,63 +192,27 @@ export default function HomePage() {
             </Button>
           </div>
 
-          <div className="grid gap-8 md:grid-cols-3">
-            <Link href="/case-study/quantinuum-hsbc-financial-services-enhancement" className="group block h-full">
-              <Card className={cn("h-full card-link-hover-effect", "flex flex-col overflow-hidden bg-card")}>
-                <div className="aspect-[2/1] bg-primary/5 relative">
-                  <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_70%,#7c3aed11_0%,transparent_50%)] [mask-image:linear-gradient(to_bottom,white,transparent)] transition-opacity group-hover:opacity-75" />
-                  <div className="absolute inset-0 bg-[linear-gradient(45deg,transparent_25%,#7c3aed11_50%,transparent_75%)] transition-opacity group-hover:opacity-75" />
-                </div>
-                <CardHeader>
-                  <div className="flex gap-2 mb-4">
-                    <Badge variant="outline" className="bg-card/75 backdrop-blur-sm">Finance</Badge>
-                    <Badge variant="outline" className="bg-card/75 backdrop-blur-sm">Cybersecurity</Badge>
-                  </div>
-                  <CardTitle className="line-clamp-2">Quantinuum & HSBC: Financial Services Enhancement</CardTitle>
-                  <CardDescription className="line-clamp-3">
-                    How HSBC partnered with Quantinuum to explore quantum computing applications in cybersecurity, fraud detection, and natural language processing for banking.
-                  </CardDescription>
-                </CardHeader>
-              </Card>
-            </Link>
-
-            <Link href="/case-study/quantinuum-google-deepmind-circuit-optimisation" className="group block h-full">
-              <Card className={cn("h-full card-link-hover-effect", "flex flex-col overflow-hidden bg-card")}>
-                <div className="aspect-[2/1] bg-primary/5 relative">
-                  <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_70%,#7c3aed11_0%,transparent_50%)] [mask-image:linear-gradient(to_bottom,white,transparent)] transition-opacity group-hover:opacity-75" />
-                  <div className="absolute inset-0 bg-[linear-gradient(-45deg,transparent_25%,#7c3aed11_50%,transparent_75%)] transition-opacity group-hover:opacity-75" />
-                </div>
-                <CardHeader>
-                  <div className="flex gap-2 mb-4">
-                    <Badge variant="outline" className="bg-card/75 backdrop-blur-sm">Technology</Badge>
-                    <Badge variant="outline" className="bg-card/75 backdrop-blur-sm">AI Integration</Badge>
-                  </div>
-                  <CardTitle className="line-clamp-2">Quantinuum & Google DeepMind: AI for Quantum Circuit Optimization</CardTitle>
-                  <CardDescription className="line-clamp-3">
-                    How Quantinuum and Google DeepMind developed AlphaTensor-Quantum to optimize quantum circuits, reducing T gate counts by up to 47% in cryptography applications.
-                  </CardDescription>
-                </CardHeader>
-              </Card>
-            </Link>
-
-            <Link href="/case-study/quantinuum-mitsui-trading-co" className="group block h-full">
-              <Card className={cn("h-full card-link-hover-effect", "flex flex-col overflow-hidden bg-card")}>
-                <div className="aspect-[2/1] bg-primary/5 relative">
-                  <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_30%,#7c3aed11_0%,transparent_50%)] [mask-image:linear-gradient(to_bottom,white,transparent)] transition-opacity group-hover:opacity-75" />
-                  <div className="absolute inset-0 bg-[linear-gradient(135deg,transparent_25%,#7c3aed11_50%,transparent_75%)] transition-opacity group-hover:opacity-75" />
-                </div>
-                <CardHeader>
-                  <div className="flex gap-2 mb-4">
-                    <Badge variant="outline" className="bg-card/75 backdrop-blur-sm">Trading</Badge>
-                    <Badge variant="outline" className="bg-card/75 backdrop-blur-sm">Optimization</Badge>
-                  </div>
-                  <CardTitle className="line-clamp-2">Quantinuum & Mitsui Co: Global Trading Optimization</CardTitle>
-                  <CardDescription className="line-clamp-3">
-                    How Mitsui & Co. partnered with Quantinuum to apply quantum computing to logistics optimization, commodity trading, and financial risk assessment.
-                  </CardDescription>
-                </CardHeader>
-              </Card>
-            </Link>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <ContentCard
+              title="Quantinuum & HSBC: Financial Services Enhancement"
+              description="How HSBC partnered with Quantinuum to explore quantum computing applications in cybersecurity, fraud detection, and natural language processing for banking."
+              badges={[]}
+              href="/case-study/quantinuum-hsbc-financial-services-enhancement"
+            />
+            
+            <ContentCard
+              title="Quantinuum & Google DeepMind: AI for Quantum Circuit Optimization"
+              description="How Quantinuum and Google DeepMind developed AlphaTensor-Quantum to optimize quantum circuits, reducing T gate counts by up to 47% in cryptography applications."
+              badges={[]}
+              href="/case-study/quantinuum-google-deepmind-circuit-optimisation"
+            />
+            
+            <ContentCard
+              title="Quantinuum & Mitsui Co: Global Trading Optimization"
+              description="How Mitsui & Co. partnered with Quantinuum to apply quantum computing to logistics optimization, commodity trading, and financial risk assessment."
+              badges={[]}
+              href="/case-study/quantinuum-mitsui-trading-co"
+            />
           </div>
         </div>
       </section>

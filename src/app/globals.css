@@ -5,35 +5,35 @@
 @layer base {
   /* Light theme - Cool, Modern & Vibrant */
   :root {
-    --background: 220 25% 92%;  /* Cooler, neutral very light gray */
-    --foreground: 0 0% 10%;     /* Neutral dark gray text */
+    --background: 220 12% 86%;  /* Slightly lighter background */
+    --foreground: 0 0% 2%;      /* Much darker text */
     
-    --card: 0 0% 96%;  /* Very light neutral gray card (almost white) */
+    --card: 0 0% 91%;  /* Slightly lighter cards */
     --card-foreground: 0 0% 10%;
     --card-background: 0 0% 96% / 0.9;
-    --card-border: 220 15% 85%;  /* Cool light gray border */
+    --card-border: 220 12% 68%;  /* Darker card borders to match */
     --card-hover-border: 160 70% 32%; /* Emerald green */
-    --card-hover-background: 160 70% 32% / 0.05;
+    --card-hover-background: 160 70% 32% / 0.08;
     
-    --text-primary: 0 0% 10%; /* Neutral dark gray */
-    --text-secondary: 0 0% 25%; /* Slightly lighter dark gray */
-    --text-tertiary: 0 0% 40%; /* Medium gray for tertiary text */
+    --text-primary: 0 0% 2%; /* Much darker primary text */
+    --text-secondary: 0 0% 8%; /* Much darker secondary text */
+    --text-tertiary: 0 0% 18%; /* Much darker tertiary text */
     
-    --surface-primary: 0 0% 96%; /* Same as card */
-    --surface-secondary: 220 20% 90%;   /* Slightly darker cool gray than background */
-    --surface-tertiary: 220 20% 86%;    /* Darker cool gray for sidebar, etc. */
+    --surface-primary: 0 0% 91%; /* Same as card */
+    --surface-secondary: 220 12% 83%;   /* Slightly lighter secondary surface */
+    --surface-tertiary: 220 12% 80%;    /* Slightly lighter tertiary surface */
     
-    --popover: 0 0% 98%; /* Very light, almost white popover */
+    --popover: 0 0% 92%; /* Slightly lighter popover */
     --popover-foreground: 0 0% 10%;
     
     --primary: 160 70% 32%; /* Emerald green */
     --primary-foreground: 0 0% 100%; /* White text on emerald green */
     
-    --secondary: 0 0% 88%; /* Neutral light gray for secondary buttons/elements */
-    --secondary-foreground: 0 0% 15%; /* Dark text on light gray secondary */
+    --secondary: 0 0% 83%; /* Slightly lighter secondary elements */
+    --secondary-foreground: 0 0% 2%; /* Much darker text on secondary */
     
-    --muted: 220 20% 90%; /* Cool light gray */
-    --muted-foreground: 0 0% 40%; /* Medium gray text */
+    --muted: 220 12% 84%; /* Slightly lighter muted background */
+    --muted-foreground: 0 0% 18%; /* Much darker muted text */
     
     --accent: 160 70% 32%; /* Emerald green */
     --accent-foreground: 0 0% 100%; /* White text for accent backgrounds */
@@ -41,8 +41,8 @@
     --destructive: 0 84.2% 60.2%; /* Keeping current destructive red */
     --destructive-foreground: 0 0% 100%; /* White text on destructive red */
     
-    --border: 220 15% 85%; /* Cool light gray */
-    --input: 220 15% 85%;  /* Cool light gray */
+    --border: 220 12% 68%; /* Darker borders for better definition */
+    --input: 220 12% 68%;  /* Darker inputs to match borders */
     --ring: 160 70% 32%; /* Emerald green */
     --radius: 0.5rem;
 

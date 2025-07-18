@@ -12,8 +12,8 @@
     --card-foreground: 0 0% 10%;
     --card-background: 0 0% 96% / 0.9;
     --card-border: 220 15% 85%;  /* Cool light gray border */
-    --card-hover-border: 230 100% 50%; /* Electric blue */
-    --card-hover-background: 230 100% 50% / 0.05;
+    --card-hover-border: 160 70% 32%; /* Emerald green */
+    --card-hover-background: 160 70% 32% / 0.05;
     
     --text-primary: 0 0% 10%; /* Neutral dark gray */
     --text-secondary: 0 0% 25%; /* Slightly lighter dark gray */
@@ -26,8 +26,8 @@
     --popover: 0 0% 98%; /* Very light, almost white popover */
     --popover-foreground: 0 0% 10%;
     
-    --primary: 230 100% 50%; /* Electric blue */
-    --primary-foreground: 0 0% 100%; /* White text on electric blue */
+    --primary: 160 70% 32%; /* Emerald green */
+    --primary-foreground: 0 0% 100%; /* White text on emerald green */
     
     --secondary: 0 0% 88%; /* Neutral light gray for secondary buttons/elements */
     --secondary-foreground: 0 0% 15%; /* Dark text on light gray secondary */
@@ -35,7 +35,7 @@
     --muted: 220 20% 90%; /* Cool light gray */
     --muted-foreground: 0 0% 40%; /* Medium gray text */
     
-    --accent: 230 100% 50%; /* Electric blue */
+    --accent: 160 70% 32%; /* Emerald green */
     --accent-foreground: 0 0% 100%; /* White text for accent backgrounds */
     
     --destructive: 0 84.2% 60.2%; /* Keeping current destructive red */
@@ -43,7 +43,7 @@
     
     --border: 220 15% 85%; /* Cool light gray */
     --input: 220 15% 85%;  /* Cool light gray */
-    --ring: 230 100% 50%; /* Electric blue */
+    --ring: 160 70% 32%; /* Emerald green */
     --radius: 0.5rem;
 
     /* Anthropic-inspired typography */
@@ -56,10 +56,10 @@
 
   /* Dark theme - consolidated from graphite theme */
   [data-theme='dark'] {
-    --background: 240 5% 10%;  /* zinc-900 equivalent */
+    --background: 240 8% 12%;  /* subtle graphite */
     --foreground: 0 0% 98%;
     
-    --card: 240 5% 15%;  /* zinc-800/50 equivalent */
+    --card: 240 8% 16%;  /* subtle graphite cards */
     --card-foreground: 0 0% 100%;
     
     /* Add missing text color variables */
@@ -67,29 +67,29 @@
     --text-secondary: 240 5% 80%;
     --text-tertiary: 240 5% 70%;
     
-    --primary: 22 100% 50%;  /* orange-500 */
+    --primary: 160 70% 32%;  /* emerald green */
     --primary-foreground: 0 0% 100%;
     
-    --secondary: 240 5% 25%;
+    --secondary: 240 8% 24%;
     --secondary-foreground: 0 0% 98%;
     
-    --accent: 22 100% 50%;  /* orange-500 */
+    --accent: 160 70% 32%;  /* emerald green */
     --accent-foreground: 0 0% 98%;
     
-    --muted: 240 5% 35%;
+    --muted: 240 8% 32%;
     --muted-foreground: 240 5% 65%;  /* zinc-400 */
     
-    --border: 240 5% 30%;  /* zinc-700 */
-    --input: 240 5% 30%;
-    --ring: 22 100% 50%;  /* orange-500 */
+    --border: 240 8% 28%;  /* subtle graphite borders */
+    --input: 240 8% 28%;
+    --ring: 160 70% 32%;  /* emerald green */
   }
   
   /* Graphite theme */
   [data-theme='graphite'] {
-    --background: 240 5% 10%;  /* zinc-900 equivalent */
+    --background: 240 8% 12%;  /* subtle graphite */
     --foreground: 0 0% 98%;
     
-    --card: 240 5% 15%;  /* zinc-800/50 equivalent */
+    --card: 240 8% 16%;  /* subtle graphite cards */
     --card-foreground: 0 0% 100%;
     
     /* Add missing text color variables */
@@ -97,21 +97,21 @@
     --text-secondary: 240 5% 80%;
     --text-tertiary: 240 5% 70%;
     
-    --primary: 22 100% 50%;  /* orange-500 */
+    --primary: 160 70% 32%;  /* emerald green */
     --primary-foreground: 0 0% 100%;
     
-    --secondary: 240 5% 25%;
+    --secondary: 240 8% 24%;
     --secondary-foreground: 0 0% 98%;
     
-    --accent: 22 100% 50%;  /* orange-500 */
+    --accent: 160 70% 32%;  /* emerald green */
     --accent-foreground: 0 0% 98%;
     
-    --muted: 240 5% 35%;
+    --muted: 240 8% 32%;
     --muted-foreground: 240 5% 65%;  /* zinc-400 */
     
-    --border: 240 5% 30%;  /* zinc-700 */
-    --input: 240 5% 30%;
-    --ring: 22 100% 50%;  /* orange-500 */
+    --border: 240 8% 28%;  /* subtle graphite borders */
+    --input: 240 8% 28%;
+    --ring: 160 70% 32%;  /* emerald green */
   }
 
   /* Paper theme (Deduxer-inspired Monochromatic) */

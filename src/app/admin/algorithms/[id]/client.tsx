@@ -45,7 +45,6 @@ export function AlgorithmForm({ algorithm, caseStudies, industries, personas, is
     slug: isNew ? '' : algorithm?.slug || '',
     description: isNew ? '' : algorithm?.description || '',
     main_content: isNew ? '' : algorithm?.main_content || '',
-    quantum_advantage: isNew ? '' : algorithm?.quantum_advantage || '',
     use_cases: isNew ? [] : algorithm?.use_cases || [],
     related_case_studies: isNew ? [] : algorithm?.related_case_studies || [],
     related_industries: isNew ? [] : algorithm?.related_industries || [],
@@ -267,6 +266,15 @@ export function AlgorithmForm({ algorithm, caseStudies, industries, personas, is
                   rows={3}
                 />
               </div>
+              
+              <div className="space-y-2">
+                <Label htmlFor="use_cases">Use Cases</Label>
+                <TagInput
+                  tags={values.use_cases}
+                  onTagsChange={(newTags) => handleChange('use_cases', newTags)}
+                  placeholder="Add use case..."
+                />
+              </div>
             </div>
           </CardContent>
         </Card>
@@ -329,34 +337,6 @@ export function AlgorithmForm({ algorithm, caseStudies, industries, personas, is
                 onChange={(e) => handleChange('academic_references', e.target.value)}
                 placeholder="[^1]: Author, Title, Journal (Year)"
                 rows={8}
-              />
-            </div>
-          </CardContent>
-        </Card>
-        
-        {/* Technical Details Section */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Technical Details</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="quantum_advantage">Quantum Advantage</Label>
-              <Textarea
-                id="quantum_advantage"
-                value={values.quantum_advantage}
-                onChange={(e) => handleChange('quantum_advantage', e.target.value)}
-                placeholder="Describe the quantum advantage of this algorithm"
-                rows={5}
-              />
-            </div>
-            
-            <div className="space-y-2">
-              <Label htmlFor="use_cases">Use Cases</Label>
-              <TagInput
-                tags={values.use_cases}
-                onTagsChange={(newTags) => handleChange('use_cases', newTags)}
-                placeholder="Add use case..."
               />
             </div>
           </CardContent>

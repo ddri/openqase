@@ -248,12 +248,10 @@ export function RelationshipSelector({
           </Button>
         </PopoverTrigger>
         <PopoverContent
-          className="w-[300px] p-0"
+          className="w-[300px] p-0 bg-popover border"
           align="start"
           sideOffset={4}
-          style={{ zIndex: 100 }}
         >
-          <div className="border rounded-md overflow-hidden bg-popover">
             <div className="flex items-center border-b px-3 py-2">
               <Search className="mr-2 h-4 w-4 shrink-0 opacity-50" />
               <input
@@ -301,7 +299,6 @@ export function RelationshipSelector({
                 </div>
               </div>
             )}
-          </div>
         </PopoverContent>
       </Popover>
       

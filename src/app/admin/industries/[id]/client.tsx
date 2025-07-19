@@ -10,6 +10,7 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { ContentCompleteness } from '@/components/admin/ContentCompleteness';
 import { PublishButton } from '@/components/admin/PublishButton';
+import { TagInput } from '@/components/ui/tag-input';
 import { createContentValidationRules, calculateCompletionPercentage, validateFormValues } from '@/utils/form-validation';
 import { useTransition } from 'react';
 import { ArrowLeft, Save, Loader2 } from 'lucide-react';
@@ -39,6 +40,7 @@ export function IndustryForm({ industry, isNew }: IndustryFormProps) {
     description: isNew ? '' : industry?.description || '',
     main_content: isNew ? '' : industry?.main_content || '',
     icon: isNew ? '' : industry?.icon || '',
+    sector: isNew ? [] : industry?.sector || [],
     published: isNew ? false : industry?.published || false,
   });
   const [isDirty, setIsDirty] = useState(false);
@@ -241,6 +243,15 @@ export function IndustryForm({ industry, isNew }: IndustryFormProps) {
                   value={values.slug}
                   onChange={(e) => handleChange('slug', e.target.value)}
                   placeholder="industry-slug"
+                />
+              </div>
+              
+              <div className="space-y-2">
+                <Label htmlFor="sector">Sector</Label>
+                <TagInput
+                  tags={values.sector}
+                  onTagsChange={(newTags) => handleChange('sector', newTags)}
+                  placeholder="Add sector..."
                 />
               </div>
             </div>

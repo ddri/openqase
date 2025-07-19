@@ -10,6 +10,7 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { ContentCompleteness } from '@/components/admin/ContentCompleteness';
 import { PublishButton } from '@/components/admin/PublishButton';
+import { TagInput } from '@/components/ui/tag-input';
 import { createContentValidationRules, calculateCompletionPercentage, validateFormValues } from '@/utils/form-validation';
 import { useTransition } from 'react';
 import { ArrowLeft, Save, Loader2 } from 'lucide-react';
@@ -352,17 +353,10 @@ export function AlgorithmForm({ algorithm, caseStudies, industries, personas, is
             
             <div className="space-y-2">
               <Label htmlFor="use_cases">Use Cases</Label>
-              <Input
-                id="use_cases"
-                value={values.use_cases.join(', ')}
-                onChange={(e) => {
-                  const useCases = e.target.value
-                    .split(',')
-                    .map(item => item.trim())
-                    .filter(Boolean);
-                  handleChange('use_cases', useCases);
-                }}
-                placeholder="Finance, Healthcare, etc."
+              <TagInput
+                tags={values.use_cases}
+                onTagsChange={(newTags) => handleChange('use_cases', newTags)}
+                placeholder="Add use case..."
               />
             </div>
           </CardContent>

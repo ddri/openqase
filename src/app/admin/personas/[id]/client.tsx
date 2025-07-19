@@ -11,19 +11,13 @@ import { Textarea } from '@/components/ui/textarea';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { ContentCompleteness } from '@/components/admin/ContentCompleteness';
 import { PublishButton } from '@/components/admin/PublishButton';
+import { TagInput } from '@/components/ui/tag-input';
 import { createContentValidationRules, calculateCompletionPercentage, validateFormValues } from '@/utils/form-validation';
 import { useTransition } from 'react';
 import { ArrowLeft, Save, Loader2, Info } from 'lucide-react';
 import { toast } from '@/components/ui/use-toast';
 import { savePersona, publishPersona, unpublishPersona } from './actions';
 
-// Helper to convert expertise array to string for input
-const expertiseToString = (arr: string[] | undefined | null): string => 
-  Array.isArray(arr) ? arr.join(', ') : '';
-
-// Helper to convert expertise string from input to array for saving
-const expertiseStringToArray = (str: string): string[] => 
-  str.split(',').map(item => item.trim()).filter(Boolean);
 
 interface PersonaFormProps {
   persona: any | null;
@@ -55,10 +49,6 @@ export function PersonaForm({ persona, industries, isNew }: PersonaFormProps) {
     published: isNew ? false : persona?.published || false,
   });
   const [isDirty, setIsDirty] = useState(false);
-  // Separate state for the raw expertise input string
-  const [expertiseInputString, setExpertiseInputString] = useState<string>(
-    () => expertiseToString(persona?.expertise) // Initialize from persona data
-  );
   
   // Validation rules for personas
   const validationRules = createContentValidationRules('persona');
@@ -77,19 +67,9 @@ export function PersonaForm({ persona, industries, isNew }: PersonaFormProps) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    // Parse expertise string before saving
-    const expertiseArray = expertiseStringToArray(expertiseInputString);
-    const valuesToSave = {
-      ...values,
-      // Ensure the expertise field being saved is the parsed array
-      // Note: We don't need to update values.expertise state here,
-      // only the object being passed to the server action.
-      expertise: expertiseArray 
-    };
-    
     startTransition(async () => {
       try {
-        const result = await savePersona(valuesToSave); // Use valuesToSave
+        const result = await savePersona(values);
         
         // If this was a new persona and we got an ID back, redirect to edit page
         if (isNew && result?.id) {
@@ -128,17 +108,10 @@ export function PersonaForm({ persona, industries, isNew }: PersonaFormProps) {
       return;
     }
     
-    // Parse expertise string before saving and publishing
-    const expertiseArray = expertiseStringToArray(expertiseInputString);
-    const valuesToSave = {
-      ...values,
-      expertise: expertiseArray
-    };
-    
     startTransition(async () => {
       try {
         // First save the content
-        await savePersona(valuesToSave); // Use valuesToSave
+        await savePersona(values);
         
         // Then publish it
         await publishPersona(values.id!);
@@ -291,17 +264,11 @@ export function PersonaForm({ persona, industries, isNew }: PersonaFormProps) {
                 </div>
                 
                 <div className="space-y-2">
-                  <Label htmlFor="expertise">Expertise (comma-separated)</Label>
-                  <Input
-                    id="expertise"
-                    // Bind directly to the local string state
-                    value={expertiseInputString}
-                    onChange={(e) => {
-                      // Update the local string state directly
-                      setExpertiseInputString(e.target.value);
-                      setIsDirty(true); // Mark form as dirty
-                    }}
-                    placeholder="e.g., Risk Modeling, Derivative Pricing"
+                  <Label htmlFor="expertise">Expertise</Label>
+                  <TagInput
+                    tags={values.expertise}
+                    onTagsChange={(newTags) => handleChange('expertise', newTags)}
+                    placeholder="Add expertise..."
                   />
                 </div>
               </div>

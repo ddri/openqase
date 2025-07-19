@@ -435,6 +435,7 @@ export type Database = {
           name: string
           published: boolean | null
           published_at: string | null
+          sector: string[] | null
           slug: string
           ts_content: unknown | null
           updated_at: string | null
@@ -449,6 +450,7 @@ export type Database = {
           name: string
           published?: boolean | null
           published_at?: string | null
+          sector?: string[] | null
           slug: string
           ts_content?: unknown | null
           updated_at?: string | null
@@ -463,6 +465,7 @@ export type Database = {
           name?: string
           published?: boolean | null
           published_at?: string | null
+          sector?: string[] | null
           slug?: string
           ts_content?: unknown | null
           updated_at?: string | null

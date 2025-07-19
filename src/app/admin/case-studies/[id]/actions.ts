@@ -9,9 +9,7 @@ export async function saveCaseStudy(values: any): Promise<any> {
   
   try {
     const supabase = createServiceRoleSupabaseClient();
-    const notApplicableStates = values.notApplicableStates || {};
 
-    console.log('[CASE_STUDY_SAVE] Not applicable states:', notApplicableStates);
     console.log('[CASE_STUDY_SAVE] Relationships to process:', {
       industries: values.industries?.length || 0,
       algorithms: values.algorithms?.length || 0,  
@@ -57,7 +55,7 @@ export async function saveCaseStudy(values: any): Promise<any> {
 
     console.log('[CASE_STUDY_SAVE] Case study upserted successfully, starting relationships...');
 
-    // Simple delete+insert pattern (industry standard)
+    // Delete and recreate relationships
     const relationshipStartTime = Date.now();
     console.log('[CASE_STUDY_SAVE] Processing relationships using delete+insert pattern...');
 
@@ -91,47 +89,31 @@ export async function saveCaseStudy(values: any): Promise<any> {
 
     console.log('[CASE_STUDY_SAVE] All existing relationships deleted successfully');
 
-    // Step 2: Prepare new relationships based on form data
+    // Step 2: Prepare new relationships from form data
     console.log('[CASE_STUDY_SAVE] Preparing new relationships...');
 
-    // Determine new relationship IDs based on form data and N/A states
     let industryRelations: any[] = [];
     let algorithmRelations: any[] = [];
     let personaRelations: any[] = [];
 
-    // Industries
-    if (notApplicableStates.industries) {
-      industryRelations = [{
-        case_study_id: data.id,
-        industry_id: '4cd2a6a0-6dc1-49ba-893c-f24eebaf384a' // N/A industry ID
-      }];
-    } else if (values.industries && Array.isArray(values.industries) && values.industries.length > 0) {
+    // Industries - only process if array has items
+    if (values.industries && Array.isArray(values.industries) && values.industries.length > 0) {
       industryRelations = values.industries.map((industryId: string) => ({
         case_study_id: data.id,
         industry_id: industryId
       }));
     }
 
-    // Algorithms
-    if (notApplicableStates.algorithms) {
-      algorithmRelations = [{
-        case_study_id: data.id,
-        algorithm_id: '5bb7190e-d0df-46cc-a459-2eea19856fb1' // N/A algorithm ID
-      }];
-    } else if (values.algorithms && Array.isArray(values.algorithms) && values.algorithms.length > 0) {
+    // Algorithms - only process if array has items
+    if (values.algorithms && Array.isArray(values.algorithms) && values.algorithms.length > 0) {
       algorithmRelations = values.algorithms.map((algorithmId: string) => ({
         case_study_id: data.id,
         algorithm_id: algorithmId
       }));
     }
 
-    // Personas
-    if (notApplicableStates.personas) {
-      personaRelations = [{
-        case_study_id: data.id,
-        persona_id: 'd1c1c7e7-2847-4bf3-b165-3bd84a99f3a6' // N/A persona ID
-      }];
-    } else if (values.personas && Array.isArray(values.personas) && values.personas.length > 0) {
+    // Personas - only process if array has items
+    if (values.personas && Array.isArray(values.personas) && values.personas.length > 0) {
       personaRelations = values.personas.map((personaId: string) => ({
         case_study_id: data.id,
         persona_id: personaId
@@ -144,7 +126,7 @@ export async function saveCaseStudy(values: any): Promise<any> {
       personas: personaRelations.length
     });
 
-    // Step 3: Insert all new relationships in parallel (batch inserts)
+    // Step 3: Insert all new relationships in parallel
     console.log('[CASE_STUDY_SAVE] Inserting new relationships...');
     
     const insertPromises = [];
@@ -187,83 +169,97 @@ export async function saveCaseStudy(values: any): Promise<any> {
           console.error(`[CASE_STUDY_SAVE] Error inserting ${type} relations:`, result.error);
         }
       });
-      
-      console.log('[CASE_STUDY_SAVE] All new relationships inserted successfully');
     } else {
       console.log('[CASE_STUDY_SAVE] No relationships to insert');
     }
 
     const relationshipTime = Date.now() - relationshipStartTime;
-    console.log(`[CASE_STUDY_SAVE] All relationship processing completed in ${relationshipTime}ms`);
+    console.log(`[CASE_STUDY_SAVE] All relationships processed in ${relationshipTime}ms`);
 
-    console.log('[CASE_STUDY_SAVE] Starting revalidation...');
-    const revalidateStartTime = Date.now();
-    
+    // Revalidate the admin cache
     revalidatePath('/admin/case-studies');
-    revalidatePath(`/case-study/${data.slug}`);
-    
-    const revalidateTime = Date.now() - revalidateStartTime;
-    const totalTime = Date.now() - startTime;
-    
-    console.log(`[CASE_STUDY_SAVE] Revalidation completed in ${revalidateTime}ms`);
-    console.log(`[CASE_STUDY_SAVE] ✅ Save operation completed successfully in ${totalTime}ms`);
-    console.log(`[CASE_STUDY_SAVE] Performance breakdown: upsert=${upsertTime}ms, relationship=${relationshipTime}ms, revalidate=${revalidateTime}ms`);
-    
-    return { caseStudy: data, error: null };
 
-  } catch (e: any) {
     const totalTime = Date.now() - startTime;
-    console.error(`[CASE_STUDY_SAVE] ❌ Save operation failed after ${totalTime}ms:`, {
-      error: e,
-      message: e.message,
-      stack: e.stack,
+    console.log(`[CASE_STUDY_SAVE] Save operation completed successfully in ${totalTime}ms`);
+
+    return {
+      caseStudy: data,
+      success: true
+    };
+
+  } catch (error: any) {
+    const totalTime = Date.now() - startTime;
+    console.error(`[CASE_STUDY_SAVE] Save operation failed after ${totalTime}ms:`, {
+      error,
+      message: error?.message,
+      stack: error?.stack,
       caseStudyId: values.id,
       caseStudyTitle: values.title
     });
-    return { caseStudy: null, error: e.message || 'An unknown error occurred' };
+    
+    return {
+      error: error?.message || "Failed to save case study",
+      success: false
+    };
   }
 }
 
-export async function publishCaseStudy(id: string, slug: string) {
-  const supabase = createServiceRoleSupabaseClient();
-  const { data, error } = await supabase
-    .from('case_studies')
-    .update({ published: true, published_at: new Date().toISOString() })
-    .eq('id', id)
-    .select()
-    .single();
-
-  if (error) {
-    console.error('Error publishing case study:', error);
-    return { success: false, error: error.message };
+export async function publishCaseStudy(id: string, slug: string): Promise<any> {
+  try {
+    const supabase = createServiceRoleSupabaseClient();
+    const { error } = await supabase
+      .from('case_studies')
+      .update({ 
+        published: true,
+        published_at: new Date().toISOString()
+      })
+      .eq('id', id);
+    
+    if (error) {
+      throw error;
+    }
+    
+    // Revalidate paths
+    revalidatePath('/admin/case-studies');
+    revalidatePath(`/case-studies/${slug}`);
+    revalidatePath('/case-studies');
+    
+    return { success: true };
+  } catch (error: any) {
+    console.error("Error publishing case study:", error);
+    return { 
+      error: error?.message || "Failed to publish case study",
+      success: false
+    };
   }
-
-  revalidatePath('/admin/case-studies');
-  revalidatePath(`/case-study/${slug}`);
-  revalidatePath('/case-study'); // revalidate the listing page
-  revalidatePath('/'); // revalidate homepage if it lists case studies
-
-  return { success: true, data };
 }
 
-export async function unpublishCaseStudy(id: string, slug: string) {
-  const supabase = createServiceRoleSupabaseClient();
-  const { data, error } = await supabase
-    .from('case_studies')
-    .update({ published: false })
-    .eq('id', id)
-    .select()
-    .single();
-
-  if (error) {
-    console.error('Error unpublishing case study:', error);
-    return { success: false, error: error.message };
+export async function unpublishCaseStudy(id: string, slug: string): Promise<any> {
+  try {
+    const supabase = createServiceRoleSupabaseClient();
+    const { error } = await supabase
+      .from('case_studies')
+      .update({ 
+        published: false,
+        published_at: null
+      })
+      .eq('id', id);
+    
+    if (error) {
+      throw error;
+    }
+    
+    // Revalidate paths
+    revalidatePath('/admin/case-studies');
+    revalidatePath(`/case-studies/${slug}`);
+    revalidatePath('/case-studies');
+    
+    return { success: true };
+  } catch (error: any) {
+    console.error("Error unpublishing case study:", error);
+    return { 
+      error: error?.message || "Failed to unpublish case study",
+      success: false
+    };
   }
-
-  revalidatePath('/admin/case-studies');
-  revalidatePath(`/case-study/${slug}`);
-  revalidatePath('/case-study');
-  revalidatePath('/');
-  
-  return { success: true, data };
 }

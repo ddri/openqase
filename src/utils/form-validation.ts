@@ -245,12 +245,6 @@ export function createContentValidationRules(contentType: 'algorithm' | 'persona
           validator: validators.required
         },
         {
-          field: 'quantum_advantage',
-          tab: 'technical',
-          label: 'Quantum advantage is required',
-          validator: validators.required
-        },
-        {
           field: 'related_case_studies',
           tab: 'relationships',
           label: 'At least one related case study is required',

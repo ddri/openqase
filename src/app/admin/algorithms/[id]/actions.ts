@@ -14,7 +14,6 @@ export async function saveAlgorithm(values: any): Promise<any> {
         slug: values.slug,
         description: values.description,
         main_content: values.main_content,
-        quantum_advantage: values.quantum_advantage,
         use_cases: values.use_cases,
         published: values.published,
         steps: values.steps || '',

@@ -14,7 +14,6 @@ export async function saveIndustry(values: any): Promise<any> {
         slug: values.slug,
         description: values.description,
         main_content: values.main_content,
-        icon: values.icon,
         published: values.published,
       })
       .select()

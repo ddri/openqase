@@ -2,7 +2,6 @@
 
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -39,7 +38,6 @@ export function IndustryForm({ industry, isNew }: IndustryFormProps) {
     slug: isNew ? '' : industry?.slug || '',
     description: isNew ? '' : industry?.description || '',
     main_content: isNew ? '' : industry?.main_content || '',
-    icon: isNew ? '' : industry?.icon || '',
     sector: isNew ? [] : industry?.sector || [],
     published: isNew ? false : industry?.published || false,
   });
@@ -288,40 +286,6 @@ export function IndustryForm({ industry, isNew }: IndustryFormProps) {
           </CardContent>
         </Card>
         
-        {/* Icon Section */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Icon</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="icon">Icon</Label>
-              <Input
-                id="icon"
-                value={values.icon}
-                onChange={(e) => handleChange('icon', e.target.value)}
-                placeholder="Icon name or URL"
-              />
-              {values.icon && (
-                <div className="mt-4">
-                  <Label>Icon Preview</Label>
-                  <div className="p-4 border rounded-md mt-2 flex items-center justify-center">
-                    <Image
-                      src={values.icon.startsWith('http') ? values.icon : `/icons/${values.icon}`}
-                      alt="Icon Preview"
-                      className="h-16 w-16 object-contain"
-                      width={64}
-                      height={64}
-                      onError={(e) => {
-                        (e.target as HTMLImageElement).src = '/placeholder-icon.svg';
-                      }}
-                    />
-                  </div>
-                </div>
-              )}
-            </div>
-          </CardContent>
-        </Card>
       </form>
     </div>
   );

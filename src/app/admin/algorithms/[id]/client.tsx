@@ -448,7 +448,6 @@ export function AlgorithmForm({ algorithm, caseStudies, industries, personas, is
               itemValueKey="id"
               label="Related Case Studies"
               placeholder="Select case studies..."
-              required={true}
             />
             
             <RelationshipSelector

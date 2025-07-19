@@ -17,10 +17,6 @@ import { ArrowLeft, Save, Loader2 } from 'lucide-react';
 import { toast } from '@/components/ui/use-toast';
 import { saveCaseStudy, publishCaseStudy, unpublishCaseStudy } from './actions';
 
-// Define IDs for "Not Applicable" records
-const NOT_APPLICABLE_ALGORITHM_ID = '5bb7190e-d0df-46cc-a459-2eea19856fb1';
-const NOT_APPLICABLE_INDUSTRY_ID = '4cd2a6a0-6dc1-49ba-893c-f24eebaf384a';
-const NOT_APPLICABLE_PERSONA_ID = 'd1c1c7e7-2847-4bf3-b165-3bd84a99f3a6';
 
 interface CaseStudyFormProps {
   caseStudy: any | null;
@@ -64,22 +60,7 @@ export function CaseStudyForm({ caseStudy, algorithms, industries, personas, isN
   });
   const [isDirty, setIsDirty] = useState(false);
   
-  const [notApplicableStates, setNotApplicableStates] = useState({
-    algorithms: false,
-    industries: false,
-    personas: false
-  });
 
-  // Effect to initialize notApplicableStates based on loaded caseStudy data
-  useEffect(() => {
-    if (caseStudy && !isNew) {
-      setNotApplicableStates({
-        algorithms: (caseStudy.algorithms || []).includes(NOT_APPLICABLE_ALGORITHM_ID),
-        industries: (caseStudy.industries || []).includes(NOT_APPLICABLE_INDUSTRY_ID),
-        personas: (caseStudy.personas || []).includes(NOT_APPLICABLE_PERSONA_ID),
-      });
-    }
-  }, [caseStudy, isNew]);
   
   // Validation rules for case studies
   const validationRules = createContentValidationRules('case_study');
@@ -94,52 +75,6 @@ export function CaseStudyForm({ caseStudy, algorithms, industries, personas, isN
     setIsDirty(true);
   };
   
-  // Handle not applicable change
-  const handleNotApplicableChange = (field: 'algorithms' | 'industries' | 'personas', isNotApplicable: boolean) => {
-    setNotApplicableStates(prev => ({
-      ...prev,
-      [field]: isNotApplicable
-    }));
-
-    let newSelectedItems: string[] = [];
-    if (isNotApplicable) {
-      if (field === 'algorithms') newSelectedItems = [NOT_APPLICABLE_ALGORITHM_ID];
-      else if (field === 'industries') newSelectedItems = [NOT_APPLICABLE_INDUSTRY_ID];
-      else if (field === 'personas') newSelectedItems = [NOT_APPLICABLE_PERSONA_ID];
-    }
-    // When unchecking N/A, values[field] is already an array of selected items,
-    // so we just need to ensure the N/A ID is not in it if it was previously.
-    // However, RelationshipSelector's onChange should provide the correct list without N/A ID.
-    // For now, if unchecking, we set to empty, relying on user to re-select or RelationshipSelector to repopulate.
-    // A more robust solution might involve RelationshipSelector handling the N/A ID itself.
-    
-    // If unchecking, we reset to the current selections, excluding the N/A ID if present.
-    // If checking, we set to only the N/A ID.
-    setValues(prev => {
-      let currentSelection = prev[field] || [];
-      if (isNotApplicable) {
-        // If N/A is checked, set the value to be only the N/A ID for that field
-        if (field === 'algorithms') return { ...prev, algorithms: [NOT_APPLICABLE_ALGORITHM_ID] };
-        if (field === 'industries') return { ...prev, industries: [NOT_APPLICABLE_INDUSTRY_ID] };
-        if (field === 'personas') return { ...prev, personas: [NOT_APPLICABLE_PERSONA_ID] };
-      } else {
-        // If N/A is unchecked, remove the N/A ID from the selection if it exists.
-        // The RelationshipSelector should ideally handle providing the list of actual selections.
-        // For now, we filter out the N/A ID.
-        let idToRemove = '';
-        if (field === 'algorithms') idToRemove = NOT_APPLICABLE_ALGORITHM_ID;
-        else if (field === 'industries') idToRemove = NOT_APPLICABLE_INDUSTRY_ID;
-        else if (field === 'personas') idToRemove = NOT_APPLICABLE_PERSONA_ID;
-        
-        const updatedSelection = Array.isArray(currentSelection) 
-                               ? currentSelection.filter(id => id !== idToRemove) 
-                               : [];
-        return { ...prev, [field]: updatedSelection };
-      }
-      return prev; // Should not happen
-    });
-    setIsDirty(true);
-  };
   
   // Handle form submission
   const handleSubmit = async (e: React.FormEvent) => {
@@ -153,8 +88,7 @@ export function CaseStudyForm({ caseStudy, algorithms, industries, personas, isN
         industries: values.industries?.length || 0,
         algorithms: values.algorithms?.length || 0,
         personas: values.personas?.length || 0
-      },
-      notApplicableStates
+      }
     });
     
     startTransition(async () => {
@@ -163,11 +97,7 @@ export function CaseStudyForm({ caseStudy, algorithms, industries, personas, isN
       try {
         console.log('[CLIENT] Calling saveCaseStudy action...');
         
-        // Include notApplicableStates in the data sent to the server
-        const result = await saveCaseStudy({
-          ...values,
-          notApplicableStates
-        });
+        const result = await saveCaseStudy(values);
         
         const submitTime = Date.now() - submitStartTime;
         console.log(`[CLIENT] Save completed in ${submitTime}ms`);
@@ -240,10 +170,7 @@ export function CaseStudyForm({ caseStudy, algorithms, industries, personas, isN
       try {
         console.log('[CLIENT] Saving case study before publishing...');
         // First save the content
-        const saveResult = await saveCaseStudy({
-          ...values,
-          notApplicableStates
-        });
+        const saveResult = await saveCaseStudy(values);
         
         if (saveResult?.error) {
           throw new Error(`Save failed: ${saveResult.error}`);
@@ -338,27 +265,9 @@ export function CaseStudyForm({ caseStudy, algorithms, industries, personas, isN
   
   // Validate content before publishing
   const validateContent = () => {
-    // Create custom validators for fields that can be marked as N/A
-    const industriesValidator = (value: any): boolean => 
-      (Array.isArray(value) && value.length > 0) || notApplicableStates.industries;
-    
-    const algorithmsValidator = (value: any): boolean => 
-      (Array.isArray(value) && value.length > 0) || notApplicableStates.algorithms;
-    
-    // Find the rules for these fields
-    const modifiedRules = validationRules.map(rule => {
-      if (rule.field === 'industries') {
-        return { ...rule, validator: industriesValidator };
-      }
-      if (rule.field === 'algorithms') {
-        return { ...rule, validator: algorithmsValidator };
-      }
-      return rule;
-    });
-    
     const issues = validateFormValues({
       values,
-      validationRules: modifiedRules
+      validationRules
     });
     
     return Object.keys(issues).length === 0 ? true : issues;
@@ -557,8 +466,6 @@ export function CaseStudyForm({ caseStudy, algorithms, industries, personas, isN
               label="Industries"
               placeholder="Select industries..."
               required={true}
-              notApplicable={notApplicableStates.industries}
-              onNotApplicableChange={(isNA) => handleNotApplicableChange('industries', isNA)}
             />
             
             <RelationshipSelector
@@ -570,8 +477,6 @@ export function CaseStudyForm({ caseStudy, algorithms, industries, personas, isN
               label="Algorithms"
               placeholder="Select algorithms..."
               required={true}
-              notApplicable={notApplicableStates.algorithms}
-              onNotApplicableChange={(isNA) => handleNotApplicableChange('algorithms', isNA)}
             />
             
             <RelationshipSelector
@@ -582,8 +487,6 @@ export function CaseStudyForm({ caseStudy, algorithms, industries, personas, isN
               itemValueKey="id"
               label="Personas"
               placeholder="Select personas..."
-              notApplicable={notApplicableStates.personas}
-              onNotApplicableChange={(isNA) => handleNotApplicableChange('personas', isNA)}
             />
           </CardContent>
         </Card>

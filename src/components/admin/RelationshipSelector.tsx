@@ -20,7 +20,6 @@ import {
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { Checkbox } from '@/components/ui/checkbox';
 
 interface Item {
   id: string;
@@ -40,8 +39,6 @@ interface RelationshipSelectorProps {
   disabled?: boolean;
   className?: string;
   maxItems?: number;
-  notApplicable?: boolean;
-  onNotApplicableChange?: (isNotApplicable: boolean) => void;
 }
 
 /**
@@ -61,8 +58,6 @@ interface RelationshipSelectorProps {
  * @param disabled - Whether the selector is disabled
  * @param className - Additional CSS classes
  * @param maxItems - Maximum number of items that can be selected
- * @param notApplicable - Whether the selector is marked as not applicable
- * @param onNotApplicableChange - Callback for when not applicable state changes
  */
 export function RelationshipSelector({
   items,
@@ -76,19 +71,11 @@ export function RelationshipSelector({
   required = false,
   disabled = false,
   className,
-  maxItems,
-  notApplicable = false,
-  onNotApplicableChange
+  maxItems
 }: RelationshipSelectorProps) {
   const [open, setOpen] = useState(false);
   const [searchValue, setSearchValue] = useState('');
   const [filteredItems, setFilteredItems] = useState(items);
-  const [isNotApplicable, setIsNotApplicable] = useState(notApplicable);
-  
-  // Update when notApplicable prop changes
-  useEffect(() => {
-    setIsNotApplicable(notApplicable);
-  }, [notApplicable]);
   
   // Update filtered items when search value changes
   useEffect(() => {
@@ -128,19 +115,6 @@ export function RelationshipSelector({
     onChange(selectedItems.filter(item => item !== value));
   };
 
-  const handleNotApplicableChange = (checked: boolean) => {
-    setIsNotApplicable(checked);
-    
-    if (checked) {
-      // If marked as not applicable, clear other selections
-      onChange([]);
-    }
-    
-    // Call parent handler if provided
-    if (onNotApplicableChange) {
-      onNotApplicableChange(checked);
-    }
-  };
 
   const handleSelectAll = () => {
     const allItemIds = items.map(item => item[itemValueKey]);
@@ -166,7 +140,7 @@ export function RelationshipSelector({
               type="button" 
               className="hover:underline" 
               onClick={handleSelectAll}
-              disabled={disabled || isNotApplicable}
+              disabled={disabled}
             >
               Select All
             </button>
@@ -175,7 +149,7 @@ export function RelationshipSelector({
               type="button" 
               className="hover:underline" 
               onClick={handleSelectNone}
-              disabled={disabled || isNotApplicable}
+              disabled={disabled}
             >
               None
             </button>
@@ -188,20 +162,6 @@ export function RelationshipSelector({
         )}
       </div>
 
-      <div className="flex items-center space-x-2 mb-2">
-        <Checkbox 
-          id={`not-applicable-${label}`} 
-          checked={isNotApplicable} 
-          onCheckedChange={handleNotApplicableChange}
-          disabled={disabled}
-        />
-        <label 
-          htmlFor={`not-applicable-${label}`}
-          className="text-sm cursor-pointer"
-        >
-          Not Applicable
-        </label>
-      </div>
       
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
@@ -211,10 +171,9 @@ export function RelationshipSelector({
             aria-expanded={open}
             className={cn(
               'w-full justify-between h-auto min-h-10 py-2',
-              !selectedItems.length && 'text-muted-foreground',
-              isNotApplicable && 'opacity-50'
+              !selectedItems.length && 'text-muted-foreground'
             )}
-            disabled={disabled || isMaxReached || isNotApplicable}
+            disabled={disabled || isMaxReached}
             onClick={() => {
               if (items.length === 0) {
                 console.warn(`No items available for "${label}" selector`);
@@ -222,9 +181,7 @@ export function RelationshipSelector({
             }}
           >
             <div className="flex flex-wrap gap-1 mr-2">
-              {isNotApplicable ? (
-                <span>Not Applicable</span>
-              ) : selectedItems.length > 0 ? (
+              {selectedItems.length > 0 ? (
                 selectedItemsData.length > 0 ? (
                   <div className="flex flex-wrap gap-1">
                     {selectedItemsData.map(item => (
@@ -302,7 +259,7 @@ export function RelationshipSelector({
         </PopoverContent>
       </Popover>
       
-      {selectedItems.length > 0 && !isNotApplicable && (
+      {selectedItems.length > 0 && (
         <div className="flex flex-wrap gap-1.5 mt-1.5">
           {selectedItemsData.map(item => (
             <Badge

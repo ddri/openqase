@@ -75,6 +75,57 @@ export function CaseStudyForm({ caseStudy, algorithms, industries, personas, isN
     setIsDirty(true);
   };
   
+  // Handle adding citation numbers to references
+  const handleAddCitationNumbers = () => {
+    const currentText = values.academic_references;
+    if (!currentText.trim()) return;
+    
+    const lines = currentText.split('\n');
+    const processedLines: string[] = [];
+    let citationNumber = 1;
+    
+    // First pass: find the highest existing citation number
+    let maxExistingNumber = 0;
+    lines.forEach(line => {
+      const match = line.match(/^\[\\^(\d+)\]:/);
+      if (match) {
+        maxExistingNumber = Math.max(maxExistingNumber, parseInt(match[1]));
+      }
+    });
+    
+    // Start numbering after the highest existing number
+    citationNumber = maxExistingNumber + 1;
+    
+    // Second pass: add numbers to lines that need them
+    lines.forEach(line => {
+      const trimmedLine = line.trim();
+      if (trimmedLine === '') {
+        processedLines.push(line); // Preserve empty lines
+      } else if (trimmedLine.match(/^\[\\^\\d+\]:/)) {
+        processedLines.push(line); // Already has citation number
+      } else {
+        processedLines.push(`[^${citationNumber}]: ${trimmedLine}`);
+        citationNumber++;
+      }
+    });
+    
+    handleChange('academic_references', processedLines.join('\n'));
+  };
+  
+  // Handle inserting reference templates
+  const handleInsertTemplate = (type: 'journal' | 'book' | 'website') => {
+    const currentText = values.academic_references;
+    const templates = {
+      journal: '[^X]: Author, A. Title of Article. Journal Name Year;Volume(Issue):Pages. DOI:10.xxxx/xxxxx',
+      book: '[^X]: Author, A. Title of Book. Publisher; Year. ISBN:xxxxxxxxxx',
+      website: '[^X]: Author, A. Title of Page. Website Name. Published Date. URL: https://example.com'
+    };
+    
+    const template = templates[type];
+    const newText = currentText ? `${currentText}\n${template}` : template;
+    handleChange('academic_references', newText);
+  };
+  
   
   // Handle form submission
   const handleSubmit = async (e: React.FormEvent) => {
@@ -440,6 +491,47 @@ export function CaseStudyForm({ caseStudy, algorithms, industries, personas, isN
               <p className="text-sm text-muted-foreground">
                 Use the format: [^1]: Reference text. Use [^1] in main content to cite.
               </p>
+              
+              {/* Reference Helper Buttons */}
+              <div className="flex gap-2 mb-3">
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={handleAddCitationNumbers}
+                  className="text-xs"
+                >
+                  🔢 Add Citation Numbers
+                </Button>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={() => handleInsertTemplate('journal')}
+                  className="text-xs"
+                >
+                  📄 Journal Template
+                </Button>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={() => handleInsertTemplate('book')}
+                  className="text-xs"
+                >
+                  📚 Book Template
+                </Button>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={() => handleInsertTemplate('website')}
+                  className="text-xs"
+                >
+                  🌐 Website Template
+                </Button>
+              </div>
+              
               <Textarea
                 id="academic_references"
                 value={values.academic_references}

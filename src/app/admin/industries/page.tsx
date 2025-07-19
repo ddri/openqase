@@ -4,7 +4,7 @@ import type { Database } from '@/types/supabase'
 import { IndustriesClient } from './client'
 
 export const metadata: Metadata = {
-  title: 'Industries Management - OpenQASE Admin',
+  title: 'Industries Management',
   description: 'Manage industry content'
 }
 

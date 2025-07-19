@@ -451,10 +451,10 @@ export function CaseStudyForm({ caseStudy, algorithms, industries, personas, isN
           </CardContent>
         </Card>
         
-        {/* Classifications Section */}
+        {/* Relationships Section */}
         <Card className="shadow-sm">
           <CardHeader className="p-6">
-            <CardTitle>Classifications</CardTitle>
+            <CardTitle>Relationships</CardTitle>
           </CardHeader>
           <CardContent className="space-y-8 p-6 pt-0">
             <RelationshipSelector

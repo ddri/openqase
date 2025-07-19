@@ -5,7 +5,7 @@ import { notFound } from 'next/navigation'
 import { CaseStudyForm } from './client'
 
 export const metadata: Metadata = {
-  title: 'Edit Case Study - OpenQASE Admin',
+  title: 'Edit Case Study',
   description: 'Create or edit a case study'
 }
 

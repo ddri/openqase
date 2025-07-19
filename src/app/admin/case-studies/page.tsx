@@ -4,7 +4,7 @@ import type { Database } from '@/types/supabase'
 import { CaseStudiesClient } from './client'
 
 export const metadata: Metadata = {
-  title: 'Case Studies Management - OpenQASE Admin',
+  title: 'Case Studies Management',
   description: 'Manage case studies content'
 }
 

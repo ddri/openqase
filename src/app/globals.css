@@ -519,7 +519,8 @@ nav a {
   transition: color 0.2s ease;
 }
 
-/* Underline effect that respects theme colors */
+/* Underline effect that respects theme colors - DISABLED */
+/* 
 nav a::after {
   content: '';
   position: absolute;
@@ -533,12 +534,15 @@ nav a::after {
   border-radius: 2px;
   background-color: hsl(var(--primary));
 }
+*/
 
-/* Active and hover states */
+/* Active and hover states - DISABLED */
+/*
 nav a:hover::after,
 nav a.active::after {
   transform: scaleX(1);
 }
+*/
 
 /* Ensure active nav links are highlighted with theme color */
 nav a.active {

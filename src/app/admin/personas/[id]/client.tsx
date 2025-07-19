@@ -176,63 +176,73 @@ export function PersonaForm({ persona, industries, isNew }: PersonaFormProps) {
   
   return (
     <TooltipProvider>
-      <div className="space-y-6">
-        <div className="flex justify-between items-center">
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => router.push('/admin/personas')}
-            className="flex items-center"
-          >
-            <ArrowLeft className="mr-2 h-4 w-4" />
-            Back
-          </Button>
-          
-          <div className="flex items-center gap-2">
+      <div className="space-y-10 max-w-5xl mx-auto pb-24">
+        {/* Header section with better spacing and styling */}
+        <div className="pt-6 mb-8 bg-background pb-4 border-b border-border">
+          <div className="flex justify-between items-center mb-6">
             <Button
-              type="button"
-              variant="outline"
+              variant="ghost"
               size="sm"
-              onClick={handleSubmit}
-              disabled={isPending || !isDirty}
-              className="min-w-[100px]"
+              onClick={() => router.push('/admin/personas')}
+              className="flex items-center"
             >
-              {isPending ? (
-                <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Saving...
-                </>
-              ) : (
-                <>
-                  <Save className="mr-2 h-4 w-4" />
-                  Save
-                </>
-              )}
+              <ArrowLeft className="mr-2 h-4 w-4" />
+              Back to Personas
             </Button>
             
-            <PublishButton
-              isPublished={values.published}
-              onPublish={handlePublish}
-              onUnpublish={handleUnpublish}
-              validateContent={validateContent}
-              disabled={isPending}
-              onTabChange={() => {}}
-              getTabLabel={() => ''}
-            />
+            <div className="flex items-center gap-3">
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={handleSubmit}
+                disabled={isPending || !isDirty}
+                className="min-w-[100px]"
+              >
+                {isPending ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Saving...
+                  </>
+                ) : (
+                  <>
+                    <Save className="mr-2 h-4 w-4" />
+                    Save
+                  </>
+                )}
+              </Button>
+              
+              <PublishButton
+                isPublished={values.published}
+                onPublish={handlePublish}
+                onUnpublish={handleUnpublish}
+                validateContent={validateContent}
+                disabled={isPending}
+                onTabChange={(tab: string) => {}}
+                getTabLabel={(tab: string) => tab}
+              />
+            </div>
+          </div>
+          
+          {/* Progress bar section */}
+          <div>
+            <div className="flex justify-between items-center text-sm mb-2">
+              <span className="text-muted-foreground">Content Completeness</span>
+              <span className="font-medium">{completionPercentage}%</span>
+            </div>
+            <ContentCompleteness percentage={completionPercentage} showLabel={false} />
           </div>
         </div>
         
-        <ContentCompleteness percentage={completionPercentage} />
-        
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form onSubmit={handleSubmit} className="space-y-10">
           {/* Basic Info Section */}
-          <Card>
-            <CardHeader>
+          <Card className="shadow-sm">
+            <CardHeader className="p-6">
               <CardTitle>Basic Info</CardTitle>
             </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="grid grid-cols-1 gap-4">
-                <div className="space-y-2">
+            <CardContent className="space-y-6 p-6 pt-0">
+              <div className="grid grid-cols-1 gap-6">
+                <div className="space-y-3">
                   <Label htmlFor="name">Name</Label>
                   <Input
                     id="name"
@@ -242,7 +252,7 @@ export function PersonaForm({ persona, industries, isNew }: PersonaFormProps) {
                   />
                 </div>
                 
-                <div className="space-y-2">
+                <div className="space-y-3">
                   <Label htmlFor="slug">Slug</Label>
                   <Input
                     id="slug"
@@ -252,7 +262,7 @@ export function PersonaForm({ persona, industries, isNew }: PersonaFormProps) {
                   />
                 </div>
                 
-                <div className="space-y-2">
+                <div className="space-y-3">
                   <Label htmlFor="description">Description</Label>
                   <Textarea
                     id="description"
@@ -263,7 +273,7 @@ export function PersonaForm({ persona, industries, isNew }: PersonaFormProps) {
                   />
                 </div>
                 
-                <div className="space-y-2">
+                <div className="space-y-3">
                   <Label htmlFor="expertise">Expertise</Label>
                   <TagInput
                     tags={values.expertise}
@@ -276,12 +286,12 @@ export function PersonaForm({ persona, industries, isNew }: PersonaFormProps) {
           </Card>
           
           {/* Details Section */}
-          <Card>
-            <CardHeader>
+          <Card className="shadow-sm">
+            <CardHeader className="p-6">
               <CardTitle>Details</CardTitle>
             </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="space-y-2">
+            <CardContent className="space-y-6 p-6 pt-0">
+              <div className="space-y-3">
                 <Label htmlFor="main_content">Main Content</Label>
                 <Textarea
                   id="main_content"
@@ -293,7 +303,7 @@ export function PersonaForm({ persona, industries, isNew }: PersonaFormProps) {
                 />
               </div>
               
-              <div className="space-y-2">
+              <div className="space-y-3">
                 <div className="flex items-center gap-2">
                   <Label htmlFor="recommended_reading">Recommended Reading</Label>
                   <Tooltip delayDuration={100}>
@@ -317,12 +327,12 @@ export function PersonaForm({ persona, industries, isNew }: PersonaFormProps) {
             </CardContent>
           </Card>
           
-          {/* Interests & Industries Section */}
-          <Card>
-            <CardHeader>
-              <CardTitle>Interests & Industries</CardTitle>
+          {/* Relationships Section */}
+          <Card className="shadow-sm">
+            <CardHeader className="p-6">
+              <CardTitle>Relationships</CardTitle>
             </CardHeader>
-            <CardContent className="space-y-4">
+            <CardContent className="space-y-6 p-6 pt-0">
               <RelationshipSelector
                 items={industries}
                 selectedItems={values.industry}

@@ -231,63 +231,73 @@ export function AlgorithmForm({ algorithm, caseStudies, industries, personas, is
   };
   
   return (
-    <div className="space-y-6">
-      <div className="flex justify-between items-center">
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={() => router.push('/admin/algorithms')}
-          className="flex items-center"
-        >
-          <ArrowLeft className="mr-2 h-4 w-4" />
-          Back
-        </Button>
-        
-        <div className="flex items-center gap-2">
+    <div className="space-y-10 max-w-5xl mx-auto pb-24">
+      {/* Header section with better spacing and styling */}
+      <div className="pt-6 mb-8 bg-background pb-4 border-b border-border">
+        <div className="flex justify-between items-center mb-6">
           <Button
-            type="button"
-            variant="outline"
+            variant="ghost"
             size="sm"
-            onClick={handleSubmit}
-            disabled={isPending || !isDirty}
-            className="min-w-[100px]"
+            onClick={() => router.push('/admin/algorithms')}
+            className="flex items-center"
           >
-            {isPending ? (
-              <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Saving...
-              </>
-            ) : (
-              <>
-                <Save className="mr-2 h-4 w-4" />
-                Save
-              </>
-            )}
+            <ArrowLeft className="mr-2 h-4 w-4" />
+            Back to Algorithms
           </Button>
           
-          <PublishButton
-            isPublished={values.published}
-            onPublish={handlePublish}
-            onUnpublish={handleUnpublish}
-            validateContent={validateContent}
-            disabled={isPending}
-            onTabChange={() => {}}
-            getTabLabel={() => ''}
-          />
+          <div className="flex items-center gap-3">
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={handleSubmit}
+              disabled={isPending || !isDirty}
+              className="min-w-[100px]"
+            >
+              {isPending ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Saving...
+                </>
+              ) : (
+                <>
+                  <Save className="mr-2 h-4 w-4" />
+                  Save
+                </>
+              )}
+            </Button>
+            
+            <PublishButton
+              isPublished={values.published}
+              onPublish={handlePublish}
+              onUnpublish={handleUnpublish}
+              validateContent={validateContent}
+              disabled={isPending}
+              onTabChange={(tab: string) => {}}
+              getTabLabel={(tab: string) => tab}
+            />
+          </div>
+        </div>
+        
+        {/* Progress bar section */}
+        <div>
+          <div className="flex justify-between items-center text-sm mb-2">
+            <span className="text-muted-foreground">Content Completeness</span>
+            <span className="font-medium">{completionPercentage}%</span>
+          </div>
+          <ContentCompleteness percentage={completionPercentage} showLabel={false} />
         </div>
       </div>
       
-      <ContentCompleteness percentage={completionPercentage} />
-      
-      <form onSubmit={handleSubmit} className="space-y-6">
+      <form onSubmit={handleSubmit} className="space-y-10">
         {/* Basic Info Section */}
-        <Card>
-          <CardHeader>
+        <Card className="shadow-sm">
+          <CardHeader className="p-6">
             <CardTitle>Basic Info</CardTitle>
           </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="grid grid-cols-1 gap-4">
-              <div className="space-y-2">
+          <CardContent className="space-y-6 p-6 pt-0">
+            <div className="grid grid-cols-1 gap-6">
+              <div className="space-y-3">
                 <Label htmlFor="name">Name</Label>
                 <Input
                   id="name"
@@ -297,7 +307,7 @@ export function AlgorithmForm({ algorithm, caseStudies, industries, personas, is
                 />
               </div>
               
-              <div className="space-y-2">
+              <div className="space-y-3">
                 <Label htmlFor="slug">Slug</Label>
                 <Input
                   id="slug"
@@ -307,7 +317,7 @@ export function AlgorithmForm({ algorithm, caseStudies, industries, personas, is
                 />
               </div>
               
-              <div className="space-y-2">
+              <div className="space-y-3">
                 <Label htmlFor="description">Description</Label>
                 <Textarea
                   id="description"
@@ -318,7 +328,7 @@ export function AlgorithmForm({ algorithm, caseStudies, industries, personas, is
                 />
               </div>
               
-              <div className="space-y-2">
+              <div className="space-y-3">
                 <Label htmlFor="use_cases">Use Cases</Label>
                 <TagInput
                   tags={values.use_cases}
@@ -331,12 +341,12 @@ export function AlgorithmForm({ algorithm, caseStudies, industries, personas, is
         </Card>
         
         {/* Content Section */}
-        <Card>
-          <CardHeader>
+        <Card className="shadow-sm">
+          <CardHeader className="p-6">
             <CardTitle>Content</CardTitle>
           </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="space-y-2">
+          <CardContent className="space-y-6 p-6 pt-0">
+            <div className="space-y-3">
               <Label htmlFor="main_content">Main Content</Label>
               <Textarea
                 id="main_content"
@@ -350,12 +360,12 @@ export function AlgorithmForm({ algorithm, caseStudies, industries, personas, is
         </Card>
         
         {/* Steps Section */}
-        <Card>
-          <CardHeader>
+        <Card className="shadow-sm">
+          <CardHeader className="p-6">
             <CardTitle>Implementation Steps</CardTitle>
           </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="space-y-2">
+          <CardContent className="space-y-6 p-6 pt-0">
+            <div className="space-y-3">
               <Label htmlFor="steps">Steps</Label>
               <p className="text-sm text-muted-foreground">
                 Use the format: &lt;step title="Step Title"&gt;Step content in markdown&lt;/step&gt;
@@ -372,12 +382,12 @@ export function AlgorithmForm({ algorithm, caseStudies, industries, personas, is
         </Card>
         
         {/* References Section */}
-        <Card>
-          <CardHeader>
+        <Card className="shadow-sm">
+          <CardHeader className="p-6">
             <CardTitle>Academic References</CardTitle>
           </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="space-y-2">
+          <CardContent className="space-y-6 p-6 pt-0">
+            <div className="space-y-3">
               <Label htmlFor="academic_references">References</Label>
               <p className="text-sm text-muted-foreground">
                 Use the format: [^1]: Reference text. Use [^1] in main content to cite.
@@ -435,11 +445,11 @@ export function AlgorithmForm({ algorithm, caseStudies, industries, personas, is
         </Card>
         
         {/* Relationships Section */}
-        <Card>
-          <CardHeader>
+        <Card className="shadow-sm">
+          <CardHeader className="p-6">
             <CardTitle>Relationships</CardTitle>
           </CardHeader>
-          <CardContent className="space-y-4">
+          <CardContent className="space-y-8 p-6 pt-0">
             <RelationshipSelector
               items={caseStudies}
               selectedItems={values.related_case_studies}

@@ -86,6 +86,7 @@ export default function Navigation() {
                   className="h-8 w-auto"
                   width={32}
                   height={32}
+                  suppressHydrationWarning
                 />
               ) : (
                 <Image
@@ -94,6 +95,7 @@ export default function Navigation() {
                   className="h-8 w-auto"
                   width={32}
                   height={32}
+                  suppressHydrationWarning
                 />
               )}
               <Badge variant="outline" className="ml-2 self-center">BETA</Badge>

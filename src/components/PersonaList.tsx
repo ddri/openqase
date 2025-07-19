@@ -14,9 +14,11 @@ interface PersonaListProps {
   personas: Persona[];
 }
 
+type SortOption = 'name-asc' | 'name-desc' | 'updated-asc' | 'updated-desc';
+
 export default function PersonaList({ personas }: PersonaListProps) {
   const [searchQuery, setSearchQuery] = useState('');
-  const [sortBy, setSortBy] = useState<'name' | 'created_at'>('name');
+  const [sortBy, setSortBy] = useState<SortOption>('name-asc');
 
   // Filter and sort personas
   const filteredPersonas = personas
@@ -31,10 +33,22 @@ export default function PersonaList({ personas }: PersonaListProps) {
       );
     })
     .sort((a, b) => {
-      if (sortBy === 'created_at') {
-        return new Date(b.created_at || 0).getTime() - new Date(a.created_at || 0).getTime();
+      switch (sortBy) {
+        case 'name-asc':
+          return (a.name || '').localeCompare(b.name || '');
+        case 'name-desc':
+          return (b.name || '').localeCompare(a.name || '');
+        case 'updated-asc':
+          const dateA = a.updated_at ? new Date(a.updated_at).getTime() : 0;
+          const dateB = b.updated_at ? new Date(b.updated_at).getTime() : 0;
+          return dateA - dateB;
+        case 'updated-desc':
+          const dateC = a.updated_at ? new Date(a.updated_at).getTime() : 0;
+          const dateD = b.updated_at ? new Date(b.updated_at).getTime() : 0;
+          return dateD - dateC;
+        default:
+          return (a.name || '').localeCompare(b.name || '');
       }
-      return (a.name || '').localeCompare(b.name || '');
     });
 
   return (
@@ -59,13 +73,15 @@ export default function PersonaList({ personas }: PersonaListProps) {
           <Label htmlFor="sort" className="text-sm font-medium mb-1.5 block">
             Sort by
           </Label>
-          <Select value={sortBy} onValueChange={(value: 'name' | 'created_at') => setSortBy(value)}>
+          <Select value={sortBy} onValueChange={(value: SortOption) => setSortBy(value)}>
             <SelectTrigger id="sort" className="w-full">
               <SelectValue placeholder="Sort by" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="name">Name (A-Z)</SelectItem>
-              <SelectItem value="created_at">Created Date</SelectItem>
+              <SelectItem value="name-asc">Name (A-Z)</SelectItem>
+              <SelectItem value="name-desc">Name (Z-A)</SelectItem>
+              <SelectItem value="updated-desc">Recently Updated</SelectItem>
+              <SelectItem value="updated-asc">Least Recently Updated</SelectItem>
             </SelectContent>
           </Select>
         </div>

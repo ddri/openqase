@@ -16,10 +16,12 @@ interface IndustryListProps {
   industries: Industry[];
 }
 
+type SortOption = 'name-asc' | 'name-desc' | 'updated-asc' | 'updated-desc';
+
 export default function IndustryList({ industries }: IndustryListProps) {
   const [searchQuery, setSearchQuery] = useState('');
   const [sectorFilter, setSectorFilter] = useState('all');
-  const [sortBy, setSortBy] = useState<'name' | 'created_at'>('name');
+  const [sortBy, setSortBy] = useState<SortOption>('name-asc');
 
   // Get unique sectors for filtering
   const sectors = Array.from(new Set(industries.map(ind => ind.sector || 'Other'))).sort();
@@ -38,13 +40,22 @@ export default function IndustryList({ industries }: IndustryListProps) {
       );
     })
     .sort((a, b) => {
-      if (sortBy === 'created_at') {
-        // Handle null created_at values
-        const dateA = a.created_at ? new Date(a.created_at).getTime() : 0;
-        const dateB = b.created_at ? new Date(b.created_at).getTime() : 0;
-        return dateB - dateA;
+      switch (sortBy) {
+        case 'name-asc':
+          return a.name.localeCompare(b.name);
+        case 'name-desc':
+          return b.name.localeCompare(a.name);
+        case 'updated-asc':
+          const dateA = a.updated_at ? new Date(a.updated_at).getTime() : 0;
+          const dateB = b.updated_at ? new Date(b.updated_at).getTime() : 0;
+          return dateA - dateB;
+        case 'updated-desc':
+          const dateC = a.updated_at ? new Date(a.updated_at).getTime() : 0;
+          const dateD = b.updated_at ? new Date(b.updated_at).getTime() : 0;
+          return dateD - dateC;
+        default:
+          return a.name.localeCompare(b.name);
       }
-      return a.name.localeCompare(b.name);
     });
 
   return (
@@ -88,13 +99,15 @@ export default function IndustryList({ industries }: IndustryListProps) {
           <Label htmlFor="sort" className="text-sm font-medium mb-1.5 block">
             Sort by
           </Label>
-          <Select value={sortBy} onValueChange={(value: 'name' | 'created_at') => setSortBy(value)}>
+          <Select value={sortBy} onValueChange={(value: SortOption) => setSortBy(value)}>
             <SelectTrigger id="sort" className="w-full">
               <SelectValue placeholder="Sort by" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="name">Name (A-Z)</SelectItem>
-              <SelectItem value="created_at">Last Updated</SelectItem>
+              <SelectItem value="name-asc">Name (A-Z)</SelectItem>
+              <SelectItem value="name-desc">Name (Z-A)</SelectItem>
+              <SelectItem value="updated-desc">Recently Updated</SelectItem>
+              <SelectItem value="updated-asc">Least Recently Updated</SelectItem>
             </SelectContent>
           </Select>
         </div>

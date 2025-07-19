@@ -248,7 +248,7 @@ export function RelationshipSelector({
           </Button>
         </PopoverTrigger>
         <PopoverContent
-          className="w-[300px] p-0 bg-popover border"
+          className="w-[300px] p-0 bg-white dark:bg-gray-900 border border-border shadow-lg"
           align="start"
           sideOffset={4}
         >

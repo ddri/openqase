@@ -161,11 +161,13 @@ export default function Navigation() {
               className="touch-target -mr-2 p-2"
               aria-label="Toggle menu"
             >
-              {isOpen ? (
-                <X className="h-6 w-6" />
-              ) : (
-                <Menu className="h-6 w-6" />
-              )}
+              <span suppressHydrationWarning>
+                {isOpen ? (
+                  <X className="h-6 w-6" />
+                ) : (
+                  <Menu className="h-6 w-6" />
+                )}
+              </span>
             </button>
           </div>
         </div>

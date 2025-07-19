@@ -137,13 +137,13 @@ export default async function PersonaPage({ params }: PageParams) {
   }
 
   // Extract related case studies from the persona data
-  const caseStudies: PersonaRelatedCaseStudy[] = persona.case_study_persona_relations?.map((relation: { case_studies: { id: string; title: string; slug: string; description: string; published_at: string } | null }) => ({
-    id: relation.case_studies!.id,
-    title: relation.case_studies!.title,
-    slug: relation.case_studies!.slug,
-    description: relation.case_studies!.description || '',
-    published_at: relation.case_studies!.published_at,
-  })).filter(cs => cs.id) || [];
+  const caseStudies: PersonaRelatedCaseStudy[] = persona.case_study_persona_relations?.map((relation: { case_studies: { id: string; title: string; slug: string; description: string; published_at: string } | null }) => relation.case_studies ? ({
+    id: relation.case_studies.id,
+    title: relation.case_studies.title,
+    slug: relation.case_studies.slug,
+    description: relation.case_studies.description || '',
+    published_at: relation.case_studies.published_at,
+  }) : null).filter((cs): cs is PersonaRelatedCaseStudy => cs !== null) || [];
 
   console.log(`[PersonaPage] Extracted ${caseStudies.length} case studies from persona relations`);
 

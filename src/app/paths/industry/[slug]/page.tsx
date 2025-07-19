@@ -125,13 +125,13 @@ export default async function IndustryPage({ params }: PageParams) {
   console.log('Fetching case studies for industry:', industry.name);
   
   // Extract related case studies from the industry data
-  const caseStudies: IndustryRelatedCaseStudy[] = industry.case_study_industry_relations?.map((relation: { case_studies: { id: string; title: string; slug: string; description: string; published_at: string } | null }) => ({
-    id: relation.case_studies!.id,
-    title: relation.case_studies!.title,
-    slug: relation.case_studies!.slug,
-    description: relation.case_studies!.description || '',
-    published_at: relation.case_studies!.published_at,
-  })).filter(cs => cs.id) || [];
+  const caseStudies: IndustryRelatedCaseStudy[] = industry.case_study_industry_relations?.map((relation: { case_studies: { id: string; title: string; slug: string; description: string; published_at: string } | null }) => relation.case_studies ? ({
+    id: relation.case_studies.id,
+    title: relation.case_studies.title,
+    slug: relation.case_studies.slug,
+    description: relation.case_studies.description || '',
+    published_at: relation.case_studies.published_at,
+  }) : null).filter((cs): cs is IndustryRelatedCaseStudy => cs !== null) || [];
 
   // Preprocess and render industry main content if available
   let processedContent = '';

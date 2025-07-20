@@ -1,5 +1,16 @@
-import { BlogPostsList } from './client';
 import { createServiceRoleSupabaseClient } from '@/lib/supabase-server';
+import dynamic from 'next/dynamic';
+
+// Dynamic import for heavy admin component
+const BlogPostsList = dynamic(() => import('./client').then(mod => ({ default: mod.BlogPostsList })), {
+  ssr: false,
+  loading: () => (
+    <div className="flex items-center justify-center p-8">
+      <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-primary"></div>
+      <span className="ml-2">Loading blog posts...</span>
+    </div>
+  )
+});
 
 export default async function BlogPostsPage() {
   // Create Supabase client

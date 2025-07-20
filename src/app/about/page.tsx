@@ -80,7 +80,7 @@ export default function AboutPage() {
 
           {/* Our Approach Section */}
           <section className="mb-16">
-            <h2 className="mb-6">How We're Different</h2>
+            <h2 className="mb-6">A Different Approach</h2>
             <p className="text-lg text-muted-foreground mb-8">
               Unlike academic resources or vendor marketing, OpenQase focuses on practical implementation insights organized around how you actually work.
             </p>
@@ -255,7 +255,7 @@ export default function AboutPage() {
           {/* Join Our Community Section - Integrated from sidebar */}
           <section className="mb-16">
             <div className="bg-gradient-to-r from-primary/5 to-primary/10 rounded-xl p-8 text-center">
-              <h2 className="mb-4">Join Our Community</h2>
+              <h2 className="mb-4">Join The Community</h2>
               <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto">
                 Connect with other professionals exploring quantum computing applications in business contexts. Stay updated with the latest case studies, insights, and community discussions.
               </p>
@@ -265,43 +265,49 @@ export default function AboutPage() {
                   className="bg-primary text-primary-foreground hover:bg-primary/90 px-6 py-3 rounded-lg font-medium transition-colors"
                   variant="inline"
                 />
-                <div className="flex justify-center">
-                  <button className="bg-background border border-border hover:bg-muted px-6 py-3 rounded-lg font-medium transition-colors">
-                    Explore Learning Paths
-                  </button>
-                </div>
               </div>
             </div>
           </section>
 
-          {/* Get Involved Section - Enhanced contact */}
+          {/* Get Involved Section */}
           <section className="mb-16">
             <div className="text-center mb-8">
               <h2 className="mb-4">Get Involved</h2>
               <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-                Have questions, want to contribute a case study, or share your quantum computing implementation experience? We'd love to hear from you!
+                Join our community of quantum computing professionals. Contribute content, ask questions, or explore partnership opportunities.
               </p>
             </div>
             
             <div className="grid gap-6 md:grid-cols-3">
-              <div className="bg-card border rounded-lg p-6 text-center">
+              <div className="bg-card border rounded-lg p-6 text-center hover:shadow-md transition-shadow flex flex-col">
+                <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mx-auto mb-4">
+                  <span className="text-lg font-semibold text-primary">📝</span>
+                </div>
                 <h4 className="font-semibold mb-3">Contribute Content</h4>
-                <p className="text-muted-foreground mb-4">Share your quantum computing case study or implementation experience with our community.</p>
-                <button className="w-full bg-primary text-primary-foreground hover:bg-primary/90 px-4 py-2 rounded-md transition-colors">
+                <p className="text-muted-foreground mb-6 flex-grow">Share your quantum computing case study or implementation experience with our community.</p>
+                <button className="w-full bg-primary text-primary-foreground hover:bg-primary/90 px-4 py-2 rounded-lg font-medium transition-colors">
                   Submit Case Study
                 </button>
               </div>
-              <div className="bg-card border rounded-lg p-6 text-center">
+              
+              <div className="bg-card border rounded-lg p-6 text-center hover:shadow-md transition-shadow flex flex-col">
+                <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mx-auto mb-4">
+                  <span className="text-lg font-semibold text-primary">💬</span>
+                </div>
                 <h4 className="font-semibold mb-3">Ask Questions</h4>
-                <p className="text-muted-foreground mb-4">Get help understanding quantum applications for your specific industry or use case.</p>
-                <button className="w-full bg-secondary text-secondary-foreground hover:bg-secondary/90 px-4 py-2 rounded-md transition-colors">
+                <p className="text-muted-foreground mb-6 flex-grow">Get help understanding quantum applications for your specific industry or use case.</p>
+                <button className="w-full bg-primary text-primary-foreground hover:bg-primary/90 px-4 py-2 rounded-lg font-medium transition-colors">
                   Get in Touch
                 </button>
               </div>
-              <div className="bg-card border rounded-lg p-6 text-center">
+              
+              <div className="bg-card border rounded-lg p-6 text-center hover:shadow-md transition-shadow flex flex-col">
+                <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mx-auto mb-4">
+                  <span className="text-lg font-semibold text-primary">🤝</span>
+                </div>
                 <h4 className="font-semibold mb-3">Partner With Us</h4>
-                <p className="text-muted-foreground mb-4">Explore partnerships for content collaboration or platform integration.</p>
-                <button className="w-full bg-muted text-muted-foreground hover:bg-muted/80 px-4 py-2 rounded-md transition-colors">
+                <p className="text-muted-foreground mb-6 flex-grow">Explore partnerships for content collaboration or platform integration.</p>
+                <button className="w-full bg-primary text-primary-foreground hover:bg-primary/90 px-4 py-2 rounded-lg font-medium transition-colors">
                   Learn More
                 </button>
               </div>

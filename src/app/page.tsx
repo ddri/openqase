@@ -40,7 +40,7 @@ const features: FeatureCard[] = [
 export default function HomePage() {
   return (
     <div className="flex flex-col">
-      {/* Ghost-style automatic FAQ schema for landing page */}
+      {/* Automatic FAQ schema for landing page */}
       <AutoSchema type="faq" />
       
       {/* Hero Section */}

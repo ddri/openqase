@@ -1,10 +1,19 @@
 'use client'
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { ThemeProvider } from 'next-themes'
 import { AuthProvider } from '@/contexts/AuthContext'
 import { useState, type ReactNode } from 'react'
+import dynamic from 'next/dynamic'
+
+// Only load DevTools in development and dynamically
+const ReactQueryDevtools = dynamic(
+  () => import('@tanstack/react-query-devtools').then(mod => ({ default: mod.ReactQueryDevtools })),
+  {
+    ssr: false,
+    loading: () => null,
+  }
+)
 
 export default function Providers({ children }: { children: ReactNode }) {
   const [queryClient] = useState(
@@ -33,7 +42,7 @@ export default function Providers({ children }: { children: ReactNode }) {
           {children}
         </AuthProvider>
       </ThemeProvider>
-      <ReactQueryDevtools initialIsOpen={false} />
+      {process.env.NODE_ENV === 'development' && <ReactQueryDevtools initialIsOpen={false} />}
     </QueryClientProvider>
   )
 } 

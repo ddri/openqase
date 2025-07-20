@@ -1,79 +1,121 @@
+import { Metadata } from 'next';
 import { NewsletterSignup } from '@/components/ui/newsletter-signup'
+import { AutoSchema } from '@/components/AutoSchema';
+
+export const metadata: Metadata = {
+  title: 'About OpenQase | Making Quantum Computing Accessible to Business Leaders',
+  description: 'Learn about OpenQase\'s mission to bridge the gap between quantum computing theory and practical business applications. Discover our approach to making complex quantum concepts accessible.',
+};
 
 export default function AboutPage() {
   return (
-    <main className="min-h-screen">
-      <div className="container-outer section-spacing">
-        {/* Hero Section */}
-        <div className="max-w-4xl mx-auto text-center mb-16">
-          <h1 className="mb-6">
-            About OpenQase
-          </h1>
-          <p className="text-xl text-muted-foreground">
-            OpenQASE is a comprehensive knowledge platform dedicated to documenting and sharing quantum computing business case studies and applications.
-          </p>
-        </div>
+    <>
+      {/* Auto-generate organization schema for About page */}
+      <AutoSchema type="organization" />
+      
+      <main className="min-h-screen">
+        <div className="container-outer section-spacing">
+          {/* Hero Section */}
+          <div className="max-w-4xl mx-auto text-center mb-16">
+            <h1 className="mb-6">
+              Making Quantum Computing Accessible to Business Leaders
+            </h1>
+            <p className="text-xl text-muted-foreground">
+              OpenQase bridges the gap between quantum computing theory and practical business applications, helping decision-makers understand real-world quantum value without technical complexity.
+            </p>
+          </div>
 
         {/* Main Content - Single Column */}
         <div className="max-w-4xl mx-auto">
-          {/* Mission Section */}
+          {/* The Problem We Solve */}
           <section className="mb-16">
-            <h2 className="mb-6">Our Mission</h2>
+            <h2 className="mb-6">The Problem We Solve</h2>
             <div className="space-y-6">
               <p className="text-lg text-muted-foreground">
-                OpenQase aims to become the definitive resource for quantum computing business applications by bridging the gap between theoretical quantum research and practical business implementation.
+                Quantum computing promises to transform industries, but understanding practical applications remains a challenge for business leaders.
               </p>
               
               <div className="bg-muted/30 rounded-lg p-6 border-l-4 border-primary">
                 <p className="text-muted-foreground">
-                  Despite significant advances in quantum computing technology, there remains a substantial gap between theoretical quantum research and practical business applications. Many organizations and professionals struggle to understand how quantum computing can solve real-world business problems.
+                  <strong>The Challenge:</strong> Most quantum computing resources focus on academic theory or technical implementation details. Business decision-makers need to understand <em>what quantum computing can do for their organization</em> without getting lost in complex mathematics or physics.
                 </p>
               </div>
               
               <p className="text-muted-foreground">
-                OpenQase addresses these challenges through a structured, accessible platform that connects quantum computing concepts with tangible business applications through community curated content and related concept navigation.
+                OpenQase solves this by curating real-world quantum implementations and presenting them in business-focused language. We show you what companies like HSBC, Google, and Mitsui are actually doing with quantum computing—and how it impacts their bottom line.
               </p>
+            </div>
+          </section>
+
+          {/* Our Mission */}
+          <section className="mb-16">
+            <h2 className="mb-6">Our Mission</h2>
+            <div className="space-y-6">
+              <p className="text-lg text-muted-foreground">
+                To make quantum computing accessible to every business leader who needs to understand its potential impact on their industry.
+              </p>
+              
+              <div className="grid gap-6 md:grid-cols-2">
+                <div>
+                  <h4 className="font-semibold mb-3 text-primary">What We Believe</h4>
+                  <ul className="space-y-2 text-muted-foreground">
+                    <li>• Quantum computing shouldn't require a PhD to understand</li>
+                    <li>• Real business applications matter more than theoretical potential</li>
+                    <li>• Decision-makers need practical insights, not academic papers</li>
+                    <li>• Learning should be organized around your role and industry</li>
+                  </ul>
+                </div>
+                <div>
+                  <h4 className="font-semibold mb-3 text-primary">How We Help</h4>
+                  <ul className="space-y-2 text-muted-foreground">
+                    <li>• Translate complex quantum concepts into business language</li>
+                    <li>• Document real implementations with measurable outcomes</li>
+                    <li>• Organize content by professional role and industry</li>
+                    <li>• Focus on practical applications over theoretical possibilities</li>
+                  </ul>
+                </div>
+              </div>
             </div>
           </section>
 
           {/* Our Approach Section */}
           <section className="mb-16">
-            <h2 className="mb-6">Our Approach</h2>
+            <h2 className="mb-6">How We're Different</h2>
             <p className="text-lg text-muted-foreground mb-8">
-              The Learning Paths concept is central to OpenQase's approach to making quantum computing accessible to diverse audiences. The platform offers three distinct navigation journeys:
+              Unlike academic resources or vendor marketing, OpenQase focuses on practical implementation insights organized around how you actually work.
             </p>
             <div className="grid gap-8 md:grid-cols-3">
               <div className="bg-card border rounded-lg p-6 hover:shadow-md transition-shadow">
                 <div className="mb-4">
                   <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mb-3">
-                    <div className="w-6 h-6 rounded-full bg-primary/20"></div>
+                    <span className="text-lg font-semibold text-primary">👤</span>
                   </div>
-                  <h3>Persona Path</h3>
+                  <h3>By Your Role</h3>
                 </div>
                 <p className="text-muted-foreground">
-                  Content tailored to your professional role, ensuring business leaders receive strategic insights while technical practitioners get implementation details.
+                  CEOs get strategic insights, CTOs get implementation guidance, engineers get technical details. Content tailored to your specific responsibilities and decision-making needs.
                 </p>
               </div>
               <div className="bg-card border rounded-lg p-6 hover:shadow-md transition-shadow">
                 <div className="mb-4">
                   <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mb-3">
-                    <div className="w-6 h-6 rounded-full bg-primary/20"></div>
+                    <span className="text-lg font-semibold text-primary">🏢</span>
                   </div>
-                  <h3>Industry Path</h3>
+                  <h3>By Your Industry</h3>
                 </div>
                 <p className="text-muted-foreground">
-                  Content organized around specific business sectors, helping professionals understand quantum computing applications relevant to their industry.
+                  Financial services, healthcare, energy, manufacturing—see quantum applications that matter to your specific sector with relevant business context and outcomes.
                 </p>
               </div>
               <div className="bg-card border rounded-lg p-6 hover:shadow-md transition-shadow">
                 <div className="mb-4">
                   <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mb-3">
-                    <div className="w-6 h-6 rounded-full bg-primary/20"></div>
+                    <span className="text-lg font-semibold text-primary">⚡</span>
                   </div>
-                  <h3>Algorithm Path</h3>
+                  <h3>By Solution Type</h3>
                 </div>
                 <p className="text-muted-foreground">
-                  Content organized around quantum algorithms and techniques, helping match business problems with appropriate quantum solutions.
+                  Optimization, machine learning, security—understand quantum algorithms through their business applications rather than mathematical complexity.
                 </p>
               </div>
             </div>
@@ -81,27 +123,30 @@ export default function AboutPage() {
 
           {/* Case Studies Section */}
           <section className="mb-16">
-            <h2 className="mb-6">Case Studies: Our Core Content</h2>
+            <h2 className="mb-6">Real Implementations, Real Results</h2>
             <div className="space-y-6">
               <p className="text-lg text-muted-foreground">
-                The Case Studies section forms the core content foundation of OpenQase, providing documented examples of real-world quantum computing implementations.
+                Every case study documents actual quantum computing implementations with measurable business outcomes—not theoretical possibilities or marketing claims.
               </p>
               
               <div className="grid md:grid-cols-2 gap-6">
                 <div>
-                  <h4 className="font-semibold mb-3">What We Document</h4>
+                  <h4 className="font-semibold mb-3 text-primary">What You'll Find</h4>
                   <ul className="space-y-2 text-muted-foreground">
-                    <li>• Business context and problem description</li>
-                    <li>• Implementation approach and outcomes</li>
-                    <li>• Industries served and algorithms used</li>
-                    <li>• Partner companies and collaborations</li>
+                    <li>• <strong>Business context:</strong> Why the company needed quantum computing</li>
+                    <li>• <strong>Implementation approach:</strong> How they actually built and deployed solutions</li>
+                    <li>• <strong>Measurable outcomes:</strong> Specific improvements and ROI metrics</li>
+                    <li>• <strong>Lessons learned:</strong> Challenges, surprises, and practical insights</li>
                   </ul>
                 </div>
                 <div>
-                  <h4 className="font-semibold mb-3">Our Focus</h4>
-                  <p className="text-muted-foreground">
-                    All case studies are structured to balance technical depth with business relevance, ensuring they serve both decision-makers and implementers while providing concrete examples of quantum computing's practical value.
-                  </p>
+                  <h4 className="font-semibold mb-3 text-primary">Featured Examples</h4>
+                  <ul className="space-y-2 text-muted-foreground">
+                    <li>• <strong>HSBC & Quantinuum:</strong> Quantum cybersecurity and fraud detection</li>
+                    <li>• <strong>Google & Quantinuum:</strong> 47% reduction in quantum circuit complexity</li>
+                    <li>• <strong>Mitsui & Quantinuum:</strong> Supply chain optimization at global scale</li>
+                    <li>• <em>Plus dozens more across industries and use cases</em></li>
+                  </ul>
                 </div>
               </div>
             </div>
@@ -265,5 +310,6 @@ export default function AboutPage() {
         </div>
       </div>
     </main>
+    </>
   );
 } 

@@ -67,6 +67,36 @@ export default function RoadmapPage() {
             <div className="space-y-6">
               <div className="bg-card border rounded-lg p-6">
                 <div className="flex items-center justify-between mb-4">
+                  <h3 className="text-xl font-semibold">UX & SEO Optimization</h3>
+                  <span className="text-sm text-muted-foreground">Q1 2025</span>
+                </div>
+                <p className="text-muted-foreground mb-4">
+                  Improving user experience, search visibility, and conversion rates through data-driven design improvements.
+                </p>
+                <div className="grid gap-4 md:grid-cols-2">
+                  <div>
+                    <h4 className="font-medium mb-2">✅ Recently Completed</h4>
+                    <ul className="text-muted-foreground space-y-1 text-sm">
+                      <li>• Ghost-style automatic schema markup</li>
+                      <li>• Landing page copy optimization</li>
+                      <li>• SEO metadata improvements</li>
+                      <li>• CTA and messaging refinements</li>
+                    </ul>
+                  </div>
+                  <div>
+                    <h4 className="font-medium mb-2">🚧 In Progress</h4>
+                    <ul className="text-muted-foreground space-y-1 text-sm">
+                      <li>• Enhanced About page and company story</li>
+                      <li>• Enhanced case study presentation</li>
+                      <li>• Content structure improvements</li>
+                      <li>• User engagement optimization</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+
+              <div className="bg-card border rounded-lg p-6">
+                <div className="flex items-center justify-between mb-4">
                   <h3 className="text-xl font-semibold">Enhanced Content Management</h3>
                   <span className="text-sm text-muted-foreground">Q3 2025</span>
                 </div>

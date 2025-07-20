@@ -65,10 +65,4 @@
       ]
     }
   ],
-  "rewrites": [
-    {
-      "source": "/healthz",
-      "destination": "/api/health"
-    }
-  ]
 }

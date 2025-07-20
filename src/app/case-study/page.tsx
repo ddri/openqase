@@ -1,6 +1,12 @@
+import { Metadata } from 'next';
 import { getStaticContentList } from '@/lib/content-fetchers';
 import { CaseStudiesList } from '@/components/CaseStudiesList';
 import type { Database } from '@/types/supabase';
+
+export const metadata: Metadata = {
+  title: 'Quantum Computing Case Studies | Real-World Business Applications - OpenQase',
+  description: 'Explore real quantum computing implementations across industries. See how companies like HSBC, Google, and Mitsui apply quantum algorithms to solve business challenges.',
+};
 
 type CaseStudy = Database['public']['Tables']['case_studies']['Row'];
 

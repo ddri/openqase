@@ -1,5 +1,6 @@
 // src/app/paths/page.tsx
 
+import { Metadata } from 'next';
 import { Card, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import Link from 'next/link';
@@ -7,6 +8,11 @@ import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { Users, Building2, Atom } from 'lucide-react';
 import AuthGate from '@/components/auth/AuthGate';
+
+export const metadata: Metadata = {
+  title: 'Quantum Computing Learning Paths | Role-Based & Industry-Specific - OpenQase',
+  description: 'Choose your quantum computing learning path by professional role, industry, or algorithm type. Structured content for business leaders, engineers, and decision-makers.',
+};
 
 export default async function LearningPathsPage() {
 

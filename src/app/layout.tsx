@@ -26,8 +26,20 @@ const openSans = Open_Sans({
 });
 
 export const metadata: Metadata = {
-  title: 'OpenQase',
-  description: 'Open repository for Quantum Computing business cases.',
+  title: 'Quantum Computing Business Applications | Case Studies & Learning Paths - OpenQase',
+  description: 'Discover how quantum computing solves real business problems. Access industry case studies and role-based learning paths to understand practical applications without technical complexity.',
+  keywords: ['quantum computing business applications', 'quantum algorithms', 'quantum case studies', 'business quantum solutions', 'quantum computing industry'],
+  openGraph: {
+    title: 'Quantum Computing Business Applications | OpenQase',
+    description: 'Real-world quantum computing case studies and learning paths for business decision-makers',
+    type: 'website',
+    locale: 'en_US',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Quantum Computing Business Applications | OpenQase',
+    description: 'Real-world quantum computing case studies and learning paths for business decision-makers',
+  },
 };
 
 export default function RootLayout({

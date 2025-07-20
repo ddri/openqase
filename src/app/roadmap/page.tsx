@@ -169,22 +169,6 @@ export default function RoadmapPage() {
                 </ul>
               </div>
 
-              <div className="bg-card border rounded-lg p-6">
-                <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-xl font-semibold">Interactive Learning Tools</h3>
-                  <span className="text-sm text-muted-foreground">Q2 2026</span>
-                </div>
-                <p className="text-muted-foreground mb-4">
-                  Enhanced educational resources and interactive content for quantum computing concepts.
-                </p>
-                <ul className="text-muted-foreground space-y-2 text-sm">
-                  <li>• Interactive algorithm visualizations</li>
-                  <li>• Step-by-step implementation guides</li>
-                  <li>• ROI calculators for business applications</li>
-                  <li>• Decision trees for technology selection</li>
-                  <li>• Virtual quantum computing simulations</li>
-                </ul>
-              </div>
             </div>
           </section>
 

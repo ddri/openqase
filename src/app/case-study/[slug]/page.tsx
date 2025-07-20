@@ -7,6 +7,7 @@ import { Badge } from '@/components/ui/badge';
 import MarkdownIt from 'markdown-it';
 import { ReferencesRenderer, processContentWithReferences } from '@/components/ui/ReferencesRenderer';
 import Link from 'next/link';
+import { AutoSchema } from '@/components/AutoSchema';
 
 // export const dynamic = 'force-dynamic'; // REMOVED - Restore default caching
 
@@ -119,12 +120,16 @@ export default async function CaseStudyPage({ params }: CaseStudyPageProps) {
   }
 
   return (
-    <LearningPathLayout
-      title={caseStudy.title}
-      description={caseStudy.description || ''}
-      backLinkText="Back to Case Studies"
-      backLinkHref="/case-study"
-    >
+    <>
+      {/* Ghost-style automatic case study schema */}
+      <AutoSchema type="case-study" data={caseStudy} />
+      
+      <LearningPathLayout
+        title={caseStudy.title}
+        description={caseStudy.description || ''}
+        backLinkText="Back to Case Studies"
+        backLinkHref="/case-study"
+      >
       <div className="grid gap-6 md:grid-cols-[2fr,1fr]">
         <div className="prose dark:prose-invert max-w-none">
           <div>
@@ -307,6 +312,7 @@ export default async function CaseStudyPage({ params }: CaseStudyPageProps) {
           )}
         </div>
       </div>
-    </LearningPathLayout>
+      </LearningPathLayout>
+    </>
   );
 }

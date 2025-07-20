@@ -7,6 +7,7 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { User, Building2, CircuitBoard, ArrowRight, Brain, FileText, Users } from 'lucide-react';
+import { AutoSchema } from '@/components/AutoSchema';
 
 interface FeatureCard {
   title: string;
@@ -39,6 +40,9 @@ const features: FeatureCard[] = [
 export default function HomePage() {
   return (
     <div className="flex flex-col">
+      {/* Ghost-style automatic FAQ schema for landing page */}
+      <AutoSchema type="faq" />
+      
       {/* Hero Section */}
       <section className="flex min-h-screen items-center justify-center bg-background text-center px-4">
         <div className="max-w-4xl mx-auto space-y-8">

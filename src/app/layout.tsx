@@ -8,6 +8,7 @@ import FooterWrapper from '@/components/FooterWrapper';
 import Providers from '@/components/Providers';
 import { GlobalErrorBoundary } from '@/components/error-boundary/GlobalErrorBoundary';
 import { Analytics } from '@vercel/analytics/react';
+import { AutoSchema } from '@/components/AutoSchema';
 
 // Load Montserrat for headings
 const montserrat = Montserrat({
@@ -50,6 +51,9 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning className={`${montserrat.variable} ${openSans.variable}`}>
       <body className="min-h-screen antialiased">
+        {/* Ghost-style automatic schema - invisible to content creators */}
+        <AutoSchema type="organization" />
+        
         <Providers>
           <div className="min-h-screen flex flex-col">
             <Navigation />

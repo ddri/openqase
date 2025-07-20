@@ -8,6 +8,7 @@ import AuthGate from '@/components/auth/AuthGate';
 import { Badge } from '@/components/ui/badge';
 import Link from 'next/link';
 import MarkdownIt from 'markdown-it';
+import { AutoSchema } from '@/components/AutoSchema';
 
 // Initialize markdown-it
 const md = new MarkdownIt({
@@ -162,10 +163,14 @@ export default async function PersonaPage({ params }: PageParams) {
   }
 
   return (
-    <AuthGate
-      title="Access Persona Details"
-      description="Get exclusive access to detailed quantum computing learning paths."
-    >
+    <>
+      {/* Ghost-style automatic course schema */}
+      <AutoSchema type="course" data={persona} courseType="persona" />
+      
+      <AuthGate
+        title="Access Persona Details"
+        description="Get exclusive access to detailed quantum computing learning paths."
+      >
       <LearningPathLayout
         title={persona.name}
         description={persona.description || ''}
@@ -279,6 +284,7 @@ export default async function PersonaPage({ params }: PageParams) {
           </div>
         </div>
       </LearningPathLayout>
-    </AuthGate>
+      </AuthGate>
+    </>
   );
 }

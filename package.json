@@ -9,7 +9,6 @@
     "build:analyze": "ANALYZE=true next build",
     "start": "next start",
     "lint": "next lint",
-    "type": "module",
     "migrate:content": "ts-node scripts/migrate-mdx-to-db.ts",
     "setup-admin": "tsx scripts/setup-admin.ts",
     "test-performance": "node scripts/page-load-performance.js",

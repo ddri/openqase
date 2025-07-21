@@ -1,7 +1,6 @@
 // Auto-inject schema markup Ghost-style
 // Invisible to content creators, automatic for developers
 
-import Head from 'next/head';
 import { 
   getOrganizationSchema, 
   getCaseStudySchema, 
@@ -44,14 +43,12 @@ export function AutoSchema({ type, data, courseType, breadcrumbs }: AutoSchemaPr
   }
   
   return (
-    <Head>
-      <script 
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ 
-          __html: JSON.stringify(schema, null, 2) 
-        }}
-      />
-    </Head>
+    <script 
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ 
+        __html: JSON.stringify(schema, null, 2) 
+      }}
+    />
   );
 }
 

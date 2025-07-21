@@ -1,7 +1,7 @@
 // src/app/layout.tsx
 import './globals.css';
 import type { Metadata } from 'next';
-import { Montserrat, Open_Sans } from 'next/font/google';
+import localFont from 'next/font/local';
 import Navigation from '@/components/Navigation';
 import { Toaster } from '@/components/ui/toaster';
 import FooterWrapper from '@/components/FooterWrapper';
@@ -10,20 +10,55 @@ import { GlobalErrorBoundary } from '@/components/error-boundary/GlobalErrorBoun
 import { Analytics } from '@vercel/analytics/react';
 import { AutoSchema } from '@/components/AutoSchema';
 
-// Load Montserrat for headings
-const montserrat = Montserrat({
-  subsets: ['latin'],
-  display: 'swap',
+// Load Montserrat locally for headings
+const montserrat = localFont({
+  src: [
+    {
+      path: '../../public/fonts/montserrat-400.woff2',
+      weight: '400',
+      style: 'normal',
+    },
+    {
+      path: '../../public/fonts/montserrat-500.woff2',
+      weight: '500',
+      style: 'normal',
+    },
+    {
+      path: '../../public/fonts/montserrat-600.woff2',
+      weight: '600',
+      style: 'normal',
+    },
+    {
+      path: '../../public/fonts/montserrat-700.woff2',
+      weight: '700',
+      style: 'normal',
+    },
+  ],
   variable: '--font-montserrat',
-  weight: ['400', '500', '600', '700'],
+  display: 'swap',
 });
 
-// Load Open Sans for body
-const openSans = Open_Sans({
-  subsets: ['latin'],
-  display: 'swap',
+// Load Open Sans locally for body
+const openSans = localFont({
+  src: [
+    {
+      path: '../../public/fonts/opensans-400.woff2',
+      weight: '400',
+      style: 'normal',
+    },
+    {
+      path: '../../public/fonts/opensans-600.woff2',
+      weight: '600',
+      style: 'normal',
+    },
+    {
+      path: '../../public/fonts/opensans-700.woff2',
+      weight: '700',
+      style: 'normal',
+    },
+  ],
   variable: '--font-open-sans',
-  weight: ['400', '600', '700'],
+  display: 'swap',
 });
 
 export const metadata: Metadata = {

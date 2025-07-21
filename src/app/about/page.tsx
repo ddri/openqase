@@ -220,7 +220,7 @@ export default function AboutPage() {
               </p>
             </div>
             
-            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
               <div className="text-center">
                 <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-4">
                   <div className="w-8 h-8 rounded-full bg-primary/20"></div>
@@ -278,7 +278,7 @@ export default function AboutPage() {
               </p>
             </div>
             
-            <div className="grid gap-6 md:grid-cols-3">
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
               <div className="bg-card border rounded-lg p-6 text-center hover:shadow-md transition-shadow flex flex-col">
                 <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mx-auto mb-4">
                   <span className="text-lg font-semibold text-primary">📝</span>

@@ -169,6 +169,23 @@ export default function RoadmapPage() {
                 </ul>
               </div>
 
+              <div className="bg-card border rounded-lg p-6">
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="text-xl font-semibold">Technical Modernization</h3>
+                  <span className="text-sm text-muted-foreground">Q2-Q3 2026</span>
+                </div>
+                <p className="text-muted-foreground mb-4">
+                  Ongoing technical improvements and framework updates to maintain modern development practices.
+                </p>
+                <ul className="text-muted-foreground space-y-2 text-sm">
+                  <li>• Migrate from next/head to App Router metadata API</li>
+                  <li>• Dependency updates and security patches</li>
+                  <li>• Performance optimizations and monitoring</li>
+                  <li>• Developer experience improvements</li>
+                  <li>• Code modernization and refactoring</li>
+                </ul>
+              </div>
+
             </div>
           </section>
 

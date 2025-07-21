@@ -1,6 +1,4 @@
 // src/app/page.tsx
-'use client';
-
 import { Card, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import ContentCard from '@/components/ui/content-card';
 import Link from 'next/link';

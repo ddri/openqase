@@ -1,5 +1,3 @@
-'use client';
-
 import Link from 'next/link';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -18,7 +16,7 @@ export default function ContentCard({
   badges,
   href
 }: ContentCardProps) {
-  // Sort badges by length for better visual hierarchy
+  // Sort badges by length for better visual hierarchy - can be done server-side
   const sortedBadges = [...badges].sort((a, b) => a.length - b.length);
   const displayBadges = sortedBadges.slice(0, 3);
   const remainingCount = sortedBadges.length - 3;

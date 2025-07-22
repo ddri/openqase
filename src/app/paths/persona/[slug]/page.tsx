@@ -45,8 +45,6 @@ export async function generateMetadata({ params }: PageParams) {
   
   const persona = await getStaticContentWithRelationships('personas', resolvedParams.slug) as EnrichedPersona;
 
-  console.log('Metadata query result:', { persona });
-
   if (!persona) {
     return {
       title: 'Not Found',
@@ -71,18 +69,7 @@ export default async function PersonaPage({ params }: PageParams) {
   // Get the persona and its related industries and case studies
   const persona = await getStaticContentWithRelationships('personas', resolvedParams.slug) as EnrichedPersona;
 
-  console.log('Fetched persona data:', {
-    slug: resolvedParams.slug,
-    persona,
-    mdxContent: persona?.main_content,
-    industryRelations: persona?.persona_industry_relations,
-    industryRelationsLength: persona?.persona_industry_relations?.length,
-    caseStudyRelations: persona?.case_study_persona_relations,
-    caseStudyRelationsLength: persona?.case_study_persona_relations?.length,
-  });
-
   if (!persona) {
-    console.error('Error fetching persona');
     notFound();
   }
 
@@ -94,8 +81,6 @@ export default async function PersonaPage({ params }: PageParams) {
     description: relation.case_studies.description || '',
     published_at: relation.case_studies.published_at,
   }) : null).filter((cs): cs is PersonaRelatedCaseStudy => cs !== null) || [];
-
-  console.log(`[PersonaPage] Extracted ${caseStudies.length} case studies from persona relations`);
 
   // Process markdown content with server-side processor
   const renderedContent = processMarkdown(persona.main_content);

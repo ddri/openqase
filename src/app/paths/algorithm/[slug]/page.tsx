@@ -64,13 +64,9 @@ export async function generateStaticParams() {
 export default async function AlgorithmPage({ params }: AlgorithmPageProps) {
   const resolvedParams = await params;
   
-  console.log('Fetching algorithm with slug:', resolvedParams.slug);
   const algorithm = await getStaticContentWithRelationships('algorithms', resolvedParams.slug) as EnrichedAlgorithm;
   
-  console.log('Algorithm query result:', { algorithm });
-
   if (!algorithm) {
-    console.error('Failed to fetch algorithm');
     notFound();
   }
 
@@ -82,8 +78,6 @@ export default async function AlgorithmPage({ params }: AlgorithmPageProps) {
     description: relation.case_studies.description || '',
     industries: [] // Case study industries aren't fetched in the algorithm relationship query
   })) || [];
-
-  console.log('Case studies query result:', { caseStudies });
 
   // Process content with server-side markdown and references
   let processedContent = '';

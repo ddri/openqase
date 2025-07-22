@@ -19,14 +19,11 @@ export default function AlgorithmList({ algorithms }: AlgorithmListProps) {
   const [searchQuery, setSearchQuery] = useState('');
   const [sortBy, setSortBy] = useState<SortOption>('name-asc');
 
-  console.log('AlgorithmList received algorithms:', algorithms);
-
   // Filter and sort algorithms
   const filteredAlgorithms = algorithms
     .filter(alg => {
       if (!searchQuery) return true;
       const query = searchQuery.toLowerCase();
-      console.log('Filtering algorithm:', { alg, query });
       return (
         alg.name.toLowerCase().includes(query) ||
         alg.description?.toLowerCase().includes(query) ||
@@ -51,8 +48,6 @@ export default function AlgorithmList({ algorithms }: AlgorithmListProps) {
           return a.name.localeCompare(b.name);
       }
     });
-
-  console.log('Filtered and sorted algorithms:', filteredAlgorithms);
 
   return (
     <div className="space-y-6">

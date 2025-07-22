@@ -65,15 +65,12 @@ export async function generateStaticParams() {
 export default async function IndustryPage({ params }: PageParams) {
   const resolvedParams = await params;
   
-  console.log('Fetching industry with slug:', resolvedParams.slug);
   // Fetch industry along with related algorithms, personas, and case studies
   const industry = await getStaticContentWithRelationships('industries', resolvedParams.slug) as EnrichedIndustry;
 
   if (!industry) {
     return <div>Industry not found</div>;
   }
-
-  console.log('Fetching case studies for industry:', industry.name);
   
   // Extract related case studies from the industry data
   const caseStudies: IndustryRelatedCaseStudy[] = industry.case_study_industry_relations?.map((relation: { case_studies: { id: string; title: string; slug: string; description: string; published_at: string } | null }) => relation.case_studies ? ({

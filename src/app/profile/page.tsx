@@ -8,7 +8,7 @@ import { Label } from '@/components/ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Switch } from '@/components/ui/switch'
 import { toast } from '@/components/ui/use-toast'
-import { supabase } from '@/lib/supabase-browser'
+import { createBrowserSupabaseClient } from '@/lib/supabase-browser'
 import { User } from '@supabase/supabase-js'
 import { useRouter } from 'next/navigation'
 
@@ -18,7 +18,7 @@ export default function ProfilePage() {
   const [loading, setLoading] = useState(true)
   const [marketingEmailsEnabled, setMarketingEmailsEnabled] = useState(false)
   const [newsletterLoading, setNewsletterLoading] = useState(false)
-  // Using singleton supabase instance
+  const supabase = createBrowserSupabaseClient()
   const router = useRouter()
 
   // Check auth and load user

@@ -35,10 +35,6 @@ export async function middleware(req: NextRequest) {
 
   // Handle API routes
   if (isApiRoute) {
-    if (process.env.NODE_ENV === 'development') {
-      console.log(`[MIDDLEWARE] API route accessed: ${req.method} ${req.nextUrl.pathname}`)
-    }
-    
     // Define public API routes that don't need authentication
     const publicApiRoutes = [
       '/api/newsletter',
@@ -51,9 +47,6 @@ export async function middleware(req: NextRequest) {
     
     // If it's a public API route, allow it through
     if (isPublicApiRoute) {
-      if (process.env.NODE_ENV === 'development') {
-        console.log(`[MIDDLEWARE] Public API route - allowing access`)
-      }
       return res
     }
     
@@ -67,18 +60,12 @@ export async function middleware(req: NextRequest) {
     // For GET requests, allow access without authentication for now
     // (This maintains current behavior while we add protection incrementally)
     if (req.method === 'GET') {
-      if (process.env.NODE_ENV === 'development') {
-        console.log(`[MIDDLEWARE] GET request - allowing access (for now)`)
-      }
       return res
     }
     
     // For write operations (POST, PUT, PATCH, DELETE), require authentication
     if (['POST', 'PUT', 'PATCH', 'DELETE'].includes(req.method || '')) {
       if (!user) {
-        if (process.env.NODE_ENV === 'development') {
-          console.log(`[MIDDLEWARE] Unauthorized ${req.method} request blocked`)
-        }
         return NextResponse.json(
           { error: 'Authentication required' }, 
           { status: 401 }
@@ -93,17 +80,10 @@ export async function middleware(req: NextRequest) {
         .single()
 
       if (!userPreferences || userPreferences.role !== 'admin') {
-        if (process.env.NODE_ENV === 'development') {
-          console.log(`[MIDDLEWARE] Non-admin ${req.method} request blocked`)
-        }
         return NextResponse.json(
           { error: 'Admin access required' }, 
           { status: 403 }
         )
-      }
-      
-      if (process.env.NODE_ENV === 'development') {
-        console.log(`[MIDDLEWARE] Admin ${req.method} request allowed`)
       }
     }
     
@@ -123,9 +103,6 @@ export async function middleware(req: NextRequest) {
                      req.headers.get('host')?.includes('127.0.0.1'))
     
     if (devMode) {
-      if (process.env.NODE_ENV === 'development') {
-        console.log('[MIDDLEWARE] Dev mode enabled on localhost - bypassing admin auth')
-      }
       return res
     }
 

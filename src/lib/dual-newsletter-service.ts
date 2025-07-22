@@ -94,7 +94,6 @@ export class DualNewsletterService {
           primaryServiceSuccess = true
         }
 
-        console.log('Successfully subscribed to Beehiiv:', email)
       } catch (error) {
         console.error('Beehiiv subscription failed:', error)
         result.services.beehiiv = {
@@ -117,7 +116,6 @@ export class DualNewsletterService {
           primaryServiceSuccess = true
         }
 
-        console.log('Successfully sent welcome email via Resend:', email)
       } catch (error) {
         console.error('Resend welcome email failed:', error)
         result.services.resend = {

@@ -5,20 +5,13 @@ import { revalidatePath } from 'next/cache';
 
 export async function saveCaseStudy(values: any): Promise<any> {
   const startTime = Date.now();
-  console.log('[CASE_STUDY_SAVE] Starting save operation for:', values.id, values.title);
   
   try {
     const supabase = createServiceRoleSupabaseClient();
 
-    console.log('[CASE_STUDY_SAVE] Relationships to process:', {
-      industries: values.industries?.length || 0,
-      algorithms: values.algorithms?.length || 0,  
-      personas: values.personas?.length || 0
-    });
 
     // Upsert the main case study data
     const upsertStartTime = Date.now();
-    console.log('[CASE_STUDY_SAVE] Starting main case study upsert...');
     
     const upsertData: any = {
       id: values.id,
@@ -43,7 +36,6 @@ export async function saveCaseStudy(values: any): Promise<any> {
       .single();
 
     const upsertTime = Date.now() - upsertStartTime;
-    console.log(`[CASE_STUDY_SAVE] Main upsert completed in ${upsertTime}ms`);
 
     if (error || !data) {
       console.error("[CASE_STUDY_SAVE] Error upserting case study:", {
@@ -53,14 +45,11 @@ export async function saveCaseStudy(values: any): Promise<any> {
       throw new Error(error?.message || "Failed to save case study data.");
     }
 
-    console.log('[CASE_STUDY_SAVE] Case study upserted successfully, starting relationships...');
 
     // Delete and recreate relationships
     const relationshipStartTime = Date.now();
-    console.log('[CASE_STUDY_SAVE] Processing relationships using delete+insert pattern...');
 
     // Step 1: Delete all existing relationships in parallel
-    console.log('[CASE_STUDY_SAVE] Deleting existing relationships...');
     const [industryDelResult, algorithmDelResult, personaDelResult] = await Promise.all([
       supabase
         .from('case_study_industry_relations' as any)
@@ -87,10 +76,8 @@ export async function saveCaseStudy(values: any): Promise<any> {
       console.error('[CASE_STUDY_SAVE] Error deleting persona relationships:', personaDelResult.error);
     }
 
-    console.log('[CASE_STUDY_SAVE] All existing relationships deleted successfully');
 
     // Step 2: Prepare new relationships from form data
-    console.log('[CASE_STUDY_SAVE] Preparing new relationships...');
 
     let industryRelations: any[] = [];
     let algorithmRelations: any[] = [];
@@ -120,19 +107,12 @@ export async function saveCaseStudy(values: any): Promise<any> {
       }));
     }
 
-    console.log('[CASE_STUDY_SAVE] New relationships prepared:', {
-      industries: industryRelations.length,
-      algorithms: algorithmRelations.length,
-      personas: personaRelations.length
-    });
 
     // Step 3: Insert all new relationships in parallel
-    console.log('[CASE_STUDY_SAVE] Inserting new relationships...');
     
     const insertPromises = [];
 
     if (industryRelations.length > 0) {
-      console.log(`[CASE_STUDY_SAVE] Inserting ${industryRelations.length} industry relations`);
       insertPromises.push(
         supabase
           .from('case_study_industry_relations' as any)
@@ -141,7 +121,6 @@ export async function saveCaseStudy(values: any): Promise<any> {
     }
 
     if (algorithmRelations.length > 0) {
-      console.log(`[CASE_STUDY_SAVE] Inserting ${algorithmRelations.length} algorithm relations`);
       insertPromises.push(
         supabase
           .from('algorithm_case_study_relations' as any)
@@ -150,7 +129,6 @@ export async function saveCaseStudy(values: any): Promise<any> {
     }
 
     if (personaRelations.length > 0) {
-      console.log(`[CASE_STUDY_SAVE] Inserting ${personaRelations.length} persona relations`);
       insertPromises.push(
         supabase
           .from('case_study_persona_relations' as any)
@@ -170,17 +148,14 @@ export async function saveCaseStudy(values: any): Promise<any> {
         }
       });
     } else {
-      console.log('[CASE_STUDY_SAVE] No relationships to insert');
     }
 
     const relationshipTime = Date.now() - relationshipStartTime;
-    console.log(`[CASE_STUDY_SAVE] All relationships processed in ${relationshipTime}ms`);
 
     // Revalidate the admin cache
     revalidatePath('/admin/case-studies');
 
     const totalTime = Date.now() - startTime;
-    console.log(`[CASE_STUDY_SAVE] Save operation completed successfully in ${totalTime}ms`);
 
     return {
       caseStudy: data,

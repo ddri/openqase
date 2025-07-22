@@ -9,7 +9,6 @@ type PersonaData = Database['public']['Tables']['personas']['Row'] | null;
 
 export async function savePersona(values: any): Promise<any> {
   try {
-    console.log("Saving persona with values:", JSON.stringify(values, null, 2));
     
     const supabase = createServiceRoleSupabaseClient();
     
@@ -70,7 +69,6 @@ export async function savePersona(values: any): Promise<any> {
       }
     }
     
-    console.log("Persona saved successfully:", JSON.stringify(data, null, 2));
     revalidatePath('/admin/personas');
     revalidatePath('/paths/persona');
     if (data?.slug) {

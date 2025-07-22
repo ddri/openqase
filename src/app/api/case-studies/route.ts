@@ -75,7 +75,6 @@ export async function GET(request: NextRequest) {
     if (searchParams.has('algorithm')) {
       const algorithm = searchParams.get('algorithm');
       if (algorithm) {
-        console.log('Handling algorithm filter for case studies:', algorithm);
         
         // Get the algorithm ID first
         const serviceClient = await createServiceRoleSupabaseClient();
@@ -93,7 +92,6 @@ export async function GET(request: NextRequest) {
           );
         }
         
-        console.log('Found algorithm:', algorithmData);
         
         // Get case studies related to this algorithm using the junction table
         const { data: relations, error: relationsError } = await serviceClient
@@ -149,7 +147,6 @@ export async function GET(request: NextRequest) {
     if (searchParams.has('industry')) {
       const industry = searchParams.get('industry');
       if (industry) {
-        console.log('Handling industry filter for case studies:', industry);
         
         // Get the industry ID first
         const serviceClient = await createServiceRoleSupabaseClient();
@@ -167,7 +164,6 @@ export async function GET(request: NextRequest) {
           );
         }
         
-        console.log('Found industry:', industryData);
         
         // Get case studies related to this industry using the junction table
         const { data: relations, error: relationsError } = await serviceClient
@@ -204,7 +200,6 @@ export async function GET(request: NextRequest) {
     if (searchParams.has('persona')) {
       const persona = searchParams.get('persona');
       if (persona) {
-        console.log('Handling persona filter for case studies:', persona);
         
         // Get the persona ID first
         const serviceClient = await createServiceRoleSupabaseClient();
@@ -222,7 +217,6 @@ export async function GET(request: NextRequest) {
           );
         }
         
-        console.log('Found persona:', personaData);
         
         // Get case studies related to this persona using the junction table
         const { data: relations, error: relationsError } = await serviceClient
@@ -275,15 +269,6 @@ export async function GET(request: NextRequest) {
       }
     }
     
-    console.log('[CaseStudies API] About to call fetchContentItems with:', {
-      contentType: CONTENT_TYPE,
-      includeUnpublished,
-      page,
-      pageSize,
-      filters,
-      orderBy: 'updated_at',
-      orderDirection: 'desc'
-    });
 
     const { data, error, count } = await fetchContentItems({
       contentType: CONTENT_TYPE as any,
@@ -295,19 +280,11 @@ export async function GET(request: NextRequest) {
       orderDirection: 'desc'
     });
 
-    console.log('[CaseStudies API] fetchContentItems result:', {
-      dataLength: data?.length,
-      error: error?.message,
-      count
-    });
     
     // Fetch relationships for each case study
     if (data && data.length > 0) {
-      console.log('[CaseStudies API] About to create service role client for relationship fetching');
       try {
         const serviceClient = await createServiceRoleSupabaseClient();
-        console.log('[CaseStudies API] Service role client created successfully, type:', typeof serviceClient);
-        console.log('[CaseStudies API] Service role client has .from method:', typeof serviceClient.from);
         
         for (const item of data) {
           // Fetch industries
@@ -349,7 +326,6 @@ export async function GET(request: NextRequest) {
             (item as any).related_personas = personaRelations.map((rel: any) => rel.personas).filter(Boolean);
           }
         }
-        console.log('[CaseStudies API] Finished fetching relationships for all case studies');
       } catch (serviceRoleError) {
         console.error('[CaseStudies API] Error creating service role client:', serviceRoleError);
         // Continue without relationships rather than failing completely

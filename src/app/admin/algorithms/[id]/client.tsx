@@ -79,7 +79,7 @@ export function AlgorithmForm({ algorithm, caseStudies, industries, personas, is
     
     // First pass: find the highest existing citation number
     let maxExistingNumber = 0;
-    lines.forEach(line => {
+    lines.forEach((line: string) => {
       const match = line.match(/^\[\^(\d+)\]:/);
       if (match) {
         maxExistingNumber = Math.max(maxExistingNumber, parseInt(match[1]));
@@ -90,7 +90,7 @@ export function AlgorithmForm({ algorithm, caseStudies, industries, personas, is
     citationNumber = maxExistingNumber + 1;
     
     // Second pass: add numbers to lines that need them
-    lines.forEach(line => {
+    lines.forEach((line: string) => {
       const trimmedLine = line.trim();
       if (trimmedLine === '') {
         processedLines.push(line); // Preserve empty lines

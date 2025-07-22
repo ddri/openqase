@@ -24,12 +24,12 @@ const nextConfig: NextConfig = {
   },
   
   eslint: {
-    ignoreDuringBuilds: true,
+    ignoreDuringBuilds: true,  // ✅ Keep disabled until ESLint cleanup (400+ errors)
   },
   pageExtensions: ['ts', 'tsx', 'js', 'jsx'],
-  // Ignore TypeScript errors during build
+  // Enable TypeScript checking during build
   typescript: {
-    ignoreBuildErrors: true,
+    // ignoreBuildErrors: true,  // ✅ Removed - all errors fixed
   },
   
   // Security Headers

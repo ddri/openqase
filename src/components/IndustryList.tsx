@@ -7,10 +7,8 @@ import { Label } from '@/components/ui/label';
 import type { Database } from '@/types/supabase';
 import ContentCard from '@/components/ui/content-card';
 
-// Define Industry type from Database with additional properties
-type Industry = Database['public']['Tables']['industries']['Row'] & {
-  sector?: string; // Add sector property which appears to be used but not in the DB schema
-};
+// Use the exact Industry type from Database
+type Industry = Database['public']['Tables']['industries']['Row'];
 
 interface IndustryListProps {
   industries: Industry[];
@@ -25,21 +23,21 @@ export default function IndustryList({ industries }: IndustryListProps) {
 
   // Memoize unique sectors for filtering
   const sectors = useMemo(() => {
-    return Array.from(new Set(industries.map(ind => ind.sector || 'Other'))).sort();
+    return Array.from(new Set(industries.flatMap(ind => ind.sector || ['Other']))).sort();
   }, [industries]);
 
   // Memoize expensive filtering and sorting operations
   const filteredIndustries = useMemo(() => {
     return industries
     .filter(industry => {
-      if (sectorFilter !== 'all' && industry.sector !== sectorFilter) return false;
+      if (sectorFilter !== 'all' && !industry.sector?.includes(sectorFilter)) return false;
       if (!searchQuery) return true;
       
       const query = searchQuery.toLowerCase();
       return (
         industry.name.toLowerCase().includes(query) ||
         industry.description?.toLowerCase().includes(query) ||
-        (industry.sector || '').toLowerCase().includes(query)
+        industry.sector?.some(s => s.toLowerCase().includes(query))
       );
     })
     .sort((a, b) => {
@@ -142,9 +140,7 @@ export default function IndustryList({ industries }: IndustryListProps) {
             key={industry.slug}
             title={industry.name}
             description={industry.description || ''}
-            badges={[
-              industry.sector || 'Other',
-            ]}
+            badges={industry.sector || ['Other']}
             href={`/paths/industry/${industry.slug}`}
           />
         ))}

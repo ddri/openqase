@@ -1,14 +1,6 @@
 import * as React from "react";
 import { Steps, Step } from "./steps";
-import MarkdownIt from 'markdown-it';
-
-// Initialize markdown-it with same settings used in algorithm pages
-const md = new MarkdownIt({
-  html: true,
-  linkify: true,
-  typographer: true,
-  breaks: true
-});
+import { processMarkdown } from '@/lib/markdown-server';
 
 interface StepsRendererProps {
   stepsMarkup: string;
@@ -36,7 +28,7 @@ export const StepsRenderer: React.FC<StepsRendererProps> = ({ stepsMarkup }) => 
     <Steps>
       {steps.map((step, idx) => (
         <Step key={idx} title={step.title} number={idx + 1}>
-          <div dangerouslySetInnerHTML={{ __html: md.render(step.content) }} />
+          <div dangerouslySetInnerHTML={{ __html: processMarkdown(step.content) }} />
         </Step>
       ))}
     </Steps>

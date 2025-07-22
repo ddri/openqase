@@ -12,3 +12,5 @@
 (Use `node --trace-deprecation ...` to show where the warning was created)
 Fetching industry with slug: aerospace
 Fetching case studies for industry: Aerospace
+Fetching industry with slug: agriculture
+Fetching case studies for industry: Agriculture

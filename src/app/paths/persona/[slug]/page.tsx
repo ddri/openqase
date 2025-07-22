@@ -6,16 +6,8 @@ import LearningPathLayout from '@/components/ui/learning-path-layout';
 import ContentCard from '@/components/ui/content-card';
 import { Badge } from '@/components/ui/badge';
 import Link from 'next/link';
-import MarkdownIt from 'markdown-it';
+import { processMarkdown } from '@/lib/markdown-server';
 import { AutoSchema } from '@/components/AutoSchema';
-
-// Initialize markdown-it
-const md = new MarkdownIt({
-  html: true,
-  linkify: true,
-  typographer: true,
-  breaks: true
-});
 
 // Define enriched types that match the actual relationship queries
 type EnrichedPersona = Database['public']['Tables']['personas']['Row'] & {
@@ -36,48 +28,6 @@ type PersonaRelatedCaseStudy = {
 type EnrichedCaseStudyForPersonaPage = Database['public']['Tables']['case_studies']['Row'] & {
   case_study_industry_relations?: { industries: { id: string; name: string; slug?: string | null } | null }[];
   // Add other relations here if fetched in the future, e.g., for algorithms
-};
-
-// Function to fix bullet points in markdown content
-function preprocessMarkdown(content: string): string {
-  // Fix lists: ensure there's a space after each dash at the beginning of a line
-  // and add a newline before lists if needed
-  const fixedContent = content
-    .replace(/^-([^\s])/gm, '- $1')  // Add space after dash at line start if missing
-    .replace(/([^\n])\n^-\s/gm, '$1\n\n- '); // Add blank line before list starts
-    
-  return fixedContent;
-}
-
-// Customize renderer to improve table formatting
-const defaultRender = md.renderer.rules.table_open || function(tokens, idx, options, env, self) {
-  return self.renderToken(tokens, idx, options);
-};
-
-md.renderer.rules.table_open = function(tokens, idx, options, env, self) {
-  // Add a div wrapper with a class around the table
-  return '<div class="table-container">' + defaultRender(tokens, idx, options, env, self);
-};
-
-md.renderer.rules.table_close = function(tokens, idx, options, env, self) {
-  // Close both the table and the wrapper div
-  return '</table></div>';
-};
-
-// Customize cell rendering for numeric detection
-const defaultCellRender = md.renderer.rules.td_open || function(tokens, idx, options, env, self) {
-  return self.renderToken(tokens, idx, options);
-};
-
-md.renderer.rules.td_open = function(tokens, idx, options, env, self) {
-  // Check if cell content might be numeric
-  const content = tokens[idx+1]?.content;
-  const isNumeric = content && !isNaN(parseFloat(content)) && content.trim() !== '';
-  
-  if (isNumeric) {
-    return '<td class="numeric">';
-  }
-  return defaultCellRender(tokens, idx, options, env, self);
 };
 
 type Persona = Database['public']['Tables']['personas']['Row'];
@@ -147,19 +97,9 @@ export default async function PersonaPage({ params }: PageParams) {
 
   console.log(`[PersonaPage] Extracted ${caseStudies.length} case studies from persona relations`);
 
-  // Preprocess and render markdown content
-  let renderedContent = '';
-  let renderedRecommendedReading = '';
-  
-  if (persona.main_content) {
-    const preprocessedContent = preprocessMarkdown(persona.main_content);
-    renderedContent = md.render(preprocessedContent);
-  }
-  
-  if (persona.recommended_reading) {
-    const preprocessedReading = preprocessMarkdown(persona.recommended_reading);
-    renderedRecommendedReading = md.render(preprocessedReading);
-  }
+  // Process markdown content with server-side processor
+  const renderedContent = processMarkdown(persona.main_content);
+  const renderedRecommendedReading = processMarkdown(persona.recommended_reading);
 
   return (
     <>

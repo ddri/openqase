@@ -25,6 +25,38 @@ This document outlines the planned features, improvements, and priorities for th
     *   **Priority**: Medium - affects admin usability
     *   **Status**: Documented
 
+### ⚡ **Performance Optimization**
+*   **Critical Bundle & Build Issues** 
+    *   Enable build validation (remove `ignoreBuildErrors: true`)
+    *   Implement webpack bundle analysis integration  
+    *   Remove production console.log statements (19+ found)
+    *   Clean unused dependencies (`prismjs`, redundant packages)
+    *   Priority: High - immediate performance impact
+    *   Status: Identified
+
+*   **Database Query Optimization**
+    *   Fix N+1 query patterns in content-fetchers.ts
+    *   Implement proper caching strategy for database calls
+    *   Optimize relationship loading (loads all regardless of need)
+    *   Priority: High - 300x improvement potential
+    *   Status: Identified
+
+*   **Client-Side Performance**
+    *   Add React memoization (memo, useMemo, useCallback) 
+    *   Re-enable Next.js image optimization (currently disabled)
+    *   Implement selective hydration for better Core Web Vitals
+    *   Consolidate markdown processing (eliminate client-side redundancy)
+    *   Priority: Medium - user experience impact
+    *   Status: Identified
+
+*   **Bundle Size Reduction**
+    *   Consolidate Radix UI packages (8 separate imports)
+    *   Remove redundant markdown libraries (markdown-it + react-markdown)
+    *   Implement dynamic imports for admin-only functionality
+    *   Optimize TanStack Query loading (loads on every page)
+    *   Priority: Medium - startup performance
+    *   Status: Identified
+
 ### 🚀 **Feature Enhancements**
 *   **Blog Migration Completion**  
     *   Complete blog posts migration to unified content fetching system

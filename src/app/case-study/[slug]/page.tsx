@@ -4,8 +4,8 @@ import { getStaticContentWithRelationships, generateStaticParamsForContentType }
 import type { Database } from '@/types/supabase';
 import LearningPathLayout from '@/components/ui/learning-path-layout';
 import { Badge } from '@/components/ui/badge';
-import MarkdownIt from 'markdown-it';
 import { ReferencesRenderer, processContentWithReferences } from '@/components/ui/ReferencesRenderer';
+import { processMarkdown } from '@/lib/markdown-server';
 import Link from 'next/link';
 import { AutoSchema } from '@/components/AutoSchema';
 
@@ -23,44 +23,6 @@ interface CaseStudyPageProps {
   params: Promise<{ slug: string }>;
 }
 
-// Initialize markdown-it with GFM features enabled
-const md = new MarkdownIt({
-  html: true,
-  linkify: true,
-  typographer: true,
-  breaks: true
-});
-
-// Function to fix bullet points in markdown content
-function preprocessMarkdown(content: string): string {
-  // Fix lists: ensure there's a space after each dash at the beginning of a line
-  // and add a newline before lists if needed
-  const fixedContent = content
-    .replace(/^-([^\s])/gm, '- $1')  // Add space after dash at line start if missing
-    .replace(/([^\n])\n^-\s/gm, '$1\n\n- '); // Add blank line before list starts
-    
-  return fixedContent;
-}
-
-// Customize renderer to improve table formatting
-const defaultRender = md.renderer.rules.table_open || function(tokens, idx, options, env, self) {
-  return self.renderToken(tokens, idx, options);
-};
-
-md.renderer.rules.table_open = function(tokens, idx, options, env, self) {
-  // Add a div wrapper with a class around the table
-  return '<div class="table-container">' + defaultRender(tokens, idx, options, env, self);
-};
-
-md.renderer.rules.table_close = function(tokens, idx, options, env, self) {
-  // Close both the table and the wrapper div
-  return '</table></div>';
-};
-
-// Customize cell rendering for numeric detection
-const defaultCellRender = md.renderer.rules.td_open || function(tokens, idx, options, env, self) {
-  return self.renderToken(tokens, idx, options);
-};
 
 // Get metadata for the page
 export async function generateMetadata({ params }: CaseStudyPageProps) {
@@ -107,15 +69,12 @@ export default async function CaseStudyPage({ params }: CaseStudyPageProps) {
   // Process content with references if available
   let processedContent = '';
   if (caseStudy.main_content) {
-    // Preprocess the markdown content to fix list formatting
-    const preprocessedContent = preprocessMarkdown(caseStudy.main_content);
-    
     // Process citations in content if there are references
     if (caseStudy.academic_references) {
-      const processedMarkdown = processContentWithReferences(preprocessedContent);
-      processedContent = md.render(processedMarkdown);
+      const processedMarkdown = processContentWithReferences(caseStudy.main_content);
+      processedContent = await processMarkdown(processedMarkdown);
     } else {
-      processedContent = md.render(preprocessedContent);
+      processedContent = await processMarkdown(caseStudy.main_content);
     }
   }
 

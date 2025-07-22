@@ -111,7 +111,6 @@ export async function GET(request: NextRequest) {
         
         if (relations && relations.length > 0) {
           const caseStudyIds = relations.map((relation: any) => relation.case_study_id);
-          console.log('Found case study IDs:', caseStudyIds);
           
           // If we already have an ID filter, we need to find the intersection
           if (filters.id) {
@@ -186,7 +185,6 @@ export async function GET(request: NextRequest) {
         
         if (relations && relations.length > 0) {
           const caseStudyIds = relations.map((relation: any) => relation.case_study_id);
-          console.log('Found case study IDs:', caseStudyIds);
           filters.id = caseStudyIds;
         } else {
           // No matching case studies, return empty result
@@ -242,7 +240,6 @@ export async function GET(request: NextRequest) {
         
         if (relations && relations.length > 0) {
           const caseStudyIds = relations.map((relation: any) => relation.case_study_id);
-          console.log('Found case study IDs:', caseStudyIds);
           
           // If we already have an ID filter, we need to find the intersection
           if (filters.id) {

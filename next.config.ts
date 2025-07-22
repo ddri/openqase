@@ -2,11 +2,6 @@ import { withSentryConfig } from '@sentry/nextjs';
 // next.config.ts
 import type { NextConfig } from "next";
 
-// Bundle analyzer configuration
-const withBundleAnalyzer = require('@next/bundle-analyzer')({
-  enabled: process.env.ANALYZE === 'true',
-});
-
 // Hybrid approach: Static generation for public content, dynamic for admin
 // Use NEXT_STATIC_EXPORT=true for full static export (public sites only)
 const isFullStaticExport = process.env.NEXT_STATIC_EXPORT === 'true';
@@ -103,7 +98,7 @@ const nextConfig: NextConfig = {
 };
 
 // Single Sentry configuration (using the correct org)
-export default withSentryConfig(withBundleAnalyzer(nextConfig), {
+export default withSentryConfig(nextConfig, {
   // For all available options, see:
   // https://www.npmjs.com/package/@sentry/webpack-plugin#options
   org: "openqase-9y",

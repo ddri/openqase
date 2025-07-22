@@ -51,6 +51,16 @@ export default function PersonaList({ personas }: PersonaListProps) {
           return (a.name || '').localeCompare(b.name || '');
       }
     });
+  }, [personas, searchQuery, sortBy]);
+
+  // Memoize event handlers to prevent child re-renders
+  const handleSearchChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchQuery(e.target.value);
+  }, []);
+
+  const handleSortChange = useCallback((value: SortOption) => {
+    setSortBy(value);
+  }, []);
 
   return (
     <div className="space-y-6">

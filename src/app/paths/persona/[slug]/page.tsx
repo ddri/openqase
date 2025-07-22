@@ -4,9 +4,6 @@ import { getStaticContentWithRelationships, generateStaticParamsForContentType }
 import type { Database } from '@/types/supabase';
 import LearningPathLayout from '@/components/ui/learning-path-layout';
 import ContentCard from '@/components/ui/content-card';
-import dynamic from 'next/dynamic';
-
-const AuthGate = dynamic(() => import('@/components/auth/AuthGate'));
 import { Badge } from '@/components/ui/badge';
 import Link from 'next/link';
 import MarkdownIt from 'markdown-it';
@@ -169,10 +166,6 @@ export default async function PersonaPage({ params }: PageParams) {
       {/* Ghost-style automatic course schema */}
       <AutoSchema type="course" data={persona} courseType="persona" />
       
-      <AuthGate
-        title="Access Persona Details"
-        description="Get exclusive access to detailed quantum computing learning paths."
-      >
       <LearningPathLayout
         title={persona.name}
         description={persona.description || ''}
@@ -286,7 +279,6 @@ export default async function PersonaPage({ params }: PageParams) {
           </div>
         </div>
       </LearningPathLayout>
-      </AuthGate>
     </>
   );
 }

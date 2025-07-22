@@ -2,7 +2,7 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 import { updateSession } from '@/lib/supabase-middleware'
-import { requireAuthForContent } from '@/lib/auth-config'
+// Auth config removed - content is now free to access
 
 const protectedRoutes = [
   '/paths',
@@ -25,7 +25,7 @@ export async function middleware(req: NextRequest) {
   const isAuthCallback = req.nextUrl.pathname === '/auth/callback'
   const isAdminRoute = adminRoutes.some(route => req.nextUrl.pathname.startsWith(route))
   const isProtectedRoute = protectedRoutes.some(route => req.nextUrl.pathname.startsWith(route))
-  const authRequired = requireAuthForContent()
+  const authRequired = false // Content is now free to access
   const isApiRoute = req.nextUrl.pathname.startsWith('/api')
 
   // Handle auth callback - must come first

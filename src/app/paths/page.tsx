@@ -7,9 +7,6 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { Users, Building2, Atom } from 'lucide-react';
-import dynamic from 'next/dynamic';
-
-const AuthGate = dynamic(() => import('@/components/auth/AuthGate'));
 
 export const metadata: Metadata = {
   title: 'Quantum Computing Learning Paths | Role-Based & Industry-Specific - OpenQase',
@@ -40,11 +37,7 @@ export default async function LearningPathsPage() {
   ];
 
   return (
-    <AuthGate
-      title="Get Personalized Learning Paths"
-      description="Sign up to unlock progress tracking, personalized recommendations, and curated content based on your interests and goals."
-    >
-      <main className="min-h-screen">
+    <main className="min-h-screen">
         <div className="container-outer section-spacing">
           <div className="max-w-3xl mx-auto text-center mb-12 md:mb-16">
             <h1 className="mb-6">
@@ -84,6 +77,5 @@ export default async function LearningPathsPage() {
           </div>
         </div>
       </main>
-    </AuthGate>
   );
 }

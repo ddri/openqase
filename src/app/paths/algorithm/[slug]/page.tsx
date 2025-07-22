@@ -4,9 +4,6 @@ import { getStaticContentWithRelationships, generateStaticParamsForContentType }
 import type { Database } from '@/types/supabase';
 import LearningPathLayout from '@/components/ui/learning-path-layout';
 import { Badge } from '@/components/ui/badge';
-import dynamic from 'next/dynamic';
-
-const AuthGate = dynamic(() => import('@/components/auth/AuthGate'));
 import MarkdownIt from 'markdown-it';
 import { StepsRenderer } from '@/components/ui/StepsRenderer';
 import { ReferencesRenderer, processContentWithReferences } from '@/components/ui/ReferencesRenderer';
@@ -153,11 +150,7 @@ export default async function AlgorithmPage({ params }: AlgorithmPageProps) {
   }
 
   return (
-    <AuthGate
-      title="Unlock Enhanced Algorithm Features"
-      description="Sign up to access interactive examples, save implementations, and track your algorithm learning progress."
-    >
-      <LearningPathLayout 
+    <LearningPathLayout 
         title={algorithm.name}
         backLinkText="Back to Algorithms"
         backLinkHref="/paths/algorithm"
@@ -303,6 +296,5 @@ export default async function AlgorithmPage({ params }: AlgorithmPageProps) {
           </div>
         </div>
       </LearningPathLayout>
-    </AuthGate>
   );
 }

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useMemo, useCallback } from 'react';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Label } from '@/components/ui/label';
@@ -20,8 +20,9 @@ export default function PersonaList({ personas }: PersonaListProps) {
   const [searchQuery, setSearchQuery] = useState('');
   const [sortBy, setSortBy] = useState<SortOption>('name-asc');
 
-  // Filter and sort personas
-  const filteredPersonas = personas
+  // Memoize expensive filtering and sorting operations
+  const filteredPersonas = useMemo(() => {
+    return personas
     .filter(persona => {
       if (!searchQuery) return true;
       
@@ -64,7 +65,7 @@ export default function PersonaList({ personas }: PersonaListProps) {
             type="search"
             placeholder="Search by name, description, or expertise..."
             value={searchQuery}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchQuery(e.target.value)}
+            onChange={handleSearchChange}
             className="w-full"
           />
         </div>
@@ -73,7 +74,7 @@ export default function PersonaList({ personas }: PersonaListProps) {
           <Label htmlFor="sort" className="text-sm font-medium mb-1.5 block">
             Sort by
           </Label>
-          <Select value={sortBy} onValueChange={(value: SortOption) => setSortBy(value)}>
+          <Select value={sortBy} onValueChange={handleSortChange}>
             <SelectTrigger id="sort" className="w-full">
               <SelectValue placeholder="Sort by" />
             </SelectTrigger>

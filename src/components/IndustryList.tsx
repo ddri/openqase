@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useMemo, useCallback } from 'react';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Label } from '@/components/ui/label';
@@ -23,11 +23,14 @@ export default function IndustryList({ industries }: IndustryListProps) {
   const [sectorFilter, setSectorFilter] = useState('all');
   const [sortBy, setSortBy] = useState<SortOption>('name-asc');
 
-  // Get unique sectors for filtering
-  const sectors = Array.from(new Set(industries.map(ind => ind.sector || 'Other'))).sort();
+  // Memoize unique sectors for filtering
+  const sectors = useMemo(() => {
+    return Array.from(new Set(industries.map(ind => ind.sector || 'Other'))).sort();
+  }, [industries]);
 
-  // Filter and sort industries
-  const filteredIndustries = industries
+  // Memoize expensive filtering and sorting operations
+  const filteredIndustries = useMemo(() => {
+    return industries
     .filter(industry => {
       if (sectorFilter !== 'all' && industry.sector !== sectorFilter) return false;
       if (!searchQuery) return true;
@@ -57,6 +60,20 @@ export default function IndustryList({ industries }: IndustryListProps) {
           return a.name.localeCompare(b.name);
       }
     });
+  }, [industries, sectorFilter, searchQuery, sortBy]);
+
+  // Memoize event handlers to prevent child re-renders
+  const handleSearchChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchQuery(e.target.value);
+  }, []);
+
+  const handleSectorFilterChange = useCallback((value: string) => {
+    setSectorFilter(value);
+  }, []);
+
+  const handleSortChange = useCallback((value: SortOption) => {
+    setSortBy(value);
+  }, []);
 
   return (
     <div className="space-y-6">
@@ -71,7 +88,7 @@ export default function IndustryList({ industries }: IndustryListProps) {
             type="search"
             placeholder="Search by name, description, or sector..."
             value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
+            onChange={handleSearchChange}
             className="w-full"
           />
         </div>
@@ -80,7 +97,7 @@ export default function IndustryList({ industries }: IndustryListProps) {
           <Label htmlFor="sector" className="text-sm font-medium mb-1.5 block">
             Sector
           </Label>
-          <Select value={sectorFilter} onValueChange={setSectorFilter}>
+          <Select value={sectorFilter} onValueChange={handleSectorFilterChange}>
             <SelectTrigger id="sector" className="w-full">
               <SelectValue placeholder="Filter by sector" />
             </SelectTrigger>
@@ -99,7 +116,7 @@ export default function IndustryList({ industries }: IndustryListProps) {
           <Label htmlFor="sort" className="text-sm font-medium mb-1.5 block">
             Sort by
           </Label>
-          <Select value={sortBy} onValueChange={(value: SortOption) => setSortBy(value)}>
+          <Select value={sortBy} onValueChange={handleSortChange}>
             <SelectTrigger id="sort" className="w-full">
               <SelectValue placeholder="Sort by" />
             </SelectTrigger>

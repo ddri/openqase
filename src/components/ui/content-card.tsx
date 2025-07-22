@@ -1,3 +1,4 @@
+import { memo, useMemo } from 'react';
 import Link from 'next/link';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -10,16 +11,19 @@ interface ContentCardProps {
   href: string;
 }
 
-export default function ContentCard({
+const ContentCard = memo(function ContentCard({
   title,
   description,
   badges,
   href
 }: ContentCardProps) {
-  // Sort badges by length for better visual hierarchy - can be done server-side
-  const sortedBadges = [...badges].sort((a, b) => a.length - b.length);
-  const displayBadges = sortedBadges.slice(0, 3);
-  const remainingCount = sortedBadges.length - 3;
+  // Memoize badge processing to avoid recalculating on every render
+  const { displayBadges, remainingCount } = useMemo(() => {
+    const sortedBadges = [...badges].sort((a, b) => a.length - b.length);
+    const displayBadges = sortedBadges.slice(0, 3);
+    const remainingCount = sortedBadges.length - 3;
+    return { displayBadges, remainingCount };
+  }, [badges]);
 
   return (
     <Link href={href} className="group block">
@@ -59,4 +63,6 @@ export default function ContentCard({
       </Card>
     </Link>
   );
-} 
+});
+
+export default ContentCard; 

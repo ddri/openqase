@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useMemo, useCallback } from 'react';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Label } from '@/components/ui/label';
@@ -19,35 +19,46 @@ export default function AlgorithmList({ algorithms }: AlgorithmListProps) {
   const [searchQuery, setSearchQuery] = useState('');
   const [sortBy, setSortBy] = useState<SortOption>('name-asc');
 
-  // Filter and sort algorithms
-  const filteredAlgorithms = algorithms
-    .filter(alg => {
-      if (!searchQuery) return true;
-      const query = searchQuery.toLowerCase();
-      return (
-        alg.name.toLowerCase().includes(query) ||
-        alg.description?.toLowerCase().includes(query) ||
-        alg.use_cases?.some(k => k.toLowerCase().includes(query))
-      );
-    })
-    .sort((a, b) => {
-      switch (sortBy) {
-        case 'name-asc':
-          return a.name.localeCompare(b.name);
-        case 'name-desc':
-          return b.name.localeCompare(a.name);
-        case 'updated-asc':
-          const dateA = a.updated_at ? new Date(a.updated_at).getTime() : 0;
-          const dateB = b.updated_at ? new Date(b.updated_at).getTime() : 0;
-          return dateA - dateB;
-        case 'updated-desc':
-          const dateC = a.updated_at ? new Date(a.updated_at).getTime() : 0;
-          const dateD = b.updated_at ? new Date(b.updated_at).getTime() : 0;
-          return dateD - dateC;
-        default:
-          return a.name.localeCompare(b.name);
-      }
-    });
+  // Memoize expensive filtering and sorting operations
+  const filteredAlgorithms = useMemo(() => {
+    return algorithms
+      .filter(alg => {
+        if (!searchQuery) return true;
+        const query = searchQuery.toLowerCase();
+        return (
+          alg.name.toLowerCase().includes(query) ||
+          alg.description?.toLowerCase().includes(query) ||
+          alg.use_cases?.some(k => k.toLowerCase().includes(query))
+        );
+      })
+      .sort((a, b) => {
+        switch (sortBy) {
+          case 'name-asc':
+            return a.name.localeCompare(b.name);
+          case 'name-desc':
+            return b.name.localeCompare(a.name);
+          case 'updated-asc':
+            const dateA = a.updated_at ? new Date(a.updated_at).getTime() : 0;
+            const dateB = b.updated_at ? new Date(b.updated_at).getTime() : 0;
+            return dateA - dateB;
+          case 'updated-desc':
+            const dateC = a.updated_at ? new Date(a.updated_at).getTime() : 0;
+            const dateD = b.updated_at ? new Date(b.updated_at).getTime() : 0;
+            return dateD - dateC;
+          default:
+            return a.name.localeCompare(b.name);
+        }
+      });
+  }, [algorithms, searchQuery, sortBy]);
+
+  // Memoize event handlers to prevent child re-renders
+  const handleSearchChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchQuery(e.target.value);
+  }, []);
+
+  const handleSortChange = useCallback((value: SortOption) => {
+    setSortBy(value);
+  }, []);
 
   return (
     <div className="space-y-6">
@@ -62,7 +73,7 @@ export default function AlgorithmList({ algorithms }: AlgorithmListProps) {
             type="search"
             placeholder="Search by name, description, or use cases..."
             value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
+            onChange={handleSearchChange}
             className="w-full"
           />
         </div>
@@ -71,7 +82,7 @@ export default function AlgorithmList({ algorithms }: AlgorithmListProps) {
           <Label htmlFor="sort" className="text-sm font-medium mb-1.5 block">
             Sort by
           </Label>
-          <Select value={sortBy} onValueChange={(value: SortOption) => setSortBy(value)}>
+          <Select value={sortBy} onValueChange={handleSortChange}>
             <SelectTrigger id="sort" className="w-full">
               <SelectValue placeholder="Sort by" />
             </SelectTrigger>

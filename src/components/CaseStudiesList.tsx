@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useMemo, useCallback } from 'react';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Label } from '@/components/ui/label';
@@ -24,13 +24,16 @@ export function CaseStudiesList({ caseStudies }: CaseStudiesListProps) {
     return <div>No case studies found.</div>;
   }
 
-  // Get unique years for filter dropdown
-  const availableYears = Array.from(
-    new Set(caseStudies.map(cs => cs.year).filter(Boolean))
-  ).sort((a, b) => b - a); // Sort years descending
+  // Memoize unique years for filter dropdown
+  const availableYears = useMemo(() => {
+    return Array.from(
+      new Set(caseStudies.map(cs => cs.year).filter(Boolean))
+    ).sort((a, b) => b - a); // Sort years descending
+  }, [caseStudies]);
 
-  // Filter and sort case studies
-  const filteredCaseStudies = caseStudies
+  // Memoize expensive filtering and sorting operations
+  const filteredCaseStudies = useMemo(() => {
+    return caseStudies
     .filter(caseStudy => {
       // Year filter
       if (yearFilter !== 'all' && caseStudy.year !== parseInt(yearFilter)) {
@@ -75,6 +78,20 @@ export function CaseStudiesList({ caseStudies }: CaseStudiesListProps) {
           return a.title.localeCompare(b.title);
       }
     });
+  }, [caseStudies, yearFilter, searchQuery, sortBy]);
+
+  // Memoize event handlers to prevent child re-renders
+  const handleSearchChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchQuery(e.target.value);
+  }, []);
+
+  const handleSortChange = useCallback((value: SortOption) => {
+    setSortBy(value);
+  }, []);
+
+  const handleYearFilterChange = useCallback((value: string) => {
+    setYearFilter(value);
+  }, []);
 
   return (
     <div className="space-y-6">
@@ -89,7 +106,7 @@ export function CaseStudiesList({ caseStudies }: CaseStudiesListProps) {
             type="search"
             placeholder="Search by title, description, or year..."
             value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
+            onChange={handleSearchChange}
             className="w-full"
           />
         </div>
@@ -98,7 +115,7 @@ export function CaseStudiesList({ caseStudies }: CaseStudiesListProps) {
           <Label htmlFor="year-filter" className="text-sm font-medium mb-1.5 block">
             Filter by year
           </Label>
-          <Select value={yearFilter} onValueChange={setYearFilter}>
+          <Select value={yearFilter} onValueChange={handleYearFilterChange}>
             <SelectTrigger id="year-filter" className="w-full">
               <SelectValue placeholder="All years" />
             </SelectTrigger>
@@ -117,7 +134,7 @@ export function CaseStudiesList({ caseStudies }: CaseStudiesListProps) {
           <Label htmlFor="sort" className="text-sm font-medium mb-1.5 block">
             Sort by
           </Label>
-          <Select value={sortBy} onValueChange={(value: SortOption) => setSortBy(value)}>
+          <Select value={sortBy} onValueChange={handleSortChange}>
             <SelectTrigger id="sort" className="w-full">
               <SelectValue placeholder="Sort by" />
             </SelectTrigger>

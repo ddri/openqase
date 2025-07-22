@@ -7,7 +7,9 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { Users, Building2, Atom } from 'lucide-react';
-import AuthGate from '@/components/auth/AuthGate';
+import dynamic from 'next/dynamic';
+
+const AuthGate = dynamic(() => import('@/components/auth/AuthGate'));
 
 export const metadata: Metadata = {
   title: 'Quantum Computing Learning Paths | Role-Based & Industry-Specific - OpenQase',

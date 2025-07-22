@@ -4,7 +4,9 @@ import { getStaticContentWithRelationships, generateStaticParamsForContentType }
 import type { Database } from '@/types/supabase';
 import LearningPathLayout from '@/components/ui/learning-path-layout';
 import ContentCard from '@/components/ui/content-card';
-import AuthGate from '@/components/auth/AuthGate';
+import dynamic from 'next/dynamic';
+
+const AuthGate = dynamic(() => import('@/components/auth/AuthGate'));
 import { Badge } from '@/components/ui/badge';
 import Link from 'next/link';
 import MarkdownIt from 'markdown-it';

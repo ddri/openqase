@@ -1,0 +1,73 @@
+
+> openqase@0.3.0 dev
+> next dev
+
+   ▲ Next.js 15.4.1
+   - Local:        http://localhost:3001
+   - Network:      http://192.168.20.4:3001
+   - Environments: .env.local, .env
+   - Experiments (use with caution):
+     · clientTraceMetadata
+     · optimizePackageImports
+
+ ✓ Starting...
+ ○ Compiling /instrumentation ...
+ ✓ Compiled /instrumentation in 2.8s (2304 modules)
+[Sentry] Cannot initialize SDK with `debug` option using a non-debug bundle.
+ ✓ Ready in 7s
+ ○ Compiling / ...
+ ✓ Compiled / in 8.9s (7240 modules)
+ GET / 200 in 11447ms
+ ✓ Compiled in 3s (811 modules)
+ GET / 200 in 256ms
+ GET / 200 in 101ms
+ GET / 200 in 230ms
+(node:27977) [DEP0060] DeprecationWarning: The `util._extend` API is deprecated. Please use Object.assign() instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+ ○ Compiling /paths ...
+ ✓ Compiled /paths in 2.2s (7244 modules)
+ GET /paths 200 in 3079ms
+ ○ Compiling /paths/industry ...
+ ✓ Compiled /paths/industry in 1617ms (7377 modules)
+ GET /paths/industry 200 in 2448ms
+ ○ Compiling /paths/industry/[slug] ...
+ ✓ Compiled /paths/industry/[slug] in 1738ms (7458 modules)
+Fetching industry with slug: aerospace
+Fetching case studies for industry: Aerospace
+ GET /paths/industry/aerospace 200 in 3971ms
+ GET / 200 in 1224ms
+ GET / 200 in 141ms
+ ⚠ Found a change in next.config.ts. Restarting the server to apply the changes...
+node:internal/modules/cjs/loader:1405
+  const err = new Error(message);
+              ^
+
+Error: Cannot find module '@next/bundle-analyzer'
+Require stack:
+- /Users/dryan/GitHub/openqase/next.config.compiled.js
+- /Users/dryan/GitHub/openqase/node_modules/next/dist/build/next-config-ts/transpile-config.js
+- /Users/dryan/GitHub/openqase/node_modules/next/dist/server/config.js
+- /Users/dryan/GitHub/openqase/node_modules/next/dist/server/next.js
+- /Users/dryan/GitHub/openqase/node_modules/next/dist/server/lib/start-server.js
+    at Function.<anonymous> (node:internal/modules/cjs/loader:1405:15)
+    at /Users/dryan/GitHub/openqase/node_modules/next/dist/server/require-hook.js:57:36
+    at defaultResolveImpl (node:internal/modules/cjs/loader:1061:19)
+    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1066:22)
+    at Function._load (node:internal/modules/cjs/loader:1215:37)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:235:24)
+    at Module.<anonymous> (node:internal/modules/cjs/loader:1491:12)
+    at mod.require (/Users/dryan/GitHub/openqase/node_modules/next/dist/server/require-hook.js:68:28)
+    at require (node:internal/modules/helpers:135:16) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '/Users/dryan/GitHub/openqase/next.config.compiled.js',
+    '/Users/dryan/GitHub/openqase/node_modules/next/dist/build/next-config-ts/transpile-config.js',
+    '/Users/dryan/GitHub/openqase/node_modules/next/dist/server/config.js',
+    '/Users/dryan/GitHub/openqase/node_modules/next/dist/server/next.js',
+    '/Users/dryan/GitHub/openqase/node_modules/next/dist/server/lib/start-server.js'
+  ]
+}
+
+Node.js v23.11.0
+[?25h

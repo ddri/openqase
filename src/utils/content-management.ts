@@ -1,4 +1,4 @@
-import { createBrowserSupabaseClient } from '@/lib/supabase-browser';
+import { supabase } from '@/lib/supabase-browser';
 import { createServiceRoleSupabaseClient } from '@/lib/supabase-server';
 import { PostgrestError } from '@supabase/supabase-js';
 
@@ -37,7 +37,7 @@ export async function fetchContentItems({
   orderBy?: string;
   orderDirection?: 'asc' | 'desc';
 }) {
-  const supabase = createBrowserSupabaseClient();
+  // Using singleton supabase instance
   
   // Apply direct filters to the main table
   let query = supabase
@@ -104,7 +104,7 @@ export async function fetchContentItem({
     fields?: string;
   }>;
 }) {
-  const supabase = createBrowserSupabaseClient();
+  // Using singleton supabase instance
   
   let query = supabase
     .from(contentType)
@@ -317,7 +317,7 @@ export async function slugToId({
   contentType: ContentType;
   slug: string;
 }) {
-  const supabase = createBrowserSupabaseClient();
+  // Using singleton supabase instance
   
   const { data, error } = await supabase
     .from(contentType)

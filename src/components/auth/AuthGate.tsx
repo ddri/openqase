@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { createBrowserSupabaseClient } from '@/lib/supabase-browser';
+import { supabase } from '@/lib/supabase-browser';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
@@ -25,7 +25,7 @@ export default function AuthGate({ children, title, description }: AuthGateProps
     return children;
   }
 
-  const supabase = createBrowserSupabaseClient();
+  // Using singleton supabase instance
 
   useEffect(() => {
     // Only run auth checks if auth is actually required

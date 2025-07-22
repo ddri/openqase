@@ -1,9 +1,14 @@
 'use client';
 
 import { ReactNode } from 'react';
-import AuthGate from '@/components/auth/AuthGate';
+import dynamic from 'next/dynamic';
 import { ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
+
+const AuthGate = dynamic(() => import('@/components/auth/AuthGate'), {
+  ssr: false,
+  loading: () => null
+});
 
 interface LearningPathLayoutProps {
   title: string;

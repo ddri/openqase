@@ -4,7 +4,15 @@ import ContentCard from '@/components/ui/content-card';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
-import { User, Building2, CircuitBoard, ArrowRight, Brain, FileText, Users } from 'lucide-react';
+import { 
+  User, 
+  Building2, 
+  CircuitBoard, 
+  ArrowRight, 
+  Brain, 
+  FileText, 
+  Users 
+} from 'lucide-react';
 import { AutoSchema } from '@/components/AutoSchema';
 
 interface FeatureCard {

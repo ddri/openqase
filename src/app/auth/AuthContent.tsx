@@ -7,13 +7,13 @@ import { useEffect, useState } from 'react'
 import { toast } from '@/components/ui/use-toast'
 import { Loader2 } from 'lucide-react'
 import { ErrorBoundary } from '@/components/ui/ErrorBoundary'
-import { createBrowserSupabaseClient } from '@/lib/supabase-browser'
+import { supabase } from '@/lib/supabase-browser'
 import type { AuthChangeEvent, Session } from '@supabase/supabase-js'
 
 export function AuthContent({ redirectTo }: { redirectTo?: string }) {
   const searchParams = useSearchParams()
   const router = useRouter()
-  const supabase = createBrowserSupabaseClient()
+  // Using singleton supabase instance
   const redirectToParam = searchParams.get('redirectTo') || '/'
   const [isLoading, setIsLoading] = useState(true)
   const viewParam = searchParams.get('view')

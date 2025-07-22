@@ -156,22 +156,25 @@ class PerformanceMonitor {
   }
 }
 
-// Create singleton instance
-export const performanceMonitor = new PerformanceMonitor();
+// Create singleton instance - client-side only
+export const performanceMonitor: PerformanceMonitor | null = typeof window !== 'undefined' ? new PerformanceMonitor() : null;
 
 // Hook for React components
 export function usePerformanceMonitor(pageName: string) {
   React.useEffect(() => {
-    performanceMonitor.startPageLoad(pageName);
-    
-    return () => {
-      performanceMonitor.endPageLoad();
-    };
+    if (performanceMonitor) {
+      performanceMonitor.startPageLoad(pageName);
+      
+      return () => {
+        performanceMonitor.endPageLoad();
+      };
+    }
   }, [pageName]);
 }
 
 // Utility to log performance summary to console
 export function logPerformanceSummary() {
+  if (!performanceMonitor) return;
   const summary = performanceMonitor.getPerformanceSummary();
   if (!summary) {
     console.log('📊 No performance data available yet');

@@ -4,7 +4,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter, usePathname } from 'next/navigation';
-import { createBrowserSupabaseClient } from '@/lib/supabase-browser';
+import { supabase } from '@/lib/supabase-browser';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import ThemeToggle from './ThemeToggle';
@@ -32,7 +32,7 @@ export default function Navigation() {
   const { theme } = useTheme();
   const [mounted, setMounted] = useState(false);
   const [user, setUser] = useState<SupabaseUser | null>(null);
-  const supabase = createBrowserSupabaseClient();
+  // Using singleton supabase instance
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
 

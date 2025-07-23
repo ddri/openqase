@@ -271,6 +271,7 @@ export type Database = {
           slug: string
           title: string
           updated_at: string | null
+          year: number
         }
         Insert: {
           academic_references?: string | null
@@ -289,6 +290,7 @@ export type Database = {
           slug: string
           title: string
           updated_at?: string | null
+          year?: number
         }
         Update: {
           academic_references?: string | null
@@ -307,6 +309,7 @@ export type Database = {
           slug?: string
           title?: string
           updated_at?: string | null
+          year?: number
         }
         Relationships: []
       }
@@ -425,13 +428,13 @@ export type Database = {
         Row: {
           created_at: string | null
           description: string | null
-          icon: string | null
           id: string
           is_system_record: boolean | null
           main_content: string | null
           name: string
           published: boolean | null
           published_at: string | null
+          sector: string[] | null
           slug: string
           ts_content: unknown | null
           updated_at: string | null
@@ -439,13 +442,13 @@ export type Database = {
         Insert: {
           created_at?: string | null
           description?: string | null
-          icon?: string | null
           id?: string
           is_system_record?: boolean | null
           main_content?: string | null
           name: string
           published?: boolean | null
           published_at?: string | null
+          sector?: string[] | null
           slug: string
           ts_content?: unknown | null
           updated_at?: string | null
@@ -453,13 +456,13 @@ export type Database = {
         Update: {
           created_at?: string | null
           description?: string | null
-          icon?: string | null
           id?: string
           is_system_record?: boolean | null
           main_content?: string | null
           name?: string
           published?: boolean | null
           published_at?: string | null
+          sector?: string[] | null
           slug?: string
           ts_content?: unknown | null
           updated_at?: string | null

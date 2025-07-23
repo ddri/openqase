@@ -2,7 +2,6 @@
 
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -10,6 +9,7 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { ContentCompleteness } from '@/components/admin/ContentCompleteness';
 import { PublishButton } from '@/components/admin/PublishButton';
+import { TagInput } from '@/components/ui/tag-input';
 import { createContentValidationRules, calculateCompletionPercentage, validateFormValues } from '@/utils/form-validation';
 import { useTransition } from 'react';
 import { ArrowLeft, Save, Loader2 } from 'lucide-react';
@@ -38,7 +38,7 @@ export function IndustryForm({ industry, isNew }: IndustryFormProps) {
     slug: isNew ? '' : industry?.slug || '',
     description: isNew ? '' : industry?.description || '',
     main_content: isNew ? '' : industry?.main_content || '',
-    icon: isNew ? '' : industry?.icon || '',
+    sector: isNew ? [] : industry?.sector || [],
     published: isNew ? false : industry?.published || false,
   });
   const [isDirty, setIsDirty] = useState(false);
@@ -168,63 +168,73 @@ export function IndustryForm({ industry, isNew }: IndustryFormProps) {
   };
   
   return (
-    <div className="space-y-6">
-      <div className="flex justify-between items-center">
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={() => router.push('/admin/industries')}
-          className="flex items-center"
-        >
-          <ArrowLeft className="mr-2 h-4 w-4" />
-          Back
-        </Button>
-        
-        <div className="flex items-center gap-2">
+    <div className="space-y-10 max-w-5xl mx-auto pb-24">
+      {/* Header section with better spacing and styling */}
+      <div className="pt-6 mb-8 bg-background pb-4 border-b border-border">
+        <div className="flex justify-between items-center mb-6">
           <Button
-            type="button"
-            variant="outline"
+            variant="ghost"
             size="sm"
-            onClick={handleSubmit}
-            disabled={isPending || !isDirty}
-            className="min-w-[100px]"
+            onClick={() => router.push('/admin/industries')}
+            className="flex items-center"
           >
-            {isPending ? (
-              <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Saving...
-              </>
-            ) : (
-              <>
-                <Save className="mr-2 h-4 w-4" />
-                Save
-              </>
-            )}
+            <ArrowLeft className="mr-2 h-4 w-4" />
+            Back to Industries
           </Button>
           
-          <PublishButton
-            isPublished={values.published}
-            onPublish={handlePublish}
-            onUnpublish={handleUnpublish}
-            validateContent={validateContent}
-            disabled={isPending}
-            onTabChange={() => {}}
-            getTabLabel={() => ''}
-          />
+          <div className="flex items-center gap-3">
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={handleSubmit}
+              disabled={isPending || !isDirty}
+              className="min-w-[100px]"
+            >
+              {isPending ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Saving...
+                </>
+              ) : (
+                <>
+                  <Save className="mr-2 h-4 w-4" />
+                  Save
+                </>
+              )}
+            </Button>
+            
+            <PublishButton
+              isPublished={values.published}
+              onPublish={handlePublish}
+              onUnpublish={handleUnpublish}
+              validateContent={validateContent}
+              disabled={isPending}
+              onTabChange={(tab: string) => {}}
+              getTabLabel={(tab: string) => tab}
+            />
+          </div>
+        </div>
+        
+        {/* Progress bar section */}
+        <div>
+          <div className="flex justify-between items-center text-sm mb-2">
+            <span className="text-muted-foreground">Content Completeness</span>
+            <span className="font-medium">{completionPercentage}%</span>
+          </div>
+          <ContentCompleteness percentage={completionPercentage} showLabel={false} />
         </div>
       </div>
       
-      <ContentCompleteness percentage={completionPercentage} />
-      
-      <form onSubmit={handleSubmit} className="space-y-6">
+      <form onSubmit={handleSubmit} className="space-y-10">
         {/* Basic Info Section */}
-        <Card>
-          <CardHeader>
+        <Card className="shadow-sm">
+          <CardHeader className="p-6">
             <CardTitle>Basic Info</CardTitle>
           </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="grid grid-cols-1 gap-4">
-              <div className="space-y-2">
+          <CardContent className="space-y-6 p-6 pt-0">
+            <div className="grid grid-cols-1 gap-6">
+              <div className="space-y-3">
                 <Label htmlFor="name">Name</Label>
                 <Input
                   id="name"
@@ -234,7 +244,7 @@ export function IndustryForm({ industry, isNew }: IndustryFormProps) {
                 />
               </div>
               
-              <div className="space-y-2">
+              <div className="space-y-3">
                 <Label htmlFor="slug">Slug</Label>
                 <Input
                   id="slug"
@@ -243,17 +253,26 @@ export function IndustryForm({ industry, isNew }: IndustryFormProps) {
                   placeholder="industry-slug"
                 />
               </div>
+              
+              <div className="space-y-3">
+                <Label htmlFor="sector">Sector</Label>
+                <TagInput
+                  tags={values.sector}
+                  onTagsChange={(newTags) => handleChange('sector', newTags)}
+                  placeholder="Add sector..."
+                />
+              </div>
             </div>
           </CardContent>
         </Card>
         
         {/* Details Section */}
-        <Card>
-          <CardHeader>
+        <Card className="shadow-sm">
+          <CardHeader className="p-6">
             <CardTitle>Details</CardTitle>
           </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="space-y-2">
+          <CardContent className="space-y-6 p-6 pt-0">
+            <div className="space-y-3">
               <Label htmlFor="description">Description</Label>
               <Textarea
                 id="description"
@@ -264,7 +283,7 @@ export function IndustryForm({ industry, isNew }: IndustryFormProps) {
               />
             </div>
             
-            <div className="space-y-2">
+            <div className="space-y-3">
               <Label htmlFor="main_content">Main Content</Label>
               <Textarea
                 id="main_content"
@@ -277,40 +296,6 @@ export function IndustryForm({ industry, isNew }: IndustryFormProps) {
           </CardContent>
         </Card>
         
-        {/* Icon Section */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Icon</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="icon">Icon</Label>
-              <Input
-                id="icon"
-                value={values.icon}
-                onChange={(e) => handleChange('icon', e.target.value)}
-                placeholder="Icon name or URL"
-              />
-              {values.icon && (
-                <div className="mt-4">
-                  <Label>Icon Preview</Label>
-                  <div className="p-4 border rounded-md mt-2 flex items-center justify-center">
-                    <Image
-                      src={values.icon.startsWith('http') ? values.icon : `/icons/${values.icon}`}
-                      alt="Icon Preview"
-                      className="h-16 w-16 object-contain"
-                      width={64}
-                      height={64}
-                      onError={(e) => {
-                        (e.target as HTMLImageElement).src = '/placeholder-icon.svg';
-                      }}
-                    />
-                  </div>
-                </div>
-              )}
-            </div>
-          </CardContent>
-        </Card>
       </form>
     </div>
   );

@@ -68,6 +68,11 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
+                <Link href="/roadmap" className="text-base text-muted-foreground hover:text-accent transition-colors">
+                  Roadmap
+                </Link>
+              </li>
+              <li>
                 <Link href="/contact" className="text-base text-muted-foreground hover:text-accent transition-colors">
                   Contact Us
                 </Link>
@@ -181,6 +186,7 @@ export default function Footer() {
               className="h-10 w-auto"
               width={120}
               height={40}
+              suppressHydrationWarning
             />
           </div>
           <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-center md:text-left">

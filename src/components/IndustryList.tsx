@@ -1,51 +1,77 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useMemo, useCallback } from 'react';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Label } from '@/components/ui/label';
 import type { Database } from '@/types/supabase';
 import ContentCard from '@/components/ui/content-card';
 
-// Define Industry type from Database with additional properties
-type Industry = Database['public']['Tables']['industries']['Row'] & {
-  sector?: string; // Add sector property which appears to be used but not in the DB schema
-};
+// Use the exact Industry type from Database
+type Industry = Database['public']['Tables']['industries']['Row'];
 
 interface IndustryListProps {
   industries: Industry[];
 }
 
+type SortOption = 'name-asc' | 'name-desc' | 'updated-asc' | 'updated-desc';
+
 export default function IndustryList({ industries }: IndustryListProps) {
   const [searchQuery, setSearchQuery] = useState('');
   const [sectorFilter, setSectorFilter] = useState('all');
-  const [sortBy, setSortBy] = useState<'name' | 'created_at'>('name');
+  const [sortBy, setSortBy] = useState<SortOption>('name-asc');
 
-  // Get unique sectors for filtering
-  const sectors = Array.from(new Set(industries.map(ind => ind.sector || 'Other'))).sort();
+  // Memoize unique sectors for filtering
+  const sectors = useMemo(() => {
+    return Array.from(new Set(industries.flatMap(ind => ind.sector || ['Other']))).sort();
+  }, [industries]);
 
-  // Filter and sort industries
-  const filteredIndustries = industries
+  // Memoize expensive filtering and sorting operations
+  const filteredIndustries = useMemo(() => {
+    return industries
     .filter(industry => {
-      if (sectorFilter !== 'all' && industry.sector !== sectorFilter) return false;
+      if (sectorFilter !== 'all' && !industry.sector?.includes(sectorFilter)) return false;
       if (!searchQuery) return true;
       
       const query = searchQuery.toLowerCase();
       return (
         industry.name.toLowerCase().includes(query) ||
         industry.description?.toLowerCase().includes(query) ||
-        (industry.sector || '').toLowerCase().includes(query)
+        industry.sector?.some(s => s.toLowerCase().includes(query))
       );
     })
     .sort((a, b) => {
-      if (sortBy === 'created_at') {
-        // Handle null created_at values
-        const dateA = a.created_at ? new Date(a.created_at).getTime() : 0;
-        const dateB = b.created_at ? new Date(b.created_at).getTime() : 0;
-        return dateB - dateA;
+      switch (sortBy) {
+        case 'name-asc':
+          return a.name.localeCompare(b.name);
+        case 'name-desc':
+          return b.name.localeCompare(a.name);
+        case 'updated-asc':
+          const dateA = a.updated_at ? new Date(a.updated_at).getTime() : 0;
+          const dateB = b.updated_at ? new Date(b.updated_at).getTime() : 0;
+          return dateA - dateB;
+        case 'updated-desc':
+          const dateC = a.updated_at ? new Date(a.updated_at).getTime() : 0;
+          const dateD = b.updated_at ? new Date(b.updated_at).getTime() : 0;
+          return dateD - dateC;
+        default:
+          return a.name.localeCompare(b.name);
       }
-      return a.name.localeCompare(b.name);
     });
+  }, [industries, sectorFilter, searchQuery, sortBy]);
+
+  // Memoize event handlers to prevent child re-renders
+  const handleSearchChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchQuery(e.target.value);
+  }, []);
+
+  const handleSectorFilterChange = useCallback((value: string) => {
+    setSectorFilter(value);
+  }, []);
+
+  const handleSortChange = useCallback((value: SortOption) => {
+    setSortBy(value);
+  }, []);
 
   return (
     <div className="space-y-6">
@@ -60,7 +86,7 @@ export default function IndustryList({ industries }: IndustryListProps) {
             type="search"
             placeholder="Search by name, description, or sector..."
             value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
+            onChange={handleSearchChange}
             className="w-full"
           />
         </div>
@@ -69,7 +95,7 @@ export default function IndustryList({ industries }: IndustryListProps) {
           <Label htmlFor="sector" className="text-sm font-medium mb-1.5 block">
             Sector
           </Label>
-          <Select value={sectorFilter} onValueChange={setSectorFilter}>
+          <Select value={sectorFilter} onValueChange={handleSectorFilterChange}>
             <SelectTrigger id="sector" className="w-full">
               <SelectValue placeholder="Filter by sector" />
             </SelectTrigger>
@@ -88,13 +114,15 @@ export default function IndustryList({ industries }: IndustryListProps) {
           <Label htmlFor="sort" className="text-sm font-medium mb-1.5 block">
             Sort by
           </Label>
-          <Select value={sortBy} onValueChange={(value: 'name' | 'created_at') => setSortBy(value)}>
+          <Select value={sortBy} onValueChange={handleSortChange}>
             <SelectTrigger id="sort" className="w-full">
               <SelectValue placeholder="Sort by" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="name">Name (A-Z)</SelectItem>
-              <SelectItem value="created_at">Last Updated</SelectItem>
+              <SelectItem value="name-asc">Name (A-Z)</SelectItem>
+              <SelectItem value="name-desc">Name (Z-A)</SelectItem>
+              <SelectItem value="updated-desc">Recently Updated</SelectItem>
+              <SelectItem value="updated-asc">Least Recently Updated</SelectItem>
             </SelectContent>
           </Select>
         </div>
@@ -112,9 +140,7 @@ export default function IndustryList({ industries }: IndustryListProps) {
             key={industry.slug}
             title={industry.name}
             description={industry.description || ''}
-            badges={[
-              industry.sector || 'Other',
-            ]}
+            badges={industry.sector || ['Other']}
             href={`/paths/industry/${industry.slug}`}
           />
         ))}

@@ -70,7 +70,8 @@ export default function ContactPage() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 max-w-5xl mx-auto">
+        {/* Single Column Layout */}
+        <div className="max-w-2xl mx-auto space-y-8">
           {/* Contact Form */}
           <Card>
             <CardHeader className="space-y-2">
@@ -141,97 +142,94 @@ export default function ContactPage() {
             </CardContent>
           </Card>
 
-          {/* Additional Contact Info */}
-          <div className="space-y-6 sm:space-y-8">
-            {/* Community Links */}
-            <Card>
-              <CardHeader className="space-y-2">
-                <CardTitle className="text-xl">Join Our Community</CardTitle>
-                <CardDescription>
-                  Connect with us on social media and join our community platforms.
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="grid gap-4">
-                  <Link 
-                    href="https://github.com/ddri/openqase"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-3 text-muted-foreground hover:text-foreground transition-colors p-2 hover:bg-accent/5 rounded-lg"
-                  >
-                    <Github className="h-5 w-5" />
-                    <span>Follow us on GitHub</span>
-                  </Link>
-                  <Link 
-                    href="https://threads.com/openqase"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-3 text-muted-foreground hover:text-foreground transition-colors p-2 hover:bg-accent/5 rounded-lg"
-                  >
-                    <Twitter className="h-5 w-5" />
-                    <span>Follow us on Threads</span>
-                  </Link>
-                  {/*
-                  <Link 
-                    href="https://linkedin.com/company/openqase"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-3 text-muted-foreground hover:text-foreground transition-colors p-2 hover:bg-accent/5 rounded-lg"
-                  >
-                    <Linkedin className="h-5 w-5" />
-                    <span>Connect on LinkedIn</span>
-                  </Link>
-                  */}
-                  {/*
-                  <Link 
-                    href="https://discord.gg/openqase"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-3 text-muted-foreground hover:text-foreground transition-colors p-2 hover:bg-accent/5 rounded-lg"
-                  >
-                    <MessageCircle className="h-5 w-5" />
-                    <span>Join our Discord</span>
-                  </Link>
-                  */}
-                </div>
-              </CardContent>
-            </Card>
+          {/* Community Links */}
+          <Card>
+            <CardHeader className="space-y-2">
+              <CardTitle className="text-xl">Join Our Community</CardTitle>
+              <CardDescription>
+                Connect with us on social media and join our community platforms.
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="grid gap-4">
+                <Link 
+                  href="https://github.com/ddri/openqase"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-3 text-muted-foreground hover:text-foreground transition-colors p-2 hover:bg-accent/5 rounded-lg"
+                >
+                  <Github className="h-5 w-5" />
+                  <span>Follow us on GitHub</span>
+                </Link>
+                <Link 
+                  href="https://threads.com/openqase"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-3 text-muted-foreground hover:text-foreground transition-colors p-2 hover:bg-accent/5 rounded-lg"
+                >
+                  <Twitter className="h-5 w-5" />
+                  <span>Follow us on Threads</span>
+                </Link>
+                {/*
+                <Link 
+                  href="https://linkedin.com/company/openqase"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-3 text-muted-foreground hover:text-foreground transition-colors p-2 hover:bg-accent/5 rounded-lg"
+                >
+                  <Linkedin className="h-5 w-5" />
+                  <span>Connect on LinkedIn</span>
+                </Link>
+                */}
+                {/*
+                <Link 
+                  href="https://discord.gg/openqase"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-3 text-muted-foreground hover:text-foreground transition-colors p-2 hover:bg-accent/5 rounded-lg"
+                >
+                  <MessageCircle className="h-5 w-5" />
+                  <span>Join our Discord</span>
+                </Link>
+                */}
+              </div>
+            </CardContent>
+          </Card>
 
-            {/* FAQ Section */}
-            <Card>
-              <CardHeader className="space-y-2">
-                <CardTitle className="text-xl">Frequently Asked Questions</CardTitle>
-                <CardDescription>
-                  Quick answers to common questions.
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-6">
-                  <div>
-                    <h3 className="mb-2">How can I contribute?</h3>
-                    <p className="text-muted-foreground">
-                      We welcome contributions from the community! You can contribute by submitting case studies,
-                      improving documentation, or helping with code. Check out our GitHub repository for more details.
-                    </p>
-                  </div>
-                  <div>
-                    <h3 className="mb-2">I found a bug. Where should I report it?</h3>
-                    <p className="text-muted-foreground">
-                      Please report any bugs or issues on our GitHub repository's issue tracker. Make sure to
-                      include as much detail as possible to help us understand and fix the problem.
-                    </p>
-                  </div>
-                  <div>
-                    <h3 className="mb-2">Can I suggest new features?</h3>
-                    <p className="text-muted-foreground">
-                      Absolutely! We love hearing new ideas from the community. You can suggest features
-                      through our GitHub repository or by reaching out to us directly through this form.
-                    </p>
-                  </div>
+          {/* FAQ Section */}
+          <Card>
+            <CardHeader className="space-y-2">
+              <CardTitle className="text-xl">Frequently Asked Questions</CardTitle>
+              <CardDescription>
+                Quick answers to common questions.
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-6">
+                <div>
+                  <h3 className="mb-2">How can I contribute?</h3>
+                  <p className="text-muted-foreground">
+                    We welcome contributions from the community! You can contribute by submitting case studies,
+                    improving documentation, or helping with code. Check out our GitHub repository for more details.
+                  </p>
                 </div>
-              </CardContent>
-            </Card>
-          </div>
+                <div>
+                  <h3 className="mb-2">I found a bug. Where should I report it?</h3>
+                  <p className="text-muted-foreground">
+                    Please report any bugs or issues on our GitHub repository's issue tracker. Make sure to
+                    include as much detail as possible to help us understand and fix the problem.
+                  </p>
+                </div>
+                <div>
+                  <h3 className="mb-2">Can I suggest new features?</h3>
+                  <p className="text-muted-foreground">
+                    Absolutely! We love hearing new ideas from the community. You can suggest features
+                    through our GitHub repository or by reaching out to us directly through this form.
+                  </p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
         </div>
       </div>
     </main>

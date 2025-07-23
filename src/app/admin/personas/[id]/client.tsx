@@ -11,19 +11,13 @@ import { Textarea } from '@/components/ui/textarea';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { ContentCompleteness } from '@/components/admin/ContentCompleteness';
 import { PublishButton } from '@/components/admin/PublishButton';
+import { TagInput } from '@/components/ui/tag-input';
 import { createContentValidationRules, calculateCompletionPercentage, validateFormValues } from '@/utils/form-validation';
 import { useTransition } from 'react';
 import { ArrowLeft, Save, Loader2, Info } from 'lucide-react';
 import { toast } from '@/components/ui/use-toast';
 import { savePersona, publishPersona, unpublishPersona } from './actions';
 
-// Helper to convert expertise array to string for input
-const expertiseToString = (arr: string[] | undefined | null): string => 
-  Array.isArray(arr) ? arr.join(', ') : '';
-
-// Helper to convert expertise string from input to array for saving
-const expertiseStringToArray = (str: string): string[] => 
-  str.split(',').map(item => item.trim()).filter(Boolean);
 
 interface PersonaFormProps {
   persona: any | null;
@@ -55,10 +49,6 @@ export function PersonaForm({ persona, industries, isNew }: PersonaFormProps) {
     published: isNew ? false : persona?.published || false,
   });
   const [isDirty, setIsDirty] = useState(false);
-  // Separate state for the raw expertise input string
-  const [expertiseInputString, setExpertiseInputString] = useState<string>(
-    () => expertiseToString(persona?.expertise) // Initialize from persona data
-  );
   
   // Validation rules for personas
   const validationRules = createContentValidationRules('persona');
@@ -77,19 +67,9 @@ export function PersonaForm({ persona, industries, isNew }: PersonaFormProps) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    // Parse expertise string before saving
-    const expertiseArray = expertiseStringToArray(expertiseInputString);
-    const valuesToSave = {
-      ...values,
-      // Ensure the expertise field being saved is the parsed array
-      // Note: We don't need to update values.expertise state here,
-      // only the object being passed to the server action.
-      expertise: expertiseArray 
-    };
-    
     startTransition(async () => {
       try {
-        const result = await savePersona(valuesToSave); // Use valuesToSave
+        const result = await savePersona(values);
         
         // If this was a new persona and we got an ID back, redirect to edit page
         if (isNew && result?.id) {
@@ -128,17 +108,10 @@ export function PersonaForm({ persona, industries, isNew }: PersonaFormProps) {
       return;
     }
     
-    // Parse expertise string before saving and publishing
-    const expertiseArray = expertiseStringToArray(expertiseInputString);
-    const valuesToSave = {
-      ...values,
-      expertise: expertiseArray
-    };
-    
     startTransition(async () => {
       try {
         // First save the content
-        await savePersona(valuesToSave); // Use valuesToSave
+        await savePersona(values);
         
         // Then publish it
         await publishPersona(values.id!);
@@ -203,63 +176,73 @@ export function PersonaForm({ persona, industries, isNew }: PersonaFormProps) {
   
   return (
     <TooltipProvider>
-      <div className="space-y-6">
-        <div className="flex justify-between items-center">
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => router.push('/admin/personas')}
-            className="flex items-center"
-          >
-            <ArrowLeft className="mr-2 h-4 w-4" />
-            Back
-          </Button>
-          
-          <div className="flex items-center gap-2">
+      <div className="space-y-10 max-w-5xl mx-auto pb-24">
+        {/* Header section with better spacing and styling */}
+        <div className="pt-6 mb-8 bg-background pb-4 border-b border-border">
+          <div className="flex justify-between items-center mb-6">
             <Button
-              type="button"
-              variant="outline"
+              variant="ghost"
               size="sm"
-              onClick={handleSubmit}
-              disabled={isPending || !isDirty}
-              className="min-w-[100px]"
+              onClick={() => router.push('/admin/personas')}
+              className="flex items-center"
             >
-              {isPending ? (
-                <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Saving...
-                </>
-              ) : (
-                <>
-                  <Save className="mr-2 h-4 w-4" />
-                  Save
-                </>
-              )}
+              <ArrowLeft className="mr-2 h-4 w-4" />
+              Back to Personas
             </Button>
             
-            <PublishButton
-              isPublished={values.published}
-              onPublish={handlePublish}
-              onUnpublish={handleUnpublish}
-              validateContent={validateContent}
-              disabled={isPending}
-              onTabChange={() => {}}
-              getTabLabel={() => ''}
-            />
+            <div className="flex items-center gap-3">
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={handleSubmit}
+                disabled={isPending || !isDirty}
+                className="min-w-[100px]"
+              >
+                {isPending ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Saving...
+                  </>
+                ) : (
+                  <>
+                    <Save className="mr-2 h-4 w-4" />
+                    Save
+                  </>
+                )}
+              </Button>
+              
+              <PublishButton
+                isPublished={values.published}
+                onPublish={handlePublish}
+                onUnpublish={handleUnpublish}
+                validateContent={validateContent}
+                disabled={isPending}
+                onTabChange={(tab: string) => {}}
+                getTabLabel={(tab: string) => tab}
+              />
+            </div>
+          </div>
+          
+          {/* Progress bar section */}
+          <div>
+            <div className="flex justify-between items-center text-sm mb-2">
+              <span className="text-muted-foreground">Content Completeness</span>
+              <span className="font-medium">{completionPercentage}%</span>
+            </div>
+            <ContentCompleteness percentage={completionPercentage} showLabel={false} />
           </div>
         </div>
         
-        <ContentCompleteness percentage={completionPercentage} />
-        
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form onSubmit={handleSubmit} className="space-y-10">
           {/* Basic Info Section */}
-          <Card>
-            <CardHeader>
+          <Card className="shadow-sm">
+            <CardHeader className="p-6">
               <CardTitle>Basic Info</CardTitle>
             </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="grid grid-cols-1 gap-4">
-                <div className="space-y-2">
+            <CardContent className="space-y-6 p-6 pt-0">
+              <div className="grid grid-cols-1 gap-6">
+                <div className="space-y-3">
                   <Label htmlFor="name">Name</Label>
                   <Input
                     id="name"
@@ -269,7 +252,7 @@ export function PersonaForm({ persona, industries, isNew }: PersonaFormProps) {
                   />
                 </div>
                 
-                <div className="space-y-2">
+                <div className="space-y-3">
                   <Label htmlFor="slug">Slug</Label>
                   <Input
                     id="slug"
@@ -279,7 +262,7 @@ export function PersonaForm({ persona, industries, isNew }: PersonaFormProps) {
                   />
                 </div>
                 
-                <div className="space-y-2">
+                <div className="space-y-3">
                   <Label htmlFor="description">Description</Label>
                   <Textarea
                     id="description"
@@ -290,18 +273,12 @@ export function PersonaForm({ persona, industries, isNew }: PersonaFormProps) {
                   />
                 </div>
                 
-                <div className="space-y-2">
-                  <Label htmlFor="expertise">Expertise (comma-separated)</Label>
-                  <Input
-                    id="expertise"
-                    // Bind directly to the local string state
-                    value={expertiseInputString}
-                    onChange={(e) => {
-                      // Update the local string state directly
-                      setExpertiseInputString(e.target.value);
-                      setIsDirty(true); // Mark form as dirty
-                    }}
-                    placeholder="e.g., Risk Modeling, Derivative Pricing"
+                <div className="space-y-3">
+                  <Label htmlFor="expertise">Expertise</Label>
+                  <TagInput
+                    tags={values.expertise}
+                    onTagsChange={(newTags) => handleChange('expertise', newTags)}
+                    placeholder="Add expertise..."
                   />
                 </div>
               </div>
@@ -309,12 +286,12 @@ export function PersonaForm({ persona, industries, isNew }: PersonaFormProps) {
           </Card>
           
           {/* Details Section */}
-          <Card>
-            <CardHeader>
+          <Card className="shadow-sm">
+            <CardHeader className="p-6">
               <CardTitle>Details</CardTitle>
             </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="space-y-2">
+            <CardContent className="space-y-6 p-6 pt-0">
+              <div className="space-y-3">
                 <Label htmlFor="main_content">Main Content</Label>
                 <Textarea
                   id="main_content"
@@ -326,7 +303,7 @@ export function PersonaForm({ persona, industries, isNew }: PersonaFormProps) {
                 />
               </div>
               
-              <div className="space-y-2">
+              <div className="space-y-3">
                 <div className="flex items-center gap-2">
                   <Label htmlFor="recommended_reading">Recommended Reading</Label>
                   <Tooltip delayDuration={100}>
@@ -350,12 +327,12 @@ export function PersonaForm({ persona, industries, isNew }: PersonaFormProps) {
             </CardContent>
           </Card>
           
-          {/* Interests & Industries Section */}
-          <Card>
-            <CardHeader>
-              <CardTitle>Interests & Industries</CardTitle>
+          {/* Relationships Section */}
+          <Card className="shadow-sm">
+            <CardHeader className="p-6">
+              <CardTitle>Relationships</CardTitle>
             </CardHeader>
-            <CardContent className="space-y-4">
+            <CardContent className="space-y-6 p-6 pt-0">
               <RelationshipSelector
                 items={industries}
                 selectedItems={values.industry}

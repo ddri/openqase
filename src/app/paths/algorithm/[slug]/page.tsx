@@ -4,61 +4,10 @@ import { getStaticContentWithRelationships, generateStaticParamsForContentType }
 import type { Database } from '@/types/supabase';
 import LearningPathLayout from '@/components/ui/learning-path-layout';
 import { Badge } from '@/components/ui/badge';
-import AuthGate from '@/components/auth/AuthGate';
-import MarkdownIt from 'markdown-it';
+import { processMarkdown } from '@/lib/markdown-server';
 import { StepsRenderer } from '@/components/ui/StepsRenderer';
 import { ReferencesRenderer, processContentWithReferences } from '@/components/ui/ReferencesRenderer';
 import Link from 'next/link';
-
-// Initialize markdown-it with GFM features enabled
-const md = new MarkdownIt({
-  html: true,
-  linkify: true,
-  typographer: true,
-  breaks: true
-});
-
-// Function to fix bullet points in markdown content
-function preprocessMarkdown(content: string): string {
-  // Fix lists: ensure there's a space after each dash at the beginning of a line
-  // and add a newline before lists if needed
-  const fixedContent = content
-    .replace(/^-([^\s])/gm, '- $1')  // Add space after dash at line start if missing
-    .replace(/([^\n])\n^-\s/gm, '$1\n\n- '); // Add blank line before list starts
-    
-  return fixedContent;
-}
-
-// Customize renderer to improve table formatting
-const defaultRender = md.renderer.rules.table_open || function(tokens, idx, options, env, self) {
-  return self.renderToken(tokens, idx, options);
-};
-
-md.renderer.rules.table_open = function(tokens, idx, options, env, self) {
-  // Add a div wrapper with a class around the table
-  return '<div class="table-container">' + defaultRender(tokens, idx, options, env, self);
-};
-
-md.renderer.rules.table_close = function(tokens, idx, options, env, self) {
-  // Close both the table and the wrapper div
-  return '</table></div>';
-};
-
-// Customize cell rendering for numeric detection
-const defaultCellRender = md.renderer.rules.td_open || function(tokens, idx, options, env, self) {
-  return self.renderToken(tokens, idx, options);
-};
-
-md.renderer.rules.td_open = function(tokens, idx, options, env, self) {
-  // Check if cell content might be numeric
-  const content = tokens[idx+1]?.content;
-  const isNumeric = content && !isNaN(parseFloat(content)) && content.trim() !== '';
-  
-  if (isNumeric) {
-    return '<td class="numeric">';
-  }
-  return defaultCellRender(tokens, idx, options, env, self);
-};
 
 // Define enriched types
 type EnrichedAlgorithm = Database['public']['Tables']['algorithms']['Row'] & {
@@ -115,13 +64,9 @@ export async function generateStaticParams() {
 export default async function AlgorithmPage({ params }: AlgorithmPageProps) {
   const resolvedParams = await params;
   
-  console.log('Fetching algorithm with slug:', resolvedParams.slug);
   const algorithm = await getStaticContentWithRelationships('algorithms', resolvedParams.slug) as EnrichedAlgorithm;
   
-  console.log('Algorithm query result:', { algorithm });
-
   if (!algorithm) {
-    console.error('Failed to fetch algorithm');
     notFound();
   }
 
@@ -134,28 +79,18 @@ export default async function AlgorithmPage({ params }: AlgorithmPageProps) {
     industries: [] // Case study industries aren't fetched in the algorithm relationship query
   })) || [];
 
-  console.log('Case studies query result:', { caseStudies });
-
-  // Process content with enhanced typography and references
+  // Process content with server-side markdown and references
   let processedContent = '';
   if (algorithm.main_content) {
-    // Preprocess the markdown content to fix list formatting
-    const preprocessedContent = preprocessMarkdown(algorithm.main_content);
-    
     // First render markdown to HTML
-    const htmlContent = md.render(preprocessedContent);
+    const htmlContent = processMarkdown(algorithm.main_content);
     // Then process references 
     const contentWithReferences = processContentWithReferences(htmlContent);
-    // Assign directly without enhancing typography
     processedContent = contentWithReferences;
   }
 
   return (
-    <AuthGate
-      title="Unlock Enhanced Algorithm Features"
-      description="Sign up to access interactive examples, save implementations, and track your algorithm learning progress."
-    >
-      <LearningPathLayout 
+    <LearningPathLayout 
         title={algorithm.name}
         backLinkText="Back to Algorithms"
         backLinkHref="/paths/algorithm"
@@ -301,6 +236,5 @@ export default async function AlgorithmPage({ params }: AlgorithmPageProps) {
           </div>
         </div>
       </LearningPathLayout>
-    </AuthGate>
   );
 }

@@ -5,57 +5,8 @@ import LearningPathLayout from '@/components/ui/learning-path-layout';
 import { Badge } from '@/components/ui/badge';
 import { Card } from '@/components/ui/card';
 import Link from 'next/link';
-import MarkdownIt from 'markdown-it';
+import { processMarkdown } from '@/lib/markdown-server';
 import { SupabaseClient } from '@supabase/supabase-js';
-
-const md = new MarkdownIt({
-  html: true,
-  linkify: true,
-  typographer: true,
-  breaks: true
-});
-
-// Function to fix bullet points in markdown content
-function preprocessMarkdown(content: string): string {
-  // Fix lists: ensure there's a space after each dash at the beginning of a line
-  // and add a newline before lists if needed
-  const fixedContent = content
-    .replace(/^-([^\s])/gm, '- $1')  // Add space after dash at line start if missing
-    .replace(/([^\n])\n^-\s/gm, '$1\n\n- '); // Add blank line before list starts
-    
-  return fixedContent;
-}
-
-// Customize renderer to improve table formatting
-const defaultRender = md.renderer.rules.table_open || function(tokens, idx, options, env, self) {
-  return self.renderToken(tokens, idx, options);
-};
-
-md.renderer.rules.table_open = function(tokens, idx, options, env, self) {
-  // Add a div wrapper with a class around the table
-  return '<div class="table-container">' + defaultRender(tokens, idx, options, env, self);
-};
-
-md.renderer.rules.table_close = function(tokens, idx, options, env, self) {
-  // Close both the table and the wrapper div
-  return '</table></div>';
-};
-
-// Customize cell rendering for numeric detection
-const defaultCellRender = md.renderer.rules.td_open || function(tokens, idx, options, env, self) {
-  return self.renderToken(tokens, idx, options);
-};
-
-md.renderer.rules.td_open = function(tokens, idx, options, env, self) {
-  // Check if cell content might be numeric
-  const content = tokens[idx+1]?.content;
-  const isNumeric = content && !isNaN(parseFloat(content)) && content.trim() !== '';
-  
-  if (isNumeric) {
-    return '<td class="numeric">';
-  }
-  return defaultCellRender(tokens, idx, options, env, self);
-};
 
 // Define enriched types
 type EnrichedIndustry = Database['public']['Tables']['industries']['Row'] & {
@@ -114,31 +65,24 @@ export async function generateStaticParams() {
 export default async function IndustryPage({ params }: PageParams) {
   const resolvedParams = await params;
   
-  console.log('Fetching industry with slug:', resolvedParams.slug);
   // Fetch industry along with related algorithms, personas, and case studies
   const industry = await getStaticContentWithRelationships('industries', resolvedParams.slug) as EnrichedIndustry;
 
   if (!industry) {
     return <div>Industry not found</div>;
   }
-
-  console.log('Fetching case studies for industry:', industry.name);
   
   // Extract related case studies from the industry data
-  const caseStudies: IndustryRelatedCaseStudy[] = industry.case_study_industry_relations?.map((relation: { case_studies: { id: string; title: string; slug: string; description: string; published_at: string } | null }) => ({
-    id: relation.case_studies!.id,
-    title: relation.case_studies!.title,
-    slug: relation.case_studies!.slug,
-    description: relation.case_studies!.description || '',
-    published_at: relation.case_studies!.published_at,
-  })).filter(cs => cs.id) || [];
+  const caseStudies: IndustryRelatedCaseStudy[] = industry.case_study_industry_relations?.map((relation: { case_studies: { id: string; title: string; slug: string; description: string; published_at: string } | null }) => relation.case_studies ? ({
+    id: relation.case_studies.id,
+    title: relation.case_studies.title,
+    slug: relation.case_studies.slug,
+    description: relation.case_studies.description || '',
+    published_at: relation.case_studies.published_at,
+  }) : null).filter((cs): cs is IndustryRelatedCaseStudy => cs !== null) || [];
 
-  // Preprocess and render industry main content if available
-  let processedContent = '';
-  if (industry.main_content) {
-    const preprocessedContent = preprocessMarkdown(industry.main_content);
-    processedContent = md.render(preprocessedContent);
-  }
+  // Process industry main content with server-side markdown
+  const processedContent = processMarkdown(industry.main_content);
 
   return (
     <LearningPathLayout 

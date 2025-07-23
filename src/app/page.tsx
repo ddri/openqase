@@ -1,12 +1,19 @@
 // src/app/page.tsx
-'use client';
-
 import { Card, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
+import ContentCard from '@/components/ui/content-card';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
-import { User, Building2, CircuitBoard, ArrowRight, Brain, FileText, Users } from 'lucide-react';
+import { 
+  User, 
+  Building2, 
+  CircuitBoard, 
+  ArrowRight, 
+  Brain, 
+  FileText, 
+  Users 
+} from 'lucide-react';
+import { AutoSchema } from '@/components/AutoSchema';
 
 interface FeatureCard {
   title: string;
@@ -17,64 +24,49 @@ interface FeatureCard {
 
 const features: FeatureCard[] = [
   {
-    title: "Accessible Knowledge",
-    description: "Business-friendly explanations of quantum computing concepts, making complex topics approachable and understandable.",
-    icon: <Brain className="w-6 h-6" />,
-    focus: "Business-friendly explanations"
-  },
-  {
-    title: "Real-world Case Studies",
-    description: "Practical implementations and real-world applications of quantum computing across various industries.",
+    title: "Real Business Applications",
+    description: "See actual quantum computing implementations from companies like HSBC, Google DeepMind, and Mitsui. Learn from proven use cases with measurable outcomes.",
     icon: <FileText className="w-6 h-6" />,
-    focus: "Practical implementations"
+    focus: "Proven implementations"
   },
   {
-    title: "Role-based Learning",
-    description: "Tailored learning paths designed for different professional roles and expertise levels.",
+    title: "No Technical Background Required",
+    description: "Business-focused explanations that skip academic theory. Understand quantum value without getting lost in complex mathematics or physics.",
+    icon: <Brain className="w-6 h-6" />,
+    focus: "Accessible insights"
+  },
+  {
+    title: "Tailored to Your Context",
+    description: "Content organized by your professional role and industry sector. Get relevant insights for your specific responsibilities and business challenges.",
     icon: <Users className="w-6 h-6" />,
-    focus: "Professional relevance"
-  },
-  {
-    title: "Industry Relevance",
-    description: "Sector-specific applications and use cases that demonstrate quantum computing's impact in your industry.",
-    icon: <Building2 className="w-6 h-6" />,
-    focus: "Sector-specific applications"
-  },
-  {
-    title: "Algorithm Clarity",
-    description: "Clear explanations of quantum algorithms and their practical applications in solving real problems.",
-    icon: <CircuitBoard className="w-6 h-6" />,
-    focus: "Problem-solution mapping"
-  },
-  {
-    title: "Simplified Content",
-    description: "Clear, focused information about quantum computing applications without overwhelming technical details.",
-    icon: <ArrowRight className="w-6 h-6" />,
-    focus: "Accessible information"
+    focus: "Personal relevance"
   }
 ];
 
 export default function HomePage() {
   return (
     <div className="flex flex-col">
+      {/* Automatic FAQ schema for landing page */}
+      <AutoSchema type="faq" />
+      
       {/* Hero Section */}
       <section className="flex min-h-screen items-center justify-center bg-background text-center px-4">
         <div className="max-w-4xl mx-auto space-y-8">
           <h1 className="tracking-tight">
-            Discover the Business Value of{' '}
+            Understand Quantum Computing{' '}
             <span className="text-primary block mt-2">
-              Quantum Computing
+              Without the Technical Complexity
             </span>
           </h1>
 
           <p className="text-xl md:text-2xl text-muted-foreground max-w-3xl mx-auto">
-            OpenQase provides structured learning paths and real-world case studies to help you understand how quantum computing solves business problems.
+            Get practical insights from real quantum computing implementations. See how companies like HSBC and Google apply quantum algorithms to solve actual business challenges.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center mt-8">
             <Button asChild size="lg" className="text-lg px-8">
-              <Link href="/paths">
-                Explore Learning Paths
+              <Link href="/case-study">
+                See Real Applications
               </Link>
             </Button>
             <Button
@@ -83,8 +75,8 @@ export default function HomePage() {
               variant="secondary"
               className="text-lg px-8"
             >
-              <Link href="/case-study">
-                Browse Resources
+              <Link href="/paths">
+                Find Your Learning Path
               </Link>
             </Button>
           </div>
@@ -95,9 +87,9 @@ export default function HomePage() {
       <section className="py-24 px-4">
         <div className="container max-w-7xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="tracking-tight">Choose Your Learning Path</h2>
+            <h2 className="tracking-tight">Get Relevant Quantum Insights</h2>
             <p className="text-xl text-muted-foreground mt-4">
-              Navigate quantum computing knowledge in the way that's most relevant to you, whether by role, industry, or technical approach.
+              Skip the theory. Focus on quantum applications that matter to your role, industry, and business objectives.
             </p>
           </div>
 
@@ -108,9 +100,9 @@ export default function HomePage() {
                   <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10">
                     <User className="h-6 w-6 text-primary" />
                   </div>
-                  <CardTitle>Persona Path</CardTitle>
+                  <CardTitle>By Your Role</CardTitle>
                   <CardDescription className="mb-4">
-                    Content tailored to your professional role, from business executives to technical practitioners.
+                    See quantum applications relevant to CEOs, CTOs, engineers, and consultants. Focus on your responsibilities and decision-making needs.
                   </CardDescription>
                 </CardHeader>
               </Card>
@@ -122,9 +114,9 @@ export default function HomePage() {
                   <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10">
                     <Building2 className="h-6 w-6 text-primary" />
                   </div>
-                  <CardTitle>Industry Path</CardTitle>
+                  <CardTitle>By Your Industry</CardTitle>
                   <CardDescription className="mb-4">
-                    Explore quantum applications specific to your industry, including challenges, opportunities, and success metrics.
+                    Discover quantum solutions in finance, healthcare, energy, and manufacturing. See sector-specific implementations and ROI potential.
                   </CardDescription>
                 </CardHeader>
               </Card>
@@ -136,9 +128,9 @@ export default function HomePage() {
                   <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10">
                     <CircuitBoard className="h-6 w-6 text-primary" />
                   </div>
-                  <CardTitle>Algorithm Path</CardTitle>
+                  <CardTitle>By Solution Type</CardTitle>
                   <CardDescription className="mb-4">
-                    Discover different quantum algorithms and understand their applications across industries.
+                    Understand quantum algorithms through their business applications. From optimization to machine learning and security solutions.
                   </CardDescription>
                 </CardHeader>
               </Card>
@@ -151,13 +143,13 @@ export default function HomePage() {
       <section className="py-24">
         <div className="container max-w-7xl">
           <div className="text-center mb-16">
-            <h2 className="mb-4">Why Support OpenQase?</h2>
-            <p className="text-muted-foreground">
-              A comprehensive platform for learning and implementing quantum computing solutions
+            <h2 className="mb-4">Why Business Leaders Choose OpenQase</h2>
+            <p className="text-xl text-muted-foreground">
+              The practical approach to understanding quantum computing's business impact
             </p>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {features.map((feature, index) => (
               <div
                 key={index}
@@ -192,63 +184,27 @@ export default function HomePage() {
             </Button>
           </div>
 
-          <div className="grid gap-8 md:grid-cols-3">
-            <Link href="/case-study/quantinuum-hsbc-financial-services-enhancement" className="group block h-full">
-              <Card className={cn("h-full card-link-hover-effect", "flex flex-col overflow-hidden bg-card")}>
-                <div className="aspect-[2/1] bg-primary/5 relative">
-                  <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_70%,#7c3aed11_0%,transparent_50%)] [mask-image:linear-gradient(to_bottom,white,transparent)] transition-opacity group-hover:opacity-75" />
-                  <div className="absolute inset-0 bg-[linear-gradient(45deg,transparent_25%,#7c3aed11_50%,transparent_75%)] transition-opacity group-hover:opacity-75" />
-                </div>
-                <CardHeader>
-                  <div className="flex gap-2 mb-4">
-                    <Badge variant="outline" className="bg-card/75 backdrop-blur-sm">Finance</Badge>
-                    <Badge variant="outline" className="bg-card/75 backdrop-blur-sm">Cybersecurity</Badge>
-                  </div>
-                  <CardTitle className="line-clamp-2">Quantinuum & HSBC: Financial Services Enhancement</CardTitle>
-                  <CardDescription className="line-clamp-3">
-                    How HSBC partnered with Quantinuum to explore quantum computing applications in cybersecurity, fraud detection, and natural language processing for banking.
-                  </CardDescription>
-                </CardHeader>
-              </Card>
-            </Link>
-
-            <Link href="/case-study/quantinuum-google-deepmind-circuit-optimisation" className="group block h-full">
-              <Card className={cn("h-full card-link-hover-effect", "flex flex-col overflow-hidden bg-card")}>
-                <div className="aspect-[2/1] bg-primary/5 relative">
-                  <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_70%,#7c3aed11_0%,transparent_50%)] [mask-image:linear-gradient(to_bottom,white,transparent)] transition-opacity group-hover:opacity-75" />
-                  <div className="absolute inset-0 bg-[linear-gradient(-45deg,transparent_25%,#7c3aed11_50%,transparent_75%)] transition-opacity group-hover:opacity-75" />
-                </div>
-                <CardHeader>
-                  <div className="flex gap-2 mb-4">
-                    <Badge variant="outline" className="bg-card/75 backdrop-blur-sm">Technology</Badge>
-                    <Badge variant="outline" className="bg-card/75 backdrop-blur-sm">AI Integration</Badge>
-                  </div>
-                  <CardTitle className="line-clamp-2">Quantinuum & Google DeepMind: AI for Quantum Circuit Optimization</CardTitle>
-                  <CardDescription className="line-clamp-3">
-                    How Quantinuum and Google DeepMind developed AlphaTensor-Quantum to optimize quantum circuits, reducing T gate counts by up to 47% in cryptography applications.
-                  </CardDescription>
-                </CardHeader>
-              </Card>
-            </Link>
-
-            <Link href="/case-study/quantinuum-mitsui-trading-co" className="group block h-full">
-              <Card className={cn("h-full card-link-hover-effect", "flex flex-col overflow-hidden bg-card")}>
-                <div className="aspect-[2/1] bg-primary/5 relative">
-                  <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_30%,#7c3aed11_0%,transparent_50%)] [mask-image:linear-gradient(to_bottom,white,transparent)] transition-opacity group-hover:opacity-75" />
-                  <div className="absolute inset-0 bg-[linear-gradient(135deg,transparent_25%,#7c3aed11_50%,transparent_75%)] transition-opacity group-hover:opacity-75" />
-                </div>
-                <CardHeader>
-                  <div className="flex gap-2 mb-4">
-                    <Badge variant="outline" className="bg-card/75 backdrop-blur-sm">Trading</Badge>
-                    <Badge variant="outline" className="bg-card/75 backdrop-blur-sm">Optimization</Badge>
-                  </div>
-                  <CardTitle className="line-clamp-2">Quantinuum & Mitsui Co: Global Trading Optimization</CardTitle>
-                  <CardDescription className="line-clamp-3">
-                    How Mitsui & Co. partnered with Quantinuum to apply quantum computing to logistics optimization, commodity trading, and financial risk assessment.
-                  </CardDescription>
-                </CardHeader>
-              </Card>
-            </Link>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <ContentCard
+              title="Quantinuum & HSBC: Financial Services Enhancement"
+              description="How HSBC partnered with Quantinuum to explore quantum computing applications in cybersecurity, fraud detection, and natural language processing for banking."
+              badges={[]}
+              href="/case-study/quantinuum-hsbc-financial-services-enhancement"
+            />
+            
+            <ContentCard
+              title="Quantinuum & Google DeepMind: AI for Quantum Circuit Optimization"
+              description="How Quantinuum and Google DeepMind developed AlphaTensor-Quantum to optimize quantum circuits, reducing T gate counts by up to 47% in cryptography applications."
+              badges={[]}
+              href="/case-study/quantinuum-google-deepmind-circuit-optimisation"
+            />
+            
+            <ContentCard
+              title="Quantinuum & Mitsui Co: Global Trading Optimization"
+              description="How Mitsui & Co. partnered with Quantinuum to apply quantum computing to logistics optimization, commodity trading, and financial risk assessment."
+              badges={[]}
+              href="/case-study/quantinuum-mitsui-trading-co"
+            />
           </div>
         </div>
       </section>

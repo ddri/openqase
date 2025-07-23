@@ -1,0 +1,16 @@
+
+> openqase@0.3.0 start
+> next start
+
+   ▲ Next.js 15.4.1
+   - Local:        http://localhost:3001
+   - Network:      http://192.168.20.4:3001
+
+ ✓ Starting...
+ ✓ Ready in 1652ms
+(node:64204) [DEP0060] DeprecationWarning: The `util._extend` API is deprecated. Please use Object.assign() instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+Fetching industry with slug: aerospace
+Fetching case studies for industry: Aerospace
+Fetching industry with slug: agriculture
+Fetching case studies for industry: Agriculture

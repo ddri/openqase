@@ -4,7 +4,7 @@ import type { Database } from '@/types/supabase'
 import { PersonasClient } from './client'
 
 export const metadata: Metadata = {
-  title: 'Personas Management - OpenQASE Admin',
+  title: 'Personas Management',
   description: 'Manage user personas content'
 }
 

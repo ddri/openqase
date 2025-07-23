@@ -82,3 +82,10 @@ papers/
 # SECURITY: Local admin and setup scripts with personal info
 scripts/local-admin-setup.sql
 scripts/verify-admin-role.sql
+
+# SECURITY: Data files that should not be in open source repository
+migrations/001_initial_seed.sql
+migrations/*_seed.sql
+
+# SECURITY: Private data folder (contains production data)
+private-data/

@@ -1,11 +1,11 @@
-import { BlogPostsList } from './client';
 import { createServiceRoleSupabaseClient } from '@/lib/supabase-server';
+import { BlogPostsList } from './client';
+
+export const dynamic = 'force-dynamic'
 
 export default async function BlogPostsPage() {
-  // Create Supabase client
   const supabase = createServiceRoleSupabaseClient();
   
-  // Fetch all blog posts
   const { data: blogPosts } = await supabase
     .from('blog_posts')
     .select('*')

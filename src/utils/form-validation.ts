@@ -245,12 +245,6 @@ export function createContentValidationRules(contentType: 'algorithm' | 'persona
           validator: validators.required
         },
         {
-          field: 'quantum_advantage',
-          tab: 'technical',
-          label: 'Quantum advantage is required',
-          validator: validators.required
-        },
-        {
           field: 'related_case_studies',
           tab: 'relationships',
           label: 'At least one related case study is required',
@@ -288,6 +282,12 @@ export function createContentValidationRules(contentType: 'algorithm' | 'persona
           tab: 'content',
           label: 'Main content is required',
           validator: validators.required
+        },
+        {
+          field: 'year',
+          tab: 'basic',
+          label: 'Year must be between 1990 and 2030',
+          validator: validators.and(validators.isNumber, validators.min(1990), validators.max(2030))
         },
         {
           field: 'algorithms',

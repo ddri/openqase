@@ -1,18 +1,9 @@
 import { NextResponse } from 'next/server'
 import { z } from 'zod'
-import { Resend } from 'resend'
 import { createServerSupabaseClient } from '@/lib/supabase-server'
 import { rateLimiter, RATE_LIMITS } from '@/lib/rate-limiter'
+import { createDualNewsletterService } from '@/lib/dual-newsletter-service'
 // import { trackNewsletterSignup } from '@/lib/analytics' // TODO: Add after database types are updated
-
-// Helper function to get Resend instance
-function getResendClient() {
-  const apiKey = process.env.RESEND_API_KEY
-  if (!apiKey) {
-    throw new Error('RESEND_API_KEY environment variable is not set')
-  }
-  return new Resend(apiKey)
-}
 
 // Email validation schema
 const newsletterSchema = z.object({
@@ -29,14 +20,6 @@ const unsubscribeSchema = z.object({
  * Subscribe to newsletter
  */
 export async function POST(request: Request) {
-  // Build-time safety check
-  if (!process.env.RESEND_API_KEY) {
-    return NextResponse.json(
-      { error: 'Newsletter service is not configured' },
-      { status: 503 }
-    )
-  }
-
   try {
     // Apply rate limiting
     const clientIP = request.headers.get('x-forwarded-for') || 
@@ -78,127 +61,19 @@ export async function POST(request: Request) {
     }
 
     const { email, source } = result.data
-    const supabase = await createServerSupabaseClient()
-
-    // Check if email already exists (with type assertion for build safety)
-    const { data: existing } = await (supabase as any)
-      .from('newsletter_subscriptions')
-      .select('id, status, metadata')
-      .eq('email', email)
-      .single()
-
-    if (existing) {
-      if (existing.status === 'active') {
-        return NextResponse.json({
-          message: 'You are already subscribed to our newsletter!',
-          email,
-          alreadySubscribed: true
-        })
-      } else {
-        // Reactivate subscription
-        const { error: updateError } = await (supabase as any)
-          .from('newsletter_subscriptions')
-          .update({ 
-            status: 'active',
-            subscription_date: new Date().toISOString(),
-            metadata: { ...existing.metadata || {}, source, reactivated: true }
-          })
-          .eq('email', email)
-
-        if (updateError) {
-          console.error('Error reactivating subscription:', updateError)
-          return NextResponse.json(
-            { error: 'Failed to reactivate subscription' },
-            { status: 500 }
-          )
-        }
-      }
-    } else {
-      // Create new subscription
-      const { error: insertError } = await (supabase as any)
-        .from('newsletter_subscriptions')
-        .insert({
-          email,
-          status: 'active',
-          metadata: { source }
-        })
-
-      if (insertError) {
-        console.error('Error creating subscription:', insertError)
-        return NextResponse.json(
-          { error: 'Failed to subscribe to newsletter' },
-          { status: 500 }
-        )
-      }
-    }
-
-    // Send welcome email via Resend
-    try {
-      const { data: unsubscribeData } = await (supabase as any)
-        .from('newsletter_subscriptions')
-        .select('unsubscribe_token')
-        .eq('email', email)
-        .single()
-
-      const unsubscribeUrl = `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/newsletter/unsubscribe?token=${unsubscribeData?.unsubscribe_token}`
-
-      const resend = getResendClient()
-      await resend.emails.send({
-        from: 'david@openqase.com',
-        to: [email],
-        subject: 'Welcome to OpenQase Newsletter! 🚀',
-        html: `
-          <div style="max-width: 600px; margin: 0 auto; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
-            <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 40px 30px; text-align: center;">
-              <h1 style="color: white; margin: 0; font-size: 28px; font-weight: 600;">Welcome to OpenQase! 🚀</h1>
-            </div>
-            
-            <div style="padding: 40px 30px; background: #ffffff;">
-              <h2 style="color: #333; margin-top: 0;">Thank you for subscribing!</h2>
-              
-              <p style="color: #666; line-height: 1.6; margin: 20px 0;">
-                You've successfully subscribed to the OpenQase newsletter. You'll receive the latest updates on:
-              </p>
-              
-              <ul style="color: #666; line-height: 1.8; margin: 20px 0; padding-left: 20px;">
-                <li>Quantum computing business case studies</li>
-                <li>Algorithm implementations and insights</li>
-                <li>Industry applications and trends</li>
-                <li>OpenQase platform updates</li>
-              </ul>
-              
-              <div style="background: #f8f9fa; border-radius: 8px; padding: 25px; margin: 30px 0;">
-                <h3 style="color: #333; margin-top: 0; font-size: 18px;">What's Next?</h3>
-                <p style="color: #666; line-height: 1.6; margin: 10px 0;">
-                  Explore our growing collection of quantum computing case studies and learning paths at 
-                  <a href="${process.env.NEXT_PUBLIC_SITE_URL || 'https://openqase.com'}" style="color: #667eea; text-decoration: none;">OpenQase.com</a>
-                </p>
-              </div>
-              
-              <p style="color: #999; font-size: 14px; line-height: 1.6; margin-top: 40px;">
-                You can <a href="${unsubscribeUrl}" style="color: #667eea; text-decoration: none;">unsubscribe</a> at any time.
-                <br>
-                This email was sent because you signed up for the OpenQase newsletter.
-              </p>
-            </div>
-          </div>
-        `
-      })
-
-      console.log('Welcome email sent successfully to:', email)
-    } catch (emailError) {
-      console.error('Error sending welcome email:', emailError)
-      // Don't fail the subscription if email fails
-    }
+    
+    // Use dual newsletter service
+    const newsletterService = createDualNewsletterService()
+    const subscriptionResult = await newsletterService.subscribeToNewsletter(email, source)
 
     return NextResponse.json(
       { 
-        message: 'Successfully subscribed to newsletter! Check your email for confirmation.',
-        email,
-        alreadySubscribed: false
+        message: subscriptionResult.message,
+        email: subscriptionResult.email,
+        alreadySubscribed: subscriptionResult.alreadySubscribed
       },
       { 
-        status: 200,
+        status: subscriptionResult.success ? 200 : 500,
         headers: {
           'X-RateLimit-Limit': RATE_LIMITS.newsletter.limit.toString(),
           'X-RateLimit-Remaining': rateLimitResult.remaining.toString(),
@@ -218,14 +93,6 @@ export async function POST(request: Request) {
  * Unsubscribe from newsletter
  */
 export async function DELETE(request: Request) {
-  // Build-time safety check
-  if (!process.env.RESEND_API_KEY) {
-    return NextResponse.json(
-      { error: 'Newsletter service is not configured' },
-      { status: 503 }
-    )
-  }
-
   try {
     const { searchParams } = new URL(request.url)
     const token = searchParams.get('token')
@@ -260,26 +127,15 @@ export async function DELETE(request: Request) {
       })
     }
 
-    // Update subscription status
-    const { error: updateError } = await (supabase as any)
-      .from('newsletter_subscriptions')
-      .update({ 
-        status: 'unsubscribed',
-        updated_at: new Date().toISOString()
-      })
-      .eq('unsubscribe_token', token)
-
-    if (updateError) {
-      console.error('Error unsubscribing:', updateError)
-      return NextResponse.json(
-        { error: 'Failed to unsubscribe' },
-        { status: 500 }
-      )
-    }
+    // Use dual newsletter service for unsubscribe
+    const newsletterService = createDualNewsletterService()
+    const result = await newsletterService.unsubscribeFromNewsletter(subscription.email)
 
     return NextResponse.json({
-      message: 'Successfully unsubscribed from newsletter.',
+      message: result.message,
       email: subscription.email
+    }, { 
+      status: result.success ? 200 : 500 
     })
   } catch (error) {
     console.error('Newsletter unsubscribe error:', error)

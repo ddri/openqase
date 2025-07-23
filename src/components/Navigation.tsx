@@ -86,6 +86,7 @@ export default function Navigation() {
                   className="h-8 w-auto"
                   width={32}
                   height={32}
+                  suppressHydrationWarning
                 />
               ) : (
                 <Image
@@ -94,6 +95,7 @@ export default function Navigation() {
                   className="h-8 w-auto"
                   width={32}
                   height={32}
+                  suppressHydrationWarning
                 />
               )}
               <Badge variant="outline" className="ml-2 self-center">BETA</Badge>
@@ -160,9 +162,9 @@ export default function Navigation() {
               aria-label="Toggle menu"
             >
               {isOpen ? (
-                <X className="h-6 w-6" />
+                <X className="h-6 w-6" suppressHydrationWarning />
               ) : (
-                <Menu className="h-6 w-6" />
+                <Menu className="h-6 w-6" suppressHydrationWarning />
               )}
             </button>
           </div>

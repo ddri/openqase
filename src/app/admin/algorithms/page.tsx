@@ -3,8 +3,10 @@ import { createServiceRoleSupabaseClient } from '@/lib/supabase-server'
 import type { Database } from '@/types/supabase'
 import { AlgorithmsClient } from './client'
 
+export const dynamic = 'force-dynamic'
+
 export const metadata: Metadata = {
-  title: 'Algorithms Management - OpenQASE Admin',
+  title: 'Algorithms Management',
   description: 'Manage quantum algorithms content'
 }
 

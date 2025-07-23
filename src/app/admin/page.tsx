@@ -6,7 +6,7 @@ import Link from 'next/link';
 
 export const metadata: Metadata = {
   title: 'Admin Dashboard - OpenQASE',
-  description: 'OpenQASE Content Management System',
+  description: 'OpenQase Content Management System',
 };
 
 export default async function AdminDashboard() {
@@ -78,7 +78,7 @@ export default async function AdminDashboard() {
       <div className="mb-8">
         <h1 className="text-3xl font-bold mb-2">Admin Dashboard</h1>
         <p className="text-muted-foreground">
-          Manage content and settings for the OpenQASE platform.
+          Manage content and settings for the OpenQase platform.
         </p>
       </div>
 

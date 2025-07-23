@@ -76,15 +76,6 @@ export function IndustriesClient({ data }: IndustriesClientProps) {
       )
     },
     {
-      accessorKey: 'icon',
-      header: 'Icon',
-      cell: ({ row }) => (
-        <div className="flex items-center">
-          {row.original.icon || 'N/A'}
-        </div>
-      )
-    },
-    {
       accessorKey: 'actions',
       header: '',
       cell: ({ row }) => (

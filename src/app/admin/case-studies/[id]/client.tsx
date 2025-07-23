@@ -17,10 +17,6 @@ import { ArrowLeft, Save, Loader2 } from 'lucide-react';
 import { toast } from '@/components/ui/use-toast';
 import { saveCaseStudy, publishCaseStudy, unpublishCaseStudy } from './actions';
 
-// Define IDs for "Not Applicable" records
-const NOT_APPLICABLE_ALGORITHM_ID = '5bb7190e-d0df-46cc-a459-2eea19856fb1';
-const NOT_APPLICABLE_INDUSTRY_ID = '4cd2a6a0-6dc1-49ba-893c-f24eebaf384a';
-const NOT_APPLICABLE_PERSONA_ID = 'd1c1c7e7-2847-4bf3-b165-3bd84a99f3a6';
 
 interface CaseStudyFormProps {
   caseStudy: any | null;
@@ -60,25 +56,11 @@ export function CaseStudyForm({ caseStudy, algorithms, industries, personas, isN
     published: isNew ? false : caseStudy?.published || false,
     academic_references: isNew ? '' : caseStudy?.academic_references || '',
     resource_links: isNew ? [] : caseStudy?.resource_links || [],
+    year: isNew ? new Date().getFullYear() : caseStudy?.year || new Date().getFullYear(),
   });
   const [isDirty, setIsDirty] = useState(false);
   
-  const [notApplicableStates, setNotApplicableStates] = useState({
-    algorithms: false,
-    industries: false,
-    personas: false
-  });
 
-  // Effect to initialize notApplicableStates based on loaded caseStudy data
-  useEffect(() => {
-    if (caseStudy && !isNew) {
-      setNotApplicableStates({
-        algorithms: (caseStudy.algorithms || []).includes(NOT_APPLICABLE_ALGORITHM_ID),
-        industries: (caseStudy.industries || []).includes(NOT_APPLICABLE_INDUSTRY_ID),
-        personas: (caseStudy.personas || []).includes(NOT_APPLICABLE_PERSONA_ID),
-      });
-    }
-  }, [caseStudy, isNew]);
   
   // Validation rules for case studies
   const validationRules = createContentValidationRules('case_study');
@@ -93,99 +75,83 @@ export function CaseStudyForm({ caseStudy, algorithms, industries, personas, isN
     setIsDirty(true);
   };
   
-  // Handle not applicable change
-  const handleNotApplicableChange = (field: 'algorithms' | 'industries' | 'personas', isNotApplicable: boolean) => {
-    setNotApplicableStates(prev => ({
-      ...prev,
-      [field]: isNotApplicable
-    }));
-
-    let newSelectedItems: string[] = [];
-    if (isNotApplicable) {
-      if (field === 'algorithms') newSelectedItems = [NOT_APPLICABLE_ALGORITHM_ID];
-      else if (field === 'industries') newSelectedItems = [NOT_APPLICABLE_INDUSTRY_ID];
-      else if (field === 'personas') newSelectedItems = [NOT_APPLICABLE_PERSONA_ID];
-    }
-    // When unchecking N/A, values[field] is already an array of selected items,
-    // so we just need to ensure the N/A ID is not in it if it was previously.
-    // However, RelationshipSelector's onChange should provide the correct list without N/A ID.
-    // For now, if unchecking, we set to empty, relying on user to re-select or RelationshipSelector to repopulate.
-    // A more robust solution might involve RelationshipSelector handling the N/A ID itself.
+  // Handle adding citation numbers to references
+  const handleAddCitationNumbers = () => {
+    const currentText = values.academic_references;
+    if (!currentText.trim()) return;
     
-    // If unchecking, we reset to the current selections, excluding the N/A ID if present.
-    // If checking, we set to only the N/A ID.
-    setValues(prev => {
-      let currentSelection = prev[field] || [];
-      if (isNotApplicable) {
-        // If N/A is checked, set the value to be only the N/A ID for that field
-        if (field === 'algorithms') return { ...prev, algorithms: [NOT_APPLICABLE_ALGORITHM_ID] };
-        if (field === 'industries') return { ...prev, industries: [NOT_APPLICABLE_INDUSTRY_ID] };
-        if (field === 'personas') return { ...prev, personas: [NOT_APPLICABLE_PERSONA_ID] };
-      } else {
-        // If N/A is unchecked, remove the N/A ID from the selection if it exists.
-        // The RelationshipSelector should ideally handle providing the list of actual selections.
-        // For now, we filter out the N/A ID.
-        let idToRemove = '';
-        if (field === 'algorithms') idToRemove = NOT_APPLICABLE_ALGORITHM_ID;
-        else if (field === 'industries') idToRemove = NOT_APPLICABLE_INDUSTRY_ID;
-        else if (field === 'personas') idToRemove = NOT_APPLICABLE_PERSONA_ID;
-        
-        const updatedSelection = Array.isArray(currentSelection) 
-                               ? currentSelection.filter(id => id !== idToRemove) 
-                               : [];
-        return { ...prev, [field]: updatedSelection };
+    const lines = currentText.split('\n');
+    const processedLines: string[] = [];
+    let citationNumber = 1;
+    
+    // First pass: find the highest existing citation number
+    let maxExistingNumber = 0;
+    lines.forEach((line: string) => {
+      const match = line.match(/^\[\^(\d+)\]:/);
+      if (match) {
+        maxExistingNumber = Math.max(maxExistingNumber, parseInt(match[1]));
       }
-      return prev; // Should not happen
     });
-    setIsDirty(true);
+    
+    // Start numbering after the highest existing number
+    citationNumber = maxExistingNumber + 1;
+    
+    // Second pass: add numbers to lines that need them
+    lines.forEach((line: string) => {
+      const trimmedLine = line.trim();
+      if (trimmedLine === '') {
+        processedLines.push(line); // Preserve empty lines
+      } else if (trimmedLine.match(/^\[\^\d+\]:/)) {
+        processedLines.push(line); // Already has citation number
+      } else {
+        processedLines.push(`[^${citationNumber}]: ${trimmedLine}`);
+        citationNumber++;
+      }
+    });
+    
+    handleChange('academic_references', processedLines.join('\n'));
   };
+  
+  // Handle inserting reference templates
+  const handleInsertTemplate = (type: 'journal' | 'book' | 'website') => {
+    const currentText = values.academic_references;
+    const templates = {
+      journal: '[^X]: Author, A. Title of Article. Journal Name Year;Volume(Issue):Pages. DOI:10.xxxx/xxxxx',
+      book: '[^X]: Author, A. Title of Book. Publisher; Year. ISBN:xxxxxxxxxx',
+      website: '[^X]: Author, A. Title of Page. Website Name. Published Date. URL: https://example.com'
+    };
+    
+    const template = templates[type];
+    const newText = currentText ? `${currentText}\n${template}` : template;
+    handleChange('academic_references', newText);
+  };
+  
   
   // Handle form submission
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    console.log('[CLIENT] Starting case study save...');
-    console.log('[CLIENT] Form values:', {
-      id: values.id,
-      title: values.title,
-      relationshipsCount: {
-        industries: values.industries?.length || 0,
-        algorithms: values.algorithms?.length || 0,
-        personas: values.personas?.length || 0
-      },
-      notApplicableStates
-    });
     
     startTransition(async () => {
       const submitStartTime = Date.now();
       
       try {
-        console.log('[CLIENT] Calling saveCaseStudy action...');
         
-        // Include notApplicableStates in the data sent to the server
-        const result = await saveCaseStudy({
-          ...values,
-          notApplicableStates
-        });
+        const result = await saveCaseStudy(values);
         
         const submitTime = Date.now() - submitStartTime;
-        console.log(`[CLIENT] Save completed in ${submitTime}ms`);
         
         if (result?.error) {
-          console.error('[CLIENT] Server returned error:', result.error);
           throw new Error(result.error);
         }
         
         if (!result?.caseStudy) {
-          console.error('[CLIENT] Server returned no case study data:', result);
           throw new Error('Save operation did not return case study data');
         }
         
-        console.log('[CLIENT] Save successful:', result.caseStudy);
         
         // If this was a new case study and we got an ID back, redirect to edit page
         if (isNew && result.caseStudy?.id) {
-          console.log('[CLIENT] Redirecting to edit page for new case study:', result.caseStudy.id);
           router.push(`/admin/case-studies/${result.caseStudy.id}`);
         }
         
@@ -198,13 +164,6 @@ export function CaseStudyForm({ caseStudy, algorithms, industries, personas, isN
         });
       } catch (error: any) {
         const submitTime = Date.now() - submitStartTime;
-        console.error(`[CLIENT] Save failed after ${submitTime}ms:`, {
-          error,
-          message: error?.message,
-          stack: error?.stack,
-          caseStudyId: values.id,
-          caseStudyTitle: values.title
-        });
         
         // Show specific error message if available
         const errorMessage = error?.message || 'An unknown error occurred while saving';
@@ -231,24 +190,18 @@ export function CaseStudyForm({ caseStudy, algorithms, industries, personas, isN
       return;
     }
     
-    console.log('[CLIENT] Starting publish operation for case study:', values.id);
     
     startTransition(async () => {
       const publishStartTime = Date.now();
       
       try {
-        console.log('[CLIENT] Saving case study before publishing...');
         // First save the content
-        const saveResult = await saveCaseStudy({
-          ...values,
-          notApplicableStates
-        });
+        const saveResult = await saveCaseStudy(values);
         
         if (saveResult?.error) {
           throw new Error(`Save failed: ${saveResult.error}`);
         }
         
-        console.log('[CLIENT] Save successful, now publishing...');
         // Then publish it
         const publishResult = await publishCaseStudy(values.id!, values.slug);
         
@@ -257,7 +210,6 @@ export function CaseStudyForm({ caseStudy, algorithms, industries, personas, isN
         }
         
         const publishTime = Date.now() - publishStartTime;
-        console.log(`[CLIENT] Publish completed successfully in ${publishTime}ms`);
         
         setValues(prev => ({ ...prev, published: true }));
         
@@ -268,12 +220,6 @@ export function CaseStudyForm({ caseStudy, algorithms, industries, personas, isN
         });
       } catch (error: any) {
         const publishTime = Date.now() - publishStartTime;
-        console.error(`[CLIENT] Publish failed after ${publishTime}ms:`, {
-          error,
-          message: error?.message,
-          caseStudyId: values.id,
-          caseStudySlug: values.slug
-        });
         
         const errorMessage = error?.message || 'An unknown error occurred while publishing';
         
@@ -291,13 +237,11 @@ export function CaseStudyForm({ caseStudy, algorithms, industries, personas, isN
   const handleUnpublish = async () => {
     if (!values.id) return;
     
-    console.log('[CLIENT] Starting unpublish operation for case study:', values.id);
     
     startTransition(async () => {
       const unpublishStartTime = Date.now();
       
       try {
-        console.log('[CLIENT] Calling unpublishCaseStudy action...');
         const result = await unpublishCaseStudy(values.id!, values.slug);
         
         if (result?.error || !result?.success) {
@@ -305,7 +249,6 @@ export function CaseStudyForm({ caseStudy, algorithms, industries, personas, isN
         }
         
         const unpublishTime = Date.now() - unpublishStartTime;
-        console.log(`[CLIENT] Unpublish completed successfully in ${unpublishTime}ms`);
         
         setValues(prev => ({ ...prev, published: false }));
         
@@ -316,12 +259,6 @@ export function CaseStudyForm({ caseStudy, algorithms, industries, personas, isN
         });
       } catch (error: any) {
         const unpublishTime = Date.now() - unpublishStartTime;
-        console.error(`[CLIENT] Unpublish failed after ${unpublishTime}ms:`, {
-          error,
-          message: error?.message,
-          caseStudyId: values.id,
-          caseStudySlug: values.slug
-        });
         
         const errorMessage = error?.message || 'An unknown error occurred while unpublishing';
         
@@ -337,27 +274,9 @@ export function CaseStudyForm({ caseStudy, algorithms, industries, personas, isN
   
   // Validate content before publishing
   const validateContent = () => {
-    // Create custom validators for fields that can be marked as N/A
-    const industriesValidator = (value: any): boolean => 
-      (Array.isArray(value) && value.length > 0) || notApplicableStates.industries;
-    
-    const algorithmsValidator = (value: any): boolean => 
-      (Array.isArray(value) && value.length > 0) || notApplicableStates.algorithms;
-    
-    // Find the rules for these fields
-    const modifiedRules = validationRules.map(rule => {
-      if (rule.field === 'industries') {
-        return { ...rule, validator: industriesValidator };
-      }
-      if (rule.field === 'algorithms') {
-        return { ...rule, validator: algorithmsValidator };
-      }
-      return rule;
-    });
-    
     const issues = validateFormValues({
       values,
-      validationRules: modifiedRules
+      validationRules
     });
     
     return Object.keys(issues).length === 0 ? true : issues;
@@ -463,6 +382,20 @@ export function CaseStudyForm({ caseStudy, algorithms, industries, personas, isN
                 />
                 {/* Validation message for description can be added here if needed */}
               </div>
+              
+              <div className="space-y-3">
+                <Label htmlFor="year">Year</Label>
+                <Input
+                  id="year"
+                  type="text"
+                  value={values.year}
+                  onChange={(e) => handleChange('year', parseInt(e.target.value) || new Date().getFullYear())}
+                  placeholder="Enter the year of the case study"
+                />
+                <p className="text-sm text-muted-foreground">
+                  The year when this case study was conducted or published (1990-2030)
+                </p>
+              </div>
             </div>
           </CardContent>
         </Card>
@@ -516,6 +449,47 @@ export function CaseStudyForm({ caseStudy, algorithms, industries, personas, isN
               <p className="text-sm text-muted-foreground">
                 Use the format: [^1]: Reference text. Use [^1] in main content to cite.
               </p>
+              
+              {/* Reference Helper Buttons */}
+              <div className="flex gap-2 mb-3">
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={handleAddCitationNumbers}
+                  className="text-xs"
+                >
+                  🔢 Add Citation Numbers
+                </Button>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={() => handleInsertTemplate('journal')}
+                  className="text-xs"
+                >
+                  📄 Journal Template
+                </Button>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={() => handleInsertTemplate('book')}
+                  className="text-xs"
+                >
+                  📚 Book Template
+                </Button>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={() => handleInsertTemplate('website')}
+                  className="text-xs"
+                >
+                  🌐 Website Template
+                </Button>
+              </div>
+              
               <Textarea
                 id="academic_references"
                 value={values.academic_references}
@@ -527,10 +501,10 @@ export function CaseStudyForm({ caseStudy, algorithms, industries, personas, isN
           </CardContent>
         </Card>
         
-        {/* Classifications Section */}
+        {/* Relationships Section */}
         <Card className="shadow-sm">
           <CardHeader className="p-6">
-            <CardTitle>Classifications</CardTitle>
+            <CardTitle>Relationships</CardTitle>
           </CardHeader>
           <CardContent className="space-y-8 p-6 pt-0">
             <RelationshipSelector
@@ -542,8 +516,6 @@ export function CaseStudyForm({ caseStudy, algorithms, industries, personas, isN
               label="Industries"
               placeholder="Select industries..."
               required={true}
-              notApplicable={notApplicableStates.industries}
-              onNotApplicableChange={(isNA) => handleNotApplicableChange('industries', isNA)}
             />
             
             <RelationshipSelector
@@ -555,8 +527,6 @@ export function CaseStudyForm({ caseStudy, algorithms, industries, personas, isN
               label="Algorithms"
               placeholder="Select algorithms..."
               required={true}
-              notApplicable={notApplicableStates.algorithms}
-              onNotApplicableChange={(isNA) => handleNotApplicableChange('algorithms', isNA)}
             />
             
             <RelationshipSelector
@@ -567,8 +537,6 @@ export function CaseStudyForm({ caseStudy, algorithms, industries, personas, isN
               itemValueKey="id"
               label="Personas"
               placeholder="Select personas..."
-              notApplicable={notApplicableStates.personas}
-              onNotApplicableChange={(isNA) => handleNotApplicableChange('personas', isNA)}
             />
           </CardContent>
         </Card>

@@ -1,33 +1,81 @@
 // src/app/layout.tsx
 import './globals.css';
 import type { Metadata } from 'next';
-import { Montserrat, Open_Sans } from 'next/font/google';
+import localFont from 'next/font/local';
 import Navigation from '@/components/Navigation';
 import { Toaster } from '@/components/ui/toaster';
 import FooterWrapper from '@/components/FooterWrapper';
 import Providers from '@/components/Providers';
 import { GlobalErrorBoundary } from '@/components/error-boundary/GlobalErrorBoundary';
 import { Analytics } from '@vercel/analytics/react';
+import { AutoSchema } from '@/components/AutoSchema';
 
-// Load Montserrat for headings
-const montserrat = Montserrat({
-  subsets: ['latin'],
-  display: 'swap',
+// Load Montserrat locally for headings
+const montserrat = localFont({
+  src: [
+    {
+      path: '../../public/fonts/montserrat-400.woff2',
+      weight: '400',
+      style: 'normal',
+    },
+    {
+      path: '../../public/fonts/montserrat-500.woff2',
+      weight: '500',
+      style: 'normal',
+    },
+    {
+      path: '../../public/fonts/montserrat-600.woff2',
+      weight: '600',
+      style: 'normal',
+    },
+    {
+      path: '../../public/fonts/montserrat-700.woff2',
+      weight: '700',
+      style: 'normal',
+    },
+  ],
   variable: '--font-montserrat',
-  weight: ['400', '500', '600', '700'],
+  display: 'swap',
 });
 
-// Load Open Sans for body
-const openSans = Open_Sans({
-  subsets: ['latin'],
-  display: 'swap',
+// Load Open Sans locally for body
+const openSans = localFont({
+  src: [
+    {
+      path: '../../public/fonts/opensans-400.woff2',
+      weight: '400',
+      style: 'normal',
+    },
+    {
+      path: '../../public/fonts/opensans-600.woff2',
+      weight: '600',
+      style: 'normal',
+    },
+    {
+      path: '../../public/fonts/opensans-700.woff2',
+      weight: '700',
+      style: 'normal',
+    },
+  ],
   variable: '--font-open-sans',
-  weight: ['400', '600', '700'],
+  display: 'swap',
 });
 
 export const metadata: Metadata = {
-  title: 'OpenQase',
-  description: 'Open repository for Quantum Computing business cases.',
+  title: 'Quantum Computing Business Applications | Case Studies & Learning Paths - OpenQase',
+  description: 'Discover how quantum computing solves real business problems. Access industry case studies and role-based learning paths to understand practical applications without technical complexity.',
+  keywords: ['quantum computing business applications', 'quantum algorithms', 'quantum case studies', 'business quantum solutions', 'quantum computing industry'],
+  openGraph: {
+    title: 'Quantum Computing Business Applications | OpenQase',
+    description: 'Real-world quantum computing case studies and learning paths for business decision-makers',
+    type: 'website',
+    locale: 'en_US',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Quantum Computing Business Applications | OpenQase',
+    description: 'Real-world quantum computing case studies and learning paths for business decision-makers',
+  },
 };
 
 export default function RootLayout({
@@ -38,6 +86,9 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning className={`${montserrat.variable} ${openSans.variable}`}>
       <body className="min-h-screen antialiased">
+        {/* Ghost-style automatic schema - invisible to content creators */}
+        <AutoSchema type="organization" />
+        
         <Providers>
           <div className="min-h-screen flex flex-col">
             <Navigation />

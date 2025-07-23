@@ -42,7 +42,8 @@ export async function GET(
         title,
         description,
         industries,
-        published_at
+        published_at,
+        year
       `)
       .neq('slug', slug)
       .eq('published', true)

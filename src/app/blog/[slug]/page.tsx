@@ -2,10 +2,10 @@ import { notFound } from 'next/navigation';
 import { Badge } from '@/components/ui/badge';
 import Link from "next/link";
 import { Metadata } from 'next';
-import ReactMarkdown from 'react-markdown';
 import { format } from 'date-fns';
 import { getStaticContentWithRelationships, generateStaticParamsForContentType } from '@/lib/content-fetchers';
 import { EnrichedBlogPost } from '@/lib/types';
+import { processMarkdown } from '@/lib/markdown-server';
 
 interface BlogPostPageProps {
   params: Promise<{
@@ -43,6 +43,9 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
   if (!blogPost) {
     notFound();
   }
+
+  // Process content with server-side markdown
+  const processedContent = blogPost.content ? await processMarkdown(blogPost.content) : '';
 
   // Extract related blog posts from the relationships
   const relatedPosts = blogPost.blog_post_relations?.map(relation => relation.related_blog_posts) || [];
@@ -85,8 +88,8 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
         
         {/* Content */}
         <div className="prose prose-lg dark:prose-invert max-w-none">
-          {blogPost.content && (
-            <ReactMarkdown>{blogPost.content}</ReactMarkdown>
+          {processedContent && (
+            <div dangerouslySetInnerHTML={{ __html: processedContent }} />
           )}
         </div>
         

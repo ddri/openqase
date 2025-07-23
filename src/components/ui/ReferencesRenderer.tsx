@@ -1,13 +1,5 @@
 import * as React from "react";
-import MarkdownIt from 'markdown-it';
-
-// Initialize markdown-it with same settings used in algorithm pages
-const md = new MarkdownIt({
-  html: true,
-  linkify: true,
-  typographer: true,
-  breaks: true
-});
+import { processMarkdown } from '@/lib/markdown-server';
 
 interface ReferencesRendererProps {
   referencesMarkup: string;
@@ -54,7 +46,7 @@ export const ReferencesRenderer: React.FC<ReferencesRendererProps> = ({ referenc
               [{reference.id}]
             </div>
             <div 
-              dangerouslySetInnerHTML={{ __html: md.render(reference.content) }}
+              dangerouslySetInnerHTML={{ __html: processMarkdown(reference.content) }}
               className="flex-1 text-[var(--text-secondary)] leading-7 prose-sm prose-p:mt-0 prose-a:text-[hsl(var(--primary))]"
             />
           </div>

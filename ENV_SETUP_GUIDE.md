@@ -70,7 +70,11 @@ SUPABASE_SERVICE_ROLE_KEY=your-production-service-role-key
 
 # === IMPORTANT ===
 NEXT_PUBLIC_SITE_URL=https://your-app.vercel.app
+
+# === EMAIL SERVICES (At least one required) ===
 RESEND_API_KEY=your-resend-api-key
+BEEHIIV_API_KEY=your-beehiiv-api-key
+BEEHIIV_PUBLICATION_ID=your-beehiiv-publication-id
 
 # === OPTIONAL ===
 VERCEL_ANALYTICS_ID=your-analytics-id
@@ -89,6 +93,12 @@ SENTRY_DSN=your-sentry-dsn
    - Go to [resend.com](https://resend.com)
    - API Keys section
    - Create new key for OpenQase
+
+3. **Beehiiv Configuration (Optional):**
+   - Go to [beehiiv.com](https://beehiiv.com)
+   - Create account and publication
+   - Settings → Integrations → API
+   - Copy: API Key and Publication ID
 
 ## 📋 Quick Setup Commands
 
@@ -180,9 +190,46 @@ else
 fi
 ```
 
+## 📧 Email Service Configuration
+
+OpenQase uses a dual newsletter service that can work with both Resend and Beehiiv:
+
+### Configuration Options
+
+1. **Resend Only** (Minimum setup):
+   ```bash
+   RESEND_API_KEY=your-resend-api-key
+   # Handles: transactional emails + newsletters
+   ```
+
+2. **Beehiiv Only** (Recommended for marketing):
+   ```bash
+   BEEHIIV_API_KEY=your-beehiiv-api-key
+   BEEHIIV_PUBLICATION_ID=your-publication-id
+   # Handles: newsletters only
+   ```
+
+3. **Dual Service** (Best of both worlds):
+   ```bash
+   RESEND_API_KEY=your-resend-api-key
+   BEEHIIV_API_KEY=your-beehiiv-api-key
+   BEEHIIV_PUBLICATION_ID=your-publication-id
+   # Beehiiv: newsletter marketing
+   # Resend: transactional emails
+   ```
+
+### Service Responsibilities
+
+- **Beehiiv**: Newsletter subscriptions, welcome emails, marketing campaigns
+- **Resend**: Password resets, auth emails, transactional messages
+- **Database**: Local subscriber management, unsubscribe tokens
+
+See `BEEHIIV_SETUP.md` for detailed setup instructions.
+
 ## 📚 Summary
 
 - **Local Development:** Use `.env.local` with Supabase local instance
 - **Production Deployment:** Set variables in Vercel dashboard
 - **Testing:** Create `.env.local.production` for production data testing
+- **Email Services:** At least one (Resend or Beehiiv) required for newsletters
 - **Never commit:** Real API keys or production URLs to git 

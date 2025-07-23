@@ -58,16 +58,6 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/about#mission" className="text-base text-muted-foreground hover:text-accent transition-colors">
-                  Our Mission
-                </Link>
-              </li>
-              <li>
-                <Link href="/about#team" className="text-base text-muted-foreground hover:text-accent transition-colors">
-                  Team
-                </Link>
-              </li>
-              <li>
                 <Link href="/roadmap" className="text-base text-muted-foreground hover:text-accent transition-colors">
                   Roadmap
                 </Link>

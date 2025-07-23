@@ -1,4 +1,5 @@
 import { Metadata } from 'next'
+import { FeedbackButton } from '@/components/FeedbackButton'
 
 export const metadata: Metadata = {
   title: 'Product Roadmap - OpenQase',
@@ -15,7 +16,7 @@ export default function RoadmapPage() {
             Product Roadmap
           </h1>
           <p className="text-xl text-muted-foreground">
-            Our vision for the future of quantum computing business applications. 
+            Our collective community vision for the future of OpenQase. 
             See what we're building and what's coming next.
           </p>
         </div>
@@ -32,7 +33,7 @@ export default function RoadmapPage() {
             <div className="bg-card border rounded-lg p-6">
               <div className="flex items-center justify-between mb-4">
                 <h3 className="text-xl font-semibold">Version 0.4.0 - Static Site Generation</h3>
-                <span className="text-sm text-muted-foreground">July 2025</span>
+                <span className="text-sm text-muted-foreground">June 2025</span>
               </div>
               <div className="grid gap-4 md:grid-cols-2">
                 <div>
@@ -67,17 +68,17 @@ export default function RoadmapPage() {
             <div className="space-y-6">
               <div className="bg-card border rounded-lg p-6">
                 <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-xl font-semibold">UX & SEO Optimization</h3>
-                  <span className="text-sm text-muted-foreground">Q1 2025</span>
+                  <h3 className="text-xl font-semibold">UX & Database Optimization</h3>
+                  <span className="text-sm text-muted-foreground">July 2025</span>
                 </div>
                 <p className="text-muted-foreground mb-4">
-                  Improving user experience, search visibility, and conversion rates through data-driven design improvements.
+                  Improving user experience and search visibility through data-driven design improvements.
                 </p>
                 <div className="grid gap-4 md:grid-cols-2">
                   <div>
                     <h4 className="font-medium mb-2">✅ Recently Completed</h4>
                     <ul className="text-muted-foreground space-y-1 text-sm">
-                      <li>• Ghost-style automatic schema markup</li>
+                      <li>• Introduced automatic schema markup</li>
                       <li>• Landing page copy optimization</li>
                       <li>• SEO metadata improvements</li>
                       <li>• CTA and messaging refinements</li>
@@ -86,10 +87,10 @@ export default function RoadmapPage() {
                   <div>
                     <h4 className="font-medium mb-2">🚧 In Progress</h4>
                     <ul className="text-muted-foreground space-y-1 text-sm">
-                      <li>• Enhanced About page and company story</li>
+                      <li>• Enhanced About page and community story</li>
                       <li>• Enhanced case study presentation</li>
                       <li>• Content structure improvements</li>
-                      <li>• User engagement optimization</li>
+                      <li>• Database improvements for improved response time</li>
                     </ul>
                   </div>
                 </div>
@@ -98,10 +99,10 @@ export default function RoadmapPage() {
               <div className="bg-card border rounded-lg p-6">
                 <div className="flex items-center justify-between mb-4">
                   <h3 className="text-xl font-semibold">Enhanced Content Management</h3>
-                  <span className="text-sm text-muted-foreground">Q3 2025</span>
+                  <span className="text-sm text-muted-foreground">July/August 2025</span>
                 </div>
                 <p className="text-muted-foreground mb-4">
-                  Improving the content creation and management experience for administrators and contributors.
+                  Improving the content creation and management experience for administrators and contributors. Implementing the Qookie AI research assistant.
                 </p>
                 <div className="grid gap-4 md:grid-cols-2">
                   <div>
@@ -168,61 +169,6 @@ export default function RoadmapPage() {
                   <li>• Semantic search capabilities</li>
                 </ul>
               </div>
-
-              <div className="bg-card border rounded-lg p-6">
-                <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-xl font-semibold">Technical Modernization</h3>
-                  <span className="text-sm text-muted-foreground">Q2-Q3 2026</span>
-                </div>
-                <p className="text-muted-foreground mb-4">
-                  Ongoing technical improvements and framework updates to maintain modern development practices.
-                </p>
-                <ul className="text-muted-foreground space-y-2 text-sm">
-                  <li>• Migrate from next/head to App Router metadata API</li>
-                  <li>• Dependency updates and security patches</li>
-                  <li>• Performance optimizations and monitoring</li>
-                  <li>• Developer experience improvements</li>
-                  <li>• Code modernization and refactoring</li>
-                </ul>
-              </div>
-
-            </div>
-          </section>
-
-          {/* Future Vision */}
-          <section className="mb-16">
-            <div className="flex items-center gap-3 mb-6">
-              <div className="w-3 h-3 rounded-full bg-purple-500"></div>
-              <h2 className="text-2xl font-semibold">Future Vision</h2>
-            </div>
-            
-            <div className="bg-gradient-to-r from-primary/5 to-primary/10 rounded-xl p-8">
-              <h3 className="text-xl font-semibold mb-4">The Ultimate Quantum Business Platform</h3>
-              <p className="text-muted-foreground mb-6">
-                Our long-term vision is to create the definitive platform for quantum computing business applications, 
-                serving as the bridge between cutting-edge research and practical implementation.
-              </p>
-              
-              <div className="grid gap-6 md:grid-cols-2">
-                <div>
-                  <h4 className="font-medium mb-3">🌐 Global Ecosystem</h4>
-                  <ul className="text-muted-foreground space-y-2 text-sm">
-                    <li>• Multi-language support and localization</li>
-                    <li>• Regional quantum computing insights</li>
-                    <li>• Global expert network integration</li>
-                    <li>• Cross-industry collaboration tools</li>
-                  </ul>
-                </div>
-                <div>
-                  <h4 className="font-medium mb-3">🔬 Advanced Capabilities</h4>
-                  <ul className="text-muted-foreground space-y-2 text-sm">
-                    <li>• Real-time quantum hardware integration</li>
-                    <li>• Predictive business impact modeling</li>
-                    <li>• Automated case study generation</li>
-                    <li>• AI-powered research synthesis</li>
-                  </ul>
-                </div>
-              </div>
             </div>
           </section>
 
@@ -235,12 +181,7 @@ export default function RoadmapPage() {
                 Let us know what matters most to you and your organization.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <a 
-                  href="/contact" 
-                  className="bg-primary text-primary-foreground hover:bg-primary/90 px-6 py-3 rounded-lg font-medium transition-colors"
-                >
-                  Share Feedback
-                </a>
+                <FeedbackButton />
                 <a 
                   href="https://github.com/ddri/openqase" 
                   target="_blank" 

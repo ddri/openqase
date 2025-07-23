@@ -1,0 +1,35 @@
+# OpenQase Robots.txt
+# Allow search engines, block commercial crawlers
+
+# Default rules for search engines
+User-agent: *
+Allow: /
+Allow: /case-study/
+Allow: /paths/
+Allow: /blog/
+Disallow: /admin/
+Disallow: /api/
+Disallow: /_next/
+Crawl-delay: 2
+
+# Block aggressive commercial crawlers
+User-agent: SemrushBot
+Disallow: /
+
+User-agent: AhrefsBot
+Disallow: /
+
+User-agent: MJ12bot
+Disallow: /
+
+User-agent: DotBot
+Disallow: /
+
+User-agent: BLEXBot
+Disallow: /
+
+User-agent: DataForSeoBot
+Disallow: /
+
+# Sitemap location
+Sitemap: https://openqase.com/sitemap.xml

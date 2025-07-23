@@ -25,7 +25,7 @@ interface FeatureCard {
 const features: FeatureCard[] = [
   {
     title: "Real Business Applications",
-    description: "See actual quantum computing implementations from companies like HSBC, Google DeepMind, and Mitsui. Learn from proven use cases with measurable outcomes.",
+    description: "See actual quantum computing implementations from companies like Ford, Airbus, and Goldman Sachs. Learn from proven use cases with measurable outcomes.",
     icon: <FileText className="w-6 h-6" />,
     focus: "Proven implementations"
   },
@@ -36,7 +36,7 @@ const features: FeatureCard[] = [
     focus: "Accessible insights"
   },
   {
-    title: "Tailored to Your Context",
+    title: "Tailored to Your Personal Context",
     description: "Content organized by your professional role and industry sector. Get relevant insights for your specific responsibilities and business challenges.",
     icon: <Users className="w-6 h-6" />,
     focus: "Personal relevance"
@@ -60,7 +60,7 @@ export default function HomePage() {
           </h1>
 
           <p className="text-xl md:text-2xl text-muted-foreground max-w-3xl mx-auto">
-            Get practical insights from real quantum computing implementations. See how companies like HSBC and Google apply quantum algorithms to solve actual business challenges.
+            Get practical insights from real quantum computing implementations. See how companies like BMW and Goldman Sachs apply quantum algorithms to solve actual business challenges.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center mt-8">
@@ -139,11 +139,11 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Why Choose OpenQASE Section */}
+      {/* Why OpenQASE Section */}
       <section className="py-24">
         <div className="container max-w-7xl">
           <div className="text-center mb-16">
-            <h2 className="mb-4">Why Business Leaders Choose OpenQase</h2>
+            <h2 className="mb-4">Why The Community Created OpenQase</h2>
             <p className="text-xl text-muted-foreground">
               The practical approach to understanding quantum computing's business impact
             </p>

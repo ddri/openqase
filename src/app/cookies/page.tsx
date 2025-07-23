@@ -1,9 +1,11 @@
+import { PrivacyContactLink } from '@/components/PrivacyContactLink';
+
 export default function CookiePolicyPage() {
   return (
     <div className="container mx-auto px-4 py-8">
       <h1 className="text-3xl font-bold mb-4">Cookie Policy</h1>
       <p className="mb-4">
-        This Cookie Policy explains how openQase ("we", "us", or "our") uses cookies and similar technologies to recognize you when you visit our website. It explains what these technologies are and why we use them, as well as your rights to control our use of them.
+        This Cookie Policy explains how OpenQase ("we", "us", or "our") uses cookies and similar technologies to recognize you when you visit our website. It explains what these technologies are and why we use them, as well as your rights to control our use of them.
       </p>
 
       <h2 className="text-2xl font-semibold mb-2">1. What are cookies?</h2>
@@ -11,7 +13,7 @@ export default function CookiePolicyPage() {
         Cookies are small data files that are placed on your computer or mobile device when you visit a website. Cookies are widely used by website owners in order to make their websites work, or to work more efficiently, as well as to provide reporting information.
       </p>
       <p className="mb-4">
-        Cookies set by the website owner (in this case, openQase) are called "first-party cookies". Cookies set by parties other than the website owner are called "third-party cookies". Third-party cookies enable third-party features or functionality to be provided on or through the website (e.g., advertising, interactive content, and analytics). The parties that set these third-party cookies can recognize your computer both when it visits the website in question and also when it visits certain other websites.
+        Cookies set by the website owner (in this case, OpenQase) are called "first-party cookies". Cookies set by parties other than the website owner are called "third-party cookies". Third-party cookies enable third-party features or functionality to be provided on or through the website (e.g., advertising, interactive content, and analytics). The parties that set these third-party cookies can recognize your computer both when it visits the website in question and also when it visits certain other websites.
       </p>
 
       <h2 className="text-2xl font-semibold mb-2">2. Why do we use cookies?</h2>
@@ -46,7 +48,7 @@ export default function CookiePolicyPage() {
 
       <h2 className="text-2xl font-semibold mb-2">6. Where can I get further information?</h2>
       <p className="mb-4">
-        If you have any questions about our use of cookies or other technologies, please email us at hello@openqase.com.
+        If you have any questions about our use of cookies or other technologies, please contact us via <PrivacyContactLink />.
       </p>
     </div>
   );

@@ -8,6 +8,7 @@ import FooterWrapper from '@/components/FooterWrapper';
 import Providers from '@/components/Providers';
 import { GlobalErrorBoundary } from '@/components/error-boundary/GlobalErrorBoundary';
 import { Analytics } from '@vercel/analytics/react';
+import { SpeedInsights } from '@vercel/speed-insights/next';
 import { AutoSchema } from '@/components/AutoSchema';
 
 // Load Montserrat locally for headings
@@ -103,6 +104,7 @@ export default function RootLayout({
           <Toaster />
         </Providers>
         <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );

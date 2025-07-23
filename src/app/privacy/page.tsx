@@ -1,9 +1,11 @@
+import { PrivacyContactLink } from '@/components/PrivacyContactLink';
+
 export default function PrivacyPolicyPage() {
   return (
     <div className="container mx-auto px-4 py-8">
       <h1 className="text-3xl font-bold mb-4">Privacy Policy</h1>
       <p className="mb-4">
-        Welcome to openQase! This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our website and use our services.
+        Welcome to OpenQase! This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our website and use our services.
       </p>
 
       <h2 className="text-2xl font-semibold mb-2">1. Information We Collect</h2>
@@ -50,7 +52,7 @@ export default function PrivacyPolicyPage() {
 
       <h2 className="text-2xl font-semibold mb-2">6. Contact Us</h2>
       <p className="mb-4">
-        If you have questions or comments about this Privacy Policy, please contact us at: [Your Contact Information]
+        If you have questions or comments about this Privacy Policy, please contact us via <PrivacyContactLink />.
       </p>
     </div>
   );

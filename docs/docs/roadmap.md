@@ -144,6 +144,8 @@ This document outlines the planned features, improvements, and priorities for th
     *   Image optimization and lazy loading
     *   Bundle size optimization and code splitting
     *   Monitor Vercel image optimization costs (currently minimal due to low image usage)
+    *   Implement selective API route caching for high-traffic endpoints
+    *   Configure function timeouts (different limits for public vs admin APIs)
     *   Status: Planned for Q2-Q3 2025
 
 *   **Analytics Integration**

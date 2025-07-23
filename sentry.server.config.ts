@@ -40,7 +40,6 @@ Sentry.init({
   
   // Integrations
   integrations: [
-    Sentry.prismaIntegration(),
-    Sentry.httpIntegration(),
+    Sentry.httpIntegration(), // Monitors Supabase API calls and external HTTP requests
   ],
 });

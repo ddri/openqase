@@ -3,7 +3,7 @@ import { NewsletterSignup } from '@/components/ui/newsletter-signup'
 import { AutoSchema } from '@/components/AutoSchema';
 
 export const metadata: Metadata = {
-  title: 'About OpenQase | Making Quantum Computing Accessible to Business Leaders',
+  title: 'About OpenQase | Making Quantum Computing Accessible to Everyone',
   description: 'Learn about OpenQase\'s mission to bridge the gap between quantum computing theory and practical business applications. Discover our approach to making complex quantum concepts accessible.',
 };
 
@@ -21,7 +21,7 @@ export default function AboutPage() {
               Making Quantum Computing Accessible to Business Leaders
             </h1>
             <p className="text-xl text-muted-foreground">
-              OpenQase bridges the gap between quantum computing theory and practical business applications, helping decision-makers understand real-world quantum value without technical complexity.
+              OpenQase bridges the gap between the theory and practical business applications, helping decision-makers understand real-world quantum value without the complexity.
             </p>
           </div>
 
@@ -32,7 +32,7 @@ export default function AboutPage() {
             <h2 className="mb-6">The Problem We Solve</h2>
             <div className="space-y-6">
               <p className="text-lg text-muted-foreground">
-                Quantum computing promises to transform industries, but understanding practical applications remains a challenge for business leaders.
+                Quantum computing promises to transform industries, but understanding practical applications remains a challenge for business leaders. Even for those of us working for Quantum Computing companies, it's not been easy to answer questions like "when will quantum computing be ready", or "what is the business case for a quantum computer".
               </p>
               
               <div className="bg-muted/30 rounded-lg p-6 border-l-4 border-primary">
@@ -42,7 +42,7 @@ export default function AboutPage() {
               </div>
               
               <p className="text-muted-foreground">
-                OpenQase solves this by curating real-world quantum implementations and presenting them in business-focused language. We show you what companies like HSBC, Google, and Mitsui are actually doing with quantum computing—and how it impacts their bottom line.
+                OpenQase solves this by curating real-world quantum implementations and presenting them in business-focused language. We show you what companies like Ford, Goldman Sachs, and Airbus are actually doing with quantum computing—and how it impacts their bottom line.
               </p>
             </div>
           </section>
@@ -82,9 +82,9 @@ export default function AboutPage() {
           <section className="mb-16">
             <h2 className="mb-6">A Different Approach</h2>
             <p className="text-lg text-muted-foreground mb-8">
-              Unlike academic resources or vendor marketing, OpenQase focuses on practical implementation insights organized around how you actually work.
+              Unlike academic resources or vendor marketing, OpenQase focuses on practical implementation insights organized around how you actually work. These learning paths are a result of real-world experience working in the quantum computing industry, and began as real-life projects and case studies developed with our various teams. We are making this information public so you don't have to go through what we did.
             </p>
-            <div className="grid gap-8 md:grid-cols-3">
+            <div className="grid gap-8">
               <div className="bg-card border rounded-lg p-6 hover:shadow-md transition-shadow">
                 <div className="mb-4">
                   <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mb-3">

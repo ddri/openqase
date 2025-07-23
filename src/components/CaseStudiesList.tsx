@@ -47,7 +47,7 @@ export function CaseStudiesList({ caseStudies }: CaseStudiesListProps) {
       return (
         caseStudy.title.toLowerCase().includes(query) ||
         (caseStudy.description?.toLowerCase().includes(query) || false) ||
-        caseStudy.year.toString().includes(query) // Search by year
+        (caseStudy.year?.toString().includes(query) || false) // Search by year with null check
       );
     })
     .sort((a, b) => {

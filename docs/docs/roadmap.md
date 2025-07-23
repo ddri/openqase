@@ -143,6 +143,7 @@ This document outlines the planned features, improvements, and priorities for th
     *   Database query optimization and indexing
     *   Image optimization and lazy loading
     *   Bundle size optimization and code splitting
+    *   Monitor Vercel image optimization costs (currently minimal due to low image usage)
     *   Status: Planned for Q2-Q3 2025
 
 *   **Analytics Integration**

@@ -72,9 +72,9 @@ export default async function CaseStudyPage({ params }: CaseStudyPageProps) {
     // Process citations in content if there are references
     if (caseStudy.academic_references) {
       const processedMarkdown = processContentWithReferences(caseStudy.main_content);
-      processedContent = await processMarkdown(processedMarkdown);
+      processedContent = processMarkdown(processedMarkdown);
     } else {
-      processedContent = await processMarkdown(caseStudy.main_content);
+      processedContent = processMarkdown(caseStudy.main_content);
     }
   }
 

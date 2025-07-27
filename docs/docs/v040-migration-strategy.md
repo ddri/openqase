@@ -496,20 +496,20 @@ export function trackPageLoad(contentType: string, slug: string) {
 ## Success Metrics
 
 ### Performance Targets
-- **Page Load Time**: 30s → <500ms (99%+ improvement)
+- **Page Load Time**: 30s → under 500ms (99%+ improvement)
 - **Core Web Vitals**: All green scores
-- **Build Time**: <3 minutes for full site
+- **Build Time**: under 3 minutes for full site
 - **CDN Cache Hit Rate**: >95%
 
 ### Technical Targets  
 - **Code Reduction**: Remove 1000+ lines of complex API code
 - **Database Queries**: Reduce from N+1 to single query per page
-- **Error Rate**: <0.1% content loading failures
+- **Error Rate**: under 0.1% content loading failures
 - **Rebuild Success Rate**: >99%
 
 ### Editorial Workflow Targets
-- **Preview Access**: <5 seconds from admin to preview
-- **Publish to Live**: <3 minutes from publish to live site
+- **Preview Access**: under 5 seconds from admin to preview
+- **Publish to Live**: under 3 minutes from publish to live site
 - **Content Editor Satisfaction**: Maintain current workflow ease
 
 ## Rollback Plan

@@ -413,9 +413,9 @@ export async function getServerSideProps({ params, preview = false }) {
 ## Performance Projections
 
 Based on Jamstack CMS benchmarks:
-- **Page Load Times**: < 500ms (vs current 2-30 seconds)
+- **Page Load Times**: &lt; 500ms (vs current 2-30 seconds)
 - **Core Web Vitals**: All green scores
-- **Build Times**: < 2 minutes for full site
+- **Build Times**: &lt; 2 minutes for full site
 - **Cache Hit Ratio**: > 95% for content pages
 
 ## Next Steps

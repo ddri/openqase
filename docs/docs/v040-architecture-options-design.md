@@ -35,7 +35,7 @@ Pre-render ALL content pages at build time, serve from CDN, rebuild on content c
 ### Architecture Diagram
 ```
 Content Update (Admin) → Database → Webhook → GitHub Action → 
-Static Build → Vercel Deploy → CDN → User (< 100ms)
+Static Build → Vercel Deploy → CDN → User (&lt; 100ms)
 ```
 
 ### Implementation Details
@@ -165,7 +165,7 @@ Static generation with Incremental Static Regeneration - best of both worlds.
 
 ### Architecture Diagram
 ```
-User Request → CDN Cache (Hit) → User (< 100ms)
+User Request → CDN Cache (Hit) → User (&lt; 100ms)
              ↓ (Miss)
            Next.js ISR → Database → Generate Page → Cache → User
                       ↓
@@ -318,7 +318,7 @@ export function PreviewBanner({ preview }: { preview: boolean }) {
 ```
 
 ### Benefits
-- ✅ **Fast Performance**: < 500ms for cached pages, < 2s for new pages
+- ✅ **Fast Performance**: &lt; 500ms for cached pages, &lt; 2s for new pages
 - ✅ **Immediate Updates**: Content changes visible within seconds
 - ✅ **Scalable**: Handles traffic spikes automatically
 - ✅ **Preview Mode**: Real-time preview for editors
@@ -342,7 +342,7 @@ Dedicated content API with aggressive CDN caching, similar to Contentful's appro
 
 ### Architecture Diagram
 ```
-User Request → CDN Edge (Hit) → User (< 100ms)
+User Request → CDN Edge (Hit) → User (&lt; 100ms)
              ↓ (Miss)
            Content API → Database → Transform → Cache → User
                      ↓
@@ -727,7 +727,7 @@ This approach maintains the simplicity of static generation while providing esse
 ### Expected Outcomes
 
 **Performance Improvements**:
-- Page load times: 30s → < 500ms
+- Page load times: 30s → &lt; 500ms
 - Core Web Vitals: All green scores
 - API timeouts: Eliminated completely
 
@@ -737,7 +737,7 @@ This approach maintains the simplicity of static generation while providing esse
 - Simplified debugging and maintenance
 
 **Editorial Experience**:
-- Immediate content updates (< 10 seconds)
+- Immediate content updates (&lt; 10 seconds)
 - Preview mode for draft content
 - Clear publish feedback
 

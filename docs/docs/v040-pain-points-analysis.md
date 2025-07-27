@@ -166,7 +166,7 @@ const { data } = await supabase
 ## Success Criteria for 0.4.0
 
 ### Performance Improvements
-- [ ] All content pages load in < 1 second
+- [ ] All content pages load in &lt; 1 second
 - [ ] Eliminate API timeouts entirely
 - [ ] Improve Core Web Vitals to all green scores
 - [ ] Reduce database query count by 50%

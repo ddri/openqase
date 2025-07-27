@@ -1,22 +1,45 @@
 // src/components/ui/card.tsx
+"use client"
+
 import * as React from "react";
+import { motion } from "framer-motion";
 
 interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
   fixedHeight?: boolean;
   height?: number;
+  animated?: boolean;
 }
 
 const Card = React.forwardRef<HTMLDivElement, CardProps>(
-  ({ className, fixedHeight = false, height = 210, ...props }, ref) => (
-    <div
-      ref={ref}
-      className={`bg-[var(--card)] text-[var(--card-foreground)] rounded-lg border-2 border-[var(--border)] shadow-sm 
+  ({ className, fixedHeight = false, height = 210, animated = false, ...props }, ref) => {
+    const baseClassName = `bg-[var(--card)] text-[var(--card-foreground)] rounded-lg border-2 border-[var(--border)] shadow-sm 
       [data-theme='dark'] & relative overflow-hidden 
-      ${fixedHeight ? 'flex flex-col' : ''} ${className || ""}`}
-      style={fixedHeight ? { height: `${height}px` } : undefined}
-      {...props}
-    />
-  )
+      ${fixedHeight ? 'flex flex-col' : ''} ${className || ""}`;
+    
+    const style = fixedHeight ? { height: `${height}px` } : undefined;
+
+    if (animated) {
+      return (
+        <motion.div
+          ref={ref}
+          className={baseClassName}
+          style={style}
+          whileHover={{ y: -2 }}
+          transition={{ duration: 0.2, ease: "easeOut" }}
+          {...props}
+        />
+      );
+    }
+
+    return (
+      <div
+        ref={ref}
+        className={baseClassName}
+        style={style}
+        {...props}
+      />
+    );
+  }
 );
 
 Card.displayName = "Card";

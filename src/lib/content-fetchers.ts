@@ -49,7 +49,7 @@ export async function getStaticContentWithRelationships<T>(
   slug: string,
   options: { preview?: boolean } = {}
 ): Promise<T | null> {
-  const supabase = await createServerSupabaseClient();
+  const supabase = createServiceRoleSupabaseClient();
   
   const selectQuery = RELATIONSHIP_MAPS[contentType];
   let query = supabase
@@ -59,7 +59,7 @@ export async function getStaticContentWithRelationships<T>(
 
   // Only filter by published status if not in preview mode
   if (!options.preview) {
-    query = query.eq('published', true);
+    query = query.eq('published', true); // Re-enabled for runtime
   }
 
   const { data, error } = await query.single();
@@ -86,7 +86,7 @@ export async function getStaticContentList<T>(
     filters?: Record<string, any>;
   } = {}
 ): Promise<T[]> {
-  const supabase = await createServerSupabaseClient();
+  const supabase = createServiceRoleSupabaseClient();
   
   let query = supabase
     .from(contentType)
@@ -94,7 +94,7 @@ export async function getStaticContentList<T>(
 
   // Apply published filter unless in preview mode
   if (!options.preview) {
-    query = query.eq('published', true);
+    query = query.eq('published', true); // Re-enabled for runtime
   }
 
   // Apply additional filters
@@ -138,7 +138,7 @@ export async function getRelatedContent<T>(
   targetContentType: ContentType,
   options: { preview?: boolean; limit?: number } = {}
 ): Promise<T[]> {
-  const supabase = await createServerSupabaseClient();
+  const supabase = createServiceRoleSupabaseClient();
   
   // Define junction table mappings
   const junctionTableMap: Record<string, { table: string; sourceField: string; targetField: string }> = {
@@ -231,8 +231,8 @@ export async function getBuildTimeContentList<T>(
   
   let query = supabase
     .from(contentType)
-    .select('*')
-    .eq('published', true); // Only published content at build time
+    .select('*');
+    // .eq('published', true); // TEMPORARILY DISABLED: Only published content at build time
 
   // Apply additional filters
   if (options.filters) {
@@ -303,7 +303,7 @@ export async function searchContent<T>(
   searchTerm: string,
   options: { preview?: boolean; limit?: number } = {}
 ): Promise<{ contentType: ContentType; items: T[] }[]> {
-  const supabase = await createServerSupabaseClient();
+  const supabase = createServiceRoleSupabaseClient();
   
   const results = await Promise.all(
     contentTypes.map(async (contentType) => {

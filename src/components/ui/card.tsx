@@ -4,11 +4,22 @@
 import * as React from "react";
 import { motion } from "framer-motion";
 
-interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
+interface BaseCardProps {
   fixedHeight?: boolean;
   height?: number;
-  animated?: boolean;
+  className?: string;
 }
+
+interface StaticCardProps extends BaseCardProps, React.HTMLAttributes<HTMLDivElement> {
+  animated?: false;
+}
+
+interface AnimatedCardProps extends BaseCardProps {
+  animated: true;
+  children?: React.ReactNode;
+}
+
+type CardProps = StaticCardProps | AnimatedCardProps;
 
 const Card = React.forwardRef<HTMLDivElement, CardProps>(
   ({ className, fixedHeight = false, height = 210, animated = false, ...props }, ref) => {
@@ -19,6 +30,7 @@ const Card = React.forwardRef<HTMLDivElement, CardProps>(
     const style = fixedHeight ? { height: `${height}px` } : undefined;
 
     if (animated) {
+      const { animated: _, ...motionProps } = props as AnimatedCardProps;
       return (
         <motion.div
           ref={ref}
@@ -26,17 +38,18 @@ const Card = React.forwardRef<HTMLDivElement, CardProps>(
           style={style}
           whileHover={{ y: -2 }}
           transition={{ duration: 0.2, ease: "easeOut" }}
-          {...props}
+          {...motionProps}
         />
       );
     }
 
+    const { animated: _, ...divProps } = props as StaticCardProps;
     return (
       <div
         ref={ref}
         className={baseClassName}
         style={style}
-        {...props}
+        {...divProps}
       />
     );
   }

@@ -38,7 +38,7 @@ const nextConfig: NextConfig = {
   pageExtensions: ['ts', 'tsx', 'js', 'jsx'],
   // Enable TypeScript checking during build
   typescript: {
-    ignoreBuildErrors: true,  // ✅ Temporarily enabled for performance testing
+    ignoreBuildErrors: false,
   },
   
   // Security Headers

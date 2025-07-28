@@ -8,8 +8,6 @@ This document catalogs all UI components in the OpenQase design system. Componen
 ### Themes
 - **Light** - Default clean theme with emerald accents
 - **Dark** - Dark mode with subtle graphite tones
-- **Graphite** - Distinctive dark theme with orange accents
-- **Paper** - Minimal monochromatic theme for distraction-free reading
 
 ### Base Components (`src/components/ui/`)
 

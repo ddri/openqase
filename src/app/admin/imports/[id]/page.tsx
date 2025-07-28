@@ -62,20 +62,39 @@ export type ImportBatchWithItems = {
 }
 
 interface BatchReviewPageProps {
-  params: { id: string }
+  params: Promise<{
+    id: string;
+  }>;
 }
 
 export default async function BatchReviewPage({ params }: BatchReviewPageProps) {
+  const resolvedParams = await params;
+  
+  // TODO: This feature requires database migration to be run
+  // For now, show a temporary message
+  return (
+    <div className="p-6">
+      <div className="bg-yellow-50 border border-yellow-200 rounded-md p-4">
+        <h3 className="text-yellow-800 font-medium">Import System Disabled</h3>
+        <p className="text-yellow-700 mt-1">
+          The Qookie import system requires database migration. This feature is temporarily disabled for performance testing.
+        </p>
+      </div>
+    </div>
+  );
+
+  // Original code commented out until migration is run
+  /*
   const supabase = createServiceRoleSupabaseClient();
   
   // Fetch batch with staging case studies
   const { data: batch, error } = await supabase
-    .from('import_batches')
+    .from('import_batches' as any)
     .select(`
       *,
       staging_case_studies (*)
     `)
-    .eq('id', params.id)
+    .eq('id', resolvedParams.id)
     .single();
 
   if (error) {
@@ -102,4 +121,5 @@ export default async function BatchReviewPage({ params }: BatchReviewPageProps) 
   }
 
   return <BatchReviewClient batch={batch as ImportBatchWithItems} />
+  */
 }

@@ -85,7 +85,7 @@ case_studies (
 2. **year**: Integer representing the year of the case study
 3. **industries/personas**: Must use exact slug values from OpenQase database
 4. **companies/hardware/software**: Plain text arrays, no specific format required
-5. **algorithms**: Should match existing algorithm names where possible
+5. **algorithms**: Must match existing algorithm names 
 
 ## Valid Taxonomy Values
 

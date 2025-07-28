@@ -32,7 +32,7 @@ export function PerformanceMonitor({ pageName, contentType }: PerformanceMonitor
           console.log(`   - TLS Setup: ${nav.secureConnectionStart ? nav.connectEnd - nav.secureConnectionStart : 0}ms`);
           console.log(`   - Server Response: ${nav.responseEnd - nav.requestStart}ms`);
           console.log(`   - DOM Processing: ${nav.domComplete - nav.responseEnd}ms`);
-          console.log(`   - Page Load Complete: ${nav.loadEventEnd - nav.navigationStart}ms`);
+          console.log(`   - Page Load Complete: ${nav.loadEventEnd - nav.fetchStart}ms`);
         }
 
         if (entry.entryType === 'largest-contentful-paint') {
@@ -45,7 +45,7 @@ export function PerformanceMonitor({ pageName, contentType }: PerformanceMonitor
         }
 
         if (entry.entryType === 'layout-shift') {
-          const cls = entry as LayoutShift;
+          const cls = entry as any; // TypeScript doesn't have LayoutShift type
           if (!cls.hadRecentInput) {
             console.log(`📐 [PERF] Cumulative Layout Shift (${pageName}): ${cls.value}`);
           }

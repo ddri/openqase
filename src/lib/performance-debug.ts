@@ -89,8 +89,8 @@ export const measurePageLoad = () => {
       console.log(`   - DNS Lookup: ${navigation.domainLookupEnd - navigation.domainLookupStart}ms`);
       console.log(`   - TCP Connect: ${navigation.connectEnd - navigation.connectStart}ms`);
       console.log(`   - Server Response: ${navigation.responseEnd - navigation.requestStart}ms`);
-      console.log(`   - DOM Content Loaded: ${navigation.domContentLoadedEventEnd - navigation.navigationStart}ms`);
-      console.log(`   - Full Load: ${navigation.loadEventEnd - navigation.navigationStart}ms`);
+      console.log(`   - DOM Content Loaded: ${navigation.domContentLoadedEventEnd - navigation.fetchStart}ms`);
+      console.log(`   - Full Load: ${navigation.loadEventEnd - navigation.fetchStart}ms`);
     }
 
     // Measure Largest Contentful Paint

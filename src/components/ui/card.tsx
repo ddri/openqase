@@ -14,9 +14,8 @@ interface StaticCardProps extends BaseCardProps, React.HTMLAttributes<HTMLDivEle
   animated?: false;
 }
 
-interface AnimatedCardProps extends BaseCardProps {
+interface AnimatedCardProps extends BaseCardProps, React.HTMLAttributes<HTMLDivElement> {
   animated: true;
-  children?: React.ReactNode;
 }
 
 type CardProps = StaticCardProps | AnimatedCardProps;
@@ -30,7 +29,7 @@ const Card = React.forwardRef<HTMLDivElement, CardProps>(
     const style = fixedHeight ? { height: `${height}px` } : undefined;
 
     if (animated) {
-      const { animated: _, ...motionProps } = props as AnimatedCardProps;
+      const { animated: _, ...motionProps } = props;
       return (
         <motion.div
           ref={ref}
@@ -43,7 +42,7 @@ const Card = React.forwardRef<HTMLDivElement, CardProps>(
       );
     }
 
-    const { animated: _, ...divProps } = props as StaticCardProps;
+    const { animated: _, ...divProps } = props;
     return (
       <div
         ref={ref}

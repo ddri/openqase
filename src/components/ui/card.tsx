@@ -14,7 +14,18 @@ interface StaticCardProps extends BaseCardProps, React.HTMLAttributes<HTMLDivEle
   animated?: false;
 }
 
-interface AnimatedCardProps extends BaseCardProps, React.HTMLAttributes<HTMLDivElement> {
+// ARCHITECTURAL DECISION: Event Handler Exclusion for Motion Component Compatibility
+// ================================================================================
+// Framer Motion's event handlers have different signatures than standard HTML events:
+// - HTML onDrag: (event: DragEvent) => void  
+// - Motion onDrag: (event: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => void
+// - HTML onAnimationStart: (event: AnimationEvent) => void
+// - Motion onAnimationStart: (definition: AnimationDefinition) => void
+//
+// Solution: Exclude conflicting event props to prevent TypeScript errors while
+// maintaining all other HTML attributes (className, onClick, etc.)
+// This follows the industry standard pattern used by React-Aria, Emotion, and other libraries.
+interface AnimatedCardProps extends BaseCardProps, Omit<React.HTMLAttributes<HTMLDivElement>, 'onDrag' | 'onDragEnd' | 'onDragStart' | 'onAnimationStart' | 'onAnimationEnd'> {
   animated: true;
 }
 

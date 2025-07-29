@@ -299,6 +299,7 @@ curl -X GET http://localhost:3004/api/newsletter/subscription \
 <!-- - [API Documentation](./api-reference.md) -->
 <!-- - [Resend Integration](./email-integration.md) -->
 
+
 ---
 
 **Last Updated**: January 2025

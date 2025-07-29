@@ -11,4 +11,6 @@ Key functionalities include:
 *   **User Authentication & Profiles:** Utilizes Supabase Auth for user management, protecting specific routes and potentially offering user profiles.
 *   **Learning Paths:** The presence of a `/paths` route suggests functionality related to structured learning or content pathways.
 
-This documentation aims to provide developers with the necessary information to understand the application's architecture, contribute effectively, and maintain the codebase. 
+This documentation aims to provide developers with the necessary information to understand the application's architecture, contribute effectively, and maintain the codebase.
+
+**Last updated:** January 2025 

@@ -496,6 +496,7 @@ export function trackPageLoad(contentType: string, slug: string) {
 ## Success Metrics
 
 ### Performance Targets
+
 - **Page Load Time**: 30s → &lt;500ms (99%+ improvement)
 - **Core Web Vitals**: All green scores
 - **Build Time**: &lt;3 minutes for full site

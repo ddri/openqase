@@ -54,12 +54,12 @@
     --banner-height: 2.5rem;
   }
 
-  /* Dark theme - consolidated from graphite theme */
+  /* Dark theme */
   [data-theme='dark'] {
-    --background: 240 8% 12%;  /* subtle graphite */
+    --background: 240 8% 12%;
     --foreground: 0 0% 98%;
     
-    --card: 240 8% 16%;  /* subtle graphite cards */
+    --card: 240 8% 16%;
     --card-foreground: 0 0% 100%;
     
     /* Add missing text color variables */
@@ -79,91 +79,11 @@
     --muted: 240 8% 32%;
     --muted-foreground: 240 5% 65%;  /* zinc-400 */
     
-    --border: 240 8% 28%;  /* subtle graphite borders */
+    --border: 240 8% 28%;
     --input: 240 8% 28%;
     --ring: 160 70% 32%;  /* emerald green */
   }
   
-  /* Graphite theme */
-  [data-theme='graphite'] {
-    --background: 240 8% 12%;  /* subtle graphite */
-    --foreground: 0 0% 98%;
-    
-    --card: 240 8% 16%;  /* subtle graphite cards */
-    --card-foreground: 0 0% 100%;
-    
-    /* Add missing text color variables */
-    --text-primary: 0 0% 98%;
-    --text-secondary: 240 5% 80%;
-    --text-tertiary: 240 5% 70%;
-    
-    --primary: 160 70% 32%;  /* emerald green */
-    --primary-foreground: 0 0% 100%;
-    
-    --secondary: 240 8% 24%;
-    --secondary-foreground: 0 0% 98%;
-    
-    --accent: 160 70% 32%;  /* emerald green */
-    --accent-foreground: 0 0% 98%;
-    
-    --muted: 240 8% 32%;
-    --muted-foreground: 240 5% 65%;  /* zinc-400 */
-    
-    --border: 240 8% 28%;  /* subtle graphite borders */
-    --input: 240 8% 28%;
-    --ring: 160 70% 32%;  /* emerald green */
-  }
-
-  /* Paper theme (Deduxer-inspired Monochromatic) */
-  [data-theme='paper'] {
-    --background: 0 0% 96%;  /* Very light neutral gray */
-    --foreground: 0 0% 8%;     /* Very dark gray / almost black text */
-    
-    --card: 0 0% 98%;  /* Almost white card background */
-    --card-foreground: 0 0% 8%;
-    --card-background: 0 0% 98% / 0.9;
-    --card-border: 0 0% 90%;  /* Subtle light gray border */
-    --card-hover-border: 0 0% 8%; /* Black border on hover */
-    --card-hover-background: 0 0% 98% / 0.05; /* Subtle effect, nearly transparent */
-    
-    --text-primary: 0 0% 8%; /* Very dark gray / almost black */
-    --text-secondary: 0 0% 35%; /* Medium-dark gray */
-    --text-tertiary: 0 0% 50%; /* Medium gray */
-    
-    --surface-primary: 0 0% 98%; /* Almost white */
-    --surface-secondary: 0 0% 94%;   /* Slightly darker than background for subtle separation */
-    --surface-tertiary: 0 0% 90%;    /* Light gray for sidebars, etc. */
-    
-    --popover: 0 0% 100%; /* Pure white popover */
-    --popover-foreground: 0 0% 8%;
-    
-    --primary: 0 0% 8%; /* Black for primary actions */
-    --primary-foreground: 0 0% 100%; /* White text on black */
-    
-    --secondary: 0 0% 90%; /* Light gray for secondary buttons */
-    --secondary-foreground: 0 0% 20%; /* Dark gray text on light gray buttons */
-    
-    --muted: 0 0% 92%; /* Light gray for muted backgrounds */
-    --muted-foreground: 0 0% 50%; /* Medium gray for muted text */
-    
-    --accent: 0 0% 8%; /* Black for accent (same as primary) */
-    --accent-foreground: 0 0% 100%; /* White text for accent backgrounds */
-    
-    --destructive: 0 84.2% 60.2%; /* Keeping current destructive red for consistency */
-    --destructive-foreground: 0 0% 100%; /* White text on destructive red */
-    
-    --border: 0 0% 90%; /* Light gray for general borders */
-    --input: 0 0% 90%;  /* Light gray for inputs */
-    --ring: 0 0% 8%; /* Black focus ring */
-    --radius: 0.5rem;
-
-    /* Font variables inherit from :root or can be redefined if paper theme needs different fonts */
-    --font-sans: var(--font-open-sans), system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    --font-heading: var(--font-montserrat), system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-
-    --header-height: 4rem;
-    --banner-height: 2.5rem;
-  }
 
   /* Make sure main content has appropriate z-index to not overlap with nav */
   main {
@@ -436,77 +356,6 @@
   }
 }
 
-/* Enhanced Card styling for graphite theme */
-[data-theme='graphite'] .card {
-  @apply bg-zinc-800/50 border-zinc-700 backdrop-blur-sm relative overflow-hidden transition-all duration-300;
-}
-
-[data-theme='graphite'] .card:hover {
-  @apply shadow-lg shadow-orange-500/20 border-orange-500/30 bg-zinc-800/70 transform scale-[1.02];
-}
-
-/* Make the bottom gradient more prominent on hover */
-[data-theme='graphite'] .card::after {
-  content: "";
-  @apply absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-orange-500 to-transparent opacity-0 transition-opacity duration-300;
-}
-
-[data-theme='graphite'] .card:hover::after {
-  @apply opacity-100;
-}
-
-/* Add an orange glow effect on hover */
-[data-theme='graphite'] .card:hover .persona-icon-wrapper {
-  @apply border-orange-500/50 bg-zinc-900/90 shadow-orange-500/30 shadow-md;
-}
-
-/* Add subtle orange corner accent that becomes more visible on hover */
-[data-theme='graphite'] .card::before {
-  content: "";
-  @apply absolute top-0 right-0 w-32 h-32 bg-orange-500/5 rounded-bl-full -mr-16 -mt-16 transform rotate-45 transition-all duration-300;
-}
-
-[data-theme='graphite'] .card:hover::before {
-  @apply bg-orange-500/20;
-}
-
-/* Icon styling */
-[data-theme='graphite'] .persona-icon-wrapper {
-  @apply p-3 bg-zinc-900/80 rounded-lg border border-zinc-700/50 shadow-lg mb-3;
-}
-
-[data-theme='graphite'] .persona-icon {
-  @apply h-8 w-8 text-orange-500;
-}
-
-/* Badge styling */
-[data-theme='graphite'] .badge {
-  @apply bg-orange-500/20 text-orange-300 border-orange-500/50;
-}
-
-[data-theme='graphite'] .more-badge {
-  @apply bg-zinc-900/70 text-zinc-400 border-zinc-700;
-}
-
-/* Decorative elements */
-[data-theme='graphite'] .card::before {
-  content: "";
-  @apply absolute top-0 right-0 w-32 h-32 bg-orange-500/10 rounded-bl-full -mr-16 -mt-16 transform rotate-45;
-}
-
-[data-theme='graphite'] .card::after {
-  content: "";
-  @apply absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-orange-500/70 to-transparent opacity-0 transition-opacity;
-}
-
-[data-theme='graphite'] .card:hover::after {
-  @apply opacity-100;
-}
-
-/* Persona role badge - using the hover state colors by default */
-[data-theme='graphite'] .persona-role-badge {
-  @apply bg-orange-500/20 text-orange-300 border-orange-500/50;
-}
 
 /* Navigation styling - proper implementation */
 nav {

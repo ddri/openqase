@@ -194,7 +194,8 @@ export default function PreviewBanner({ preview }) {
 ## Performance Characteristics
 
 ### Delivery Speed
-- **First Byte Time**: Under 100ms globally via CDN
+
+- **First Byte Time**: &lt;100ms globally via CDN
 - **Content Loading**: Sub-second for most content types
 - **Relationship Resolution**: Single request for complex data
 - **Build Times**: Optimized for large content sets (10,000+ entries)

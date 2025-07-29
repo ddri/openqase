@@ -142,7 +142,7 @@ class DatabaseCircuitBreaker {
 
   private isOpen(): boolean {
     return this.failures >= this.threshold && 
-           (Date.now() - this.lastFailTime) < this.timeout;
+           (Date.now() - this.lastFailTime) &lt; this.timeout;
   }
 }
 ```

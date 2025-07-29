@@ -111,8 +111,8 @@ OpenQase 0.4.0 will modernize our content architecture from the current mixed AP
 ## Success Metrics
 
 ### Performance Targets
-- **Page Load Time**: < 1 second for all content pages
-- **Build Time**: < 5 minutes for full site rebuild
+- **Page Load Time**: &lt; 1 second for all content pages
+- **Build Time**: &lt; 5 minutes for full site rebuild
 - **API Response**: Eliminate case studies timeout issues
 - **Core Web Vitals**: All green scores
 

@@ -1,22 +1,68 @@
 // src/components/ui/card.tsx
-import * as React from "react";
+"use client"
 
-interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
+import * as React from "react";
+import { motion } from "framer-motion";
+
+interface BaseCardProps {
   fixedHeight?: boolean;
   height?: number;
+  className?: string;
 }
 
+interface StaticCardProps extends BaseCardProps, React.HTMLAttributes<HTMLDivElement> {
+  animated?: false;
+}
+
+// ARCHITECTURAL DECISION: Event Handler Exclusion for Motion Component Compatibility
+// ================================================================================
+// Framer Motion's event handlers have different signatures than standard HTML events:
+// - HTML onDrag: (event: DragEvent) => void  
+// - Motion onDrag: (event: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => void
+// - HTML onAnimationStart: (event: AnimationEvent) => void
+// - Motion onAnimationStart: (definition: AnimationDefinition) => void
+//
+// Solution: Exclude conflicting event props to prevent TypeScript errors while
+// maintaining all other HTML attributes (className, onClick, etc.)
+// This follows the industry standard pattern used by React-Aria, Emotion, and other libraries.
+interface AnimatedCardProps extends BaseCardProps, Omit<React.HTMLAttributes<HTMLDivElement>, 'onDrag' | 'onDragEnd' | 'onDragStart' | 'onAnimationStart' | 'onAnimationEnd'> {
+  animated: true;
+}
+
+type CardProps = StaticCardProps | AnimatedCardProps;
+
 const Card = React.forwardRef<HTMLDivElement, CardProps>(
-  ({ className, fixedHeight = false, height = 210, ...props }, ref) => (
-    <div
-      ref={ref}
-      className={`bg-[var(--card)] text-[var(--card-foreground)] rounded-lg border-2 border-[var(--border)] shadow-sm 
+  ({ className, fixedHeight = false, height = 210, animated = false, ...props }, ref) => {
+    const baseClassName = `bg-[var(--card)] text-[var(--card-foreground)] rounded-lg border-2 border-[var(--border)] shadow-sm 
       [data-theme='dark'] & relative overflow-hidden 
-      ${fixedHeight ? 'flex flex-col' : ''} ${className || ""}`}
-      style={fixedHeight ? { height: `${height}px` } : undefined}
-      {...props}
-    />
-  )
+      ${fixedHeight ? 'flex flex-col' : ''} ${className || ""}`;
+    
+    const style = fixedHeight ? { height: `${height}px` } : undefined;
+
+    if (animated) {
+      const { animated: _, ...motionProps } = props as AnimatedCardProps;
+      return (
+        <motion.div
+          ref={ref}
+          className={baseClassName}
+          style={style}
+          whileHover={{ y: -2 }}
+          transition={{ duration: 0.2, ease: "easeOut" }}
+          {...motionProps}
+        />
+      );
+    }
+
+    const { animated: _, ...divProps } = props as StaticCardProps;
+    return (
+      <div
+        ref={ref}
+        className={baseClassName}
+        style={style}
+        {...divProps}
+      />
+    );
+  }
 );
 
 Card.displayName = "Card";

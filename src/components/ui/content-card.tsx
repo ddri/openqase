@@ -27,10 +27,12 @@ const ContentCard = memo(function ContentCard({
 
   return (
     <Link href={href} className="group block">
-      <Card className={cn(
-        "h-[320px] card-link-hover-effect",
-        "flex flex-col p-6"
-      )}>
+      <Card 
+        animated
+        className={cn(
+          "h-[320px]",
+          "flex flex-col p-6"
+        )}>
         <div className="flex flex-col h-full">
           <h3 className="text-xl font-semibold text-[var(--text-primary)] min-h-[3.5rem] mb-3 line-clamp-2">
             {title}

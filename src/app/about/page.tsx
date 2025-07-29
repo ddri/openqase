@@ -122,6 +122,28 @@ export default function AboutPage() {
             </div>
           </section>
 
+          {/* Our Team Section */}
+          <section className="mb-16">
+            <h2 className="mb-8">Our Team</h2>
+            <p className="text-lg text-muted-foreground mb-8">
+              OpenQase was created after a conversation between quantum industry colleagues David Ryan and Anastasia Marchenkova at the Q2B Silicon Valley conference. While the pair come from different product and scientific leadership roles, they shared a common frustration as to the challenge of keeping up with the steady release of business case studies and associated pilot programs and use cases. It was clear that as the ecosystem evolves from Science to Technology to Engineering to Product, so must the resources and repositories of knowledge. Not as business intelligence service restrated to commercial vendors, but as a resource for the community, a "wikipedia for quantum computing". Want to join the team? Get in touch.
+            </p>
+            <div className="grid gap-8 md:grid-cols-2">
+              <div className="bg-card rounded-lg p-6 border">
+                <h3 className="text-xl font-semibold mb-2">David Ryan</h3>
+                <p className="text-muted-foreground">
+                  Experienced Deep Tech product leader and former SaaS founder. First Head of Product at Quantum Brilliance, former open source advocate at Red Hat, and the author of "Pocket Guide to Quantum Computing".
+                </p>
+              </div>
+              <div className="bg-card rounded-lg p-6 border">
+                <h3 className="text-xl font-semibold mb-2">Anastasia Marchenkova</h3>
+                <p className="text-muted-foreground">
+                  Experienced quantum physicist and former founding team member at Bleximo. A prolific quantum computing educator, talented engineer with experience at the likes of Rigetti, and prolific early-stage investor.
+                </p>
+              </div>
+            </div>
+          </section>
+
           {/* Join Our Community Section - Integrated from sidebar */}
           {/* <section className="mb-16">
             <div className="bg-gradient-to-r from-primary/5 to-primary/10 rounded-xl p-8 text-center">

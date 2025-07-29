@@ -29,7 +29,7 @@ const Card = React.forwardRef<HTMLDivElement, CardProps>(
     const style = fixedHeight ? { height: `${height}px` } : undefined;
 
     if (animated) {
-      const { animated: _, ...motionProps } = props;
+      const { animated: _, ...motionProps } = props as AnimatedCardProps;
       return (
         <motion.div
           ref={ref}
@@ -42,7 +42,7 @@ const Card = React.forwardRef<HTMLDivElement, CardProps>(
       );
     }
 
-    const { animated: _, ...divProps } = props;
+    const { animated: _, ...divProps } = props as StaticCardProps;
     return (
       <div
         ref={ref}

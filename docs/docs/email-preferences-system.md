@@ -296,8 +296,8 @@ curl -X GET http://localhost:3004/api/newsletter/subscription \
 
 - [Newsletter System](./newsletter-system.md)
 - [Authentication](./authentication.md)
-- [API Documentation](./api-reference.md)
-- [Resend Integration](./email-integration.md)
+<!-- - [API Documentation](./api-reference.md) -->
+<!-- - [Resend Integration](./email-integration.md) -->
 
 ---
 

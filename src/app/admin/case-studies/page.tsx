@@ -30,14 +30,16 @@ export default async function CaseStudiesPage() {
         console.log('Trying fallback query without import_batch_name')
         const fallbackResult = await supabase
           .from('case_studies')
-          .select('id, title, description, published, created_at, updated_at, slug, main_content, partner_companies, quantum_companies, quantum_hardware, quantum_software, academic_references, resource_links, published_at, year')
+          .select('id, title, description, published, created_at, updated_at, slug, main_content, partner_companies, quantum_companies, quantum_hardware, quantum_software, academic_references, resource_links, published_at, year, algorithms')
           .order('title')
         
         if (!fallbackResult.error) {
           // Add null import_batch_name to each item
           caseStudies = fallbackResult.data?.map(item => ({
             ...item,
-            import_batch_name: null
+            import_batch_name: null,
+            algorithms: item.algorithms || null,
+            academic_references: item.academic_references || null
           })) || []
           error = null
         }

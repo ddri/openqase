@@ -298,7 +298,7 @@ export async function GET(request: NextRequest) {
       page,
       pageSize,
       filters,
-      searchQuery: search,
+      searchQuery: search || undefined,
       searchFields,
       orderBy: sortBy,
       orderDirection: sortDirection as 'asc' | 'desc'
@@ -652,7 +652,7 @@ async function handleBulkDelete(ids: string[]) {
     
     for (const table of relationshipTables) {
       await serviceClient
-        .from(table)
+        .from(table as any)
         .delete()
         .in('case_study_id', ids);
     }

@@ -194,7 +194,7 @@ async function processCaseStudyFile(filePath: string): Promise<BatchImportResult
     result.slug = generateSlug(caseStudy.title);
 
     // Check for duplicates
-    const { hasDuplicates, duplicates } = await checkForDuplicates(result.title, result.slug);
+    const { hasDuplicates, duplicates } = await checkForDuplicates(result.title, result.slug!);
     if (hasDuplicates) {
       result.status = 'duplicate';
       result.duplicateInfo = duplicates;

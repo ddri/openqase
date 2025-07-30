@@ -9,6 +9,7 @@ import { config } from 'dotenv';
 import { createServiceRoleSupabaseClient } from '@/lib/supabase-server';
 import fs from 'fs';
 import path from 'path';
+import { randomUUID } from 'crypto';
 import entityMapping from './entity-mapping.json';
 
 // Load environment variables
@@ -252,13 +253,17 @@ async function processCaseStudyFile(filePath: string): Promise<BatchImportResult
 }
 
 // Import single case study to database
-async function importCaseStudy(filePath: string): Promise<void> {
+async function importCaseStudy(filePath: string, batchId?: string): Promise<void> {
   const fileContent = fs.readFileSync(filePath, 'utf-8');
   const caseStudy = JSON.parse(fileContent);
 
   const slug = generateSlug(caseStudy.title);
   const mainContent = buildMainContent(caseStudy);
   const references = buildReferences(caseStudy);
+
+  // Generate batch ID if not provided
+  const importBatchId = batchId || randomUUID();
+  const fileName = path.basename(filePath, '.json');
 
   const caseStudyData = {
     title: caseStudy.title,
@@ -267,6 +272,11 @@ async function importCaseStudy(filePath: string): Promise<void> {
     main_content: mainContent,
     resource_links: references.length > 0 ? references : [],
     published: false,
+    import_batch_id: importBatchId,
+    import_source: 'qookie-export',
+    import_timestamp: new Date().toISOString(),
+    original_qookie_id: caseStudy.id || null,
+    original_qookie_slug: fileName,
     created_at: new Date().toISOString(),
     updated_at: new Date().toISOString(),
   };
@@ -464,13 +474,19 @@ async function main() {
 
   // Import if commit mode
   if (commit && successful.length > 0) {
+    // Generate batch ID for this import run
+    const batchId = randomUUID();
+    const timestamp = new Date().toISOString();
+    
     console.log(`\n🚀 Importing ${successful.length} case studies...`);
+    console.log(`📦 Batch ID: ${batchId}`);
+    console.log(`⏰ Started: ${timestamp}`);
     
     let imported = 0;
     for (const result of successful) {
       try {
         process.stdout.write(`\r   Importing ${imported + 1}/${successful.length}: ${result.title?.slice(0, 50)}...`);
-        await importCaseStudy(result.filePath);
+        await importCaseStudy(result.filePath, batchId);
         imported++;
       } catch (error) {
         console.error(`\n❌ Failed to import ${result.fileName}:`, error);
@@ -478,6 +494,8 @@ async function main() {
     }
 
     console.log(`\n🎉 Import completed! ${imported}/${successful.length} case studies imported successfully.`);
+    console.log(`📦 Batch ID: ${batchId} (save this for rollback if needed)`);
+    console.log(`🔍 View imported case studies: SELECT * FROM case_studies WHERE import_batch_id = '${batchId}';`);
   } else if (!commit && successful.length > 0) {
     console.log(`\n📋 Next step: Run with --commit to import ${successful.length} case studies`);
   }

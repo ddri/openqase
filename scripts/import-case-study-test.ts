@@ -9,6 +9,7 @@ import { config } from 'dotenv';
 import { createServiceRoleSupabaseClient } from '@/lib/supabase-server';
 import fs from 'fs';
 import path from 'path';
+import { randomUUID } from 'crypto';
 
 // Load environment variables
 config({ path: '.env.local' });
@@ -177,7 +178,7 @@ function buildReferences(caseStudy: QookieCaseStudy): QookieReference[] {
 }
 
 // Main import function
-async function importCaseStudy(jsonFilePath: string, dryRun: boolean = true) {
+async function importCaseStudy(jsonFilePath: string, dryRun: boolean = true, batchId?: string) {
   console.log('🔍 Starting case study import test...');
   console.log(`📄 File: ${jsonFilePath}`);
   console.log(`🚫 Dry run: ${dryRun ? 'YES (no database changes)' : 'NO (will modify database)'}`);
@@ -232,13 +233,22 @@ async function importCaseStudy(jsonFilePath: string, dryRun: boolean = true) {
   const mainContent = buildMainContent(caseStudy);
   const references = buildReferences(caseStudy);
 
+  // Generate batch ID for tracking (or use provided one)
+  const importBatchId = batchId || randomUUID();
+  const fileName = path.basename(jsonFilePath, '.json');
+
   const caseStudyData = {
     title: caseStudy.title,
     slug: slug,
     description: caseStudy.summary,
     main_content: mainContent,
-    references: references.length > 0 ? references : null,
+    resource_links: references.length > 0 ? references : [],
     published: false, // Start as unpublished for review
+    import_batch_id: importBatchId,
+    import_source: batchId ? 'qookie-export-batch' : 'qookie-export-test',
+    import_timestamp: new Date().toISOString(),
+    original_qookie_id: caseStudy.id || null,
+    original_qookie_slug: fileName,
     created_at: new Date().toISOString(),
     updated_at: new Date().toISOString(),
   };
@@ -252,6 +262,8 @@ async function importCaseStudy(jsonFilePath: string, dryRun: boolean = true) {
   console.log(`   Algorithm relations: ${algorithmMatches.exact.length + algorithmMatches.fuzzy.length}`);
   console.log(`   Industry relations: ${industryMatches.exact.length + industryMatches.fuzzy.length}`);
   console.log(`   Persona relations: ${personaMatches.exact.length + personaMatches.fuzzy.length}`);
+  console.log(`   Batch ID: ${importBatchId}`);
+  console.log(`   Import source: ${caseStudyData.import_source}`);
 
   if (dryRun) {
     console.log('\n🚫 DRY RUN - No database changes made');
@@ -338,6 +350,8 @@ async function importCaseStudy(jsonFilePath: string, dryRun: boolean = true) {
 
     console.log('\n🎉 Case study import completed successfully!');
     console.log(`📝 View at: /admin/case-studies/${caseStudyId}`);
+    console.log(`📦 Batch ID: ${importBatchId}`);
+    console.log(`🔍 Query: SELECT * FROM case_studies WHERE import_batch_id = '${importBatchId}';`);
 
   } catch (error) {
     console.error('❌ Database operation failed:', error);

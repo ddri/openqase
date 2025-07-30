@@ -9,6 +9,7 @@ import { config } from 'dotenv';
 import { createServiceRoleSupabaseClient } from '@/lib/supabase-server';
 import fs from 'fs';
 import path from 'path';
+import { randomUUID } from 'crypto';
 import { importCaseStudy } from './import-case-study-test';
 
 // Load environment variables
@@ -457,7 +458,13 @@ async function processBatch(directory: string, commit: boolean = false) {
 
   // If commit mode and successful cases exist, proceed with import
   if (commit && report.successful > 0) {
+    // Generate batch ID for this import run
+    const batchId = randomUUID();
+    const timestamp = new Date().toISOString();
+    
     console.log('\n🚀 Starting database import...');
+    console.log(`📦 Batch ID: ${batchId}`);
+    console.log(`⏰ Started: ${timestamp}`);
     
     const successfulFiles = results
       .filter(r => r.status === 'success')
@@ -467,7 +474,7 @@ async function processBatch(directory: string, commit: boolean = false) {
     for (const filePath of successfulFiles) {
       try {
         process.stdout.write(`\r   Importing ${imported + 1}/${successfulFiles.length}...`);
-        await importCaseStudy(filePath, false); // false = not dry run
+        await importCaseStudy(filePath, false, batchId); // false = not dry run, pass batch ID
         imported++;
       } catch (error) {
         console.error(`\n❌ Failed to import ${path.basename(filePath)}:`, error);
@@ -475,6 +482,8 @@ async function processBatch(directory: string, commit: boolean = false) {
     }
 
     console.log(`\n🎉 Import completed! ${imported}/${successfulFiles.length} case studies imported successfully.`);
+    console.log(`📦 Batch ID: ${batchId} (save this for rollback if needed)`);
+    console.log(`🔍 View imported case studies: SELECT * FROM case_studies WHERE import_batch_id = '${batchId}';`);
   }
 }
 

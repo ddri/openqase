@@ -1,5 +1,5 @@
 import { withSentryConfig } from '@sentry/nextjs';
-// next.config.ts
+// next.config.ts - force cache bust
 import type { NextConfig } from "next";
 
 // Hybrid approach: Static generation for public content, dynamic for admin

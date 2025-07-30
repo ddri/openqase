@@ -1,5 +1,5 @@
 import { createBrowserSupabaseClient } from '@/lib/supabase-browser';
-import { createServiceRoleSupabaseClient } from '@/lib/supabase-server';
+import { createServiceRoleSupabaseClient } from '@/lib/supabase';
 import { PostgrestError } from '@supabase/supabase-js';
 
 /**
@@ -26,6 +26,8 @@ export async function fetchContentItems({
   page = 1,
   pageSize = 10,
   filters = {},
+  searchQuery,
+  searchFields,
   orderBy = 'updated_at',
   orderDirection = 'desc'
 }: {
@@ -34,10 +36,12 @@ export async function fetchContentItems({
   page?: number;
   pageSize?: number;
   filters?: Record<string, any>;
+  searchQuery?: string;
+  searchFields?: string[];
   orderBy?: string;
   orderDirection?: 'asc' | 'desc';
 }) {
-  const supabase = createBrowserSupabaseClient();
+  const supabase = await createServiceRoleSupabaseClient();
   
   // Apply direct filters to the main table
   let query = supabase
@@ -60,24 +64,20 @@ export async function fetchContentItems({
       }
     }
   });
+
+  // Apply search filters
+  if (searchQuery && searchFields && searchFields.length > 0) {
+    // Create OR conditions for each search field
+    const searchConditions = searchFields.map(field => `${field}.ilike.%${searchQuery}%`).join(',');
+    query = query.or(searchConditions);
+  }
   
   // Apply ordering
   query = query.order(orderBy, { ascending: orderDirection === 'asc' });
-  
-  // Apply pagination
-  const startRow = (page - 1) * pageSize;
-  const endRow = startRow + pageSize - 1;
-  
-  // Execute query with pagination
-  const result = await query.range(startRow, endRow);
-  return { ...result, page, pageSize };
   
   // Apply pagination
   const from = (page - 1) * pageSize;
   const to = from + pageSize - 1;
-  
-  // Apply ordering
-  query = query.order(orderBy, { ascending: orderDirection === 'asc' });
   
   // Execute query with pagination
   const { data, error, count } = await query.range(from, to);
@@ -104,7 +104,7 @@ export async function fetchContentItem({
     fields?: string;
   }>;
 }) {
-  const supabase = createBrowserSupabaseClient();
+  const supabase = await createServiceRoleSupabaseClient();
   
   let query = supabase
     .from(contentType)
@@ -123,7 +123,7 @@ export async function fetchContentItem({
   
   // Fetch relationships if requested
   if (includeRelationships.length > 0 && item) {
-    const serviceClient = createServiceRoleSupabaseClient();
+    const serviceClient = await createServiceRoleSupabaseClient();
     
     for (const relationship of includeRelationships) {
       const { relationshipConfig, fields = '*' } = relationship;
@@ -165,7 +165,7 @@ export async function saveContentItem({
     relatedIds: string[];
   }>;
 }) {
-  const serviceClient = createServiceRoleSupabaseClient();
+  const serviceClient = await createServiceRoleSupabaseClient();
   let result;
   
   // Prepare the data with updated timestamp
@@ -247,7 +247,7 @@ export async function deleteContentItem({
   id: string;
   relationshipConfigs?: RelationshipConfig[];
 }) {
-  const serviceClient = createServiceRoleSupabaseClient();
+  const serviceClient = await createServiceRoleSupabaseClient();
   
   // First delete relationships in junction tables
   for (const config of relationshipConfigs) {
@@ -285,7 +285,7 @@ export async function updatePublishedStatus({
   id: string;
   published: boolean;
 }) {
-  const serviceClient = createServiceRoleSupabaseClient();
+  const serviceClient = await createServiceRoleSupabaseClient();
   
   const updateData: Record<string, any> = {
     published,
@@ -317,7 +317,7 @@ export async function slugToId({
   contentType: ContentType;
   slug: string;
 }) {
-  const supabase = createBrowserSupabaseClient();
+  const supabase = await createServiceRoleSupabaseClient();
   
   const { data, error } = await supabase
     .from(contentType)

@@ -11,6 +11,7 @@ import fs from 'fs';
 import path from 'path';
 import { randomUUID } from 'crypto';
 import entityMapping from './entity-mapping.json';
+import { generateNextBatchName } from './batch-name-generator';
 
 // Load environment variables
 config({ path: '.env.local' });
@@ -175,11 +176,42 @@ ${caseStudy.results_and_business_impact}
 ${caseStudy.future_directions}`;
 }
 
-function buildReferences(caseStudy: any): any[] {
-  return [
-    ...(caseStudy.references || []),
-    ...(caseStudy.furtherReading || [])
-  ];
+// Build academic references as formatted text
+function buildAcademicReferences(caseStudy: any): string {
+  const references = caseStudy.references || [];
+  if (references.length === 0) return '';
+  
+  return references.map((ref: any, index: number) => {
+    const num = index + 1;
+    let citation = `[${num}]: `;
+    
+    if (ref.authors && ref.authors.length > 0) {
+      citation += `${ref.authors.join(', ')}. `;
+    }
+    
+    if (ref.title) {
+      citation += `"${ref.title}". `;
+    }
+    
+    if (ref.journal) {
+      citation += `${ref.journal}`;
+      if (ref.year) citation += ` (${ref.year})`;
+      citation += '. ';
+    } else if (ref.year) {
+      citation += `${ref.year}. `;
+    }
+    
+    if (ref.url) {
+      citation += `${ref.url}`;
+    }
+    
+    return citation.trim();
+  }).join('\n\n');
+}
+
+// Build resource links as structured JSONB
+function buildResourceLinks(caseStudy: any): any[] {
+  return caseStudy.furtherReading || [];
 }
 
 // Process single case study with mapping
@@ -197,10 +229,13 @@ async function processCaseStudyFile(filePath: string): Promise<BatchImportResult
     const caseStudy = JSON.parse(fileContent);
 
     // Validate required fields
-    if (!caseStudy.title || !caseStudy.summary || !caseStudy.advancedMetadata) {
-      result.error = 'Missing required fields (title, summary, or advancedMetadata)';
+    if (!caseStudy.title || !caseStudy.summary) {
+      result.error = 'Missing required fields (title or summary)';
       return result;
     }
+
+    // Use advancedMetadata if available, otherwise empty arrays (no fallback to basic metadata)
+    const metadata = caseStudy.advancedMetadata || { algorithms: [], industries: [], personas: [] };
 
     result.title = caseStudy.title;
     result.slug = generateSlug(caseStudy.title);
@@ -214,9 +249,9 @@ async function processCaseStudyFile(filePath: string): Promise<BatchImportResult
     }
 
     // Map entities using predefined mapping
-    const algorithmResults = await mapEntities('algorithms', caseStudy.advancedMetadata.algorithms || []);
-    const industryResults = await mapEntities('industries', caseStudy.advancedMetadata.industries || []);
-    const personaResults = await mapEntities('personas', caseStudy.advancedMetadata.personas || []);
+    const algorithmResults = await mapEntities('algorithms', metadata.algorithms || []);
+    const industryResults = await mapEntities('industries', metadata.industries || []);
+    const personaResults = await mapEntities('personas', metadata.personas || []);
 
     result.entityMatches = {
       algorithms: {
@@ -235,12 +270,13 @@ async function processCaseStudyFile(filePath: string): Promise<BatchImportResult
 
     // Content stats
     const mainContent = buildMainContent(caseStudy);
-    const references = buildReferences(caseStudy);
+    const academicReferences = buildAcademicReferences(caseStudy);
+    const resourceLinks = buildResourceLinks(caseStudy);
 
     result.contentStats = {
       descriptionLength: caseStudy.summary.length,
       mainContentLength: mainContent.length,
-      referencesCount: references.length
+      referencesCount: (caseStudy.references || []).length + (caseStudy.furtherReading || []).length
     };
 
     result.status = 'success';
@@ -253,13 +289,14 @@ async function processCaseStudyFile(filePath: string): Promise<BatchImportResult
 }
 
 // Import single case study to database
-async function importCaseStudy(filePath: string, batchId?: string): Promise<void> {
+async function importCaseStudy(filePath: string, batchId?: string, batchName?: string): Promise<void> {
   const fileContent = fs.readFileSync(filePath, 'utf-8');
   const caseStudy = JSON.parse(fileContent);
 
   const slug = generateSlug(caseStudy.title);
   const mainContent = buildMainContent(caseStudy);
-  const references = buildReferences(caseStudy);
+  const academicReferences = buildAcademicReferences(caseStudy);
+  const resourceLinks = buildResourceLinks(caseStudy);
 
   // Generate batch ID if not provided
   const importBatchId = batchId || randomUUID();
@@ -270,9 +307,11 @@ async function importCaseStudy(filePath: string, batchId?: string): Promise<void
     slug: slug,
     description: caseStudy.summary,
     main_content: mainContent,
-    resource_links: references.length > 0 ? references : [],
+    academic_references: academicReferences || null,
+    resource_links: resourceLinks.length > 0 ? resourceLinks : [],
     published: false,
     import_batch_id: importBatchId,
+    import_batch_name: batchName || null,
     import_source: 'qookie-export',
     import_timestamp: new Date().toISOString(),
     original_qookie_id: caseStudy.id || null,
@@ -296,10 +335,11 @@ async function importCaseStudy(filePath: string, batchId?: string): Promise<void
 
   const caseStudyId = insertedCaseStudy.id;
 
-  // Map and insert relationships
-  const algorithmResults = await mapEntities('algorithms', caseStudy.advancedMetadata.algorithms || []);
-  const industryResults = await mapEntities('industries', caseStudy.advancedMetadata.industries || []);
-  const personaResults = await mapEntities('personas', caseStudy.advancedMetadata.personas || []);
+  // Map and insert relationships (use advancedMetadata if available, otherwise empty)
+  const metadata = caseStudy.advancedMetadata || { algorithms: [], industries: [], personas: [] };
+  const algorithmResults = await mapEntities('algorithms', metadata.algorithms || []);
+  const industryResults = await mapEntities('industries', metadata.industries || []);
+  const personaResults = await mapEntities('personas', metadata.personas || []);
 
   // Insert algorithm relationships
   if (algorithmResults.mapped.length > 0) {
@@ -474,19 +514,21 @@ async function main() {
 
   // Import if commit mode
   if (commit && successful.length > 0) {
-    // Generate batch ID for this import run
+    // Generate batch ID and batch name for this import run
     const batchId = randomUUID();
+    const batchName = await generateNextBatchName();
     const timestamp = new Date().toISOString();
     
     console.log(`\n🚀 Importing ${successful.length} case studies...`);
     console.log(`📦 Batch ID: ${batchId}`);
+    console.log(`🏷️  Batch Name: ${batchName}`);
     console.log(`⏰ Started: ${timestamp}`);
     
     let imported = 0;
     for (const result of successful) {
       try {
         process.stdout.write(`\r   Importing ${imported + 1}/${successful.length}: ${result.title?.slice(0, 50)}...`);
-        await importCaseStudy(result.filePath, batchId);
+        await importCaseStudy(result.filePath, batchId, batchName);
         imported++;
       } catch (error) {
         console.error(`\n❌ Failed to import ${result.fileName}:`, error);
@@ -495,7 +537,8 @@ async function main() {
 
     console.log(`\n🎉 Import completed! ${imported}/${successful.length} case studies imported successfully.`);
     console.log(`📦 Batch ID: ${batchId} (save this for rollback if needed)`);
-    console.log(`🔍 View imported case studies: SELECT * FROM case_studies WHERE import_batch_id = '${batchId}';`);
+    console.log(`🏷️  Batch Name: ${batchName} (for admin interface)`);
+    console.log(`🔍 View imported case studies: SELECT * FROM case_studies WHERE import_batch_name = '${batchName}';`);
   } else if (!commit && successful.length > 0) {
     console.log(`\n📋 Next step: Run with --commit to import ${successful.length} case studies`);
   }

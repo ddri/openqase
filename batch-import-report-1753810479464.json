@@ -1,0 +1,4614 @@
+{
+  "generatedAt": "2025-07-29T17:34:39.464Z",
+  "summary": {
+    "totalFiles": 105,
+    "successful": 103,
+    "duplicates": 0,
+    "errors": 2
+  },
+  "entitySummary": {
+    "allUnmatchedAlgorithms": [
+      "Quantum Approximate Optimization Algorithm (QAOA)",
+      "Variational Quantum Eigensolver (VQE)",
+      "Quantum Annealing Algorithms",
+      "Quantum Support Vector Machine (QSVM)",
+      "Quantum Boltzmann Machines (QBM)",
+      "Quantum Machine Learning",
+      "Quantum Gradient Descent",
+      "Quantum Error Correction",
+      "Quantum Fourier Transform (QFT)",
+      "Quantum Phase Estimation (QPE)",
+      "Quantum K-Means Clustering",
+      "Shor's Algorithm",
+      "Quantum Principal Component Analysis (qPCA)",
+      "Quantum Amplitude Amplification",
+      "Grover's Algorithm",
+      "Harrow-Hassidim-Lloyd (HHL) Algorithm"
+    ],
+    "allUnmatchedIndustries": [
+      "Pharmaceutical",
+      "Healthcare",
+      "AI and Machine Learning",
+      "Automotive",
+      "Logistics and Supply Chain",
+      "Materials Science",
+      "Finance",
+      "Chemical Manufacturing",
+      "Education",
+      "Government and Public Sector",
+      "Energy",
+      "Climate and Environment",
+      "Cybersecurity",
+      "Aerospace",
+      "Defence",
+      "Retail",
+      "Telecommunications"
+    ],
+    "allUnmatchedPersonas": [
+      "Quantum Algorithm Developer",
+      "Quantum Solutions Provider",
+      "Business Decision-Maker",
+      "Domain Expert",
+      "Quantum Chemist",
+      "Systems Integration Engineer",
+      "Financial Services Specialist",
+      "Quantum Educator",
+      "Quantum Cloud and Platform Provider",
+      "Software Engineer",
+      "Government Representative",
+      "Cybersecurity Specialist",
+      "Quantum Hardware Engineer",
+      "Investment Professional"
+    ],
+    "totalAlgorithmMatches": 0,
+    "totalIndustryMatches": 0,
+    "totalPersonaMatches": 0
+  },
+  "detailedResults": [
+    {
+      "filePath": "/Users/dryan/Downloads/qookie-exports-main/exports/batch-2-100/15ggg5bit-natwest-Quantum machine learning for drug discovery and molecular simulation.json",
+      "fileName": "15ggg5bit-natwest-Quantum machine learning for drug discovery and molecular simulation.json",
+      "status": "error",
+      "error": "Missing required fields (title, summary, or advancedMetadata)"
+    },
+    {
+      "filePath": "/Users/dryan/Downloads/qookie-exports-main/exports/batch-2-100/1qbit-biogen--accenture-Quantum computing for financial modeling and fraud detection.json",
+      "fileName": "1qbit-biogen--accenture-Quantum computing for financial modeling and fraud detection.json",
+      "status": "success",
+      "title": "1QBit, Biogen, and Accenture: Advancing Drug Discovery Through Quantum Computing",
+      "slug": "1qbit-biogen-and-accenture-advancing-drug-discovery-through-quantum-computing",
+      "entityMatches": {
+        "algorithms": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Quantum Approximate Optimization Algorithm (QAOA)",
+            "Variational Quantum Eigensolver (VQE)"
+          ]
+        },
+        "industries": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Pharmaceutical",
+            "Healthcare",
+            "AI and Machine Learning"
+          ]
+        },
+        "personas": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Quantum Algorithm Developer",
+            "Quantum Solutions Provider",
+            "Business Decision-Maker",
+            "Domain Expert",
+            "Quantum Chemist"
+          ]
+        }
+      },
+      "contentStats": {
+        "descriptionLength": 299,
+        "mainContentLength": 7731,
+        "referencesCount": 7
+      }
+    },
+    {
+      "filePath": "/Users/dryan/Downloads/qookie-exports-main/exports/batch-2-100/1qbit-bmw-Quantum photonic computing integration for hardware development.json",
+      "fileName": "1qbit-bmw-Quantum photonic computing integration for hardware development.json",
+      "status": "success",
+      "title": "1QBit and BMW Partnership: Quantum Computing for Automotive Optimization",
+      "slug": "1qbit-and-bmw-partnership-quantum-computing-for-automotive-optimization",
+      "entityMatches": {
+        "algorithms": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Quantum Annealing Algorithms",
+            "Variational Quantum Eigensolver (VQE)",
+            "Quantum Approximate Optimization Algorithm (QAOA)",
+            "Quantum Support Vector Machine (QSVM)",
+            "Quantum Boltzmann Machines (QBM)"
+          ]
+        },
+        "industries": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Automotive",
+            "Logistics and Supply Chain",
+            "AI and Machine Learning",
+            "Materials Science"
+          ]
+        },
+        "personas": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Business Decision-Maker",
+            "Quantum Algorithm Developer",
+            "Quantum Solutions Provider",
+            "Systems Integration Engineer",
+            "Domain Expert"
+          ]
+        }
+      },
+      "contentStats": {
+        "descriptionLength": 363,
+        "mainContentLength": 8879,
+        "referencesCount": 8
+      }
+    },
+    {
+      "filePath": "/Users/dryan/Downloads/qookie-exports-main/exports/batch-2-100/1qbit-dow-chemical-Portfolio optimization and risk analysis using quantum algorithms.json",
+      "fileName": "1qbit-dow-chemical-Portfolio optimization and risk analysis using quantum algorithms.json",
+      "status": "success",
+      "title": "1QBit and Dow Chemical: Quantum Computing for Portfolio Optimization and Risk Analysis",
+      "slug": "1qbit-and-dow-chemical-quantum-computing-for-portfolio-optimization-and-risk-analysis",
+      "entityMatches": {
+        "algorithms": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Quantum Approximate Optimization Algorithm (QAOA)",
+            "Variational Quantum Eigensolver (VQE)",
+            "Quantum Annealing Algorithms"
+          ]
+        },
+        "industries": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Finance",
+            "Chemical Manufacturing"
+          ]
+        },
+        "personas": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Business Decision-Maker",
+            "Financial Services Specialist",
+            "Quantum Algorithm Developer",
+            "Quantum Solutions Provider",
+            "Systems Integration Engineer"
+          ]
+        }
+      },
+      "contentStats": {
+        "descriptionLength": 312,
+        "mainContentLength": 8314,
+        "referencesCount": 5
+      }
+    },
+    {
+      "filePath": "/Users/dryan/Downloads/qookie-exports-main/exports/batch-2-100/1qbit-natwest-Quantum machine learning for drug discovery and molecular simulation.json",
+      "fileName": "1qbit-natwest-Quantum machine learning for drug discovery and molecular simulation.json",
+      "status": "success",
+      "title": "1QBit and NatWest: Quantum Computing for Financial Portfolio Optimization",
+      "slug": "1qbit-and-natwest-quantum-computing-for-financial-portfolio-optimization",
+      "entityMatches": {
+        "algorithms": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Quantum Annealing Algorithms",
+            "Quantum Approximate Optimization Algorithm (QAOA)",
+            "Quantum Machine Learning",
+            "Quantum Gradient Descent"
+          ]
+        },
+        "industries": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Finance",
+            "AI and Machine Learning"
+          ]
+        },
+        "personas": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Financial Services Specialist",
+            "Quantum Algorithm Developer",
+            "Quantum Solutions Provider",
+            "Business Decision-Maker",
+            "Domain Expert"
+          ]
+        }
+      },
+      "contentStats": {
+        "descriptionLength": 341,
+        "mainContentLength": 7451,
+        "referencesCount": 8
+      }
+    },
+    {
+      "filePath": "/Users/dryan/Downloads/qookie-exports-main/exports/batch-2-100/algorithmiq--finland---ibm-quantum--usa--trinity-college-dublin--ireland--Quantum optimization for jet engine design and maintenance.json",
+      "fileName": "algorithmiq--finland---ibm-quantum--usa--trinity-college-dublin--ireland--Quantum optimization for jet engine design and maintenance.json",
+      "status": "success",
+      "title": "Quantum Computing Partnership for Advanced Materials and Drug Discovery",
+      "slug": "quantum-computing-partnership-for-advanced-materials-and-drug-discovery",
+      "entityMatches": {
+        "algorithms": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Variational Quantum Eigensolver (VQE)",
+            "Quantum Error Correction"
+          ]
+        },
+        "industries": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Pharmaceutical",
+            "Healthcare",
+            "Materials Science"
+          ]
+        },
+        "personas": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Quantum Algorithm Developer",
+            "Quantum Chemist",
+            "Business Decision-Maker",
+            "Quantum Solutions Provider",
+            "Quantum Educator",
+            "Domain Expert"
+          ]
+        }
+      },
+      "contentStats": {
+        "descriptionLength": 436,
+        "mainContentLength": 8580,
+        "referencesCount": 8
+      }
+    },
+    {
+      "filePath": "/Users/dryan/Downloads/qookie-exports-main/exports/batch-2-100/alibaba-quantum-computing-lab-alibaba-cloud-Neutral atom quantum computing platform development.json",
+      "fileName": "alibaba-quantum-computing-lab-alibaba-cloud-Neutral atom quantum computing platform development.json",
+      "status": "success",
+      "title": "Alibaba Quantum Computing Lab and Alibaba Cloud: Building China's First Commercial Quantum Computing Platform",
+      "slug": "alibaba-quantum-computing-lab-and-alibaba-cloud-building-chinas-first-commercial-quantum-computing-platform",
+      "entityMatches": {
+        "algorithms": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Quantum Approximate Optimization Algorithm (QAOA)",
+            "Variational Quantum Eigensolver (VQE)",
+            "Quantum Error Correction"
+          ]
+        },
+        "industries": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "AI and Machine Learning",
+            "Finance",
+            "Healthcare",
+            "Pharmaceutical",
+            "Education",
+            "Logistics and Supply Chain"
+          ]
+        },
+        "personas": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Quantum Cloud and Platform Provider",
+            "Quantum Algorithm Developer",
+            "Software Engineer",
+            "Quantum Educator",
+            "Business Decision-Maker",
+            "Financial Services Specialist"
+          ]
+        }
+      },
+      "contentStats": {
+        "descriptionLength": 385,
+        "mainContentLength": 7239,
+        "referencesCount": 4
+      }
+    },
+    {
+      "filePath": "/Users/dryan/Downloads/qookie-exports-main/exports/batch-2-100/amazon-bmw-Quantum simulation for materials research and drug discovery.json",
+      "fileName": "amazon-bmw-Quantum simulation for materials research and drug discovery.json",
+      "status": "success",
+      "title": "Amazon Web Services and BMW Group: Quantum Computing for Industrial Challenges",
+      "slug": "amazon-web-services-and-bmw-group-quantum-computing-for-industrial-challenges",
+      "entityMatches": {
+        "algorithms": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Quantum Approximate Optimization Algorithm (QAOA)",
+            "Variational Quantum Eigensolver (VQE)",
+            "Quantum Annealing Algorithms"
+          ]
+        },
+        "industries": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Automotive",
+            "Logistics and Supply Chain",
+            "Materials Science",
+            "AI and Machine Learning"
+          ]
+        },
+        "personas": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Business Decision-Maker",
+            "Domain Expert",
+            "Quantum Algorithm Developer",
+            "Quantum Cloud and Platform Provider",
+            "Systems Integration Engineer"
+          ]
+        }
+      },
+      "contentStats": {
+        "descriptionLength": 357,
+        "mainContentLength": 8156,
+        "referencesCount": 9
+      }
+    },
+    {
+      "filePath": "/Users/dryan/Downloads/qookie-exports-main/exports/batch-2-100/arc-centre-of-excellence--qubic--queensland-government-Quantum computing for pharmaceutical research and development.json",
+      "fileName": "arc-centre-of-excellence--qubic--queensland-government-Quantum computing for pharmaceutical research and development.json",
+      "status": "success",
+      "title": "ARC Centre of Excellence for Quantum Computation and Communication Technology (CQC2T) Partnership with Queensland Government for Pharmaceutical Research",
+      "slug": "arc-centre-of-excellence-for-quantum-computation-and-communication-technology-cqc2t-partnership-with-queensland-government-for-pharmaceutical-research",
+      "entityMatches": {
+        "algorithms": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Quantum Approximate Optimization Algorithm (QAOA)",
+            "Variational Quantum Eigensolver (VQE)"
+          ]
+        },
+        "industries": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Pharmaceutical",
+            "Healthcare",
+            "Government and Public Sector",
+            "Education",
+            "AI and Machine Learning"
+          ]
+        },
+        "personas": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Government Representative",
+            "Quantum Algorithm Developer",
+            "Quantum Chemist",
+            "Quantum Educator",
+            "Domain Expert"
+          ]
+        }
+      },
+      "contentStats": {
+        "descriptionLength": 382,
+        "mainContentLength": 7865,
+        "referencesCount": 9
+      }
+    },
+    {
+      "filePath": "/Users/dryan/Downloads/qookie-exports-main/exports/batch-2-100/atom-computing--usa--top-5-pharma--usa--.json",
+      "fileName": "atom-computing--usa--top-5-pharma--usa--.json",
+      "status": "success",
+      "title": "Atom Computing and Top-5 Pharma: Advancing Drug Discovery Through Neutral Atom Quantum Computing",
+      "slug": "atom-computing-and-top-5-pharma-advancing-drug-discovery-through-neutral-atom-quantum-computing",
+      "entityMatches": {
+        "algorithms": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Variational Quantum Eigensolver (VQE)",
+            "Quantum Approximate Optimization Algorithm (QAOA)"
+          ]
+        },
+        "industries": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Pharmaceutical",
+            "Healthcare",
+            "AI and Machine Learning"
+          ]
+        },
+        "personas": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Quantum Chemist",
+            "Domain Expert",
+            "Business Decision-Maker",
+            "Quantum Algorithm Developer",
+            "Quantum Solutions Provider",
+            "Software Engineer"
+          ]
+        }
+      },
+      "contentStats": {
+        "descriptionLength": 402,
+        "mainContentLength": 8388,
+        "referencesCount": 10
+      }
+    },
+    {
+      "filePath": "/Users/dryan/Downloads/qookie-exports-main/exports/batch-2-100/atos-quantum-total-.json",
+      "fileName": "atos-quantum-total-.json",
+      "status": "success",
+      "title": "Atos Quantum and Total: Advancing Energy Sector Optimization Through Quantum Computing",
+      "slug": "atos-quantum-and-total-advancing-energy-sector-optimization-through-quantum-computing",
+      "entityMatches": {
+        "algorithms": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Quantum Approximate Optimization Algorithm (QAOA)",
+            "Variational Quantum Eigensolver (VQE)"
+          ]
+        },
+        "industries": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Energy",
+            "Materials Science",
+            "Climate and Environment"
+          ]
+        },
+        "personas": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Quantum Algorithm Developer",
+            "Domain Expert",
+            "Business Decision-Maker",
+            "Quantum Solutions Provider"
+          ]
+        }
+      },
+      "contentStats": {
+        "descriptionLength": 382,
+        "mainContentLength": 8153,
+        "referencesCount": 8
+      }
+    },
+    {
+      "filePath": "/Users/dryan/Downloads/qookie-exports-main/exports/batch-2-100/cambridge-quantum--uk--crown-bioscience--usa--.json",
+      "fileName": "cambridge-quantum--uk--crown-bioscience--usa--.json",
+      "status": "success",
+      "title": "Cambridge Quantum and Crown Bioscience: Advancing Drug Discovery Through Quantum Computing",
+      "slug": "cambridge-quantum-and-crown-bioscience-advancing-drug-discovery-through-quantum-computing",
+      "entityMatches": {
+        "algorithms": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Variational Quantum Eigensolver (VQE)",
+            "Quantum Annealing Algorithms",
+            "Quantum Fourier Transform (QFT)",
+            "Quantum Phase Estimation (QPE)"
+          ]
+        },
+        "industries": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Pharmaceutical",
+            "Healthcare",
+            "AI and Machine Learning",
+            "Chemical Manufacturing"
+          ]
+        },
+        "personas": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Quantum Algorithm Developer",
+            "Quantum Chemist",
+            "Quantum Solutions Provider",
+            "Domain Expert",
+            "Business Decision-Maker",
+            "Quantum Cloud and Platform Provider"
+          ]
+        }
+      },
+      "contentStats": {
+        "descriptionLength": 402,
+        "mainContentLength": 8091,
+        "referencesCount": 8
+      }
+    },
+    {
+      "filePath": "/Users/dryan/Downloads/qookie-exports-main/exports/batch-2-100/cambridge-quantum--uk--roche--switzerland--.json",
+      "fileName": "cambridge-quantum--uk--roche--switzerland--.json",
+      "status": "success",
+      "title": "Cambridge Quantum Computing and Roche Partnership for Drug Discovery",
+      "slug": "cambridge-quantum-computing-and-roche-partnership-for-drug-discovery",
+      "entityMatches": {
+        "algorithms": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Variational Quantum Eigensolver (VQE)",
+            "Quantum Approximate Optimization Algorithm (QAOA)",
+            "Quantum Support Vector Machine (QSVM)"
+          ]
+        },
+        "industries": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Pharmaceutical",
+            "Healthcare",
+            "AI and Machine Learning"
+          ]
+        },
+        "personas": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Quantum Chemist",
+            "Domain Expert",
+            "Quantum Algorithm Developer",
+            "Business Decision-Maker",
+            "Quantum Solutions Provider"
+          ]
+        }
+      },
+      "contentStats": {
+        "descriptionLength": 427,
+        "mainContentLength": 9390,
+        "referencesCount": 7
+      }
+    },
+    {
+      "filePath": "/Users/dryan/Downloads/qookie-exports-main/exports/batch-2-100/cambridge-quantum-computing-axa-.json",
+      "fileName": "cambridge-quantum-computing-axa-.json",
+      "status": "success",
+      "title": "Cambridge Quantum Computing and AXA: Advancing Quantum Computing Applications in Insurance and Financial Risk Management",
+      "slug": "cambridge-quantum-computing-and-axa-advancing-quantum-computing-applications-in-insurance-and-financial-risk-management",
+      "entityMatches": {
+        "algorithms": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Quantum Approximate Optimization Algorithm (QAOA)",
+            "Variational Quantum Eigensolver (VQE)",
+            "Quantum Fourier Transform (QFT)",
+            "Quantum Support Vector Machine (QSVM)"
+          ]
+        },
+        "industries": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Finance",
+            "Cybersecurity",
+            "AI and Machine Learning"
+          ]
+        },
+        "personas": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Financial Services Specialist",
+            "Cybersecurity Specialist",
+            "Quantum Algorithm Developer",
+            "Business Decision-Maker",
+            "Quantum Solutions Provider"
+          ]
+        }
+      },
+      "contentStats": {
+        "descriptionLength": 403,
+        "mainContentLength": 7797,
+        "referencesCount": 5
+      }
+    },
+    {
+      "filePath": "/Users/dryan/Downloads/qookie-exports-main/exports/batch-2-100/cambridge-quantum-computing-honeywell-quantum-solutions-.json",
+      "fileName": "cambridge-quantum-computing-honeywell-quantum-solutions-.json",
+      "status": "success",
+      "title": "Cambridge Quantum Computing and Honeywell Quantum Solutions: Merger to Form Quantinuum",
+      "slug": "cambridge-quantum-computing-and-honeywell-quantum-solutions-merger-to-form-quantinuum",
+      "entityMatches": {
+        "algorithms": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Quantum Error Correction",
+            "Variational Quantum Eigensolver (VQE)",
+            "Quantum Approximate Optimization Algorithm (QAOA)"
+          ]
+        },
+        "industries": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Pharmaceutical",
+            "Finance",
+            "Energy",
+            "Materials Science",
+            "Cybersecurity",
+            "Healthcare",
+            "Logistics and Supply Chain"
+          ]
+        },
+        "personas": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Business Decision-Maker",
+            "Quantum Hardware Engineer",
+            "Quantum Algorithm Developer",
+            "Software Engineer",
+            "Quantum Chemist",
+            "Quantum Solutions Provider"
+          ]
+        }
+      },
+      "contentStats": {
+        "descriptionLength": 332,
+        "mainContentLength": 7847,
+        "referencesCount": 9
+      }
+    },
+    {
+      "filePath": "/Users/dryan/Downloads/qookie-exports-main/exports/batch-2-100/cambridge-quantum-computing-nippon-steel-corporation-.json",
+      "fileName": "cambridge-quantum-computing-nippon-steel-corporation-.json",
+      "status": "success",
+      "title": "Cambridge Quantum Computing and Nippon Steel: Quantum Solutions for Materials Science and Optimization",
+      "slug": "cambridge-quantum-computing-and-nippon-steel-quantum-solutions-for-materials-science-and-optimization",
+      "entityMatches": {
+        "algorithms": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Quantum Approximate Optimization Algorithm (QAOA)",
+            "Variational Quantum Eigensolver (VQE)",
+            "Quantum Support Vector Machine (QSVM)",
+            "Quantum K-Means Clustering"
+          ]
+        },
+        "industries": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Materials Science",
+            "Logistics and Supply Chain",
+            "AI and Machine Learning",
+            "Chemical Manufacturing"
+          ]
+        },
+        "personas": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Domain Expert",
+            "Quantum Algorithm Developer",
+            "Quantum Chemist",
+            "Business Decision-Maker",
+            "Quantum Solutions Provider",
+            "Software Engineer"
+          ]
+        }
+      },
+      "contentStats": {
+        "descriptionLength": 340,
+        "mainContentLength": 7445,
+        "referencesCount": 6
+      }
+    },
+    {
+      "filePath": "/Users/dryan/Downloads/qookie-exports-main/exports/batch-2-100/cambridge-quantum-computing-roche-.json",
+      "fileName": "cambridge-quantum-computing-roche-.json",
+      "status": "success",
+      "title": "Cambridge Quantum Computing and Roche Partnership: Advancing Drug Discovery Through Quantum Computing",
+      "slug": "cambridge-quantum-computing-and-roche-partnership-advancing-drug-discovery-through-quantum-computing",
+      "entityMatches": {
+        "algorithms": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Variational Quantum Eigensolver (VQE)",
+            "Quantum Machine Learning",
+            "Quantum Approximate Optimization Algorithm (QAOA)"
+          ]
+        },
+        "industries": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Pharmaceutical",
+            "Healthcare",
+            "AI and Machine Learning"
+          ]
+        },
+        "personas": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Business Decision-Maker",
+            "Domain Expert",
+            "Quantum Algorithm Developer",
+            "Quantum Chemist",
+            "Quantum Solutions Provider",
+            "Software Engineer"
+          ]
+        }
+      },
+      "contentStats": {
+        "descriptionLength": 365,
+        "mainContentLength": 7110,
+        "referencesCount": 9
+      }
+    },
+    {
+      "filePath": "/Users/dryan/Downloads/qookie-exports-main/exports/batch-2-100/d-wave-airbus-.json",
+      "fileName": "d-wave-airbus-.json",
+      "status": "success",
+      "title": "D-Wave and Airbus Partnership: Quantum Computing Applications in Aerospace Manufacturing and Operations",
+      "slug": "d-wave-and-airbus-partnership-quantum-computing-applications-in-aerospace-manufacturing-and-operations",
+      "entityMatches": {
+        "algorithms": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Quantum Annealing Algorithms",
+            "Quantum Approximate Optimization Algorithm (QAOA)",
+            "Quantum K-Means Clustering"
+          ]
+        },
+        "industries": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Aerospace",
+            "Logistics and Supply Chain",
+            "AI and Machine Learning",
+            "Materials Science"
+          ]
+        },
+        "personas": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Business Decision-Maker",
+            "Domain Expert",
+            "Quantum Solutions Provider",
+            "Systems Integration Engineer",
+            "Quantum Algorithm Developer"
+          ]
+        }
+      },
+      "contentStats": {
+        "descriptionLength": 309,
+        "mainContentLength": 9663,
+        "referencesCount": 0
+      }
+    },
+    {
+      "filePath": "/Users/dryan/Downloads/qookie-exports-main/exports/batch-2-100/d-wave-db-schenker--germany--.json",
+      "fileName": "d-wave-db-schenker--germany--.json",
+      "status": "success",
+      "title": "D-Wave and DB Schenker Partnership for Quantum-Enhanced Logistics Optimization",
+      "slug": "d-wave-and-db-schenker-partnership-for-quantum-enhanced-logistics-optimization",
+      "entityMatches": {
+        "algorithms": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Quantum Annealing Algorithms",
+            "Quantum Approximate Optimization Algorithm (QAOA)"
+          ]
+        },
+        "industries": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Logistics and Supply Chain"
+          ]
+        },
+        "personas": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Business Decision-Maker",
+            "Domain Expert",
+            "Quantum Algorithm Developer",
+            "Quantum Solutions Provider",
+            "Software Engineer",
+            "Systems Integration Engineer"
+          ]
+        }
+      },
+      "contentStats": {
+        "descriptionLength": 382,
+        "mainContentLength": 8015,
+        "referencesCount": 8
+      }
+    },
+    {
+      "filePath": "/Users/dryan/Downloads/qookie-exports-main/exports/batch-2-100/d-wave-denso-.json",
+      "fileName": "d-wave-denso-.json",
+      "status": "success",
+      "title": "D-Wave and DENSO Partnership: Quantum Computing for Automotive Manufacturing Optimization",
+      "slug": "d-wave-and-denso-partnership-quantum-computing-for-automotive-manufacturing-optimization",
+      "entityMatches": {
+        "algorithms": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Quantum Annealing Algorithms",
+            "Quantum Approximate Optimization Algorithm (QAOA)"
+          ]
+        },
+        "industries": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Automotive",
+            "Logistics and Supply Chain",
+            "AI and Machine Learning"
+          ]
+        },
+        "personas": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Business Decision-Maker",
+            "Domain Expert",
+            "Quantum Algorithm Developer",
+            "Quantum Solutions Provider",
+            "Systems Integration Engineer"
+          ]
+        }
+      },
+      "contentStats": {
+        "descriptionLength": 445,
+        "mainContentLength": 8709,
+        "referencesCount": 8
+      }
+    },
+    {
+      "filePath": "/Users/dryan/Downloads/qookie-exports-main/exports/batch-2-100/d-wave-denso-and-toyota-tsusho-.json",
+      "fileName": "d-wave-denso-and-toyota-tsusho-.json",
+      "status": "success",
+      "title": "D-Wave, DENSO, and Toyota Tsusho Partnership for Traffic Flow Optimization Using Quantum Computing",
+      "slug": "d-wave-denso-and-toyota-tsusho-partnership-for-traffic-flow-optimization-using-quantum-computing",
+      "entityMatches": {
+        "algorithms": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Quantum Annealing Algorithms",
+            "Quantum Approximate Optimization Algorithm (QAOA)"
+          ]
+        },
+        "industries": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Automotive",
+            "Logistics and Supply Chain",
+            "Government and Public Sector",
+            "AI and Machine Learning"
+          ]
+        },
+        "personas": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Business Decision-Maker",
+            "Domain Expert",
+            "Quantum Solutions Provider",
+            "Systems Integration Engineer",
+            "Government Representative"
+          ]
+        }
+      },
+      "contentStats": {
+        "descriptionLength": 352,
+        "mainContentLength": 8263,
+        "referencesCount": 7
+      }
+    },
+    {
+      "filePath": "/Users/dryan/Downloads/qookie-exports-main/exports/batch-2-100/d-wave-lockheed-martin-.json",
+      "fileName": "d-wave-lockheed-martin-.json",
+      "status": "success",
+      "title": "D-Wave and Lockheed Martin Quantum Computing Partnership for Aerospace Optimization",
+      "slug": "d-wave-and-lockheed-martin-quantum-computing-partnership-for-aerospace-optimization",
+      "entityMatches": {
+        "algorithms": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Quantum Annealing Algorithms",
+            "Quantum K-Means Clustering",
+            "Quantum Boltzmann Machines (QBM)"
+          ]
+        },
+        "industries": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Aerospace",
+            "Defence",
+            "AI and Machine Learning"
+          ]
+        },
+        "personas": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Business Decision-Maker",
+            "Domain Expert",
+            "Quantum Solutions Provider",
+            "Systems Integration Engineer"
+          ]
+        }
+      },
+      "contentStats": {
+        "descriptionLength": 375,
+        "mainContentLength": 9312,
+        "referencesCount": 12
+      }
+    },
+    {
+      "filePath": "/Users/dryan/Downloads/qookie-exports-main/exports/batch-2-100/d-wave-nec-.json",
+      "fileName": "d-wave-nec-.json",
+      "status": "success",
+      "title": "D-Wave and NEC Strategic Partnership for Quantum Computing Applications in Japan",
+      "slug": "d-wave-and-nec-strategic-partnership-for-quantum-computing-applications-in-japan",
+      "entityMatches": {
+        "algorithms": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Quantum Annealing Algorithms"
+          ]
+        },
+        "industries": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Automotive",
+            "Finance",
+            "Logistics and Supply Chain",
+            "Materials Science",
+            "Pharmaceutical"
+          ]
+        },
+        "personas": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Business Decision-Maker",
+            "Domain Expert",
+            "Financial Services Specialist",
+            "Quantum Algorithm Developer",
+            "Quantum Cloud and Platform Provider",
+            "Quantum Solutions Provider",
+            "Systems Integration Engineer"
+          ]
+        }
+      },
+      "contentStats": {
+        "descriptionLength": 382,
+        "mainContentLength": 8404,
+        "referencesCount": 10
+      }
+    },
+    {
+      "filePath": "/Users/dryan/Downloads/qookie-exports-main/exports/batch-2-100/d-wave-pattison-.json",
+      "fileName": "d-wave-pattison-.json",
+      "status": "success",
+      "title": "D-Wave and Pattison Food Group Partnership: Quantum-Powered Supply Chain Optimization",
+      "slug": "d-wave-and-pattison-food-group-partnership-quantum-powered-supply-chain-optimization",
+      "entityMatches": {
+        "algorithms": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Quantum Annealing Algorithms",
+            "Quantum K-Means Clustering",
+            "Quantum Gradient Descent"
+          ]
+        },
+        "industries": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Logistics and Supply Chain",
+            "Retail"
+          ]
+        },
+        "personas": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Business Decision-Maker",
+            "Domain Expert",
+            "Quantum Solutions Provider",
+            "Systems Integration Engineer"
+          ]
+        }
+      },
+      "contentStats": {
+        "descriptionLength": 305,
+        "mainContentLength": 8694,
+        "referencesCount": 10
+      }
+    },
+    {
+      "filePath": "/Users/dryan/Downloads/qookie-exports-main/exports/batch-2-100/d-wave-save-on-foods-.json",
+      "fileName": "d-wave-save-on-foods-.json",
+      "status": "success",
+      "title": "D-Wave and Save-On-Foods Quantum Optimization Partnership",
+      "slug": "d-wave-and-save-on-foods-quantum-optimization-partnership",
+      "entityMatches": {
+        "algorithms": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Quantum Annealing Algorithms",
+            "Quantum Approximate Optimization Algorithm (QAOA)"
+          ]
+        },
+        "industries": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Retail",
+            "Logistics and Supply Chain"
+          ]
+        },
+        "personas": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Business Decision-Maker",
+            "Quantum Solutions Provider",
+            "Systems Integration Engineer"
+          ]
+        }
+      },
+      "contentStats": {
+        "descriptionLength": 409,
+        "mainContentLength": 8619,
+        "referencesCount": 10
+      }
+    },
+    {
+      "filePath": "/Users/dryan/Downloads/qookie-exports-main/exports/batch-2-100/d-wave-toyota-.json",
+      "fileName": "d-wave-toyota-.json",
+      "status": "success",
+      "title": "D-Wave and Toyota: Quantum Computing for Traffic Flow Optimization",
+      "slug": "d-wave-and-toyota-quantum-computing-for-traffic-flow-optimization",
+      "entityMatches": {
+        "algorithms": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Quantum Annealing Algorithms",
+            "Quantum Approximate Optimization Algorithm (QAOA)"
+          ]
+        },
+        "industries": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Automotive",
+            "AI and Machine Learning",
+            "Government and Public Sector",
+            "Logistics and Supply Chain"
+          ]
+        },
+        "personas": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Business Decision-Maker",
+            "Quantum Algorithm Developer",
+            "Systems Integration Engineer",
+            "Domain Expert",
+            "Quantum Solutions Provider"
+          ]
+        }
+      },
+      "contentStats": {
+        "descriptionLength": 292,
+        "mainContentLength": 8225,
+        "referencesCount": 8
+      }
+    },
+    {
+      "filePath": "/Users/dryan/Downloads/qookie-exports-main/exports/batch-2-100/d-wave-volkswagen-.json",
+      "fileName": "d-wave-volkswagen-.json",
+      "status": "success",
+      "title": "D-Wave and Volkswagen: Quantum Computing for Traffic Optimization and Paint Shop Scheduling",
+      "slug": "d-wave-and-volkswagen-quantum-computing-for-traffic-optimization-and-paint-shop-scheduling",
+      "entityMatches": {
+        "algorithms": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Quantum Annealing Algorithms",
+            "Quantum Approximate Optimization Algorithm (QAOA)"
+          ]
+        },
+        "industries": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Automotive",
+            "Logistics and Supply Chain",
+            "Government and Public Sector",
+            "AI and Machine Learning"
+          ]
+        },
+        "personas": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Business Decision-Maker",
+            "Domain Expert",
+            "Quantum Algorithm Developer",
+            "Quantum Solutions Provider",
+            "Systems Integration Engineer"
+          ]
+        }
+      },
+      "contentStats": {
+        "descriptionLength": 354,
+        "mainContentLength": 8786,
+        "referencesCount": 10
+      }
+    },
+    {
+      "filePath": "/Users/dryan/Downloads/qookie-exports-main/exports/batch-2-100/fs-isac-tbd-.json",
+      "fileName": "fs-isac-tbd-.json",
+      "status": "success",
+      "title": "Insufficient Information Available",
+      "slug": "insufficient-information-available",
+      "entityMatches": {
+        "algorithms": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Quantum Error Correction",
+            "Shor's Algorithm"
+          ]
+        },
+        "industries": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Finance",
+            "Cybersecurity"
+          ]
+        },
+        "personas": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Financial Services Specialist",
+            "Cybersecurity Specialist",
+            "Business Decision-Maker"
+          ]
+        }
+      },
+      "contentStats": {
+        "descriptionLength": 219,
+        "mainContentLength": 7841,
+        "referencesCount": 5
+      }
+    },
+    {
+      "filePath": "/Users/dryan/Downloads/qookie-exports-main/exports/batch-2-100/fujitsu-coca-cola-japan-.json",
+      "fileName": "fujitsu-coca-cola-japan-.json",
+      "status": "success",
+      "title": "Fujitsu-Coca-Cola Japan Quantum Computing Partnership for Supply Chain Optimization",
+      "slug": "fujitsu-coca-cola-japan-quantum-computing-partnership-for-supply-chain-optimization",
+      "entityMatches": {
+        "algorithms": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Quantum Annealing Algorithms",
+            "Quantum K-Means Clustering"
+          ]
+        },
+        "industries": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Logistics and Supply Chain",
+            "Retail"
+          ]
+        },
+        "personas": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Business Decision-Maker",
+            "Quantum Solutions Provider",
+            "Systems Integration Engineer"
+          ]
+        }
+      },
+      "contentStats": {
+        "descriptionLength": 315,
+        "mainContentLength": 10029,
+        "referencesCount": 6
+      }
+    },
+    {
+      "filePath": "/Users/dryan/Downloads/qookie-exports-main/exports/batch-2-100/google-nasa-.json",
+      "fileName": "google-nasa-.json",
+      "status": "success",
+      "title": "Google-NASA Quantum Artificial Intelligence Laboratory Partnership",
+      "slug": "google-nasa-quantum-artificial-intelligence-laboratory-partnership",
+      "entityMatches": {
+        "algorithms": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Quantum Annealing Algorithms",
+            "Quantum Error Correction",
+            "Quantum K-Means Clustering",
+            "Quantum Support Vector Machine (QSVM)",
+            "Quantum Principal Component Analysis (qPCA)",
+            "Quantum Gradient Descent"
+          ]
+        },
+        "industries": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Aerospace",
+            "AI and Machine Learning",
+            "Government and Public Sector"
+          ]
+        },
+        "personas": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Quantum Algorithm Developer",
+            "Quantum Hardware Engineer",
+            "Government Representative",
+            "Business Decision-Maker",
+            "Domain Expert",
+            "Quantum Cloud and Platform Provider"
+          ]
+        }
+      },
+      "contentStats": {
+        "descriptionLength": 359,
+        "mainContentLength": 9045,
+        "referencesCount": 10
+      }
+    },
+    {
+      "filePath": "/Users/dryan/Downloads/qookie-exports-main/exports/batch-2-100/google-quantum-ai-boehringer-ingelheim-.json",
+      "fileName": "google-quantum-ai-boehringer-ingelheim-.json",
+      "status": "success",
+      "title": "Google Quantum AI and Boehringer Ingelheim Partnership for Molecular Simulation in Drug Discovery",
+      "slug": "google-quantum-ai-and-boehringer-ingelheim-partnership-for-molecular-simulation-in-drug-discovery",
+      "entityMatches": {
+        "algorithms": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Variational Quantum Eigensolver (VQE)",
+            "Quantum Approximate Optimization Algorithm (QAOA)"
+          ]
+        },
+        "industries": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Pharmaceutical",
+            "Healthcare"
+          ]
+        },
+        "personas": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Business Decision-Maker",
+            "Domain Expert",
+            "Quantum Algorithm Developer",
+            "Quantum Chemist",
+            "Quantum Solutions Provider"
+          ]
+        }
+      },
+      "contentStats": {
+        "descriptionLength": 394,
+        "mainContentLength": 8249,
+        "referencesCount": 8
+      }
+    },
+    {
+      "filePath": "/Users/dryan/Downloads/qookie-exports-main/exports/batch-2-100/google-quantum-ai-kasikornbank-.json",
+      "fileName": "google-quantum-ai-kasikornbank-.json",
+      "status": "success",
+      "title": "Google Quantum AI and Kasikornbank: Exploring Quantum Computing for Financial Services Innovation",
+      "slug": "google-quantum-ai-and-kasikornbank-exploring-quantum-computing-for-financial-services-innovation",
+      "entityMatches": {
+        "algorithms": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Quantum Approximate Optimization Algorithm (QAOA)",
+            "Quantum Support Vector Machine (QSVM)",
+            "Variational Quantum Eigensolver (VQE)"
+          ]
+        },
+        "industries": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Finance"
+          ]
+        },
+        "personas": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Financial Services Specialist",
+            "Quantum Algorithm Developer",
+            "Business Decision-Maker",
+            "Software Engineer"
+          ]
+        }
+      },
+      "contentStats": {
+        "descriptionLength": 377,
+        "mainContentLength": 8078,
+        "referencesCount": 8
+      }
+    },
+    {
+      "filePath": "/Users/dryan/Downloads/qookie-exports-main/exports/batch-2-100/google-quantum-ai-nvidia-.json",
+      "fileName": "google-quantum-ai-nvidia-.json",
+      "status": "success",
+      "title": "Google Quantum AI and NVIDIA Collaborate on Quantum Circuit Simulation",
+      "slug": "google-quantum-ai-and-nvidia-collaborate-on-quantum-circuit-simulation",
+      "entityMatches": {
+        "algorithms": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Quantum Error Correction",
+            "Variational Quantum Eigensolver (VQE)",
+            "Quantum Approximate Optimization Algorithm (QAOA)"
+          ]
+        },
+        "industries": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "AI and Machine Learning",
+            "Education",
+            "Government and Public Sector"
+          ]
+        },
+        "personas": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Quantum Algorithm Developer",
+            "Quantum Hardware Engineer",
+            "Software Engineer",
+            "Quantum Cloud and Platform Provider",
+            "Quantum Educator"
+          ]
+        }
+      },
+      "contentStats": {
+        "descriptionLength": 380,
+        "mainContentLength": 7961,
+        "referencesCount": 9
+      }
+    },
+    {
+      "filePath": "/Users/dryan/Downloads/qookie-exports-main/exports/batch-2-100/google-quantum-ai-volkswagen--germany--.json",
+      "fileName": "google-quantum-ai-volkswagen--germany--.json",
+      "status": "success",
+      "title": "Google Quantum AI and Volkswagen Partnership for Traffic Optimization and Battery Research",
+      "slug": "google-quantum-ai-and-volkswagen-partnership-for-traffic-optimization-and-battery-research",
+      "entityMatches": {
+        "algorithms": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Quantum Approximate Optimization Algorithm (QAOA)",
+            "Variational Quantum Eigensolver (VQE)",
+            "Quantum Error Correction"
+          ]
+        },
+        "industries": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Automotive",
+            "Energy",
+            "Logistics and Supply Chain",
+            "Materials Science",
+            "AI and Machine Learning"
+          ]
+        },
+        "personas": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Quantum Algorithm Developer",
+            "Domain Expert",
+            "Business Decision-Maker",
+            "Quantum Hardware Engineer",
+            "Quantum Solutions Provider"
+          ]
+        }
+      },
+      "contentStats": {
+        "descriptionLength": 319,
+        "mainContentLength": 7848,
+        "referencesCount": 8
+      }
+    },
+    {
+      "filePath": "/Users/dryan/Downloads/qookie-exports-main/exports/batch-2-100/google-quantum-ai-volkswagen-ag-.json",
+      "fileName": "google-quantum-ai-volkswagen-ag-.json",
+      "status": "success",
+      "title": "Google Quantum AI and Volkswagen AG: Advancing Traffic Optimization and Battery Research with Quantum Computing",
+      "slug": "google-quantum-ai-and-volkswagen-ag-advancing-traffic-optimization-and-battery-research-with-quantum-computing",
+      "entityMatches": {
+        "algorithms": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Quantum Annealing Algorithms",
+            "Variational Quantum Eigensolver (VQE)",
+            "Quantum Approximate Optimization Algorithm (QAOA)"
+          ]
+        },
+        "industries": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Automotive",
+            "Energy",
+            "Materials Science",
+            "Logistics and Supply Chain",
+            "AI and Machine Learning"
+          ]
+        },
+        "personas": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Business Decision-Maker",
+            "Domain Expert",
+            "Quantum Algorithm Developer",
+            "Quantum Chemist",
+            "Quantum Solutions Provider",
+            "Systems Integration Engineer"
+          ]
+        }
+      },
+      "contentStats": {
+        "descriptionLength": 380,
+        "mainContentLength": 7780,
+        "referencesCount": 3
+      }
+    },
+    {
+      "filePath": "/Users/dryan/Downloads/qookie-exports-main/exports/batch-2-100/honeywell-quantum-solutions-bmw-group-.json",
+      "fileName": "honeywell-quantum-solutions-bmw-group-.json",
+      "status": "success",
+      "title": "Honeywell Quantum Solutions and BMW Group: Advancing Supply Chain Optimization through Quantum Computing",
+      "slug": "honeywell-quantum-solutions-and-bmw-group-advancing-supply-chain-optimization-through-quantum-computing",
+      "entityMatches": {
+        "algorithms": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Quantum Approximate Optimization Algorithm (QAOA)",
+            "Quantum Machine Learning",
+            "Quantum Error Correction"
+          ]
+        },
+        "industries": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Automotive",
+            "Logistics and Supply Chain",
+            "Materials Science"
+          ]
+        },
+        "personas": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Business Decision-Maker",
+            "Domain Expert",
+            "Quantum Algorithm Developer",
+            "Quantum Solutions Provider",
+            "Software Engineer",
+            "Systems Integration Engineer"
+          ]
+        }
+      },
+      "contentStats": {
+        "descriptionLength": 327,
+        "mainContentLength": 7468,
+        "referencesCount": 6
+      }
+    },
+    {
+      "filePath": "/Users/dryan/Downloads/qookie-exports-main/exports/batch-2-100/honeywell-quantum-solutions-j-p--morgan-.json",
+      "fileName": "honeywell-quantum-solutions-j-p--morgan-.json",
+      "status": "success",
+      "title": "Honeywell Quantum Solutions and J.P. Morgan: Advancing Financial Services Through Quantum Computing",
+      "slug": "honeywell-quantum-solutions-and-jp-morgan-advancing-financial-services-through-quantum-computing",
+      "entityMatches": {
+        "algorithms": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Quantum Approximate Optimization Algorithm (QAOA)",
+            "Variational Quantum Eigensolver (VQE)",
+            "Quantum Amplitude Amplification"
+          ]
+        },
+        "industries": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Finance",
+            "Cybersecurity"
+          ]
+        },
+        "personas": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Financial Services Specialist",
+            "Quantum Algorithm Developer",
+            "Business Decision-Maker",
+            "Cybersecurity Specialist",
+            "Quantum Hardware Engineer",
+            "Quantum Solutions Provider"
+          ]
+        }
+      },
+      "contentStats": {
+        "descriptionLength": 398,
+        "mainContentLength": 8295,
+        "referencesCount": 7
+      }
+    },
+    {
+      "filePath": "/Users/dryan/Downloads/qookie-exports-main/exports/batch-2-100/ibm--rigetti-exxonmobil-.json",
+      "fileName": "ibm--rigetti-exxonmobil-.json",
+      "status": "success",
+      "title": "Quantum Computing Collaboration for Energy Sector Optimization",
+      "slug": "quantum-computing-collaboration-for-energy-sector-optimization",
+      "entityMatches": {
+        "algorithms": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Variational Quantum Eigensolver (VQE)",
+            "Quantum Approximate Optimization Algorithm (QAOA)",
+            "Quantum Error Correction"
+          ]
+        },
+        "industries": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Energy",
+            "Chemical Manufacturing",
+            "Materials Science"
+          ]
+        },
+        "personas": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Business Decision-Maker",
+            "Domain Expert",
+            "Quantum Algorithm Developer",
+            "Quantum Chemist",
+            "Quantum Cloud and Platform Provider",
+            "Quantum Solutions Provider"
+          ]
+        }
+      },
+      "contentStats": {
+        "descriptionLength": 332,
+        "mainContentLength": 7480,
+        "referencesCount": 5
+      }
+    },
+    {
+      "filePath": "/Users/dryan/Downloads/qookie-exports-main/exports/batch-2-100/ibm-barclays-.json",
+      "fileName": "ibm-barclays-.json",
+      "status": "success",
+      "title": "IBM and Barclays Quantum Computing Partnership for Financial Services Innovation",
+      "slug": "ibm-and-barclays-quantum-computing-partnership-for-financial-services-innovation",
+      "entityMatches": {
+        "algorithms": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Quantum Approximate Optimization Algorithm (QAOA)",
+            "Variational Quantum Eigensolver (VQE)",
+            "Quantum Fourier Transform (QFT)",
+            "Quantum Principal Component Analysis (qPCA)",
+            "Quantum Support Vector Machine (QSVM)"
+          ]
+        },
+        "industries": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Finance",
+            "AI and Machine Learning",
+            "Cybersecurity"
+          ]
+        },
+        "personas": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Financial Services Specialist",
+            "Quantum Algorithm Developer",
+            "Business Decision-Maker",
+            "Quantum Solutions Provider",
+            "Software Engineer"
+          ]
+        }
+      },
+      "contentStats": {
+        "descriptionLength": 364,
+        "mainContentLength": 6836,
+        "referencesCount": 10
+      }
+    },
+    {
+      "filePath": "/Users/dryan/Downloads/qookie-exports-main/exports/batch-2-100/ibm-boeing-.json",
+      "fileName": "ibm-boeing-.json",
+      "status": "success",
+      "title": "IBM-Boeing Quantum Computing Partnership for Aerospace Innovation",
+      "slug": "ibm-boeing-quantum-computing-partnership-for-aerospace-innovation",
+      "entityMatches": {
+        "algorithms": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Quantum Approximate Optimization Algorithm (QAOA)",
+            "Variational Quantum Eigensolver (VQE)",
+            "Quantum Error Correction"
+          ]
+        },
+        "industries": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Aerospace",
+            "Materials Science",
+            "Logistics and Supply Chain",
+            "AI and Machine Learning"
+          ]
+        },
+        "personas": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Quantum Algorithm Developer",
+            "Domain Expert",
+            "Business Decision-Maker",
+            "Quantum Solutions Provider",
+            "Quantum Hardware Engineer"
+          ]
+        }
+      },
+      "contentStats": {
+        "descriptionLength": 392,
+        "mainContentLength": 7769,
+        "referencesCount": 9
+      }
+    },
+    {
+      "filePath": "/Users/dryan/Downloads/qookie-exports-main/exports/batch-2-100/ibm-daimler-ag-.json",
+      "fileName": "ibm-daimler-ag-.json",
+      "status": "success",
+      "title": "IBM and Daimler AG Quantum Computing Partnership for Battery Development and Optimization",
+      "slug": "ibm-and-daimler-ag-quantum-computing-partnership-for-battery-development-and-optimization",
+      "entityMatches": {
+        "algorithms": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Variational Quantum Eigensolver (VQE)",
+            "Quantum Approximate Optimization Algorithm (QAOA)",
+            "Quantum Error Correction"
+          ]
+        },
+        "industries": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Automotive",
+            "Materials Science",
+            "Energy",
+            "AI and Machine Learning",
+            "Logistics and Supply Chain"
+          ]
+        },
+        "personas": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Business Decision-Maker",
+            "Domain Expert",
+            "Quantum Algorithm Developer",
+            "Quantum Chemist",
+            "Quantum Cloud and Platform Provider",
+            "Software Engineer"
+          ]
+        }
+      },
+      "contentStats": {
+        "descriptionLength": 367,
+        "mainContentLength": 8637,
+        "referencesCount": 9
+      }
+    },
+    {
+      "filePath": "/Users/dryan/Downloads/qookie-exports-main/exports/batch-2-100/ibm-e-on-.json",
+      "fileName": "ibm-e-on-.json",
+      "status": "success",
+      "title": "IBM and E.ON Partnership: Quantum Computing for Energy Grid Optimization",
+      "slug": "ibm-and-eon-partnership-quantum-computing-for-energy-grid-optimization",
+      "entityMatches": {
+        "algorithms": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Quantum Approximate Optimization Algorithm (QAOA)",
+            "Variational Quantum Eigensolver (VQE)"
+          ]
+        },
+        "industries": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Energy"
+          ]
+        },
+        "personas": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Business Decision-Maker",
+            "Domain Expert",
+            "Quantum Algorithm Developer",
+            "Quantum Solutions Provider",
+            "Software Engineer"
+          ]
+        }
+      },
+      "contentStats": {
+        "descriptionLength": 375,
+        "mainContentLength": 6697,
+        "referencesCount": 8
+      }
+    },
+    {
+      "filePath": "/Users/dryan/Downloads/qookie-exports-main/exports/batch-2-100/ibm-exxonmobil-.json",
+      "fileName": "ibm-exxonmobil-.json",
+      "status": "success",
+      "title": "IBM and ExxonMobil Quantum Computing Partnership for Energy and Chemical Research",
+      "slug": "ibm-and-exxonmobil-quantum-computing-partnership-for-energy-and-chemical-research",
+      "entityMatches": {
+        "algorithms": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Quantum Approximate Optimization Algorithm (QAOA)",
+            "Variational Quantum Eigensolver (VQE)",
+            "Quantum Error Correction"
+          ]
+        },
+        "industries": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Energy",
+            "Chemical Manufacturing",
+            "Climate and Environment",
+            "Logistics and Supply Chain",
+            "Materials Science"
+          ]
+        },
+        "personas": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Business Decision-Maker",
+            "Domain Expert",
+            "Quantum Algorithm Developer",
+            "Quantum Chemist",
+            "Quantum Cloud and Platform Provider",
+            "Quantum Solutions Provider"
+          ]
+        }
+      },
+      "contentStats": {
+        "descriptionLength": 389,
+        "mainContentLength": 8704,
+        "referencesCount": 9
+      }
+    },
+    {
+      "filePath": "/Users/dryan/Downloads/qookie-exports-main/exports/batch-2-100/ibm-jpmorgan-chase-.json",
+      "fileName": "ibm-jpmorgan-chase-.json",
+      "status": "success",
+      "title": "IBM and JPMorgan Chase: Advancing Quantum Computing for Financial Services",
+      "slug": "ibm-and-jpmorgan-chase-advancing-quantum-computing-for-financial-services",
+      "entityMatches": {
+        "algorithms": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Quantum Approximate Optimization Algorithm (QAOA)",
+            "Quantum Fourier Transform (QFT)",
+            "Quantum Support Vector Machine (QSVM)",
+            "Quantum Error Correction"
+          ]
+        },
+        "industries": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Finance",
+            "AI and Machine Learning",
+            "Cybersecurity"
+          ]
+        },
+        "personas": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Financial Services Specialist",
+            "Quantum Algorithm Developer",
+            "Business Decision-Maker",
+            "Software Engineer",
+            "Quantum Cloud and Platform Provider"
+          ]
+        }
+      },
+      "contentStats": {
+        "descriptionLength": 383,
+        "mainContentLength": 9169,
+        "referencesCount": 9
+      }
+    },
+    {
+      "filePath": "/Users/dryan/Downloads/qookie-exports-main/exports/batch-2-100/ibm-mercedes-benz---daimler-.json",
+      "fileName": "ibm-mercedes-benz---daimler-.json",
+      "status": "success",
+      "title": "IBM and Mercedes-Benz Partnership: Quantum Computing for Automotive Innovation",
+      "slug": "ibm-and-mercedes-benz-partnership-quantum-computing-for-automotive-innovation",
+      "entityMatches": {
+        "algorithms": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Quantum Approximate Optimization Algorithm (QAOA)",
+            "Variational Quantum Eigensolver (VQE)"
+          ]
+        },
+        "industries": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Automotive",
+            "Energy",
+            "Logistics and Supply Chain",
+            "Materials Science",
+            "AI and Machine Learning"
+          ]
+        },
+        "personas": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Business Decision-Maker",
+            "Domain Expert",
+            "Quantum Algorithm Developer",
+            "Quantum Chemist",
+            "Software Engineer"
+          ]
+        }
+      },
+      "contentStats": {
+        "descriptionLength": 395,
+        "mainContentLength": 7809,
+        "referencesCount": 4
+      }
+    },
+    {
+      "filePath": "/Users/dryan/Downloads/qookie-exports-main/exports/batch-2-100/ibm-mitsubishi-chemical-.json",
+      "fileName": "ibm-mitsubishi-chemical-.json",
+      "status": "success",
+      "title": "IBM and Mitsubishi Chemical: Advancing Materials Discovery Through Quantum Computing",
+      "slug": "ibm-and-mitsubishi-chemical-advancing-materials-discovery-through-quantum-computing",
+      "entityMatches": {
+        "algorithms": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Variational Quantum Eigensolver (VQE)",
+            "Quantum Approximate Optimization Algorithm (QAOA)"
+          ]
+        },
+        "industries": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Chemical Manufacturing",
+            "Materials Science"
+          ]
+        },
+        "personas": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Quantum Chemist",
+            "Domain Expert",
+            "Quantum Algorithm Developer",
+            "Business Decision-Maker",
+            "Quantum Solutions Provider"
+          ]
+        }
+      },
+      "contentStats": {
+        "descriptionLength": 359,
+        "mainContentLength": 7427,
+        "referencesCount": 8
+      }
+    },
+    {
+      "filePath": "/Users/dryan/Downloads/qookie-exports-main/exports/batch-2-100/ibm-quantum-anthem--usa--.json",
+      "fileName": "ibm-quantum-anthem--usa--.json",
+      "status": "success",
+      "title": "IBM Quantum and Anthem Partnership: Exploring Quantum Computing for Healthcare Data Analytics",
+      "slug": "ibm-quantum-and-anthem-partnership-exploring-quantum-computing-for-healthcare-data-analytics",
+      "entityMatches": {
+        "algorithms": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Quantum Approximate Optimization Algorithm (QAOA)",
+            "Variational Quantum Eigensolver (VQE)",
+            "Quantum Support Vector Machine (QSVM)"
+          ]
+        },
+        "industries": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Healthcare",
+            "AI and Machine Learning",
+            "Pharmaceutical"
+          ]
+        },
+        "personas": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Business Decision-Maker",
+            "Domain Expert",
+            "Quantum Algorithm Developer",
+            "Software Engineer",
+            "Systems Integration Engineer",
+            "Quantum Solutions Provider"
+          ]
+        }
+      },
+      "contentStats": {
+        "descriptionLength": 376,
+        "mainContentLength": 8049,
+        "referencesCount": 10
+      }
+    },
+    {
+      "filePath": "/Users/dryan/Downloads/qookie-exports-main/exports/batch-2-100/ibm-quantum-apple-amazon--usa--.json",
+      "fileName": "ibm-quantum-apple-amazon--usa--.json",
+      "status": "success",
+      "title": "IBM Quantum Network Partnership with Major Tech Companies",
+      "slug": "ibm-quantum-network-partnership-with-major-tech-companies",
+      "entityMatches": {
+        "algorithms": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Quantum Approximate Optimization Algorithm (QAOA)",
+            "Variational Quantum Eigensolver (VQE)",
+            "Quantum Error Correction",
+            "Grover's Algorithm",
+            "Quantum Support Vector Machine (QSVM)"
+          ]
+        },
+        "industries": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Finance",
+            "Healthcare",
+            "Pharmaceutical",
+            "Logistics and Supply Chain",
+            "Materials Science",
+            "AI and Machine Learning",
+            "Chemical Manufacturing"
+          ]
+        },
+        "personas": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Business Decision-Maker",
+            "Quantum Algorithm Developer",
+            "Software Engineer",
+            "Quantum Cloud and Platform Provider",
+            "Quantum Educator",
+            "Domain Expert",
+            "Systems Integration Engineer"
+          ]
+        }
+      },
+      "contentStats": {
+        "descriptionLength": 390,
+        "mainContentLength": 7506,
+        "referencesCount": 8
+      }
+    },
+    {
+      "filePath": "/Users/dryan/Downloads/qookie-exports-main/exports/batch-2-100/ibm-quantum-cleveland-clinic-.json",
+      "fileName": "ibm-quantum-cleveland-clinic-.json",
+      "status": "success",
+      "title": "IBM Quantum Network Partnership with Cleveland Clinic: Accelerating Healthcare Discovery through Quantum Computing",
+      "slug": "ibm-quantum-network-partnership-with-cleveland-clinic-accelerating-healthcare-discovery-through-quantum-computing",
+      "entityMatches": {
+        "algorithms": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Variational Quantum Eigensolver (VQE)",
+            "Quantum Machine Learning",
+            "Quantum Support Vector Machine (QSVM)",
+            "Quantum Principal Component Analysis (qPCA)"
+          ]
+        },
+        "industries": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Healthcare",
+            "Pharmaceutical",
+            "AI and Machine Learning",
+            "Education"
+          ]
+        },
+        "personas": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Quantum Algorithm Developer",
+            "Domain Expert",
+            "Quantum Educator",
+            "Business Decision-Maker",
+            "Quantum Solutions Provider"
+          ]
+        }
+      },
+      "contentStats": {
+        "descriptionLength": 393,
+        "mainContentLength": 9090,
+        "referencesCount": 10
+      }
+    },
+    {
+      "filePath": "/Users/dryan/Downloads/qookie-exports-main/exports/batch-2-100/ibm-quantum-daimler--germany--.json",
+      "fileName": "ibm-quantum-daimler--germany--.json",
+      "status": "success",
+      "title": "IBM Quantum and Daimler Partnership: Advancing Automotive Innovation through Quantum Computing",
+      "slug": "ibm-quantum-and-daimler-partnership-advancing-automotive-innovation-through-quantum-computing",
+      "entityMatches": {
+        "algorithms": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Quantum Approximate Optimization Algorithm (QAOA)",
+            "Variational Quantum Eigensolver (VQE)",
+            "Quantum Annealing Algorithms"
+          ]
+        },
+        "industries": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Automotive",
+            "Materials Science",
+            "Logistics and Supply Chain",
+            "Energy"
+          ]
+        },
+        "personas": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Business Decision-Maker",
+            "Domain Expert",
+            "Quantum Algorithm Developer",
+            "Quantum Chemist",
+            "Quantum Cloud and Platform Provider",
+            "Quantum Solutions Provider"
+          ]
+        }
+      },
+      "contentStats": {
+        "descriptionLength": 427,
+        "mainContentLength": 8935,
+        "referencesCount": 8
+      }
+    },
+    {
+      "filePath": "/Users/dryan/Downloads/qookie-exports-main/exports/batch-2-100/ibm-quantum-daimler-ag-.json",
+      "fileName": "ibm-quantum-daimler-ag-.json",
+      "status": "success",
+      "title": "IBM Quantum and Daimler AG Strategic Partnership for Automotive Quantum Computing Applications",
+      "slug": "ibm-quantum-and-daimler-ag-strategic-partnership-for-automotive-quantum-computing-applications",
+      "entityMatches": {
+        "algorithms": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Variational Quantum Eigensolver (VQE)",
+            "Quantum Approximate Optimization Algorithm (QAOA)",
+            "Quantum Annealing Algorithms"
+          ]
+        },
+        "industries": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Automotive",
+            "Materials Science",
+            "Logistics and Supply Chain"
+          ]
+        },
+        "personas": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Business Decision-Maker",
+            "Domain Expert",
+            "Quantum Algorithm Developer",
+            "Quantum Chemist",
+            "Quantum Cloud and Platform Provider"
+          ]
+        }
+      },
+      "contentStats": {
+        "descriptionLength": 344,
+        "mainContentLength": 9560,
+        "referencesCount": 9
+      }
+    },
+    {
+      "filePath": "/Users/dryan/Downloads/qookie-exports-main/exports/batch-2-100/ibm-quantum-exxonmobil-.json",
+      "fileName": "ibm-quantum-exxonmobil-.json",
+      "status": "success",
+      "title": "IBM Quantum and ExxonMobil: Advancing Energy and Materials Science through Quantum Computing",
+      "slug": "ibm-quantum-and-exxonmobil-advancing-energy-and-materials-science-through-quantum-computing",
+      "entityMatches": {
+        "algorithms": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Variational Quantum Eigensolver (VQE)",
+            "Quantum Approximate Optimization Algorithm (QAOA)",
+            "Quantum Error Correction"
+          ]
+        },
+        "industries": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Energy",
+            "Chemical Manufacturing",
+            "Materials Science",
+            "Logistics and Supply Chain"
+          ]
+        },
+        "personas": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Business Decision-Maker",
+            "Domain Expert",
+            "Quantum Algorithm Developer",
+            "Quantum Chemist",
+            "Quantum Cloud and Platform Provider",
+            "Quantum Solutions Provider"
+          ]
+        }
+      },
+      "contentStats": {
+        "descriptionLength": 320,
+        "mainContentLength": 7690,
+        "referencesCount": 10
+      }
+    },
+    {
+      "filePath": "/Users/dryan/Downloads/qookie-exports-main/exports/batch-2-100/ibm-quantum-goldman-sachs-.json",
+      "fileName": "ibm-quantum-goldman-sachs-.json",
+      "status": "success",
+      "title": "IBM Quantum and Goldman Sachs: Advancing Quantum Computing for Financial Services",
+      "slug": "ibm-quantum-and-goldman-sachs-advancing-quantum-computing-for-financial-services",
+      "entityMatches": {
+        "algorithms": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Quantum Approximate Optimization Algorithm (QAOA)",
+            "Variational Quantum Eigensolver (VQE)",
+            "Quantum Amplitude Amplification",
+            "Quantum Error Correction"
+          ]
+        },
+        "industries": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Finance"
+          ]
+        },
+        "personas": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Financial Services Specialist",
+            "Quantum Algorithm Developer",
+            "Business Decision-Maker",
+            "Software Engineer",
+            "Quantum Cloud and Platform Provider"
+          ]
+        }
+      },
+      "contentStats": {
+        "descriptionLength": 380,
+        "mainContentLength": 7772,
+        "referencesCount": 10
+      }
+    },
+    {
+      "filePath": "/Users/dryan/Downloads/qookie-exports-main/exports/batch-2-100/ibm-quantum-jpmorgan-chase-.json",
+      "fileName": "ibm-quantum-jpmorgan-chase-.json",
+      "status": "success",
+      "title": "IBM Quantum Network Partnership with JPMorgan Chase for Financial Optimization",
+      "slug": "ibm-quantum-network-partnership-with-jpmorgan-chase-for-financial-optimization",
+      "entityMatches": {
+        "algorithms": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Quantum Approximate Optimization Algorithm (QAOA)",
+            "Variational Quantum Eigensolver (VQE)",
+            "Quantum Amplitude Amplification",
+            "Quantum Fourier Transform (QFT)",
+            "Quantum Principal Component Analysis (qPCA)",
+            "Quantum Support Vector Machine (QSVM)"
+          ]
+        },
+        "industries": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Finance",
+            "AI and Machine Learning",
+            "Cybersecurity"
+          ]
+        },
+        "personas": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Business Decision-Maker",
+            "Financial Services Specialist",
+            "Quantum Algorithm Developer",
+            "Software Engineer",
+            "Domain Expert"
+          ]
+        }
+      },
+      "contentStats": {
+        "descriptionLength": 430,
+        "mainContentLength": 7854,
+        "referencesCount": 9
+      }
+    },
+    {
+      "filePath": "/Users/dryan/Downloads/qookie-exports-main/exports/batch-2-100/ibm-quantum-mit-.json",
+      "fileName": "ibm-quantum-mit-.json",
+      "status": "success",
+      "title": "IBM Quantum Network Partnership with MIT: Advancing Quantum Computing Research and Education",
+      "slug": "ibm-quantum-network-partnership-with-mit-advancing-quantum-computing-research-and-education",
+      "entityMatches": {
+        "algorithms": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Quantum Error Correction",
+            "Variational Quantum Eigensolver (VQE)",
+            "Quantum Approximate Optimization Algorithm (QAOA)",
+            "Quantum Support Vector Machine (QSVM)",
+            "Quantum K-Means Clustering"
+          ]
+        },
+        "industries": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Education",
+            "Healthcare",
+            "Materials Science",
+            "Pharmaceutical",
+            "Finance",
+            "AI and Machine Learning",
+            "Chemical Manufacturing",
+            "Logistics and Supply Chain"
+          ]
+        },
+        "personas": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Quantum Educator",
+            "Quantum Algorithm Developer",
+            "Quantum Hardware Engineer",
+            "Domain Expert",
+            "Software Engineer",
+            "Quantum Chemist",
+            "Quantum Cloud and Platform Provider"
+          ]
+        }
+      },
+      "contentStats": {
+        "descriptionLength": 410,
+        "mainContentLength": 8591,
+        "referencesCount": 10
+      }
+    },
+    {
+      "filePath": "/Users/dryan/Downloads/qookie-exports-main/exports/batch-2-100/ibm-quantum-mitsubishi-chemical-.json",
+      "fileName": "ibm-quantum-mitsubishi-chemical-.json",
+      "status": "success",
+      "title": "IBM Quantum and Mitsubishi Chemical: Advancing Materials Discovery Through Quantum Computing",
+      "slug": "ibm-quantum-and-mitsubishi-chemical-advancing-materials-discovery-through-quantum-computing",
+      "entityMatches": {
+        "algorithms": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Quantum Approximate Optimization Algorithm (QAOA)",
+            "Variational Quantum Eigensolver (VQE)"
+          ]
+        },
+        "industries": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Chemical Manufacturing",
+            "Materials Science"
+          ]
+        },
+        "personas": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Business Decision-Maker",
+            "Domain Expert",
+            "Quantum Algorithm Developer",
+            "Quantum Chemist",
+            "Quantum Solutions Provider"
+          ]
+        }
+      },
+      "contentStats": {
+        "descriptionLength": 413,
+        "mainContentLength": 8168,
+        "referencesCount": 10
+      }
+    },
+    {
+      "filePath": "/Users/dryan/Downloads/qookie-exports-main/exports/batch-2-100/ibm-quantum-moltex-energy-.json",
+      "fileName": "ibm-quantum-moltex-energy-.json",
+      "status": "success",
+      "title": "IBM Quantum and MolTex Energy Partnership: Advancing Nuclear Waste Processing Through Quantum Computing",
+      "slug": "ibm-quantum-and-moltex-energy-partnership-advancing-nuclear-waste-processing-through-quantum-computing",
+      "entityMatches": {
+        "algorithms": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Variational Quantum Eigensolver (VQE)",
+            "Quantum Approximate Optimization Algorithm (QAOA)"
+          ]
+        },
+        "industries": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Energy",
+            "Chemical Manufacturing",
+            "Materials Science"
+          ]
+        },
+        "personas": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Domain Expert",
+            "Quantum Algorithm Developer",
+            "Quantum Chemist",
+            "Business Decision-Maker",
+            "Quantum Solutions Provider"
+          ]
+        }
+      },
+      "contentStats": {
+        "descriptionLength": 337,
+        "mainContentLength": 7069,
+        "referencesCount": 0
+      }
+    },
+    {
+      "filePath": "/Users/dryan/Downloads/qookie-exports-main/exports/batch-2-100/ibm-quantum-paypal--usa--.json",
+      "fileName": "ibm-quantum-paypal--usa--.json",
+      "status": "success",
+      "title": "IBM Quantum and PayPal: Exploring Quantum Computing for Advanced Fraud Detection and Risk Management",
+      "slug": "ibm-quantum-and-paypal-exploring-quantum-computing-for-advanced-fraud-detection-and-risk-management",
+      "entityMatches": {
+        "algorithms": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Quantum Approximate Optimization Algorithm (QAOA)",
+            "Variational Quantum Eigensolver (VQE)",
+            "Quantum Support Vector Machine (QSVM)",
+            "Quantum K-Means Clustering"
+          ]
+        },
+        "industries": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Finance",
+            "AI and Machine Learning",
+            "Cybersecurity"
+          ]
+        },
+        "personas": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Financial Services Specialist",
+            "Quantum Algorithm Developer",
+            "Business Decision-Maker",
+            "Software Engineer",
+            "Quantum Cloud and Platform Provider"
+          ]
+        }
+      },
+      "contentStats": {
+        "descriptionLength": 342,
+        "mainContentLength": 8141,
+        "referencesCount": 10
+      }
+    },
+    {
+      "filePath": "/Users/dryan/Downloads/qookie-exports-main/exports/batch-2-100/ibm-quantum-u-s--doe-labs--usa--.json",
+      "fileName": "ibm-quantum-u-s--doe-labs--usa--.json",
+      "status": "success",
+      "title": "IBM Quantum Network Partnership with U.S. Department of Energy National Laboratories",
+      "slug": "ibm-quantum-network-partnership-with-us-department-of-energy-national-laboratories",
+      "entityMatches": {
+        "algorithms": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Quantum Approximate Optimization Algorithm (QAOA)",
+            "Variational Quantum Eigensolver (VQE)",
+            "Quantum Error Correction"
+          ]
+        },
+        "industries": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Energy",
+            "Government and Public Sector",
+            "Materials Science",
+            "Chemical Manufacturing",
+            "Education"
+          ]
+        },
+        "personas": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Government Representative",
+            "Quantum Algorithm Developer",
+            "Quantum Chemist",
+            "Quantum Educator",
+            "Domain Expert"
+          ]
+        }
+      },
+      "contentStats": {
+        "descriptionLength": 441,
+        "mainContentLength": 8659,
+        "referencesCount": 9
+      }
+    },
+    {
+      "filePath": "/Users/dryan/Downloads/qookie-exports-main/exports/batch-2-100/ibm-riken---cleveland-clinic-.json",
+      "fileName": "ibm-riken---cleveland-clinic-.json",
+      "status": "success",
+      "title": "IBM Quantum Network Partnership with RIKEN and Cleveland Clinic",
+      "slug": "ibm-quantum-network-partnership-with-riken-and-cleveland-clinic",
+      "entityMatches": {
+        "algorithms": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Quantum Error Correction",
+            "Variational Quantum Eigensolver (VQE)",
+            "Quantum Approximate Optimization Algorithm (QAOA)",
+            "Quantum Support Vector Machine (QSVM)"
+          ]
+        },
+        "industries": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Healthcare",
+            "Pharmaceutical",
+            "Materials Science",
+            "Education",
+            "AI and Machine Learning"
+          ]
+        },
+        "personas": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Quantum Algorithm Developer",
+            "Quantum Chemist",
+            "Quantum Solutions Provider",
+            "Quantum Educator",
+            "Domain Expert",
+            "Business Decision-Maker"
+          ]
+        }
+      },
+      "contentStats": {
+        "descriptionLength": 413,
+        "mainContentLength": 8239,
+        "referencesCount": 8
+      }
+    },
+    {
+      "filePath": "/Users/dryan/Downloads/qookie-exports-main/exports/batch-2-100/ibm-wells-fargo-.json",
+      "fileName": "ibm-wells-fargo-.json",
+      "status": "success",
+      "title": "IBM Quantum Network and Wells Fargo: Advancing Financial Services Through Quantum Computing",
+      "slug": "ibm-quantum-network-and-wells-fargo-advancing-financial-services-through-quantum-computing",
+      "entityMatches": {
+        "algorithms": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Quantum Approximate Optimization Algorithm (QAOA)",
+            "Variational Quantum Eigensolver (VQE)"
+          ]
+        },
+        "industries": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Finance",
+            "Cybersecurity"
+          ]
+        },
+        "personas": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Business Decision-Maker",
+            "Financial Services Specialist",
+            "Quantum Algorithm Developer",
+            "Software Engineer"
+          ]
+        }
+      },
+      "contentStats": {
+        "descriptionLength": 324,
+        "mainContentLength": 7782,
+        "referencesCount": 9
+      }
+    },
+    {
+      "filePath": "/Users/dryan/Downloads/qookie-exports-main/exports/batch-2-100/id-quantique-sk-telecom-.json",
+      "fileName": "id-quantique-sk-telecom-.json",
+      "status": "success",
+      "title": "ID Quantique and SK Telecom: Pioneering Quantum-Safe Communications Infrastructure in South Korea",
+      "slug": "id-quantique-and-sk-telecom-pioneering-quantum-safe-communications-infrastructure-in-south-korea",
+      "entityMatches": {
+        "algorithms": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Quantum Error Correction"
+          ]
+        },
+        "industries": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Telecommunications",
+            "Cybersecurity",
+            "Finance",
+            "Government and Public Sector"
+          ]
+        },
+        "personas": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Business Decision-Maker",
+            "Cybersecurity Specialist",
+            "Government Representative",
+            "Quantum Solutions Provider",
+            "Systems Integration Engineer"
+          ]
+        }
+      },
+      "contentStats": {
+        "descriptionLength": 480,
+        "mainContentLength": 8189,
+        "referencesCount": 10
+      }
+    },
+    {
+      "filePath": "/Users/dryan/Downloads/qookie-exports-main/exports/batch-2-100/intel--usa--aist--japan--.json",
+      "fileName": "intel--usa--aist--japan--.json",
+      "status": "success",
+      "title": "Intel-AIST Quantum Computing Research Collaboration for Advanced Materials and Device Development",
+      "slug": "intel-aist-quantum-computing-research-collaboration-for-advanced-materials-and-device-development",
+      "entityMatches": {
+        "algorithms": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Quantum Error Correction"
+          ]
+        },
+        "industries": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Materials Science",
+            "Healthcare",
+            "Pharmaceutical"
+          ]
+        },
+        "personas": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Quantum Hardware Engineer",
+            "Domain Expert",
+            "Business Decision-Maker",
+            "Government Representative"
+          ]
+        }
+      },
+      "contentStats": {
+        "descriptionLength": 415,
+        "mainContentLength": 8614,
+        "referencesCount": 3
+      }
+    },
+    {
+      "filePath": "/Users/dryan/Downloads/qookie-exports-main/exports/batch-2-100/ionq-airbus-.json",
+      "fileName": "ionq-airbus-.json",
+      "status": "success",
+      "title": "IonQ and Airbus Partnership for Quantum Computing in Aerospace Applications",
+      "slug": "ionq-and-airbus-partnership-for-quantum-computing-in-aerospace-applications",
+      "entityMatches": {
+        "algorithms": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Quantum Approximate Optimization Algorithm (QAOA)",
+            "Variational Quantum Eigensolver (VQE)",
+            "Harrow-Hassidim-Lloyd (HHL) Algorithm"
+          ]
+        },
+        "industries": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Aerospace",
+            "AI and Machine Learning",
+            "Logistics and Supply Chain",
+            "Materials Science"
+          ]
+        },
+        "personas": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Business Decision-Maker",
+            "Domain Expert",
+            "Quantum Algorithm Developer",
+            "Quantum Cloud and Platform Provider",
+            "Software Engineer",
+            "Systems Integration Engineer"
+          ]
+        }
+      },
+      "contentStats": {
+        "descriptionLength": 339,
+        "mainContentLength": 7149,
+        "referencesCount": 10
+      }
+    },
+    {
+      "filePath": "/Users/dryan/Downloads/qookie-exports-main/exports/batch-2-100/ionq-aws-amazon-braket--usa--.json",
+      "fileName": "ionq-aws-amazon-braket--usa--.json",
+      "status": "success",
+      "title": "IonQ and AWS Braket Partnership: Democratizing Access to Trapped Ion Quantum Computing",
+      "slug": "ionq-and-aws-braket-partnership-democratizing-access-to-trapped-ion-quantum-computing",
+      "entityMatches": {
+        "algorithms": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Quantum Approximate Optimization Algorithm (QAOA)",
+            "Variational Quantum Eigensolver (VQE)",
+            "Quantum Error Correction"
+          ]
+        },
+        "industries": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Finance",
+            "Healthcare",
+            "Pharmaceutical",
+            "Education",
+            "AI and Machine Learning"
+          ]
+        },
+        "personas": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Quantum Cloud and Platform Provider",
+            "Business Decision-Maker",
+            "Quantum Algorithm Developer",
+            "Quantum Educator",
+            "Software Engineer"
+          ]
+        }
+      },
+      "contentStats": {
+        "descriptionLength": 420,
+        "mainContentLength": 7858,
+        "referencesCount": 8
+      }
+    },
+    {
+      "filePath": "/Users/dryan/Downloads/qookie-exports-main/exports/batch-2-100/ionq-oak-ridge-national-lab--usa--.json",
+      "fileName": "ionq-oak-ridge-national-lab--usa--.json",
+      "status": "success",
+      "title": "IonQ and Oak Ridge National Laboratory Quantum Computing Access Partnership",
+      "slug": "ionq-and-oak-ridge-national-laboratory-quantum-computing-access-partnership",
+      "entityMatches": {
+        "algorithms": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Quantum Approximate Optimization Algorithm (QAOA)",
+            "Variational Quantum Eigensolver (VQE)",
+            "Quantum Error Correction"
+          ]
+        },
+        "industries": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Energy",
+            "Materials Science",
+            "Pharmaceutical",
+            "Education",
+            "Government and Public Sector"
+          ]
+        },
+        "personas": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Quantum Algorithm Developer",
+            "Quantum Chemist",
+            "Quantum Educator",
+            "Government Representative",
+            "Quantum Solutions Provider"
+          ]
+        }
+      },
+      "contentStats": {
+        "descriptionLength": 385,
+        "mainContentLength": 7323,
+        "referencesCount": 2
+      }
+    },
+    {
+      "filePath": "/Users/dryan/Downloads/qookie-exports-main/exports/batch-2-100/ionq-oak-ridge-national-laboratory-.json",
+      "fileName": "ionq-oak-ridge-national-laboratory-.json",
+      "status": "success",
+      "title": "IonQ and Oak Ridge National Laboratory: Advancing Quantum Computing for Scientific Research",
+      "slug": "ionq-and-oak-ridge-national-laboratory-advancing-quantum-computing-for-scientific-research",
+      "entityMatches": {
+        "algorithms": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Quantum Approximate Optimization Algorithm (QAOA)",
+            "Variational Quantum Eigensolver (VQE)",
+            "Quantum Machine Learning",
+            "Quantum Error Correction"
+          ]
+        },
+        "industries": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Energy",
+            "Materials Science",
+            "Government and Public Sector",
+            "Education",
+            "AI and Machine Learning"
+          ]
+        },
+        "personas": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Government Representative",
+            "Quantum Algorithm Developer",
+            "Quantum Chemist",
+            "Quantum Hardware Engineer",
+            "Quantum Educator",
+            "Domain Expert",
+            "Quantum Cloud and Platform Provider"
+          ]
+        }
+      },
+      "contentStats": {
+        "descriptionLength": 355,
+        "mainContentLength": 7575,
+        "referencesCount": 9
+      }
+    },
+    {
+      "filePath": "/Users/dryan/Downloads/qookie-exports-main/exports/batch-2-100/ionq-united-states-air-force-research-lab-.json",
+      "fileName": "ionq-united-states-air-force-research-lab-.json",
+      "status": "success",
+      "title": "IonQ and US Air Force Research Laboratory Quantum Computing Partnership for Defense Applications",
+      "slug": "ionq-and-us-air-force-research-laboratory-quantum-computing-partnership-for-defense-applications",
+      "entityMatches": {
+        "algorithms": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Quantum Approximate Optimization Algorithm (QAOA)",
+            "Variational Quantum Eigensolver (VQE)",
+            "Quantum Support Vector Machine (QSVM)"
+          ]
+        },
+        "industries": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Defence",
+            "Aerospace",
+            "Government and Public Sector",
+            "Materials Science",
+            "Cybersecurity",
+            "AI and Machine Learning"
+          ]
+        },
+        "personas": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Government Representative",
+            "Quantum Algorithm Developer",
+            "Cybersecurity Specialist",
+            "Domain Expert",
+            "Quantum Solutions Provider"
+          ]
+        }
+      },
+      "contentStats": {
+        "descriptionLength": 340,
+        "mainContentLength": 9205,
+        "referencesCount": 8
+      }
+    },
+    {
+      "filePath": "/Users/dryan/Downloads/qookie-exports-main/exports/batch-2-100/iqm-eviden---csc---it-center-for-science-.json",
+      "fileName": "iqm-eviden---csc---it-center-for-science-.json",
+      "status": "success",
+      "title": "IQM, Eviden, and CSC Partnership: Advancing European Quantum Computing Infrastructure",
+      "slug": "iqm-eviden-and-csc-partnership-advancing-european-quantum-computing-infrastructure",
+      "entityMatches": {
+        "algorithms": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Quantum Approximate Optimization Algorithm (QAOA)",
+            "Variational Quantum Eigensolver (VQE)",
+            "Quantum Error Correction"
+          ]
+        },
+        "industries": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Healthcare",
+            "Pharmaceutical",
+            "Finance",
+            "Logistics and Supply Chain",
+            "Education",
+            "Government and Public Sector"
+          ]
+        },
+        "personas": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Quantum Hardware Engineer",
+            "Systems Integration Engineer",
+            "Quantum Solutions Provider",
+            "Quantum Educator",
+            "Government Representative",
+            "Business Decision-Maker"
+          ]
+        }
+      },
+      "contentStats": {
+        "descriptionLength": 422,
+        "mainContentLength": 7969,
+        "referencesCount": 9
+      }
+    },
+    {
+      "filePath": "/Users/dryan/Downloads/qookie-exports-main/exports/batch-2-100/iqm-hewlett-packard-enterprise-.json",
+      "fileName": "iqm-hewlett-packard-enterprise-.json",
+      "status": "success",
+      "title": "IQM and Hewlett Packard Enterprise Strategic Partnership for Hybrid Quantum-Classical Computing Solutions",
+      "slug": "iqm-and-hewlett-packard-enterprise-strategic-partnership-for-hybrid-quantum-classical-computing-solutions",
+      "entityMatches": {
+        "algorithms": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Quantum Approximate Optimization Algorithm (QAOA)",
+            "Variational Quantum Eigensolver (VQE)",
+            "Quantum Error Correction",
+            "Quantum Support Vector Machine (QSVM)"
+          ]
+        },
+        "industries": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "AI and Machine Learning",
+            "Finance",
+            "Healthcare",
+            "Pharmaceutical",
+            "Materials Science",
+            "Logistics and Supply Chain"
+          ]
+        },
+        "personas": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Business Decision-Maker",
+            "Quantum Hardware Engineer",
+            "Quantum Solutions Provider",
+            "Systems Integration Engineer",
+            "Software Engineer",
+            "Domain Expert"
+          ]
+        }
+      },
+      "contentStats": {
+        "descriptionLength": 350,
+        "mainContentLength": 7627,
+        "referencesCount": 6
+      }
+    },
+    {
+      "filePath": "/Users/dryan/Downloads/qookie-exports-main/exports/batch-2-100/iqm-hqs-quantum-simulations-.json",
+      "fileName": "iqm-hqs-quantum-simulations-.json",
+      "status": "success",
+      "title": "IQM and HQS Quantum Simulations: Advancing Quantum Computing for Materials and Drug Discovery",
+      "slug": "iqm-and-hqs-quantum-simulations-advancing-quantum-computing-for-materials-and-drug-discovery",
+      "entityMatches": {
+        "algorithms": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Quantum Approximate Optimization Algorithm (QAOA)",
+            "Variational Quantum Eigensolver (VQE)",
+            "Quantum Error Correction"
+          ]
+        },
+        "industries": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Materials Science",
+            "Pharmaceutical",
+            "Chemical Manufacturing",
+            "Healthcare"
+          ]
+        },
+        "personas": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Quantum Algorithm Developer",
+            "Quantum Chemist",
+            "Quantum Hardware Engineer",
+            "Quantum Solutions Provider",
+            "Quantum Cloud and Platform Provider",
+            "Business Decision-Maker"
+          ]
+        }
+      },
+      "contentStats": {
+        "descriptionLength": 417,
+        "mainContentLength": 7960,
+        "referencesCount": 9
+      }
+    },
+    {
+      "filePath": "/Users/dryan/Downloads/qookie-exports-main/exports/batch-2-100/iqm-j-lich-supercomputing-centre-.json",
+      "fileName": "iqm-j-lich-supercomputing-centre-.json",
+      "status": "success",
+      "title": "IQM and Jülich Supercomputing Centre: Advancing European Quantum Computing Infrastructure",
+      "slug": "iqm-and-jlich-supercomputing-centre-advancing-european-quantum-computing-infrastructure",
+      "entityMatches": {
+        "algorithms": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Variational Quantum Eigensolver (VQE)",
+            "Quantum Approximate Optimization Algorithm (QAOA)",
+            "Quantum Error Correction"
+          ]
+        },
+        "industries": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Healthcare",
+            "Pharmaceutical",
+            "Materials Science",
+            "Energy",
+            "Chemical Manufacturing",
+            "Education",
+            "Government and Public Sector"
+          ]
+        },
+        "personas": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Quantum Hardware Engineer",
+            "Quantum Solutions Provider",
+            "Systems Integration Engineer",
+            "Quantum Educator",
+            "Government Representative",
+            "Quantum Algorithm Developer",
+            "Quantum Chemist"
+          ]
+        }
+      },
+      "contentStats": {
+        "descriptionLength": 377,
+        "mainContentLength": 7504,
+        "referencesCount": 8
+      }
+    },
+    {
+      "filePath": "/Users/dryan/Downloads/qookie-exports-main/exports/batch-2-100/iqm-leibniz-supercomputing-centre--lrz--.json",
+      "fileName": "iqm-leibniz-supercomputing-centre--lrz--.json",
+      "status": "success",
+      "title": "IQM and Leibniz Supercomputing Centre Pioneer Quantum-HPC Integration in Europe",
+      "slug": "iqm-and-leibniz-supercomputing-centre-pioneer-quantum-hpc-integration-in-europe",
+      "entityMatches": {
+        "algorithms": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Variational Quantum Eigensolver (VQE)",
+            "Quantum Support Vector Machine (QSVM)",
+            "Quantum Error Correction"
+          ]
+        },
+        "industries": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Education",
+            "Healthcare",
+            "Pharmaceutical",
+            "Materials Science",
+            "Automotive",
+            "Climate and Environment"
+          ]
+        },
+        "personas": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Quantum Hardware Engineer",
+            "Quantum Solutions Provider",
+            "Systems Integration Engineer",
+            "Quantum Educator",
+            "Government Representative"
+          ]
+        }
+      },
+      "contentStats": {
+        "descriptionLength": 421,
+        "mainContentLength": 7797,
+        "referencesCount": 9
+      }
+    },
+    {
+      "filePath": "/Users/dryan/Downloads/qookie-exports-main/exports/batch-2-100/iqm-nvidia-.json",
+      "fileName": "iqm-nvidia-.json",
+      "status": "success",
+      "title": "IQM-NVIDIA Partnership: Accelerating Quantum-Classical Computing Integration",
+      "slug": "iqm-nvidia-partnership-accelerating-quantum-classical-computing-integration",
+      "entityMatches": {
+        "algorithms": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Quantum Approximate Optimization Algorithm (QAOA)",
+            "Variational Quantum Eigensolver (VQE)",
+            "Quantum Error Correction"
+          ]
+        },
+        "industries": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "AI and Machine Learning",
+            "Finance",
+            "Healthcare",
+            "Materials Science",
+            "Pharmaceutical",
+            "Logistics and Supply Chain"
+          ]
+        },
+        "personas": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Quantum Hardware Engineer",
+            "Quantum Algorithm Developer",
+            "Software Engineer",
+            "Systems Integration Engineer",
+            "Quantum Solutions Provider",
+            "Business Decision-Maker",
+            "Quantum Chemist",
+            "Quantum Cloud and Platform Provider"
+          ]
+        }
+      },
+      "contentStats": {
+        "descriptionLength": 424,
+        "mainContentLength": 7939,
+        "referencesCount": 9
+      }
+    },
+    {
+      "filePath": "/Users/dryan/Downloads/qookie-exports-main/exports/batch-2-100/iqm-quantum-computers-volkswagen-ag-.json",
+      "fileName": "iqm-quantum-computers-volkswagen-ag-.json",
+      "status": "success",
+      "title": "IQM Quantum Computers and Volkswagen AG Strategic Partnership for Automotive Quantum Applications",
+      "slug": "iqm-quantum-computers-and-volkswagen-ag-strategic-partnership-for-automotive-quantum-applications",
+      "entityMatches": {
+        "algorithms": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Quantum Approximate Optimization Algorithm (QAOA)",
+            "Variational Quantum Eigensolver (VQE)"
+          ]
+        },
+        "industries": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Automotive",
+            "Materials Science",
+            "AI and Machine Learning"
+          ]
+        },
+        "personas": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Business Decision-Maker",
+            "Domain Expert",
+            "Quantum Algorithm Developer",
+            "Quantum Hardware Engineer",
+            "Quantum Solutions Provider"
+          ]
+        }
+      },
+      "contentStats": {
+        "descriptionLength": 380,
+        "mainContentLength": 7327,
+        "referencesCount": 3
+      }
+    },
+    {
+      "filePath": "/Users/dryan/Downloads/qookie-exports-main/exports/batch-2-100/iqm-vtt-technical-research-centre-.json",
+      "fileName": "iqm-vtt-technical-research-centre-.json",
+      "status": "success",
+      "title": "IQM and VTT Partnership: Advancing European Quantum Computing Infrastructure",
+      "slug": "iqm-and-vtt-partnership-advancing-european-quantum-computing-infrastructure",
+      "entityMatches": {
+        "algorithms": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Quantum Error Correction",
+            "Variational Quantum Eigensolver (VQE)",
+            "Quantum Approximate Optimization Algorithm (QAOA)"
+          ]
+        },
+        "industries": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Materials Science",
+            "Pharmaceutical",
+            "Healthcare",
+            "Finance",
+            "Chemical Manufacturing",
+            "Education",
+            "Government and Public Sector"
+          ]
+        },
+        "personas": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Quantum Hardware Engineer",
+            "Quantum Solutions Provider",
+            "Government Representative",
+            "Quantum Educator",
+            "Business Decision-Maker",
+            "Domain Expert"
+          ]
+        }
+      },
+      "contentStats": {
+        "descriptionLength": 372,
+        "mainContentLength": 7739,
+        "referencesCount": 9
+      }
+    },
+    {
+      "filePath": "/Users/dryan/Downloads/qookie-exports-main/exports/batch-2-100/lightsolver-ansys-.json",
+      "fileName": "lightsolver-ansys-.json",
+      "status": "success",
+      "title": "LightSolver and Ansys Partnership: Laser-Based Quantum Computing for Engineering Simulation",
+      "slug": "lightsolver-and-ansys-partnership-laser-based-quantum-computing-for-engineering-simulation",
+      "entityMatches": {
+        "algorithms": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Quantum Annealing Algorithms",
+            "Quantum Approximate Optimization Algorithm (QAOA)"
+          ]
+        },
+        "industries": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Aerospace",
+            "Automotive",
+            "AI and Machine Learning",
+            "Materials Science"
+          ]
+        },
+        "personas": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Business Decision-Maker",
+            "Domain Expert",
+            "Quantum Hardware Engineer",
+            "Quantum Solutions Provider",
+            "Software Engineer",
+            "Systems Integration Engineer"
+          ]
+        }
+      },
+      "contentStats": {
+        "descriptionLength": 327,
+        "mainContentLength": 7788,
+        "referencesCount": 8
+      }
+    },
+    {
+      "filePath": "/Users/dryan/Downloads/qookie-exports-main/exports/batch-2-100/microsoft-azure-quantum-ford-.json",
+      "fileName": "microsoft-azure-quantum-ford-.json",
+      "status": "success",
+      "title": "Microsoft Azure Quantum and Ford: Advancing Automotive Manufacturing through Quantum Computing",
+      "slug": "microsoft-azure-quantum-and-ford-advancing-automotive-manufacturing-through-quantum-computing",
+      "entityMatches": {
+        "algorithms": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Quantum Approximate Optimization Algorithm (QAOA)",
+            "Variational Quantum Eigensolver (VQE)",
+            "Quantum Annealing Algorithms"
+          ]
+        },
+        "industries": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Automotive",
+            "Materials Science",
+            "Logistics and Supply Chain",
+            "Energy"
+          ]
+        },
+        "personas": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Business Decision-Maker",
+            "Domain Expert",
+            "Quantum Algorithm Developer",
+            "Quantum Chemist",
+            "Quantum Cloud and Platform Provider",
+            "Quantum Solutions Provider",
+            "Software Engineer"
+          ]
+        }
+      },
+      "contentStats": {
+        "descriptionLength": 351,
+        "mainContentLength": 7116,
+        "referencesCount": 8
+      }
+    },
+    {
+      "filePath": "/Users/dryan/Downloads/qookie-exports-main/exports/batch-2-100/microsoft-dewa--uae--.json",
+      "fileName": "microsoft-dewa--uae--.json",
+      "status": "success",
+      "title": "Microsoft Azure Quantum and DEWA Partnership for Smart Grid Optimization",
+      "slug": "microsoft-azure-quantum-and-dewa-partnership-for-smart-grid-optimization",
+      "entityMatches": {
+        "algorithms": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Quantum Approximate Optimization Algorithm (QAOA)",
+            "Variational Quantum Eigensolver (VQE)"
+          ]
+        },
+        "industries": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Energy",
+            "Government and Public Sector",
+            "AI and Machine Learning"
+          ]
+        },
+        "personas": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Business Decision-Maker",
+            "Quantum Algorithm Developer",
+            "Quantum Cloud and Platform Provider",
+            "Systems Integration Engineer",
+            "Government Representative"
+          ]
+        }
+      },
+      "contentStats": {
+        "descriptionLength": 366,
+        "mainContentLength": 8220,
+        "referencesCount": 7
+      }
+    },
+    {
+      "filePath": "/Users/dryan/Downloads/qookie-exports-main/exports/batch-2-100/microsoft-quantum-university-of-sydney-.json",
+      "fileName": "microsoft-quantum-university-of-sydney-.json",
+      "status": "success",
+      "title": "Microsoft Quantum and University of Sydney: Advancing Topological Quantum Computing Through Station Q Sydney",
+      "slug": "microsoft-quantum-and-university-of-sydney-advancing-topological-quantum-computing-through-station-q-sydney",
+      "entityMatches": {
+        "algorithms": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Quantum Error Correction"
+          ]
+        },
+        "industries": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Education",
+            "Healthcare",
+            "Materials Science",
+            "Pharmaceutical"
+          ]
+        },
+        "personas": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Quantum Hardware Engineer",
+            "Quantum Educator",
+            "Quantum Solutions Provider",
+            "Business Decision-Maker"
+          ]
+        }
+      },
+      "contentStats": {
+        "descriptionLength": 419,
+        "mainContentLength": 7005,
+        "referencesCount": 9
+      }
+    },
+    {
+      "filePath": "/Users/dryan/Downloads/qookie-exports-main/exports/batch-2-100/nu-quantum--uk--cern--switzerland--.json",
+      "fileName": "nu-quantum--uk--cern--switzerland--.json",
+      "status": "error",
+      "error": "Missing required fields (title, summary, or advancedMetadata)"
+    },
+    {
+      "filePath": "/Users/dryan/Downloads/qookie-exports-main/exports/batch-2-100/nu-quantum-cern-white-rabbit-.json",
+      "fileName": "nu-quantum-cern-white-rabbit-.json",
+      "status": "success",
+      "title": "Nu Quantum and CERN White Rabbit: Advancing Quantum Network Synchronization",
+      "slug": "nu-quantum-and-cern-white-rabbit-advancing-quantum-network-synchronization",
+      "entityMatches": {
+        "algorithms": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Quantum Error Correction"
+          ]
+        },
+        "industries": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Telecommunications",
+            "Finance",
+            "Healthcare",
+            "Government and Public Sector",
+            "Defence",
+            "Cybersecurity"
+          ]
+        },
+        "personas": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Quantum Hardware Engineer",
+            "Systems Integration Engineer",
+            "Quantum Solutions Provider",
+            "Business Decision-Maker",
+            "Cybersecurity Specialist",
+            "Government Representative"
+          ]
+        }
+      },
+      "contentStats": {
+        "descriptionLength": 356,
+        "mainContentLength": 7116,
+        "referencesCount": 8
+      }
+    },
+    {
+      "filePath": "/Users/dryan/Downloads/qookie-exports-main/exports/batch-2-100/oxford-ionics--quanscient-airbus-.json",
+      "fileName": "oxford-ionics--quanscient-airbus-.json",
+      "status": "success",
+      "title": "Oxford Ionics, Quanscient, and Airbus: Advancing Aerospace Design Through Quantum Computing",
+      "slug": "oxford-ionics-quanscient-and-airbus-advancing-aerospace-design-through-quantum-computing",
+      "entityMatches": {
+        "algorithms": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Quantum Approximate Optimization Algorithm (QAOA)",
+            "Variational Quantum Eigensolver (VQE)"
+          ]
+        },
+        "industries": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Aerospace",
+            "Materials Science",
+            "Logistics and Supply Chain"
+          ]
+        },
+        "personas": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Business Decision-Maker",
+            "Domain Expert",
+            "Quantum Algorithm Developer",
+            "Quantum Hardware Engineer",
+            "Quantum Solutions Provider",
+            "Software Engineer",
+            "Systems Integration Engineer"
+          ]
+        }
+      },
+      "contentStats": {
+        "descriptionLength": 391,
+        "mainContentLength": 7090,
+        "referencesCount": 2
+      }
+    },
+    {
+      "filePath": "/Users/dryan/Downloads/qookie-exports-main/exports/batch-2-100/oxford-ionics--uk---quanscient--finland--airbus-.json",
+      "fileName": "oxford-ionics--uk---quanscient--finland--airbus-.json",
+      "status": "success",
+      "title": "Oxford Ionics, Quanscient, and Airbus: Advancing Aerospace Design through Quantum Computing",
+      "slug": "oxford-ionics-quanscient-and-airbus-advancing-aerospace-design-through-quantum-computing",
+      "entityMatches": {
+        "algorithms": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Quantum Approximate Optimization Algorithm (QAOA)",
+            "Variational Quantum Eigensolver (VQE)",
+            "Quantum Error Correction"
+          ]
+        },
+        "industries": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Aerospace",
+            "Materials Science"
+          ]
+        },
+        "personas": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Quantum Hardware Engineer",
+            "Quantum Algorithm Developer",
+            "Domain Expert",
+            "Business Decision-Maker",
+            "Quantum Solutions Provider"
+          ]
+        }
+      },
+      "contentStats": {
+        "descriptionLength": 381,
+        "mainContentLength": 7414,
+        "referencesCount": 8
+      }
+    },
+    {
+      "filePath": "/Users/dryan/Downloads/qookie-exports-main/exports/batch-2-100/pasqal--france--aramco-.json",
+      "fileName": "pasqal--france--aramco-.json",
+      "status": "success",
+      "title": "Pasqal and Aramco Partnership: Quantum Computing for Energy Optimization",
+      "slug": "pasqal-and-aramco-partnership-quantum-computing-for-energy-optimization",
+      "entityMatches": {
+        "algorithms": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Quantum Approximate Optimization Algorithm (QAOA)",
+            "Variational Quantum Eigensolver (VQE)"
+          ]
+        },
+        "industries": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Energy"
+          ]
+        },
+        "personas": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Business Decision-Maker",
+            "Domain Expert",
+            "Quantum Algorithm Developer",
+            "Quantum Solutions Provider",
+            "Software Engineer"
+          ]
+        }
+      },
+      "contentStats": {
+        "descriptionLength": 369,
+        "mainContentLength": 7704,
+        "referencesCount": 8
+      }
+    },
+    {
+      "filePath": "/Users/dryan/Downloads/qookie-exports-main/exports/batch-2-100/pasqal-aramco-.json",
+      "fileName": "pasqal-aramco-.json",
+      "status": "success",
+      "title": "Pasqal and Saudi Aramco Partnership for Quantum Computing Applications in Energy Sector",
+      "slug": "pasqal-and-saudi-aramco-partnership-for-quantum-computing-applications-in-energy-sector",
+      "entityMatches": {
+        "algorithms": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Quantum Approximate Optimization Algorithm (QAOA)",
+            "Variational Quantum Eigensolver (VQE)"
+          ]
+        },
+        "industries": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Energy",
+            "Chemical Manufacturing"
+          ]
+        },
+        "personas": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Business Decision-Maker",
+            "Domain Expert",
+            "Quantum Algorithm Developer",
+            "Quantum Chemist",
+            "Quantum Solutions Provider"
+          ]
+        }
+      },
+      "contentStats": {
+        "descriptionLength": 413,
+        "mainContentLength": 7192,
+        "referencesCount": 6
+      }
+    },
+    {
+      "filePath": "/Users/dryan/Downloads/qookie-exports-main/exports/batch-2-100/pasqal-bmw-.json",
+      "fileName": "pasqal-bmw-.json",
+      "status": "success",
+      "title": "Pasqal and BMW Partnership: Quantum Computing for Automotive Manufacturing Optimization",
+      "slug": "pasqal-and-bmw-partnership-quantum-computing-for-automotive-manufacturing-optimization",
+      "entityMatches": {
+        "algorithms": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Quantum Approximate Optimization Algorithm (QAOA)",
+            "Quantum Machine Learning",
+            "Variational Quantum Eigensolver (VQE)"
+          ]
+        },
+        "industries": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Automotive",
+            "Materials Science",
+            "Logistics and Supply Chain",
+            "AI and Machine Learning"
+          ]
+        },
+        "personas": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Business Decision-Maker",
+            "Domain Expert",
+            "Quantum Algorithm Developer",
+            "Quantum Hardware Engineer",
+            "Quantum Solutions Provider",
+            "Systems Integration Engineer"
+          ]
+        }
+      },
+      "contentStats": {
+        "descriptionLength": 356,
+        "mainContentLength": 7749,
+        "referencesCount": 9
+      }
+    },
+    {
+      "filePath": "/Users/dryan/Downloads/qookie-exports-main/exports/batch-2-100/psiquantum-illinois-quantum-and-microelectronics-park-.json",
+      "fileName": "psiquantum-illinois-quantum-and-microelectronics-park-.json",
+      "status": "success",
+      "title": "PsiQuantum and Illinois Quantum And Microelectronics Park: Building America's First Utility-Scale Quantum Computing Facility",
+      "slug": "psiquantum-and-illinois-quantum-and-microelectronics-park-building-americas-first-utility-scale-quantum-computing-facility",
+      "entityMatches": {
+        "algorithms": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Quantum Error Correction"
+          ]
+        },
+        "industries": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Energy",
+            "Healthcare",
+            "Materials Science",
+            "Pharmaceutical",
+            "Finance",
+            "Climate and Environment",
+            "Government and Public Sector"
+          ]
+        },
+        "personas": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Business Decision-Maker",
+            "Government Representative",
+            "Quantum Hardware Engineer",
+            "Quantum Solutions Provider",
+            "Quantum Educator",
+            "Investment Professional"
+          ]
+        }
+      },
+      "contentStats": {
+        "descriptionLength": 527,
+        "mainContentLength": 9518,
+        "referencesCount": 10
+      }
+    },
+    {
+      "filePath": "/Users/dryan/Downloads/qookie-exports-main/exports/batch-2-100/qc-ware--ionq-goldman-sachs-.json",
+      "fileName": "qc-ware--ionq-goldman-sachs-.json",
+      "status": "success",
+      "title": "QC Ware, IonQ, and Goldman Sachs: Advancing Quantum Computing for Financial Services",
+      "slug": "qc-ware-ionq-and-goldman-sachs-advancing-quantum-computing-for-financial-services",
+      "entityMatches": {
+        "algorithms": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Quantum Amplitude Amplification",
+            "Variational Quantum Eigensolver (VQE)",
+            "Quantum Approximate Optimization Algorithm (QAOA)"
+          ]
+        },
+        "industries": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Finance"
+          ]
+        },
+        "personas": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Financial Services Specialist",
+            "Quantum Algorithm Developer",
+            "Quantum Solutions Provider",
+            "Business Decision-Maker",
+            "Investment Professional"
+          ]
+        }
+      },
+      "contentStats": {
+        "descriptionLength": 433,
+        "mainContentLength": 8133,
+        "referencesCount": 8
+      }
+    },
+    {
+      "filePath": "/Users/dryan/Downloads/qookie-exports-main/exports/batch-2-100/qilimanjaro-quantum-tech--spain--caixa-bank--spain--.json",
+      "fileName": "qilimanjaro-quantum-tech--spain--caixa-bank--spain--.json",
+      "status": "success",
+      "title": "Qilimanjaro Quantum Tech and CaixaBank: Pioneering Quantum Computing in Spanish Financial Services",
+      "slug": "qilimanjaro-quantum-tech-and-caixabank-pioneering-quantum-computing-in-spanish-financial-services",
+      "entityMatches": {
+        "algorithms": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Quantum Approximate Optimization Algorithm (QAOA)",
+            "Variational Quantum Eigensolver (VQE)"
+          ]
+        },
+        "industries": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Finance"
+          ]
+        },
+        "personas": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Business Decision-Maker",
+            "Domain Expert",
+            "Financial Services Specialist",
+            "Quantum Algorithm Developer",
+            "Quantum Solutions Provider"
+          ]
+        }
+      },
+      "contentStats": {
+        "descriptionLength": 371,
+        "mainContentLength": 8281,
+        "referencesCount": 8
+      }
+    },
+    {
+      "filePath": "/Users/dryan/Downloads/qookie-exports-main/exports/batch-2-100/qrypt-mattermost-.json",
+      "fileName": "qrypt-mattermost-.json",
+      "status": "success",
+      "title": "Qrypt and Mattermost: Quantum-Safe Encryption for Secure Enterprise Communications",
+      "slug": "qrypt-and-mattermost-quantum-safe-encryption-for-secure-enterprise-communications",
+      "entityMatches": {
+        "algorithms": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Shor's Algorithm"
+          ]
+        },
+        "industries": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Cybersecurity",
+            "Defence",
+            "Finance",
+            "Government and Public Sector",
+            "Healthcare"
+          ]
+        },
+        "personas": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Business Decision-Maker",
+            "Cybersecurity Specialist",
+            "Government Representative",
+            "Quantum Solutions Provider",
+            "Systems Integration Engineer"
+          ]
+        }
+      },
+      "contentStats": {
+        "descriptionLength": 391,
+        "mainContentLength": 8821,
+        "referencesCount": 4
+      }
+    },
+    {
+      "filePath": "/Users/dryan/Downloads/qookie-exports-main/exports/batch-2-100/qsimulate--germany--bosch--germany--.json",
+      "fileName": "qsimulate--germany--bosch--germany--.json",
+      "status": "success",
+      "title": "QSimulate-Bosch Partnership: Quantum Computing for Materials Discovery and Chemical Simulation",
+      "slug": "qsimulate-bosch-partnership-quantum-computing-for-materials-discovery-and-chemical-simulation",
+      "entityMatches": {
+        "algorithms": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Quantum Approximate Optimization Algorithm (QAOA)",
+            "Variational Quantum Eigensolver (VQE)"
+          ]
+        },
+        "industries": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Automotive",
+            "Chemical Manufacturing",
+            "Energy",
+            "Materials Science"
+          ]
+        },
+        "personas": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Business Decision-Maker",
+            "Domain Expert",
+            "Quantum Algorithm Developer",
+            "Quantum Chemist",
+            "Quantum Solutions Provider"
+          ]
+        }
+      },
+      "contentStats": {
+        "descriptionLength": 384,
+        "mainContentLength": 8689,
+        "referencesCount": 9
+      }
+    },
+    {
+      "filePath": "/Users/dryan/Downloads/qookie-exports-main/exports/batch-2-100/quantx-labs-australian-government-.json",
+      "fileName": "quantx-labs-australian-government-.json",
+      "status": "success",
+      "title": "QuantX Labs and Australian Government Strategic Quantum Computing Initiative",
+      "slug": "quantx-labs-and-australian-government-strategic-quantum-computing-initiative",
+      "entityMatches": {
+        "algorithms": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Quantum Error Correction",
+            "Quantum Approximate Optimization Algorithm (QAOA)",
+            "Quantum Phase Estimation (QPE)",
+            "Variational Quantum Eigensolver (VQE)",
+            "Quantum Fourier Transform (QFT)"
+          ]
+        },
+        "industries": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Government and Public Sector",
+            "Defence",
+            "Climate and Environment",
+            "Healthcare",
+            "Cybersecurity",
+            "Education",
+            "Energy"
+          ]
+        },
+        "personas": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Government Representative",
+            "Quantum Solutions Provider",
+            "Cybersecurity Specialist",
+            "Quantum Educator",
+            "Quantum Hardware Engineer",
+            "Software Engineer",
+            "Systems Integration Engineer"
+          ]
+        }
+      },
+      "contentStats": {
+        "descriptionLength": 339,
+        "mainContentLength": 8339,
+        "referencesCount": 8
+      }
+    },
+    {
+      "filePath": "/Users/dryan/Downloads/qookie-exports-main/exports/batch-2-100/quera-aist---nvidia-.json",
+      "fileName": "quera-aist---nvidia-.json",
+      "status": "success",
+      "title": "QuEra, AIST, and NVIDIA Collaborate to Advance Neutral Atom Quantum Computing for Scientific and Industrial Applications",
+      "slug": "quera-aist-and-nvidia-collaborate-to-advance-neutral-atom-quantum-computing-for-scientific-and-industrial-applications",
+      "entityMatches": {
+        "algorithms": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Quantum Approximate Optimization Algorithm (QAOA)",
+            "Variational Quantum Eigensolver (VQE)",
+            "Quantum Error Correction",
+            "Quantum Support Vector Machine (QSVM)"
+          ]
+        },
+        "industries": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Materials Science",
+            "Pharmaceutical",
+            "Automotive",
+            "Logistics and Supply Chain",
+            "Finance",
+            "Healthcare",
+            "AI and Machine Learning"
+          ]
+        },
+        "personas": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Quantum Hardware Engineer",
+            "Quantum Algorithm Developer",
+            "Software Engineer",
+            "Systems Integration Engineer",
+            "Quantum Solutions Provider",
+            "Business Decision-Maker",
+            "Domain Expert",
+            "Quantum Educator"
+          ]
+        }
+      },
+      "contentStats": {
+        "descriptionLength": 507,
+        "mainContentLength": 8327,
+        "referencesCount": 8
+      }
+    },
+    {
+      "filePath": "/Users/dryan/Downloads/qookie-exports-main/exports/batch-2-100/quera-massachusetts-administration-.json",
+      "fileName": "quera-massachusetts-administration-.json",
+      "status": "success",
+      "title": "QuEra Computing and Massachusetts Government Quantum Computing Partnership for Optimization and Public Services",
+      "slug": "quera-computing-and-massachusetts-government-quantum-computing-partnership-for-optimization-and-public-services",
+      "entityMatches": {
+        "algorithms": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Quantum Approximate Optimization Algorithm (QAOA)",
+            "Quantum Annealing Algorithms"
+          ]
+        },
+        "industries": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Government and Public Sector",
+            "Healthcare",
+            "Logistics and Supply Chain",
+            "Energy"
+          ]
+        },
+        "personas": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Government Representative",
+            "Quantum Solutions Provider",
+            "Domain Expert",
+            "Systems Integration Engineer",
+            "Quantum Algorithm Developer"
+          ]
+        }
+      },
+      "contentStats": {
+        "descriptionLength": 449,
+        "mainContentLength": 8236,
+        "referencesCount": 7
+      }
+    },
+    {
+      "filePath": "/Users/dryan/Downloads/qookie-exports-main/exports/batch-2-100/qureca-impactifi-.json",
+      "fileName": "qureca-impactifi-.json",
+      "status": "success",
+      "title": "QURECA and IMPACTIFI: Bridging Quantum Education and Social Impact Investment",
+      "slug": "qureca-and-impactifi-bridging-quantum-education-and-social-impact-investment",
+      "entityMatches": {
+        "algorithms": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Quantum Approximate Optimization Algorithm (QAOA)",
+            "Variational Quantum Eigensolver (VQE)"
+          ]
+        },
+        "industries": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Finance",
+            "Education",
+            "AI and Machine Learning"
+          ]
+        },
+        "personas": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Quantum Educator",
+            "Investment Professional",
+            "Quantum Algorithm Developer",
+            "Software Engineer",
+            "Business Decision-Maker"
+          ]
+        }
+      },
+      "contentStats": {
+        "descriptionLength": 398,
+        "mainContentLength": 6872,
+        "referencesCount": 4
+      }
+    },
+    {
+      "filePath": "/Users/dryan/Downloads/qookie-exports-main/exports/batch-2-100/rigetti--usa--u-s--air-force-.json",
+      "fileName": "rigetti--usa--u-s--air-force-.json",
+      "status": "success",
+      "title": "Rigetti Computing and U.S. Air Force Research Laboratory Quantum Computing Partnership",
+      "slug": "rigetti-computing-and-us-air-force-research-laboratory-quantum-computing-partnership",
+      "entityMatches": {
+        "algorithms": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Quantum Approximate Optimization Algorithm (QAOA)",
+            "Variational Quantum Eigensolver (VQE)",
+            "Quantum Support Vector Machine (QSVM)",
+            "Quantum Error Correction"
+          ]
+        },
+        "industries": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Defence",
+            "Aerospace",
+            "Cybersecurity",
+            "AI and Machine Learning",
+            "Government and Public Sector"
+          ]
+        },
+        "personas": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Government Representative",
+            "Quantum Algorithm Developer",
+            "Quantum Cloud and Platform Provider",
+            "Cybersecurity Specialist",
+            "Quantum Hardware Engineer",
+            "Domain Expert"
+          ]
+        }
+      },
+      "contentStats": {
+        "descriptionLength": 412,
+        "mainContentLength": 8561,
+        "referencesCount": 8
+      }
+    },
+    {
+      "filePath": "/Users/dryan/Downloads/qookie-exports-main/exports/batch-2-100/sandboxaq-deloitte-.json",
+      "fileName": "sandboxaq-deloitte-.json",
+      "status": "success",
+      "title": "SandboxAQ and Deloitte Strategic Alliance for Enterprise Quantum and AI Solutions",
+      "slug": "sandboxaq-and-deloitte-strategic-alliance-for-enterprise-quantum-and-ai-solutions",
+      "entityMatches": {
+        "algorithms": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Quantum Annealing Algorithms",
+            "Quantum Approximate Optimization Algorithm (QAOA)",
+            "Quantum Phase Estimation (QPE)",
+            "Quantum Principal Component Analysis (qPCA)"
+          ]
+        },
+        "industries": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "AI and Machine Learning",
+            "Cybersecurity",
+            "Finance",
+            "Healthcare",
+            "Materials Science",
+            "Pharmaceutical",
+            "Automotive",
+            "Climate and Environment",
+            "Energy",
+            "Logistics and Supply Chain"
+          ]
+        },
+        "personas": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Business Decision-Maker",
+            "Cybersecurity Specialist",
+            "Domain Expert",
+            "Financial Services Specialist",
+            "Quantum Solutions Provider",
+            "Systems Integration Engineer"
+          ]
+        }
+      },
+      "contentStats": {
+        "descriptionLength": 348,
+        "mainContentLength": 7813,
+        "referencesCount": 8
+      }
+    },
+    {
+      "filePath": "/Users/dryan/Downloads/qookie-exports-main/exports/batch-2-100/silicon-quantum-computing-australian-government--unsw--cba--telstra-.json",
+      "fileName": "silicon-quantum-computing-australian-government--unsw--cba--telstra-.json",
+      "status": "success",
+      "title": "Silicon Quantum Computing: Australia's National Quantum Computing Commercialization Partnership",
+      "slug": "silicon-quantum-computing-australias-national-quantum-computing-commercialization-partnership",
+      "entityMatches": {
+        "algorithms": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Quantum Error Correction"
+          ]
+        },
+        "industries": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Finance",
+            "Telecommunications",
+            "Government and Public Sector",
+            "Materials Science",
+            "Pharmaceutical"
+          ]
+        },
+        "personas": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Business Decision-Maker",
+            "Government Representative",
+            "Investment Professional",
+            "Quantum Hardware Engineer",
+            "Quantum Solutions Provider",
+            "Financial Services Specialist"
+          ]
+        }
+      },
+      "contentStats": {
+        "descriptionLength": 499,
+        "mainContentLength": 7578,
+        "referencesCount": 7
+      }
+    },
+    {
+      "filePath": "/Users/dryan/Downloads/qookie-exports-main/exports/batch-2-100/university-of-hamburg-lufthansa-.json",
+      "fileName": "university-of-hamburg-lufthansa-.json",
+      "status": "success",
+      "title": "University of Hamburg and Lufthansa Quantum Computing Partnership for Aviation Optimization",
+      "slug": "university-of-hamburg-and-lufthansa-quantum-computing-partnership-for-aviation-optimization",
+      "entityMatches": {
+        "algorithms": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Quantum Approximate Optimization Algorithm (QAOA)",
+            "Variational Quantum Eigensolver (VQE)"
+          ]
+        },
+        "industries": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Aerospace",
+            "Logistics and Supply Chain",
+            "AI and Machine Learning"
+          ]
+        },
+        "personas": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Business Decision-Maker",
+            "Domain Expert",
+            "Quantum Algorithm Developer",
+            "Quantum Solutions Provider",
+            "Software Engineer",
+            "Systems Integration Engineer"
+          ]
+        }
+      },
+      "contentStats": {
+        "descriptionLength": 352,
+        "mainContentLength": 8058,
+        "referencesCount": 6
+      }
+    },
+    {
+      "filePath": "/Users/dryan/Downloads/qookie-exports-main/exports/batch-2-100/xanadu--canada--astrazeneca--uk--.json",
+      "fileName": "xanadu--canada--astrazeneca--uk--.json",
+      "status": "success",
+      "title": "Xanadu and AstraZeneca Partnership: Quantum Computing for Drug Discovery",
+      "slug": "xanadu-and-astrazeneca-partnership-quantum-computing-for-drug-discovery",
+      "entityMatches": {
+        "algorithms": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Variational Quantum Eigensolver (VQE)",
+            "Quantum Approximate Optimization Algorithm (QAOA)",
+            "Quantum Boltzmann Machines (QBM)"
+          ]
+        },
+        "industries": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Pharmaceutical",
+            "Healthcare",
+            "AI and Machine Learning"
+          ]
+        },
+        "personas": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Quantum Algorithm Developer",
+            "Quantum Chemist",
+            "Domain Expert",
+            "Business Decision-Maker",
+            "Quantum Cloud and Platform Provider"
+          ]
+        }
+      },
+      "contentStats": {
+        "descriptionLength": 353,
+        "mainContentLength": 6453,
+        "referencesCount": 8
+      }
+    },
+    {
+      "filePath": "/Users/dryan/Downloads/qookie-exports-main/exports/batch-2-100/zapata-computing-andretti-autosport-.json",
+      "fileName": "zapata-computing-andretti-autosport-.json",
+      "status": "success",
+      "title": "Zapata Computing and Andretti Autosport: Quantum Computing for Formula E Race Strategy Optimization",
+      "slug": "zapata-computing-and-andretti-autosport-quantum-computing-for-formula-e-race-strategy-optimization",
+      "entityMatches": {
+        "algorithms": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Quantum Annealing Algorithms",
+            "Variational Quantum Eigensolver (VQE)",
+            "Quantum Approximate Optimization Algorithm (QAOA)"
+          ]
+        },
+        "industries": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Automotive",
+            "AI and Machine Learning"
+          ]
+        },
+        "personas": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Business Decision-Maker",
+            "Quantum Algorithm Developer",
+            "Quantum Solutions Provider",
+            "Software Engineer",
+            "Domain Expert"
+          ]
+        }
+      },
+      "contentStats": {
+        "descriptionLength": 413,
+        "mainContentLength": 8363,
+        "referencesCount": 8
+      }
+    },
+    {
+      "filePath": "/Users/dryan/Downloads/qookie-exports-main/exports/batch-2-100/zapata-computing-bbva-.json",
+      "fileName": "zapata-computing-bbva-.json",
+      "status": "success",
+      "title": "Zapata Computing and BBVA: Pioneering Quantum Computing in Financial Services",
+      "slug": "zapata-computing-and-bbva-pioneering-quantum-computing-in-financial-services",
+      "entityMatches": {
+        "algorithms": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Quantum Approximate Optimization Algorithm (QAOA)",
+            "Variational Quantum Eigensolver (VQE)",
+            "Quantum Amplitude Amplification"
+          ]
+        },
+        "industries": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Finance"
+          ]
+        },
+        "personas": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Business Decision-Maker",
+            "Financial Services Specialist",
+            "Quantum Algorithm Developer",
+            "Quantum Solutions Provider",
+            "Software Engineer"
+          ]
+        }
+      },
+      "contentStats": {
+        "descriptionLength": 445,
+        "mainContentLength": 7867,
+        "referencesCount": 7
+      }
+    },
+    {
+      "filePath": "/Users/dryan/Downloads/qookie-exports-main/exports/batch-2-100/zapata-computing-biogen-.json",
+      "fileName": "zapata-computing-biogen-.json",
+      "status": "success",
+      "title": "Zapata Computing and Biogen Partnership: Advancing Drug Discovery through Quantum Machine Learning",
+      "slug": "zapata-computing-and-biogen-partnership-advancing-drug-discovery-through-quantum-machine-learning",
+      "entityMatches": {
+        "algorithms": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Quantum Approximate Optimization Algorithm (QAOA)",
+            "Variational Quantum Eigensolver (VQE)",
+            "Quantum Boltzmann Machines (QBM)"
+          ]
+        },
+        "industries": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Pharmaceutical",
+            "Healthcare",
+            "AI and Machine Learning"
+          ]
+        },
+        "personas": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Quantum Algorithm Developer",
+            "Quantum Chemist",
+            "Domain Expert",
+            "Business Decision-Maker",
+            "Quantum Solutions Provider"
+          ]
+        }
+      },
+      "contentStats": {
+        "descriptionLength": 368,
+        "mainContentLength": 7766,
+        "referencesCount": 8
+      }
+    },
+    {
+      "filePath": "/Users/dryan/Downloads/qookie-exports-main/exports/batch-2-100/zapata-computing-bp-.json",
+      "fileName": "zapata-computing-bp-.json",
+      "status": "success",
+      "title": "Zapata Computing and BP: Quantum Computing for Energy Optimization",
+      "slug": "zapata-computing-and-bp-quantum-computing-for-energy-optimization",
+      "entityMatches": {
+        "algorithms": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Quantum Approximate Optimization Algorithm (QAOA)",
+            "Variational Quantum Eigensolver (VQE)"
+          ]
+        },
+        "industries": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Energy",
+            "Materials Science"
+          ]
+        },
+        "personas": {
+          "exact": 0,
+          "fuzzy": 0,
+          "unmatched": [
+            "Business Decision-Maker",
+            "Domain Expert",
+            "Quantum Algorithm Developer",
+            "Quantum Chemist",
+            "Quantum Solutions Provider"
+          ]
+        }
+      },
+      "contentStats": {
+        "descriptionLength": 322,
+        "mainContentLength": 9213,
+        "referencesCount": 9
+      }
+    }
+  ]
+}

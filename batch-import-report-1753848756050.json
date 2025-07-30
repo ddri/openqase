@@ -1,0 +1,52 @@
+{
+  "generatedAt": "2025-07-30T04:12:36.050Z",
+  "summary": {
+    "totalFiles": 1,
+    "successful": 1,
+    "duplicates": 0,
+    "errors": 0
+  },
+  "entitySummary": {
+    "allUnmatchedAlgorithms": [
+      "Quantum Annealing Algorithms"
+    ],
+    "allUnmatchedIndustries": [],
+    "allUnmatchedPersonas": [],
+    "totalAlgorithmMatches": 1,
+    "totalIndustryMatches": 2,
+    "totalPersonaMatches": 3
+  },
+  "detailedResults": [
+    {
+      "filePath": "/tmp/test-case-studies/test-case-study.json",
+      "fileName": "test-case-study.json",
+      "status": "success",
+      "title": "Quantum Drug Discovery Optimization at PharmaTech",
+      "slug": "quantum-drug-discovery-optimization-at-pharmatech",
+      "entityMatches": {
+        "algorithms": {
+          "exact": 1,
+          "fuzzy": 0,
+          "unmatched": [
+            "Quantum Annealing Algorithms"
+          ]
+        },
+        "industries": {
+          "exact": 2,
+          "fuzzy": 0,
+          "unmatched": []
+        },
+        "personas": {
+          "exact": 3,
+          "fuzzy": 0,
+          "unmatched": []
+        }
+      },
+      "contentStats": {
+        "descriptionLength": 198,
+        "mainContentLength": 1853,
+        "referencesCount": 2
+      }
+    }
+  ]
+}

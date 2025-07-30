@@ -62,11 +62,16 @@ export function createServiceRoleSupabaseClient() {
 
   if (!supabaseUrl || !serviceRoleKey) {
     console.error('Supabase environment variables NEXT_PUBLIC_SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY are missing');
+    console.error('URL:', supabaseUrl);
+    console.error('Key length:', serviceRoleKey?.length);
     throw new Error('Supabase service role configuration is missing');
   }
 
+  // Clean the service role key of any potential whitespace/newlines
+  const cleanServiceRoleKey = serviceRoleKey.trim().replace(/\s/g, '');
+
   // Note: Using the standard createClient from @supabase/supabase-js for service role
-  return _createClient<Database>(supabaseUrl, serviceRoleKey, {
+  return _createClient<Database>(supabaseUrl, cleanServiceRoleKey, {
     auth: {
       // Prevent client from trying to use browser storage for auth
       persistSession: false,

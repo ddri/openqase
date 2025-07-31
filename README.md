@@ -47,15 +47,11 @@ cd openqase
 2. **Install dependencies:**
 ```bash
 npm install
+
+# Also ensure the docker daemon is installed and running, and the user is in the docker group
 ```
 
-3. **Set up environment variables:**
-```bash
-cp .env.example .env.local
-# Add your Supabase credentials
-```
-
-4. **Set up local database:**
+3. **Set up local database:**
 ```bash
 # Option A: Use the setup script (recommended)
 ./scripts/setup-local.sh
@@ -63,6 +59,14 @@ cp .env.example .env.local
 # Option B: Manual setup
 supabase start
 supabase db reset
+```
+
+4. **Set up environment variables:**
+```bash
+cp .env.example .env.local
+# Add your Supabase credentials
+# If using example database, credentials can
+# be found in the output from 3. 
 ```
 
 5. **Run the development server:**

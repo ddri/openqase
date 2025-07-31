@@ -62,7 +62,7 @@ docs/.cache-loader # Docusaurus uses this sometimes
 
 # Supabase
 supabase/seed.sql
-supabase/migrations/
+supabase/migrations/*
 
 # SECURITY: Database dumps and sensitive content
 local_data_dump.sql

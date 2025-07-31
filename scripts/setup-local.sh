@@ -38,6 +38,7 @@ case $choice in
         echo "✅ Using example data from supabase/seed.sql"
         echo "   This will be automatically loaded by Supabase CLI"
         cp supabase/example-seed.sql supabase/seed.sql
+        mkdir -p supabase/migrations
         cp supabase/template-migrations/202505* supabase/migrations/
         ;;
     2)
@@ -45,11 +46,13 @@ case $choice in
             echo "✅ Using production data from private-data/production-seed.sql"
             echo "   Copying to supabase/seed.sql..."
             cp private-data/production-seed.sql supabase/seed.sql
+            mkdir -p supabase/migrations
             cp supabase/template-migrations/* supabase/migrations/
         else
             echo "❌ Production data file not found: private-data/production-seed.sql"
             echo "   Falling back to example data..."
             cp supabase/example-seed.sql supabase/seed.sql
+            mkdir -p supabase/migrations
             cp supabase/template-migrations/202505* supabase/migrations/
         fi
         ;;
@@ -61,6 +64,7 @@ case $choice in
     *)
         echo "❌ Invalid choice. Using example data..."
         cp supabase/example-seed.sql supabase/seed.sql
+        mkdir -p supabase/migrations
         cp supabase/template-migrations/202505* supabase/migrations/
         ;;
 esac

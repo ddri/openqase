@@ -98,3 +98,22 @@ private-data/
 backups/
 *.sql.backup
 *.sql.bak
+
+# Performance and debugging reports
+*.report.html
+lighthouse-*.html
+lighthouse-*.json
+chromewebdata_*.html
+localhost_*.html
+
+# Log files  
+*.log
+dev-server*.log
+prod-server*.log
+
+# Temporary build and analysis files
+build-output.txt
+batch-import-report-*.json
+
+# Test files (should be in proper test directories)
+scripts/test-*.json

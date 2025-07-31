@@ -4,17 +4,31 @@ We welcome contributions to the OpenQase project! Please follow these guidelines
 
 ## Getting Started
 
-1.  **Set up the development environment:** Follow the [Installation](./installation.md) and [Running Locally](./running-locally.md) guides.
+1.  **Set up the development environment:** Follow the [Installation](./installation.md) guide.
 2.  **Find an issue:** Look for existing issues on the project's issue tracker (e.g., GitHub Issues) that you'd like to work on. If you have a new idea or bug fix, consider creating a new issue first to discuss it.
 3.  **Fork & Branch:** Fork the repository and create a new branch for your changes (`git checkout -b feature/your-feature-name` or `fix/your-bug-fix`).
 
 ## Development Process
 
-1.  **Code:** Make your changes, adhering to the project's [Coding Style](./coding-style.md).
-2.  **Test:** If applicable, add tests for your changes. (Refer to the [Testing](./testing.md) guide - currently, formal testing is TBD). Manually test your changes thoroughly.
+1.  **Code:** Make your changes, following the coding standards below.
+2.  **Test:** Manually test your changes thoroughly. Run `npm run lint` to check code quality.
 3.  **Update Documentation:** If your changes affect user-facing features, APIs, or the development setup, please update the relevant documentation pages within `/docs`.
-4.  **Update Migrations:** If you make database schema changes, create a new migration file following the process outlined in [Database Migrations](./migrations.md).
+4.  **Update Migrations:** If you make database schema changes, create a new migration file in `supabase/migrations/`.
 5.  **Commit:** Use clear and descriptive commit messages. Reference the relevant issue number (e.g., `feat: Add user profile page (#123)`).
+
+## Coding Standards
+
+**ESLint Configuration:**
+- Run `npm run lint` to check code quality
+- Most editors have ESLint extensions for real-time feedback
+- Configuration in `eslint.config.mjs`
+
+**Code Style:**
+- Use TypeScript for type safety
+- Follow existing patterns in the codebase
+- Use the unified content fetching system for public content
+- Keep admin functionality separate from public pages
+- Write clear, descriptive variable and function names
 
 ## Submitting Changes
 

@@ -53,7 +53,7 @@ The CMS follows a standardized pattern for managing content, exemplified by the 
     *   Inserts the new record into the corresponding Supabase table using `getSupabaseServiceClientRole`.
     *   Handles relationship updates (inserting records into junction tables).
     *   Calls `revalidatePath` or `revalidateTag` to invalidate caches.
-    *   Redirects the user to the edit page for the newly created item (`/admin/[content-type]/[new-item-id]`).
+    *   Redirects the user to the edit page for the newly created item (`/admin/[content-type]/[new-item-id]`)
 
 ### 3. Editing Existing Content (`/admin/[content-type]/[id]`)
 
@@ -84,7 +84,7 @@ The CMS follows a standardized pattern for managing content, exemplified by the 
 
 *   Responsible for initial data fetching using `async/await` and Supabase server clients.
 *   Render the basic page structure and pass initial data down to Client Components.
-*   Handle route parameters (e.g., `[id]`).
+*   Handle route parameters (e.g., `[id]`)
 
 ### Client Components (`client.tsx`)
 
@@ -148,5 +148,4 @@ The CMS follows a standardized pattern for managing content, exemplified by the 
 *   **Validation:** Always validate input in Server Actions using Zod schemas before database operations.
 *   **Revalidation:** Be thorough with `revalidatePath` or `revalidateTag` calls. Ensure *all* affected pages (admin and public) are revalidated after mutations.
 *   **Relationship IDs:** Standardize on using IDs (`itemValueKey="id"`) for relationship selectors and handle IDs directly in Server Actions. Avoid unnecessary slug-to-ID conversions.
-*   **Error Handling:** Implement robust error handling within Server Actions (e.g., using try/catch blocks) and provide feedback to the user on the client-side form.
-
+*   **Error Handling:** Implement robust error handling within Server Actions (e.g., using try/catch blocks) and provide feedback to the user on the client-side form. 

@@ -60,6 +60,10 @@ docs/.cache-loader # Docusaurus uses this sometimes
 # Sentry Config File
 .env.sentry-build-plugin
 
+# Supabase
+supabase/seed.sql
+supabase/migrations/
+
 # SECURITY: Database dumps and sensitive content
 local_data_dump.sql
 *_data_dump.sql

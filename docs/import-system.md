@@ -15,6 +15,14 @@ OpenQase includes a comprehensive import system designed to handle bulk imports 
 - Creates entity relationships (algorithms, industries, personas)
 - Generates comprehensive import reports
 
+**Key Features:**
+- **Dry Run Mode**: Analyze imports without database changes
+- **Duplicate Detection**: Checks for existing case studies by title and slug
+- **Entity Relationship Mapping**: Uses entity-mapping.json for consistent relationships
+- **Batch Tracking**: Assigns batch names for import tracking and rollback
+- **Comprehensive Reporting**: Detailed success/failure reports with statistics
+- **Error Handling**: Continues processing on individual file failures
+
 ### 🏷️ Batch Management
 **`scripts/batch-name-generator.ts`**
 - Generates human-readable batch names (QK-001, QK-002, etc.)
@@ -26,6 +34,26 @@ OpenQase includes a comprehensive import system designed to handle bulk imports 
 - Predefined mappings between import data and OpenQase entities
 - Maps algorithm names, industry categories, and persona types
 - Prevents duplicate entity creation and ensures consistency
+
+**Structure:**
+```json
+{
+  "algorithms": {
+    "Display Name": "database-slug",
+    "Quantum Approximate Optimization Algorithm (QAOA)": "quantum-approximate-optimization-algorithm"
+  },
+  "industries": {
+    "Pharmaceutical": "pharmaceutical",
+    "AI and Machine Learning": "ai-machine-learning"
+  },
+  "personas": {
+    "Quantum Algorithm Developer": "quantum-algorithm-developer",
+    "Business Decision-Maker": "business-decision-maker"
+  }
+}
+```
+
+**Adding New Mappings:** To support new entities in imports, add them to the appropriate section with their database slug. Set value to `null` to skip mapping for that entity.
 
 ### 🌱 Entity Population
 **`scripts/populate-entities.ts`**

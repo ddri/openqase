@@ -12,6 +12,25 @@ Complete guide to setting up OpenQase locally for development.
 
 ## Quick Start
 
+### Option A: Automated Setup (Recommended)
+```bash
+# 1. Clone and install
+git clone <repository-url>
+cd openqase
+npm install
+
+# 2. Run automated setup script
+bash scripts/setup-local.sh
+
+# 3. Configure environment (if needed)
+cp .env.local.example .env.local
+# Update with your Supabase credentials from 'supabase status'
+
+# 4. Run the application
+npm run dev
+```
+
+### Option B: Manual Setup
 ```bash
 # 1. Clone and install
 git clone <repository-url>
@@ -98,6 +117,9 @@ RESEND_FROM_EMAIL=noreply@localhost
 
 # Admin Setup (Optional)
 ADMIN_EMAIL=admin@localhost
+
+# Development Mode (Optional - See Security Note below)
+NEXT_PUBLIC_DEV_MODE=false
 ADMIN_PASSWORD=your-secure-password
 ```
 
@@ -126,7 +148,32 @@ npm run dev
 
 The application will be available at [http://localhost:3000](http://localhost:3000).
 
-### 6. Admin Setup (Optional)
+### 6. Automated Local Setup (Alternative)
+
+For a streamlined setup experience, use the automated setup script:
+
+```bash
+bash scripts/setup-local.sh
+```
+
+This script:
+- **Checks Prerequisites**: Verifies Supabase CLI is installed
+- **Starts Supabase**: Automatically starts your local Supabase instance
+- **Interactive Data Setup**: Choose from three options:
+  1. **Example Data** (recommended for contributors) - Uses sample data from `supabase/seed.sql`
+  2. **Production Data** - Uses real data from `private-data/production-seed.sql` if available
+  3. **Empty Database** - Start with a clean slate
+- **Database Reset**: Applies migrations and loads selected seed data
+- **Provides Next Steps**: Clear guidance on what to do next
+
+**Data Setup Options:**
+- **Example Data**: Perfect for development and testing
+- **Production Data**: For working with real content (requires access to production data)
+- **Empty Database**: When you want to build content from scratch
+
+After running the script, you'll have a fully configured local development environment ready to use.
+
+### 7. Admin Setup (Optional)
 
 To create an admin user for content management:
 
@@ -134,7 +181,17 @@ To create an admin user for content management:
 npm run setup-admin
 ```
 
-This creates an admin user and grants necessary permissions.
+This script will prompt you for admin credentials and set up the necessary permissions for accessing the admin interface at `/admin`.
+
+### 7. Development Mode (Optional)
+
+For development convenience, you can enable a mode that simplifies local admin access:
+
+```bash
+node scripts/enable-dev-mode.js
+```
+
+⚠️ **Security Note**: Development mode is restricted to localhost only and should never be used in production environments.
 
 ## Available Scripts
 
@@ -149,16 +206,135 @@ supabase start          # Start local Supabase
 supabase stop           # Stop local Supabase
 supabase db reset       # Reset local database
 
-# Admin
-npm run setup-admin     # Create admin user
-npm run enable-dev-mode # Enable development features
+# Setup & Admin  
+bash scripts/setup-local.sh    # Automated local development setup
+npm run setup-admin            # Create admin user
+npm run enable-dev-mode        # Enable development features
 
 # Performance
 npm run test-performance # Run performance tests
+node scripts/page-load-performance.js # Test real page load performance
+tsx scripts/performance-monitor.ts [command] # Comprehensive performance monitoring
+bash scripts/run-performance-test.sh # Quick shell-based performance diagnostics
 
 # Import System
 tsx scripts/import-case-studies-with-mapping.ts <directory> # Import case studies
+
+# Documentation Generation
+tsx scripts/get-schema.ts       # Generate schema documentation
 ```
+
+## Development Utilities
+
+### Schema Documentation Generation
+
+OpenQase includes a utility to automatically generate database schema documentation:
+
+```bash
+tsx scripts/get-schema.ts
+```
+
+This script:
+- Connects to your configured Supabase instance
+- Examines all main tables (algorithms, case_studies, industries, personas, user_preferences)
+- Generates markdown documentation with column names and data types
+- Outputs to `docs/supabase-schema.md`
+
+The generated documentation helps developers understand the database structure and is useful for:
+- Onboarding new developers
+- API development reference
+- Database migration planning
+
+**Note**: This script requires a live database connection and will fail if no data exists in the tables.
+
+### Performance Testing
+
+OpenQase includes tools for monitoring database and page load performance:
+
+```bash
+node scripts/page-load-performance.js
+```
+
+This script:
+- Simulates real page loads for admin dashboard, persona pages, and case study pages
+- Measures database query performance with detailed breakdowns
+- Tests actual content from your database using real slugs
+- Identifies performance bottlenecks and provides optimization recommendations
+- Reports timing for all database queries with record counts
+
+**Performance Benchmarks:**
+- **Good**: <200ms page load time
+- **Warning**: 200-500ms page load time  
+- **Critical**: >500ms page load time
+
+The script provides actionable recommendations for database indexing, query optimization, and caching strategies.
+
+#### Comprehensive Performance Monitoring
+
+For continuous performance monitoring and CI/CD integration:
+
+```bash
+tsx scripts/performance-monitor.ts [command]
+```
+
+**Available Commands:**
+- `full` (default) - Complete performance test including build, server start, and page loads
+- `build` - Measure build time only
+- `server` - Measure server startup time only  
+- `pages` - Test page load times only
+- `admin` - Admin operations performance test
+
+**Features:**
+- Automated build time measurement
+- Server startup time tracking
+- Page load testing with real URLs
+- Memory usage analysis  
+- JSON performance reports saved to `./performance-reports/`
+- CLI interface for different test scenarios
+- Error tracking and reporting
+
+**Example Usage:**
+```bash
+# Full performance test
+tsx scripts/performance-monitor.ts
+
+# Test only build performance
+tsx scripts/performance-monitor.ts build
+
+# Test page load times
+tsx scripts/performance-monitor.ts pages
+```
+
+This tool is ideal for CI/CD pipelines and regular performance monitoring.
+
+#### Quick Performance Diagnostics
+
+For rapid performance testing and troubleshooting:
+
+```bash
+bash scripts/run-performance-test.sh
+```
+
+This shell script provides:
+- **Build Performance**: Times the complete build process
+- **Page Load Testing**: Tests real page URLs with curl timing
+- **Manual Testing Guide**: Instructions for browser-based performance analysis
+- **Admin Page Testing**: Attempts to test admin routes
+- **Development Server**: Automatically starts/stops dev server for testing
+
+**What it tests:**
+- Case study pages, algorithm pages, persona pages, industry pages
+- Admin dashboard (if accessible)
+- Build time measurement
+- Server startup time
+
+**Manual testing guidance for:**
+- JavaScript bundle sizes and loading times
+- API calls during page load (should be zero for static pages)
+- Browser developer tools analysis
+- Memory usage and performance bottlenecks
+
+This script is perfect for quick performance checks during development.
 
 ## Development Workflow
 

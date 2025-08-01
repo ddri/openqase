@@ -65,6 +65,10 @@ local_data_dump.sql
 *_data_dump.sql
 current-schema.sql
 migration-verification.sql
+prod-data.sql
+prod-schema.sql
+prod-schema2.sql
+production_schema.sql
 
 # SECURITY: Local configuration and personal information
 supabase/functions/.env
@@ -89,3 +93,27 @@ migrations/*_seed.sql
 
 # SECURITY: Private data folder (contains production data)
 private-data/
+
+# SECURITY: Backup files and database dumps
+backups/
+*.sql.backup
+*.sql.bak
+
+# Performance and debugging reports
+*.report.html
+lighthouse-*.html
+lighthouse-*.json
+chromewebdata_*.html
+localhost_*.html
+
+# Log files  
+*.log
+dev-server*.log
+prod-server*.log
+
+# Temporary build and analysis files
+build-output.txt
+batch-import-report-*.json
+
+# Test files (should be in proper test directories)
+scripts/test-*.json

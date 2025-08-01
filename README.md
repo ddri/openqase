@@ -80,16 +80,16 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 ## 📚 Documentation
 
 ### Core System
-- **[Unified Content Fetching](./docs/docs/unified-content-fetching.md)** - Complete API documentation
-- **[Hybrid Architecture](./docs/docs/v040-hybrid-architecture.md)** - Architecture decisions and implementation
-- **[Data Fetching](./docs/docs/data-fetching.md)** - Updated patterns and best practices
-- **[Quick Reference](./docs/docs/v040-quick-reference.md)** - Developer quick start guide
+- **[Unified Content Fetching](./docs/unified-content-fetching.md)** - Complete API documentation
+- **[Data Fetching](./docs/data-fetching.md)** - Updated patterns and best practices
+- **[Quick Reference](./docs/v040-quick-reference.md)** - Developer quick start guide
 
 ### Additional Resources
-- **[Release Notes](./docs/docs/release-notes.md)** - Latest changes and improvements
-- **[Migration Guide](./docs/docs/data-fetching.md#migration-status)** - Upgrading from legacy patterns
-- **[API Documentation](./docs/docs/api-documentation.md)** - REST API reference
-- **[Email Preferences System](./docs/docs/email-preferences-system.md)** - Newsletter management following Resend best practices
+- **[Release Notes](./docs/release-notes.md)** - Latest changes and improvements
+- **[Migration Guide](./docs/data-fetching.md#migration-status)** - Upgrading from legacy patterns
+- **[API Documentation](./docs/api-documentation.md)** - REST API reference
+- **[Scripts Documentation](./docs/import-system.md)** - Import system, admin utilities, and development tools
+- **[Email System](./docs/email-system.md)** - Dual email architecture with Beehiiv and Resend
 
 ## 🔧 Content Management
 
@@ -113,6 +113,26 @@ const algorithm = await getStaticContentWithRelationships('algorithms', 'quantum
 - Relationship management
 - Publishing workflows
 - User management
+
+**📥 Import System:**
+OpenQase includes a comprehensive case study import system for handling JSON exports:
+
+```bash
+# Import case studies from JSON files
+tsx scripts/import-case-studies-with-mapping.ts /path/to/json/files --commit
+
+# Available import utilities:
+# - import-case-studies-with-mapping.ts: Main importer with entity mapping
+# - batch-name-generator.ts: Generates batch names (QK-001, QK-002, etc.)
+# - entity-mapping.json: Predefined mappings for algorithms/industries/personas
+# - populate-entities.ts: Utility for seeding reference entities
+```
+
+The import system features:
+- **Entity Mapping**: Intelligent matching of algorithms, industries, and personas
+- **Batch Tracking**: Human-readable batch names for admin management
+- **Duplicate Detection**: Prevents importing the same content twice
+- **Comprehensive Reporting**: Detailed statistics and unmapped entity reports
 
 ## 📊 Performance Metrics
 
@@ -166,6 +186,16 @@ openqase/
 ├── docs/                      # Documentation
 ├── migrations/                # Database migrations
 └── scripts/                   # Build and deployment scripts
+    ├── import-case-studies-with-mapping.ts    # Main case study importer
+    ├── batch-name-generator.ts               # Batch naming utility (QK-001, etc.)
+    ├── entity-mapping.json                   # Entity mapping definitions
+    ├── populate-entities.ts                  # Entity population utility
+    ├── setup-admin.ts                        # Admin user setup
+    ├── setup-local.sh                        # Local environment setup
+    ├── get-schema.ts                          # Database schema extraction
+    ├── enable-dev-mode.js                    # Development mode toggle
+    ├── performance-monitor.ts                # Performance monitoring tools
+    └── page-load-performance.js              # Page performance testing
 ```
 
 ## 🔄 Migration Status

@@ -260,6 +260,7 @@ export type Database = {
           created_at: string | null
           description: string | null
           id: string
+          import_batch_name: string | null
           main_content: string | null
           partner_companies: string[] | null
           published: boolean | null
@@ -279,6 +280,7 @@ export type Database = {
           created_at?: string | null
           description?: string | null
           id?: string
+          import_batch_name?: string | null
           main_content?: string | null
           partner_companies?: string[] | null
           published?: boolean | null
@@ -298,6 +300,7 @@ export type Database = {
           created_at?: string | null
           description?: string | null
           id?: string
+          import_batch_name?: string | null
           main_content?: string | null
           partner_companies?: string[] | null
           published?: boolean | null

@@ -270,14 +270,38 @@ export async function GET(request: NextRequest) {
     }
     
 
+    // Add new admin filters
+    const status = searchParams.get('status'); // 'draft' | 'published' | null (all)
+    const importBatch = searchParams.get('importBatch');
+    const search = searchParams.get('search');
+    const sortBy = searchParams.get('sortBy') || 'updated_at';
+    const sortDirection = searchParams.get('sortDirection') || 'desc';
+
+    // Apply status filter
+    if (status === 'draft') {
+      filters.published = false;
+    } else if (status === 'published') {
+      filters.published = true;
+    }
+
+    // Apply import batch filter
+    if (importBatch) {
+      filters.import_batch_name = importBatch;
+    }
+
+    // Apply search filter (will be handled by fetchContentItems)
+    const searchFields = search ? ['title', 'description', 'main_content'] : undefined;
+
     const { data, error, count } = await fetchContentItems({
       contentType: CONTENT_TYPE as any,
       includeUnpublished,
       page,
       pageSize,
       filters,
-      orderBy: 'updated_at',
-      orderDirection: 'desc'
+      searchQuery: search || undefined,
+      searchFields,
+      orderBy: sortBy,
+      orderDirection: sortDirection as 'asc' | 'desc'
     });
 
     
@@ -335,7 +359,7 @@ export async function GET(request: NextRequest) {
     if (error) {
       console.error('[CaseStudies API] Error from fetchContentItems:', error);
       return NextResponse.json(
-        { error: 'Error fetching case studies' },
+        { error: 'Error fetching case studies', details: error.message || 'Unknown error' },
         { status: 500 }
       );
     }
@@ -504,13 +528,40 @@ export async function DELETE(request: NextRequest) {
 }
 
 /**
- * PATCH handler for updating published status
+ * PATCH handler for updating published status or bulk operations
  */
 export async function PATCH(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
-    const id = searchParams.get('id');
     const body = await request.json();
+    
+    // Handle bulk operations
+    if (body.bulk) {
+      const { operation, ids } = body;
+      
+      if (!Array.isArray(ids) || ids.length === 0) {
+        return NextResponse.json(
+          { error: 'IDs array is required for bulk operations' },
+          { status: 400 }
+        );
+      }
+      
+      if (operation === 'publish') {
+        return await handleBulkPublish(ids, true);
+      } else if (operation === 'unpublish') {
+        return await handleBulkPublish(ids, false);
+      } else if (operation === 'delete') {
+        return await handleBulkDelete(ids);
+      } else {
+        return NextResponse.json(
+          { error: 'Invalid bulk operation' },
+          { status: 400 }
+        );
+      }
+    }
+    
+    // Handle single item update
+    const id = searchParams.get('id');
     const { published } = body;
     
     if (!id) {
@@ -545,6 +596,91 @@ export async function PATCH(request: NextRequest) {
     console.error('Error in case studies PATCH handler:', error);
     return NextResponse.json(
       { error: 'Failed to update case study' },
+      { status: 500 }
+    );
+  }
+}
+
+/**
+ * Handle bulk publish/unpublish operations
+ */
+async function handleBulkPublish(ids: string[], published: boolean) {
+  try {
+    const serviceClient = await createServiceRoleSupabaseClient();
+    
+    const { data, error } = await serviceClient
+      .from('case_studies')
+      .update({ published, updated_at: new Date().toISOString() })
+      .in('id', ids)
+      .select();
+    
+    if (error) {
+      console.error('Bulk publish error:', error);
+      return NextResponse.json(
+        { error: `Failed to ${published ? 'publish' : 'unpublish'} case studies` },
+        { status: 500 }
+      );
+    }
+    
+    return NextResponse.json({
+      success: true,
+      updated: data?.length || 0,
+      message: `Successfully ${published ? 'published' : 'unpublished'} ${data?.length || 0} case studies`
+    });
+  } catch (error) {
+    console.error('Bulk publish handler error:', error);
+    return NextResponse.json(
+      { error: 'Failed to process bulk operation' },
+      { status: 500 }
+    );
+  }
+}
+
+/**
+ * Handle bulk delete operations
+ */
+async function handleBulkDelete(ids: string[]) {
+  try {
+    const serviceClient = await createServiceRoleSupabaseClient();
+    
+    // Delete relationships first
+    const relationshipTables = [
+      'algorithm_case_study_relations',
+      'case_study_industry_relations',
+      'case_study_persona_relations'
+    ];
+    
+    for (const table of relationshipTables) {
+      await serviceClient
+        .from(table as any)
+        .delete()
+        .in('case_study_id', ids);
+    }
+    
+    // Delete case studies
+    const { data, error } = await serviceClient
+      .from('case_studies')
+      .delete()
+      .in('id', ids)
+      .select();
+    
+    if (error) {
+      console.error('Bulk delete error:', error);
+      return NextResponse.json(
+        { error: 'Failed to delete case studies' },
+        { status: 500 }
+      );
+    }
+    
+    return NextResponse.json({
+      success: true,
+      deleted: data?.length || 0,
+      message: `Successfully deleted ${data?.length || 0} case studies`
+    });
+  } catch (error) {
+    console.error('Bulk delete handler error:', error);
+    return NextResponse.json(
+      { error: 'Failed to process bulk delete' },
       { status: 500 }
     );
   }

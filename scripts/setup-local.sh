@@ -7,16 +7,21 @@ set -e
 
 echo "🚀 Setting up OpenQase local development environment..."
 
-# Check if Supabase CLI is installed
-if ! command -v supabase &> /dev/null; then
-    echo "❌ Supabase CLI is not installed. Please install it first:"
-    echo "   https://supabase.com/docs/guides/cli"
-    exit 1
+SUPCMD='supabase'
+
+# Check if Supabase CLI is installed locally or if it should be installed through npm
+if command -v supabase &> /dev/null; then
+      echo "Found and using local Supabase install."
+else
+    echo "No local Supabase install found---using node module instead."
+    SUPCMD='npx supabase'
 fi
+
+echo "Running with Supabase command: ${SUPCMD}"
 
 # Start Supabase
 echo "📦 Starting Supabase local instance..."
-supabase start
+${SUPCMD} start
 
 # Ask user about data setup
 echo ""
@@ -32,31 +37,42 @@ case $choice in
     1)
         echo "✅ Using example data from supabase/seed.sql"
         echo "   This will be automatically loaded by Supabase CLI"
+        cp supabase/example-seed.sql supabase/seed.sql
+        mkdir -p supabase/migrations
+        cp supabase/template-migrations/202505* supabase/migrations/
         ;;
     2)
         if [ -f "private-data/production-seed.sql" ]; then
             echo "✅ Using production data from private-data/production-seed.sql"
             echo "   Copying to supabase/seed.sql..."
             cp private-data/production-seed.sql supabase/seed.sql
+            mkdir -p supabase/migrations
+            cp supabase/template-migrations/* supabase/migrations/
         else
             echo "❌ Production data file not found: private-data/production-seed.sql"
             echo "   Falling back to example data..."
+            cp supabase/example-seed.sql supabase/seed.sql
+            mkdir -p supabase/migrations
+            cp supabase/template-migrations/202505* supabase/migrations/
         fi
         ;;
     3)
         echo "✅ Skipping data setup - empty database"
         echo "   Removing seed file..."
-        rm -f supabase/seed.sql
+        # rm -f supabase/seed.sql
         ;;
     *)
         echo "❌ Invalid choice. Using example data..."
+        cp supabase/example-seed.sql supabase/seed.sql
+        mkdir -p supabase/migrations
+        cp supabase/template-migrations/202505* supabase/migrations/
         ;;
 esac
 
 # Reset database to apply migrations and seed data
 echo ""
 echo "🔄 Resetting database to apply migrations and seed data..."
-supabase db reset
+${SUPCMD} db reset
 
 echo ""
 echo "✅ Setup complete!"

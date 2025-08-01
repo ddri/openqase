@@ -61,8 +61,8 @@ function promptPassword(question: string): Promise<string> {
     rl.question(question, () => {})
     
     let password = ''
-    stdin.on('data', (char) => {
-      char = char.toString()
+    stdin.on('data', (buffer) => {
+      const char = buffer.toString()
       
       switch (char) {
         case '\n':

@@ -51,11 +51,11 @@ next-env.d.ts
 *.sw?
 .roo/
 
-# Docusaurus in /docs
-docs/node_modules
-docs/build
-docs/.docusaurus
-docs/.cache-loader # Docusaurus uses this sometimes
+# Legacy entries (Docusaurus removed)
+# docs/node_modules
+# docs/build
+# docs/.docusaurus
+# docs/.cache-loader
 
 # Sentry Config File
 .env.sentry-build-plugin

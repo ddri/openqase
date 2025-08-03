@@ -152,7 +152,7 @@ export function AlgorithmsClient({ data }: AlgorithmsClientProps) {
               Delete Algorithm
             </AlertDialogTitle>
             <AlertDialogDescription>
-              Are you sure you want to delete "{algorithmToDelete?.name}"? This action cannot be undone.
+              Are you sure you want to delete &quot;{algorithmToDelete?.name}&quot;? This action cannot be undone.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>

@@ -33,7 +33,7 @@ const nextConfig: NextConfig = {
   },
   
   eslint: {
-    ignoreDuringBuilds: true,  // ✅ Keep disabled until ESLint cleanup (400+ errors)
+    ignoreDuringBuilds: false,  // ✅ Re-enabled after ESLint rule adjustments
   },
   pageExtensions: ['ts', 'tsx', 'js', 'jsx'],
   // Enable TypeScript checking during build

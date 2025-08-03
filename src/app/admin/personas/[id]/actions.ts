@@ -2,12 +2,17 @@
 
 import { createServiceRoleSupabaseClient } from '@/lib/supabase-server';
 import { revalidatePath } from 'next/cache';
-import { Database } from '@/types/supabase';
+import { Database, TablesInsert } from '@/types/supabase';
 
 // Define a type for the expected structure of the returned persona data
 type PersonaData = Database['public']['Tables']['personas']['Row'] | null;
 
-export async function savePersona(values: any): Promise<any> {
+interface PersonaFormData extends Omit<TablesInsert<'personas'>, 'id'> {
+  id?: string;
+  industry?: string[];
+}
+
+export async function savePersona(values: PersonaFormData): Promise<PersonaData> {
   try {
     
     const supabase = createServiceRoleSupabaseClient();
@@ -46,26 +51,26 @@ export async function savePersona(values: any): Promise<any> {
     }
 
     // Handle industry relationships (delete and re-create)
-    let industryError = await supabase
+    const { error: deleteError } = await supabase
       .from('persona_industry_relations')
       .delete()
       .eq('persona_id', data.id);
 
-    if (industryError && industryError.error) {
-        console.error("Error deleting industry relationships:", industryError.error);
-        throw new Error(industryError.error.message || "Failed to delete industry relationships");
+    if (deleteError) {
+      console.error("Error deleting industry relationships:", deleteError);
+      throw new Error(deleteError.message || "Failed to delete industry relationships");
     }
 
     if (industryIds.length > 0 && data && data.id) {
       for (const industryId of industryIds) {
-          let insertError = await supabase
-              .from('persona_industry_relations')
-              .insert({ persona_id: data.id, industry_id: industryId });
+        const { error: insertError } = await supabase
+          .from('persona_industry_relations')
+          .insert({ persona_id: data.id, industry_id: industryId });
 
-          if (insertError && insertError.error) {
-              console.error("Error inserting industry relationship:", insertError.error);
-              throw new Error(insertError.error.message || "Failed to insert industry relationship");
-          }
+        if (insertError) {
+          console.error("Error inserting industry relationship:", insertError);
+          throw new Error(insertError.message || "Failed to insert industry relationship");
+        }
       }
     }
     
@@ -77,10 +82,10 @@ export async function savePersona(values: any): Promise<any> {
     
     // Return the saved data
     return data;
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Error saving persona:", error);
-    console.error("Error stack:", error.stack);
-    throw new Error(error.message || "Failed to save persona");
+    const errorMessage = error instanceof Error ? error.message : "Failed to save persona";
+    throw new Error(errorMessage);
   }
 }
 
@@ -96,9 +101,10 @@ export async function publishPersona(id: string): Promise<void> {
       throw error;
     }
     revalidatePath('/admin/personas');
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Error publishing persona:", error);
-    throw new Error(error.message || "Failed to publish persona");
+    const errorMessage = error instanceof Error ? error.message : "Failed to publish persona";
+    throw new Error(errorMessage);
   }
 }
 
@@ -114,8 +120,9 @@ export async function unpublishPersona(id: string): Promise<void> {
       throw error;
     }
     revalidatePath('/admin/personas');
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Error unpublishing persona:", error);
-    throw new Error(error.message || "Failed to unpublish persona");
+    const errorMessage = error instanceof Error ? error.message : "Failed to unpublish persona";
+    throw new Error(errorMessage);
   }
 }

@@ -1,6 +1,11 @@
 import { notFound } from 'next/navigation';
 import { BlogPostForm } from './client';
 import { createServiceRoleSupabaseClient } from '@/lib/supabase-server';
+import { Tables } from '@/types/supabase';
+
+type BlogPostWithRelated = Tables<'blog_posts'> & {
+  related_posts?: string[];
+};
 
 interface BlogPostPageProps {
   params: Promise<{
@@ -49,12 +54,12 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
         .in('id', relatedPostIds);
       
       if (relatedPosts) {
-        // Use type assertion to add related_posts property
-        (blogPost as any).related_posts = relatedPosts;
+        // Add related_posts property
+        (blogPost as BlogPostWithRelated).related_posts = relatedPosts;
       }
     } else {
-      // Use type assertion to add related_posts property
-      (blogPost as any).related_posts = [];
+      // Add related_posts property
+      (blogPost as BlogPostWithRelated).related_posts = [];
     }
   }
   

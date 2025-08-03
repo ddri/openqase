@@ -142,7 +142,7 @@ export function PersonasClient({ data }: PersonasClientProps) {
               Delete Persona
             </AlertDialogTitle>
             <AlertDialogDescription>
-              Are you sure you want to delete "{personaToDelete?.name}"? This action cannot be undone.
+              Are you sure you want to delete &quot;{personaToDelete?.name}&quot;? This action cannot be undone.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>

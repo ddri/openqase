@@ -2,8 +2,13 @@
 
 import { createServiceRoleSupabaseClient } from '@/lib/supabase-server';
 import { revalidatePath } from 'next/cache';
+import { TablesInsert } from '@/types/supabase';
 
-export async function saveIndustry(values: any): Promise<any> {
+interface IndustryFormData extends Omit<TablesInsert<'industries'>, 'id'> {
+  id?: string;
+}
+
+export async function saveIndustry(values: IndustryFormData): Promise<TablesInsert<'industries'>> {
   try {
     const supabase = createServiceRoleSupabaseClient();
     const { data, error } = await supabase
@@ -29,9 +34,10 @@ export async function saveIndustry(values: any): Promise<any> {
     
     // Return the saved data
     return data;
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Error saving industry:", error);
-    throw new Error(error.message || "Failed to save industry");
+    const errorMessage = error instanceof Error ? error.message : "Failed to save industry";
+    throw new Error(errorMessage);
   }
 }
 
@@ -47,9 +53,10 @@ export async function publishIndustry(id: string): Promise<void> {
       throw error;
     }
     revalidatePath('/admin/industries');
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Error publishing industry:", error);
-    throw new Error(error.message || "Failed to publish industry");
+    const errorMessage = error instanceof Error ? error.message : "Failed to publish industry";
+    throw new Error(errorMessage);
   }
 }
 
@@ -65,8 +72,9 @@ export async function unpublishIndustry(id: string): Promise<void> {
       throw error;
     }
     revalidatePath('/admin/industries');
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Error unpublishing industry:", error);
-    throw new Error(error.message || "Failed to unpublish industry");
+    const errorMessage = error instanceof Error ? error.message : "Failed to unpublish industry";
+    throw new Error(errorMessage);
   }
 }

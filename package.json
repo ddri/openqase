@@ -54,8 +54,6 @@
     "uuid": "^11.1.0"
   },
   "devDependencies": {
-    "@docusaurus/preset-classic": "^3.7.0",
-    "@docusaurus/types": "^3.7.0",
     "@eslint/eslintrc": "^3",
     "@tailwindcss/typography": "^0.5.16",
     "@types/node": "^20.19.0",

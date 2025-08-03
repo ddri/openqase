@@ -43,9 +43,10 @@ import {
   Search,
   ArrowUpDown
 } from 'lucide-react';
+import { Tables } from '@/types/supabase';
 
 interface BlogPostsListProps {
-  initialBlogPosts: any[];
+  initialBlogPosts: Tables<'blog_posts'>[];
 }
 
 export function BlogPostsList({ initialBlogPosts }: BlogPostsListProps) {
@@ -54,7 +55,7 @@ export function BlogPostsList({ initialBlogPosts }: BlogPostsListProps) {
   const [blogPosts, setBlogPosts] = useState(initialBlogPosts);
   const [searchTerm, setSearchTerm] = useState('');
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
-  const [blogPostToDelete, setBlogPostToDelete] = useState<any>(null);
+  const [blogPostToDelete, setBlogPostToDelete] = useState<Tables<'blog_posts'> | null>(null);
   const [sortField, setSortField] = useState<string>('updated_at');
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('desc');
   
@@ -90,7 +91,7 @@ export function BlogPostsList({ initialBlogPosts }: BlogPostsListProps) {
   };
   
   // Handle publish/unpublish
-  const handlePublishToggle = async (blogPost: any) => {
+  const handlePublishToggle = async (blogPost: Tables<'blog_posts'>) => {
     try {
       const response = await fetch(`/api/blog-posts?id=${blogPost.id}`, {
         method: 'PATCH',
@@ -120,7 +121,7 @@ export function BlogPostsList({ initialBlogPosts }: BlogPostsListProps) {
         description: `"${blogPost.title}" is now ${blogPost.published ? 'unpublished' : 'published'}`,
         duration: 3000,
       });
-    } catch (error) {
+    } catch (_error) {
       toast({
         variant: 'destructive',
         title: 'Error',
@@ -131,7 +132,7 @@ export function BlogPostsList({ initialBlogPosts }: BlogPostsListProps) {
   };
   
   // Handle featured toggle
-  const handleFeaturedToggle = async (blogPost: any) => {
+  const handleFeaturedToggle = async (blogPost: Tables<'blog_posts'>) => {
     try {
       const response = await fetch(`/api/blog-posts?id=${blogPost.id}`, {
         method: 'PATCH',

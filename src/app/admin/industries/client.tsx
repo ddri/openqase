@@ -131,7 +131,7 @@ export function IndustriesClient({ data }: IndustriesClientProps) {
               Delete Industry
             </AlertDialogTitle>
             <AlertDialogDescription>
-              Are you sure you want to delete "{industryToDelete?.name}"? This action cannot be undone.
+              Are you sure you want to delete &quot;{industryToDelete?.name}&quot;? This action cannot be undone.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>

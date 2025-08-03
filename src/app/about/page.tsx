@@ -1,5 +1,4 @@
 import { Metadata } from 'next';
-import { NewsletterSignup } from '@/components/ui/newsletter-signup'
 import { AutoSchema } from '@/components/AutoSchema';
 import { GetInvolvedSection } from '@/components/GetInvolvedSection';
 
@@ -33,7 +32,7 @@ export default function AboutPage() {
             <h2 className="mb-6">The Problem We Solve</h2>
             <div className="space-y-6">
               <p className="text-lg text-muted-foreground">
-                Quantum computing promises to transform industries, but understanding practical applications remains a challenge for business leaders. Even for those of us working in the quantum computing industry, it's not easy to answer questions like "when will quantum computing be ready", or "what is the business case for a quantum computer". This is a polite way of asking "what's in it for me", which is the most important question we need to answer.
+                Quantum computing promises to transform industries, but understanding practical applications remains a challenge for business leaders. Even for those of us working in the quantum computing industry, it&apos;s not easy to answer questions like &quot;when will quantum computing be ready&quot;, or &quot;what is the business case for a quantum computer&quot;. This is a polite way of asking &quot;what&apos;s in it for me&quot;, which is the most important question we need to answer.
               </p>
               
               <div className="bg-muted/30 rounded-lg p-6 border-l-4 border-primary">

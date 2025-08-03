@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
@@ -17,10 +17,11 @@ import { useTransition } from 'react';
 import { ArrowLeft, Save, Loader2 } from 'lucide-react';
 import { toast } from '@/components/ui/use-toast';
 import { saveBlogPost, publishBlogPost, unpublishBlogPost } from './actions';
+import { Tables } from '@/types/supabase';
 
 interface BlogPostFormProps {
-  blogPost: any | null;
-  relatedPosts: any[];
+  blogPost: Tables<'blog_posts'> | null;
+  relatedPosts: Array<{ id: string; title: string; slug: string }>;
   isNew: boolean;
 }
 

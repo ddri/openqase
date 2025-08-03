@@ -19,7 +19,7 @@ This project utilizes a modern web development stack focused on React, Next.js, 
     *   [Radix UI](https://www.radix-ui.com/) (Primitives)
     *   [Tailwind CSS](https://tailwindcss.com/) (Styling)
     *   [Lucide React](https://lucide.dev/) (Icons)
-*   **Data Fetching/State (Client):** [TanStack Query (React Query)](https://tanstack.com/query/latest)
+*   **Data Fetching:** Unified content fetching system with static generation
 *   **Tables:** [TanStack Table (React Table)](https://tanstack.com/table/latest)
 *   **Markdown Rendering:** [react-markdown](https://github.com/remarkjs/react-markdown) / [markdown-it](https://github.com/markdown-it/markdown-it)
 *   **Forms:** Standard HTML/React, potentially enhanced with libraries like [React Select](https://react-select.com/).
@@ -27,11 +27,12 @@ This project utilizes a modern web development stack focused on React, Next.js, 
 ## Development & Tooling
 
 *   **Package Manager:** npm (Based on `package-lock.json`)
-*   **Linting:** [ESLint](https://eslint.org/)
+*   **Linting:** [ESLint](https://eslint.org/) - Enabled during builds with adjusted rules for gradual improvement
 *   **Validation:** [Zod](https://zod.dev/)
 *   **Scripting:** [ts-node](https://github.com/TypeStrong/ts-node)
 *   **API Helpers:** `@supabase/ssr`, `@supabase/auth-helpers-nextjs`, `@supabase/supabase-js`
 
 ## Documentation
 
-*   **Framework:** [Docusaurus](https://docusaurus.io/) (v3) 
+*   **Format:** Markdown files in `/docs/` directory
+*   **Previously:** Used Docusaurus (removed in latest update for simplicity)

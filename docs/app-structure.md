@@ -73,10 +73,10 @@ This project leverages the React Server Components (RSC) architecture introduced
     *   Can have interactive event handlers.
 *   **Limitations:**
     *   Cannot directly access server-side resources (must fetch data via API calls or Server Actions).
-    *   Cannot use `async/await` directly for data fetching in the component body (use `useEffect` or libraries like TanStack Query).
+    *   Cannot use `async/await` directly for data fetching in the component body (use `useEffect` or standard React state).
 *   **Example Usage (OpenQase):**
     *   Components containing forms with state and event handlers, like the admin edit forms (`src/app/admin/[content-type]/[id]/client.tsx`).
-    *   Components using TanStack Query for client-side data fetching.
+    *   Components using standard React hooks for client-side state management.
     *   Any component requiring `useState`, `useEffect`, or browser interaction.
 
 ## Relationship & Interaction

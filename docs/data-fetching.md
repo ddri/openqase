@@ -47,15 +47,15 @@ export default async function AlgorithmPage({ params }: { params: { slug: string
 *   **Example:** The `saveItem`, `publishItem`, `deleteItem` functions in Admin CMS (`src/app/admin/[content-type]/[id]/actions.ts`).
 *   **Cache Invalidation:** Server Actions call `revalidatePath` or `revalidateTag` after mutations to update static content.
 
-## 4. Client-Side Fetching (TanStack Query)
+## 4. Client-Side Fetching (React State)
 
-*   **Context:** Used within Client Components for scenarios requiring client-side data fetching or state management:
-    *   Interactive features after initial page load
-    *   Pagination, infinite scrolling, dynamic filtering
-    *   Complex client-side state management
-*   **Mechanism:** Uses [TanStack Query (React Query)](https://tanstack.com/query/latest) library for fetching, caching, and state management.
+*   **Context:** Used within Client Components for interactive features:
+    *   Dynamic form interactions
+    *   Local component state management
+    *   Real-time admin interface updates
+*   **Mechanism:** Standard React state and effects with Supabase client
 *   **Supabase Client:** Uses browser-safe Supabase client (`createBrowserSupabaseClient`) for client-side operations.
-*   **Example:** Interactive admin dashboards, search interfaces, real-time features.
+*   **Example:** Admin form submissions, relationship selectors, content validation.
 
 ## 5. API Routes (Admin & External Integrations)
 
@@ -113,7 +113,7 @@ OpenQase v0.4.0 employs a **hybrid architecture** that optimizes for different u
 4. **Call `revalidatePath`** after mutations to update static content
 
 ### For Interactive Features
-1. **Use TanStack Query** for client-side state management
+1. **Use React state and effects** for client-side state management
 2. **Implement proper loading states** and error handling
 3. **Use browser client** for client-side operations
 4. **Consider performance implications** of client-side fetching

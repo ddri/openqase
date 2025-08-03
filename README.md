@@ -12,7 +12,7 @@ OpenQase provides:
 
 ## ⚡ Performance
 
-**OpenQase v0.4.0 delivers blazing-fast performance:**
+**OpenQase v0.4.1 delivers blazing-fast performance:**
 - **50-100ms page loads** (vs 30+ seconds previously)
 - **76 static pages** pre-generated at build time
 - **Zero runtime database calls** for public content
@@ -29,7 +29,7 @@ OpenQase uses a **hybrid architecture** that combines:
 
 ## Technology Stack
 
-- **Framework**: [Next.js](https://nextjs.org) 14.x with App Router
+- **Framework**: [Next.js](https://nextjs.org) 15.x with App Router
 - **Database**: [Supabase](https://supabase.com) for data and authentication
 - **UI Components**: [shadcn/ui](https://ui.shadcn.com/) for consistent design
 - **Content**: Unified content fetching system with relationship management
@@ -163,7 +163,7 @@ NEXT_STATIC_EXPORT=true npm run build
 
 ## 🤝 Contributing
 
-1. **Read the documentation** - Start with the [Quick Reference](./docs/docs/v040-quick-reference.md)
+1. **Read the documentation** - Start with the [Quick Reference](./docs/v040-quick-reference.md)
 2. **Follow the patterns** - Use unified content fetching for public content
 3. **Preserve admin functionality** - Keep dynamic patterns for admin features
 4. **Test performance** - Ensure changes don't impact build times
@@ -213,10 +213,21 @@ openqase/
 
 ## 📞 Support
 
-- **Documentation**: Comprehensive guides in `/docs/docs/`
+- **Documentation**: Comprehensive guides in `/docs/`
 - **Issues**: GitHub Issues for bug reports and feature requests
 - **Performance**: Build logs and performance monitoring included
 
 ---
 
-**OpenQase v0.4.0** - Delivering quantum computing insights at quantum speed ⚡
+**OpenQase v0.4.1** - Delivering quantum computing insights at quantum speed ⚡
+
+## 🔄 Planned Major Updates
+
+**Note:** The following major version updates are available but require careful testing due to potential breaking changes:
+
+- **Tailwind CSS**: 3.4.17 → 4.1.11 (major CSS framework redesign)
+- **Zod**: 3.25.63 → 4.0.14 (validation library with breaking changes)
+- **Sentry**: 9.39.0 → 10.0.0 (monitoring service updates)
+- **Node.js Types**: 20.x → 24.x (latest Node.js support)
+
+These updates should be planned for a dedicated maintenance window with thorough testing.

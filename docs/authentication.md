@@ -183,4 +183,4 @@ NEXT_PUBLIC_REQUIRE_AUTH_FOR_CONTENT=false
 
 ---
 
-*Last updated: v0.3.0 - Two-tier security model documented* 
+*Last updated: v0.4.1 - Two-tier security model documented* 

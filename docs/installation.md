@@ -23,7 +23,7 @@ npm install
 bash scripts/setup-local.sh
 
 # 3. Configure environment (if needed)
-cp .env.local.example .env.local
+cp .env.example .env.local
 # Update with your Supabase credentials from 'supabase status'
 
 # 4. Run the application
@@ -41,7 +41,7 @@ npm install
 supabase start
 
 # 3. Configure environment
-cp .env.local.example .env.local
+cp .env.example .env.local
 # Add your Supabase credentials (see below)
 
 # 4. Run the application
@@ -95,7 +95,7 @@ service_role key: your-local-service-role-key
 Create your local environment file:
 
 ```bash
-cp .env.local.example .env.local
+cp .env.example .env.local
 ```
 
 Configure with your local Supabase credentials:

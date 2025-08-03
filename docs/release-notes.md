@@ -1,6 +1,24 @@
 # Release Notes
 
-## v0.4.0 - Hybrid Architecture & Unified Content Fetching (Current)
+## v0.4.1 - Enhanced Stability & Documentation Updates (Current)
+
+**🔧 Maintenance & Improvements**
+
+### 🎯 Key Updates
+- **📦 Dependency Updates**: Minor/patch version updates for Next.js 15.x, React 19.x, TypeScript 5.9
+- **🛡️ Security**: Removed Docusaurus dependencies, eliminating 16 security vulnerabilities  
+- **🔍 Code Quality**: Re-enabled ESLint during builds with improved rule configuration
+- **📚 Documentation**: Updated and corrected installation guides and tech stack references
+- **⚡ Performance**: Optimized TypeScript interfaces for admin relationship components
+
+### 🐛 Bug Fixes
+- Fixed `.env.example` file references in installation documentation
+- Corrected outdated TanStack Query references (dependency was removed)
+- Updated version numbers and roadmap status
+
+---
+
+## v0.4.0 - Hybrid Architecture & Unified Content Fetching
 
 **🚀 Major Performance Overhaul**
 
@@ -206,7 +224,7 @@ OpenQase v0.4.0 introduces a revolutionary hybrid architecture that delivers 300
 - **Admin Interface**: Minimal admin interface for content management
 
 ### Technical Stack
-- **Frontend**: Next.js 14 with App Router, TypeScript, Tailwind CSS
+- **Frontend**: Next.js 15 with App Router, TypeScript, Tailwind CSS
 - **Backend**: Supabase for database and authentication
 - **Deployment**: Vercel deployment with automated CI/CD
 - **Development**: ESLint, Prettier, and development tooling setup 

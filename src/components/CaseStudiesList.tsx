@@ -8,6 +8,7 @@ import { Database } from '@/types/supabase';
 import ContentCard from '@/components/ui/content-card';
 import { ViewSwitcher } from '@/components/ui/view-switcher';
 import { useViewSwitcher } from '@/hooks/useViewSwitcher';
+import { useSortPersistence } from '@/hooks/useSortPersistence';
 import { getContentMetadata } from '@/lib/content-metadata';
 
 type CaseStudy = Database['public']['Tables']['case_studies']['Row'];
@@ -18,14 +19,16 @@ interface CaseStudiesListProps {
 
 type SortOption = 'title-asc' | 'title-desc' | 'updated-asc' | 'updated-desc' | 'year-asc' | 'year-desc';
 
+const CASE_STUDIES_SORT_OPTIONS = ['title-asc', 'title-desc', 'updated-asc', 'updated-desc', 'year-asc', 'year-desc'] as const;
+
 export function CaseStudiesList({ caseStudies }: CaseStudiesListProps) {
   const [searchQuery, setSearchQuery] = useState('');
-  const [sortBy, setSortBy] = useState<SortOption>('title-asc');
   const [yearFilter, setYearFilter] = useState<string>('all');
   const [companyFilter, setCompanyFilter] = useState<string>('all');
   
-  // Use the new hook for view switching
+  // Use hooks for persistence
   const { viewMode, handleViewModeChange } = useViewSwitcher('case-studies-view-mode');
+  const { sortBy, handleSortChange } = useSortPersistence('case-studies-sort', 'title-asc', CASE_STUDIES_SORT_OPTIONS);
 
   if (!caseStudies || caseStudies.length === 0) {
     return <div>No case studies found.</div>;
@@ -119,10 +122,6 @@ export function CaseStudiesList({ caseStudies }: CaseStudiesListProps) {
   // Memoize event handlers to prevent child re-renders
   const handleSearchChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(e.target.value);
-  }, []);
-
-  const handleSortChange = useCallback((value: SortOption) => {
-    setSortBy(value);
   }, []);
 
   const handleYearFilterChange = useCallback((value: string) => {

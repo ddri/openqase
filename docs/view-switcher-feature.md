@@ -311,15 +311,55 @@ const contentCardVariants = cva("flex p-6", {
 - [x] AlgorithmList integration 
 - [x] IndustryList integration
 - [x] PersonaList integration
-- [x] localStorage preference persistence
+- [x] localStorage preference persistence for view modes
+- [x] **NEW:** Sort persistence with useSortPersistence hook
+- [x] **NEW:** localStorage preference persistence for sorting
 - [x] Responsive design across all screen sizes
 - [x] TypeScript type safety
 - [x] Performance optimization with memoization
 - [x] Comprehensive documentation
 
+## Sort Persistence Enhancement
+
+### useSortPersistence Hook
+
+A companion hook to `useViewSwitcher` that provides sorting preference persistence.
+
+```typescript
+// Hook signature
+function useSortPersistence<T extends string>(
+  storageKey: string,
+  defaultSort: T,
+  validSortOptions: readonly T[]
+): {
+  sortBy: T;
+  handleSortChange: (newSortBy: T) => void;
+}
+
+// Usage example
+const { sortBy, handleSortChange } = useSortPersistence(
+  'case-studies-sort', 
+  'title-asc', 
+  CASE_STUDIES_SORT_OPTIONS
+);
+```
+
+### Features
+- **Type-safe validation**: Only accepts valid sort options
+- **localStorage persistence**: Remembers user's preferred sorting
+- **Error resilience**: Graceful fallback if localStorage unavailable
+- **Consistent API**: Matches useViewSwitcher pattern
+
+### Storage Keys Used
+- `case-studies-sort` → Case Studies sorting preference
+- `algorithms-sort` → Algorithms sorting preference  
+- `industries-sort` → Industries sorting preference
+- `personas-sort` → Personas sorting preference
+
 ### Bundle Impact Analysis
-Total additional bundle size: ~4KB
+Total additional bundle size: ~5KB
 - ViewSwitcher component: +2.1KB
+- useSortPersistence hook: +1KB
 - ContentCard variant logic: +1.8KB  
 - No performance degradation observed
 - Maintained existing memoization patterns

@@ -8,6 +8,7 @@ import type { Database } from '@/types/supabase';
 import ContentCard from '@/components/ui/content-card';
 import { ViewSwitcher } from '@/components/ui/view-switcher';
 import { useViewSwitcher } from '@/hooks/useViewSwitcher';
+import { useSortPersistence } from '@/hooks/useSortPersistence';
 import { getContentMetadata } from '@/lib/content-metadata';
 
 // Explicitly import the Row type
@@ -19,12 +20,14 @@ interface PersonaListProps {
 
 type SortOption = 'name-asc' | 'name-desc' | 'updated-asc' | 'updated-desc';
 
+const PERSONAS_SORT_OPTIONS = ['name-asc', 'name-desc', 'updated-asc', 'updated-desc'] as const;
+
 export default function PersonaList({ personas }: PersonaListProps) {
   const [searchQuery, setSearchQuery] = useState('');
-  const [sortBy, setSortBy] = useState<SortOption>('name-asc');
   
-  // Use the new hook for view switching
+  // Use hooks for persistence
   const { viewMode, handleViewModeChange } = useViewSwitcher('personas-view-mode');
+  const { sortBy, handleSortChange } = useSortPersistence('personas-sort', 'name-asc', PERSONAS_SORT_OPTIONS);
 
   // Memoize expensive filtering and sorting operations
   const filteredPersonas = useMemo(() => {
@@ -62,10 +65,6 @@ export default function PersonaList({ personas }: PersonaListProps) {
   // Memoize event handlers to prevent child re-renders
   const handleSearchChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(e.target.value);
-  }, []);
-
-  const handleSortChange = useCallback((value: SortOption) => {
-    setSortBy(value);
   }, []);
 
   return (

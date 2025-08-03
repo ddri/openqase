@@ -8,6 +8,7 @@ import type { Database } from '@/types/supabase';
 import ContentCard from '@/components/ui/content-card';
 import { ViewSwitcher } from '@/components/ui/view-switcher';
 import { useViewSwitcher } from '@/hooks/useViewSwitcher';
+import { useSortPersistence } from '@/hooks/useSortPersistence';
 import { getContentMetadata } from '@/lib/content-metadata';
 
 type Algorithm = Database['public']['Tables']['algorithms']['Row'];
@@ -18,12 +19,14 @@ interface AlgorithmListProps {
 
 type SortOption = 'name-asc' | 'name-desc' | 'updated-asc' | 'updated-desc';
 
+const ALGORITHMS_SORT_OPTIONS = ['name-asc', 'name-desc', 'updated-asc', 'updated-desc'] as const;
+
 export default function AlgorithmList({ algorithms }: AlgorithmListProps) {
   const [searchQuery, setSearchQuery] = useState('');
-  const [sortBy, setSortBy] = useState<SortOption>('name-asc');
   
-  // Use the new hook for view switching
+  // Use hooks for persistence
   const { viewMode, handleViewModeChange } = useViewSwitcher('algorithms-view-mode');
+  const { sortBy, handleSortChange } = useSortPersistence('algorithms-sort', 'name-asc', ALGORITHMS_SORT_OPTIONS);
 
   // Memoize expensive filtering and sorting operations
   const filteredAlgorithms = useMemo(() => {
@@ -60,10 +63,6 @@ export default function AlgorithmList({ algorithms }: AlgorithmListProps) {
   // Memoize event handlers to prevent child re-renders
   const handleSearchChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(e.target.value);
-  }, []);
-
-  const handleSortChange = useCallback((value: SortOption) => {
-    setSortBy(value);
   }, []);
 
   return (

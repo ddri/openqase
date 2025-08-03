@@ -8,6 +8,7 @@ import type { Database } from '@/types/supabase';
 import ContentCard from '@/components/ui/content-card';
 import { ViewSwitcher } from '@/components/ui/view-switcher';
 import { useViewSwitcher } from '@/hooks/useViewSwitcher';
+import { useSortPersistence } from '@/hooks/useSortPersistence';
 import { getContentMetadata } from '@/lib/content-metadata';
 
 // Use the exact Industry type from Database
@@ -19,13 +20,15 @@ interface IndustryListProps {
 
 type SortOption = 'name-asc' | 'name-desc' | 'updated-asc' | 'updated-desc';
 
+const INDUSTRIES_SORT_OPTIONS = ['name-asc', 'name-desc', 'updated-asc', 'updated-desc'] as const;
+
 export default function IndustryList({ industries }: IndustryListProps) {
   const [searchQuery, setSearchQuery] = useState('');
   const [sectorFilter, setSectorFilter] = useState('all');
-  const [sortBy, setSortBy] = useState<SortOption>('name-asc');
   
-  // Use the new hook for view switching
+  // Use hooks for persistence
   const { viewMode, handleViewModeChange } = useViewSwitcher('industries-view-mode');
+  const { sortBy, handleSortChange } = useSortPersistence('industries-sort', 'name-asc', INDUSTRIES_SORT_OPTIONS);
 
   // Memoize unique sectors for filtering
   const sectors = useMemo(() => {
@@ -73,10 +76,6 @@ export default function IndustryList({ industries }: IndustryListProps) {
 
   const handleSectorFilterChange = useCallback((value: string) => {
     setSectorFilter(value);
-  }, []);
-
-  const handleSortChange = useCallback((value: SortOption) => {
-    setSortBy(value);
   }, []);
 
   return (

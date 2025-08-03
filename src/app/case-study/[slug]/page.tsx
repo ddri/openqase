@@ -118,7 +118,7 @@ export default async function CaseStudyPage({ params }: CaseStudyPageProps) {
               <h3 className="sidebar-title">Partner Companies</h3>
               <div className="flex flex-wrap gap-2">
                 {caseStudy.partner_companies.map((company: string) => (
-                  <Badge key={company} variant="outline" className="text-[14px] border-border">
+                  <Badge key={company} variant="outline" className="text-[14px] border-border break-words">
                     {company}
                   </Badge>
                 ))}
@@ -130,7 +130,7 @@ export default async function CaseStudyPage({ params }: CaseStudyPageProps) {
               <h3 className="sidebar-title">Quantum Companies</h3>
               <div className="flex flex-wrap gap-2">
                 {caseStudy.quantum_companies.map((company: string) => (
-                  <Badge key={company} variant="outline" className="text-[14px] border-border">
+                  <Badge key={company} variant="outline" className="text-[14px] border-border break-words">
                     {company}
                   </Badge>
                 ))}
@@ -142,7 +142,7 @@ export default async function CaseStudyPage({ params }: CaseStudyPageProps) {
               <h3 className="sidebar-title">Quantum Hardware</h3>
               <div className="flex flex-wrap gap-2">
                 {caseStudy.quantum_hardware.map((hardware: string) => (
-                  <Badge key={hardware} variant="outline" className="text-[14px] border-border">
+                  <Badge key={hardware} variant="outline" className="text-[14px] border-border break-words">
                     {hardware}
                   </Badge>
                 ))}
@@ -154,7 +154,7 @@ export default async function CaseStudyPage({ params }: CaseStudyPageProps) {
               <h3 className="sidebar-title">Quantum Software</h3>
               <div className="flex flex-wrap gap-2">
                 {caseStudy.quantum_software.map((software: string) => (
-                  <Badge key={software} variant="outline" className="text-[14px] border-border">
+                  <Badge key={software} variant="outline" className="text-[14px] border-border break-words">
                     {software}
                   </Badge>
                 ))}

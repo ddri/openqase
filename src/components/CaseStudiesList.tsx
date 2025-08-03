@@ -6,6 +6,9 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Label } from '@/components/ui/label';
 import { Database } from '@/types/supabase';
 import ContentCard from '@/components/ui/content-card';
+import { ViewSwitcher } from '@/components/ui/view-switcher';
+import { useViewSwitcher } from '@/hooks/useViewSwitcher';
+import { getContentMetadata } from '@/lib/content-metadata';
 
 type CaseStudy = Database['public']['Tables']['case_studies']['Row'];
 
@@ -20,6 +23,9 @@ export function CaseStudiesList({ caseStudies }: CaseStudiesListProps) {
   const [sortBy, setSortBy] = useState<SortOption>('title-asc');
   const [yearFilter, setYearFilter] = useState<string>('all');
   const [companyFilter, setCompanyFilter] = useState<string>('all');
+  
+  // Use the new hook for view switching
+  const { viewMode, handleViewModeChange } = useViewSwitcher('case-studies-view-mode');
 
   if (!caseStudies || caseStudies.length === 0) {
     return <div>No case studies found.</div>;
@@ -130,86 +136,94 @@ export function CaseStudiesList({ caseStudies }: CaseStudiesListProps) {
   return (
     <div className="space-y-6">
       {/* Search and Sort Controls */}
-      <div className="flex flex-col sm:flex-row gap-4">
-        <div className="flex-1">
-          <Label htmlFor="search" className="text-sm font-medium mb-1.5 block">
-            Search case studies
-          </Label>
-          <Input
-            id="search"
-            type="search"
-            placeholder="Search by title, description, year, or company..."
-            value={searchQuery}
-            onChange={handleSearchChange}
-            className="w-full"
-          />
+      <div className="flex flex-col gap-4">
+        <div className="flex flex-col sm:flex-row gap-4">
+          <div className="flex-1">
+            <Label htmlFor="search" className="text-sm font-medium mb-1.5 block">
+              Search case studies
+            </Label>
+            <Input
+              id="search"
+              type="search"
+              placeholder="Search by title, description, year, or company..."
+              value={searchQuery}
+              onChange={handleSearchChange}
+              className="w-full"
+            />
+          </div>
+          
+          <div className="w-full sm:w-[200px]">
+            <Label htmlFor="year-filter" className="text-sm font-medium mb-1.5 block">
+              Filter by year
+            </Label>
+            <Select value={yearFilter} onValueChange={handleYearFilterChange}>
+              <SelectTrigger id="year-filter" className="w-full">
+                <SelectValue placeholder="All years" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Years</SelectItem>
+                {availableYears.map(year => (
+                  <SelectItem key={year} value={year.toString()}>
+                    {year}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+          
+          <div className="w-full sm:w-[200px]">
+            <Label htmlFor="company-filter" className="text-sm font-medium mb-1.5 block">
+              Filter by company
+            </Label>
+            <Select value={companyFilter} onValueChange={handleCompanyFilterChange}>
+              <SelectTrigger id="company-filter" className="w-full">
+                <SelectValue placeholder="All companies" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Companies</SelectItem>
+                {availableCompanies.map(company => (
+                  <SelectItem key={company} value={company}>
+                    {company}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+          
+          <div className="w-full sm:w-[200px]">
+            <Label htmlFor="sort" className="text-sm font-medium mb-1.5 block">
+              Sort by
+            </Label>
+            <Select value={sortBy} onValueChange={handleSortChange}>
+              <SelectTrigger id="sort" className="w-full">
+                <SelectValue placeholder="Sort by" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="title-asc">Title (A-Z)</SelectItem>
+                <SelectItem value="title-desc">Title (Z-A)</SelectItem>
+                <SelectItem value="year-desc">Year (Newest First)</SelectItem>
+                <SelectItem value="year-asc">Year (Oldest First)</SelectItem>
+                <SelectItem value="updated-desc">Recently Updated</SelectItem>
+                <SelectItem value="updated-asc">Least Recently Updated</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
         </div>
-        
-        <div className="w-full sm:w-[200px]">
-          <Label htmlFor="year-filter" className="text-sm font-medium mb-1.5 block">
-            Filter by year
-          </Label>
-          <Select value={yearFilter} onValueChange={handleYearFilterChange}>
-            <SelectTrigger id="year-filter" className="w-full">
-              <SelectValue placeholder="All years" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All Years</SelectItem>
-              {availableYears.map(year => (
-                <SelectItem key={year} value={year.toString()}>
-                  {year}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-        
-        <div className="w-full sm:w-[200px]">
-          <Label htmlFor="company-filter" className="text-sm font-medium mb-1.5 block">
-            Filter by company
-          </Label>
-          <Select value={companyFilter} onValueChange={handleCompanyFilterChange}>
-            <SelectTrigger id="company-filter" className="w-full">
-              <SelectValue placeholder="All companies" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All Companies</SelectItem>
-              {availableCompanies.map(company => (
-                <SelectItem key={company} value={company}>
-                  {company}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-        
-        <div className="w-full sm:w-[200px]">
-          <Label htmlFor="sort" className="text-sm font-medium mb-1.5 block">
-            Sort by
-          </Label>
-          <Select value={sortBy} onValueChange={handleSortChange}>
-            <SelectTrigger id="sort" className="w-full">
-              <SelectValue placeholder="Sort by" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="title-asc">Title (A-Z)</SelectItem>
-              <SelectItem value="title-desc">Title (Z-A)</SelectItem>
-              <SelectItem value="year-desc">Year (Newest First)</SelectItem>
-              <SelectItem value="year-asc">Year (Oldest First)</SelectItem>
-              <SelectItem value="updated-desc">Recently Updated</SelectItem>
-              <SelectItem value="updated-asc">Least Recently Updated</SelectItem>
-            </SelectContent>
-          </Select>
+
+        {/* View Switcher and Results Count Row */}
+        <div className="flex items-center justify-between">
+          <div className="text-sm text-muted-foreground">
+            {filteredCaseStudies.length} case stud{filteredCaseStudies.length !== 1 ? 'ies' : 'y'} found
+          </div>
+          <ViewSwitcher value={viewMode} onValueChange={handleViewModeChange} />
         </div>
       </div>
 
-      {/* Results count */}
-      <div className="text-sm text-muted-foreground">
-        {filteredCaseStudies.length} case stud{filteredCaseStudies.length !== 1 ? 'ies' : 'y'} found
-      </div>
-
-      {/* Case Studies Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {/* Case Studies Grid/List */}
+      <div className={viewMode === 'grid' 
+        ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+        : "space-y-4"
+      }>
         {filteredCaseStudies.map((caseStudy) => {
           // Combine quantum and partner companies for badges
           const companies = [
@@ -217,13 +231,20 @@ export function CaseStudiesList({ caseStudies }: CaseStudiesListProps) {
             ...(caseStudy.partner_companies || [])
           ].filter(Boolean); // Remove any null/undefined values
           
+          // Get metadata using the new system
+          const metadata = getContentMetadata('case-studies', caseStudy, viewMode);
+          
           return (
             <ContentCard
               key={caseStudy.id}
+              variant={viewMode}
               title={caseStudy.title}
               description={caseStudy.description || ''}
               badges={companies}
               href={`/case-study/${caseStudy.slug}`}
+              metadata={{
+                lastUpdated: metadata.join(' • ') || undefined
+              }}
             />
           );
         })}

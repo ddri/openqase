@@ -131,7 +131,7 @@ export default async function PersonaPage({ params }: PageParams) {
                       className="block group"
                     >
                       <div className="p-6 rounded-lg border border-border bg-card/50 transition-all duration-200 hover:bg-accent/5 hover:border-border-hover">
-                        <h3 className="text-lg font-semibold mb-2 group-hover:text-primary">
+                        <h3 className="text-lg font-semibold mb-2 group-hover:text-primary line-clamp-2">
                           {caseStudy.title}
                         </h3>
                         <p className="text-muted-foreground mb-4">
@@ -153,7 +153,7 @@ export default async function PersonaPage({ params }: PageParams) {
                 <h3 className="sidebar-title">Expertise</h3>
                 <div className="flex flex-wrap gap-2">
                   {persona.expertise.map((item: string) => (
-                    <Badge key={item} variant="outline" className="text-[14px] border-border">
+                    <Badge key={item} variant="outline" className="text-[14px] border-border break-words hyphens-auto">
                       {item}
                     </Badge>
                   ))}
@@ -184,7 +184,7 @@ export default async function PersonaPage({ params }: PageParams) {
                           <Link key={relation.industries.id} href={`/paths/industry/${relation.industries?.slug}`} passHref>
                             <Badge
                               variant="outline"
-                              className="text-[14px] border-border hover:bg-muted-foreground/20 cursor-pointer"
+                              className="text-[14px] border-border hover:bg-muted-foreground/20 cursor-pointer break-words"
                             >
                               {relation.industries.name}
                             </Badge>

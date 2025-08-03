@@ -110,9 +110,18 @@ This document catalogs all UI components in the OpenQase design system. Componen
   - Location: `src/components/ui/tag-input.tsx`
 
 #### Content Display
-- **`Content Card`** - Specialized card for content listings
+- **`Content Card`** - Specialized card for content listings with grid/list variants
   - Location: `src/components/ui/content-card.tsx`
-  - Features: Badge display, truncation, hover effects
+  - Variants: `grid` (default), `list`
+  - Features: Badge display, truncation, hover effects, metadata display
+  - Props: `variant`, `metadata` (year, companyCount, lastUpdated)
+  - Usage: Grid view for visual browsing, list view for detailed scanning
+
+- **`View Switcher`** - Toggle between grid and list view modes
+  - Location: `src/components/ui/view-switcher.tsx`
+  - Props: `value`, `onValueChange`, `className`
+  - Icons: Grid3X3 (grid), List (list)
+  - Built on: Radix UI Tabs with custom styling
 
 - **`Content List`** - List container for content items
   - Location: `src/components/ui/content-list.tsx`
@@ -276,3 +285,11 @@ This document catalogs all UI components in the OpenQase design system. Componen
 - ✅ Removed react-select dependency in favor of Radix UI Select
 - ✅ Added comprehensive component documentation
 - ✅ Improved bundle size by ~30KB while adding smooth animations
+- ✅ **NEW**: Added ContentCard variant system with grid/list layouts
+- ✅ **NEW**: Created ViewSwitcher component for content view toggling
+- ✅ **NEW**: Implemented localStorage-based view preference persistence
+- ✅ **NEW**: Extended view switcher across all content lists:
+  - CaseStudiesList with metadata display (year, company count)
+  - AlgorithmList with last updated metadata
+  - IndustryList with last updated metadata  
+  - PersonaList with last updated metadata

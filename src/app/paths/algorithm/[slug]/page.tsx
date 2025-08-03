@@ -138,7 +138,7 @@ export default async function AlgorithmPage({ params }: AlgorithmPageProps) {
                   {caseStudies.map((cs) => (
                     <Link key={cs.id} href={`/case-study/${cs.slug}`} className="block group">
                       <div className="p-6 rounded-lg border border-border bg-card/50 transition-all duration-200 hover:bg-accent/5 hover:border-border-hover">
-                        <h3 className="text-lg font-semibold mb-2 group-hover:text-primary">
+                        <h3 className="text-lg font-semibold mb-2 group-hover:text-primary line-clamp-2">
                           {cs.title}
                         </h3>
                         <p className="text-muted-foreground mb-4 line-clamp-3">

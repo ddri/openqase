@@ -124,67 +124,50 @@ export default async function HomePage() {
             </p>
           </div>
 
-          {/* Visual Knowledge Map */}
+          {/* Interactive Knowledge Map */}
           <div className="space-y-6">
-            {/* Case Studies - Full Width Green Box */}
-            <div className="bg-primary/10 rounded-lg p-6 border-2 border-primary/20 text-center">
-              <BookOpen className="w-8 h-8 text-primary mx-auto mb-2" />
-              <div className="font-semibold text-lg">Case Studies</div>
-              <div className="text-sm text-muted-foreground">Real implementations</div>
-            </div>
+            {/* Case Studies - Full Width Clickable Box */}
+            <Link href="/case-study" className="block">
+              <div className="bg-primary/10 rounded-lg p-6 border-2 border-primary/20 text-center hover:bg-primary/15 hover:border-primary/30 transition-colors cursor-pointer">
+                <BookOpen className="w-8 h-8 text-primary mx-auto mb-2" />
+                <div className="font-semibold text-lg">Case Studies</div>
+                <div className="text-sm text-muted-foreground">Real implementations</div>
+              </div>
+            </Link>
 
-            {/* Three subsections underneath */}
+            {/* Three clickable subsections underneath */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {/* Algorithms */}
-              <div className="bg-secondary/50 rounded-lg p-4 border text-center">
-                <CircuitBoard className="w-6 h-6 mx-auto mb-2 text-muted-foreground" />
-                <div className="font-medium text-sm">Algorithms</div>
-                <div className="text-xs text-muted-foreground">{algorithms.length} types</div>
-              </div>
+              <Link href="/paths/algorithm" className="block">
+                <div className="bg-secondary/50 rounded-lg p-4 border text-center hover:bg-secondary/70 hover:shadow-sm transition-all cursor-pointer">
+                  <CircuitBoard className="w-6 h-6 mx-auto mb-2 text-muted-foreground" />
+                  <div className="font-medium text-sm">Algorithms</div>
+                  <div className="text-xs text-muted-foreground">{algorithms.length} types</div>
+                </div>
+              </Link>
 
               {/* Industries */}
-              <div className="bg-secondary/50 rounded-lg p-4 border text-center">
-                <Building2 className="w-6 h-6 mx-auto mb-2 text-muted-foreground" />
-                <div className="font-medium text-sm">Industries</div>
-                <div className="text-xs text-muted-foreground">{industries.length} sectors</div>
-              </div>
+              <Link href="/paths/industry" className="block">
+                <div className="bg-secondary/50 rounded-lg p-4 border text-center hover:bg-secondary/70 hover:shadow-sm transition-all cursor-pointer">
+                  <Building2 className="w-6 h-6 mx-auto mb-2 text-muted-foreground" />
+                  <div className="font-medium text-sm">Industries</div>
+                  <div className="text-xs text-muted-foreground">{industries.length} sectors</div>
+                </div>
+              </Link>
 
               {/* Professional Roles */}
-              <div className="bg-secondary/50 rounded-lg p-4 border text-center">
-                <User className="w-6 h-6 mx-auto mb-2 text-muted-foreground" />
-                <div className="font-medium text-sm">Professional Roles</div>
-                <div className="text-xs text-muted-foreground">{personas.length} perspectives</div>
-              </div>
+              <Link href="/paths/persona" className="block">
+                <div className="bg-secondary/50 rounded-lg p-4 border text-center hover:bg-secondary/70 hover:shadow-sm transition-all cursor-pointer">
+                  <User className="w-6 h-6 mx-auto mb-2 text-muted-foreground" />
+                  <div className="font-medium text-sm">Professional Roles</div>
+                  <div className="text-xs text-muted-foreground">{personas.length} perspectives</div>
+                </div>
+              </Link>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Browse by Category - Wikipedia Style */}
-      <section className="py-16 px-4">
-        <div className="max-w-6xl mx-auto">
-          <h2 className="text-2xl font-semibold mb-8 text-center">Browse Knowledge Base</h2>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {categoryStats.map((category) => (
-              <Link key={category.title} href={category.href} className="group">
-                <Card className="h-full hover:shadow-md transition-shadow">
-                  <CardHeader className="text-center">
-                    <div className="flex justify-center mb-3">
-                      {category.icon}
-                    </div>
-                    <CardTitle className="text-lg">{category.title}</CardTitle>
-                    <div className="text-2xl font-bold text-primary">{category.count}</div>
-                    <CardDescription className="text-sm">
-                      {category.description}
-                    </CardDescription>
-                  </CardHeader>
-                </Card>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section>
 
       {/* Featured Case Studies - Primary Content */}
       <section className="py-16 px-4">
@@ -264,7 +247,7 @@ export default async function HomePage() {
                   Submit new case studies, corrections, or improvements to help the community learn
                 </p>
                 <Button variant="outline" size="sm" asChild>
-                  <Link href="/contribute">
+                  <Link href="/contact">
                     Contribute Content
                   </Link>
                 </Button>

@@ -188,7 +188,7 @@ export default async function HomePage() {
             </div>
             <Button variant="outline" asChild className="gap-2">
               <Link href="/case-study">
-                View All 25 Case Studies
+                View All Case Studies
                 <ArrowRight className="h-4 w-4" />
               </Link>
             </Button>

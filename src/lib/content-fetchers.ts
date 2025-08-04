@@ -328,6 +328,93 @@ export async function batchFetchContent<T>(
 }
 
 /**
+ * Search item interface for client-side search
+ */
+export interface SearchableItem {
+  id: string;
+  title: string;
+  description: string | null;
+  slug: string;
+  type: ContentType;
+  metadata: {
+    companies?: string[];
+    year?: number;
+    industries?: string[];
+    quantum_advantage?: string;
+    use_cases?: string[];
+  };
+}
+
+/**
+ * Fetch search-optimized data for client-side search
+ * Returns minimal data needed for fast client-side filtering
+ */
+export async function fetchSearchData(
+  options: { preview?: boolean } = {}
+): Promise<SearchableItem[]> {
+  const supabase = createServiceRoleSupabaseClient();
+  
+  const contentTypes: ContentType[] = ['case_studies', 'algorithms', 'industries', 'personas'];
+  const searchItems: SearchableItem[] = [];
+
+  await Promise.all(
+    contentTypes.map(async (contentType) => {
+      let selectFields: string;
+      
+      switch (contentType) {
+        case 'case_studies':
+          selectFields = 'id, title, description, slug, quantum_companies, partner_companies, year';
+          break;
+        case 'algorithms':
+          selectFields = 'id, name, description, slug, quantum_advantage, use_cases';
+          break;
+        case 'industries':
+        case 'personas':
+          selectFields = 'id, name, description, slug';
+          break;
+        default:
+          selectFields = 'id, title, description, slug';
+      }
+
+      let query = supabase
+        .from(contentType)
+        .select(selectFields);
+
+      if (!options.preview) {
+        query = query.eq('published', true);
+      }
+
+      const { data, error } = await query;
+      
+      if (error) {
+        console.error(`Failed to fetch search data for ${contentType}:`, error);
+        return;
+      }
+
+      if (data) {
+        const transformedItems = data.map((item: any) => ({
+          id: item.id,
+          title: item.title || item.name,
+          description: item.description,
+          slug: item.slug,
+          type: contentType,
+          metadata: {
+            ...(item.quantum_companies && { companies: [...(item.quantum_companies || []), ...(item.partner_companies || [])] }),
+            ...(item.year && { year: item.year }),
+            ...(item.quantum_advantage && { quantum_advantage: item.quantum_advantage }),
+            ...(item.use_cases && { use_cases: item.use_cases })
+          }
+        }));
+        
+        searchItems.push(...transformedItems);
+      }
+    })
+  );
+
+  return searchItems;
+}
+
+/**
  * Search content across multiple types
  * Simple implementation for basic search functionality
  */

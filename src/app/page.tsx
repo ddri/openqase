@@ -17,7 +17,7 @@ import {
 } from 'lucide-react';
 import { AutoSchema } from '@/components/AutoSchema';
 import GlobalSearch from '@/components/GlobalSearch';
-import { fetchSearchData } from '@/lib/content-fetchers';
+import { fetchSearchData, getBuildTimeContentList } from '@/lib/content-fetchers';
 
 interface CategoryStats {
   title: string;
@@ -27,40 +27,50 @@ interface CategoryStats {
   href: string;
 }
 
-const categoryStats: CategoryStats[] = [
-  {
-    title: "Case Studies",
-    count: 25,
-    description: "Real quantum implementations from leading companies",
-    icon: <BookOpen className="w-5 h-5" />,
-    href: "/case-study"
-  },
-  {
-    title: "Algorithms", 
-    count: 12,
-    description: "Quantum algorithms with business applications",
-    icon: <CircuitBoard className="w-5 h-5" />,
-    href: "/paths/algorithm"
-  },
-  {
-    title: "Industries",
-    count: 8,
-    description: "Sectors applying quantum computing",
-    icon: <Building2 className="w-5 h-5" />,
-    href: "/paths/industry"
-  },
-  {
-    title: "Professional Roles",
-    count: 6,
-    description: "Perspectives by career function",
-    icon: <User className="w-5 h-5" />,
-    href: "/paths/persona"
-  }
-];
 
 export default async function HomePage() {
   // Fetch search data for client-side search
   const searchData = await fetchSearchData();
+
+  // Get actual content counts from database
+  const [caseStudies, algorithms, industries, personas] = await Promise.all([
+    getBuildTimeContentList('case_studies'),
+    getBuildTimeContentList('algorithms'), 
+    getBuildTimeContentList('industries'),
+    getBuildTimeContentList('personas')
+  ]);
+
+  // Create dynamic category stats with real counts
+  const categoryStats: CategoryStats[] = [
+    {
+      title: "Case Studies",
+      count: caseStudies.length,
+      description: "Real quantum implementations from leading companies",
+      icon: <BookOpen className="w-5 h-5" />,
+      href: "/case-study"
+    },
+    {
+      title: "Algorithms", 
+      count: algorithms.length,
+      description: "Quantum algorithms with business applications",
+      icon: <CircuitBoard className="w-5 h-5" />,
+      href: "/paths/algorithm"
+    },
+    {
+      title: "Industries",
+      count: industries.length,
+      description: "Sectors applying quantum computing",
+      icon: <Building2 className="w-5 h-5" />,
+      href: "/paths/industry"
+    },
+    {
+      title: "Professional Roles",
+      count: personas.length,
+      description: "Perspectives by career function",
+      icon: <User className="w-5 h-5" />,
+      href: "/paths/persona"
+    }
+  ];
 
   return (
     <div className="flex flex-col">
@@ -129,21 +139,21 @@ export default async function HomePage() {
               <div className="bg-secondary/50 rounded-lg p-4 border text-center">
                 <CircuitBoard className="w-6 h-6 mx-auto mb-2 text-muted-foreground" />
                 <div className="font-medium text-sm">Algorithms</div>
-                <div className="text-xs text-muted-foreground">12 types</div>
+                <div className="text-xs text-muted-foreground">{algorithms.length} types</div>
               </div>
 
               {/* Industries */}
               <div className="bg-secondary/50 rounded-lg p-4 border text-center">
                 <Building2 className="w-6 h-6 mx-auto mb-2 text-muted-foreground" />
                 <div className="font-medium text-sm">Industries</div>
-                <div className="text-xs text-muted-foreground">8 sectors</div>
+                <div className="text-xs text-muted-foreground">{industries.length} sectors</div>
               </div>
 
               {/* Professional Roles */}
               <div className="bg-secondary/50 rounded-lg p-4 border text-center">
                 <User className="w-6 h-6 mx-auto mb-2 text-muted-foreground" />
                 <div className="font-medium text-sm">Professional Roles</div>
-                <div className="text-xs text-muted-foreground">6 perspectives</div>
+                <div className="text-xs text-muted-foreground">{personas.length} perspectives</div>
               </div>
             </div>
           </div>

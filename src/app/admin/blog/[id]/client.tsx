@@ -19,8 +19,12 @@ import { toast } from '@/components/ui/use-toast';
 import { saveBlogPost, publishBlogPost, unpublishBlogPost } from './actions';
 import { Tables } from '@/types/supabase';
 
+interface BlogPostWithRelations extends Tables<'blog_posts'> {
+  related_posts?: string[];
+}
+
 interface BlogPostFormProps {
-  blogPost: Tables<'blog_posts'> | null;
+  blogPost: BlogPostWithRelations | null;
   relatedPosts: Array<{ id: string; title: string; slug: string }>;
   isNew: boolean;
 }

@@ -73,7 +73,7 @@ export default async function EditAlgorithmPage({ params }: AlgorithmPageProps) 
       .select('case_study_id')
       .eq('algorithm_id', algorithm.id);
     if (csRelations) {
-      relatedCaseStudyIds = csRelations.map((rel) => rel.case_study_id).filter(Boolean);
+      relatedCaseStudyIds = csRelations.map((rel) => rel.case_study_id).filter((id): id is string => Boolean(id));
     }
 
     // Fetch related industry IDs
@@ -82,7 +82,7 @@ export default async function EditAlgorithmPage({ params }: AlgorithmPageProps) 
       .select('industry_id')
       .eq('algorithm_id', algorithm.id);
     if (indRelations) {
-      relatedIndustryIds = indRelations.map((rel) => rel.industry_id).filter(Boolean);
+      relatedIndustryIds = indRelations.map((rel) => rel.industry_id).filter((id): id is string => Boolean(id));
     }
 
     // Fetch related persona IDs (Note: No direct algorithm-persona relation in schema)

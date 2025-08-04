@@ -14,6 +14,7 @@ export interface GroupedSearchResults {
   algorithms: SearchResult[];
   industries: SearchResult[];
   personas: SearchResult[];
+  blog_posts: SearchResult[];
 }
 
 /**
@@ -76,7 +77,8 @@ export function useGlobalSearch(searchData: SearchableItem[]) {
         case_studies: [],
         algorithms: [],
         industries: [],
-        personas: []
+        personas: [],
+        blog_posts: []
       } as GroupedSearchResults;
     }
 
@@ -98,7 +100,8 @@ export function useGlobalSearch(searchData: SearchableItem[]) {
       case_studies: [],
       algorithms: [],
       industries: [],
-      personas: []
+      personas: [],
+      blog_posts: []
     };
 
     results.forEach(result => {

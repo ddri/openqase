@@ -54,8 +54,8 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
         .in('id', relatedPostIds);
       
       if (relatedPosts) {
-        // Add related_posts property
-        (blogPost as BlogPostWithRelated).related_posts = relatedPosts;
+        // Add related_posts property (store IDs, not full objects)
+        (blogPost as BlogPostWithRelated).related_posts = relatedPosts.map(post => post.id);
       }
     } else {
       // Add related_posts property

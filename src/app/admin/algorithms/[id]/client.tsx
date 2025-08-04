@@ -18,8 +18,14 @@ import { toast } from '@/components/ui/use-toast';
 import { saveAlgorithm, publishAlgorithm, unpublishAlgorithm } from './actions';
 import { Tables } from '@/types/supabase';
 
+interface AlgorithmWithRelations extends Tables<'algorithms'> {
+  related_case_studies?: string[];
+  related_industries?: string[];
+  related_personas?: string[];
+}
+
 interface AlgorithmFormProps {
-  algorithm: Tables<'algorithms'> | null;
+  algorithm: AlgorithmWithRelations | null;
   caseStudies: Array<{ id: string; title: string; slug: string }>;
   industries: Array<{ id: string; name: string; slug: string }>;
   personas: Array<{ id: string; name: string; slug: string }>;

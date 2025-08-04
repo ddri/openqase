@@ -1,6 +1,5 @@
 'use client'
 
-import { Button } from "@/components/ui/button"
 import {
   Card,
   CardContent,
@@ -8,53 +7,20 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Textarea } from "@/components/ui/textarea"
-import { Github, Twitter, Linkedin, MessageCircle } from 'lucide-react'
+import { Github, Twitter } from 'lucide-react'
 import Link from 'next/link'
-import { useState } from 'react'
-import { useToast } from "@/components/ui/use-toast"
+import { useEffect } from 'react'
 
 export default function ContactPage() {
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const { toast } = useToast()
-
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    setIsSubmitting(true)
-
-    try {
-      const formData = new FormData(e.currentTarget)
-      const response = await fetch('https://formspree.io/f/mdkekzlb', {
-        method: 'POST',
-        body: formData,
-        headers: {
-          'Accept': 'application/json'
-        }
-      })
-
-      if (response.ok) {
-        toast({
-          title: "Success",
-          description: "Thank you for your message. We'll get back to you soon.",
-          duration: 3000,
-        })
-        // Reset the form
-        ;(e.target as HTMLFormElement).reset()
-      } else {
-        throw new Error('Failed to send message')
-      }
-    } catch (error) {
-      toast({
-        variant: "destructive",
-        title: "Error",
-        description: "Failed to send message. Please try again later.",
-        duration: 5000,
-      })
-    } finally {
-      setIsSubmitting(false)
+  useEffect(() => {
+    // Load Tally script if not already loaded
+    if (!document.querySelector('script[src="https://tally.so/widgets/embed.js"]')) {
+      const script = document.createElement('script');
+      script.src = 'https://tally.so/widgets/embed.js';
+      script.async = true;
+      document.head.appendChild(script);
     }
-  }
+  }, []);
 
   return (
     <main className="min-h-screen">
@@ -71,8 +37,8 @@ export default function ContactPage() {
         </div>
 
         {/* Single Column Layout */}
-        <div className="max-w-2xl mx-auto space-y-8">
-          {/* Contact Form */}
+        <div className="max-w-4xl mx-auto space-y-8">
+          {/* Embedded Tally Form */}
           <Card>
             <CardHeader className="space-y-2">
               <CardTitle className="text-xl">Send us a Message</CardTitle>
@@ -81,64 +47,17 @@ export default function ContactPage() {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
-                  <div className="space-y-2">
-                    <label htmlFor="name" className="text-sm font-medium">
-                      Name
-                    </label>
-                    <Input
-                      id="name"
-                      name="name"
-                      placeholder="Your name"
-                      required
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <label htmlFor="email" className="text-sm font-medium">
-                      Email
-                    </label>
-                    <Input
-                      id="email"
-                      name="email"
-                      type="email"
-                      placeholder="your@email.com"
-                      required
-                    />
-                  </div>
-                </div>
-                <div className="space-y-2">
-                  <label htmlFor="subject" className="text-sm font-medium">
-                    Subject
-                  </label>
-                  <Input
-                    id="subject"
-                    name="subject"
-                    placeholder="What's this about?"
-                    required
-                  />
-                </div>
-                <div className="space-y-2">
-                  <label htmlFor="message" className="text-sm font-medium">
-                    Message
-                  </label>
-                  <Textarea
-                    id="message"
-                    name="message"
-                    placeholder="Your message..."
-                    className="min-h-[150px] resize-y"
-                    required
-                  />
-                </div>
-                <Button 
-                  type="submit" 
-                  className="w-full sm:w-auto"
-                  size="lg"
-                  disabled={isSubmitting}
-                >
-                  {isSubmitting ? 'Sending...' : 'Send Message'}
-                </Button>
-              </form>
+              <iframe
+                data-tally-src="https://tally.so/embed/wap82b?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1"
+                loading="lazy"
+                width="100%"
+                height="400"
+                frameBorder="0"
+                marginHeight={0}
+                marginWidth={0}
+                title="Contact Form"
+                className="rounded-lg"
+              />
             </CardContent>
           </Card>
 

@@ -328,26 +328,30 @@ export async function batchFetchContent<T>(
 }
 
 /**
- * Search item interface for client-side search
+ * Optimized search item interface for client-side search
+ * Streamlined for performance while preserving key search functionality
  */
 export interface SearchableItem {
   id: string;
   title: string;
-  description: string | null;
+  description: string | null; // Truncated to 150 chars
   slug: string;
   type: ContentType;
   metadata: {
-    companies?: string[];
+    companies?: string[]; // Limited to first 2 companies
     year?: number;
-    industries?: string[];
-    quantum_advantage?: string;
-    use_cases?: string[];
+    quantum_advantage?: string; // For algorithms only
+    use_cases?: string[]; // Limited to first 2 use cases
   };
 }
 
 /**
  * Fetch search-optimized data for client-side search
- * Returns minimal data needed for fast client-side filtering
+ * Returns streamlined data for fast loading and searching:
+ * - Truncated descriptions (150 chars)
+ * - Limited companies (first 2)
+ * - Limited use cases (first 2) 
+ * - Published content only
  */
 export async function fetchSearchData(
   options: { preview?: boolean } = {}
@@ -356,6 +360,18 @@ export async function fetchSearchData(
   
   const contentTypes: ContentType[] = ['case_studies', 'algorithms', 'industries', 'personas'];
   const searchItems: SearchableItem[] = [];
+
+  // Helper function to truncate text
+  const truncateText = (text: string | null, maxLength: number = 150): string | null => {
+    if (!text) return null;
+    return text.length > maxLength ? text.substring(0, maxLength) + '...' : text;
+  };
+  
+  // Helper function to limit array size
+  const limitArray = (arr: any[] | null, maxItems: number = 2): any[] => {
+    if (!arr || !Array.isArray(arr)) return [];
+    return arr.slice(0, maxItems);
+  };
 
   await Promise.all(
     contentTypes.map(async (contentType) => {
@@ -395,14 +411,18 @@ export async function fetchSearchData(
         const transformedItems = data.map((item: any) => ({
           id: item.id,
           title: item.title || item.name,
-          description: item.description,
+          description: truncateText(item.description, 150), // Truncate descriptions
           slug: item.slug,
           type: contentType,
           metadata: {
-            ...(item.quantum_companies && { companies: [...(item.quantum_companies || []), ...(item.partner_companies || [])] }),
+            // Combine and limit companies to first 2
+            ...(item.quantum_companies && { 
+              companies: limitArray([...(item.quantum_companies || []), ...(item.partner_companies || [])], 2) 
+            }),
             ...(item.year && { year: item.year }),
             ...(item.quantum_advantage && { quantum_advantage: item.quantum_advantage }),
-            ...(item.use_cases && { use_cases: item.use_cases })
+            // Limit use cases to first 2
+            ...(item.use_cases && { use_cases: limitArray(item.use_cases, 2) })
           }
         }));
         

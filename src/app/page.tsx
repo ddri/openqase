@@ -16,8 +16,8 @@ import {
   ExternalLink
 } from 'lucide-react';
 import { AutoSchema } from '@/components/AutoSchema';
-import LazyGlobalSearch from '@/components/LazyGlobalSearch';
-import { getBuildTimeContentList } from '@/lib/content-fetchers';
+import GlobalSearch from '@/components/GlobalSearch';
+import { getBuildTimeContentList, fetchSearchData } from '@/lib/content-fetchers';
 
 interface CategoryStats {
   title: string;
@@ -29,7 +29,8 @@ interface CategoryStats {
 
 
 export default async function HomePage() {
-  // Note: Search data now loads lazily when user interacts with search
+  // Fetch optimized search data (streamlined payload for performance)
+  const searchData = await fetchSearchData();
 
   // Get actual content counts from database
   const [caseStudies, algorithms, industries, personas] = await Promise.all([
@@ -93,7 +94,7 @@ export default async function HomePage() {
 
           {/* Search Bar */}
           <div className="mb-12">
-            <LazyGlobalSearch className="mx-auto" />
+            <GlobalSearch searchData={searchData} className="mx-auto" />
           </div>
 
           {/* Quick Browse Categories */}

@@ -2,6 +2,8 @@
 
 OpenQase uses a **unified API architecture** designed for optimal performance and consistency. This guide explains how to fetch and manage data effectively.
 
+> **📖 For comprehensive documentation on the unified content fetching system, see [Unified Content Fetching](./unified-content-fetching.md)**
+
 ## Architecture Overview
 
 Our API uses a **single, consistent approach**:
@@ -23,33 +25,34 @@ graph TB
 ## Data Access Patterns
 
 ### ✅ Server-side Pages (Recommended)
-Use direct Supabase queries for:
+Use the unified content fetching system for:
 - **Individual content pages** (`/algorithm/[slug]`, `/case-study/[slug]`, etc.)
-- **Admin pages** with immediate data needs
+- **Listing pages** with relationships
 - **Static generation** and **server-side rendering**
 
 **Benefits:**
-- Fastest possible performance (direct database access)
-- Automatic caching and optimization
-- SEO-friendly
+- Single-query efficiency (eliminates N+1 query problems)
+- Automatic relationship loading
+- Static generation support
+- Consistent API across all content types
 
 **Example:**
 ```typescript
 // app/algorithm/[slug]/page.tsx
-import { createServerSupabaseClient } from '@/lib/supabase-server';
+import { getStaticContentWithRelationships } from '@/lib/content-fetchers';
+import { notFound } from 'next/navigation';
 
-export default async function AlgorithmPage({ params }) {
-  const supabase = await createServerSupabaseClient();
+export default async function AlgorithmPage({ params }: { params: { slug: string } }) {
+  const algorithm = await getStaticContentWithRelationships('algorithms', params.slug);
   
-  const { data: algorithm } = await supabase
-    .from('algorithms')
-    .select(`
-      *,
-      algorithm_industry_relations(industries(id, name, slug)),
-      persona_algorithm_relations(personas(id, name, slug))
-    `)
-    .eq('slug', params.slug)
-    .single();
+  if (!algorithm) {
+    notFound();
+  }
+  
+  // algorithm automatically includes all relationships:
+  // - algorithm_industry_relations(industries(id, name, slug))
+  // - persona_algorithm_relations(personas(id, name, slug))
+  // - algorithm_case_study_relations(case_studies(...))
 
   return <div>{algorithm.name}</div>;
 }

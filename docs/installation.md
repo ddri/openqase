@@ -15,7 +15,7 @@ Complete guide to setting up OpenQase locally for development.
 ### Option A: Automated Setup (Recommended)
 ```bash
 # 1. Clone and install
-git clone <repository-url>
+git clone https://github.com/ddri/openqase.git
 cd openqase
 npm install
 
@@ -33,7 +33,7 @@ npm run dev
 ### Option B: Manual Setup
 ```bash
 # 1. Clone and install
-git clone <repository-url>
+git clone https://github.com/ddri/openqase.git
 cd openqase
 npm install
 
@@ -53,7 +53,7 @@ npm run dev
 ### 1. Clone Repository
 
 ```bash
-git clone <repository-url>
+git clone https://github.com/ddri/openqase.git
 cd openqase
 npm install
 ```

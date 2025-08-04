@@ -13,7 +13,7 @@ This guide provides quick reference for developers working with the new unified 
 ### ❌ Don't Use Unified Content Fetching For:
 - **Admin pages** (use direct Supabase clients)
 - **User-specific content** (use Server Components)
-- **Real-time features** (use TanStack Query)
+- **Real-time features** (use native React state with hooks)
 - **Complex filtering** (use API routes)
 
 ## Common Patterns

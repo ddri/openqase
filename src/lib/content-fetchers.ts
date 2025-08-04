@@ -414,6 +414,7 @@ export async function fetchSearchData(
   return searchItems;
 }
 
+
 /**
  * Search content across multiple types
  * Simple implementation for basic search functionality

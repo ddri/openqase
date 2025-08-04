@@ -396,6 +396,7 @@ export function CaseStudyForm({ caseStudy, algorithms, industries, personas, isN
                   The year when this case study was conducted or published (1990-2030)
                 </p>
               </div>
+              
             </div>
           </CardContent>
         </Card>

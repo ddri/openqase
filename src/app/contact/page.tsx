@@ -9,43 +9,12 @@ import {
 } from "@/components/ui/card"
 import { Github, Twitter } from 'lucide-react'
 import Link from 'next/link'
-import { useEffect } from 'react'
-
-declare global {
-  interface Window {
-    Tally?: {
-      loadEmbeds: () => void;
-      openPopup: (formId: string, options?: any) => void;
-    };
-  }
-}
+import { Button } from "@/components/ui/button"
 
 export default function ContactPage() {
-  useEffect(() => {
-    // Tally embed loading script
-    const loadTally = () => {
-      if (typeof window.Tally !== 'undefined') {
-        window.Tally.loadEmbeds();
-      } else {
-        document.querySelectorAll('iframe[data-tally-src]:not([src])').forEach((iframe) => {
-          const iframeElement = iframe as HTMLIFrameElement;
-          if (iframeElement.dataset.tallySrc) {
-            iframeElement.src = iframeElement.dataset.tallySrc;
-          }
-        });
-      }
-    };
-
-    if (typeof window.Tally !== 'undefined') {
-      loadTally();
-    } else if (!document.querySelector('script[src="https://tally.so/widgets/embed.js"]')) {
-      const script = document.createElement('script');
-      script.src = 'https://tally.so/widgets/embed.js';
-      script.onload = loadTally;
-      script.onerror = loadTally;
-      document.body.appendChild(script);
-    }
-  }, []);
+  const openTallyForm = () => {
+    window.open('https://tally.so/r/wap82b', '_blank', 'width=700,height=800,scrollbars=yes,resizable=yes');
+  };
 
   return (
     <main className="min-h-screen">
@@ -63,26 +32,22 @@ export default function ContactPage() {
 
         {/* Single Column Layout */}
         <div className="max-w-4xl mx-auto space-y-8">
-          {/* Embedded Tally Form */}
+          {/* Contact Form */}
           <Card>
             <CardHeader className="space-y-2">
               <CardTitle className="text-xl">Send us a Message</CardTitle>
               <CardDescription>
-                Fill out the form below and we'll get back to you as soon as possible.
+                Fill out our contact form and we'll get back to you as soon as possible.
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <iframe
-                data-tally-src="https://tally.so/embed/wap82b?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1"
-                loading="lazy"
-                width="100%"
-                height="494"
-                frameBorder="0"
-                marginHeight={0}
-                marginWidth={0}
-                title="Get in touch with OpenQase"
-                className="rounded-lg"
-              />
+              <Button 
+                onClick={openTallyForm}
+                className="w-full py-6 text-lg"
+                size="lg"
+              >
+                Open Contact Form
+              </Button>
             </CardContent>
           </Card>
 

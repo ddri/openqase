@@ -11,14 +11,39 @@ import { Github, Twitter } from 'lucide-react'
 import Link from 'next/link'
 import { useEffect } from 'react'
 
+declare global {
+  interface Window {
+    Tally?: {
+      loadEmbeds: () => void;
+      openPopup: (formId: string, options?: any) => void;
+    };
+  }
+}
+
 export default function ContactPage() {
   useEffect(() => {
-    // Load Tally script if not already loaded
-    if (!document.querySelector('script[src="https://tally.so/widgets/embed.js"]')) {
+    // Tally embed loading script
+    const loadTally = () => {
+      if (typeof window.Tally !== 'undefined') {
+        window.Tally.loadEmbeds();
+      } else {
+        document.querySelectorAll('iframe[data-tally-src]:not([src])').forEach((iframe) => {
+          const iframeElement = iframe as HTMLIFrameElement;
+          if (iframeElement.dataset.tallySrc) {
+            iframeElement.src = iframeElement.dataset.tallySrc;
+          }
+        });
+      }
+    };
+
+    if (typeof window.Tally !== 'undefined') {
+      loadTally();
+    } else if (!document.querySelector('script[src="https://tally.so/widgets/embed.js"]')) {
       const script = document.createElement('script');
       script.src = 'https://tally.so/widgets/embed.js';
-      script.async = true;
-      document.head.appendChild(script);
+      script.onload = loadTally;
+      script.onerror = loadTally;
+      document.body.appendChild(script);
     }
   }, []);
 
@@ -51,11 +76,11 @@ export default function ContactPage() {
                 data-tally-src="https://tally.so/embed/wap82b?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1"
                 loading="lazy"
                 width="100%"
-                height="400"
+                height="494"
                 frameBorder="0"
                 marginHeight={0}
                 marginWidth={0}
-                title="Contact Form"
+                title="Get in touch with OpenQase"
                 className="rounded-lg"
               />
             </CardContent>

@@ -12,6 +12,7 @@ interface TallyModalProps {
 declare global {
   interface Window {
     Tally?: {
+      loadEmbeds: () => void;
       openPopup: (formId: string, options?: any) => void;
     };
   }

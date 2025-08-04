@@ -230,11 +230,11 @@ export default async function HomePage() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="text-center">
-              <div className="bg-background rounded-lg p-6 border">
+            <div className="text-center h-full">
+              <div className="bg-background rounded-lg p-6 border h-full flex flex-col">
                 <Github className="w-8 h-8 mx-auto mb-4 text-muted-foreground" />
                 <h3 className="font-semibold mb-2">Open Source</h3>
-                <p className="text-sm text-muted-foreground mb-4">
+                <p className="text-sm text-muted-foreground mb-4 flex-grow">
                   All code and content freely available on GitHub under open source license
                 </p>
                 <Button variant="outline" size="sm" asChild>
@@ -246,11 +246,11 @@ export default async function HomePage() {
               </div>
             </div>
 
-            <div className="text-center">
-              <div className="bg-background rounded-lg p-6 border">
+            <div className="text-center h-full">
+              <div className="bg-background rounded-lg p-6 border h-full flex flex-col">
                 <Users className="w-8 h-8 mx-auto mb-4 text-muted-foreground" />
                 <h3 className="font-semibold mb-2">Community Contributions</h3>
-                <p className="text-sm text-muted-foreground mb-4">
+                <p className="text-sm text-muted-foreground mb-4 flex-grow">
                   Submit new case studies, corrections, or improvements to help the community learn
                 </p>
                 <Button variant="outline" size="sm" asChild>
@@ -261,11 +261,11 @@ export default async function HomePage() {
               </div>
             </div>
 
-            <div className="text-center">
-              <div className="bg-background rounded-lg p-6 border">
+            <div className="text-center h-full">
+              <div className="bg-background rounded-lg p-6 border h-full flex flex-col">
                 <Database className="w-8 h-8 mx-auto mb-4 text-muted-foreground" />
                 <h3 className="font-semibold mb-2">Free Access</h3>
-                <p className="text-sm text-muted-foreground mb-4">
+                <p className="text-sm text-muted-foreground mb-4 flex-grow">
                   No paywalls, no subscriptions. All quantum case studies available to everyone
                 </p>
                 <Button variant="outline" size="sm" asChild>

@@ -32,12 +32,12 @@ export default async function HomePage() {
   // Fetch optimized search data (streamlined payload for performance)
   const searchData = await fetchSearchData();
 
-  // Get actual content counts from database
+  // Get actual content counts from database (published only)
   const [caseStudies, algorithms, industries, personas] = await Promise.all([
-    getBuildTimeContentList('case_studies'),
-    getBuildTimeContentList('algorithms'), 
-    getBuildTimeContentList('industries'),
-    getBuildTimeContentList('personas')
+    getBuildTimeContentList('case_studies', { filters: { published: true } }),
+    getBuildTimeContentList('algorithms', { filters: { published: true } }), 
+    getBuildTimeContentList('industries', { filters: { published: true } }),
+    getBuildTimeContentList('personas', { filters: { published: true } })
   ]);
 
   // Create dynamic category stats with real counts

@@ -15,18 +15,18 @@ const RELATIONSHIP_MAPS: Record<ContentType, string> = {
     *,
     algorithm_industry_relations(industries(id, name, slug)),
     persona_algorithm_relations(personas(id, name, slug)),
-    algorithm_case_study_relations(case_studies(id, title, slug, description, published_at))
+    algorithm_case_study_relations(case_studies(id, title, slug, description, published_at, published))
   `,
   personas: `
     *,
     persona_industry_relations(industries(id, name, slug)),
     persona_algorithm_relations(algorithms(id, name, slug)),
-    case_study_persona_relations(case_studies(id, title, slug, description, published_at))
+    case_study_persona_relations(case_studies(id, title, slug, description, published_at, published))
   `,
   industries: `
     *,
     algorithm_industry_relations(algorithms(id, name, slug, use_cases)),
-    case_study_industry_relations(case_studies(id, title, slug, description, published_at)),
+    case_study_industry_relations(case_studies(id, title, slug, description, published_at, published)),
     persona_industry_relations(personas(id, name, slug))
   `,
   blog_posts: `
@@ -60,6 +60,19 @@ export async function getStaticContentWithRelationships<T>(
   // Only filter by published status if not in preview mode
   if (!options.preview) {
     query = query.eq('published', true); // Re-enabled for runtime
+    
+    // Filter related case studies to only show published ones
+    switch (contentType) {
+      case 'algorithms':
+        query = query.eq('algorithm_case_study_relations.case_studies.published', true);
+        break;
+      case 'personas':
+        query = query.eq('case_study_persona_relations.case_studies.published', true);
+        break;
+      case 'industries':
+        query = query.eq('case_study_industry_relations.case_studies.published', true);
+        break;
+    }
   }
 
   const { data, error } = await query.single();

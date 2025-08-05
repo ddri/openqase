@@ -18,6 +18,8 @@ import {
 import { AutoSchema } from '@/components/AutoSchema';
 import GlobalSearch from '@/components/GlobalSearch';
 import { getBuildTimeContentList, fetchSearchData } from '@/lib/content-fetchers';
+import { AnimatedBackground, SectionDivider } from '@/components/ui/animated-background';
+import { KnowledgeConnectors } from '@/components/ui/knowledge-connectors';
 
 interface CategoryStats {
   title: string;
@@ -78,99 +80,150 @@ export default async function HomePage() {
       <AutoSchema type="faq" />
       
       {/* Resource-Focused Hero Section */}
-      <section className="py-16 px-4 bg-background">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-12">
-            <h1 className="text-4xl md:text-5xl font-bold tracking-tight mb-4">
-              OpenQase
-            </h1>
-            <p className="text-xl md:text-2xl text-muted-foreground mb-2">
-              Open Source Quantum Computing Case Studies
-            </p>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              A free, community-driven collection of real quantum computing implementations from industry leaders
-            </p>
+      <AnimatedBackground variant="particles" className="relative">
+        <section className="relative py-24 px-4 min-h-[600px] flex items-center">
+          {/* Dynamic floating orbs */}
+          <div className="absolute inset-0 overflow-hidden">
+            <div 
+              className="floating-orb w-64 h-64 bg-gradient-to-br from-[hsl(var(--purple-vivid))]/30 to-primary/20 glow-pulse"
+              style={{ 
+                left: '5%',
+                top: '20%',
+                animation: 'float-up 25s infinite ease-in-out',
+              }}
+            />
+            <div 
+              className="floating-orb w-96 h-96 bg-gradient-to-tr from-[hsl(var(--yellow-sharp))]/20 to-transparent"
+              style={{ 
+                right: '10%',
+                top: '60%',
+                animation: 'float-diagonal 30s infinite ease-in-out',
+                animationDelay: '10s'
+              }}
+            />
+            <div 
+              className="floating-orb w-48 h-48 bg-gradient-to-bl from-primary/25 to-[hsl(var(--blue-vivid))]/15"
+              style={{ 
+                left: '70%',
+                top: '10%',
+                animation: 'float-up 20s infinite ease-in-out',
+                animationDelay: '5s'
+              }}
+            />
           </div>
+          <div className="max-w-6xl mx-auto w-full relative z-10">
+            <div className="text-center mb-12">
+              <h1 className="text-6xl md:text-7xl lg:text-8xl font-bold tracking-tight mb-6">
+                <span className="bg-clip-text text-transparent bg-gradient-to-r from-purple-vivid via-primary to-yellow-sharp animate-gradient-shift">
+                  OpenQase
+                </span>
+              </h1>
+              <p className="text-xl md:text-2xl text-muted-foreground mb-2">
+                Open Source Quantum Computing Case Studies
+              </p>
+              <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+                A free, community-driven collection of real quantum computing implementations from industry leaders
+              </p>
+            </div>
 
-          {/* Search Bar */}
-          <div className="mb-12">
-            <GlobalSearch searchData={searchData} className="mx-auto" />
-          </div>
+            {/* Search Bar with glass effect */}
+            <div className="mb-12">
+              <div className="glass-premium rounded-xl p-1 max-w-2xl mx-auto">
+                <GlobalSearch searchData={searchData} className="w-full" />
+              </div>
+            </div>
 
-          {/* Quick Browse Categories */}
-          <div className="flex flex-wrap justify-center gap-3 mb-12">
-            <span className="text-sm text-muted-foreground">Browse by:</span>
-            {categoryStats.map((category) => (
-              <Link 
-                key={category.title}
-                href={category.href}
-                className="inline-flex items-center gap-1 px-3 py-1 bg-secondary/50 hover:bg-secondary rounded-full text-sm transition-colors"
-              >
-                {category.icon}
-                {category.title}
-              </Link>
-            ))}
+            {/* Quick Browse Categories */}
+            <div className="flex flex-wrap justify-center gap-3">
+              <span className="text-sm text-muted-foreground">Browse by:</span>
+              {categoryStats.map((category) => (
+                <Link 
+                  key={category.title}
+                  href={category.href}
+                  className="inline-flex items-center gap-1 px-4 py-2 bg-secondary/30 backdrop-blur-sm hover:bg-secondary/50 hover:border-[hsl(var(--yellow-sharp))]/50 border border-transparent rounded-full text-sm transition-all duration-200"
+                >
+                  {category.icon}
+                  {category.title}
+                </Link>
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      </AnimatedBackground>
+      
+      <SectionDivider variant="wave" />
 
       {/* Knowledge Map - Visual Cross-Reference */}
-      <section className="py-16 px-4 bg-muted/30">
-        <div className="max-w-6xl mx-auto">
+      <section className="py-20 px-4 bg-gradient-to-b from-background to-surface-secondary relative overflow-hidden">
+        {/* Subtle animated mesh background */}
+        <div className="absolute inset-0 mesh-animated opacity-50">
+          <div className="absolute inset-0 bg-gradient-mesh" />
+        </div>
+        <div className="max-w-6xl mx-auto relative z-10">
           <div className="text-center mb-12">
-            <h2 className="text-2xl font-semibold mb-4">How OpenQase Organizes Knowledge</h2>
+            <h2 className="text-3xl font-semibold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-foreground to-primary">How OpenQase Organizes Knowledge</h2>
             <p className="text-muted-foreground">
               Every case study is cross-referenced by algorithm, industry, and professional perspective
             </p>
           </div>
 
           {/* Interactive Knowledge Map */}
-          <div className="space-y-6">
+          <div className="relative space-y-6">
+            {/* SVG Connector Lines */}
+            <KnowledgeConnectors />
+            
             {/* Case Studies - Full Width Clickable Box */}
-            <Link href="/case-study" className="block">
-              <div className="bg-primary/10 rounded-lg p-6 border-2 border-primary/20 text-center hover:bg-primary/15 hover:border-primary/30 transition-colors cursor-pointer">
-                <BookOpen className="w-8 h-8 text-primary mx-auto mb-2" />
-                <div className="font-semibold text-lg">Case Studies</div>
-                <div className="text-sm text-muted-foreground">Real implementations</div>
+            <Link href="/case-study" className="block group relative z-10">
+              <div className="relative overflow-hidden glass-premium p-8 text-center hover:scale-[1.02] transition-all duration-300 cursor-pointer">
+                <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-purple-vivid/10 to-transparent opacity-50" />
+                <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-primary/5 to-purple-vivid/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                <BookOpen className="w-12 h-12 text-primary mx-auto mb-3 relative z-10 drop-shadow-lg" />
+                <div className="font-bold text-2xl mb-1 relative z-10 text-foreground">Case Studies</div>
+                <div className="text-sm text-muted-foreground relative z-10">Real implementations</div>
+                <div className="absolute -bottom-2 -right-2 w-32 h-32 bg-gradient-to-br from-primary/20 to-purple-vivid/20 rounded-full blur-3xl opacity-50 group-hover:opacity-70 transition-opacity" />
               </div>
             </Link>
 
             {/* Three clickable subsections underneath */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 relative z-10 mt-16">
               {/* Algorithms */}
-              <Link href="/paths/algorithm" className="block">
-                <div className="bg-secondary/50 rounded-lg p-4 border text-center hover:bg-secondary/70 hover:shadow-sm transition-all cursor-pointer">
-                  <CircuitBoard className="w-6 h-6 mx-auto mb-2 text-muted-foreground" />
-                  <div className="font-medium text-sm">Algorithms</div>
-                  <div className="text-xs text-muted-foreground">{algorithms.length} types</div>
+              <Link href="/paths/algorithm" className="block group">
+                <div className="glass-premium p-6 text-center hover:scale-105 transition-all duration-300 cursor-pointer relative overflow-hidden">
+                  <div className="absolute inset-0 bg-gradient-to-br from-blue-vivid/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  <CircuitBoard className="w-8 h-8 mx-auto mb-2 text-primary relative z-10 group-hover:text-[hsl(var(--blue-vivid))] transition-colors" />
+                  <div className="font-semibold text-base relative z-10">Algorithms</div>
+                  <div className="text-sm text-muted-foreground relative z-10">{algorithms.length} types</div>
                 </div>
               </Link>
 
               {/* Industries */}
-              <Link href="/paths/industry" className="block">
-                <div className="bg-secondary/50 rounded-lg p-4 border text-center hover:bg-secondary/70 hover:shadow-sm transition-all cursor-pointer">
-                  <Building2 className="w-6 h-6 mx-auto mb-2 text-muted-foreground" />
-                  <div className="font-medium text-sm">Industries</div>
-                  <div className="text-xs text-muted-foreground">{industries.length} sectors</div>
+              <Link href="/paths/industry" className="block group">
+                <div className="glass-premium p-6 text-center hover:scale-105 transition-all duration-300 cursor-pointer relative overflow-hidden">
+                  <div className="absolute inset-0 bg-gradient-to-br from-purple-vivid/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  <Building2 className="w-8 h-8 mx-auto mb-2 text-primary relative z-10 group-hover:text-[hsl(var(--purple-vivid))] transition-colors" />
+                  <div className="font-semibold text-base relative z-10">Industries</div>
+                  <div className="text-sm text-muted-foreground relative z-10">{industries.length} sectors</div>
                 </div>
               </Link>
 
               {/* Professional Roles */}
-              <Link href="/paths/persona" className="block">
-                <div className="bg-secondary/50 rounded-lg p-4 border text-center hover:bg-secondary/70 hover:shadow-sm transition-all cursor-pointer">
-                  <User className="w-6 h-6 mx-auto mb-2 text-muted-foreground" />
-                  <div className="font-medium text-sm">Professional Roles</div>
-                  <div className="text-xs text-muted-foreground">{personas.length} perspectives</div>
+              <Link href="/paths/persona" className="block group">
+                <div className="glass-premium p-6 text-center hover:scale-105 transition-all duration-300 cursor-pointer relative overflow-hidden">
+                  <div className="absolute inset-0 bg-gradient-to-br from-yellow-sharp/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  <User className="w-8 h-8 mx-auto mb-2 text-primary relative z-10 group-hover:text-[hsl(var(--yellow-sharp))] transition-colors" />
+                  <div className="font-semibold text-base relative z-10">Professional Roles</div>
+                  <div className="text-sm text-muted-foreground relative z-10">{personas.length} perspectives</div>
                 </div>
               </Link>
             </div>
           </div>
         </div>
       </section>
-
+      
+      <SectionDivider variant="angle" />
 
       {/* Featured Case Studies - Primary Content */}
-      <section className="py-16 px-4">
+      <AnimatedBackground variant="mesh" className="py-20 px-4 bg-surface-primary">
         <div className="max-w-7xl mx-auto">
           <div className="flex justify-between items-center mb-12">
             <div>
@@ -210,11 +263,15 @@ export default async function HomePage() {
             />
           </div>
         </div>
-      </section>
+      </AnimatedBackground>
 
       {/* Community & Open Source Section */}
-      <section className="py-16 px-4 bg-muted/30">
-        <div className="max-w-6xl mx-auto">
+      <section className="py-20 px-4 bg-gradient-to-b from-surface-secondary to-background relative overflow-hidden">
+        {/* Animated background pattern */}
+        <div className="absolute inset-0 opacity-30">
+          <div className="absolute inset-0 bg-gradient-to-br from-purple-vivid/10 via-transparent to-yellow-sharp/10 animated-gradient" />
+        </div>
+        <div className="max-w-6xl mx-auto relative z-10">
           <div className="text-center mb-12">
             <h2 className="text-2xl font-semibold mb-4">Open Source & Community Driven</h2>
             <p className="text-muted-foreground max-w-2xl mx-auto">

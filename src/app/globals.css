@@ -742,9 +742,9 @@
                 0 10px 20px -15px rgba(6, 182, 212, 0.2);
   }
   
-  .gradient-shadow-purple {
-    box-shadow: 0 10px 30px -10px rgba(139, 92, 246, 0.3),
-                0 10px 20px -15px rgba(59, 130, 246, 0.2);
+  .gradient-shadow-gold {
+    box-shadow: 0 10px 30px -10px rgba(255, 208, 0, 0.3),
+                0 10px 20px -15px rgba(244, 208, 63, 0.2);
   }
   
   /* Organic Shapes */

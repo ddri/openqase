@@ -21,6 +21,9 @@ import { getBuildTimeContentList, fetchSearchData } from '@/lib/content-fetchers
 import type { BlogPost } from '@/lib/types';
 import { InteractiveKnowledgeMap } from '@/components/ui/interactive-knowledge-map';
 
+// Force this page to be statically generated at build time
+export const dynamic = 'force-static'
+
 interface CategoryStats {
   title: string;
   count: number;

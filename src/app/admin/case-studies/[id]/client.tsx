@@ -10,6 +10,7 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { ContentCompleteness } from '@/components/admin/ContentCompleteness';
 import { PublishButton } from '@/components/admin/PublishButton';
+import { Checkbox } from '@/components/ui/checkbox';
 import { TagInput } from '@/components/ui/tag-input';
 import { ResourceLinksEditor } from '@/components/admin/ResourceLinksEditor';
 import { createContentValidationRules, calculateCompletionPercentage, validateFormValues } from '@/utils/form-validation';
@@ -54,6 +55,7 @@ export function CaseStudyForm({ caseStudy, algorithms, industries, personas, isN
     industries: isNew ? [] : (caseStudy?.industries || []),
     personas: isNew ? [] : (caseStudy?.personas || []),
     published: isNew ? false : caseStudy?.published || false,
+    featured: isNew ? false : caseStudy?.featured || false,
     academic_references: isNew ? '' : caseStudy?.academic_references || '',
     resource_links: isNew ? [] : caseStudy?.resource_links || [],
     year: isNew ? new Date().getFullYear() : caseStudy?.year || new Date().getFullYear(),
@@ -328,6 +330,26 @@ export function CaseStudyForm({ caseStudy, algorithms, industries, personas, isN
               onTabChange={(tab: string) => {}}
               getTabLabel={(tab: string) => tab}
             />
+
+            {/* Featured Checkbox */}
+            <div className="flex items-center space-x-2 p-3 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-md">
+              <Checkbox
+                id="featured"
+                checked={values.featured}
+                onCheckedChange={(checked: boolean) => {
+                  setValues(prev => ({ ...prev, featured: checked }));
+                }}
+                disabled={isPending}
+              />
+              <div className="flex flex-col">
+                <Label htmlFor="featured" className="text-sm font-medium cursor-pointer">
+                  ⭐ Featured Case Study
+                </Label>
+                <p className="text-xs text-muted-foreground">
+                  Feature this case study on the homepage (premium placement)
+                </p>
+              </div>
+            </div>
           </div>
         </div>
         

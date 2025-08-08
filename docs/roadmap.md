@@ -226,6 +226,29 @@ This document outlines the planned features, improvements, and priorities for th
 
 ---
 
+## 🔮 **Future Considerations (v0.6.0+)**
+
+### **Structured Error Handling & Logging System**
+- **Context**: Currently using ad-hoc console logging (210+ statements across 58 files)  
+- **Industry Standard**: Structured logging with services like Sentry, request tracing, user-friendly error messages
+- **When to Implement**: When scaling beyond single admin user OR when users report error experience issues
+- **Scope**: 
+  - Centralized logger service with request IDs
+  - User-friendly error boundaries for public content
+  - Structured error messages and actionable user guidance  
+  - Integration with monitoring service (Sentry/LogRocket)
+- **Effort**: 8-12 hours implementation + testing
+- **Priority**: Low for beta, Medium when scaling to multiple users
+
+### **API Route Refactoring**
+- **Context**: 686-line case studies API route, similar patterns in other content APIs
+- **Benefits**: Easier debugging, better code organization, team-ready codebase
+- **When to Implement**: When hiring first developer OR when route complexity causes maintenance issues
+- **Effort**: 6-8 hours to split into focused handler modules
+- **Priority**: Defer until team scaling needs
+
+---
+
 **Last Updated**: January 2025  
 **Current Version**: v0.4.1  
 **Next Release**: v0.4.2 (Build config fixes and ISR implementation)  

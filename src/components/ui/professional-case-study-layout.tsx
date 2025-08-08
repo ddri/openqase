@@ -70,7 +70,7 @@ export default function ProfessionalCaseStudyLayout({
               <div className="flex items-center gap-2">
                 <Network className="h-4 w-4 text-muted-foreground" />
                 <span className="text-foreground font-medium">
-                  {caseStudy.case_study_industry_relations.filter(rel => rel.industries?.slug !== 'not-applicable').length} Industries
+                  {caseStudy.case_study_industry_relations.filter((rel: any) => rel.industries?.slug !== 'not-applicable').length} Industries
                 </span>
               </div>
             )}
@@ -175,13 +175,13 @@ export default function ProfessionalCaseStudyLayout({
                   <div className="flex flex-wrap gap-1.5">
                     {(() => {
                       if (caseStudy.case_study_industry_relations && caseStudy.case_study_industry_relations.length > 0) {
-                        const naIndustry = caseStudy.case_study_industry_relations.find(rel => rel.industries?.slug === 'not-applicable');
+                        const naIndustry = caseStudy.case_study_industry_relations.find((rel: any) => rel.industries?.slug === 'not-applicable');
                         if (naIndustry && naIndustry.industries) {
                           return <span className="text-xs text-muted-foreground">Not Applicable</span>;
                         }
-                        const actualIndustries = caseStudy.case_study_industry_relations.filter(rel => rel.industries?.slug !== 'not-applicable');
+                        const actualIndustries = caseStudy.case_study_industry_relations.filter((rel: any) => rel.industries?.slug !== 'not-applicable');
                         if (actualIndustries.length > 0) {
-                          return actualIndustries.map((relation) =>
+                          return actualIndustries.map((relation: any) =>
                             relation.industries ? (
                               <Link key={relation.industries.id} href={`/paths/industry/${relation.industries?.slug}`}>
                                 <Badge variant="default" className="text-xs hover:bg-primary/80 cursor-pointer">
@@ -202,13 +202,13 @@ export default function ProfessionalCaseStudyLayout({
                   <div className="flex flex-wrap gap-1.5">
                     {(() => {
                       if (caseStudy.algorithm_case_study_relations && caseStudy.algorithm_case_study_relations.length > 0) {
-                        const naAlgorithm = caseStudy.algorithm_case_study_relations.find(rel => rel.algorithms?.slug === 'not-applicable');
+                        const naAlgorithm = caseStudy.algorithm_case_study_relations.find((rel: any) => rel.algorithms?.slug === 'not-applicable');
                         if (naAlgorithm && naAlgorithm.algorithms) {
                           return <span className="text-xs text-muted-foreground">Not Applicable</span>;
                         }
-                        const actualAlgorithms = caseStudy.algorithm_case_study_relations.filter(rel => rel.algorithms?.slug !== 'not-applicable');
+                        const actualAlgorithms = caseStudy.algorithm_case_study_relations.filter((rel: any) => rel.algorithms?.slug !== 'not-applicable');
                         if (actualAlgorithms.length > 0) {
-                          return actualAlgorithms.map((relation) =>
+                          return actualAlgorithms.map((relation: any) =>
                             relation.algorithms ? (
                               <Link key={relation.algorithms.id} href={`/paths/algorithm/${relation.algorithms?.slug}`}>
                                 <Badge variant="default" className="text-xs hover:bg-primary/80 cursor-pointer">
@@ -229,13 +229,13 @@ export default function ProfessionalCaseStudyLayout({
                   <div className="flex flex-wrap gap-1.5">
                     {(() => {
                       if (caseStudy.case_study_persona_relations && caseStudy.case_study_persona_relations.length > 0) {
-                        const naPersona = caseStudy.case_study_persona_relations.find(rel => rel.personas?.slug === 'not-applicable');
+                        const naPersona = caseStudy.case_study_persona_relations.find((rel: any) => rel.personas?.slug === 'not-applicable');
                         if (naPersona && naPersona.personas) {
                           return <span className="text-xs text-muted-foreground">Not Applicable</span>;
                         }
-                        const actualPersonas = caseStudy.case_study_persona_relations.filter(rel => rel.personas?.slug !== 'not-applicable');
+                        const actualPersonas = caseStudy.case_study_persona_relations.filter((rel: any) => rel.personas?.slug !== 'not-applicable');
                         if (actualPersonas.length > 0) {
-                          return actualPersonas.map((relation) =>
+                          return actualPersonas.map((relation: any) =>
                             relation.personas ? (
                               <Link key={relation.personas.id} href={`/paths/persona/${relation.personas?.slug}`}>
                                 <Badge variant="default" className="text-xs hover:bg-primary/80 cursor-pointer">

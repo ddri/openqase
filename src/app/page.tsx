@@ -18,7 +18,7 @@ import {
 import { AutoSchema } from '@/components/AutoSchema';
 import GlobalSearch from '@/components/GlobalSearch';
 import { getBuildTimeContentList, fetchSearchData } from '@/lib/content-fetchers';
-import { AnimatedBackground, SectionDivider } from '@/components/ui/animated-background';
+import type { BlogPost } from '@/lib/types';
 import { InteractiveKnowledgeMap } from '@/components/ui/interactive-knowledge-map';
 
 interface CategoryStats {
@@ -35,12 +35,18 @@ export default async function HomePage() {
   const searchData = await fetchSearchData();
 
   // Get actual content counts from database (published only)
-  const [caseStudies, algorithms, industries, personas] = await Promise.all([
+  const [caseStudies, algorithms, industries, personas, blogPostsData, featuredCaseStudiesData] = await Promise.all([
     getBuildTimeContentList('case_studies', { filters: { published: true } }),
     getBuildTimeContentList('algorithms', { filters: { published: true } }), 
     getBuildTimeContentList('industries', { filters: { published: true } }),
-    getBuildTimeContentList('personas', { filters: { published: true } })
+    getBuildTimeContentList('personas', { filters: { published: true } }),
+    getBuildTimeContentList('blog_posts', { filters: { published: true }, limit: 2 }),
+    getBuildTimeContentList('case_studies', { filters: { published: true, featured: true }, limit: 2 })
   ]);
+
+  // Type the blog posts and featured case studies properly
+  const blogPosts = blogPostsData as BlogPost[];
+  const featuredCaseStudies = featuredCaseStudiesData as any[];
 
   // Create dynamic category stats with real counts
   const categoryStats: CategoryStats[] = [
@@ -108,21 +114,21 @@ export default async function HomePage() {
               </div>
 
               {/* Stats Grid */}
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
                 {categoryStats.map((category) => (
                   <Link 
                     key={category.title}
                     href={category.href}
-                    className="bg-card border border-border p-4 hover:border-primary transition-colors group"
+                    className="bg-card border border-border p-3 sm:p-4 hover:border-primary transition-colors group"
                   >
-                    <div className="flex items-center gap-3 mb-2">
+                    <div className="flex items-center gap-2 sm:gap-3 mb-2">
                       {category.icon}
-                      <span className="font-semibold text-primary text-2xl">{category.count}</span>
+                      <span className="font-semibold text-primary text-xl sm:text-2xl">{category.count}</span>
                     </div>
-                    <h3 className="font-medium text-sm text-foreground group-hover:text-primary transition-colors">
+                    <h3 className="font-medium text-xs sm:text-sm text-foreground group-hover:text-primary transition-colors">
                       {category.title}
                     </h3>
-                    <p className="text-xs text-muted-foreground mt-1">
+                    <p className="text-xs text-muted-foreground mt-1 hidden sm:block">
                       {category.description}
                     </p>
                   </Link>
@@ -227,7 +233,7 @@ export default async function HomePage() {
             {/* Latest Case Studies Column */}
             <div>
               <div className="flex justify-between items-center mb-6">
-                <h3 className="text-xl font-semibold text-foreground">Latest Case Studies</h3>
+                <h3 className="text-xl font-semibold text-foreground">Featured Case Studies</h3>
                 <Link href="/case-study" className="inline-flex items-center text-primary hover:underline text-sm font-medium">
                   View all
                   <ArrowRight className="ml-1 h-3 w-3" />
@@ -235,42 +241,53 @@ export default async function HomePage() {
               </div>
               
               <div className="space-y-6">
-                {/* Featured Case Study */}
-                <Link href="/case-study/quantinuum-hsbc-financial-services-enhancement" className="block group">
-                  <div className="bg-card border border-border p-6 hover:border-primary transition-colors">
-                    <div className="flex gap-2 mb-3">
-                      <span className="px-2 py-1 bg-primary/10 text-primary text-xs font-medium">Finance</span>
-                      <span className="px-2 py-1 bg-primary/10 text-primary text-xs font-medium">Security</span>
+                {featuredCaseStudies.length > 0 ? (
+                  featuredCaseStudies.map((caseStudy, index) => (
+                    <Link key={caseStudy.id} href={`/case-study/${caseStudy.slug}`} className="block group">
+                      <div className="bg-card border border-border p-6 hover:border-primary transition-colors">
+                        {/* Industries as tags */}
+                        {caseStudy.case_study_industry_relations && caseStudy.case_study_industry_relations.length > 0 && (
+                          <div className="flex gap-2 mb-3">
+                            {caseStudy.case_study_industry_relations.slice(0, 2).map((relation: any) => 
+                              relation.industries?.name ? (
+                                <span key={relation.industries.id} className="px-2 py-1 bg-primary/10 text-primary text-xs font-medium">
+                                  {relation.industries.name}
+                                </span>
+                              ) : null
+                            )}
+                          </div>
+                        )}
+                        <h4 className="text-lg font-bold text-foreground mb-2 group-hover:text-primary transition-colors">
+                          {caseStudy.title}
+                        </h4>
+                        <p className="text-sm text-muted-foreground mb-3">
+                          {caseStudy.description || 'Read more about this quantum computing case study.'}
+                        </p>
+                        <div className="flex items-center text-primary text-sm font-medium group-hover:underline">
+                          Read case study →
+                        </div>
+                      </div>
+                    </Link>
+                  ))
+                ) : (
+                  /* Fallback content when no featured case studies exist */
+                  <>
+                    <div className="bg-card border border-border p-6">
+                      <div className="flex gap-2 mb-3">
+                        <span className="px-2 py-1 bg-primary/10 text-primary text-xs font-medium">Coming Soon</span>
+                      </div>
+                      <h4 className="text-lg font-bold text-foreground mb-2">
+                        Featured Case Studies
+                      </h4>
+                      <p className="text-sm text-muted-foreground mb-3">
+                        Premium case studies will be featured here. Contact us to promote your quantum computing success story.
+                      </p>
+                      <Link href="/contact" className="text-primary text-sm font-medium hover:underline">
+                        Promote your case study →
+                      </Link>
                     </div>
-                    <h4 className="text-lg font-bold text-foreground mb-2 group-hover:text-primary transition-colors">
-                      Quantinuum & HSBC: Financial Services Enhancement
-                    </h4>
-                    <p className="text-sm text-muted-foreground mb-3">
-                      How HSBC partnered with Quantinuum to explore quantum computing applications in cybersecurity and fraud detection.
-                    </p>
-                    <div className="flex items-center text-primary text-sm font-medium group-hover:underline">
-                      Read case study →
-                    </div>
-                  </div>
-                </Link>
-
-                {/* Second Case Study */}
-                <Link href="/case-study/quantinuum-google-deepmind-circuit-optimisation" className="block group">
-                  <div className="bg-card border border-border p-6 hover:border-primary transition-colors">
-                    <div className="flex gap-2 mb-3">
-                      <span className="px-2 py-1 bg-primary/10 text-primary text-xs font-medium">AI/ML</span>
-                    </div>
-                    <h4 className="text-lg font-bold text-foreground mb-2 group-hover:text-primary transition-colors">
-                      Quantinuum & Google DeepMind
-                    </h4>
-                    <p className="text-sm text-muted-foreground mb-3">
-                      AI-powered quantum circuit optimization reducing gate counts by up to 47%.
-                    </p>
-                    <div className="flex items-center text-primary text-sm font-medium group-hover:underline">
-                      Read case study →
-                    </div>
-                  </div>
-                </Link>
+                  </>
+                )}
               </div>
             </div>
 
@@ -285,42 +302,47 @@ export default async function HomePage() {
               </div>
               
               <div className="space-y-6">
-                {/* Featured Blog Post */}
-                <Link href="/blog/quantum-computing-industry-trends-2024" className="block group">
-                  <div className="bg-card border border-border p-6 hover:border-primary transition-colors">
-                    <div className="flex gap-2 mb-3">
-                      <span className="px-2 py-1 bg-primary/10 text-primary text-xs font-medium">Industry</span>
-                      <span className="px-2 py-1 bg-primary/10 text-primary text-xs font-medium">Analysis</span>
+                {blogPosts.length > 0 ? (
+                  blogPosts.map((blogPost, index) => (
+                    <Link key={blogPost.id} href={`/blog/${blogPost.slug}`} className="block group">
+                      <div className="bg-card border border-border p-6 hover:border-primary transition-colors">
+                        {blogPost.tags && Array.isArray(blogPost.tags) && blogPost.tags.length > 0 && (
+                          <div className="flex gap-2 mb-3">
+                            {blogPost.tags.slice(0, 2).map((tag) => (
+                              <span key={tag} className="px-2 py-1 bg-primary/10 text-primary text-xs font-medium capitalize">
+                                {tag}
+                              </span>
+                            ))}
+                          </div>
+                        )}
+                        <h4 className="text-lg font-bold text-foreground mb-2 group-hover:text-primary transition-colors">
+                          {blogPost.title}
+                        </h4>
+                        <p className="text-sm text-muted-foreground mb-3">
+                          {blogPost.description || 'Read more about this quantum computing topic.'}
+                        </p>
+                        <div className="flex items-center text-primary text-sm font-medium group-hover:underline">
+                          Read article →
+                        </div>
+                      </div>
+                    </Link>
+                  ))
+                ) : (
+                  /* Fallback content when no blog posts exist */
+                  <>
+                    <div className="bg-card border border-border p-6">
+                      <div className="flex gap-2 mb-3">
+                        <span className="px-2 py-1 bg-primary/10 text-primary text-xs font-medium">Coming Soon</span>
+                      </div>
+                      <h4 className="text-lg font-bold text-foreground mb-2">
+                        Blog Posts Coming Soon
+                      </h4>
+                      <p className="text-sm text-muted-foreground mb-3">
+                        We're working on adding insightful blog posts about quantum computing industry trends and enterprise readiness guides.
+                      </p>
                     </div>
-                    <h4 className="text-lg font-bold text-foreground mb-2 group-hover:text-primary transition-colors">
-                      Quantum Computing Industry Trends in 2024
-                    </h4>
-                    <p className="text-sm text-muted-foreground mb-3">
-                      Key developments and emerging patterns in quantum computing adoption across industries.
-                    </p>
-                    <div className="flex items-center text-primary text-sm font-medium group-hover:underline">
-                      Read article →
-                    </div>
-                  </div>
-                </Link>
-
-                {/* Second Blog Post */}
-                <Link href="/blog/enterprise-quantum-readiness-guide" className="block group">
-                  <div className="bg-card border border-border p-6 hover:border-primary transition-colors">
-                    <div className="flex gap-2 mb-3">
-                      <span className="px-2 py-1 bg-primary/10 text-primary text-xs font-medium">Enterprise</span>
-                    </div>
-                    <h4 className="text-lg font-bold text-foreground mb-2 group-hover:text-primary transition-colors">
-                      Enterprise Quantum Readiness Guide
-                    </h4>
-                    <p className="text-sm text-muted-foreground mb-3">
-                      A practical framework for organizations to assess quantum computing readiness.
-                    </p>
-                    <div className="flex items-center text-primary text-sm font-medium group-hover:underline">
-                      Read article →
-                    </div>
-                  </div>
-                </Link>
+                  </>
+                )}
               </div>
             </div>
           </div>

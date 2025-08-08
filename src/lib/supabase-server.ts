@@ -62,8 +62,6 @@ export function createServiceRoleSupabaseClient() {
 
   if (!supabaseUrl || !serviceRoleKey) {
     console.error('Supabase environment variables NEXT_PUBLIC_SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY are missing');
-    console.error('URL:', supabaseUrl);
-    console.error('Key length:', serviceRoleKey?.length);
     throw new Error('Supabase service role configuration is missing');
   }
 

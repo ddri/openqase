@@ -175,21 +175,6 @@
     font-feature-settings: "salt" 1;
   }
   
-  /* Subtle background pattern for dark mode */
-  [data-theme='dark'] body::before {
-    content: '';
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-image: 
-      radial-gradient(at 40% 20%, hsla(267, 83%, 70%, 0.08) 0px, transparent 50%),
-      radial-gradient(at 80% 80%, hsla(220, 83%, 70%, 0.06) 0px, transparent 50%),
-      radial-gradient(at 0% 100%, hsla(340, 82%, 65%, 0.04) 0px, transparent 50%);
-    pointer-events: none;
-    z-index: 0;
-  }
 
   /* Responsive typography - UPDATED with new scale */
   h1, h2, h3, h4, h5, h6 {

@@ -7,6 +7,7 @@
 ### 🎯 Key Updates
 - **📦 Dependency Updates**: Minor/patch version updates for Next.js 15.x, React 19.x, TypeScript 5.9
 - **🛡️ Security**: Removed Docusaurus dependencies, eliminating 16 security vulnerabilities  
+- **🔧 Auth Migration**: Completed migration from deprecated `@supabase/auth-helpers-nextjs` to `@supabase/ssr`
 - **🔍 Code Quality**: Re-enabled ESLint during builds with improved rule configuration
 - **📚 Documentation**: Updated and corrected installation guides and tech stack references
 - **⚡ Performance**: Optimized TypeScript interfaces for admin relationship components
@@ -15,6 +16,15 @@
 - Fixed `.env.example` file references in installation documentation
 - Corrected outdated TanStack Query references (dependency was removed)
 - Updated version numbers and roadmap status
+
+### 🔧 Technical Details
+
+**Supabase Auth Migration Completed**
+- **Issue**: Build warnings from deprecated `@supabase/auth-helpers-nextjs@0.10.0` and `@supabase/auth-helpers-shared`
+- **Solution**: Migrated to unified `@supabase/ssr@0.6.1` package for Next.js 15 compatibility
+- **Impact**: Eliminated deprecation warnings, improved build performance, future-proofed auth system
+- **Breaking Changes**: None - migration was type-level only in `src/lib/cookies.ts`
+- **Why This Matters**: Supabase deprecated auth-helpers in favor of unified SSR package supporting all SSR frameworks. The new package provides better middleware support and cleaner API for server-side auth handling.
 
 ---
 

@@ -2,7 +2,11 @@
 
 import React, { useEffect, useRef, useState } from 'react'
 
-export function KnowledgeConnectors() {
+interface KnowledgeConnectorsProps {
+  hoveredSection?: 'algorithms' | 'industries' | 'roles' | 'case-studies' | null
+}
+
+export function KnowledgeConnectors({ hoveredSection }: KnowledgeConnectorsProps) {
   const svgRef = useRef<SVGSVGElement>(null)
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 })
   const [hoveredPath, setHoveredPath] = useState<string | null>(null)
@@ -114,23 +118,24 @@ export function KnowledgeConnectors() {
   }, [])
 
   // Calculate path positions based on actual box positions
-  const startY = boxPositions.caseStudy.bottom + 20 // Start slightly below case study box
-  const endY = boxPositions.algorithms.top - 20 // End slightly above target boxes
+  const startY = boxPositions.caseStudy.bottom + 5 // Start just below case study box
+  const endY = boxPositions.algorithms.top - 5 // End just above target boxes
   const midY = (startY + endY) / 2
   
-  // Check if we're on mobile (all boxes have same centerX)
-  const isMobile = dimensions.width < 768 || (
-    boxPositions.algorithms.centerX === boxPositions.industries.centerX &&
-    boxPositions.industries.centerX === boxPositions.roles.centerX
-  )
+  // Check if we're on mobile (screen width only - more reliable than position comparison)
+  const isMobile = dimensions.width < 768
+
+  // Force center line to be slightly offset if it would be perfectly vertical
+  const centerTargetX = Math.abs(boxPositions.industries.centerX - boxPositions.caseStudy.centerX) < 5 ? 
+    boxPositions.industries.centerX + 10 : boxPositions.industries.centerX
 
   const pathData = {
-    left: boxPositions.algorithms.centerX > 0 && !isMobile ? 
-      `M ${boxPositions.caseStudy.centerX} ${startY} Q ${boxPositions.caseStudy.centerX} ${midY} ${boxPositions.algorithms.centerX} ${endY}` : '',
-    center: boxPositions.industries.centerX > 0 && !isMobile ? 
-      `M ${boxPositions.caseStudy.centerX} ${startY} Q ${boxPositions.caseStudy.centerX} ${midY} ${boxPositions.industries.centerX} ${endY}` : '',
-    right: boxPositions.roles.centerX > 0 && !isMobile ? 
-      `M ${boxPositions.caseStudy.centerX} ${startY} Q ${boxPositions.caseStudy.centerX} ${midY} ${boxPositions.roles.centerX} ${endY}` : ''
+    left: boxPositions.algorithms.centerX > 0 && boxPositions.caseStudy.centerX > 0 && !isMobile ? 
+      `M ${boxPositions.caseStudy.centerX} ${boxPositions.caseStudy.bottom} L ${boxPositions.algorithms.centerX} ${boxPositions.algorithms.top}` : '',
+    center: !isMobile && boxPositions.industries.centerX > 0 && boxPositions.caseStudy.centerX > 0 ? 
+      `M ${boxPositions.caseStudy.centerX} ${boxPositions.caseStudy.bottom} L ${centerTargetX} ${boxPositions.industries.top}` : '',
+    right: boxPositions.roles.centerX > 0 && boxPositions.caseStudy.centerX > 0 && !isMobile ? 
+      `M ${boxPositions.caseStudy.centerX} ${boxPositions.caseStudy.bottom} L ${boxPositions.roles.centerX} ${boxPositions.roles.top}` : ''
   }
 
   // Add debugging info
@@ -138,7 +143,22 @@ export function KnowledgeConnectors() {
     console.log('Connector positions:', {
       dimensions,
       boxPositions,
-      pathData
+      pathData,
+      isMobile,
+      centerXComparison: {
+        algoCenterX: boxPositions.algorithms.centerX,
+        industryCenterX: boxPositions.industries.centerX,
+        rolesCenterX: boxPositions.roles.centerX,
+        caseStudyCenterX: boxPositions.caseStudy.centerX,
+        centerLineDiff: Math.abs(boxPositions.industries.centerX - boxPositions.caseStudy.centerX),
+        isVerticalLine: Math.abs(boxPositions.industries.centerX - boxPositions.caseStudy.centerX) < 5,
+        centerConditions: {
+          isMobile: isMobile,
+          industriesXValid: boxPositions.industries.centerX > 0,
+          caseStudyXValid: boxPositions.caseStudy.centerX > 0,
+          shouldShowCenter: !isMobile && boxPositions.industries.centerX > 0 && boxPositions.caseStudy.centerX > 0
+        }
+      }
     })
   }
 
@@ -153,7 +173,7 @@ export function KnowledgeConnectors() {
       <defs>
         <linearGradient id="connector-gradient" x1="0%" y1="0%" x2="0%" y2="100%">
           <stop offset="0%" stopColor="hsl(var(--primary))" stopOpacity="0.8" />
-          <stop offset="50%" stopColor="hsl(var(--purple-vivid))" stopOpacity="0.6" />
+          <stop offset="50%" stopColor="hsl(var(--gold-light))" stopOpacity="0.6" />
           <stop offset="100%" stopColor="hsl(var(--primary))" stopOpacity="0.2" />
         </linearGradient>
         
@@ -181,7 +201,7 @@ export function KnowledgeConnectors() {
         </filter>
       </defs>
 
-      {/* Animated paths */}
+      {/* Interactive paths with hover highlighting */}
       <g filter="url(#glow)">
         {/* Left path (to Algorithms) */}
         {pathData.left && (
@@ -189,29 +209,13 @@ export function KnowledgeConnectors() {
             d={pathData.left}
             fill="none"
             stroke="url(#connector-gradient)"
-            strokeWidth={hoveredPath === 'left' ? "3" : "2"}
-            opacity="0"
-            style={{
-              transition: 'stroke-width 0.3s ease',
-              filter: hoveredPath === 'left' ? 'brightness(1.5)' : undefined
-            }}
-          >
-            <animate
-              attributeName="opacity"
-              from="0"
-              to={hoveredPath === 'left' ? "1" : "0.7"}
-              dur="0.8s"
-              begin="0.3s"
-              fill="freeze"
-            />
-            <animate
-              attributeName="stroke-dasharray"
-              from="0 500"
-              to="500 0"
-              dur="1.2s"
-              begin="0.3s"
-            />
-          </path>
+            strokeWidth={hoveredSection === 'algorithms' ? "3" : "2"}
+            opacity={
+              !hoveredSection ? "0.7" : 
+              hoveredSection === 'algorithms' || hoveredSection === 'case-studies' ? "0.9" : "0.3"
+            }
+            style={{ transition: 'opacity 300ms ease, stroke-width 200ms ease' }}
+          />
         )}
 
         {/* Center path (to Industries) */}
@@ -220,29 +224,14 @@ export function KnowledgeConnectors() {
             d={pathData.center}
             fill="none"
             stroke="url(#connector-gradient)"
-            strokeWidth={hoveredPath === 'center' ? "3" : "2"}
-            opacity="0"
-            style={{
-              transition: 'stroke-width 0.3s ease',
-              filter: hoveredPath === 'center' ? 'brightness(1.5)' : undefined
-            }}
-          >
-            <animate
-              attributeName="opacity"
-              from="0"
-              to={hoveredPath === 'center' ? "1" : "0.7"}
-              dur="0.8s"
-              begin="0.5s"
-              fill="freeze"
-            />
-            <animate
-              attributeName="stroke-dasharray"
-              from="0 500"
-              to="500 0"
-              dur="1s"
-              begin="0.5s"
-            />
-          </path>
+            strokeWidth={hoveredSection === 'industries' ? "4" : "3"}
+            opacity={
+              !hoveredSection ? "0.8" : 
+              hoveredSection === 'industries' || hoveredSection === 'case-studies' ? "1.0" : "0.3"
+            }
+            strokeLinecap="round"
+            style={{ transition: 'opacity 300ms ease, stroke-width 200ms ease' }}
+          />
         )}
 
         {/* Right path (to Professional Roles) */}
@@ -251,107 +240,16 @@ export function KnowledgeConnectors() {
             d={pathData.right}
             fill="none"
             stroke="url(#connector-gradient)"
-            strokeWidth={hoveredPath === 'right' ? "3" : "2"}
-            opacity="0"
-            style={{
-              transition: 'stroke-width 0.3s ease',
-              filter: hoveredPath === 'right' ? 'brightness(1.5)' : undefined
-            }}
-          >
-            <animate
-              attributeName="opacity"
-              from="0"
-              to={hoveredPath === 'right' ? "1" : "0.7"}
-              dur="0.8s"
-              begin="0.7s"
-              fill="freeze"
-            />
-            <animate
-              attributeName="stroke-dasharray"
-              from="0 500"
-              to="500 0"
-              dur="1.2s"
-              begin="0.7s"
-            />
-          </path>
+            strokeWidth={hoveredSection === 'roles' ? "3" : "2"}
+            opacity={
+              !hoveredSection ? "0.7" : 
+              hoveredSection === 'roles' || hoveredSection === 'case-studies' ? "0.9" : "0.3"
+            }
+            style={{ transition: 'opacity 300ms ease, stroke-width 200ms ease' }}
+          />
         )}
       </g>
 
-      {/* Animated dots along the paths */}
-      {pathData.left && (
-        <circle r="5" fill="url(#dot-gradient)" filter="url(#dot-glow)">
-          <animateMotion
-            dur="3s"
-            repeatCount="indefinite"
-            path={pathData.left}
-            begin="1.5s"
-          />
-          <animate
-            attributeName="opacity"
-            values="0;1;1;0"
-            dur="3s"
-            repeatCount="indefinite"
-            begin="1.5s"
-          />
-          <animate
-            attributeName="r"
-            values="3;5;3"
-            dur="3s"
-            repeatCount="indefinite"
-            begin="1.5s"
-          />
-        </circle>
-      )}
-
-      {pathData.center && (
-        <circle r="5" fill="url(#dot-gradient)" filter="url(#dot-glow)">
-          <animateMotion
-            dur="2.8s"
-            repeatCount="indefinite"
-            path={pathData.center}
-            begin="1.7s"
-          />
-          <animate
-            attributeName="opacity"
-            values="0;1;1;0"
-            dur="2.8s"
-            repeatCount="indefinite"
-            begin="1.7s"
-          />
-          <animate
-            attributeName="r"
-            values="3;5;3"
-            dur="2.8s"
-            repeatCount="indefinite"
-            begin="1.7s"
-          />
-        </circle>
-      )}
-
-      {pathData.right && (
-        <circle r="5" fill="url(#dot-gradient)" filter="url(#dot-glow)">
-          <animateMotion
-            dur="3.2s"
-            repeatCount="indefinite"
-            path={pathData.right}
-            begin="1.9s"
-          />
-          <animate
-            attributeName="opacity"
-            values="0;1;1;0"
-            dur="3.2s"
-            repeatCount="indefinite"
-            begin="1.9s"
-          />
-          <animate
-            attributeName="r"
-            values="3;5;3"
-            dur="3.2s"
-            repeatCount="indefinite"
-            begin="1.9s"
-          />
-        </circle>
-      )}
     </svg>
   )
 }

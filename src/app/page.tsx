@@ -17,9 +17,13 @@ import {
 } from 'lucide-react';
 import { AutoSchema } from '@/components/AutoSchema';
 import GlobalSearch from '@/components/GlobalSearch';
-import { getBuildTimeContentList, fetchSearchData } from '@/lib/content-fetchers';
-import { AnimatedBackground, SectionDivider } from '@/components/ui/animated-background';
-import { KnowledgeConnectors } from '@/components/ui/knowledge-connectors';
+import { getBuildTimeContentList, fetchSearchData, getStaticContentList } from '@/lib/content-fetchers';
+import type { BlogPost } from '@/lib/types';
+import { InteractiveKnowledgeMap } from '@/components/ui/interactive-knowledge-map';
+import { draftMode } from 'next/headers';
+
+// Force this page to be statically generated at build time
+export const dynamic = 'force-static'
 
 interface CategoryStats {
   title: string;
@@ -31,16 +35,29 @@ interface CategoryStats {
 
 
 export default async function HomePage() {
+  // Check if we're in preview mode
+  const { isEnabled: isPreview } = await draftMode();
+  
   // Fetch optimized search data (streamlined payload for performance)
   const searchData = await fetchSearchData();
 
-  // Get actual content counts from database (published only)
-  const [caseStudies, algorithms, industries, personas] = await Promise.all([
-    getBuildTimeContentList('case_studies', { filters: { published: true } }),
-    getBuildTimeContentList('algorithms', { filters: { published: true } }), 
-    getBuildTimeContentList('industries', { filters: { published: true } }),
-    getBuildTimeContentList('personas', { filters: { published: true } })
+  // Get actual content counts from database
+  // In preview mode, show all content including drafts
+  const publishedFilter = isPreview ? {} : { published: true };
+  const featuredFilter = isPreview ? { featured: true } : { published: true, featured: true };
+  
+  const [caseStudies, algorithms, industries, personas, blogPostsData, featuredCaseStudiesData] = await Promise.all([
+    getBuildTimeContentList('case_studies', { filters: publishedFilter }),
+    getBuildTimeContentList('algorithms', { filters: publishedFilter }), 
+    getBuildTimeContentList('industries', { filters: publishedFilter }),
+    getBuildTimeContentList('personas', { filters: publishedFilter }),
+    getBuildTimeContentList('blog_posts', { filters: publishedFilter, limit: 2 }),
+    getBuildTimeContentList('case_studies', { filters: featuredFilter, limit: 2 })
   ]);
+
+  // Type the blog posts and featured case studies properly
+  const blogPosts = blogPostsData as BlogPost[];
+  const featuredCaseStudies = featuredCaseStudiesData as any[];
 
   // Create dynamic category stats with real counts
   const categoryStats: CategoryStats[] = [
@@ -79,251 +96,313 @@ export default async function HomePage() {
       {/* Automatic FAQ schema for landing page */}
       <AutoSchema type="faq" />
       
-      {/* Resource-Focused Hero Section */}
-      <AnimatedBackground variant="particles" className="relative">
-        <section className="relative py-24 px-4 min-h-[600px] flex items-center">
-          {/* Dynamic floating orbs */}
-          <div className="absolute inset-0 overflow-hidden">
-            <div 
-              className="floating-orb w-64 h-64 bg-gradient-to-br from-[hsl(var(--purple-vivid))]/30 to-primary/20 glow-pulse"
-              style={{ 
-                left: '5%',
-                top: '20%',
-                animation: 'float-up 25s infinite ease-in-out',
-              }}
-            />
-            <div 
-              className="floating-orb w-96 h-96 bg-gradient-to-tr from-[hsl(var(--yellow-sharp))]/20 to-transparent"
-              style={{ 
-                right: '10%',
-                top: '60%',
-                animation: 'float-diagonal 30s infinite ease-in-out',
-                animationDelay: '10s'
-              }}
-            />
-            <div 
-              className="floating-orb w-48 h-48 bg-gradient-to-bl from-primary/25 to-[hsl(var(--blue-vivid))]/15"
-              style={{ 
-                left: '70%',
-                top: '10%',
-                animation: 'float-up 20s infinite ease-in-out',
-                animationDelay: '5s'
-              }}
-            />
-          </div>
-          <div className="max-w-6xl mx-auto w-full relative z-10">
-            <div className="text-center mb-12">
-              <h1 className="text-6xl md:text-7xl lg:text-8xl font-bold tracking-tight mb-6">
-                <span className="bg-clip-text text-transparent bg-gradient-to-r from-purple-vivid via-primary to-yellow-sharp animate-gradient-shift">
-                  OpenQase
-                </span>
-              </h1>
-              <p className="text-xl md:text-2xl text-muted-foreground mb-2">
-                Open Source Quantum Computing Case Studies
-              </p>
-              <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-                A free, community-driven collection of real quantum computing implementations from industry leaders
-              </p>
-            </div>
-
-            {/* Search Bar with glass effect */}
-            <div className="mb-12">
-              <div className="glass-premium rounded-xl p-1 max-w-2xl mx-auto">
-                <GlobalSearch searchData={searchData} className="w-full" />
+      {/* Modern Magazine-Style Hero Section */}
+      <section className="relative bg-background border-b border-border">
+        <div className="max-w-7xl mx-auto px-4 py-16">
+          {/* Header */}
+          <div className="mb-12">
+            <div className="flex items-center gap-4 mb-6">
+              <div className="w-12 h-12 bg-primary rounded-sm flex items-center justify-center">
+                <span className="text-black font-bold text-xl">Q</span>
               </div>
+              <h1 className="text-4xl md:text-5xl font-bold text-foreground tracking-tight">
+                OpenQase
+              </h1>
             </div>
-
-            {/* Quick Browse Categories */}
-            <div className="flex flex-wrap justify-center gap-3">
-              <span className="text-sm text-muted-foreground">Browse by:</span>
-              {categoryStats.map((category) => (
-                <Link 
-                  key={category.title}
-                  href={category.href}
-                  className="inline-flex items-center gap-1 px-4 py-2 bg-secondary/30 backdrop-blur-sm hover:bg-secondary/50 hover:border-[hsl(var(--yellow-sharp))]/50 border border-transparent rounded-full text-sm transition-all duration-200"
-                >
-                  {category.icon}
-                  {category.title}
-                </Link>
-              ))}
-            </div>
-          </div>
-        </section>
-      </AnimatedBackground>
-      
-      <SectionDivider variant="wave" />
-
-      {/* Knowledge Map - Visual Cross-Reference */}
-      <section className="py-20 px-4 bg-gradient-to-b from-background to-surface-secondary relative overflow-hidden">
-        {/* Subtle animated mesh background */}
-        <div className="absolute inset-0 mesh-animated opacity-50">
-          <div className="absolute inset-0 bg-gradient-mesh" />
-        </div>
-        <div className="max-w-6xl mx-auto relative z-10">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-semibold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-foreground to-primary">How OpenQase Organizes Knowledge</h2>
-            <p className="text-muted-foreground">
-              Every case study is cross-referenced by algorithm, industry, and professional perspective
+            <p className="text-lg text-muted-foreground max-w-3xl">
+              Real Quantum Computing Case Studies — A free, open-source collection of quantum implementations from industry leaders
             </p>
           </div>
 
-          {/* Interactive Knowledge Map */}
-          <div className="relative space-y-6">
-            {/* SVG Connector Lines */}
-            <KnowledgeConnectors />
-            
-            {/* Case Studies - Full Width Clickable Box */}
-            <Link href="/case-study" className="block group relative z-10">
-              <div className="relative overflow-hidden glass-premium p-8 text-center hover:scale-[1.02] transition-all duration-300 cursor-pointer">
-                <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-purple-vivid/10 to-transparent opacity-50" />
-                <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-primary/5 to-purple-vivid/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                <BookOpen className="w-12 h-12 text-primary mx-auto mb-3 relative z-10 drop-shadow-lg" />
-                <div className="font-bold text-2xl mb-1 relative z-10 text-foreground">Case Studies</div>
-                <div className="text-sm text-muted-foreground relative z-10">Real implementations</div>
-                <div className="absolute -bottom-2 -right-2 w-32 h-32 bg-gradient-to-br from-primary/20 to-purple-vivid/20 rounded-full blur-3xl opacity-50 group-hover:opacity-70 transition-opacity" />
+          {/* Main Content Grid */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            {/* Left Column - Search & Stats */}
+            <div className="lg:col-span-2 space-y-8">
+              {/* Search Bar */}
+              <div className="bg-card border border-border p-6">
+                <h2 className="text-xl font-semibold mb-4 text-foreground">Search Case Studies</h2>
+                <GlobalSearch searchData={searchData} className="w-full" />
+              </div>
+
+              {/* Stats Grid */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
+                {categoryStats.map((category) => (
+                  <Link 
+                    key={category.title}
+                    href={category.href}
+                    className="bg-card border border-border p-3 sm:p-4 hover:border-primary transition-colors group"
+                  >
+                    <div className="flex items-center gap-2 sm:gap-3 mb-2">
+                      {category.icon}
+                      <span className="font-semibold text-primary text-xl sm:text-2xl">{category.count}</span>
+                    </div>
+                    <h3 className="font-medium text-xs sm:text-sm text-foreground group-hover:text-primary transition-colors">
+                      {category.title}
+                    </h3>
+                    <p className="text-xs text-muted-foreground mt-1 hidden sm:block">
+                      {category.description}
+                    </p>
+                  </Link>
+                ))}
+              </div>
+            </div>
+
+            {/* Right Column - Featured */}
+            <div>
+              <div className="bg-card border border-border p-6 h-full flex flex-col justify-center">
+                <h2 className="text-xl font-semibold mb-4 text-foreground">Latest Addition</h2>
+                <div className="space-y-4">
+                  <h3 className="font-semibold text-foreground text-lg">Quantinuum & HSBC</h3>
+                  <p className="text-sm text-muted-foreground leading-relaxed">Financial services enhancement through quantum computing applications in cybersecurity and fraud detection.</p>
+                  <Link href="/case-study/quantinuum-hsbc-financial-services-enhancement" className="inline-flex items-center text-primary hover:underline text-sm font-medium">
+                    Read case study →
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Modern Knowledge Organization */}
+      <section className="py-20 px-4 bg-muted/30">
+        <div className="max-w-7xl mx-auto">
+          <div className="mb-12">
+            <h2 className="text-3xl font-bold text-foreground mb-4">How We Organize Knowledge</h2>
+            <p className="text-lg text-muted-foreground max-w-3xl">
+              Every case study is systematically cross-referenced by algorithm, industry, and professional perspective to create a comprehensive knowledge base.
+            </p>
+          </div>
+
+          {/* Modern Grid Layout */}
+          <div className="space-y-6">
+            {/* Case Studies - Full Width Row */}
+            <Link href="/case-study" className="block group">
+              <div className="bg-background border border-primary/20 p-8 hover:border-primary transition-colors">
+                <BookOpen className="w-8 h-8 text-primary mb-4" />
+                <h3 className="text-2xl font-bold text-foreground mb-2">Case Studies</h3>
+                <p className="text-muted-foreground mb-4">Real quantum computing implementations from industry leaders, documented with technical details and business outcomes.</p>
+                <div className="flex items-center text-primary font-medium group-hover:underline">
+                  Browse all {caseStudies.length} case studies →
+                </div>
               </div>
             </Link>
 
-            {/* Three clickable subsections underneath */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 relative z-10 mt-16">
+            {/* Three Child Boxes Row */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {/* Algorithms */}
-              <Link href="/paths/algorithm" className="block group">
-                <div className="glass-premium p-6 text-center hover:scale-105 transition-all duration-300 cursor-pointer relative overflow-hidden">
-                  <div className="absolute inset-0 bg-gradient-to-br from-blue-vivid/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                  <CircuitBoard className="w-8 h-8 mx-auto mb-2 text-primary relative z-10 group-hover:text-[hsl(var(--blue-vivid))] transition-colors" />
-                  <div className="font-semibold text-base relative z-10">Algorithms</div>
-                  <div className="text-sm text-muted-foreground relative z-10">{algorithms.length} types</div>
+              <Link href="/paths/algorithm" className="group">
+                <div className="bg-background border border-primary/20 p-6 h-full hover:border-primary transition-colors">
+                  <CircuitBoard className="w-6 h-6 text-primary mb-3" />
+                  <div className="flex items-center justify-between mb-2">
+                    <h3 className="font-semibold text-foreground">Algorithms</h3>
+                    <span className="text-2xl font-bold text-primary">{algorithms.length}</span>
+                  </div>
+                  <p className="text-sm text-muted-foreground">Quantum algorithms with proven business applications</p>
                 </div>
               </Link>
 
               {/* Industries */}
-              <Link href="/paths/industry" className="block group">
-                <div className="glass-premium p-6 text-center hover:scale-105 transition-all duration-300 cursor-pointer relative overflow-hidden">
-                  <div className="absolute inset-0 bg-gradient-to-br from-purple-vivid/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                  <Building2 className="w-8 h-8 mx-auto mb-2 text-primary relative z-10 group-hover:text-[hsl(var(--purple-vivid))] transition-colors" />
-                  <div className="font-semibold text-base relative z-10">Industries</div>
-                  <div className="text-sm text-muted-foreground relative z-10">{industries.length} sectors</div>
+              <Link href="/paths/industry" className="group">
+                <div className="bg-background border border-primary/20 p-6 h-full hover:border-primary transition-colors">
+                  <Building2 className="w-6 h-6 text-primary mb-3" />
+                  <div className="flex items-center justify-between mb-2">
+                    <h3 className="font-semibold text-foreground">Industries</h3>
+                    <span className="text-2xl font-bold text-primary">{industries.length}</span>
+                  </div>
+                  <p className="text-sm text-muted-foreground">Sectors actively implementing quantum solutions</p>
                 </div>
               </Link>
 
-              {/* Professional Roles */}
-              <Link href="/paths/persona" className="block group">
-                <div className="glass-premium p-6 text-center hover:scale-105 transition-all duration-300 cursor-pointer relative overflow-hidden">
-                  <div className="absolute inset-0 bg-gradient-to-br from-yellow-sharp/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                  <User className="w-8 h-8 mx-auto mb-2 text-primary relative z-10 group-hover:text-[hsl(var(--yellow-sharp))] transition-colors" />
-                  <div className="font-semibold text-base relative z-10">Professional Roles</div>
-                  <div className="text-sm text-muted-foreground relative z-10">{personas.length} perspectives</div>
+              {/* Professional Perspectives */}
+              <Link href="/paths/persona" className="group">
+                <div className="bg-background border border-primary/20 p-6 h-full hover:border-primary transition-colors">
+                  <User className="w-6 h-6 text-primary mb-3" />
+                  <div className="flex items-center justify-between mb-2">
+                    <h3 className="font-semibold text-foreground">Professional Roles</h3>
+                    <span className="text-2xl font-bold text-primary">{personas.length}</span>
+                  </div>
+                  <p className="text-sm text-muted-foreground">Case studies organized by career function and role</p>
                 </div>
               </Link>
             </div>
           </div>
         </div>
       </section>
-      
-      <SectionDivider variant="angle" />
 
-      {/* Featured Case Studies - Primary Content */}
-      <AnimatedBackground variant="mesh" className="py-20 px-4 bg-surface-primary">
+      {/* Latest Content - Case Studies & Blog Posts */}
+      <section className="py-20 px-4 bg-background">
         <div className="max-w-7xl mx-auto">
-          <div className="flex justify-between items-center mb-12">
+          <div className="mb-12">
+            <h2 className="text-3xl font-bold text-foreground mb-4">Latest Content</h2>
+            <p className="text-lg text-muted-foreground max-w-3xl">
+              Recent case studies and insights from the quantum computing community
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+            {/* Latest Case Studies Column */}
             <div>
-              <h2 className="text-2xl font-semibold mb-2">Latest Case Studies</h2>
-              <p className="text-muted-foreground">
-                Recent additions to the quantum computing implementation database
-              </p>
+              <div className="flex justify-between items-center mb-6">
+                <h3 className="text-xl font-semibold text-foreground">Featured Case Studies</h3>
+                <Link href="/case-study" className="inline-flex items-center text-primary hover:underline text-sm font-medium">
+                  View all
+                  <ArrowRight className="ml-1 h-3 w-3" />
+                </Link>
+              </div>
+              
+              <div className="space-y-6">
+                {featuredCaseStudies.length > 0 ? (
+                  featuredCaseStudies.map((caseStudy, index) => (
+                    <Link key={caseStudy.id} href={`/case-study/${caseStudy.slug}`} className="block group">
+                      <div className="bg-card border border-border p-6 hover:border-primary transition-colors">
+                        {/* Industries as tags */}
+                        {caseStudy.case_study_industry_relations && caseStudy.case_study_industry_relations.length > 0 && (
+                          <div className="flex gap-2 mb-3">
+                            {caseStudy.case_study_industry_relations.slice(0, 2).map((relation: any) => 
+                              relation.industries?.name ? (
+                                <span key={relation.industries.id} className="px-2 py-1 bg-primary/10 text-primary text-xs font-medium">
+                                  {relation.industries.name}
+                                </span>
+                              ) : null
+                            )}
+                          </div>
+                        )}
+                        <h4 className="text-lg font-bold text-foreground mb-2 group-hover:text-primary transition-colors">
+                          {caseStudy.title}
+                        </h4>
+                        <p className="text-sm text-muted-foreground mb-3">
+                          {caseStudy.description || 'Read more about this quantum computing case study.'}
+                        </p>
+                        <div className="flex items-center text-primary text-sm font-medium group-hover:underline">
+                          Read case study →
+                        </div>
+                      </div>
+                    </Link>
+                  ))
+                ) : (
+                  /* Fallback content when no featured case studies exist */
+                  <>
+                    <div className="bg-card border border-border p-6">
+                      <div className="flex gap-2 mb-3">
+                        <span className="px-2 py-1 bg-primary/10 text-primary text-xs font-medium">Coming Soon</span>
+                      </div>
+                      <h4 className="text-lg font-bold text-foreground mb-2">
+                        Featured Case Studies
+                      </h4>
+                      <p className="text-sm text-muted-foreground mb-3">
+                        Premium case studies will be featured here. Contact us to promote your quantum computing success story.
+                      </p>
+                      <Link href="/contact" className="text-primary text-sm font-medium hover:underline">
+                        Promote your case study →
+                      </Link>
+                    </div>
+                  </>
+                )}
+              </div>
             </div>
-            <Button variant="outline" asChild className="gap-2">
-              <Link href="/case-study">
-                View All Case Studies
-                <ArrowRight className="h-4 w-4" />
-              </Link>
-            </Button>
-          </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <ContentCard
-              title="Quantinuum & HSBC: Financial Services Enhancement"
-              description="How HSBC partnered with Quantinuum to explore quantum computing applications in cybersecurity, fraud detection, and natural language processing for banking."
-              badges={["Finance", "Security", "NLP"]}
-              href="/case-study/quantinuum-hsbc-financial-services-enhancement"
-            />
-            
-            <ContentCard
-              title="Quantinuum & Google DeepMind: AI for Quantum Circuit Optimization"
-              description="How Quantinuum and Google DeepMind developed AlphaTensor-Quantum to optimize quantum circuits, reducing T gate counts by up to 47% in cryptography applications."
-              badges={["AI/ML", "Optimization", "Cryptography"]}
-              href="/case-study/quantinuum-google-deepmind-circuit-optimisation"
-            />
-            
-            <ContentCard
-              title="Quantinuum & Mitsui Co: Global Trading Optimization"
-              description="How Mitsui & Co. partnered with Quantinuum to apply quantum computing to logistics optimization, commodity trading, and financial risk assessment."
-              badges={["Trading", "Logistics", "Risk Management"]}
-              href="/case-study/quantinuum-mitsui-trading-co"
-            />
+            {/* Latest Blog Posts Column */}
+            <div>
+              <div className="flex justify-between items-center mb-6">
+                <h3 className="text-xl font-semibold text-foreground">Latest Blog Posts</h3>
+                <Link href="/blog" className="inline-flex items-center text-primary hover:underline text-sm font-medium">
+                  View all
+                  <ArrowRight className="ml-1 h-3 w-3" />
+                </Link>
+              </div>
+              
+              <div className="space-y-6">
+                {blogPosts.length > 0 ? (
+                  blogPosts.map((blogPost, index) => (
+                    <Link key={blogPost.id} href={`/blog/${blogPost.slug}`} className="block group">
+                      <div className="bg-card border border-border p-6 hover:border-primary transition-colors">
+                        {blogPost.tags && Array.isArray(blogPost.tags) && blogPost.tags.length > 0 && (
+                          <div className="flex gap-2 mb-3">
+                            {blogPost.tags.slice(0, 2).map((tag) => (
+                              <span key={tag} className="px-2 py-1 bg-primary/10 text-primary text-xs font-medium capitalize">
+                                {tag}
+                              </span>
+                            ))}
+                          </div>
+                        )}
+                        <h4 className="text-lg font-bold text-foreground mb-2 group-hover:text-primary transition-colors">
+                          {blogPost.title}
+                        </h4>
+                        <p className="text-sm text-muted-foreground mb-3">
+                          {blogPost.description || 'Read more about this quantum computing topic.'}
+                        </p>
+                        <div className="flex items-center text-primary text-sm font-medium group-hover:underline">
+                          Read article →
+                        </div>
+                      </div>
+                    </Link>
+                  ))
+                ) : (
+                  /* Fallback content when no blog posts exist */
+                  <>
+                    <div className="bg-card border border-border p-6">
+                      <div className="flex gap-2 mb-3">
+                        <span className="px-2 py-1 bg-primary/10 text-primary text-xs font-medium">Coming Soon</span>
+                      </div>
+                      <h4 className="text-lg font-bold text-foreground mb-2">
+                        Blog Posts Coming Soon
+                      </h4>
+                      <p className="text-sm text-muted-foreground mb-3">
+                        We're working on adding insightful blog posts about quantum computing industry trends and enterprise readiness guides.
+                      </p>
+                    </div>
+                  </>
+                )}
+              </div>
+            </div>
           </div>
         </div>
-      </AnimatedBackground>
+      </section>
 
-      {/* Community & Open Source Section */}
-      <section className="py-20 px-4 bg-gradient-to-b from-surface-secondary to-background relative overflow-hidden">
-        {/* Animated background pattern */}
-        <div className="absolute inset-0 opacity-30">
-          <div className="absolute inset-0 bg-gradient-to-br from-purple-vivid/10 via-transparent to-yellow-sharp/10 animated-gradient" />
-        </div>
-        <div className="max-w-6xl mx-auto relative z-10">
-          <div className="text-center mb-12">
-            <h2 className="text-2xl font-semibold mb-4">Open Source & Community Driven</h2>
-            <p className="text-muted-foreground max-w-2xl mx-auto">
+      {/* Open Source & Community */}
+      <section className="py-20 px-4 bg-muted/30 border-t border-border">
+        <div className="max-w-7xl mx-auto">
+          <div className="mb-12">
+            <h2 className="text-3xl font-bold text-foreground mb-4">Open Source & Community Driven</h2>
+            <p className="text-lg text-muted-foreground max-w-3xl">
               OpenQase is built by and for the quantum computing community. All content is freely available and contributions are welcome.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="text-center h-full">
-              <div className="bg-background rounded-lg p-6 border h-full flex flex-col">
-                <Github className="w-8 h-8 mx-auto mb-4 text-muted-foreground" />
-                <h3 className="font-semibold mb-2">Open Source</h3>
-                <p className="text-sm text-muted-foreground mb-4 flex-grow">
-                  All code and content freely available on GitHub under open source license
-                </p>
-                <Button variant="outline" size="sm" asChild>
-                  <Link href="https://github.com/openqase" className="inline-flex items-center gap-2">
-                    <ExternalLink className="w-4 h-4" />
-                    View on GitHub
-                  </Link>
-                </Button>
-              </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="bg-card border border-border p-6">
+              <Github className="w-6 h-6 text-primary mb-4" />
+              <h3 className="font-semibold text-foreground mb-2">Open Source</h3>
+              <p className="text-sm text-muted-foreground mb-4">
+                All code and content freely available on GitHub under open source license
+              </p>
+              <Link href="https://github.com/ddri/openqase" className="inline-flex items-center text-primary hover:underline text-sm font-medium">
+                <ExternalLink className="w-4 h-4 mr-1" />
+                View on GitHub →
+              </Link>
             </div>
 
-            <div className="text-center h-full">
-              <div className="bg-background rounded-lg p-6 border h-full flex flex-col">
-                <Users className="w-8 h-8 mx-auto mb-4 text-muted-foreground" />
-                <h3 className="font-semibold mb-2">Community Contributions</h3>
-                <p className="text-sm text-muted-foreground mb-4 flex-grow">
-                  Submit new case studies, corrections, or improvements to help the community learn
-                </p>
-                <Button variant="outline" size="sm" asChild>
-                  <Link href="/contact">
-                    Contribute Content
-                  </Link>
-                </Button>
-              </div>
+            <div className="bg-card border border-border p-6">
+              <Users className="w-6 h-6 text-primary mb-4" />
+              <h3 className="font-semibold text-foreground mb-2">Community Contributions</h3>
+              <p className="text-sm text-muted-foreground mb-4">
+                Submit new case studies, corrections, or improvements to help the community learn
+              </p>
+              <Link href="/contact" className="inline-flex items-center text-primary hover:underline text-sm font-medium">
+                Contribute content →
+              </Link>
             </div>
 
-            <div className="text-center h-full">
-              <div className="bg-background rounded-lg p-6 border h-full flex flex-col">
-                <Database className="w-8 h-8 mx-auto mb-4 text-muted-foreground" />
-                <h3 className="font-semibold mb-2">Free Access</h3>
-                <p className="text-sm text-muted-foreground mb-4 flex-grow">
-                  No paywalls, no subscriptions. All quantum case studies available to everyone
-                </p>
-                <Button variant="outline" size="sm" asChild>
-                  <Link href="/about">
-                    Learn More
-                  </Link>
-                </Button>
-              </div>
+            <div className="bg-card border border-border p-6">
+              <Database className="w-6 h-6 text-primary mb-4" />
+              <h3 className="font-semibold text-foreground mb-2">Free Access</h3>
+              <p className="text-sm text-muted-foreground mb-4">
+                No paywalls, no subscriptions. All quantum case studies available to everyone
+              </p>
+              <Link href="/about" className="inline-flex items-center text-primary hover:underline text-sm font-medium">
+                Learn more →
+              </Link>
             </div>
           </div>
         </div>

@@ -104,7 +104,7 @@ export default function AlgorithmList({ algorithms }: AlgorithmListProps) {
 
         {/* View Switcher and Results Count Row */}
         <div className="flex items-center justify-between">
-          <div className="text-sm text-[var(--text-secondary)]">
+          <div className="text-sm text-muted-foreground">
             {filteredAlgorithms.length} algorithm{filteredAlgorithms.length !== 1 ? 's' : ''} found
           </div>
           <ViewSwitcher value={viewMode} onValueChange={handleViewModeChange} />
@@ -139,7 +139,7 @@ export default function AlgorithmList({ algorithms }: AlgorithmListProps) {
       {/* Empty State */}
       {filteredAlgorithms.length === 0 && (
         <div className="text-center py-12">
-          <p className="text-lg text-[var(--text-secondary)]">
+          <p className="text-lg text-muted-foreground">
             No algorithms found matching your search.
           </p>
         </div>

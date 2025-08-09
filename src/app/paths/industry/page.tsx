@@ -2,7 +2,7 @@
 import { Metadata } from 'next';
 import { getStaticContentList } from '@/lib/content-fetchers';
 import IndustryList from '@/components/IndustryList';
-import LearningPathLayout from '@/components/ui/learning-path-layout';
+import ProfessionalIndustriesLayout from '@/components/ui/professional-industries-layout';
 import type { Database } from '@/types/supabase';
 
 export const metadata: Metadata = {
@@ -14,10 +14,17 @@ type Industry = Database['public']['Tables']['industries']['Row'];
 
 export default async function IndustriesPage() {
   const industries = await getStaticContentList('industries') as Industry[];
+  
+  // Calculate sector count for metrics
+  const uniqueSectors = Array.from(new Set(industries.flatMap(ind => ind.sector || ['Other'])));
 
   return (
-    <LearningPathLayout title="Quantum Industries">
+    <ProfessionalIndustriesLayout 
+      title="Quantum Industries"
+      industryCount={industries.length}
+      sectorCount={uniqueSectors.length}
+    >
       <IndustryList industries={industries} />
-    </LearningPathLayout>
+    </ProfessionalIndustriesLayout>
   );
 }

@@ -2,7 +2,7 @@
 import { Metadata } from 'next';
 import { getStaticContentList } from '@/lib/content-fetchers';
 import PersonaList from '@/components/PersonaList';
-import LearningPathLayout from '@/components/ui/learning-path-layout';
+import ProfessionalPersonasLayout from '@/components/ui/professional-personas-layout';
 import type { Database } from '@/types/supabase';
 
 export const metadata: Metadata = {
@@ -16,8 +16,11 @@ export default async function PersonasPage() {
   const personas = await getStaticContentList('personas') as Persona[];
 
   return (
-    <LearningPathLayout title="Quantum Personas">
+    <ProfessionalPersonasLayout 
+      title="Quantum Personas"
+      personaCount={personas.length}
+    >
       <PersonaList personas={personas} />
-    </LearningPathLayout>
+    </ProfessionalPersonasLayout>
   );
 }

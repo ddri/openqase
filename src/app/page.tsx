@@ -45,13 +45,14 @@ export default async function HomePage() {
   // In preview mode, show all content including drafts
   const publishedFilter = isPreview ? {} : { published: true };
   const featuredFilter = isPreview ? { featured: true } : { published: true, featured: true };
+  const featuredBlogFilter = isPreview ? { featured: true } : { published: true, featured: true };
   
   const [caseStudies, algorithms, industries, personas, blogPostsData, featuredCaseStudiesData] = await Promise.all([
     getBuildTimeContentList('case_studies', { filters: publishedFilter }),
     getBuildTimeContentList('algorithms', { filters: publishedFilter }), 
     getBuildTimeContentList('industries', { filters: publishedFilter }),
     getBuildTimeContentList('personas', { filters: publishedFilter }),
-    getBuildTimeContentList('blog_posts', { filters: publishedFilter, limit: 2 }),
+    getBuildTimeContentList('blog_posts', { filters: featuredBlogFilter, limit: 2 }),
     getBuildTimeContentList('case_studies', { filters: featuredFilter, limit: 2 })
   ]);
 
@@ -302,10 +303,10 @@ export default async function HomePage() {
               </div>
             </div>
 
-            {/* Latest Blog Posts Column */}
+            {/* Featured Blog Posts Column */}
             <div>
               <div className="flex justify-between items-center mb-6">
-                <h3 className="text-xl font-semibold text-foreground">Latest Blog Posts</h3>
+                <h3 className="text-xl font-semibold text-foreground">Featured Blog Posts</h3>
                 <Link href="/blog" className="inline-flex items-center text-primary hover:underline text-sm font-medium">
                   View all
                   <ArrowRight className="ml-1 h-3 w-3" />
@@ -339,17 +340,17 @@ export default async function HomePage() {
                     </Link>
                   ))
                 ) : (
-                  /* Fallback content when no blog posts exist */
+                  /* Fallback content when no featured blog posts exist */
                   <>
                     <div className="bg-card border border-border p-6">
                       <div className="flex gap-2 mb-3">
                         <span className="px-2 py-1 bg-primary/10 text-primary text-xs font-medium">Coming Soon</span>
                       </div>
                       <h4 className="text-lg font-bold text-foreground mb-2">
-                        Blog Posts Coming Soon
+                        Featured Blog Posts Coming Soon
                       </h4>
                       <p className="text-sm text-muted-foreground mb-3">
-                        We're working on adding insightful blog posts about quantum computing industry trends and enterprise readiness guides.
+                        We're working on adding featured blog posts about quantum computing industry trends and enterprise readiness guides.
                       </p>
                     </div>
                   </>

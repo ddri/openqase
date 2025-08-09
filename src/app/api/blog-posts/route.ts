@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { revalidatePath } from 'next/cache';
 import { 
   fetchContentItems, 
   fetchContentItem, 
@@ -269,6 +270,9 @@ export async function PATCH(request: NextRequest) {
         );
       }
       
+      revalidatePath('/admin/blog');
+      revalidatePath('/'); // Revalidate homepage since it shows featured blog posts
+      
       return NextResponse.json(data);
     }
     
@@ -286,6 +290,9 @@ export async function PATCH(request: NextRequest) {
           { status: 500 }
         );
       }
+      
+      revalidatePath('/admin/blog');
+      revalidatePath('/'); // Revalidate homepage since it shows featured blog posts
       
       return NextResponse.json(data);
     }

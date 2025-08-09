@@ -15,7 +15,8 @@ const createColumns = (
   selectedItems: Set<string>,
   onSelectItem: (id: string, selected: boolean) => void,
   onSelectAll: (selected: boolean) => void,
-  allSelected: boolean
+  allSelected: boolean,
+  onDeleteItem: (id: string) => void
 ): ColumnDef<CaseStudy>[] => [
   {
     id: 'select',
@@ -28,10 +29,9 @@ const createColumns = (
     ),
     cell: ({ row }) => (
       <Checkbox
-        checked={row.original.id ? selectedItems.has(row.original.id) : false}
-        onCheckedChange={(checked) => row.original.id && onSelectItem(row.original.id, !!checked)}
+        checked={selectedItems.has(row.original.id)}
+        onCheckedChange={(checked) => onSelectItem(row.original.id, !!checked)}
         aria-label="Select row"
-        disabled={!row.original.id}
       />
     ),
     enableSorting: false,
@@ -83,11 +83,19 @@ const createColumns = (
     header: '',
     cell: ({ row }) => {
       return (
-        <div className="flex justify-end">
-          <Button variant="ghost" size="sm" asChild disabled={!row.original.id}>
-            <Link href={row.original.id ? `/admin/case-studies/${row.original.id}` : '#'}>
+        <div className="flex justify-end gap-2">
+          <Button variant="ghost" size="sm" asChild>
+            <Link href={`/admin/case-studies/${row.original.id}`}>
               Edit
             </Link>
+          </Button>
+          <Button 
+            variant="ghost" 
+            size="sm" 
+            onClick={() => onDeleteItem(row.original.id)}
+            className="text-destructive hover:text-destructive"
+          >
+            Delete
           </Button>
         </div>
       );
@@ -150,7 +158,7 @@ export function CaseStudiesClient({ data }: CaseStudiesClientProps) {
 
   const handleSelectAll = (selected: boolean) => {
     if (selected) {
-      setSelectedItems(new Set(filteredData.map(item => item.id).filter((id): id is string => id !== null)))
+      setSelectedItems(new Set(filteredData.map(item => item.id)))
     } else {
       setSelectedItems(new Set())
     }
@@ -159,27 +167,48 @@ export function CaseStudiesClient({ data }: CaseStudiesClientProps) {
   const handleBulkOperation = async (operation: 'publish' | 'unpublish' | 'delete') => {
     if (selectedItems.size === 0) return
     
-    const confirmMessage = `Are you sure you want to ${operation} ${selectedItems.size} case studies?`
+    const confirmMessage = operation === 'delete' 
+      ? `Are you sure you want to delete ${selectedItems.size} case studies? They will be moved to trash.`
+      : `Are you sure you want to ${operation} ${selectedItems.size} case studies?`
     if (!confirm(confirmMessage)) return
     
     setIsLoading(true)
     try {
-      const response = await fetch('/api/case-studies', {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          bulk: true,
-          operation,
-          ids: Array.from(selectedItems)
+      if (operation === 'delete') {
+        // Use our new delete endpoint for bulk delete
+        const response = await fetch('/api/case-studies/delete', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ ids: Array.from(selectedItems) })
         })
-      })
-      
-      if (response.ok) {
-        alert(`Successfully ${operation}ed ${selectedItems.size} case studies`)
-        setSelectedItems(new Set())
-        window.location.reload() // Refresh to see changes
+        
+        if (response.ok) {
+          alert(`Successfully moved ${selectedItems.size} case studies to trash`)
+          setSelectedItems(new Set())
+          window.location.reload()
+        } else {
+          const error = await response.text()
+          alert(`Failed to delete case studies: ${error}`)
+        }
       } else {
-        alert(`Failed to ${operation} case studies`)
+        // Existing bulk operations for publish/unpublish
+        const response = await fetch('/api/case-studies', {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            bulk: true,
+            operation,
+            ids: Array.from(selectedItems)
+          })
+        })
+        
+        if (response.ok) {
+          alert(`Successfully ${operation}ed ${selectedItems.size} case studies`)
+          setSelectedItems(new Set())
+          window.location.reload()
+        } else {
+          alert(`Failed to ${operation} case studies`)
+        }
       }
     } catch (error) {
       console.error('Bulk operation error:', error)
@@ -188,8 +217,34 @@ export function CaseStudiesClient({ data }: CaseStudiesClientProps) {
     setIsLoading(false)
   }
 
+  const handleDeleteItem = async (id: string) => {
+    const confirmMessage = 'Are you sure you want to delete this case study? It will be moved to trash.'
+    if (!confirm(confirmMessage)) return
+    
+    setIsLoading(true)
+    try {
+      const response = await fetch('/api/case-studies/delete', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id })
+      })
+      
+      if (response.ok) {
+        alert('Case study moved to trash')
+        window.location.reload()
+      } else {
+        const error = await response.text()
+        alert(`Failed to delete case study: ${error}`)
+      }
+    } catch (error) {
+      console.error('Delete error:', error)
+      alert('Error deleting case study')
+    }
+    setIsLoading(false)
+  }
+
   const allSelected = filteredData.length > 0 && selectedItems.size === filteredData.length
-  const columns = createColumns(selectedItems, handleSelectItem, handleSelectAll, allSelected)
+  const columns = createColumns(selectedItems, handleSelectItem, handleSelectAll, allSelected, handleDeleteItem)
 
   return (
     <div className="p-8">

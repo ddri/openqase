@@ -10,15 +10,15 @@ export const metadata: Metadata = {
   description: 'Manage case studies content'
 }
 
-export type CaseStudy = Database['public']['Views']['admin_case_studies']['Row']
+export type CaseStudy = Database['public']['Tables']['case_studies']['Row']
 
 export default async function CaseStudiesPage() {
   try {
     const supabase = await createServiceRoleSupabaseClient();
     
-    // Use admin view to show all non-deleted case studies
+    // Direct table access - will show all content including deleted for now
     let { data: caseStudies, error } = await supabase
-      .from('admin_case_studies')
+      .from('case_studies')
       .select('*')
       .order('title')
 

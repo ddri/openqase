@@ -17,9 +17,10 @@ import {
 } from 'lucide-react';
 import { AutoSchema } from '@/components/AutoSchema';
 import GlobalSearch from '@/components/GlobalSearch';
-import { getBuildTimeContentList, fetchSearchData } from '@/lib/content-fetchers';
+import { getBuildTimeContentList, fetchSearchData, getStaticContentList } from '@/lib/content-fetchers';
 import type { BlogPost } from '@/lib/types';
 import { InteractiveKnowledgeMap } from '@/components/ui/interactive-knowledge-map';
+import { draftMode } from 'next/headers';
 
 // Force this page to be statically generated at build time
 export const dynamic = 'force-static'
@@ -34,17 +35,24 @@ interface CategoryStats {
 
 
 export default async function HomePage() {
+  // Check if we're in preview mode
+  const { isEnabled: isPreview } = await draftMode();
+  
   // Fetch optimized search data (streamlined payload for performance)
   const searchData = await fetchSearchData();
 
-  // Get actual content counts from database (published only)
+  // Get actual content counts from database
+  // In preview mode, show all content including drafts
+  const publishedFilter = isPreview ? {} : { published: true };
+  const featuredFilter = isPreview ? { featured: true } : { published: true, featured: true };
+  
   const [caseStudies, algorithms, industries, personas, blogPostsData, featuredCaseStudiesData] = await Promise.all([
-    getBuildTimeContentList('case_studies', { filters: { published: true } }),
-    getBuildTimeContentList('algorithms', { filters: { published: true } }), 
-    getBuildTimeContentList('industries', { filters: { published: true } }),
-    getBuildTimeContentList('personas', { filters: { published: true } }),
-    getBuildTimeContentList('blog_posts', { filters: { published: true }, limit: 2 }),
-    getBuildTimeContentList('case_studies', { filters: { published: true, featured: true }, limit: 2 })
+    getBuildTimeContentList('case_studies', { filters: publishedFilter }),
+    getBuildTimeContentList('algorithms', { filters: publishedFilter }), 
+    getBuildTimeContentList('industries', { filters: publishedFilter }),
+    getBuildTimeContentList('personas', { filters: publishedFilter }),
+    getBuildTimeContentList('blog_posts', { filters: publishedFilter, limit: 2 }),
+    getBuildTimeContentList('case_studies', { filters: featuredFilter, limit: 2 })
   ]);
 
   // Type the blog posts and featured case studies properly
@@ -369,7 +377,7 @@ export default async function HomePage() {
               <p className="text-sm text-muted-foreground mb-4">
                 All code and content freely available on GitHub under open source license
               </p>
-              <Link href="https://github.com/openqase" className="inline-flex items-center text-primary hover:underline text-sm font-medium">
+              <Link href="https://github.com/ddri/openqase" className="inline-flex items-center text-primary hover:underline text-sm font-medium">
                 <ExternalLink className="w-4 h-4 mr-1" />
                 View on GitHub →
               </Link>

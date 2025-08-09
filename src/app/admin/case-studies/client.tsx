@@ -11,31 +11,6 @@ import { Checkbox } from '@/components/ui/checkbox'
 import { useState, useMemo } from 'react'
 import type { CaseStudy } from './page'
 
-async function refreshCache() {
-  try {
-    // Note: For security, the token should be handled server-side
-    // This is a simplified example - in production, create a server action
-    const response = await fetch('/api/revalidate', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        // Remove auth for now - you'll need to set REVALIDATION_TOKEN in .env.local
-      },
-      body: JSON.stringify({ type: 'all-case-studies' })
-    });
-    
-    if (response.ok) {
-      alert('Cache refreshed successfully!');
-      window.location.reload(); // Refresh the admin page to see any changes
-    } else {
-      alert('Failed to refresh cache - check console for details');
-    }
-  } catch (error) {
-    console.error('Cache refresh error:', error);
-    alert('Error refreshing cache');
-  }
-}
-
 const createColumns = (
   selectedItems: Set<string>,
   onSelectItem: (id: string, selected: boolean) => void,
@@ -225,9 +200,6 @@ export function CaseStudiesClient({ data }: CaseStudiesClientProps) {
           </p>
         </div>
         <div className="flex gap-2">
-          <Button onClick={refreshCache} variant="outline">
-            Refresh Cache
-          </Button>
           <Button asChild>
             <Link href="/admin/case-studies/new">
               <Plus className="w-4 h-4 mr-2" />

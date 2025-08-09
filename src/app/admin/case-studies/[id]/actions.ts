@@ -162,6 +162,11 @@ export async function saveCaseStudy(values: CaseStudyFormData): Promise<{ caseSt
 
     // Revalidate the admin cache
     revalidatePath('/admin/case-studies');
+    
+    // Revalidate homepage if featured status might have changed
+    if ('featured' in values) {
+      revalidatePath('/');
+    }
 
     const totalTime = Date.now() - startTime;
 
@@ -206,6 +211,7 @@ export async function publishCaseStudy(id: string, slug: string): Promise<{ succ
     revalidatePath('/admin/case-studies');
     revalidatePath(`/case-studies/${slug}`);
     revalidatePath('/case-studies');
+    revalidatePath('/'); // Homepage shows featured case studies
     
     return { success: true };
   } catch (error: unknown) {
@@ -237,6 +243,7 @@ export async function unpublishCaseStudy(id: string, slug: string): Promise<{ su
     revalidatePath('/admin/case-studies');
     revalidatePath(`/case-studies/${slug}`);
     revalidatePath('/case-studies');
+    revalidatePath('/'); // Homepage shows featured case studies
     
     return { success: true };
   } catch (error: unknown) {

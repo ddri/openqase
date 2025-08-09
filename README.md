@@ -208,6 +208,9 @@ openqase/
 
 **🔄 Next Phases:**
 
+### 🔧 TODO
+- **Fix Build Warnings**: Update content fetchers to use `.maybeSingle()` instead of `.single()` for relationship lookups to handle missing referenced case studies gracefully. Currently shows harmless 404 errors during build for case studies that exist in JSON references but haven't been imported to the database yet.
+
 ### 🚀 Feature Development (High Impact)
 - Search functionality enhancement (basic implementation complete)
 

@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import { ArrowLeft, Calendar, Building2, Users, Cpu, Network, ExternalLink } from 'lucide-react';
+import { ArrowLeft, Users, Cpu, ExternalLink } from 'lucide-react';
 import Link from 'next/link';
 import { Badge } from '@/components/ui/badge';
 
@@ -41,38 +41,6 @@ export default function ProfessionalCaseStudyLayout({
               <p className="text-lg md:text-xl text-muted-foreground leading-relaxed max-w-3xl">
                 {description}
               </p>
-            )}
-          </div>
-        </div>
-      </div>
-
-      {/* Key Metrics Bar */}
-      <div className="bg-muted/30 border-b border-border/30">
-        <div className="container-outer py-4">
-          <div className="flex flex-wrap gap-6 text-sm">
-            {caseStudy.year && (
-              <div className="flex items-center gap-2">
-                <Calendar className="h-4 w-4 text-muted-foreground" />
-                <span className="text-foreground font-medium">{caseStudy.year}</span>
-              </div>
-            )}
-            
-            {((caseStudy.partner_companies?.length || 0) + (caseStudy.quantum_companies?.length || 0)) > 0 && (
-              <div className="flex items-center gap-2">
-                <Building2 className="h-4 w-4 text-muted-foreground" />
-                <span className="text-foreground font-medium">
-                  {((caseStudy.partner_companies?.length || 0) + (caseStudy.quantum_companies?.length || 0))} Companies
-                </span>
-              </div>
-            )}
-            
-            {caseStudy.case_study_industry_relations && caseStudy.case_study_industry_relations.length > 0 && (
-              <div className="flex items-center gap-2">
-                <Network className="h-4 w-4 text-muted-foreground" />
-                <span className="text-foreground font-medium">
-                  {caseStudy.case_study_industry_relations.filter((rel: any) => rel.industries?.slug !== 'not-applicable').length} Industries
-                </span>
-              </div>
             )}
           </div>
         </div>

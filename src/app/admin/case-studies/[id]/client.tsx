@@ -14,7 +14,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { TagInput } from '@/components/ui/tag-input';
 import { ResourceLinksEditor } from '@/components/admin/ResourceLinksEditor';
 import { createContentValidationRules, calculateCompletionPercentage, validateFormValues } from '@/utils/form-validation';
-import { ArrowLeft, Save, Loader2 } from 'lucide-react';
+import { ArrowLeft, Save, Loader2, Eye } from 'lucide-react';
 import { toast } from '@/components/ui/use-toast';
 import { saveCaseStudy, publishCaseStudy, unpublishCaseStudy } from './actions';
 
@@ -300,6 +300,22 @@ export function CaseStudyForm({ caseStudy, algorithms, industries, personas, isN
           </Button>
           
           <div className="flex items-center gap-3">
+            {/* Featured Checkbox - moved to left */}
+            <div className="flex items-center space-x-2 p-2 border border-border rounded-md bg-card">
+              <Checkbox
+                id="featured"
+                checked={values.featured}
+                onCheckedChange={(checked: boolean) => {
+                  setValues(prev => ({ ...prev, featured: checked }));
+                  setIsDirty(true);
+                }}
+                disabled={isPending}
+              />
+              <Label htmlFor="featured" className="text-sm font-medium cursor-pointer">
+                Feature article
+              </Label>
+            </div>
+
             <Button
               type="button"
               variant="outline"
@@ -320,6 +336,23 @@ export function CaseStudyForm({ caseStudy, algorithms, industries, personas, isN
                 </>
               )}
             </Button>
+
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={() => {
+                // Open preview in new tab
+                const previewUrl = `/api/preview?type=case-study&slug=${values.slug}`;
+                window.open(previewUrl, '_blank');
+              }}
+              disabled={!values.slug}
+              className="min-w-[100px]"
+              title={!values.slug ? "Save the case study first to preview" : "Preview case study"}
+            >
+              <Eye className="mr-2 h-4 w-4" />
+              Preview
+            </Button>
             
             <PublishButton
               isPublished={values.published}
@@ -330,26 +363,6 @@ export function CaseStudyForm({ caseStudy, algorithms, industries, personas, isN
               onTabChange={(tab: string) => {}}
               getTabLabel={(tab: string) => tab}
             />
-
-            {/* Featured Checkbox */}
-            <div className="flex items-center space-x-2 p-3 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-md">
-              <Checkbox
-                id="featured"
-                checked={values.featured}
-                onCheckedChange={(checked: boolean) => {
-                  setValues(prev => ({ ...prev, featured: checked }));
-                }}
-                disabled={isPending}
-              />
-              <div className="flex flex-col">
-                <Label htmlFor="featured" className="text-sm font-medium cursor-pointer">
-                  ⭐ Featured Case Study
-                </Label>
-                <p className="text-xs text-muted-foreground">
-                  Feature this case study on the homepage (premium placement)
-                </p>
-              </div>
-            </div>
           </div>
         </div>
         

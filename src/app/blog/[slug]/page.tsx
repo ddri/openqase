@@ -47,8 +47,9 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
   // Process content with server-side markdown
   const processedContent = blogPost.content ? await processMarkdown(blogPost.content) : '';
 
-  // Extract related blog posts from the relationships
-  const relatedPosts = blogPost.blog_post_relations?.map(relation => relation.related_blog_posts) || [];
+  // Extract related blog posts from the relationships, filter out those without slugs
+  const relatedPosts = (blogPost.blog_post_relations?.map(relation => relation.related_blog_posts) || [])
+    .filter(post => post && post.slug);
 
   return (
     <main className="min-h-screen">

@@ -70,10 +70,23 @@ export function CaseStudyForm({ caseStudy, algorithms, industries, personas, isN
   
   // Handle field change
   const handleChange = (field: string, value: any) => {
-    setValues(prev => ({
-      ...prev,
+    const newValues = {
+      ...values,
       [field]: value
-    }));
+    };
+    
+    // Auto-generate slug from title if slug is empty
+    if (field === 'title' && value && !values.slug) {
+      const autoSlug = value
+        .toLowerCase()
+        .replace(/[^a-z0-9\s-]/g, '') // Remove special chars
+        .replace(/\s+/g, '-') // Replace spaces with hyphens
+        .replace(/-+/g, '-') // Replace multiple hyphens with single
+        .trim();
+      newValues.slug = autoSlug;
+    }
+    
+    setValues(newValues);
     setIsDirty(true);
   };
   

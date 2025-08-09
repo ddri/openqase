@@ -9,6 +9,7 @@ This folder contains project documentation in Markdown format.
 - **[Quick Reference](v040-quick-reference.md)** - Developer quick start guide
 - **[API Documentation](api-documentation.md)** - REST API reference
 - **[Unified Content Fetching](unified-content-fetching.md)** - Content system documentation
+- **[Deletion System](deletion-system-implementation.md)** - Soft delete and content lifecycle management
 
 ## Documentation Structure
 

@@ -56,6 +56,16 @@ Update the CHANGELOG for these types of changes:
 - Include `published` field in relationship queries when filtering is needed
 - Apply published filters conditionally based on preview mode
 
+### Deletion System (View-Based Architecture)
+- **Public pages**: Use `public_*` views (e.g., `public_case_studies`) - shows only published content
+- **Admin pages**: Use `admin_*` views (e.g., `admin_case_studies`) - shows all non-deleted content
+- **Trash/Recovery**: Use `trash_*` views (e.g., `trash_case_studies`) - shows only deleted content
+- **Soft delete**: Use `soft_delete_content()` database function
+- **Recovery**: Use `recover_content()` database function
+- Content has `content_status` field: 'draft', 'published', 'archived', 'deleted'
+- 30-day retention period for soft-deleted content before permanent deletion
+- See `/docs/deletion-system-implementation.md` for full technical documentation
+
 ## Architecture Principles
 
 ### Static Site Generation

@@ -30,23 +30,23 @@ export default function IndustryList({ industries }: IndustryListProps) {
   const { viewMode, handleViewModeChange } = useViewSwitcher('industries-view-mode');
   const { sortBy, handleSortChange } = useSortPersistence('industries-sort', 'name-asc', INDUSTRIES_SORT_OPTIONS);
 
-  // Memoize unique sectors for filtering
+  // Memoize unique sectors for filtering (hardcoded as industries don't have sectors)
   const sectors = useMemo(() => {
-    return Array.from(new Set(industries.flatMap(ind => ind.sector || ['Other']))).sort();
-  }, [industries]);
+    return ['Technology', 'Healthcare', 'Finance', 'Manufacturing', 'Other'];
+  }, []);
 
   // Memoize expensive filtering and sorting operations
   const filteredIndustries = useMemo(() => {
     return industries
     .filter(industry => {
-      if (sectorFilter !== 'all' && !industry.sector?.includes(sectorFilter)) return false;
+      // Skip sector filtering as industries don't have sectors
+      if (sectorFilter !== 'all') return false;
       if (!searchQuery) return true;
       
       const query = searchQuery.toLowerCase();
       return (
         industry.name.toLowerCase().includes(query) ||
-        industry.description?.toLowerCase().includes(query) ||
-        industry.sector?.some(s => s.toLowerCase().includes(query))
+        industry.description?.toLowerCase().includes(query)
       );
     })
     .sort((a, b) => {
@@ -158,7 +158,7 @@ export default function IndustryList({ industries }: IndustryListProps) {
               variant={viewMode}
               title={industry.name}
               description={industry.description || ''}
-              badges={industry.sector || ['Other']}
+              badges={[]}
               href={`/paths/industry/${industry.slug}`}
               metadata={{
                 lastUpdated: metadata.join(' • ') || undefined

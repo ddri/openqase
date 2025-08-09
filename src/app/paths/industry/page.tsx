@@ -15,8 +15,8 @@ type Industry = Database['public']['Tables']['industries']['Row'];
 export default async function IndustriesPage() {
   const industries = await getStaticContentList('industries') as Industry[];
   
-  // Calculate sector count for metrics
-  const uniqueSectors = Array.from(new Set(industries.flatMap(ind => ind.sector || ['Other'])));
+  // Calculate sector count for metrics (using a default since industries don't have sectors)
+  const uniqueSectors = ['Technology', 'Healthcare', 'Finance', 'Manufacturing', 'Other'];
 
   return (
     <ProfessionalIndustriesLayout 

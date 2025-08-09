@@ -19,7 +19,6 @@ export async function saveIndustry(values: IndustryFormData): Promise<TablesInse
         slug: values.slug,
         description: values.description,
         main_content: values.main_content,
-        sector: values.sector,
         published: values.published,
       })
       .select()

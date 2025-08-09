@@ -95,19 +95,7 @@ export default function ProfessionalIndustryDetailLayout({
         <div className="grid gap-8 lg:gap-12 lg:grid-cols-[1fr,300px]">
           {/* Article Content */}
           <article className="max-w-none">
-            {/* Sector Information */}
-            {industry.sector && industry.sector.length > 0 && (
-              <div className="mb-8">
-                <h3 className="text-lg font-semibold mb-3 text-foreground">Business Sectors</h3>
-                <div className="flex flex-wrap gap-2">
-                  {industry.sector.map((sector: string) => (
-                    <Badge key={sector} variant="secondary" className="text-sm">
-                      {sector}
-                    </Badge>
-                  ))}
-                </div>
-              </div>
-            )}
+            {/* Sector Information - Removed as industries don't have sectors field */}
 
             <div className="prose prose-lg dark:prose-invert max-w-none prose-headings:font-bold prose-headings:tracking-tight prose-h1:text-3xl prose-h2:text-2xl prose-h3:text-xl prose-p:leading-relaxed prose-p:text-foreground/90">
               {children}
@@ -123,18 +111,6 @@ export default function ProfessionalIndustryDetailLayout({
                 Industry Details
               </h3>
               <div className="space-y-4">
-                {industry.sector && industry.sector.length > 0 && (
-                  <div>
-                    <div className="text-sm text-muted-foreground mb-2">Sectors</div>
-                    <div className="flex flex-wrap gap-1.5">
-                      {industry.sector.map((sector: string) => (
-                        <Badge key={sector} variant="outline" className="text-xs">
-                          {sector}
-                        </Badge>
-                      ))}
-                    </div>
-                  </div>
-                )}
               </div>
             </div>
 

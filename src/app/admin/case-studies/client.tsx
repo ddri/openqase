@@ -28,9 +28,10 @@ const createColumns = (
     ),
     cell: ({ row }) => (
       <Checkbox
-        checked={selectedItems.has(row.original.id)}
-        onCheckedChange={(checked) => onSelectItem(row.original.id, !!checked)}
+        checked={row.original.id ? selectedItems.has(row.original.id) : false}
+        onCheckedChange={(checked) => row.original.id && onSelectItem(row.original.id, !!checked)}
         aria-label="Select row"
+        disabled={!row.original.id}
       />
     ),
     enableSorting: false,
@@ -83,8 +84,8 @@ const createColumns = (
     cell: ({ row }) => {
       return (
         <div className="flex justify-end">
-          <Button variant="ghost" size="sm" asChild>
-            <Link href={`/admin/case-studies/${row.original.id}`}>
+          <Button variant="ghost" size="sm" asChild disabled={!row.original.id}>
+            <Link href={row.original.id ? `/admin/case-studies/${row.original.id}` : '#'}>
               Edit
             </Link>
           </Button>
@@ -128,7 +129,7 @@ export function CaseStudiesClient({ data }: CaseStudiesClientProps) {
       if (searchQuery) {
         const query = searchQuery.toLowerCase()
         return (
-          item.title.toLowerCase().includes(query) ||
+          (item.title || '').toLowerCase().includes(query) ||
           (item.description || '').toLowerCase().includes(query)
         )
       }
@@ -149,7 +150,7 @@ export function CaseStudiesClient({ data }: CaseStudiesClientProps) {
 
   const handleSelectAll = (selected: boolean) => {
     if (selected) {
-      setSelectedItems(new Set(filteredData.map(item => item.id)))
+      setSelectedItems(new Set(filteredData.map(item => item.id).filter((id): id is string => id !== null)))
     } else {
       setSelectedItems(new Set())
     }

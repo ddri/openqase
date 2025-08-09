@@ -236,41 +236,168 @@ export async function saveContentItem({
 }
 
 /**
- * Deletes a content item and its relationships
+ * Deletes a content item and its relationships (soft delete by default)
  */
 export async function deleteContentItem({
   contentType,
   id,
-  relationshipConfigs = []
+  relationshipConfigs = [],
+  hardDelete = false,
+  deletedBy = null
 }: {
   contentType: ContentType;
   id: string;
   relationshipConfigs?: RelationshipConfig[];
+  hardDelete?: boolean;
+  deletedBy?: string | null;
 }) {
   const serviceClient = await createServiceRoleSupabaseClient();
   
-  // First delete relationships in junction tables
-  for (const config of relationshipConfigs) {
-    const { junctionTable, contentIdField } = config;
-    
-    const { error: relDeleteError } = await serviceClient
-      .from(junctionTable as any)
-      .delete()
-      .eq(contentIdField, id);
+  // If hard delete is requested (or soft delete not supported), use original logic
+  if (hardDelete) {
+    // First delete relationships in junction tables
+    for (const config of relationshipConfigs) {
+      const { junctionTable, contentIdField } = config;
       
-    if (relDeleteError) {
-      console.error(`Error deleting relationships in ${junctionTable}:`, relDeleteError);
-      // Continue with deletion even if relationship deletion fails
+      const { error: relDeleteError } = await serviceClient
+        .from(junctionTable as any)
+        .delete()
+        .eq(contentIdField, id);
+        
+      if (relDeleteError) {
+        console.error(`Error deleting relationships in ${junctionTable}:`, relDeleteError);
+        // Continue with deletion even if relationship deletion fails
+      }
     }
+    
+    // Then delete the content item
+    const { error: deleteError } = await serviceClient
+      .from(contentType)
+      .delete()
+      .eq('id', id);
+      
+    return { success: !deleteError, error: deleteError };
   }
   
-  // Then delete the content item
-  const { error: deleteError } = await serviceClient
-    .from(contentType)
-    .delete()
-    .eq('id', id);
+  // Soft delete implementation
+  try {
+    // Step 1: Soft delete relationships in junction tables
+    for (const config of relationshipConfigs) {
+      const { junctionTable, contentIdField } = config;
+      
+      // Update junction table entries with deleted_at timestamp
+      const { error: relDeleteError } = await serviceClient
+        .from(junctionTable as any)
+        .update({ 
+          deleted_at: new Date().toISOString()
+        })
+        .eq(contentIdField, id)
+        .is('deleted_at', null); // Only update if not already deleted
+        
+      if (relDeleteError) {
+        console.error(`Error soft deleting relationships in ${junctionTable}:`, relDeleteError);
+        // Continue - non-critical error
+      }
+    }
     
-  return { success: !deleteError, error: deleteError };
+    // Step 2: Soft delete the main content item
+    const { error: deleteError } = await serviceClient
+      .from(contentType)
+      .update({ 
+        deleted_at: new Date().toISOString(),
+        deleted_by: deletedBy,
+        published: false // Immediately unpublish when soft deleted
+      })
+      .eq('id', id);
+      
+    // Step 3: Log the deletion for audit trail
+    if (!deleteError && deletedBy) {
+      await serviceClient
+        .from('deletion_audit_log')
+        .insert({
+          content_type: contentType,
+          content_id: id,
+          action: 'soft_delete',
+          performed_by: deletedBy,
+          performed_at: new Date().toISOString()
+        });
+    }
+      
+    return { success: !deleteError, error: deleteError };
+  } catch (error) {
+    console.error('Soft delete failed:', error);
+    return { success: false, error: error as any };
+  }
+}
+
+/**
+ * Recovers a soft-deleted content item and its relationships
+ */
+export async function recoverContentItem({
+  contentType,
+  id,
+  relationshipConfigs = [],
+  recoveredBy = null
+}: {
+  contentType: ContentType;
+  id: string;
+  relationshipConfigs?: RelationshipConfig[];
+  recoveredBy?: string | null;
+}) {
+  const serviceClient = await createServiceRoleSupabaseClient();
+  
+  try {
+    // Step 1: Recover the main content item
+    const { data, error: recoverError } = await serviceClient
+      .from(contentType)
+      .update({ 
+        deleted_at: null,
+        deleted_by: null,
+        published: false // Always recover as draft for safety
+      })
+      .eq('id', id)
+      .select()
+      .single();
+      
+    if (recoverError || !data) {
+      return { success: false, error: recoverError };
+    }
+    
+    // Step 2: Recover relationships in junction tables
+    for (const config of relationshipConfigs) {
+      const { junctionTable, contentIdField } = config;
+      
+      const { error: relRecoverError } = await serviceClient
+        .from(junctionTable as any)
+        .update({ 
+          deleted_at: null
+        })
+        .eq(contentIdField, id);
+        
+      if (relRecoverError) {
+        console.error(`Error recovering relationships in ${junctionTable}:`, relRecoverError);
+        // Continue - non-critical error
+      }
+    }
+    
+    // Step 3: Log the recovery for audit trail
+    if (recoveredBy) {
+      await serviceClient
+        .from('deletion_audit_log')
+        .insert({
+          content_type: contentType,
+          content_id: id,
+          action: 'restore',
+          performed_by: recoveredBy,
+          performed_at: new Date().toISOString()
+        });
+    }
+    
+    return { success: true, data };
+  } catch (error) {
+    console.error('Recovery failed:', error);
+    return { success: false, error: error as any };
+  }
 }
 
 /**

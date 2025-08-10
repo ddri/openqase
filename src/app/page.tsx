@@ -111,7 +111,7 @@ export default async function HomePage() {
               </h1>
             </div>
             <p className="text-lg text-muted-foreground max-w-3xl">
-              Real Quantum Computing Case Studies — A free, open-source collection of quantum implementations from industry leaders
+              Real Quantum Computing Case Studies — An open-source collection of quantum implementations from industry leaders
             </p>
           </div>
 

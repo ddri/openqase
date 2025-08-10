@@ -21,8 +21,8 @@ import { Menu, X, User } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 
 const navItems = [
-  { href: '/paths', label: 'Learning Paths' },
   { href: '/case-study', label: 'Case Studies' },
+  { href: '/paths', label: 'Related Content' },
   { href: '/blog', label: 'Blog' },
 ];
 

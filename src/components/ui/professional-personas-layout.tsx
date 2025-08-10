@@ -15,7 +15,7 @@ export default function ProfessionalPersonasLayout({
   title,
   description = "Role-specific quantum computing content tailored for different professional responsibilities and technical backgrounds.",
   children,
-  backLinkText = "Back to Learning Paths",
+  backLinkText = "Back to Related Content",
   backLinkHref = "/paths",
   personaCount = 0
 }: ProfessionalPersonasLayoutProps) {

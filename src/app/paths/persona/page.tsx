@@ -6,7 +6,7 @@ import ProfessionalPersonasLayout from '@/components/ui/professional-personas-la
 import type { Database } from '@/types/supabase';
 
 export const metadata: Metadata = {
-  title: 'Quantum Computing by Role | Learning Paths for Business Leaders & Engineers - OpenQase',
+  title: 'Quantum Computing by Role | Related Content for Business Leaders & Engineers - OpenQase',
   description: 'Role-specific quantum computing content for CEOs, CTOs, engineers, and consultants. Learn how quantum applications apply to your professional responsibilities.',
 };
 

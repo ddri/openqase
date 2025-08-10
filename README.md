@@ -1,6 +1,6 @@
 # OpenQase
 
-OpenQase is a high-performance quantum computing business case platform featuring real-world implementations, quantum algorithms, and industry-specific resources. Built with a hybrid architecture for maximum performance and functionality.
+OpenQase is a curated collection of quantum computing business cases, with a cross-reference of the industries, algorithms, and personas that are most relevant to each. This GitHub repository features the underlying OpenQase CMS, but from scratch to serve the needs to the cross-referencing of these metadata relationships, and provided as open source for any teams looking to create their own such libraries. Note that the software is open source, but the case studies and other data are accessible via the website, the API, or (upcoming) MCP.
 
 ## Overview
 
@@ -8,29 +8,30 @@ OpenQase provides:
 - **Case Studies**: Real-world quantum computing implementations and business impact
 - **Algorithms**: Detailed explanations of quantum algorithms with implementation steps
 - **Industries**: Industry-specific applications and use cases
-- **Personas**: Role-based learning paths and resources
+- **Personas**: Role-based descriptions of relevant users
 
-## ⚡ Performance
+## Performance
 
-**OpenQase v0.4.1 delivers blazing-fast performance:**
-- **50-100ms page loads** (vs 30+ seconds previously)
+**OpenQase v0.5.0 delivers the requisite "blazing-fast" performance:**
+- **50-100ms page loads** (due to static renders)
 - **76 static pages** pre-generated at build time
 - **Zero runtime database calls** for public content
 - **300x performance improvement** through hybrid architecture
 
-## 🏗️ Architecture
+## Architecture
 
 OpenQase uses a **hybrid architecture** that combines:
 
 - **📊 Static Generation** for public content (case studies, algorithms, personas, industries)
 - **🔄 Dynamic Generation** for admin CMS and user management
-- **🚀 Unified Content Fetching** system eliminates N+1 query problems
-- **🛡️ Zero Breaking Changes** - all existing functionality preserved
+- **🚀 Unified Content Fetching** system eliminates prior N+1 query processes
+- **🛡️ Zero Breaking Changes** - all existing functionality preserved (touch wood)
 
 ## Technology Stack
 
 - **Framework**: [Next.js](https://nextjs.org) 15.x with App Router
 - **Database**: [Supabase](https://supabase.com) for data and authentication
+- **Newsletter**: [Beehiiv](https://beehiiv.com/) integration for professional newsletter management
 - **UI Components**: [shadcn/ui](https://ui.shadcn.com/) for consistent design
 - **Content**: Unified content fetching system with relationship management
 - **Styling**: Tailwind CSS for responsive design
@@ -52,7 +53,7 @@ npm install
 3. **Set up environment variables:**
 ```bash
 cp .env.example .env.local
-# Add your Supabase credentials
+# Add your Supabase credentials and Beehiiv API key for newsletter
 ```
 
 4. **Set up local database:**
@@ -70,7 +71,13 @@ supabase db reset
 npm run dev
 ```
 
-6. **Build for production:**
+6. **Set up admin access:**
+```bash
+npm run setup-admin
+# Creates admin user for content management and soft delete features
+```
+
+7. **Build for production:**
 ```bash
 npm run build
 ```
@@ -93,13 +100,14 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 ## 🔧 Content Management
 
-Content is managed through a modern CMS with:
+Content is managed through the professional OpenQase CMS with:
 
 **📝 Content Types:**
-- Case Studies (`/case-study/[slug]`)
+- Case Studies (`/case-study/[slug]`) with featured content support
 - Algorithms (`/paths/algorithm/[slug]`)
 - Personas (`/paths/persona/[slug]`)
 - Industries (`/paths/industry/[slug]`)
+- Blog Posts (`/blog/[slug]`) with featured content support
 
 **⚡ Unified API:**
 ```typescript
@@ -110,9 +118,22 @@ const algorithm = await getStaticContentWithRelationships('algorithms', 'quantum
 
 **🔄 Admin Interface:**
 - Real-time content editing at `/admin`
+- **Professional soft delete system** - safely delete content with recovery options
+- **Featured content management** - showcase important content on homepage
 - Relationship management
 - Publishing workflows
 - User management
+
+**🗑️ Soft Delete System:**
+- Safe content deletion with recovery capability
+- Admin-only delete operations with proper authentication
+- Audit trail tracking who deleted what and when
+- 30-day retention before permanent deletion
+
+**⭐ Featured Content:**
+- Mark case studies and blog posts as featured
+- Automatic homepage integration
+- Performance-optimized with database indexes
 
 **📥 Import System:**
 OpenQase includes a comprehensive case study import system for handling JSON exports:
@@ -136,12 +157,12 @@ The import system features:
 
 ## 📊 Performance Metrics
 
-| Metric | Before v0.4.0 | After v0.4.0 | Improvement |
+| Metric | Before v0.4.0 | After v0.5.0 | Improvement |
 |--------|---------------|--------------|-------------|
 | Page Load Time | 30+ seconds | 50-100ms | **300x faster** |
 | Database Queries | 3-5 per page | 0 (static) | **100% reduction** |
 | Build Time | 2-3 minutes | 45 seconds | **60% faster** |
-| Static Pages | 0 | 76 | **Full static generation** |
+| Static Pages | 0 | 76+ | **Full static generation** |
 
 ## 🚀 Deployment
 
@@ -200,16 +221,18 @@ openqase/
 
 ## 🔄 Migration Status
 
-**✅ v0.4.0 Complete:**
+**✅ v0.5.0 Complete:**
 - Unified content fetching system
 - Static generation for all major content types
 - Hybrid architecture implementation
-- 300x performance improvement
+- Professional soft delete system
+- Featured content functionality
+- Newsletter integration
+- Homepage redesign
+- Security hardening
+- 301 redirect management
 
 **🔄 Next Phases:**
-
-### 🔧 TODO
-- **Fix Build Warnings**: Update content fetchers to use `.maybeSingle()` instead of `.single()` for relationship lookups to handle missing referenced case studies gracefully. Currently shows harmless 404 errors during build for case studies that exist in JSON references but haven't been imported to the database yet.
 
 ### 🚀 Feature Development (High Impact)
 - Search functionality enhancement (basic implementation complete)
@@ -237,7 +260,7 @@ openqase/
 - **Performance Monitoring Dashboard** - Build on existing performance tools for better insights
 - **API Rate Limiting Improvements** - Scale rate limiting for production multi-server deployments
 
-## 📞 Support
+## Support
 
 - **Documentation**: Comprehensive guides in `/docs/`
 - **Issues**: GitHub Issues for bug reports and feature requests
@@ -245,9 +268,11 @@ openqase/
 
 ---
 
-**OpenQase v0.4.1** - Delivering quantum computing insights at quantum speed ⚡
 
-## 🔄 Planned Major Updates
+
+## Planned updates in upcoming releases
+
+**OpenQase v0.5.0** - Delivering quantum computing insights at quantum speed 
 
 **Note:** The following major version updates are available but require careful testing due to potential breaking changes:
 

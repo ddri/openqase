@@ -16,7 +16,7 @@ export default function ProfessionalIndustriesLayout({
   title,
   description = "Explore quantum computing applications across diverse industries and sectors, from finance and healthcare to manufacturing and energy.",
   children,
-  backLinkText = "Back to Learning Paths",
+  backLinkText = "Back to Related Content",
   backLinkHref = "/paths",
   industryCount = 0,
   sectorCount = 0

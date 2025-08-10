@@ -7,61 +7,76 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.5.0] - 2025-01-11
+
 ### Added
-- **Content Deletion System**: Implemented comprehensive soft delete system with content_status field
-  - Added content_status field (draft, published, archived, deleted) to all content tables
-  - Created database views for clean content filtering (public_, admin_, trash_, all_)
-  - Added soft_delete_content() and recover_content() database functions
-  - Implemented deletion audit log for compliance tracking
-  - Added 30-day retention for soft-deleted content before permanent deletion
-- **Database Infrastructure**: Enhanced database with deletion support
-  - Added deleted_at, deleted_by, archived_at, archived_by columns to all content tables
-  - Created deletion_config table for retention policy management
-  - Added indexes on content_status for performance optimization
-- **Preview Mode**: Implemented Next.js draft mode for admins to preview unpublished content
-- **Preview Button**: Added preview button to admin case study editor that opens content in draft mode
-- **Homepage Revalidation**: Homepage automatically updates via ISR when featured case studies are saved
-- **Featured Case Studies**: Added database schema and UI for featuring case studies on homepage
-  - Added `featured` boolean column to case_studies table with index
-  - Implemented featured checkbox in admin UI with proper save state triggering
-  - Homepage displays up to 2 featured case studies with graceful fallback
+- **Complete Soft Delete System**: Implemented professional content deletion system across all content types
+  - Added `deleted_at` and `deleted_by` columns to all content tables (case studies, blog posts, algorithms, industries, personas)
+  - Created secure `soft_delete_content()` and `recover_content()` database functions with SQL injection protection
+  - Implemented admin-only delete endpoints with proper authentication and authorization
+  - Added recovery system for accidentally deleted content
+- **Featured Content System**: Enhanced homepage with featured content capabilities
+  - Added `featured` boolean column to case_studies and blog_posts tables with performance indexes
+  - Implemented featured content selection in admin interface
+  - Homepage displays up to 2 featured case studies with graceful fallback content
+- **Newsletter Integration**: Complete newsletter signup system with Beehiiv integration
+  - Added NewsletterSignup component with form validation and loading states
+  - Integrated with Beehiiv API for professional newsletter management
+  - Added newsletter signup call-to-action in sidebar replacing removed content section
+  - Implemented rate limiting and error handling for newsletter subscriptions
+- **Homepage Redesign**: Completely redesigned homepage with modern magazine-style layout
+  - Replaced cluttered layout with clean, organized content sections
+  - Added newsletter signup component in prominent sidebar position
+  - Improved visual hierarchy and content organization
+  - Enhanced mobile responsiveness and accessibility
 
 ### Changed
-- **Admin Interface**: Updated admin pages to use new view-based architecture
-  - Admin case studies page now uses admin_case_studies view (shows all non-deleted content)
-  - Public pages will use public_ views (only published content)
-  - Improved separation between public and admin content access
-- **Homepage Performance**: Dramatically improved homepage performance through proper static generation
-  - Added `export const dynamic = 'force-static'` to enforce build-time generation
-  - Eliminated 6 parallel runtime database queries
-  - Reduced LCP from 5.3s to 1.5s (71% improvement)
-  - Improved Lighthouse performance score from 0.75 to 0.97
-- **Cache Management**: Implemented industry-standard Pattern A for CMS cache invalidation
-  - Replaced broken client-side cache refresh with server-side ISR
-  - Added automatic revalidation through server actions on save/publish
-  - Aligned with Next.js best practices and modern CMS patterns (Sanity, Contentful, Strapi)
-- **CMS Architecture**: Completed the preview mode implementation that was planned but never finished
-  - Pure server-side approach with no client-side revalidation
-  - Clean separation between draft and published content states
-  - Maintains static-first architecture while enabling dynamic updates
+- **Homepage Layout**: Major redesign for improved user experience
+  - Removed "Latest Addition" section that was redundant with other content
+  - Restructured content sections for better flow and engagement
+  - Added partner company badges to case study cards for visual balance and company recognition
+  - Implemented consistent hover states across all interactive elements
+- **Security Hardening**: Enhanced production security measures
+  - Removed temporary localhost authentication bypass from middleware
+  - Implemented proper authentication requirements for all write operations
+  - Added admin role verification for content management operations
+  - Secured environment variables and API key management
+- **Database Architecture**: Modernized database with soft delete capabilities
+  - Production database updated with all new schema changes
+  - Added performance indexes for featured content queries
+  - Implemented secure database functions with proper permission grants
 
 ### Fixed
-- **CMS Content Filtering**: Fixed unpublished case studies appearing on Algorithm, Persona, and Industry pages. Related case studies are now properly filtered to show only published content while preserving preview mode functionality for team access to drafts. This fix maintains the static site generation performance architecture while ensuring content workflow integrity.
-- **Featured Case Studies Database**: Added missing `featured` column that was causing SQL errors
-- **GitHub Link**: Corrected homepage GitHub link from `/openqase` to `/ddri/openqase`
-- **Cache Refresh Errors**: Fixed 401 errors from middleware blocking client-side revalidation attempts
-- **Async draftMode**: Updated preview mode implementation for Next.js 15 async `draftMode()` API
-- **Admin UI Polish**: 
-  - Cleaned up featured checkbox styling, removed star emoji
-  - Positioned featured checkbox left of Save button
-  - Simplified label to "Feature article"
+- **Content Relationship Filtering**: Resolved build failures from unpublished content in relationships
+  - Added JavaScript runtime filtering to handle mixed published/unpublished content gracefully
+  - Modified `generateStaticParams` to only build pages for published content
+  - Made page components resilient to null relationships from unpublished content
+  - Maintained static site generation performance while fixing content workflow issues
+- **Card Height Consistency**: Fixed visual imbalance in homepage content cards
+  - Added partner company badges to case study cards to match blog post card heights
+  - Improved visual consistency across all content card layouts
+- **Authentication Middleware**: Corrected authentication flow for production deployment
+  - Removed development-only localhost bypasses
+  - Ensured proper authentication requirements for all admin operations
 
 ### Removed
-- **Broken Refresh Cache Button**: Removed non-functional client-side cache refresh button from admin
-- **Redundant Metadata Display**: Removed duplicate Key Metrics Bar from case study pages that repeated Quick Facts sidebar information
+- **Development Artifacts**: Cleaned up temporary files and development tools
+  - Removed DELETEPLAN.md and other temporary planning documents
+  - Deleted migrations_backup folder with broken migration files
+  - Cleaned up unused development scripts and temporary SQL files
+- **Redundant Homepage Sections**: Streamlined homepage content
+  - Removed "Latest Addition" section that duplicated other content areas
+  - Simplified content presentation for better user focus
 
-### Known Issues
-- **Build Warnings**: Some case studies referenced in relationship data have not been imported to database yet, causing harmless 404 warnings during static generation. These can be fixed by updating fetchers to use `.maybeSingle()` instead of `.single()` for relationship lookups.
+### Security
+- **Authentication Hardening**: Strengthened security for production deployment
+  - Removed all localhost authentication bypasses from middleware
+  - Implemented proper admin role verification for all content operations
+  - Secured all API endpoints with appropriate authentication requirements
+- **Database Security**: Enhanced database function security
+  - Added SECURITY DEFINER to database functions for proper permission escalation
+  - Implemented input validation and SQL injection protection
+  - Added transaction safety for all schema modifications
 
 ## [0.4.1] - Previous Release
 

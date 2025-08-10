@@ -16,7 +16,7 @@ export default function ProfessionalAlgorithmsLayout({
   title,
   description = "Explore quantum algorithms and their computational advantages across different problem domains, from optimization to cryptography.",
   children,
-  backLinkText = "Back to Learning Paths",
+  backLinkText = "Back to Related Content",
   backLinkHref = "/paths",
   algorithmCount = 0,
   useCaseCount = 0

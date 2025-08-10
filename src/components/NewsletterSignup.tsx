@@ -54,7 +54,7 @@ export default function NewsletterSignup() {
     <div className="bg-card border border-border p-6 h-full flex flex-col justify-center hover:border-primary transition-colors">
       <h2 className="text-xl font-semibold mb-4 text-foreground">Stay Updated</h2>
       <div className="space-y-4">
-        <p className="text-sm text-muted-foreground leading-relaxed">
+        <p className="text-sm text-muted-foreground leading-relaxed mb-6">
           Get notified when new quantum computing case studies and industry insights are published. Join quantum professionals staying ahead of the curve.
         </p>
         
@@ -99,10 +99,6 @@ export default function NewsletterSignup() {
             )}
           </form>
         )}
-        
-        <p className="text-xs text-muted-foreground">
-          Free weekly updates • No spam • Unsubscribe anytime
-        </p>
       </div>
     </div>
   )

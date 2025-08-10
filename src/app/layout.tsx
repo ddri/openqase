@@ -63,8 +63,8 @@ const openSans = localFont({
 });
 
 export const metadata: Metadata = {
-  title: 'Quantum Computing Business Applications | Case Studies & Learning Paths - OpenQase',
-  description: 'Discover how quantum computing solves real business problems. Access industry case studies and role-based learning paths to understand practical applications without technical complexity.',
+  title: 'Quantum Computing Business Applications | Case Studies & Related Content - OpenQase',
+  description: 'Discover how quantum computing solves real business problems. Access industry case studies and related content organized by role and industry to understand practical applications without technical complexity.',
   keywords: ['quantum computing business applications', 'quantum algorithms', 'quantum case studies', 'business quantum solutions', 'quantum computing industry'],
   openGraph: {
     title: 'Quantum Computing Business Applications | OpenQase',

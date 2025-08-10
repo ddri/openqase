@@ -256,16 +256,18 @@ export default async function HomePage() {
                   featuredCaseStudies.map((caseStudy, index) => (
                     <Link key={caseStudy.id} href={`/case-study/${caseStudy.slug}`} className="block group">
                       <div className="bg-card border border-border p-6 hover:border-primary transition-colors">
-                        {/* Industries as tags */}
-                        {caseStudy.case_study_industry_relations && caseStudy.case_study_industry_relations.length > 0 && (
+                        {/* Partner Companies as tags */}
+                        {((caseStudy.quantum_companies && caseStudy.quantum_companies.length > 0) || 
+                          (caseStudy.partner_companies && caseStudy.partner_companies.length > 0)) && (
                           <div className="flex gap-2 mb-3">
-                            {caseStudy.case_study_industry_relations.slice(0, 2).map((relation: any) => 
-                              relation.industries?.name ? (
-                                <span key={relation.industries.id} className="px-2 py-1 bg-primary/10 text-primary text-xs font-medium">
-                                  {relation.industries.name}
+                            {/* Combine quantum and partner companies, take first 2 */}
+                            {[...(caseStudy.quantum_companies || []), ...(caseStudy.partner_companies || [])]
+                              .slice(0, 2)
+                              .map((company, idx) => (
+                                <span key={idx} className="px-2 py-1 bg-primary/10 text-primary text-xs font-medium">
+                                  {company}
                                 </span>
-                              ) : null
-                            )}
+                              ))}
                           </div>
                         )}
                         <h4 className="text-lg font-bold text-foreground mb-2 group-hover:text-primary transition-colors">

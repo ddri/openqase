@@ -74,6 +74,40 @@ Update the CHANGELOG for these types of changes:
 - Preserve ISR (Incremental Static Regeneration) capabilities
 - Keep preview workflows functional for team collaboration
 
+### Bidirectional Junction Tables
+**CRITICAL**: The CMS uses bidirectional junction tables for relationships. These tables are used differently depending on the content type context:
+
+#### Junction Table Mappings
+- `algorithm_case_study_relations`:
+  - On case study pages: contains algorithms (use nested key: 'algorithms')
+  - On algorithm pages: contains case studies (use nested key: 'case_studies')
+  
+- `case_study_industry_relations`:
+  - On case study pages: contains industries (use nested key: 'industries')
+  - On industry pages: contains case studies (use nested key: 'case_studies')
+  
+- `case_study_persona_relations`:
+  - On case study pages: contains personas (use nested key: 'personas')
+  - On persona pages: contains case studies (use nested key: 'case_studies')
+  
+- `algorithm_industry_relations`:
+  - On algorithm pages: contains industries (use nested key: 'industries')
+  - On industry pages: contains algorithms (use nested key: 'algorithms')
+  
+- `persona_algorithm_relations`:
+  - On persona pages: contains algorithms (use nested key: 'algorithms')
+  - On algorithm pages: contains personas (use nested key: 'personas')
+  
+- `persona_industry_relations`:
+  - On persona pages: contains industries (use nested key: 'industries')
+  - On industry pages: contains personas (use nested key: 'personas')
+
+#### Implementation Notes
+- The `filterRelationships()` function in `content-fetchers.ts` handles context detection
+- Content type is determined by checking unique properties (e.g., `quantum_advantage` for algorithms)
+- NEVER filter the same relationship data multiple times - it will destroy the data
+- Currently, published field filtering is disabled for relationships due to inconsistent data
+
 ### Code Quality
 - Follow existing code patterns and conventions
 - Prefer editing existing files over creating new ones

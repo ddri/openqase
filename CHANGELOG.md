@@ -48,6 +48,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 - **Content Relationship Filtering**: Resolved build failures from unpublished content in relationships
+- **Bidirectional Junction Table Handling**: Fixed critical bug where relationship data showed "None" on content pages
+  - Implemented context-aware filtering for all bidirectional junction tables
+  - Fixed duplicate filtering that was destroying relationship data
+  - Properly handles `algorithm_case_study_relations`, `case_study_industry_relations`, `case_study_persona_relations`, `algorithm_industry_relations`, `persona_algorithm_relations`, and `persona_industry_relations` based on page context
+  - Ensures correct nested key usage ('algorithms', 'industries', 'personas', 'case_studies') depending on the content type being filtered
   - Added JavaScript runtime filtering to handle mixed published/unpublished content gracefully
   - Modified `generateStaticParams` to only build pages for published content
   - Made page components resilient to null relationships from unpublished content

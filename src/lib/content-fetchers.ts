@@ -57,63 +57,78 @@ function filterRelationships(data: any, preview: boolean = false): any {
       if (!nestedItem) return false;
       // In preview mode, show all content
       if (preview) return true;
-      // In public mode, only show published content
-      return nestedItem.published === true;
+      // In public mode, show all relationships (published field not reliable)
+      return true;
     });
   };
 
   // Apply filtering based on content type
   const filtered = { ...data };
   
-  // Algorithm relationships
+  // Determine content type based on data properties
+  const isCaseStudy = data.hasOwnProperty('title') && data.hasOwnProperty('partner_companies');
+  const isAlgorithm = data.hasOwnProperty('quantum_advantage');
+  const isIndustry = data.hasOwnProperty('icon') && !data.hasOwnProperty('expertise');
+  const isPersona = data.hasOwnProperty('expertise');
+  
+  // Handle bidirectional junction tables based on context
+  
+  // algorithm_case_study_relations (bidirectional)
   if (filtered.algorithm_case_study_relations) {
+    const nestedKey = isCaseStudy ? 'algorithms' : 'case_studies';
     filtered.algorithm_case_study_relations = filterRelationArray(
-      filtered.algorithm_case_study_relations, 
-      'case_studies'
+      filtered.algorithm_case_study_relations,
+      nestedKey
     );
   }
-  if (filtered.algorithm_industry_relations) {
-    filtered.algorithm_industry_relations = filterRelationArray(
-      filtered.algorithm_industry_relations,
-      'industries' 
-    );
-  }
-
-  // Case study relationships
+  
+  // case_study_industry_relations (bidirectional)
   if (filtered.case_study_industry_relations) {
+    const nestedKey = isCaseStudy ? 'industries' : 'case_studies';
     filtered.case_study_industry_relations = filterRelationArray(
       filtered.case_study_industry_relations,
-      'industries'
+      nestedKey
     );
   }
+  
+  // case_study_persona_relations (bidirectional)
   if (filtered.case_study_persona_relations) {
+    const nestedKey = isCaseStudy ? 'personas' : 'case_studies';
     filtered.case_study_persona_relations = filterRelationArray(
       filtered.case_study_persona_relations,
-      'personas'
+      nestedKey
     );
   }
-
-  // Persona relationships
+  
+  // algorithm_industry_relations (bidirectional)
+  if (filtered.algorithm_industry_relations) {
+    const nestedKey = isAlgorithm ? 'industries' : 'algorithms';
+    filtered.algorithm_industry_relations = filterRelationArray(
+      filtered.algorithm_industry_relations,
+      nestedKey
+    );
+  }
+  
+  // persona_algorithm_relations (bidirectional)
   if (filtered.persona_algorithm_relations) {
+    const nestedKey = isPersona ? 'algorithms' : 'personas';
     filtered.persona_algorithm_relations = filterRelationArray(
       filtered.persona_algorithm_relations,
-      'algorithms'
+      nestedKey
     );
   }
+  
+  // persona_industry_relations (bidirectional)
   if (filtered.persona_industry_relations) {
+    const nestedKey = isPersona ? 'industries' : 'personas';
     filtered.persona_industry_relations = filterRelationArray(
       filtered.persona_industry_relations,
-      'industries'
+      nestedKey
     );
   }
 
-  // Industry relationships 
-  if (filtered.case_study_industry_relations) {
-    filtered.case_study_industry_relations = filterRelationArray(
-      filtered.case_study_industry_relations,
-      'case_studies'
-    );
-  }
+  // Industry relationships
+  // (case_study_industry_relations already handled above)
 
   // Blog post relationships
   if (filtered.blog_post_relations) {

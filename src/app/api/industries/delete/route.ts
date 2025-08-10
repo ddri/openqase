@@ -1,4 +1,4 @@
-import { createServiceRoleSupabaseClient } from '@/lib/supabase'
+import { createServiceRoleSupabaseClient } from '@/lib/supabase-server'
 import { NextRequest, NextResponse } from 'next/server'
 
 export async function POST(request: NextRequest) {
@@ -9,7 +9,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'ID or IDs are required' }, { status: 400 })
     }
 
-    const supabase = await createServiceRoleSupabaseClient()
+    const supabase = createServiceRoleSupabaseClient()
     
     // Handle both single and bulk delete
     const idsToDelete = ids ? ids : [id]

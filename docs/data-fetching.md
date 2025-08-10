@@ -1,10 +1,10 @@
 # Data Fetching
 
-OpenQase v0.4.0 introduces a hybrid data fetching architecture that combines static generation for public content with dynamic patterns for admin functionality.
+OpenQase v0.4.1 features a robust hybrid data fetching architecture that combines static generation for public content with dynamic patterns for admin functionality. The system now handles mixed published/unpublished content gracefully without breaking builds or user experience.
 
 ## 1. Unified Content Fetching (Public Content) 
 
-**NEW in v0.4.0** - Primary pattern for public content pages (`case-study`, `paths/algorithm`, `paths/persona`, `paths/industry`).
+**NEW in v0.4.0, IMPROVED in v0.4.1** - Primary pattern for public content pages (`case-study`, `paths/algorithm`, `paths/persona`, `paths/industry`).
 
 * **Context:** Used for all public content pages that need to be statically generated for optimal performance.
 * **Mechanism:** Uses the unified content fetching system from `src/lib/content-fetchers.ts` that provides consistent APIs across all content types.
@@ -12,7 +12,8 @@ OpenQase v0.4.0 introduces a hybrid data fetching architecture that combines sta
   * `getStaticContentWithRelationships()` - Fetches single content item with all relationships
   * `getStaticContentList()` - Fetches content lists for listing pages
   * `generateStaticParamsForContentType()` - Generates static params for build-time generation
-* **Benefits:** Eliminates N+1 queries, enables static generation, provides consistent API
+* **Benefits:** Eliminates N+1 queries, enables static generation, provides consistent API, handles mixed published/unpublished content gracefully
+* **v0.4.1 Improvement:** JavaScript filtering prevents crashes when relationships contain unpublished content
 * **Example:** See [Unified Content Fetching](./unified-content-fetching.md) for comprehensive documentation
 
 ```typescript

@@ -71,13 +71,14 @@ export default async function AlgorithmPage({ params }: AlgorithmPageProps) {
   }
 
   // Extract related case studies from the algorithm data
+  // The improved relationship filtering ensures case_studies is never null
   const caseStudies: CaseStudy[] = algorithm.algorithm_case_study_relations?.map((relation: any) => ({
-    id: relation.case_studies.id,
-    title: relation.case_studies.title,
-    slug: relation.case_studies.slug,
-    description: relation.case_studies.description || '',
+    id: relation.case_studies?.id || '',
+    title: relation.case_studies?.title || 'Untitled Case Study',
+    slug: relation.case_studies?.slug || '',
+    description: relation.case_studies?.description || '',
     industries: [] // Case study industries aren't fetched in the algorithm relationship query
-  })) || [];
+  })).filter(cs => cs.id && cs.slug) || []; // Filter out any malformed entries
 
   // Process content with server-side markdown and references
   let processedContent = '';

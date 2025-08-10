@@ -52,7 +52,7 @@ export default async function HomePage() {
     getBuildTimeContentList('industries', { filters: publishedFilter }),
     getBuildTimeContentList('personas', { filters: publishedFilter }),
     getBuildTimeContentList('blog_posts', { filters: publishedFilter, limit: 2 }),
-    getBuildTimeContentList('case_studies', { filters: publishedFilter, limit: 2 })
+    getBuildTimeContentList('case_studies', { filters: featuredFilter, limit: 2 })
   ]);
 
   // Type the blog posts and featured case studies properly
@@ -244,7 +244,7 @@ export default async function HomePage() {
             {/* Latest Case Studies Column */}
             <div>
               <div className="flex justify-between items-center mb-6">
-                <h3 className="text-xl font-semibold text-foreground">Latest Case Studies</h3>
+                <h3 className="text-xl font-semibold text-foreground">Featured Case Studies</h3>
                 <Link href="/case-study" className="inline-flex items-center text-primary hover:underline text-sm font-medium">
                   View all
                   <ArrowRight className="ml-1 h-3 w-3" />

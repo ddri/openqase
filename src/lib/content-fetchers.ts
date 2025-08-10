@@ -41,8 +41,97 @@ const RELATIONSHIP_MAPS: Record<ContentType, string> = {
 };
 
 /**
+ * Helper function to filter relationships and remove null/unpublished content
+ * This prevents null pointer exceptions and handles mixed content gracefully
+ */
+function filterRelationships(data: any, preview: boolean = false): any {
+  if (!data) return data;
+
+  // Helper to filter individual relationship arrays
+  const filterRelationArray = (relations: any[], nestedKey: string) => {
+    if (!relations || !Array.isArray(relations)) return relations;
+    
+    return relations.filter(relation => {
+      const nestedItem = relation[nestedKey];
+      // Remove null relationships (broken data)
+      if (!nestedItem) return false;
+      // In preview mode, show all content
+      if (preview) return true;
+      // In public mode, only show published content
+      return nestedItem.published === true;
+    });
+  };
+
+  // Apply filtering based on content type
+  const filtered = { ...data };
+  
+  // Algorithm relationships
+  if (filtered.algorithm_case_study_relations) {
+    filtered.algorithm_case_study_relations = filterRelationArray(
+      filtered.algorithm_case_study_relations, 
+      'case_studies'
+    );
+  }
+  if (filtered.algorithm_industry_relations) {
+    filtered.algorithm_industry_relations = filterRelationArray(
+      filtered.algorithm_industry_relations,
+      'industries' 
+    );
+  }
+
+  // Case study relationships
+  if (filtered.case_study_industry_relations) {
+    filtered.case_study_industry_relations = filterRelationArray(
+      filtered.case_study_industry_relations,
+      'industries'
+    );
+  }
+  if (filtered.case_study_persona_relations) {
+    filtered.case_study_persona_relations = filterRelationArray(
+      filtered.case_study_persona_relations,
+      'personas'
+    );
+  }
+
+  // Persona relationships
+  if (filtered.persona_algorithm_relations) {
+    filtered.persona_algorithm_relations = filterRelationArray(
+      filtered.persona_algorithm_relations,
+      'algorithms'
+    );
+  }
+  if (filtered.persona_industry_relations) {
+    filtered.persona_industry_relations = filterRelationArray(
+      filtered.persona_industry_relations,
+      'industries'
+    );
+  }
+
+  // Industry relationships 
+  if (filtered.case_study_industry_relations) {
+    filtered.case_study_industry_relations = filterRelationArray(
+      filtered.case_study_industry_relations,
+      'case_studies'
+    );
+  }
+
+  // Blog post relationships
+  if (filtered.blog_post_relations) {
+    filtered.blog_post_relations = filterRelationArray(
+      filtered.blog_post_relations,
+      'related_blog_posts'
+    );
+  }
+
+  return filtered;
+}
+
+/**
  * Unified function to fetch a single content item with all relationships
- * This replaces the complex API route patterns and N+1 query issues
+ * IMPROVED: Handles mixed published/unpublished content gracefully
+ * - Fetches all relationships without breaking queries
+ * - Filters relationships in JavaScript to prevent null pointer exceptions
+ * - Supports preview mode for unpublished content access
  */
 export async function getStaticContentWithRelationships<T>(
   contentType: ContentType,
@@ -57,22 +146,9 @@ export async function getStaticContentWithRelationships<T>(
     .select(selectQuery)
     .eq('slug', slug);
 
-  // Only filter by published status if not in preview mode
+  // Only filter main content by published status if not in preview mode
   if (!options.preview) {
-    query = query.eq('published', true); // Re-enabled for runtime
-    
-    // Filter related case studies to only show published ones
-    switch (contentType) {
-      case 'algorithms':
-        query = query.eq('algorithm_case_study_relations.case_studies.published', true);
-        break;
-      case 'personas':
-        query = query.eq('case_study_persona_relations.case_studies.published', true);
-        break;
-      case 'industries':
-        query = query.eq('case_study_industry_relations.case_studies.published', true);
-        break;
-    }
+    query = query.eq('published', true);
   }
 
   const { data, error } = await query.single();
@@ -82,7 +158,10 @@ export async function getStaticContentWithRelationships<T>(
     return null;
   }
 
-  return data as T;
+  // Filter relationships to handle mixed published/unpublished content
+  const filteredData = filterRelationships(data, options.preview);
+  
+  return filteredData as T;
 }
 
 /**
@@ -228,41 +307,16 @@ export async function getRelatedContent<T>(
 }
 
 /**
- * Build-time safe content fetching using service role client
- * Used for generateStaticParams and other build-time operations
+ * Build-time content fetching using service role client
+ * Used for batch operations and admin functionality
  * 
- * IMPORTANT ARCHITECTURAL DECISION: Published Filter Intentionally Disabled
- * =====================================================================
+ * NOTE: This function fetches ALL content regardless of published status.
+ * This is useful for admin operations, batch processing, and content management.
  * 
- * The published filter is intentionally disabled here for performance and workflow reasons:
+ * For static page generation, use generateStaticParamsForContentType() instead,
+ * which filters to published content only.
  * 
- * 1. PERFORMANCE OPTIMIZATION (95% improvement):
- *    - Generates static HTML for ALL content (published + unpublished) at build time
- *    - Published content: Lightning fast (2-6ms) static serving
- *    - Unpublished content: Falls back to ISR (Incremental Static Regeneration)
- *    - Alternative would reduce static generation and hurt performance
- * 
- * 2. SECURITY IS HANDLED AT RUNTIME:
- *    - getStaticContentWithRelationships() enforces published: true filter
- *    - Unpublished content returns 404 when accessed by public
- *    - No sensitive data - just "not ready yet" content
- * 
- * 3. WORKFLOW BENEFITS:
- *    - Team can access draft content via direct URLs for review/testing
- *    - Content is not discoverable (no links/sitemaps to unpublished content)
- *    - Supports preview workflows without complex preview infrastructure
- * 
- * 4. CONSISTENT WITH NEXT.JS PATTERNS:
- *    - generateStaticParams determines what to build (quantity)
- *    - Page components determine what to show (quality/filtering)
- *    - This separation of concerns is a Next.js best practice
- * 
- * If you're seeing this due to a security scanner flagging "data leak":
- * This is an intentional architectural choice, not a bug. The content is
- * "not ready yet" rather than "private/sensitive", and runtime filtering
- * prevents public access while enabling team workflows.
- * 
- * Last reviewed: 2025-07-29
+ * Last reviewed: 2025-08-10
  */
 export async function getBuildTimeContentList<T>(
   contentType: ContentType,
@@ -278,7 +332,7 @@ export async function getBuildTimeContentList<T>(
   let query = supabase
     .from(contentType)
     .select('*');
-    // .eq('published', true); // INTENTIONALLY DISABLED: See detailed explanation below
+    // Note: No published filter - this function fetches all content for admin/batch operations
 
   // Apply additional filters
   if (options.filters) {
@@ -312,15 +366,30 @@ export async function getBuildTimeContentList<T>(
 }
 
 /**
- * Generate static parameters for all published content of a given type
+ * Generate static parameters for PUBLISHED content only
  * Used in generateStaticParams functions
+ * 
+ * NOTE: This function intentionally filters to published content only.
+ * We don't want to generate static pages for unpublished content - 
+ * that would cause build warnings when the page component filters them out.
+ * Professional CMS behavior: only build static pages for published content.
  */
 export async function generateStaticParamsForContentType(
   contentType: ContentType
 ): Promise<{ slug: string }[]> {
-  const content = await getBuildTimeContentList<{ slug: string }>(contentType);
+  const supabase = createServiceRoleSupabaseClient();
   
-  return content.map(({ slug }) => ({ slug }));
+  const { data, error } = await supabase
+    .from(contentType)
+    .select('slug')
+    .eq('published', true);
+  
+  if (error) {
+    console.error(`Failed to fetch published ${contentType} for static params:`, error);
+    return [];
+  }
+  
+  return (data || []).map(({ slug }) => ({ slug }));
 }
 
 /**

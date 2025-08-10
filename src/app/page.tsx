@@ -17,6 +17,7 @@ import {
 } from 'lucide-react';
 import { AutoSchema } from '@/components/AutoSchema';
 import GlobalSearch from '@/components/GlobalSearch';
+import NewsletterSignup from '@/components/NewsletterSignup';
 import { getBuildTimeContentList, fetchSearchData, getStaticContentList } from '@/lib/content-fetchers';
 import type { BlogPost } from '@/lib/types';
 import { InteractiveKnowledgeMap } from '@/components/ui/interactive-knowledge-map';
@@ -119,7 +120,7 @@ export default async function HomePage() {
             {/* Left Column - Search & Stats */}
             <div className="lg:col-span-2 space-y-8">
               {/* Search Bar */}
-              <div className="bg-card border border-border p-6">
+              <div className="bg-card border border-border p-6 hover:border-primary transition-colors">
                 <h2 className="text-xl font-semibold mb-4 text-foreground">Search Case Studies</h2>
                 <GlobalSearch searchData={searchData} className="w-full" />
               </div>
@@ -147,18 +148,9 @@ export default async function HomePage() {
               </div>
             </div>
 
-            {/* Right Column - Featured */}
+            {/* Right Column - Newsletter CTA */}
             <div>
-              <div className="bg-card border border-border p-6 h-full flex flex-col justify-center">
-                <h2 className="text-xl font-semibold mb-4 text-foreground">Latest Addition</h2>
-                <div className="space-y-4">
-                  <h3 className="font-semibold text-foreground text-lg">Quantinuum & HSBC</h3>
-                  <p className="text-sm text-muted-foreground leading-relaxed">Financial services enhancement through quantum computing applications in cybersecurity and fraud detection.</p>
-                  <Link href="/case-study/quantinuum-hsbc-financial-services-enhancement" className="inline-flex items-center text-primary hover:underline text-sm font-medium">
-                    Read case study →
-                  </Link>
-                </div>
-              </div>
+              <NewsletterSignup />
             </div>
           </div>
         </div>

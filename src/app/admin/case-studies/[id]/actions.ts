@@ -32,6 +32,7 @@ export async function saveCaseStudy(values: CaseStudyFormData): Promise<{ caseSt
       quantum_hardware: values.quantum_hardware,
       quantum_software: values.quantum_software,
       published: values.published,
+      featured: values.featured || false,
       academic_references: values.academic_references || null,
       resource_links: values.resource_links || null,
       year: values.year || new Date().getFullYear(),

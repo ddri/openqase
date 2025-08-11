@@ -226,14 +226,22 @@ export default function DesignSystem() {
                 Get Started
               </button>
               <button
-                className="w-full px-4 py-2 rounded-md transition-colors"
+                className="w-full px-4 py-2 rounded-md transition-all"
                 style={{
                   backgroundColor: palette['bg-elevated'],
                   color: palette['text-primary'],
                   border: `1px solid ${palette['border-default']}`
                 }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = palette['bg-surface'];
+                  e.currentTarget.style.borderColor = palette['border-strong'];
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = palette['bg-elevated'];
+                  e.currentTarget.style.borderColor = palette['border-default'];
+                }}
               >
-                Secondary Button
+                Learn More
               </button>
             </div>
           </div>

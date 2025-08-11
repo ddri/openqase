@@ -46,6 +46,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Added performance indexes for featured content queries
   - Implemented secure database functions with proper permission grants
 
+### Security
+- **API Content Exposure**: Fixed critical vulnerability where unpublished content could be accessed via public API endpoints
+  - Removed `includeUnpublished` parameter from all public GET endpoints
+  - Hardcoded published-only filtering in API routes to prevent draft content exposure
+  - Protects partner companies from having incomplete case studies exposed prematurely
+- **Unauthenticated Revalidation Endpoint**: Removed dead `/api/revalidate` endpoint that lacked authentication
+  - Endpoint was unused code from old "refresh cache" button feature
+  - Eliminated potential DoS attack vector from unauthenticated cache rebuilds
+  - All revalidation now happens securely through Server Actions
+
 ### Fixed
 - **Content Relationship Filtering**: Resolved build failures from unpublished content in relationships
 - **Bidirectional Junction Table Handling**: Fixed critical bug where relationship data showed "None" on content pages
@@ -72,16 +82,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Redundant Homepage Sections**: Streamlined homepage content
   - Removed "Latest Addition" section that duplicated other content areas
   - Simplified content presentation for better user focus
-
-### Security
-- **Authentication Hardening**: Strengthened security for production deployment
-  - Removed all localhost authentication bypasses from middleware
-  - Implemented proper admin role verification for all content operations
-  - Secured all API endpoints with appropriate authentication requirements
-- **Database Security**: Enhanced database function security
-  - Added SECURITY DEFINER to database functions for proper permission escalation
-  - Implemented input validation and SQL injection protection
-  - Added transaction safety for all schema modifications
 
 ## [0.4.1] - Previous Release
 

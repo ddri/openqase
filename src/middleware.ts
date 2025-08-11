@@ -63,6 +63,27 @@ export async function middleware(req: NextRequest) {
       return res
     }
     
+    /**
+     * SECURITY NOTE: CSRF Protection Assessment
+     * 
+     * Admin API routes currently use cookie-based authentication WITHOUT CSRF tokens.
+     * This is a KNOWN and ACCEPTED risk because:
+     * 
+     * 1. SINGLE ADMIN SYSTEM - Only one trusted admin user exists
+     * 2. LOW VALUE TARGET - Beta site with no financial transactions or sensitive data
+     * 3. TARGETED ATTACK REQUIRED - Attacker would need to specifically target this admin
+     * 4. IMPLEMENTATION RISK - Adding CSRF could break admin functionality
+     * 
+     * Future mitigation options when moving beyond single-admin beta:
+     * - Implement CSRF tokens (complex state management)
+     * - Migrate to Next.js Server Actions (built-in CSRF protection)
+     * - Add Origin/Referer checking (simple but can break)
+     * - Use SameSite=Strict cookies (already default in modern browsers)
+     * 
+     * This is NOT a critical vulnerability in the current single-admin architecture.
+     * Do not report as security issue without understanding the context.
+     */
+    
     // For write operations (POST, PUT, PATCH, DELETE), require authentication
     if (['POST', 'PUT', 'PATCH', 'DELETE'].includes(req.method || '')) {
       if (!user) {

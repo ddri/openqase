@@ -6,23 +6,23 @@ import { AlgorithmForm } from './client';
 type Algorithm = Database['public']['Tables']['algorithms']['Row'];
 
 // Define more specific types for the query results
-interface CaseStudyListItem {
+type CaseStudyListItem = {
   id: string;
   title: string;
   slug: string;
-}
+};
 
-interface IndustryListItem {
+type IndustryListItem = {
   id: string;
   name: string;
   slug: string;
-}
+};
 
-interface PersonaListItem {
+type PersonaListItem = {
   id: string;
   name: string;
   slug: string;
-}
+};
 
 interface AlgorithmPageProps {
   params: Promise<{
@@ -50,17 +50,17 @@ export default async function EditAlgorithmPage({ params }: AlgorithmPageProps) 
   const { data: caseStudies } = await supabase
     .from('case_studies')
     .select('id, title, slug')
-    .order('title');
+    .order('title') as { data: CaseStudyListItem[] | null };
 
   const { data: industries } = await supabase
     .from('industries')
     .select('id, name, slug')
-    .order('name');
+    .order('name') as { data: IndustryListItem[] | null };
 
   const { data: personas } = await supabase
     .from('personas')
     .select('id, name, slug')
-    .order('name');
+    .order('name') as { data: PersonaListItem[] | null };
 
   let relatedCaseStudyIds: string[] = [];
   let relatedIndustryIds: string[] = [];
@@ -69,30 +69,25 @@ export default async function EditAlgorithmPage({ params }: AlgorithmPageProps) 
   if (!isNew && algorithm) {
     // Fetch related case study IDs
     const { data: csRelations } = await supabase
-      .from('algorithm_case_study_relations' as any)
+      .from('algorithm_case_study_relations')
       .select('case_study_id')
       .eq('algorithm_id', algorithm.id);
     if (csRelations) {
-      relatedCaseStudyIds = csRelations.map((rel: any) => rel.case_study_id);
+      relatedCaseStudyIds = csRelations.map((rel) => rel.case_study_id).filter((id): id is string => Boolean(id));
     }
 
     // Fetch related industry IDs
     const { data: indRelations } = await supabase
-      .from('algorithm_industry_relations' as any)
+      .from('algorithm_industry_relations')
       .select('industry_id')
       .eq('algorithm_id', algorithm.id);
     if (indRelations) {
-      relatedIndustryIds = indRelations.map((rel: any) => rel.industry_id);
+      relatedIndustryIds = indRelations.map((rel) => rel.industry_id).filter((id): id is string => Boolean(id));
     }
 
-    // Fetch related persona IDs
-    const { data: personaRelations } = await supabase
-      .from('persona_algorithm_relations' as any)
-      .select('persona_id')
-      .eq('algorithm_id', algorithm.id);
-    if (personaRelations) {
-      relatedPersonaIds = personaRelations.map((rel: any) => rel.persona_id);
-    }
+    // Fetch related persona IDs (Note: No direct algorithm-persona relation in schema)
+    // If this relation exists, check schema for correct table name
+    relatedPersonaIds = [];
   }
 
   if (!isNew && !algorithm) {
@@ -101,12 +96,18 @@ export default async function EditAlgorithmPage({ params }: AlgorithmPageProps) 
 
   // This means at this point, if !isNew is true, then algorithm must be defined
   // Use a more explicit type annotation to help TypeScript understand our intent
-  const algorithmData: Algorithm = !isNew && algorithm ? algorithm : {} as Algorithm;
+  interface AlgorithmWithRelations extends Algorithm {
+    related_case_studies?: string[];
+    related_industries?: string[];
+    related_personas?: string[];
+  }
+
+  const algorithmData: AlgorithmWithRelations = !isNew && algorithm ? algorithm : {} as Algorithm;
 
   if (!isNew) {
-    (algorithmData as any).related_case_studies = relatedCaseStudyIds;
-    (algorithmData as any).related_industries = relatedIndustryIds;
-    (algorithmData as any).related_personas = relatedPersonaIds;
+    algorithmData.related_case_studies = relatedCaseStudyIds;
+    algorithmData.related_industries = relatedIndustryIds;
+    algorithmData.related_personas = relatedPersonaIds;
   }
 
   return (

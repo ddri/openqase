@@ -28,7 +28,7 @@ export async function saveAlgorithm(values: any): Promise<any> {
     }
     
     // Handle case study relationships (delete and re-create)
-    let caseStudyError = await supabase
+    const caseStudyError = await supabase
       .from('algorithm_case_study_relations' as any)
       .delete()
       .eq('algorithm_id', data?.id);
@@ -42,7 +42,7 @@ export async function saveAlgorithm(values: any): Promise<any> {
     if (values.related_case_studies && values.related_case_studies.length > 0) {
         // Insert relationships with IDs
         for (const caseStudyId of values.related_case_studies) {
-            let insertError = await supabase
+            const insertError = await supabase
                 .from('algorithm_case_study_relations' as any)
                 .insert({ algorithm_id: data?.id, case_study_id: caseStudyId });
 
@@ -54,7 +54,7 @@ export async function saveAlgorithm(values: any): Promise<any> {
     }
 
     // Handle industry relationships (delete and re-create)
-    let industryError = await supabase
+    const industryError = await supabase
       .from('algorithm_industry_relations' as any)
       .delete()
       .eq('algorithm_id', data?.id);
@@ -68,7 +68,7 @@ export async function saveAlgorithm(values: any): Promise<any> {
     if (values.related_industries && values.related_industries.length > 0) {
         // Insert relationships with IDs
         for (const industryId of values.related_industries) {
-            let insertError = await supabase
+            const insertError = await supabase
                 .from('algorithm_industry_relations' as any)
                 .insert({ algorithm_id: data?.id, industry_id: industryId });
 
@@ -80,7 +80,7 @@ export async function saveAlgorithm(values: any): Promise<any> {
     }
 
     // Handle persona relationships (delete and re-create)
-    let personaError = await supabase
+    const personaError = await supabase
       .from('persona_algorithm_relations' as any)
       .delete()
       .eq('algorithm_id', data?.id);
@@ -94,7 +94,7 @@ export async function saveAlgorithm(values: any): Promise<any> {
     if (values.related_personas && values.related_personas.length > 0) {
         // Insert relationships with IDs
         for (const personaId of values.related_personas) {
-            let insertError = await supabase
+            const insertError = await supabase
                 .from('persona_algorithm_relations' as any)
                 .insert({ algorithm_id: data?.id, persona_id: personaId });
 

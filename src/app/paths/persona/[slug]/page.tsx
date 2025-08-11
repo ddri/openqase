@@ -2,7 +2,7 @@
 import { notFound } from 'next/navigation';
 import { getStaticContentWithRelationships, generateStaticParamsForContentType } from '@/lib/content-fetchers';
 import type { Database } from '@/types/supabase';
-import LearningPathLayout from '@/components/ui/learning-path-layout';
+import ProfessionalPersonaDetailLayout from '@/components/ui/professional-persona-detail-layout';
 import ContentCard from '@/components/ui/content-card';
 import { Badge } from '@/components/ui/badge';
 import Link from 'next/link';
@@ -91,119 +91,59 @@ export default async function PersonaPage({ params }: PageParams) {
       {/* Ghost-style automatic course schema */}
       <AutoSchema type="course" data={persona} courseType="persona" />
       
-      <LearningPathLayout
+      <ProfessionalPersonaDetailLayout
         title={persona.name}
         description={persona.description || ''}
         backLinkText="Back to Personas"
         backLinkHref="/paths/persona"
+        persona={persona}
       >
-        <div className="grid gap-6 md:grid-cols-[2fr,1fr]">
-          <div className="space-y-8">
-            {renderedContent && (
+        {renderedContent && (
+          <div dangerouslySetInnerHTML={{ __html: renderedContent }} />
+        )}
+
+        {/* Recommended Reading Section */}
+        {persona.recommended_reading && (
+          <div className="mt-12">
+            <hr className="my-12 border-border/50" />
+            <div className="bg-muted/30 rounded-lg p-6 border border-border/50">
+              <h2 className="text-2xl font-bold mb-6 text-foreground">Recommended Reading</h2>
               <div
-                className="prose prose-gray dark:prose-invert max-w-none"
-                dangerouslySetInnerHTML={{ __html: renderedContent }}
+                className="prose dark:prose-invert max-w-none prose-a:text-primary prose-a:hover:underline"
+                dangerouslySetInnerHTML={{ __html: renderedRecommendedReading }}
               />
-            )}
-
-            {/* Recommended Reading Section */}
-            {persona.recommended_reading && (
-              <div>
-                <hr className="my-8 border-border" />
-                <h2 className="text-xl font-semibold mb-4">Recommended Reading</h2>
-                <div
-                  className="prose-a:text-[var(--primary)] prose-a:hover:underline"
-                  dangerouslySetInnerHTML={{ __html: renderedRecommendedReading }}
-                />
-              </div>
-            )}
-
-            {/* Related Case Studies */}
-            {caseStudies.length > 0 && (
-              <div>
-                <hr className="my-8 border-border" />
-                <h2 className="text-xl font-semibold mb-4">Related Case Studies</h2>
-                <div className="grid grid-cols-1 gap-6">
-                  {caseStudies.map((caseStudy) => (
-                    <Link
-                      key={caseStudy.id}
-                      href={`/case-study/${caseStudy.slug}`}
-                      className="block group"
-                    >
-                      <div className="p-6 rounded-lg border border-border bg-card/50 transition-all duration-200 hover:bg-accent/5 hover:border-border-hover">
-                        <h3 className="text-lg font-semibold mb-2 group-hover:text-primary">
-                          {caseStudy.title}
-                        </h3>
-                        <p className="text-muted-foreground mb-4">
-                          {caseStudy.description}
-                        </p>
-                        {/* Note: Industry and quantum hardware info not available in persona->case_study relationship */}
-                      </div>
-                    </Link>
-                  ))}
-                </div>
-              </div>
-            )}
+            </div>
           </div>
+        )}
 
-          <div className="space-y-6">
-            {/* Expertise Badges */}
-            {persona.expertise && persona.expertise.length > 0 && (
-              <div>
-                <h3 className="sidebar-title">Expertise</h3>
-                <div className="flex flex-wrap gap-2">
-                  {persona.expertise.map((item: string) => (
-                    <Badge key={item} variant="outline" className="text-[14px] border-border">
-                      {item}
-                    </Badge>
-                  ))}
-                </div>
+        {/* Related Case Studies */}
+        {caseStudies.length > 0 && (
+          <div className="mt-12">
+            <hr className="my-12 border-border/50" />
+            <div className="bg-muted/30 rounded-lg p-6 border border-border/50">
+              <h2 className="text-2xl font-bold mb-6">Related Case Studies</h2>
+              <div className="grid grid-cols-1 gap-4">
+                {caseStudies.map((caseStudy) => (
+                  <Link
+                    key={caseStudy.id}
+                    href={`/case-study/${caseStudy.slug}`}
+                    className="block group"
+                  >
+                    <div className="p-4 rounded-lg border border-border/30 bg-background/50 transition-all duration-200 hover:bg-accent/5 hover:border-border">
+                      <h3 className="text-lg font-semibold mb-2 group-hover:text-primary line-clamp-2">
+                        {caseStudy.title}
+                      </h3>
+                      <p className="text-muted-foreground mb-3 line-clamp-3 text-sm">
+                        {caseStudy.description}
+                      </p>
+                    </div>
+                  </Link>
+                ))}
               </div>
-            )}
-            {/* Industries Section */}
-            {persona.persona_industry_relations && (
-              <div>
-                <h3 className="sidebar-title">Industries</h3>
-                <div className="flex flex-wrap gap-2">
-                  {(() => {
-                    const relations = persona.persona_industry_relations || [];
-                    if (relations.length === 0) {
-                      return <p className="text-sm text-muted-foreground">None</p>;
-                    }
-                    const naIndustry = relations.find(rel => rel.industries?.slug === 'not-applicable');
-                    if (naIndustry && relations.length === 1) {
-                      return <p className="text-sm text-muted-foreground">Not Applicable</p>;
-                    }
-                    const actualIndustries = relations.filter(rel => rel.industries?.slug !== 'not-applicable');
-                    if (actualIndustries.length === 0 && relations.length > 0 && !naIndustry) {
-                        return <p className="text-sm text-muted-foreground">None</p>;
-                    } 
-                    if (actualIndustries.length > 0) {
-                        return actualIndustries.map((relation) =>
-                        relation.industries ? (
-                          <Link key={relation.industries.id} href={`/paths/industry/${relation.industries?.slug}`} passHref>
-                            <Badge
-                              variant="outline"
-                              className="text-[14px] border-border hover:bg-muted-foreground/20 cursor-pointer"
-                            >
-                              {relation.industries.name}
-                            </Badge>
-                          </Link>
-                        ) : null
-                      );
-                    }
-                    if (naIndustry) {
-                        return <p className="text-sm text-muted-foreground">Not Applicable</p>;
-                    }
-                    return <p className="text-sm text-muted-foreground">None</p>;
-                  })()}
-                </div>
-              </div>
-            )}
-            {/* Other sidebar content will go here */}
+            </div>
           </div>
-        </div>
-      </LearningPathLayout>
+        )}
+      </ProfessionalPersonaDetailLayout>
     </>
   );
 }

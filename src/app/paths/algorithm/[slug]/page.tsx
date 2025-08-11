@@ -2,7 +2,7 @@
 import { notFound } from 'next/navigation';
 import { getStaticContentWithRelationships, generateStaticParamsForContentType } from '@/lib/content-fetchers';
 import type { Database } from '@/types/supabase';
-import LearningPathLayout from '@/components/ui/learning-path-layout';
+import ProfessionalAlgorithmDetailLayout from '@/components/ui/professional-algorithm-detail-layout';
 import { Badge } from '@/components/ui/badge';
 import { processMarkdown } from '@/lib/markdown-server';
 import { StepsRenderer } from '@/components/ui/StepsRenderer';
@@ -71,13 +71,14 @@ export default async function AlgorithmPage({ params }: AlgorithmPageProps) {
   }
 
   // Extract related case studies from the algorithm data
+  // The improved relationship filtering ensures case_studies is never null
   const caseStudies: CaseStudy[] = algorithm.algorithm_case_study_relations?.map((relation: any) => ({
-    id: relation.case_studies.id,
-    title: relation.case_studies.title,
-    slug: relation.case_studies.slug,
-    description: relation.case_studies.description || '',
+    id: relation.case_studies?.id || '',
+    title: relation.case_studies?.title || 'Untitled Case Study',
+    slug: relation.case_studies?.slug || '',
+    description: relation.case_studies?.description || '',
     industries: [] // Case study industries aren't fetched in the algorithm relationship query
-  })) || [];
+  })).filter(cs => cs.id && cs.slug) || []; // Filter out any malformed entries
 
   // Process content with server-side markdown and references
   let processedContent = '';
@@ -90,151 +91,66 @@ export default async function AlgorithmPage({ params }: AlgorithmPageProps) {
   }
 
   return (
-    <LearningPathLayout 
+    <ProfessionalAlgorithmDetailLayout 
         title={algorithm.name}
+        description={algorithm.description || ''}
         backLinkText="Back to Algorithms"
         backLinkHref="/paths/algorithm"
+        algorithm={algorithm}
       >
-        <div className="grid gap-12 md:grid-cols-[2fr,1fr]">
-          <div>
-            <article className="max-w-none text-[var(--text-secondary)]">
-              <p className="text-lg text-[var(--text-primary)] mb-8 leading-7">{algorithm.description}</p>
-              
-              <div className="flex flex-wrap gap-2 mb-8">
-                {algorithm.use_cases?.map((app: string) => (
-                  <Badge key={app} variant="outline" className="bg-[var(--surface-secondary)] border-[var(--border)] text-[var(--text-secondary)]">
-                    {app}
-                  </Badge>
-                ))}
-              </div>
-              
-              <div 
-                className="prose dark:prose-invert max-w-none prose-headings:text-[var(--text-primary)] prose-p:text-[var(--text-secondary)] prose-strong:text-[var(--text-primary)] prose-a:text-[var(--primary)] prose-a:font-medium prose-a:no-underline prose-a:hover:underline"
-                dangerouslySetInnerHTML={{ __html: processedContent }} 
-              />
-            </article>
+        <div dangerouslySetInnerHTML={{ __html: processedContent }} />
             
             {algorithm.steps && (
               <div className="my-12">
-                <hr className="my-8 border-border" /> 
-                <h2 className="mt-10 scroll-m-20 text-3xl font-semibold tracking-tight text-[var(--text-primary)]">Implementation Steps</h2> 
-                <StepsRenderer stepsMarkup={algorithm.steps} />
+                <hr className="my-12 border-border/50" /> 
+                <div className="bg-muted/30 rounded-lg p-6 border border-border/50">
+                  <h2 className="text-2xl font-bold mb-6 text-foreground">Implementation Steps</h2> 
+                  <StepsRenderer stepsMarkup={algorithm.steps} />
+                </div>
               </div>
             )}
             
             {algorithm.academic_references && (
               <div className="my-12">
-                <hr className="my-8 border-border" /> 
-                <ReferencesRenderer referencesMarkup={algorithm.academic_references} />
+                <hr className="my-12 border-border/50" /> 
+                <div className="bg-muted/30 rounded-lg p-6 border border-border/50">
+                  <ReferencesRenderer referencesMarkup={algorithm.academic_references} />
+                </div>
               </div>
             )}
 
-            {/* Related Case Studies Section (at the bottom of main content) */}
+            {/* Related Case Studies Section */}
             {caseStudies.length > 0 && (
               <div className="mt-12">
-                <hr className="my-8 border-border" />
-                <h2 className="text-2xl font-bold mb-6">Related Case Studies</h2>
-                <div className="grid grid-cols-1 gap-6">
-                  {caseStudies.map((cs) => (
-                    <Link key={cs.id} href={`/case-study/${cs.slug}`} className="block group">
-                      <div className="p-6 rounded-lg border border-border bg-card/50 transition-all duration-200 hover:bg-accent/5 hover:border-border-hover">
-                        <h3 className="text-lg font-semibold mb-2 group-hover:text-primary">
-                          {cs.title}
-                        </h3>
-                        <p className="text-muted-foreground mb-4 line-clamp-3">
-                          {cs.description}
-                        </p>
-                        {cs.industries && cs.industries.length > 0 && (
-                           <div className="flex flex-wrap gap-2">
-                              {cs.industries.map((industryName) => (
-                                 <Badge key={industryName} variant="outline" className="text-sm">
-                                    {industryName}
-                                 </Badge>
-                              ))}
-                           </div>
-                        )}
-                      </div>
-                    </Link>
-                  ))}
+                <hr className="my-12 border-border/50" />
+                <div className="bg-muted/30 rounded-lg p-6 border border-border/50">
+                  <h2 className="text-2xl font-bold mb-6">Related Case Studies</h2>
+                  <div className="grid grid-cols-1 gap-4">
+                    {caseStudies.map((cs) => (
+                      <Link key={cs.id} href={`/case-study/${cs.slug}`} className="block group">
+                        <div className="p-4 rounded-lg border border-border/30 bg-background/50 transition-all duration-200 hover:bg-accent/5 hover:border-border">
+                          <h3 className="text-lg font-semibold mb-2 group-hover:text-primary line-clamp-2">
+                            {cs.title}
+                          </h3>
+                          <p className="text-muted-foreground mb-3 line-clamp-3 text-sm">
+                            {cs.description}
+                          </p>
+                          {cs.industries && cs.industries.length > 0 && (
+                             <div className="flex flex-wrap gap-1.5">
+                                {cs.industries.map((industryName) => (
+                                   <Badge key={industryName} variant="outline" className="text-xs">
+                                      {industryName}
+                                   </Badge>
+                                ))}
+                             </div>
+                          )}
+                        </div>
+                      </Link>
+                    ))}
+                  </div>
                 </div>
               </div>
             )}
-          </div>
-          
-          <div>
-            <div className="sticky top-8 space-y-8">
-              {/* Related Industries Section */}
-              {algorithm.algorithm_industry_relations && (
-                <div>
-                  <h3 className="sidebar-title">Related Industries</h3>
-                  <div className="flex flex-wrap gap-2">
-                    {(() => {
-                      const relations = algorithm.algorithm_industry_relations || [];
-                      if (relations.length === 0) {
-                        return <p className="text-sm text-muted-foreground">None</p>;
-                      }
-                      const naItem = relations.find(rel => rel.industries?.slug === 'not-applicable');
-                      if (naItem && relations.length === 1) {
-                        return <p className="text-sm text-muted-foreground">Not Applicable</p>;
-                      }
-                      const actualItems = relations.filter(rel => rel.industries?.slug !== 'not-applicable');
-                      if (actualItems.length === 0) {
-                        return naItem ? <p className="text-sm text-muted-foreground">Not Applicable</p> : <p className="text-sm text-muted-foreground">None</p>;
-                      }
-                      return actualItems.map((relation) =>
-                        relation.industries ? (
-                          <Link key={relation.industries.id} href={`/paths/industry/${relation.industries?.slug}`} passHref>
-                            <Badge
-                              variant="outline"
-                              className="text-[14px] border-border hover:bg-muted-foreground/20 cursor-pointer"
-                            >
-                              {relation.industries.name}
-                            </Badge>
-                          </Link>
-                        ) : null
-                      );
-                    })()}
-                  </div>
-                </div>
-              )}
-
-              {/* Related Personas Section */}
-              {algorithm.persona_algorithm_relations && (
-                <div>
-                  <h3 className="sidebar-title">Related Personas</h3>
-                  <div className="flex flex-wrap gap-2">
-                    {(() => {
-                      const relations = algorithm.persona_algorithm_relations || [];
-                      if (relations.length === 0) {
-                        return <p className="text-sm text-muted-foreground">None</p>;
-                      }
-                      const naItem = relations.find(rel => rel.personas?.slug === 'not-applicable');
-                      if (naItem && relations.length === 1) {
-                        return <p className="text-sm text-muted-foreground">Not Applicable</p>;
-                      }
-                      const actualItems = relations.filter(rel => rel.personas?.slug !== 'not-applicable');
-                      if (actualItems.length === 0) {
-                        return naItem ? <p className="text-sm text-muted-foreground">Not Applicable</p> : <p className="text-sm text-muted-foreground">None</p>;
-                      }
-                      return actualItems.map((relation) =>
-                        relation.personas ? (
-                          <Link key={relation.personas.id} href={`/paths/persona/${relation.personas?.slug}`} passHref>
-                            <Badge
-                              variant="outline"
-                              className="text-[14px] border-border hover:bg-muted-foreground/20 cursor-pointer"
-                            >
-                              {relation.personas.name}
-                            </Badge>
-                          </Link>
-                        ) : null
-                      );
-                    })()}
-                  </div>
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
-      </LearningPathLayout>
+        </ProfessionalAlgorithmDetailLayout>
   );
 }

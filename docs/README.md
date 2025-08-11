@@ -1,41 +1,22 @@
-# Website
+# Documentation
 
-This website is built using [Docusaurus](https://docusaurus.io/), a modern static website generator.
+This folder contains project documentation in Markdown format. 
 
-### Installation
+## Key Documentation Files
 
-```
-$ yarn
-```
+- **[Overview](overview.md)** - Project overview and introduction
+- **[Installation](installation.md)** - Setup and installation guide
+- **[Quick Reference](v040-quick-reference.md)** - Developer quick start guide
+- **[API Documentation](api-documentation.md)** - REST API reference
+- **[Unified Content Fetching](unified-content-fetching.md)** - Content system documentation
+- **[Deletion System](deletion-system-implementation.md)** - Soft delete and content lifecycle management
 
-### Local Development
+## Documentation Structure
 
-```
-$ yarn start
-```
+The documentation is organized into:
+- Core system guides (installation, data-fetching, etc.)
+- Architecture documentation (app-structure, tech-stack)
+- Feature-specific guides (authentication, email-system, etc.)
+- Archive folder for historical documentation
 
-This command starts a local development server and opens up a browser window. Most changes are reflected live without having to restart the server.
-
-### Build
-
-```
-$ yarn build
-```
-
-This command generates static content into the `build` directory and can be served using any static contents hosting service.
-
-### Deployment
-
-Using SSH:
-
-```
-$ USE_SSH=true yarn deploy
-```
-
-Not using SSH:
-
-```
-$ GIT_USER=<Your GitHub username> yarn deploy
-```
-
-If you are using GitHub pages for hosting, this command is a convenient way to build the website and push to the `gh-pages` branch.
+All documentation is written in Markdown and can be viewed directly in GitHub or any Markdown viewer.

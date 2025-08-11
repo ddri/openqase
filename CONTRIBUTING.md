@@ -86,7 +86,7 @@ Thank you for your interest in contributing to OpenQase! This guide will help yo
 - **Frontend**: Next.js 15 (App Router), React 19, TypeScript
 - **Backend**: Supabase (PostgreSQL, Auth, Storage)
 - **Styling**: Tailwind CSS, shadcn/ui components
-- **State Management**: TanStack Query (React Query)
+- **Tables**: TanStack Table (React Table)
 - **Documentation**: Docusaurus
 
 ### Project Structure

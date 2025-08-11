@@ -6,6 +6,10 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Label } from '@/components/ui/label';
 import type { Database } from '@/types/supabase';
 import ContentCard from '@/components/ui/content-card';
+import { ViewSwitcher } from '@/components/ui/view-switcher';
+import { useViewSwitcher } from '@/hooks/useViewSwitcher';
+import { useSortPersistence } from '@/hooks/useSortPersistence';
+import { getContentMetadata } from '@/lib/content-metadata';
 
 // Explicitly import the Row type
 type Persona = Database['public']['Tables']['personas']['Row'];
@@ -16,9 +20,14 @@ interface PersonaListProps {
 
 type SortOption = 'name-asc' | 'name-desc' | 'updated-asc' | 'updated-desc';
 
+const PERSONAS_SORT_OPTIONS = ['name-asc', 'name-desc', 'updated-asc', 'updated-desc'] as const;
+
 export default function PersonaList({ personas }: PersonaListProps) {
   const [searchQuery, setSearchQuery] = useState('');
-  const [sortBy, setSortBy] = useState<SortOption>('name-asc');
+  
+  // Use hooks for persistence
+  const { viewMode, handleViewModeChange } = useViewSwitcher('personas-view-mode');
+  const { sortBy, handleSortChange } = useSortPersistence('personas-sort', 'name-asc', PERSONAS_SORT_OPTIONS);
 
   // Memoize expensive filtering and sorting operations
   const filteredPersonas = useMemo(() => {
@@ -58,68 +67,81 @@ export default function PersonaList({ personas }: PersonaListProps) {
     setSearchQuery(e.target.value);
   }, []);
 
-  const handleSortChange = useCallback((value: SortOption) => {
-    setSortBy(value);
-  }, []);
-
   return (
     <div className="space-y-6">
       {/* Search and Filter Controls */}
-      <div className="flex flex-col sm:flex-row gap-4">
-        <div className="flex-1">
-          <Label htmlFor="search" className="text-sm font-medium mb-1.5 block">
-            Search personas
-          </Label>
-          <Input
-            id="search"
-            type="search"
-            placeholder="Search by name, description, or expertise..."
-            value={searchQuery}
-            onChange={handleSearchChange}
-            className="w-full"
-          />
+      <div className="flex flex-col gap-4">
+        <div className="flex flex-col sm:flex-row gap-4">
+          <div className="flex-1">
+            <Label htmlFor="search" className="text-sm font-medium mb-1.5 block">
+              Search personas
+            </Label>
+            <Input
+              id="search"
+              type="search"
+              placeholder="Search by name, description, or expertise..."
+              value={searchQuery}
+              onChange={handleSearchChange}
+              className="w-full"
+            />
+          </div>
+
+          <div className="w-full sm:w-[200px]">
+            <Label htmlFor="sort" className="text-sm font-medium mb-1.5 block">
+              Sort by
+            </Label>
+            <Select value={sortBy} onValueChange={handleSortChange}>
+              <SelectTrigger id="sort" className="w-full">
+                <SelectValue placeholder="Sort by" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="name-asc">Name (A-Z)</SelectItem>
+                <SelectItem value="name-desc">Name (Z-A)</SelectItem>
+                <SelectItem value="updated-desc">Recently Updated</SelectItem>
+                <SelectItem value="updated-asc">Least Recently Updated</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
         </div>
 
-        <div className="w-full sm:w-[200px]">
-          <Label htmlFor="sort" className="text-sm font-medium mb-1.5 block">
-            Sort by
-          </Label>
-          <Select value={sortBy} onValueChange={handleSortChange}>
-            <SelectTrigger id="sort" className="w-full">
-              <SelectValue placeholder="Sort by" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="name-asc">Name (A-Z)</SelectItem>
-              <SelectItem value="name-desc">Name (Z-A)</SelectItem>
-              <SelectItem value="updated-desc">Recently Updated</SelectItem>
-              <SelectItem value="updated-asc">Least Recently Updated</SelectItem>
-            </SelectContent>
-          </Select>
+        {/* View Switcher and Results Count Row */}
+        <div className="flex items-center justify-between">
+          <div className="text-sm text-muted-foreground">
+            {filteredPersonas.length} persona{filteredPersonas.length !== 1 ? 's' : ''} found
+          </div>
+          <ViewSwitcher value={viewMode} onValueChange={handleViewModeChange} />
         </div>
       </div>
 
-      {/* Results count */}
-      <div className="text-sm text-[var(--text-secondary)]">
-        {filteredPersonas.length} persona{filteredPersonas.length !== 1 ? 's' : ''} found
-      </div>
-
-      {/* Persona Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {filteredPersonas.map((persona) => (
-          <ContentCard
-            key={persona.slug}
-            title={persona.name || 'Untitled Persona'}
-            description={persona.description || ''}
-            badges={persona.expertise || []}
-            href={`/paths/persona/${persona.slug}`}
-          />
-        ))}
+      {/* Persona Grid/List */}
+      <div className={viewMode === 'grid' 
+        ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+        : "space-y-4"
+      }>
+        {filteredPersonas.map((persona) => {
+          // Get metadata using the new system
+          const metadata = getContentMetadata('personas', persona, viewMode);
+          
+          return (
+            <ContentCard
+              key={persona.slug}
+              variant={viewMode}
+              title={persona.name || 'Untitled Persona'}
+              description={persona.description || ''}
+              badges={persona.expertise || []}
+              href={`/paths/persona/${persona.slug}`}
+              metadata={{
+                lastUpdated: metadata.join(' • ') || undefined
+              }}
+            />
+          );
+        })}
       </div>
 
       {/* Empty State */}
       {filteredPersonas.length === 0 && (
         <div className="text-center py-12">
-          <p className="text-lg text-[var(--text-secondary)]">
+          <p className="text-lg text-muted-foreground">
             No personas found matching your search.
           </p>
         </div>

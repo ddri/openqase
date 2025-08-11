@@ -2,8 +2,14 @@
 
 import { createServiceRoleSupabaseClient } from '@/lib/supabase-server';
 import { revalidatePath } from 'next/cache';
+import { TablesInsert } from '@/types/supabase';
 
-export async function saveBlogPost(values: any): Promise<any> {
+interface BlogPostFormData extends Omit<TablesInsert<'blog_posts'>, 'id'> {
+  id?: string;
+  related_posts?: string[];
+}
+
+export async function saveBlogPost(values: BlogPostFormData): Promise<TablesInsert<'blog_posts'>> {
   try {
     const supabase = createServiceRoleSupabaseClient();
     const { data, error } = await supabase
@@ -31,34 +37,38 @@ export async function saveBlogPost(values: any): Promise<any> {
     }
     
     // Handle related posts relationships (delete and re-create)
-    let relatedPostsError = await supabase
-      .from('blog_post_relations' as any)
-      .delete()
-      .eq('blog_post_id', data?.id);
+    if (values.related_posts && values.related_posts.length > 0) {
+      const { error: deleteError } = await supabase
+        .from('blog_post_relations')
+        .delete()
+        .eq('blog_post_id', data.id);
 
-    if (relatedPostsError && relatedPostsError.error) {
-        console.error("Error deleting related posts relationships:", relatedPostsError.error);
-        throw new Error(relatedPostsError.error.message || "Failed to delete related posts relationships");
-    }
+      if (deleteError) {
+        console.error("Error deleting related posts relationships:", deleteError);
+        throw new Error(deleteError.message || "Failed to delete related posts relationships");
+      }
 
-    for (const relatedPostId of values.related_posts) {
-        let insertError = await supabase
-            .from('blog_post_relations' as any)
-            .insert({ blog_post_id: data?.id, related_blog_post_id: relatedPostId, relation_type: 'related' });
+      for (const relatedPostId of values.related_posts) {
+        const { error: insertError } = await supabase
+          .from('blog_post_relations')
+          .insert({ blog_post_id: data.id, related_blog_post_id: relatedPostId, relation_type: 'related' });
 
-        if (insertError && insertError.error) {
-            console.error("Error inserting related post relationship:", insertError.error);
-            throw new Error(insertError.error.message || "Failed to insert related post relationship");
+        if (insertError) {
+          console.error("Error inserting related post relationship:", insertError);
+          throw new Error(insertError.message || "Failed to insert related post relationship");
         }
+      }
     }
     
     revalidatePath('/admin/blog');
+    revalidatePath('/'); // Revalidate homepage since it shows featured blog posts
     
     // Return the saved data
     return data;
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Error saving blog post:", error);
-    throw new Error(error.message || "Failed to save blog post");
+    const errorMessage = error instanceof Error ? error.message : "Failed to save blog post";
+    throw new Error(errorMessage);
   }
 }
 
@@ -74,9 +84,11 @@ export async function publishBlogPost(id: string): Promise<void> {
       throw error;
     }
     revalidatePath('/admin/blog');
-  } catch (error: any) {
+    revalidatePath('/'); // Revalidate homepage since it shows featured blog posts
+  } catch (error: unknown) {
     console.error("Error publishing blog post:", error);
-    throw new Error(error.message || "Failed to publish blog post");
+    const errorMessage = error instanceof Error ? error.message : "Failed to publish blog post";
+    throw new Error(errorMessage);
   }
 }
 
@@ -92,8 +104,10 @@ export async function unpublishBlogPost(id: string): Promise<void> {
       throw error;
     }
     revalidatePath('/admin/blog');
-  } catch (error: any) {
+    revalidatePath('/'); // Revalidate homepage since it shows featured blog posts
+  } catch (error: unknown) {
     console.error("Error unpublishing blog post:", error);
-    throw new Error(error.message || "Failed to unpublish blog post");
+    const errorMessage = error instanceof Error ? error.message : "Failed to unpublish blog post";
+    throw new Error(errorMessage);
   }
 }

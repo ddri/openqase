@@ -47,26 +47,28 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
   // Process content with server-side markdown
   const processedContent = blogPost.content ? await processMarkdown(blogPost.content) : '';
 
-  // Extract related blog posts from the relationships
-  const relatedPosts = blogPost.blog_post_relations?.map(relation => relation.related_blog_posts) || [];
+  // Extract related blog posts from the relationships, filter out those without slugs
+  const relatedPosts = (blogPost.blog_post_relations?.map(relation => relation.related_blog_posts) || [])
+    .filter(post => post && post.slug);
 
   return (
-    <div className="container mx-auto px-4 py-12">
-      <div className="max-w-3xl mx-auto">
+    <main className="min-h-screen">
+      <div className="container-outer section-spacing">
+        <div className="max-w-4xl mx-auto">
         {/* Breadcrumb */}
-        <div className="mb-8">
-          <Link href="/blog" className="text-muted-foreground hover:text-primary">
+        <div className="mb-12">
+          <Link href="/blog" className="text-muted-foreground hover:text-primary transition-colors">
             ← Back to Blog
           </Link>
         </div>
         
-        {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-4xl font-bold mb-4">{blogPost.title}</h1>
+        {/* Header - Professional Typography */}
+        <div className="mb-12">
+          <h1 className="text-4xl md:text-5xl font-bold tracking-tight text-foreground mb-6">{blogPost.title}</h1>
           
-          <div className="flex items-center text-muted-foreground mb-4">
+          <div className="flex items-center text-muted-foreground mb-6 text-base">
             {blogPost.published_at && (
-              <span className="mr-4">{format(new Date(blogPost.published_at), 'dd/MM/yyyy')}</span>
+              <span className="mr-6">{format(new Date(blogPost.published_at), 'MMM dd, yyyy')}</span>
             )}
             {blogPost.author && (
               <span>By {blogPost.author}</span>
@@ -87,36 +89,42 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
         </div>
         
         {/* Content */}
-        <div className="prose prose-lg dark:prose-invert max-w-none">
+        <div className="prose prose-base md:prose-lg dark:prose-invert max-w-full md:max-w-none mb-12 md:mb-16">
           {processedContent && (
             <div dangerouslySetInnerHTML={{ __html: processedContent }} />
           )}
         </div>
         
-        {/* Related Blog Posts Section */}
+        {/* Related Blog Posts Section - Mobile-Friendly Styling */}
         {relatedPosts.length > 0 && (
-          <>
-            <hr className="my-8 border-border" />
-            <div className="space-y-4">
-              <h2 className="text-2xl font-bold">Related Blog Posts</h2>
-              <div className="grid grid-cols-1 gap-6">
-                {relatedPosts.map((post) => (
-                  <Link key={post.id} href={`/blog/${post.slug}`} className="block group">
-                    <div className="p-6 rounded-lg border border-border bg-card/50 transition-all duration-200 hover:bg-accent/5 hover:border-border-hover">
-                      <h3 className="text-lg font-semibold mb-2 group-hover:text-primary">
-                        {post.title}
-                      </h3>
-                      <p className="text-muted-foreground mb-4">
-                        {post.description}
-                      </p>
-                    </div>
-                  </Link>
-                ))}
+          <div className="bg-muted/20 border-y border-border py-8 md:py-12">
+            <div className="container-outer">
+              <div className="max-w-4xl mx-auto">
+                <div className="mb-6 md:mb-8">
+                  <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-3 md:mb-4">Related Articles</h2>
+                  <p className="text-base md:text-lg text-muted-foreground">Continue exploring quantum computing insights</p>
+                </div>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+                  {relatedPosts.map((post) => (
+                    <Link key={post.id} href={`/blog/${post.slug}`} className="block group">
+                      <div className="bg-card border border-border rounded-lg p-4 md:p-6 hover:border-primary transition-colors">
+                        <h3 className="text-lg md:text-xl font-semibold text-foreground mb-2 md:mb-3 group-hover:text-primary transition-colors">
+                          {post.title}
+                        </h3>
+                        <p className="text-muted-foreground leading-relaxed text-sm md:text-base">
+                          {post.description}
+                        </p>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
               </div>
             </div>
-          </>
+          </div>
         )}
+        </div>
       </div>
-    </div>
+    </main>
   );
 }

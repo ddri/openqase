@@ -62,6 +62,11 @@ export function PersonaManager({ onSave, onDelete, personas }: PersonaManagerPro
             published: false,
             published_at: null,
             recommended_reading: null,
+            content_status: 'draft',
+            archived_at: null,
+            archived_by: null,
+            deleted_at: null,
+            deleted_by: null,
             slug: '',
             ts_content: null,
             updated_at: new Date().toISOString()

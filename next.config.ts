@@ -26,6 +26,51 @@ const nextConfig: NextConfig = {
       imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
     },
   }),
+
+  // Handle common redirect patterns
+  async redirects() {
+    return [
+      // American to British spelling redirects (from Google Search Console 404s)
+      {
+        source: '/case-study/goldman-portfolio-optimization',
+        destination: '/case-study/goldman-portfolio-optimisation',
+        permanent: true,
+      },
+      {
+        source: '/case-study/volkswagen-traffic-optimization',
+        destination: '/case-study/volkswagen-traffic-optimisation',
+        permanent: true,
+      },
+      // Removed page redirect
+      {
+        source: '/quantum-stack',
+        destination: '/',
+        permanent: true,
+      },
+      // Legal page URL variations
+      {
+        source: '/terms-of-service',
+        destination: '/terms',
+        permanent: true,
+      },
+      {
+        source: '/privacy-policy',
+        destination: '/privacy',
+        permanent: true,
+      },
+      // Old/test blog posts redirect to blog root
+      {
+        source: '/blog/blog-slug',
+        destination: '/blog',
+        permanent: true,
+      },
+      {
+        source: '/blog/welcome-to-openqase',
+        destination: '/blog',
+        permanent: true,
+      },
+    ];
+  },
   
   // Simple optimizations only
   experimental: {
@@ -33,7 +78,7 @@ const nextConfig: NextConfig = {
   },
   
   eslint: {
-    ignoreDuringBuilds: true,  // ✅ Keep disabled until ESLint cleanup (400+ errors)
+    ignoreDuringBuilds: true,  // Keep disabled until ESLint warnings are addressed
   },
   pageExtensions: ['ts', 'tsx', 'js', 'jsx'],
   // Enable TypeScript checking during build

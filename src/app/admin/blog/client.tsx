@@ -43,9 +43,10 @@ import {
   Search,
   ArrowUpDown
 } from 'lucide-react';
+import { Tables } from '@/types/supabase';
 
 interface BlogPostsListProps {
-  initialBlogPosts: any[];
+  initialBlogPosts: Tables<'blog_posts'>[];
 }
 
 export function BlogPostsList({ initialBlogPosts }: BlogPostsListProps) {
@@ -54,7 +55,7 @@ export function BlogPostsList({ initialBlogPosts }: BlogPostsListProps) {
   const [blogPosts, setBlogPosts] = useState(initialBlogPosts);
   const [searchTerm, setSearchTerm] = useState('');
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
-  const [blogPostToDelete, setBlogPostToDelete] = useState<any>(null);
+  const [blogPostToDelete, setBlogPostToDelete] = useState<Tables<'blog_posts'> | null>(null);
   const [sortField, setSortField] = useState<string>('updated_at');
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('desc');
   
@@ -90,7 +91,7 @@ export function BlogPostsList({ initialBlogPosts }: BlogPostsListProps) {
   };
   
   // Handle publish/unpublish
-  const handlePublishToggle = async (blogPost: any) => {
+  const handlePublishToggle = async (blogPost: Tables<'blog_posts'>) => {
     try {
       const response = await fetch(`/api/blog-posts?id=${blogPost.id}`, {
         method: 'PATCH',
@@ -120,7 +121,7 @@ export function BlogPostsList({ initialBlogPosts }: BlogPostsListProps) {
         description: `"${blogPost.title}" is now ${blogPost.published ? 'unpublished' : 'published'}`,
         duration: 3000,
       });
-    } catch (error) {
+    } catch (_error) {
       toast({
         variant: 'destructive',
         title: 'Error',
@@ -131,7 +132,7 @@ export function BlogPostsList({ initialBlogPosts }: BlogPostsListProps) {
   };
   
   // Handle featured toggle
-  const handleFeaturedToggle = async (blogPost: any) => {
+  const handleFeaturedToggle = async (blogPost: Tables<'blog_posts'>) => {
     try {
       const response = await fetch(`/api/blog-posts?id=${blogPost.id}`, {
         method: 'PATCH',
@@ -176,12 +177,15 @@ export function BlogPostsList({ initialBlogPosts }: BlogPostsListProps) {
     if (!blogPostToDelete) return;
     
     try {
-      const response = await fetch(`/api/blog-posts?id=${blogPostToDelete.id}`, {
-        method: 'DELETE',
+      const response = await fetch('/api/blog-posts/delete', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: blogPostToDelete.id })
       });
       
       if (!response.ok) {
-        throw new Error('Failed to delete blog post');
+        const error = await response.text();
+        throw new Error(`Failed to delete blog post: ${error}`);
       }
       
       // Update local state
@@ -190,8 +194,8 @@ export function BlogPostsList({ initialBlogPosts }: BlogPostsListProps) {
       );
       
       toast({
-        title: 'Blog post deleted',
-        description: `"${blogPostToDelete.title}" has been deleted`,
+        title: 'Blog post moved to trash',
+        description: `"${blogPostToDelete.title}" has been moved to trash`,
         duration: 3000,
       });
       
@@ -202,7 +206,7 @@ export function BlogPostsList({ initialBlogPosts }: BlogPostsListProps) {
       toast({
         variant: 'destructive',
         title: 'Error',
-        description: 'Failed to delete blog post',
+        description: error instanceof Error ? error.message : 'Failed to delete blog post',
         duration: 5000,
       });
     }
@@ -402,8 +406,8 @@ export function BlogPostsList({ initialBlogPosts }: BlogPostsListProps) {
           <AlertDialogHeader>
             <AlertDialogTitle>Are you sure?</AlertDialogTitle>
             <AlertDialogDescription>
-              This will permanently delete the blog post 
-              "{blogPostToDelete?.title}". This action cannot be undone.
+              Are you sure you want to delete the blog post 
+              "{blogPostToDelete?.title}"? It will be moved to trash and can be recovered later.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>

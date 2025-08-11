@@ -85,7 +85,7 @@ export default function Footer() {
               </li>
               <li>
                 <Link href="/paths" className="text-base text-muted-foreground hover:text-accent transition-colors">
-                  Learning Paths
+                  Related Content
                 </Link>
               </li>
             </ul>

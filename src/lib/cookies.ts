@@ -1,5 +1,5 @@
 import { cookies } from 'next/headers'
-import type { CookieOptionsWithName } from '@supabase/auth-helpers-shared'
+import type { CookieOptions } from '@supabase/ssr'
 
 /**
  * Creates an async cookie handler compatible with Next.js 15 Server Components

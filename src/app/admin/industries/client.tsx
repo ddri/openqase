@@ -38,18 +38,24 @@ export function IndustriesClient({ data }: IndustriesClientProps) {
     
     setIsDeleting(true)
     try {
-      const response = await fetch(`/api/industries?id=${industryToDelete.id}`, {
-        method: 'DELETE',
+      const response = await fetch('/api/industries/delete', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: industryToDelete.id })
       })
       
       if (response.ok) {
         // Remove the deleted industry from the state
         setIndustries(industries.filter(i => i.id !== industryToDelete.id))
+        alert('Industry moved to trash')
       } else {
+        const error = await response.text()
+        alert(`Failed to delete industry: ${error}`)
         console.error('Failed to delete industry')
       }
     } catch (error) {
       console.error('Error deleting industry:', error)
+      alert('Error deleting industry')
     } finally {
       setIsDeleting(false)
       setDeleteDialogOpen(false)
@@ -131,7 +137,7 @@ export function IndustriesClient({ data }: IndustriesClientProps) {
               Delete Industry
             </AlertDialogTitle>
             <AlertDialogDescription>
-              Are you sure you want to delete "{industryToDelete?.name}"? This action cannot be undone.
+              Are you sure you want to delete &quot;{industryToDelete?.name}&quot;? It will be moved to trash and can be recovered later.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>

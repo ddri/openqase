@@ -1,6 +1,5 @@
 'use client'
 
-import { Button } from "@/components/ui/button"
 import {
   Card,
   CardContent,
@@ -8,228 +7,128 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Textarea } from "@/components/ui/textarea"
-import { Github, Twitter, Linkedin, MessageCircle } from 'lucide-react'
+import { Github, Twitter } from 'lucide-react'
 import Link from 'next/link'
-import { useState } from 'react'
-import { useToast } from "@/components/ui/use-toast"
+import { Button } from "@/components/ui/button"
 
 export default function ContactPage() {
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const { toast } = useToast()
-
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    setIsSubmitting(true)
-
-    try {
-      const formData = new FormData(e.currentTarget)
-      const response = await fetch('https://formspree.io/f/mdkekzlb', {
-        method: 'POST',
-        body: formData,
-        headers: {
-          'Accept': 'application/json'
-        }
-      })
-
-      if (response.ok) {
-        toast({
-          title: "Success",
-          description: "Thank you for your message. We'll get back to you soon.",
-          duration: 3000,
-        })
-        // Reset the form
-        ;(e.target as HTMLFormElement).reset()
-      } else {
-        throw new Error('Failed to send message')
-      }
-    } catch (error) {
-      toast({
-        variant: "destructive",
-        title: "Error",
-        description: "Failed to send message. Please try again later.",
-        duration: 5000,
-      })
-    } finally {
-      setIsSubmitting(false)
-    }
-  }
+  const openTallyForm = () => {
+    window.open('https://tally.so/r/wap82b', '_blank', 'width=700,height=800,scrollbars=yes,resizable=yes');
+  };
 
   return (
     <main className="min-h-screen">
       <div className="container-outer section-spacing">
-        {/* Hero Section */}
-        <div className="max-w-3xl mx-auto text-center mb-12 md:mb-16">
-          <h1 className="mb-4 md:mb-6 tracking-tight">
-            Contact Us
-          </h1>
-          <p className="text-lg sm:text-xl text-muted-foreground">
-            Have questions about quantum computing or suggestions for our platform? 
-            We'd love to hear from you.
-          </p>
+        {/* Hero Section - Professional Magazine Style */}
+        <div className="max-w-4xl mx-auto mb-16">
+          <div className="text-center mb-8">
+            <h1 className="text-4xl md:text-5xl font-bold tracking-tight text-foreground mb-6">
+              Contact Us
+            </h1>
+            <p className="text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
+              Have questions about quantum computing or suggestions for our platform? 
+              We'd love to hear from you.
+            </p>
+          </div>
         </div>
 
-        {/* Single Column Layout */}
-        <div className="max-w-2xl mx-auto space-y-8">
-          {/* Contact Form */}
-          <Card>
-            <CardHeader className="space-y-2">
-              <CardTitle className="text-xl">Send us a Message</CardTitle>
-              <CardDescription>
-                Fill out the form below and we'll get back to you as soon as possible.
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
-                  <div className="space-y-2">
-                    <label htmlFor="name" className="text-sm font-medium">
-                      Name
-                    </label>
-                    <Input
-                      id="name"
-                      name="name"
-                      placeholder="Your name"
-                      required
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <label htmlFor="email" className="text-sm font-medium">
-                      Email
-                    </label>
-                    <Input
-                      id="email"
-                      name="email"
-                      type="email"
-                      placeholder="your@email.com"
-                      required
-                    />
-                  </div>
-                </div>
-                <div className="space-y-2">
-                  <label htmlFor="subject" className="text-sm font-medium">
-                    Subject
-                  </label>
-                  <Input
-                    id="subject"
-                    name="subject"
-                    placeholder="What's this about?"
-                    required
-                  />
-                </div>
-                <div className="space-y-2">
-                  <label htmlFor="message" className="text-sm font-medium">
-                    Message
-                  </label>
-                  <Textarea
-                    id="message"
-                    name="message"
-                    placeholder="Your message..."
-                    className="min-h-[150px] resize-y"
-                    required
-                  />
-                </div>
-                <Button 
-                  type="submit" 
-                  className="w-full sm:w-auto"
-                  size="lg"
-                  disabled={isSubmitting}
-                >
-                  {isSubmitting ? 'Sending...' : 'Send Message'}
-                </Button>
-              </form>
-            </CardContent>
-          </Card>
+        {/* Professional Grid Layout */}
+        <div className="max-w-6xl mx-auto">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-16">
+            {/* Contact Form */}
+            <div className="bg-card border border-border rounded-lg p-8">
+              <div className="mb-6">
+                <h2 className="text-2xl font-bold text-foreground mb-3">Get in Touch</h2>
+                <p className="text-muted-foreground leading-relaxed">
+                  Fill out our contact form and we'll get back to you as soon as possible.
+                </p>
+              </div>
+              <Button 
+                onClick={openTallyForm}
+                className="w-full py-4 text-base font-medium"
+                size="lg"
+              >
+                Open Contact Form →
+              </Button>
+            </div>
 
-          {/* Community Links */}
-          <Card>
-            <CardHeader className="space-y-2">
-              <CardTitle className="text-xl">Join Our Community</CardTitle>
-              <CardDescription>
-                Connect with us on social media and join our community platforms.
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="grid gap-4">
+            {/* Community Links */}
+            <div className="bg-card border border-border rounded-lg p-8">
+              <div className="mb-6">
+                <h2 className="text-2xl font-bold text-foreground mb-3">Join Our Community</h2>
+                <p className="text-muted-foreground leading-relaxed">
+                  Connect with us on social media and contribute to the quantum computing community.
+                </p>
+              </div>
+              <div className="space-y-4">
                 <Link 
                   href="https://github.com/ddri/openqase"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-3 text-muted-foreground hover:text-foreground transition-colors p-2 hover:bg-accent/5 rounded-lg"
+                  className="flex items-center gap-3 p-3 hover:bg-muted/50 rounded-md transition-colors group"
                 >
-                  <Github className="h-5 w-5" />
-                  <span>Follow us on GitHub</span>
+                  <Github className="h-5 w-5 text-muted-foreground group-hover:text-foreground" />
+                  <span className="text-foreground group-hover:text-primary font-medium">Follow us on GitHub</span>
                 </Link>
                 <Link 
                   href="https://threads.com/openqase"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-3 text-muted-foreground hover:text-foreground transition-colors p-2 hover:bg-accent/5 rounded-lg"
+                  className="flex items-center gap-3 p-3 hover:bg-muted/50 rounded-md transition-colors group"
                 >
-                  <Twitter className="h-5 w-5" />
-                  <span>Follow us on Threads</span>
+                  <Twitter className="h-5 w-5 text-muted-foreground group-hover:text-foreground" />
+                  <span className="text-foreground group-hover:text-primary font-medium">Follow us on Threads</span>
                 </Link>
-                {/*
-                <Link 
-                  href="https://linkedin.com/company/openqase"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-3 text-muted-foreground hover:text-foreground transition-colors p-2 hover:bg-accent/5 rounded-lg"
-                >
-                  <Linkedin className="h-5 w-5" />
-                  <span>Connect on LinkedIn</span>
-                </Link>
-                */}
-                {/*
-                <Link 
-                  href="https://discord.gg/openqase"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-3 text-muted-foreground hover:text-foreground transition-colors p-2 hover:bg-accent/5 rounded-lg"
-                >
-                  <MessageCircle className="h-5 w-5" />
-                  <span>Join our Discord</span>
-                </Link>
-                */}
               </div>
-            </CardContent>
-          </Card>
+            </div>
+          </div>
 
-          {/* FAQ Section */}
-          <Card>
-            <CardHeader className="space-y-2">
-              <CardTitle className="text-xl">Frequently Asked Questions</CardTitle>
-              <CardDescription>
-                Quick answers to common questions.
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-6">
-                <div>
-                  <h3 className="mb-2">How can I contribute?</h3>
-                  <p className="text-muted-foreground">
-                    We welcome contributions from the community! You can contribute by submitting case studies,
-                    improving documentation, or helping with code. Check out our GitHub repository for more details.
+          {/* FAQ Section - Professional Typography */}
+          <div className="bg-muted/20 border-y border-border py-12 md:py-16">
+            <div className="max-w-4xl mx-auto">
+              <div className="text-center mb-8 md:mb-12">
+                <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-3 md:mb-4">Frequently Asked Questions</h2>
+                <p className="text-base md:text-lg text-muted-foreground">Quick answers to common questions about OpenQase</p>
+              </div>
+              
+              <div className="grid gap-6 md:gap-8 lg:gap-10">
+                <div className="border-l-4 border-primary/20 pl-4 md:pl-6">
+                  <h3 className="text-lg md:text-xl font-semibold text-foreground mb-2 md:mb-3">How can I contribute to OpenQase?</h3>
+                  <p className="text-muted-foreground leading-relaxed text-base">
+                    We welcome contributions from the quantum computing community! You can contribute by submitting case studies,
+                    improving documentation, reporting bugs, or contributing code. Check out our 
+                    <Link href="https://github.com/ddri/openqase" className="text-primary hover:underline ml-1">GitHub repository</Link> for detailed contribution guidelines.
                   </p>
                 </div>
-                <div>
-                  <h3 className="mb-2">I found a bug. Where should I report it?</h3>
-                  <p className="text-muted-foreground">
-                    Please report any bugs or issues on our GitHub repository's issue tracker. Make sure to
-                    include as much detail as possible to help us understand and fix the problem.
+                
+                <div className="border-l-4 border-primary/20 pl-4 md:pl-6">
+                  <h3 className="text-lg md:text-xl font-semibold text-foreground mb-2 md:mb-3">I found a bug. Where should I report it?</h3>
+                  <p className="text-muted-foreground leading-relaxed text-sm md:text-base">
+                    Please report any bugs or issues on our GitHub repository's issue tracker. Include as much detail as possible:
+                    browser version, steps to reproduce, and screenshots if applicable. This helps us understand and fix problems quickly.
                   </p>
                 </div>
-                <div>
-                  <h3 className="mb-2">Can I suggest new features?</h3>
-                  <p className="text-muted-foreground">
-                    Absolutely! We love hearing new ideas from the community. You can suggest features
-                    through our GitHub repository or by reaching out to us directly through this form.
+                
+                <div className="border-l-4 border-primary/20 pl-4 md:pl-6">
+                  <h3 className="text-lg md:text-xl font-semibold text-foreground mb-2 md:mb-3">Can I suggest new features or case studies?</h3>
+                  <p className="text-muted-foreground leading-relaxed text-sm md:text-base">
+                    Absolutely! We value community input and new ideas. You can suggest features through our GitHub repository's 
+                    discussions section, or reach out to us directly through the contact form above. We're especially interested 
+                    in new quantum computing case studies from industry leaders.
+                  </p>
+                </div>
+                
+                <div className="border-l-4 border-primary/20 pl-4 md:pl-6">
+                  <h3 className="text-lg md:text-xl font-semibold text-foreground mb-2 md:mb-3">How do I get my company's case study featured?</h3>
+                  <p className="text-muted-foreground leading-relaxed text-sm md:text-base">
+                    We offer featured placement opportunities for quantum computing case studies on our homepage. 
+                    This provides premium visibility to showcase your company's quantum innovations. Contact us through 
+                    the form above to discuss featured placement options and pricing.
                   </p>
                 </div>
               </div>
-            </CardContent>
-          </Card>
+            </div>
+          </div>
         </div>
       </div>
     </main>

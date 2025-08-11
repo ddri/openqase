@@ -1,6 +1,6 @@
 {
   "name": "openqase",
-  "version": "0.3.0",
+  "version": "0.4.1",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -24,7 +24,6 @@
     "@radix-ui/react-tabs": "^1.1.12",
     "@radix-ui/react-tooltip": "^1.2.7",
     "@sentry/nextjs": "^9.28.1",
-    "@supabase/auth-helpers-nextjs": "^0.10.0",
     "@supabase/auth-ui-react": "^0.4.7",
     "@supabase/auth-ui-shared": "^0.1.8",
     "@supabase/ssr": "^0.6.1",
@@ -54,8 +53,6 @@
     "uuid": "^11.1.0"
   },
   "devDependencies": {
-    "@docusaurus/preset-classic": "^3.7.0",
-    "@docusaurus/types": "^3.7.0",
     "@eslint/eslintrc": "^3",
     "@tailwindcss/typography": "^0.5.16",
     "@types/node": "^20.19.0",

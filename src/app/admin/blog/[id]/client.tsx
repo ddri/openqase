@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
@@ -10,6 +10,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Checkbox } from '@/components/ui/checkbox';
+import { TagInput } from '@/components/ui/tag-input';
 import { ContentCompleteness } from '@/components/admin/ContentCompleteness';
 import { PublishButton } from '@/components/admin/PublishButton';
 import { createContentValidationRules, calculateCompletionPercentage, validateFormValues } from '@/utils/form-validation';
@@ -17,10 +18,15 @@ import { useTransition } from 'react';
 import { ArrowLeft, Save, Loader2 } from 'lucide-react';
 import { toast } from '@/components/ui/use-toast';
 import { saveBlogPost, publishBlogPost, unpublishBlogPost } from './actions';
+import { Tables } from '@/types/supabase';
+
+interface BlogPostWithRelations extends Tables<'blog_posts'> {
+  related_posts?: string[];
+}
 
 interface BlogPostFormProps {
-  blogPost: any | null;
-  relatedPosts: any[];
+  blogPost: BlogPostWithRelations | null;
+  relatedPosts: Array<{ id: string; title: string; slug: string }>;
   isNew: boolean;
 }
 
@@ -59,10 +65,23 @@ export function BlogPostForm({ blogPost, relatedPosts, isNew }: BlogPostFormProp
   
   // Handle field change
   const handleChange = (field: string, value: any) => {
-    setValues(prev => ({
-      ...prev,
+    const newValues = {
+      ...values,
       [field]: value
-    }));
+    };
+    
+    // Auto-generate slug from title if slug is empty
+    if (field === 'title' && value && !values.slug) {
+      const autoSlug = value
+        .toLowerCase()
+        .replace(/[^a-z0-9\s-]/g, '') // Remove special chars
+        .replace(/\s+/g, '-') // Replace spaces with hyphens
+        .replace(/-+/g, '-') // Replace multiple hyphens with single
+        .trim();
+      newValues.slug = autoSlug;
+    }
+    
+    setValues(newValues);
     setIsDirty(true);
   };
   
@@ -106,6 +125,16 @@ export function BlogPostForm({ blogPost, relatedPosts, isNew }: BlogPostFormProp
         variant: 'destructive',
         title: 'Error',
         description: 'Cannot publish blog post without saving first',
+        duration: 3000,
+      });
+      return;
+    }
+    
+    if (!values.slug || !values.title) {
+      toast({
+        variant: 'destructive',
+        title: 'Cannot Publish',
+        description: 'Title and slug are required before publishing',
         duration: 3000,
       });
       return;
@@ -284,17 +313,10 @@ export function BlogPostForm({ blogPost, relatedPosts, isNew }: BlogPostFormProp
               
               <div className="space-y-2">
                 <Label htmlFor="tags">Tags</Label>
-                <Input
-                  id="tags"
-                  value={values.tags.join(', ')}
-                  onChange={(e) => {
-                    const tags = e.target.value
-                      .split(',')
-                      .map(item => item.trim())
-                      .filter(Boolean);
-                    handleChange('tags', tags);
-                  }}
-                  placeholder="tag1, tag2, tag3"
+                <TagInput
+                  tags={values.tags}
+                  onTagsChange={(newTags) => handleChange('tags', newTags)}
+                  placeholder="Add tag..."
                 />
               </div>
 

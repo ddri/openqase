@@ -16,12 +16,19 @@ import { useTransition } from 'react';
 import { ArrowLeft, Save, Loader2 } from 'lucide-react';
 import { toast } from '@/components/ui/use-toast';
 import { saveAlgorithm, publishAlgorithm, unpublishAlgorithm } from './actions';
+import { Tables } from '@/types/supabase';
+
+interface AlgorithmWithRelations extends Tables<'algorithms'> {
+  related_case_studies?: string[];
+  related_industries?: string[];
+  related_personas?: string[];
+}
 
 interface AlgorithmFormProps {
-  algorithm: any | null;
-  caseStudies: any[];
-  industries: any[];
-  personas: any[];
+  algorithm: AlgorithmWithRelations | null;
+  caseStudies: Array<{ id: string; title: string; slug: string }>;
+  industries: Array<{ id: string; name: string; slug: string }>;
+  personas: Array<{ id: string; name: string; slug: string }>;
   isNew: boolean;
 }
 
@@ -60,7 +67,7 @@ export function AlgorithmForm({ algorithm, caseStudies, industries, personas, is
   const completionPercentage = calculateCompletionPercentage({ values, validationRules });
   
   // Handle field change
-  const handleChange = (field: string, value: any) => {
+  const handleChange = (field: string, value: string | string[] | boolean) => {
     setValues(prev => ({
       ...prev,
       [field]: value
@@ -79,7 +86,7 @@ export function AlgorithmForm({ algorithm, caseStudies, industries, personas, is
     
     // First pass: find the highest existing citation number
     let maxExistingNumber = 0;
-    lines.forEach((line: string) => {
+    lines.forEach((line) => {
       const match = line.match(/^\[\^(\d+)\]:/);
       if (match) {
         maxExistingNumber = Math.max(maxExistingNumber, parseInt(match[1]));
@@ -90,7 +97,7 @@ export function AlgorithmForm({ algorithm, caseStudies, industries, personas, is
     citationNumber = maxExistingNumber + 1;
     
     // Second pass: add numbers to lines that need them
-    lines.forEach((line: string) => {
+    lines.forEach((line) => {
       const trimmedLine = line.trim();
       if (trimmedLine === '') {
         processedLines.push(line); // Preserve empty lines
@@ -273,7 +280,7 @@ export function AlgorithmForm({ algorithm, caseStudies, industries, personas, is
               onUnpublish={handleUnpublish}
               validateContent={validateContent}
               disabled={isPending}
-              onTabChange={(tab: string) => {}}
+              onTabChange={(_tab: string) => {}}
               getTabLabel={(tab: string) => tab}
             />
           </div>
@@ -368,7 +375,7 @@ export function AlgorithmForm({ algorithm, caseStudies, industries, personas, is
             <div className="space-y-3">
               <Label htmlFor="steps">Steps</Label>
               <p className="text-sm text-muted-foreground">
-                Use the format: &lt;step title="Step Title"&gt;Step content in markdown&lt;/step&gt;
+                Use the format: &lt;step title=&quot;Step Title&quot;&gt;Step content in markdown&lt;/step&gt;
               </p>
               <Textarea
                 id="steps"

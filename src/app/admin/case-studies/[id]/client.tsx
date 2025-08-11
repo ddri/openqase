@@ -10,10 +10,11 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { ContentCompleteness } from '@/components/admin/ContentCompleteness';
 import { PublishButton } from '@/components/admin/PublishButton';
+import { Checkbox } from '@/components/ui/checkbox';
 import { TagInput } from '@/components/ui/tag-input';
 import { ResourceLinksEditor } from '@/components/admin/ResourceLinksEditor';
 import { createContentValidationRules, calculateCompletionPercentage, validateFormValues } from '@/utils/form-validation';
-import { ArrowLeft, Save, Loader2 } from 'lucide-react';
+import { ArrowLeft, Save, Loader2, Eye } from 'lucide-react';
 import { toast } from '@/components/ui/use-toast';
 import { saveCaseStudy, publishCaseStudy, unpublishCaseStudy } from './actions';
 
@@ -54,6 +55,7 @@ export function CaseStudyForm({ caseStudy, algorithms, industries, personas, isN
     industries: isNew ? [] : (caseStudy?.industries || []),
     personas: isNew ? [] : (caseStudy?.personas || []),
     published: isNew ? false : caseStudy?.published || false,
+    featured: isNew ? false : caseStudy?.featured || false,
     academic_references: isNew ? '' : caseStudy?.academic_references || '',
     resource_links: isNew ? [] : caseStudy?.resource_links || [],
     year: isNew ? new Date().getFullYear() : caseStudy?.year || new Date().getFullYear(),
@@ -68,10 +70,23 @@ export function CaseStudyForm({ caseStudy, algorithms, industries, personas, isN
   
   // Handle field change
   const handleChange = (field: string, value: any) => {
-    setValues(prev => ({
-      ...prev,
+    const newValues = {
+      ...values,
       [field]: value
-    }));
+    };
+    
+    // Auto-generate slug from title if slug is empty
+    if (field === 'title' && value && !values.slug) {
+      const autoSlug = value
+        .toLowerCase()
+        .replace(/[^a-z0-9\s-]/g, '') // Remove special chars
+        .replace(/\s+/g, '-') // Replace spaces with hyphens
+        .replace(/-+/g, '-') // Replace multiple hyphens with single
+        .trim();
+      newValues.slug = autoSlug;
+    }
+    
+    setValues(newValues);
     setIsDirty(true);
   };
   
@@ -298,6 +313,22 @@ export function CaseStudyForm({ caseStudy, algorithms, industries, personas, isN
           </Button>
           
           <div className="flex items-center gap-3">
+            {/* Featured Checkbox - moved to left */}
+            <div className="flex items-center space-x-2 p-2 border border-border rounded-md bg-card">
+              <Checkbox
+                id="featured"
+                checked={values.featured}
+                onCheckedChange={(checked: boolean) => {
+                  setValues(prev => ({ ...prev, featured: checked }));
+                  setIsDirty(true);
+                }}
+                disabled={isPending}
+              />
+              <Label htmlFor="featured" className="text-sm font-medium cursor-pointer">
+                Feature article
+              </Label>
+            </div>
+
             <Button
               type="button"
               variant="outline"
@@ -317,6 +348,23 @@ export function CaseStudyForm({ caseStudy, algorithms, industries, personas, isN
                   Save
                 </>
               )}
+            </Button>
+
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={() => {
+                // Open preview in new tab
+                const previewUrl = `/api/preview?type=case-study&slug=${values.slug}`;
+                window.open(previewUrl, '_blank');
+              }}
+              disabled={!values.slug}
+              className="min-w-[100px]"
+              title={!values.slug ? "Save the case study first to preview" : "Preview case study"}
+            >
+              <Eye className="mr-2 h-4 w-4" />
+              Preview
             </Button>
             
             <PublishButton
@@ -396,6 +444,7 @@ export function CaseStudyForm({ caseStudy, algorithms, industries, personas, isN
                   The year when this case study was conducted or published (1990-2030)
                 </p>
               </div>
+              
             </div>
           </CardContent>
         </Card>

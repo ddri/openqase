@@ -1,6 +1,7 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useTheme } from 'next-themes';
 
 // Light Mode Palette - No pure white (#FFFFFF)
 const lightPalette = {
@@ -22,10 +23,10 @@ const lightPalette = {
   'border-subtle': '#F3F4F6',   // Very subtle borders
   'border-strong': '#D1D5DB',   // Stronger borders
   
-  // Interactive Elements
-  'primary': '#3B82F6',          // Primary blue
-  'primary-hover': '#2563EB',   
-  'primary-muted': '#EFF6FF',   // Primary tinted background
+  // Interactive Elements - OpenQase Yellow
+  'primary': '#EAB308',          // OpenQase yellow
+  'primary-hover': '#CA8A04',   // Darker yellow on hover
+  'primary-muted': '#FEF3C7',   // Yellow tinted background
   
   // Semantic Colors
   'success': '#10B981',
@@ -59,10 +60,10 @@ const darkPalette = {
   'border-subtle': '#1E2430',   // Very subtle borders
   'border-strong': '#374151',   // Stronger borders
   
-  // Interactive Elements
-  'primary': '#5B9EF8',          // Primary blue (lighter in dark)
-  'primary-hover': '#7AB3FA',   
-  'primary-muted': '#1A2332',   // Primary tinted background
+  // Interactive Elements - OpenQase Yellow (adjusted for dark)
+  'primary': '#FACC15',          // Brighter yellow in dark mode
+  'primary-hover': '#FDE047',   // Even brighter on hover
+  'primary-muted': '#422006',   // Dark yellow tinted background
   
   // Semantic Colors (adjusted for dark)
   'success': '#34D399',
@@ -77,27 +78,38 @@ const darkPalette = {
 };
 
 export default function DesignSystem() {
-  const [mode, setMode] = useState<'light' | 'dark'>('light');
+  const { theme, setTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+  
+  // Avoid hydration mismatch
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+  
+  const mode = theme === 'dark' ? 'dark' : 'light';
   const palette = mode === 'light' ? lightPalette : darkPalette;
+  
+  if (!mounted) {
+    return null; // Avoid hydration mismatch
+  }
   
   return (
     <div 
       className="min-h-screen transition-colors duration-300"
       style={{ backgroundColor: palette['bg-base'] }}
     >
-      {/* Mode Toggle */}
-      <div className="fixed top-4 right-4 z-50">
+      {/* Mode Toggle - Actually changes the site theme */}
+      <div className="fixed top-20 right-4 z-50">
         <button
-          onClick={() => setMode(mode === 'light' ? 'dark' : 'light')}
+          onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
           className="px-4 py-2 rounded-lg transition-all"
           style={{
-            backgroundColor: palette['bg-elevated'],
-            color: palette['text-primary'],
-            border: `1px solid ${palette['border-default']}`,
+            backgroundColor: palette['primary'],
+            color: mode === 'light' ? '#FFFFFF' : '#000000',
             boxShadow: `0 2px 8px ${palette['shadow']}`
           }}
         >
-          {mode === 'light' ? '🌙' : '☀️'} {mode === 'light' ? 'Dark' : 'Light'} Mode
+          {mode === 'light' ? '🌙' : '☀️'} Switch to {mode === 'light' ? 'Dark' : 'Light'} Mode
         </button>
       </div>
 
@@ -203,15 +215,15 @@ export default function DesignSystem() {
             </h3>
             <div className="space-y-3">
               <button
-                className="w-full px-4 py-2 rounded-md transition-colors"
+                className="w-full px-4 py-2 rounded-md transition-colors font-medium"
                 style={{
                   backgroundColor: palette['primary'],
-                  color: mode === 'light' ? '#FFFFFF' : palette['bg-base']
+                  color: mode === 'light' ? '#000000' : '#000000', // Black text on yellow for both modes
                 }}
                 onMouseEnter={(e) => e.currentTarget.style.backgroundColor = palette['primary-hover']}
                 onMouseLeave={(e) => e.currentTarget.style.backgroundColor = palette['primary']}
               >
-                Primary Button
+                Get Started
               </button>
               <button
                 className="w-full px-4 py-2 rounded-md transition-colors"

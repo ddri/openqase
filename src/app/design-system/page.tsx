@@ -3,25 +3,25 @@
 import { useState, useEffect } from 'react';
 import { useTheme } from 'next-themes';
 
-// Light Mode Palette - No pure white (#FFFFFF)
+// Light Mode Palette - Warmer, softer, less intense
 const lightPalette = {
-  // Backgrounds - Subtle off-whites with slight blue tint
-  'bg-base': '#FAFBFC',      // Main background - GitHub-style off-white
-  'bg-surface': '#FCFDFE',   // Cards/surfaces - Not pure white!
-  'bg-elevated': '#FEFEFF',  // Elevated elements - Still not pure white
-  'bg-subtle': '#F6F8FA',    // Subtle backgrounds
-  'bg-muted': '#F1F4F7',     // More muted areas
+  // Backgrounds - Warmer off-whites, less bright
+  'bg-base': '#F9F9F8',      // Warm off-white, less bright than typical
+  'bg-surface': '#FBFBFA',   // Slightly brighter but still warm
+  'bg-elevated': '#FDFDFC',  // Highest elevation, still not pure white
+  'bg-subtle': '#F5F5F3',    // Warm subtle background
+  'bg-muted': '#F0F0ED',     // More muted, paper-like
   
-  // Text - No pure black (#000000)
-  'text-primary': '#1A1F26',    // Main text - Soft blue-black
-  'text-secondary': '#4B5563',  // Secondary text
-  'text-muted': '#6B7280',      // Muted text
-  'text-disabled': '#9CA3AF',   // Disabled text
+  // Text - Softer contrast, easier on eyes
+  'text-primary': '#2C3338',    // Softer dark gray (~10:1 contrast)
+  'text-secondary': '#5A6570',  // Medium gray (~6:1 contrast)
+  'text-muted': '#737D88',      // Lighter gray (~4.8:1 contrast)
+  'text-disabled': '#A0A9B3',   // Disabled text
   
-  // Borders & Dividers
-  'border-default': '#E5E7EB',  // Default borders
-  'border-subtle': '#F3F4F6',   // Very subtle borders
-  'border-strong': '#D1D5DB',   // Stronger borders
+  // Borders & Dividers - Warmer tones
+  'border-default': '#E0E0DD',  // Warm gray border
+  'border-subtle': '#EDEDEA',   // Very subtle warm border
+  'border-strong': '#D0D0CC',   // Stronger warm border
   
   // Interactive Elements - OpenQase Yellow
   'primary': '#EAB308',          // OpenQase yellow
@@ -35,30 +35,30 @@ const lightPalette = {
   'info': '#06B6D4',
   
   // Special
-  'code-bg': '#F8F9FB',         // Code block background
-  'code-border': '#E8EAED',
-  'shadow': 'rgba(0, 0, 0, 0.04)',
+  'code-bg': '#F4F4F2',         // Warmer, less bright code background
+  'code-border': '#E5E5E2',     // Warm code border
+  'shadow': 'rgba(0, 0, 0, 0.03)', // Even softer shadows
 };
 
-// Dark Mode Palette - No pure black (#000000)
+// Dark Mode Palette - Warmer, less harsh
 const darkPalette = {
-  // Backgrounds - Blue-tinted blacks
-  'bg-base': '#0B0E14',        // Main background - Blue-black
-  'bg-surface': '#13171F',     // Cards/surfaces
-  'bg-elevated': '#1A1F2B',    // Elevated elements
-  'bg-subtle': '#151921',      // Subtle backgrounds  
-  'bg-muted': '#0F1218',       // More muted areas
+  // Backgrounds - Warmer dark tones, not pure black
+  'bg-base': '#131312',        // Warm charcoal base
+  'bg-surface': '#1A1A19',     // Slightly lighter surface
+  'bg-elevated': '#212120',    // Elevated elements
+  'bg-subtle': '#171716',      // Subtle backgrounds  
+  'bg-muted': '#0F0F0E',       // More muted areas
   
-  // Text - No pure white (#FFFFFF)
-  'text-primary': '#F7F8F9',    // Main text - Soft white
-  'text-secondary': '#C1C7CE',  // Secondary text
-  'text-muted': '#8B92A1',      // Muted text
-  'text-disabled': '#565D6B',   // Disabled text
+  // Text - Softer whites, less stark
+  'text-primary': '#F0F0EE',    // Warm white, not pure
+  'text-secondary': '#B8B8B5',  // Warm gray
+  'text-muted': '#8A8A87',      // Muted warm gray
+  'text-disabled': '#5A5A57',   // Disabled text
   
-  // Borders & Dividers
-  'border-default': '#2A3142',  // Default borders
-  'border-subtle': '#1E2430',   // Very subtle borders
-  'border-strong': '#374151',   // Stronger borders
+  // Borders & Dividers - Warmer
+  'border-default': '#2A2A28',  // Warm border
+  'border-subtle': '#202020',   // Very subtle warm border
+  'border-strong': '#333331',   // Stronger warm border
   
   // Interactive Elements - OpenQase Yellow (adjusted for dark)
   'primary': '#FACC15',          // Brighter yellow in dark mode
@@ -72,9 +72,9 @@ const darkPalette = {
   'info': '#67E8F9',
   
   // Special
-  'code-bg': '#0D1117',         // Code block background
-  'code-border': '#1F2937',
-  'shadow': 'rgba(0, 0, 0, 0.3)',
+  'code-bg': '#0E0E0D',         // Warmer code background
+  'code-border': '#1A1A19',     // Warm code border
+  'shadow': 'rgba(0, 0, 0, 0.25)', // Softer shadow
 };
 
 export default function DesignSystem() {

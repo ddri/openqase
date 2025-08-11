@@ -177,12 +177,15 @@ export function BlogPostsList({ initialBlogPosts }: BlogPostsListProps) {
     if (!blogPostToDelete) return;
     
     try {
-      const response = await fetch(`/api/blog-posts?id=${blogPostToDelete.id}`, {
-        method: 'DELETE',
+      const response = await fetch('/api/blog-posts/delete', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: blogPostToDelete.id })
       });
       
       if (!response.ok) {
-        throw new Error('Failed to delete blog post');
+        const error = await response.text();
+        throw new Error(`Failed to delete blog post: ${error}`);
       }
       
       // Update local state
@@ -191,8 +194,8 @@ export function BlogPostsList({ initialBlogPosts }: BlogPostsListProps) {
       );
       
       toast({
-        title: 'Blog post deleted',
-        description: `"${blogPostToDelete.title}" has been deleted`,
+        title: 'Blog post moved to trash',
+        description: `"${blogPostToDelete.title}" has been moved to trash`,
         duration: 3000,
       });
       
@@ -203,7 +206,7 @@ export function BlogPostsList({ initialBlogPosts }: BlogPostsListProps) {
       toast({
         variant: 'destructive',
         title: 'Error',
-        description: 'Failed to delete blog post',
+        description: error instanceof Error ? error.message : 'Failed to delete blog post',
         duration: 5000,
       });
     }
@@ -403,8 +406,8 @@ export function BlogPostsList({ initialBlogPosts }: BlogPostsListProps) {
           <AlertDialogHeader>
             <AlertDialogTitle>Are you sure?</AlertDialogTitle>
             <AlertDialogDescription>
-              This will permanently delete the blog post 
-              "{blogPostToDelete?.title}". This action cannot be undone.
+              Are you sure you want to delete the blog post 
+              "{blogPostToDelete?.title}"? It will be moved to trash and can be recovered later.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>

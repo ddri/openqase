@@ -44,18 +44,24 @@ export function AlgorithmsClient({ data }: AlgorithmsClientProps) {
     
     setIsDeleting(true)
     try {
-      const response = await fetch(`/api/algorithms?id=${algorithmToDelete.id}`, {
-        method: 'DELETE',
+      const response = await fetch('/api/algorithms/delete', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: algorithmToDelete.id })
       })
       
       if (response.ok) {
         // Remove the deleted algorithm from the state
         setAlgorithms(algorithms.filter(a => a.id !== algorithmToDelete.id))
+        alert('Algorithm moved to trash')
       } else {
+        const error = await response.text()
+        alert(`Failed to delete algorithm: ${error}`)
         console.error('Failed to delete algorithm')
       }
     } catch (error) {
       console.error('Error deleting algorithm:', error)
+      alert('Error deleting algorithm')
     } finally {
       setIsDeleting(false)
       setDeleteDialogOpen(false)
@@ -152,7 +158,7 @@ export function AlgorithmsClient({ data }: AlgorithmsClientProps) {
               Delete Algorithm
             </AlertDialogTitle>
             <AlertDialogDescription>
-              Are you sure you want to delete &quot;{algorithmToDelete?.name}&quot;? This action cannot be undone.
+              Are you sure you want to delete &quot;{algorithmToDelete?.name}&quot;? It will be moved to trash and can be recovered later.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>

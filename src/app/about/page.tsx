@@ -18,10 +18,10 @@ export default function AboutPage() {
           {/* Hero Section */}
           <div className="max-w-4xl mx-auto text-center mb-16">
             <h1 className="mb-6">
-              Making Quantum Computing Accessible to Business Leaders
+              Making Quantum Computing Accessible to Everyone Else
             </h1>
             <p className="text-xl text-muted-foreground">
-              OpenQase bridges the gap between the theory and practical business applications, helping decision-makers understand real-world quantum value without the complexity.
+              OpenQase bridges the gap between the theory and practical business applications, helping you understand the value of quantum computingby showing it.
             </p>
           </div>
 
@@ -37,12 +37,12 @@ export default function AboutPage() {
               
               <div className="bg-muted/30 rounded-lg p-6 border-l-4 border-primary">
                 <p className="text-muted-foreground">
-                  <strong>The Challenge:</strong> business leaders need to understand <em>what quantum computing can do for their organization</em> without getting lost in complex mathematics or physics.
+                  <strong>The Challenge:</strong> business leaders need to understand <em>what quantum computing can do for their organisation</em> without getting lost in complex mathematics or physics.
                 </p>
               </div>
               
               <p className="text-muted-foreground">
-                OpenQase approaches this by curating a collection of real-world quantum computing business case studies. We show you what companies like Ford, Goldman Sachs, and Airbus are actually doing with quantum computing—and how it impacts their bottom line. This isn't a replacement for the yearly consulting reports and commercial business intelligence services. Those are an essential part of our ecosystem, but those are a little further down the engagement funnel, for people and organisations with considerable intent. At the other end is a whole lot mass media coverage that we will just call "noisy" and leave it at that. But there is a missing middle in terms of a self-learning resource, something of a "wikipedia for quantum computing business cases". Something like OpenQase. 
+                OpenQase approaches this by curating a collection of real-world quantum computing business case studies. We show you what companies like Ford, Goldman Sachs, and Airbus are actually doing with quantum computing. This isn't a replacement for the yearly consulting reports and commercial business intelligence services. Those are an essential part of our ecosystem, but those are a little further down the engagement funnel, for people and organisations with considerable intent. At the other end is a whole lot mass media coverage that we will just call "noisy" and leave it at that. But there is a missing middle in terms of a self-learning resource, something of a "wikipedia for quantum computing business cases". Something like OpenQase. 
               </p>
             </div>
           </section>
@@ -63,10 +63,10 @@ export default function AboutPage() {
                   <strong>By Role:</strong> CEOs get strategic insights, CTOs get implementation guidance, engineers get technical details. Content tailored to your specific responsibilities and decision-making needs.
                 </p>
                                 <p className="text-muted-foreground">
-                  <strong>By Industry:</strong> Financial services, healthcare, energy, manufacturing—see quantum applications that matter to your specific sector with relevant business context and outcomes.
+                  <strong>By Industry:</strong> Financial services, healthcare, energy, manufacturing. See quantum applications that matter to your specific sector with relevant business context and outcomes.
                 </p>
                                                 <p className="text-muted-foreground">
-                  <strong>By Solution Type:</strong> Optimization, machine learning, security—understand quantum algorithms through their business applications rather than mathematical complexity.
+                  <strong>By Solution Type:</strong> Optimization, machine learning, security. Understand quantum algorithms through their business applications rather than mathematical complexity.
                 </p>
               </div>
           </section>
@@ -125,13 +125,13 @@ export default function AboutPage() {
           <section className="mb-16">
             <h2 className="mb-8">Our Team</h2>
             <p className="text-lg text-muted-foreground mb-8">
-              OpenQase was created after a conversation between quantum industry colleagues David Ryan and Anastasia Marchenkova at the Q2B Silicon Valley conference. While the pair come from different product and scientific leadership roles, they shared a common frustration as to the challenge of keeping up with the steady release of business case studies and associated pilot programs and use cases. It was clear that as the ecosystem evolves from Science to Technology to Engineering to Product, so must the resources and repositories of knowledge. Not as business intelligence service restrated to commercial vendors, but as a resource for the community, a "wikipedia for quantum computing". Want to join the team? Get in touch.
+              OpenQase was created after a conversation between quantum industry colleagues <a href="https://www.linkedin.com/in/hellodavidryan/" className="text-primary underline hover:text-primary/80 transition-colors">David Ryan</a> and <a href="https://www.linkedin.com/in/amarchenkova/" className="text-primary underline hover:text-primary/80 transition-colors">Anastasia Marchenkova</a> at the Q2B Silicon Valley conference. While the pair come from different product and scientific leadership roles, they shared a common frustration as to the challenge of keeping up with the steady release of business case studies and associated pilot programs and use cases. It was clear that as the ecosystem evolves from Science to Technology to Engineering to Product, so must the resources and repositories of knowledge. Not as business intelligence service restrated to commercial vendors, but as a resource for the community, a "wikipedia for quantum computing". Want to join the team? Get in touch.
             </p>
             <div className="grid gap-8 md:grid-cols-2">
               <div className="bg-card rounded-lg p-6 border">
                 <h3 className="text-xl font-semibold mb-2">David Ryan</h3>
                 <p className="text-muted-foreground">
-                  Experienced Deep Tech product leader and former SaaS founder. First Head of Product at Quantum Brilliance, former open source advocate at Red Hat, and the author of "Pocket Guide to Quantum Computing".
+                  Experienced Deep Tech product leader and former SaaS founder. First Head of Product at Quantum Brilliance, former open source advocate at Red Hat, and the author of "Pocket Guide to Quantum Algorithms".
                 </p>
               </div>
               <div className="bg-card rounded-lg p-6 border">
@@ -143,22 +143,6 @@ export default function AboutPage() {
             </div>
           </section>
 
-          {/* Join Our Community Section - Integrated from sidebar */}
-          {/* <section className="mb-16">
-            <div className="bg-gradient-to-r from-primary/5 to-primary/10 rounded-xl p-8 text-center">
-              <h2 className="mb-4">Join The Community</h2>
-              <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto">
-                Connect with other professionals exploring quantum computing applications in business contexts. Stay updated with the latest case studies, insights, and community discussions.
-              </p>
-              <div className="space-y-4">
-                <NewsletterSignup 
-                  buttonText="Subscribe to Updates"
-                  className="bg-primary text-primary-foreground hover:bg-primary/90 px-6 py-3 rounded-lg font-medium transition-colors"
-                  variant="inline"
-                />
-              </div>
-            </div>
-          </section> */}
 
           {/* Get Involved Section */}
           <GetInvolvedSection />

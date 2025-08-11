@@ -115,12 +115,16 @@ NEXT_PUBLIC_SITE_URL=http://localhost:3000
 RESEND_API_KEY=your-resend-api-key
 RESEND_FROM_EMAIL=noreply@localhost
 
-# Admin Setup (Optional)
+# Newsletter Integration (Required for newsletter signup)
+BEEHIIV_API_KEY=your-beehiiv-api-key
+BEEHIIV_PUBLICATION_ID=your-beehiiv-publication-id
+
+# Admin Setup (Required for content management and soft delete)
 ADMIN_EMAIL=admin@localhost
+ADMIN_PASSWORD=your-secure-password
 
 # Development Mode (Optional - See Security Note below)
 NEXT_PUBLIC_DEV_MODE=false
-ADMIN_PASSWORD=your-secure-password
 ```
 
 **Important**: Never commit `.env.local` to version control.
@@ -173,15 +177,19 @@ This script:
 
 After running the script, you'll have a fully configured local development environment ready to use.
 
-### 7. Admin Setup (Optional)
+### 7. Admin Setup (Required for Content Management)
 
-To create an admin user for content management:
+To create an admin user for content management and soft delete features:
 
 ```bash
 npm run setup-admin
 ```
 
-This script will prompt you for admin credentials and set up the necessary permissions for accessing the admin interface at `/admin`.
+This script will prompt you for admin credentials and set up the necessary permissions for:
+- Accessing the admin interface at `/admin`
+- Using the soft delete system for content management
+- Managing featured content on the homepage
+- Creating and editing all content types
 
 ### 7. Development Mode (Optional)
 

@@ -1,0 +1,100 @@
+# Changelog
+
+All notable changes to this project will be documented in this file.
+
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## [Unreleased]
+
+## [0.5.0] - 2025-01-11
+
+### Added
+- **Complete Soft Delete System**: Implemented professional content deletion system across all content types
+  - Added `deleted_at` and `deleted_by` columns to all content tables (case studies, blog posts, algorithms, industries, personas)
+  - Created secure `soft_delete_content()` and `recover_content()` database functions with SQL injection protection
+  - Implemented admin-only delete endpoints with proper authentication and authorization
+  - Added recovery system for accidentally deleted content
+- **Featured Content System**: Enhanced homepage with featured content capabilities
+  - Added `featured` boolean column to case_studies and blog_posts tables with performance indexes
+  - Implemented featured content selection in admin interface
+  - Homepage displays up to 2 featured case studies with graceful fallback content
+- **Newsletter Integration**: Complete newsletter signup system with Beehiiv integration
+  - Added NewsletterSignup component with form validation and loading states
+  - Integrated with Beehiiv API for professional newsletter management
+  - Added newsletter signup call-to-action in sidebar replacing removed content section
+  - Implemented rate limiting and error handling for newsletter subscriptions
+- **Homepage Redesign**: Completely redesigned homepage with modern magazine-style layout
+  - Replaced cluttered layout with clean, organized content sections
+  - Added newsletter signup component in prominent sidebar position
+  - Improved visual hierarchy and content organization
+  - Enhanced mobile responsiveness and accessibility
+
+### Changed
+- **Homepage Layout**: Major redesign for improved user experience
+  - Removed "Latest Addition" section that was redundant with other content
+  - Restructured content sections for better flow and engagement
+  - Added partner company badges to case study cards for visual balance and company recognition
+  - Implemented consistent hover states across all interactive elements
+- **Security Hardening**: Enhanced production security measures
+  - Removed temporary localhost authentication bypass from middleware
+  - Implemented proper authentication requirements for all write operations
+  - Added admin role verification for content management operations
+  - Secured environment variables and API key management
+- **Database Architecture**: Modernized database with soft delete capabilities
+  - Production database updated with all new schema changes
+  - Added performance indexes for featured content queries
+  - Implemented secure database functions with proper permission grants
+
+### Security
+- **API Content Exposure**: Fixed critical vulnerability where unpublished content could be accessed via public API endpoints
+  - Removed `includeUnpublished` parameter from all public GET endpoints
+  - Hardcoded published-only filtering in API routes to prevent draft content exposure
+  - Protects partner companies from having incomplete case studies exposed prematurely
+- **Unauthenticated Revalidation Endpoint**: Removed dead `/api/revalidate` endpoint that lacked authentication
+  - Endpoint was unused code from old "refresh cache" button feature
+  - Eliminated potential DoS attack vector from unauthenticated cache rebuilds
+  - All revalidation now happens securely through Server Actions
+
+### Fixed
+- **Content Relationship Filtering**: Resolved build failures from unpublished content in relationships
+- **Bidirectional Junction Table Handling**: Fixed critical bug where relationship data showed "None" on content pages
+  - Implemented context-aware filtering for all bidirectional junction tables
+  - Fixed duplicate filtering that was destroying relationship data
+  - Properly handles `algorithm_case_study_relations`, `case_study_industry_relations`, `case_study_persona_relations`, `algorithm_industry_relations`, `persona_algorithm_relations`, and `persona_industry_relations` based on page context
+  - Ensures correct nested key usage ('algorithms', 'industries', 'personas', 'case_studies') depending on the content type being filtered
+  - Added JavaScript runtime filtering to handle mixed published/unpublished content gracefully
+  - Modified `generateStaticParams` to only build pages for published content
+  - Made page components resilient to null relationships from unpublished content
+  - Maintained static site generation performance while fixing content workflow issues
+- **Card Height Consistency**: Fixed visual imbalance in homepage content cards
+  - Added partner company badges to case study cards to match blog post card heights
+  - Improved visual consistency across all content card layouts
+- **Authentication Middleware**: Corrected authentication flow for production deployment
+  - Removed development-only localhost bypasses
+  - Ensured proper authentication requirements for all admin operations
+
+### Removed
+- **Development Artifacts**: Cleaned up temporary files and development tools
+  - Removed DELETEPLAN.md and other temporary planning documents
+  - Deleted migrations_backup folder with broken migration files
+  - Cleaned up unused development scripts and temporary SQL files
+- **Redundant Homepage Sections**: Streamlined homepage content
+  - Removed "Latest Addition" section that duplicated other content areas
+  - Simplified content presentation for better user focus
+
+## [0.4.1] - Previous Release
+
+### Fixed
+- CMS Content Filtering: Fixed unpublished case studies appearing on public pages
+- Mobile Responsiveness: Fixed various layout issues on mobile devices
+- Security: Fixed content exposure vulnerabilities in API endpoints
+
+### Added
+- Supabase Auth migration completed
+- Professional layouts for case studies, algorithms, industries, and personas
+- Interactive Knowledge Map component for homepage
+
+### Changed
+- Redesigned homepage with particle field animation and dashboard metrics
+- Improved search functionality with type filtering

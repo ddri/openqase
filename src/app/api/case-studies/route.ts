@@ -43,7 +43,8 @@ export async function GET(request: NextRequest) {
     const slug = searchParams.get('slug');
     const page = parseInt(searchParams.get('page') || '1');
     const pageSize = parseInt(searchParams.get('pageSize') || '10');
-    const includeUnpublished = searchParams.get('includeUnpublished') === 'true';
+    // Security fix: Never expose unpublished content via public API
+    const includeUnpublished = false;
     
     // Handle single case study request
     if (slug) {

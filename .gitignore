@@ -117,3 +117,6 @@ batch-import-report-*.json
 
 # Test files (should be in proper test directories)
 scripts/test-*.json
+
+# Claude Code development guidelines (local only)
+CLAUDE.md

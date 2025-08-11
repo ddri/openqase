@@ -32,6 +32,7 @@ export async function saveCaseStudy(values: CaseStudyFormData): Promise<{ caseSt
       quantum_hardware: values.quantum_hardware,
       quantum_software: values.quantum_software,
       published: values.published,
+      featured: values.featured || false,
       academic_references: values.academic_references || null,
       resource_links: values.resource_links || null,
       year: values.year || new Date().getFullYear(),
@@ -162,6 +163,16 @@ export async function saveCaseStudy(values: CaseStudyFormData): Promise<{ caseSt
 
     // Revalidate the admin cache
     revalidatePath('/admin/case-studies');
+    
+    // Revalidate the case study page itself
+    if (data && data.slug) {
+      revalidatePath(`/case-study/${data.slug}`);
+    }
+    
+    // Revalidate homepage if featured status might have changed
+    if ('featured' in values) {
+      revalidatePath('/');
+    }
 
     const totalTime = Date.now() - startTime;
 
@@ -204,8 +215,8 @@ export async function publishCaseStudy(id: string, slug: string): Promise<{ succ
     
     // Revalidate paths
     revalidatePath('/admin/case-studies');
-    revalidatePath(`/case-studies/${slug}`);
-    revalidatePath('/case-studies');
+    revalidatePath(`/case-study/${slug}`); // Fixed: singular case-study
+    revalidatePath('/'); // Homepage shows featured case studies
     
     return { success: true };
   } catch (error: unknown) {
@@ -235,8 +246,8 @@ export async function unpublishCaseStudy(id: string, slug: string): Promise<{ su
     
     // Revalidate paths
     revalidatePath('/admin/case-studies');
-    revalidatePath(`/case-studies/${slug}`);
-    revalidatePath('/case-studies');
+    revalidatePath(`/case-study/${slug}`); // Fixed: singular case-study
+    revalidatePath('/'); // Homepage shows featured case studies
     
     return { success: true };
   } catch (error: unknown) {

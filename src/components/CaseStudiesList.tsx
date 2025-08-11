@@ -37,7 +37,7 @@ export function CaseStudiesList({ caseStudies }: CaseStudiesListProps) {
   // Memoize unique years for filter dropdown
   const availableYears = useMemo(() => {
     return Array.from(
-      new Set(caseStudies.map(cs => cs.year).filter(Boolean))
+      new Set(caseStudies.map(cs => cs.year).filter((year): year is number => year !== null))
     ).sort((a, b) => b - a); // Sort years descending
   }, [caseStudies]);
 
@@ -105,12 +105,12 @@ export function CaseStudiesList({ caseStudies }: CaseStudiesListProps) {
           return dateD - dateC;
         case 'year-asc':
           if (a.year !== b.year) {
-            return a.year - b.year;
+            return (a.year || 0) - (b.year || 0);
           }
           return a.title.localeCompare(b.title);
         case 'year-desc':
           if (a.year !== b.year) {
-            return b.year - a.year;
+            return (b.year || 0) - (a.year || 0);
           }
           return a.title.localeCompare(b.title);
         default:

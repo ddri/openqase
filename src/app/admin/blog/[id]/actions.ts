@@ -61,6 +61,7 @@ export async function saveBlogPost(values: BlogPostFormData): Promise<TablesInse
     }
     
     revalidatePath('/admin/blog');
+    revalidatePath('/'); // Revalidate homepage since it shows featured blog posts
     
     // Return the saved data
     return data;
@@ -83,6 +84,7 @@ export async function publishBlogPost(id: string): Promise<void> {
       throw error;
     }
     revalidatePath('/admin/blog');
+    revalidatePath('/'); // Revalidate homepage since it shows featured blog posts
   } catch (error: unknown) {
     console.error("Error publishing blog post:", error);
     const errorMessage = error instanceof Error ? error.message : "Failed to publish blog post";
@@ -102,6 +104,7 @@ export async function unpublishBlogPost(id: string): Promise<void> {
       throw error;
     }
     revalidatePath('/admin/blog');
+    revalidatePath('/'); // Revalidate homepage since it shows featured blog posts
   } catch (error: unknown) {
     console.error("Error unpublishing blog post:", error);
     const errorMessage = error instanceof Error ? error.message : "Failed to unpublish blog post";

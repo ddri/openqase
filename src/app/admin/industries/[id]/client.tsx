@@ -38,7 +38,6 @@ export function IndustryForm({ industry, isNew }: IndustryFormProps) {
     slug: isNew ? '' : industry?.slug || '',
     description: isNew ? '' : industry?.description || '',
     main_content: isNew ? '' : industry?.main_content || '',
-    sector: isNew ? [] : industry?.sector || [],
     published: isNew ? false : industry?.published || false,
   });
   const [isDirty, setIsDirty] = useState(false);
@@ -251,15 +250,6 @@ export function IndustryForm({ industry, isNew }: IndustryFormProps) {
                   value={values.slug}
                   onChange={(e) => handleChange('slug', e.target.value)}
                   placeholder="industry-slug"
-                />
-              </div>
-              
-              <div className="space-y-3">
-                <Label htmlFor="sector">Sector</Label>
-                <TagInput
-                  tags={values.sector}
-                  onTagsChange={(newTags) => handleChange('sector', newTags)}
-                  placeholder="Add sector..."
                 />
               </div>
             </div>

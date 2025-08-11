@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { revalidatePath } from 'next/cache';
 import { 
   fetchContentItems, 
   fetchContentItem, 
@@ -30,7 +31,8 @@ export async function GET(request: NextRequest) {
     const slug = searchParams.get('slug');
     const page = parseInt(searchParams.get('page') || '1');
     const pageSize = parseInt(searchParams.get('pageSize') || '10');
-    const includeUnpublished = searchParams.get('includeUnpublished') === 'true';
+    // Security fix: Never expose unpublished content via public API
+    const includeUnpublished = false;
     
     // Handle single blog post request
     if (slug) {
@@ -269,6 +271,9 @@ export async function PATCH(request: NextRequest) {
         );
       }
       
+      revalidatePath('/admin/blog');
+      revalidatePath('/'); // Revalidate homepage since it shows featured blog posts
+      
       return NextResponse.json(data);
     }
     
@@ -286,6 +291,9 @@ export async function PATCH(request: NextRequest) {
           { status: 500 }
         );
       }
+      
+      revalidatePath('/admin/blog');
+      revalidatePath('/'); // Revalidate homepage since it shows featured blog posts
       
       return NextResponse.json(data);
     }

@@ -9,8 +9,8 @@ import { cn } from '@/lib/utils';
 import { Users, Building2, Atom } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Quantum Computing Learning Paths | Role-Based & Industry-Specific - OpenQase',
-  description: 'Choose your quantum computing learning path by professional role, industry, or algorithm type. Structured content for business leaders, engineers, and decision-makers.',
+  title: 'Related Content | Find Quantum Computing Case Studies by Role & Industry - OpenQase',
+  description: 'Find quantum computing case studies relevant to your professional role, industry, or algorithm interest. Structured content for business leaders, engineers, and decision-makers.',
 };
 
 export default async function LearningPathsPage() {
@@ -41,10 +41,10 @@ export default async function LearningPathsPage() {
         <div className="container-outer section-spacing">
           <div className="max-w-3xl mx-auto text-center mb-12 md:mb-16">
             <h1 className="mb-6">
-              Choose Your Learning Path
+              Explore by Your Focus
             </h1>
             <p className="text-base sm:text-lg text-muted-foreground">
-              Explore quantum computing through different perspectives, tailored to your interests and needs
+              Browse quantum computing case studies organized by professional role, industry sector, or algorithm type
             </p>
           </div>
 

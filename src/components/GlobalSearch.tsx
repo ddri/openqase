@@ -169,20 +169,20 @@ export default function GlobalSearch({ searchData, className }: GlobalSearchProp
     <div ref={searchRef} className={cn("relative w-full max-w-2xl", className)}>
       {/* Search Input */}
       <div className="relative">
-        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-5 h-5" />
+        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-primary/70 w-5 h-5" />
         <input
           ref={inputRef}
           type="text"
           placeholder="Search case studies, algorithms, companies..."
           value={searchQuery}
           onChange={(e) => handleSearchChange(e.target.value)}
-          className="w-full pl-10 pr-4 py-3 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors"
+          className="w-full pl-10 pr-4 py-3 bg-background border border-border focus:outline-none focus:border-primary focus:ring-0 transition-colors duration-200 placeholder:text-muted-foreground text-foreground"
         />
       </div>
 
       {/* Search Results Dropdown */}
       {isOpen && (
-        <div className="absolute top-full left-0 right-0 mt-2 bg-background border border-border rounded-lg shadow-lg z-50 max-h-96 overflow-y-auto">
+        <div className="absolute top-full left-0 right-0 mt-2 bg-background border border-border rounded-lg shadow-xl z-[100] max-h-96 overflow-y-auto">
           {totalResults > 0 ? (
             <div className="py-2">
               <SearchResultGroup

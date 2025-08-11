@@ -1,12 +1,120 @@
 # Release Notes
 
-## v0.4.1 - Enhanced Stability & Documentation Updates (Current)
+## v0.5.0 - Content Management Revolution & Security Hardening (Current)
+
+**🚀 Major Release with Soft Delete System, Featured Content, Newsletter Integration, and Critical Security Fixes**
+
+### 🎯 Highlights
+- **Complete Soft Delete System** across all content types with recovery capabilities
+- **Featured Content System** for homepage curation
+- **Newsletter Integration** with Beehiiv for professional email management
+- **Critical Security Fixes** preventing unpublished content exposure
+- **Homepage Redesign** with modern magazine-style layout
+- **Relationship Data Fix** for proper content connections
+
+### 🔐 Security Fixes
+- **Fixed Critical Vulnerability**: Unpublished content could be accessed via public API endpoints
+  - Removed `includeUnpublished` parameter from all public GET endpoints
+  - Hardcoded published-only filtering to prevent draft content exposure
+  - Protects partner companies from premature case study exposure
+- **Removed Dead Code**: Deleted unused `/api/revalidate` endpoint that lacked authentication
+  - Eliminated potential DoS attack vector
+  - All revalidation now happens securely through Server Actions
+
+### ✨ New Features
+
+**Soft Delete System:**
+- Professional content deletion with recovery capabilities
+- `deleted_at` and `deleted_by` columns added to all content tables
+- Secure database functions with SQL injection protection
+- Admin-only delete endpoints with proper authorization
+- Recovery system for accidentally deleted content
+
+**Featured Content:**
+- Homepage displays up to 2 featured case studies
+- Admin interface for selecting featured content
+- Performance indexes for optimized queries
+- Graceful fallback when no featured content selected
+
+**Newsletter Integration:**
+- Beehiiv API integration for professional newsletter management
+- Form validation with loading states and error handling
+- Rate limiting to prevent spam
+- Prominent sidebar placement on homepage
+
+### 🎨 Design Improvements
+
+**Homepage Redesign:**
+- Clean, magazine-style layout with organized content sections
+- Removed redundant "Latest Addition" section
+- Added partner company badges to case study cards
+- Improved visual hierarchy and mobile responsiveness
+- Consistent hover states across all interactive elements
+
+### 🐛 Bug Fixes
+
+**Bidirectional Junction Table Handling:**
+- Fixed critical bug where relationship data showed "None" on content pages
+- Implemented context-aware filtering for all junction tables
+- Properly handles Industries, Algorithms, and Personas relationships
+- Fixed duplicate filtering that was destroying relationship data
+
+**Content Filtering:**
+- Resolved build failures from unpublished content in relationships
+- JavaScript runtime filtering handles mixed published/unpublished content
+- Static site generation only builds pages for published content
+- Page components now resilient to null relationships
+
+### 🔧 Technical Improvements
+
+**Database Architecture:**
+- Added soft delete columns with proper indexes
+- Implemented secure database functions with SECURITY DEFINER
+- Transaction safety for all schema modifications
+- Performance indexes for featured content queries
+
+**Security Hardening:**
+- Removed localhost authentication bypasses from middleware
+- Proper admin role verification for all content operations
+- Secured all API endpoints with appropriate authentication
+- Input validation and SQL injection protection
+
+### 📝 Documentation
+
+**CLAUDE.md Guidelines:**
+- Added bidirectional junction table documentation
+- Documented security considerations and accepted risks
+- Updated commit and CHANGELOG maintenance practices
+
+**Security Audit:**
+- Comprehensive security audit documented in SECURITY-AUDIT-2025-01.md
+- Identified and fixed critical vulnerabilities
+- Documented accepted risks with justifications
+- Created roadmap for future security improvements
+
+### ⚠️ Known Issues & Accepted Risks
+
+**Accepted for Beta:**
+- XSS in markdown rendering (single admin author mitigates risk)
+- CSRF protection not implemented (single admin, low value target)
+- Rate limiting broken on Vercel serverless (Beehiiv provides backup)
+- CSP allows unsafe-inline (required for third-party services)
+
+**Future Improvements:**
+- Implement Redis/Vercel KV for distributed rate limiting
+- Add CSRF tokens or migrate to Server Actions
+- Tighten CSP if removing third-party services
+
+---
+
+## v0.4.1 - Enhanced Stability & Documentation Updates
 
 **🔧 Maintenance & Improvements**
 
 ### 🎯 Key Updates
 - **📦 Dependency Updates**: Minor/patch version updates for Next.js 15.x, React 19.x, TypeScript 5.9
 - **🛡️ Security**: Removed Docusaurus dependencies, eliminating 16 security vulnerabilities  
+- **🔧 Auth Migration**: Completed migration from deprecated `@supabase/auth-helpers-nextjs` to `@supabase/ssr`
 - **🔍 Code Quality**: Re-enabled ESLint during builds with improved rule configuration
 - **📚 Documentation**: Updated and corrected installation guides and tech stack references
 - **⚡ Performance**: Optimized TypeScript interfaces for admin relationship components
@@ -15,6 +123,15 @@
 - Fixed `.env.example` file references in installation documentation
 - Corrected outdated TanStack Query references (dependency was removed)
 - Updated version numbers and roadmap status
+
+### 🔧 Technical Details
+
+**Supabase Auth Migration Completed**
+- **Issue**: Build warnings from deprecated `@supabase/auth-helpers-nextjs@0.10.0` and `@supabase/auth-helpers-shared`
+- **Solution**: Migrated to unified `@supabase/ssr@0.6.1` package for Next.js 15 compatibility
+- **Impact**: Eliminated deprecation warnings, improved build performance, future-proofed auth system
+- **Breaking Changes**: None - migration was type-level only in `src/lib/cookies.ts`
+- **Why This Matters**: Supabase deprecated auth-helpers in favor of unified SSR package supporting all SSR frameworks. The new package provides better middleware support and cleaner API for server-side auth handling.
 
 ---
 

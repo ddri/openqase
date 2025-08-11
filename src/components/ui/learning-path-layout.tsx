@@ -14,7 +14,7 @@ export default function LearningPathLayout({
   title,
   children,
   description,
-  backLinkText = "Back to Learning Paths",
+  backLinkText = "Back to Related Content",
   backLinkHref = "/paths"
 }: LearningPathLayoutProps) {
   return (

@@ -70,12 +70,17 @@ export default async function AlgorithmsPage() {
 
 ### `generateStaticParamsForContentType(contentType)`
 
-Generates static params for `generateStaticParams` functions, enabling static site generation.
+Generates static params for **published content only** to enable static site generation.
 
 **Parameters:**
 - `contentType`: One of `'case_studies' | 'algorithms' | 'personas' | 'industries' | 'blog_posts'`
 
-**Returns:** Array of `{ slug: string }` objects
+**Returns:** Array of `{ slug: string }` objects for published content
+
+**Behavior (v0.4.1 Update):**
+- Only returns slugs for `published: true` content
+- Prevents build warnings from unpublished content
+- Unpublished content can still be previewed via direct URLs (rendered dynamically)
 
 **Example:**
 ```typescript
@@ -83,15 +88,18 @@ Generates static params for `generateStaticParams` functions, enabling static si
 import { generateStaticParamsForContentType } from '@/lib/content-fetchers';
 
 export async function generateStaticParams() {
+  // Only builds static pages for published algorithms
   return generateStaticParamsForContentType('algorithms');
 }
 ```
 
 ### `getBuildTimeContentList<T>(contentType, options?)`
 
-Build-time safe content fetching using service role client. Used internally by `generateStaticParamsForContentType`.
+Fetches ALL content (published and unpublished) using service role client.
 
-**Use Case:** Prevents cookies context errors during build-time static generation.
+**Use Case:** Admin operations, batch processing, content management. Not used for static generation.
+
+**Note:** For static page generation, use `generateStaticParamsForContentType()` which filters to published content only.
 
 ## Relationship Mapping
 
@@ -272,9 +280,61 @@ type EnrichedAlgorithm = Database['public']['Tables']['algorithms']['Row'] & {
 
 The unified system enables a hybrid architecture:
 
-- **Public Content**: Static generation for maximum performance
+- **Public Content**: Static generation for published content only (v0.4.1)
+- **Preview Content**: Dynamic rendering for unpublished content accessed via direct URLs
 - **Admin CMS**: Dynamic API routes preserved for content management
-- **Build Process**: Efficient static generation with relationship pre-fetching
+- **Build Process**: Clean builds without warnings from unpublished content
+
+## Mixed Content Handling (v0.4.1)
+
+**Critical Architecture Fix**: The system now handles mixed published/unpublished content gracefully.
+
+### Problem Solved
+Previously, the CMS would break when relationships contained unpublished content:
+- Query-level filtering created `null` objects in relationships
+- Page components crashed with "Cannot read properties of null" errors  
+- Static generation failed completely when importing unpublished content
+
+### Solution: Runtime Relationship Filtering
+The system now uses JavaScript filtering instead of database-level filtering for relationships:
+
+```typescript
+// ✅ NEW: Robust filtering that prevents crashes
+function filterRelationships(data: any, preview: boolean = false): any {
+  const filterRelationArray = (relations: any[], nestedKey: string) => {
+    return relations.filter(relation => {
+      const nestedItem = relation[nestedKey];
+      if (!nestedItem) return false; // Remove null relationships
+      if (preview) return true; // Show all in preview mode
+      return nestedItem.published === true; // Filter by published status
+    });
+  };
+  
+  // Apply filtering to all relationship types...
+}
+```
+
+### Benefits
+- **Build Resilience**: Never fails due to unpublished content in relationships
+- **Import Workflows**: Can import unpublished content without breaking the site
+- **Preview Mode**: Team can access unpublished content via direct URLs (dynamic rendering)
+- **Clean Builds**: No warnings from unpublished content (v0.4.1)
+- **Performance**: Published content gets static pages, unpublished uses dynamic rendering
+- **Professional CMS**: Handles mixed content states like industry-standard CMSs
+
+### Performance Impact
+- **Published Content**: Static HTML (2-6ms) - no change
+- **Unpublished Content**: Dynamic rendering (~200-500ms) on first access, then cached via ISR
+- **Build Time**: Cleaner and faster - only builds pages for published content
+- **Database Load**: No runtime impact for published content
+
+### Publishing Workflow (v0.4.1)
+1. **Draft Stage**: Content is unpublished, accessible via direct URL (dynamic rendering)
+2. **Review Stage**: Team can preview via direct URLs without build warnings
+3. **Publish Stage**: Content is published, static page generated on next build
+4. **Performance**: Published content gets full static optimization
+
+This architectural improvement provides a professional CMS workflow while maintaining optimal performance for published content.
 
 ## Implementation Details
 
@@ -285,6 +345,7 @@ The system is implemented in `src/lib/content-fetchers.ts` and provides:
 3. **Build-Time Safety**: Service role client prevents cookies context errors
 4. **Error Handling**: Comprehensive error handling and logging
 5. **Preview Support**: Optional preview mode for draft content
+6. **Mixed Content Resilience**: JavaScript filtering prevents null pointer crashes
 
 ## Future Enhancements
 

@@ -82,6 +82,9 @@ module.exports = {
 			'400': '#fb923c',
 			'500': '#f97316',
 		  },
+		  'gold-vivid': 'hsl(var(--gold-vivid))',
+		  'gold-light': 'hsl(var(--gold-light))',
+		  'yellow-sharp': 'hsl(var(--yellow-sharp))',
 		},
 		borderRadius: {
 		  lg: 'var(--radius)',

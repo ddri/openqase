@@ -52,10 +52,9 @@ const ContentCard = memo(function ContentCard({
     return (
       <Link href={href} className="group block">
         <Card 
-          animated
           className={cn(contentCardVariants({ variant }))}>
-          <div className="flex-shrink-0 w-16 h-16 bg-gradient-to-br from-primary/20 to-primary/5 rounded-lg flex items-center justify-center">
-            <div className="w-8 h-8 bg-primary/10 rounded"></div>
+          <div className="flex-shrink-0 w-16 h-16 bg-muted/50 rounded-lg flex items-center justify-center">
+            <div className="w-8 h-8 bg-primary/20 rounded-md"></div>
           </div>
           
           <div className="flex-1 min-w-0">
@@ -103,7 +102,6 @@ const ContentCard = memo(function ContentCard({
   return (
     <Link href={href} className="group block">
       <Card 
-        animated
         className={cn(contentCardVariants({ variant }))}>
         <div className="flex flex-col h-full">
           <h3 className="text-xl font-semibold text-[var(--text-primary)] min-h-[3.5rem] mb-3 line-clamp-2">
@@ -139,4 +137,4 @@ const ContentCard = memo(function ContentCard({
   );
 });
 
-export default ContentCard; 
+export default ContentCard;

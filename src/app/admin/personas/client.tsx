@@ -38,18 +38,24 @@ export function PersonasClient({ data }: PersonasClientProps) {
     
     setIsDeleting(true)
     try {
-      const response = await fetch(`/api/personas?id=${personaToDelete.id}`, {
-        method: 'DELETE',
+      const response = await fetch('/api/personas/delete', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: personaToDelete.id })
       })
       
       if (response.ok) {
         // Remove the deleted persona from the state
         setPersonas(personas.filter(p => p.id !== personaToDelete.id))
+        alert('Persona moved to trash')
       } else {
+        const error = await response.text()
+        alert(`Failed to delete persona: ${error}`)
         console.error('Failed to delete persona')
       }
     } catch (error) {
       console.error('Error deleting persona:', error)
+      alert('Error deleting persona')
     } finally {
       setIsDeleting(false)
       setDeleteDialogOpen(false)
@@ -142,7 +148,7 @@ export function PersonasClient({ data }: PersonasClientProps) {
               Delete Persona
             </AlertDialogTitle>
             <AlertDialogDescription>
-              Are you sure you want to delete &quot;{personaToDelete?.name}&quot;? This action cannot be undone.
+              Are you sure you want to delete &quot;{personaToDelete?.name}&quot;? It will be moved to trash and can be recovered later.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>

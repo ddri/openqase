@@ -1,0 +1,106 @@
+/* Improved Light Mode with Visual Hierarchy */
+@layer base {
+  :root {
+    /* Backgrounds - Visible contrast between layers */
+    --background: 244 244 242; /* #F4F4F2 - Base warm gray */
+    --background-surface: 255 255 255; /* #FFFFFF - White for important cards */
+    --background-subtle: 236 236 234; /* #ECECEA - Gray for category cards */
+    --background-muted: 228 228 224; /* #E4E4E0 - Darker gray for sections */
+    
+    /* Foreground Colors */
+    --foreground: 44 51 56; /* #2C3338 - Softer dark gray */
+    --secondary: 90 101 112; /* #5A6570 - Secondary text */
+    --muted-foreground: 115 125 136; /* #737D88 - Muted text */
+    
+    /* Borders - More visible */
+    --border: 212 212 208; /* #D4D4D0 - Visible warm border */
+    --border-subtle: 232 232 229; /* #E8E8E5 - Subtle but visible */
+    
+    /* Interactive - OpenQase Yellow */
+    --primary: 234 179 8; /* #EAB308 - Brand yellow */
+    --primary-foreground: 0 0 0; /* Black text on yellow */
+    
+    /* Card and Popover */
+    --card: 255 255 255; /* White cards by default */
+    --card-foreground: 44 51 56;
+    --popover: 255 255 255;
+    --popover-foreground: 44 51 56;
+    
+    /* Special */
+    --accent: 236 236 234; /* Gray accent */
+    --accent-foreground: 44 51 56;
+    --destructive: 239 68 68;
+    --destructive-foreground: 255 255 255;
+    
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    /* Dark Mode - Warmer, less harsh */
+    --background: 19 19 18; /* #131312 - Warm charcoal */
+    --background-surface: 26 26 25; /* #1A1A19 - Surface */
+    --background-subtle: 23 23 22; /* #171716 - Subtle */
+    --background-muted: 15 15 14; /* #0F0F0E - Muted */
+    
+    /* Foreground Colors */
+    --foreground: 240 240 238; /* #F0F0EE - Warm white */
+    --secondary: 184 184 181; /* #B8B8B5 - Warm gray */
+    --muted-foreground: 138 138 135; /* #8A8A87 - Muted warm gray */
+    
+    /* Borders */
+    --border: 42 42 40; /* #2A2A28 - Warm border */
+    --border-subtle: 32 32 32; /* #202020 - Subtle border */
+    
+    /* Interactive - Brighter yellow for dark */
+    --primary: 250 204 21; /* #FACC15 - Bright yellow */
+    --primary-foreground: 0 0 0; /* Black text on yellow */
+    
+    /* Card and Popover */
+    --card: 26 26 25; /* Surface color for cards */
+    --card-foreground: 240 240 238;
+    --popover: 26 26 25;
+    --popover-foreground: 240 240 238;
+    
+    /* Special */
+    --accent: 33 33 32; /* Darker accent */
+    --accent-foreground: 240 240 238;
+    --destructive: 248 113 113;
+    --destructive-foreground: 0 0 0;
+  }
+}
+
+/* Custom utility classes for the new color system */
+@layer utilities {
+  .bg-surface {
+    background-color: hsl(var(--background-surface));
+  }
+  
+  .bg-subtle {
+    background-color: hsl(var(--background-subtle));
+  }
+  
+  .bg-muted-section {
+    background-color: hsl(var(--background-muted));
+  }
+  
+  .border-subtle {
+    border-color: hsl(var(--border-subtle));
+  }
+  
+  /* Specific component styles */
+  .card-elevated {
+    background-color: hsl(var(--background-surface));
+    border: 1px solid hsl(var(--border-subtle));
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  }
+  
+  .card-subtle {
+    background-color: hsl(var(--background-subtle));
+    border: 1px solid hsl(var(--border-subtle));
+  }
+  
+  .card-nested {
+    background-color: hsl(var(--background));
+    border: 1px solid hsl(var(--border-subtle));
+  }
+}

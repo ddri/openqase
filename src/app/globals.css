@@ -5,8 +5,8 @@
 @layer base {
   /* Light theme - Sophisticated & Modern */
   :root {
-    --background: 240 5% 96%;    /* Cool gray background */
-    --foreground: 240 10% 3.9%;  /* Near black text */
+    --background: 30 15% 94%;    /* Soft warm cream like Stark */
+    --foreground: 0 0% 0%;        /* Pure black text like Stark */
     
     --card: 0 0% 100%;           /* Pure white cards */
     --card-foreground: 240 10% 3.9%;
@@ -15,13 +15,13 @@
     --card-hover-border: 48 100% 50%; /* Gold */
     --card-hover-background: 48 100% 50% / 0.05;
     
-    --text-primary: 240 10% 3.9%;   /* Near black */
-    --text-secondary: 240 5% 34%;   /* Medium gray */
-    --text-tertiary: 240 5% 50%;    /* Light gray */
+    --text-primary: 0 0% 0%;        /* Pure black like Stark */
+    --text-secondary: 0 0% 30%;     /* Dark gray */
+    --text-tertiary: 0 0% 45%;      /* Medium gray */
     
     --surface-primary: 0 0% 100%;    /* White */
-    --surface-secondary: 240 5% 96%; /* Light gray */
-    --surface-tertiary: 240 5% 94%; /* Lighter gray */
+    --surface-secondary: 30 10% 92%; /* Subtle warm gray */
+    --surface-tertiary: 30 8% 90%;   /* Slightly darker warm gray */
     
     --popover: 0 0% 100%;
     --popover-foreground: 240 10% 3.9%;
@@ -29,20 +29,23 @@
     --primary: 48 100% 50%;      /* Golden yellow #ffd000 */
     --primary-foreground: 0 0% 0%;
     
-    --secondary: 240 4.8% 95.9%; /* Neutral gray */
-    --secondary-foreground: 240 5.9% 10%;
+    --secondary: 30 10% 90%;     /* Warm gray */
+    --secondary-foreground: 0 0% 0%;
     
-    --muted: 240 4.8% 95.9%;
-    --muted-foreground: 240 3.8% 46.1%;
+    --muted: 30 10% 92%;         /* Warm muted */
+    --muted-foreground: 0 0% 40%;
     
     --accent: 45 93% 55%;        /* Slightly darker gold #f4d03f */
     --accent-foreground: 0 0% 0%;
     
+    --accent-secondary: 220 70% 50%; /* Blue accent */
+    --accent-secondary-foreground: 0 0% 100%;
+    
     --destructive: 0 72% 51%;    /* Coral red */
     --destructive-foreground: 0 0% 100%;
     
-    --border: 240 5.9% 90%;
-    --input: 240 5.9% 90%;
+    --border: 0 0% 88%;          /* Neutral gray border like Stark */
+    --input: 30 10% 92%;
     --ring: 48 100% 50%;
     --radius: 0.25rem;
 
@@ -68,6 +71,12 @@
     --blue-vivid: 220 83% 60%;      /* #3b82f6 */
     --pink-vivid: 340 82% 52%;      /* #db2777 */
     --yellow-sharp: 48 100% 50%;    /* #ffd000 - Sharp golden yellow */
+    
+    /* Shadow system for elevation - Actually visible like Stark */
+    --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.08);
+    --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.12), 0 2px 4px rgba(0, 0, 0, 0.08);
+    --shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.15), 0 4px 8px rgba(0, 0, 0, 0.1);
+    --shadow-xl: 0 12px 24px rgba(0, 0, 0, 0.18), 0 6px 12px rgba(0, 0, 0, 0.12);
   }
 
   /* Dark theme - Charcoal & Gold */
@@ -105,6 +114,9 @@
     --accent: 45 93% 65%;          /* Brighter gold #f4d03f */
     --accent-foreground: 0 0% 0%;
     
+    --accent-secondary: 220 80% 65%; /* Bright blue accent */
+    --accent-secondary-foreground: 0 0% 0%;
+    
     --destructive: 350 80% 60%;    /* Soft red */
     --destructive-foreground: 0 0% 98%;
     
@@ -127,6 +139,12 @@
     --blue-vivid: 220 83% 70%;      /* #60a5fa */
     --pink-vivid: 340 82% 65%;      /* #f472b6 */
     --yellow-sharp: 48 100% 60%;    /* #ffda00 - Sharp golden yellow */
+    
+    /* Shadow system for elevation (darker for dark mode) */
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.25), 0 1px 2px rgba(0, 0, 0, 0.15);
+    --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.3), 0 2px 4px rgba(0, 0, 0, 0.2);
+    --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.35), 0 4px 6px rgba(0, 0, 0, 0.25);
+    --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.4), 0 10px 10px rgba(0, 0, 0, 0.3);
   }
   
 
@@ -251,13 +269,52 @@
     @apply py-6 sm:py-8 md:py-12;
   }
 
-  /* Card styles */
+  /* Card styles with elevation */
   .card {
     @apply rounded-lg border border-border bg-card p-4 sm:p-6;
+    box-shadow: var(--shadow-md);
   }
 
   .card-hover {
-    @apply hover:border-border-hover hover:shadow-sm transition-all duration-200;
+    @apply hover:border-primary transition-all duration-200;
+    box-shadow: var(--shadow-sm);
+  }
+  
+  .card-hover:hover {
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
+  }
+  
+  /* Elevation utilities */
+  .elevation-0 {
+    box-shadow: none;
+  }
+  
+  .elevation-1 {
+    box-shadow: var(--shadow-sm);
+  }
+  
+  .elevation-2 {
+    box-shadow: var(--shadow-md);
+  }
+  
+  .elevation-3 {
+    box-shadow: var(--shadow-lg);
+  }
+  
+  .elevation-4 {
+    box-shadow: var(--shadow-xl);
+  }
+  
+  /* Interactive elevation */
+  .elevation-interactive {
+    box-shadow: var(--shadow-sm);
+    transition: all 0.2s ease;
+  }
+  
+  .elevation-interactive:hover {
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
   }
   
   /* Premium card effects */
@@ -401,6 +458,20 @@
   /* Button sizes */
   .btn {
     @apply px-4 py-2 sm:px-6 sm:py-2.5 rounded-md text-sm sm:text-base;
+  }
+  
+  /* Blue accent button */
+  .btn-blue {
+    @apply px-4 py-2 sm:px-6 sm:py-2.5 rounded-md text-sm sm:text-base;
+    background-color: hsl(var(--accent-secondary));
+    color: hsl(var(--accent-secondary-foreground));
+    transition: all 0.2s ease;
+  }
+  
+  .btn-blue:hover {
+    opacity: 0.9;
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
   }
 
   .btn-lg {

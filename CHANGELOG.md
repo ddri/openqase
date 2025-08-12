@@ -7,6 +7,51 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- **Complete Design System Documentation**: Created comprehensive design system page at `/design-system`
+  - Live component examples with actual Card components
+  - Interactive light/dark mode toggle
+  - Typography scale, color palette, and shadow system documentation
+  - Clear Do's and Don'ts guidelines
+- **Design System Architecture**: Created `/lib/design-system.ts` as single source of truth
+  - Centralized design tokens and component styles
+  - Documented design rules and principles
+  - Utility functions for consistent styling
+
+### Fixed
+- **Design System Consistency**: Comprehensive audit and fixes across entire codebase
+  - Fixed hard-coded colors in NewsletterSignup and AlphaBanner components
+  - Updated Card component to use proper shadow system (shadow-md default, shadow-lg on hover)
+  - Removed opacity from border hover states for better visibility
+  - Applied consistent semantic tokens across all 37 pages
+
+### Changed
+
+### Added
+- **Stark-Inspired Design System**: Implemented accessibility-focused color improvements
+  - Warmer cream background for better visual comfort
+  - Deeper blue-black text for higher contrast (10:1+ ratio)
+  - Blue secondary accent color to complement yellow primary
+  - Shadow elevation system for visual hierarchy
+  - Card hover effects with elevation changes
+
+### Changed
+- **Professional Design System Implementation**: Complete overhaul following Stark and Material Design principles
+  - Text colors now pure black (0 0% 0%) for maximum contrast like Stark
+  - Background remains warm cream for comfort
+  - Shadow system strengthened for actual visible elevation
+  - All cards now have proper borders AND shadows for definition
+- **Strategic Accent Color Usage**: Fixed yellow overuse
+  - Icons changed from yellow to gray (professional look)
+  - Numbers changed from yellow to bold black (emphasis through weight)
+  - Links changed from yellow to gray with subtle hover states
+  - Yellow reserved only for primary CTAs and key interactions
+- **Improved Visual Hierarchy**: Systematic elevation and spacing
+  - Consistent shadow progression (sm, md, lg) indicates importance
+  - Increased section padding and grid gaps for breathing room
+  - Rounded corners on all cards for modern feel
+  - Removed unnecessary hover translations (elevation via shadow only)
+
 ## [0.5.0] - 2025-01-11
 
 ### Added

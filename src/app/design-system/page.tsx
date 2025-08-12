@@ -1,393 +1,370 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { useTheme } from 'next-themes';
+import { useState } from 'react';
+import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { 
+  BookOpen, 
+  CircuitBoard, 
+  Building2, 
+  User,
+  Github,
+  Users,
+  Database,
+  ArrowRight,
+  Sun,
+  Moon
+} from 'lucide-react';
+import { designSystem, componentStyles } from '@/lib/design-system';
 
-// Light Mode Palette - Warmer, softer, less intense
-const lightPalette = {
-  // Backgrounds - Warmer off-whites, less bright
-  'bg-base': '#F9F9F8',      // Warm off-white, less bright than typical
-  'bg-surface': '#FBFBFA',   // Slightly brighter but still warm
-  'bg-elevated': '#FDFDFC',  // Highest elevation, still not pure white
-  'bg-subtle': '#F5F5F3',    // Warm subtle background
-  'bg-muted': '#F0F0ED',     // More muted, paper-like
-  
-  // Text - Softer contrast, easier on eyes
-  'text-primary': '#2C3338',    // Softer dark gray (~10:1 contrast)
-  'text-secondary': '#5A6570',  // Medium gray (~6:1 contrast)
-  'text-muted': '#737D88',      // Lighter gray (~4.8:1 contrast)
-  'text-disabled': '#A0A9B3',   // Disabled text
-  
-  // Borders & Dividers - Warmer tones
-  'border-default': '#E0E0DD',  // Warm gray border
-  'border-subtle': '#EDEDEA',   // Very subtle warm border
-  'border-strong': '#D0D0CC',   // Stronger warm border
-  
-  // Interactive Elements - OpenQase Yellow
-  'primary': '#EAB308',          // OpenQase yellow
-  'primary-hover': '#CA8A04',   // Darker yellow on hover
-  'primary-muted': '#FEF3C7',   // Yellow tinted background
-  
-  // Semantic Colors
-  'success': '#10B981',
-  'warning': '#F59E0B',
-  'error': '#EF4444',
-  'info': '#06B6D4',
-  
-  // Special
-  'code-bg': '#F4F4F2',         // Warmer, less bright code background
-  'code-border': '#E5E5E2',     // Warm code border
-  'shadow': 'rgba(0, 0, 0, 0.03)', // Even softer shadows
-};
+export default function DesignSystemPage() {
+  const [isDark, setIsDark] = useState(false);
 
-// Dark Mode Palette - Warmer, less harsh
-const darkPalette = {
-  // Backgrounds - Warmer dark tones, not pure black
-  'bg-base': '#131312',        // Warm charcoal base
-  'bg-surface': '#1A1A19',     // Slightly lighter surface
-  'bg-elevated': '#212120',    // Elevated elements
-  'bg-subtle': '#171716',      // Subtle backgrounds  
-  'bg-muted': '#0F0F0E',       // More muted areas
-  
-  // Text - Softer whites, less stark
-  'text-primary': '#F0F0EE',    // Warm white, not pure
-  'text-secondary': '#B8B8B5',  // Warm gray
-  'text-muted': '#8A8A87',      // Muted warm gray
-  'text-disabled': '#5A5A57',   // Disabled text
-  
-  // Borders & Dividers - Warmer
-  'border-default': '#2A2A28',  // Warm border
-  'border-subtle': '#202020',   // Very subtle warm border
-  'border-strong': '#333331',   // Stronger warm border
-  
-  // Interactive Elements - OpenQase Yellow (adjusted for dark)
-  'primary': '#FACC15',          // Brighter yellow in dark mode
-  'primary-hover': '#FDE047',   // Even brighter on hover
-  'primary-muted': '#422006',   // Dark yellow tinted background
-  
-  // Semantic Colors (adjusted for dark)
-  'success': '#34D399',
-  'warning': '#FBBF24',
-  'error': '#F87171',
-  'info': '#67E8F9',
-  
-  // Special
-  'code-bg': '#0E0E0D',         // Warmer code background
-  'code-border': '#1A1A19',     // Warm code border
-  'shadow': 'rgba(0, 0, 0, 0.25)', // Softer shadow
-};
+  // Toggle theme
+  const toggleTheme = () => {
+    if (isDark) {
+      document.documentElement.removeAttribute('data-theme');
+    } else {
+      document.documentElement.setAttribute('data-theme', 'dark');
+    }
+    setIsDark(!isDark);
+  };
 
-export default function DesignSystem() {
-  const { theme, setTheme } = useTheme();
-  const [mounted, setMounted] = useState(false);
-  
-  // Avoid hydration mismatch
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-  
-  const mode = theme === 'dark' ? 'dark' : 'light';
-  const palette = mode === 'light' ? lightPalette : darkPalette;
-  
-  if (!mounted) {
-    return null; // Avoid hydration mismatch
-  }
-  
   return (
-    <div 
-      className="min-h-screen transition-colors duration-300"
-      style={{ backgroundColor: palette['bg-base'] }}
-    >
-      {/* Mode Toggle - Actually changes the site theme */}
-      <div className="fixed top-20 right-4 z-50">
-        <button
-          onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-          className="px-4 py-2 rounded-lg transition-all"
-          style={{
-            backgroundColor: palette['primary'],
-            color: mode === 'light' ? '#FFFFFF' : '#000000',
-            boxShadow: `0 2px 8px ${palette['shadow']}`
-          }}
-        >
-          {mode === 'light' ? '🌙' : '☀️'} Switch to {mode === 'light' ? 'Dark' : 'Light'} Mode
-        </button>
+    <div className="min-h-screen bg-background">
+      {/* Header */}
+      <div className="border-b border-border bg-card">
+        <div className="max-w-7xl mx-auto px-6 py-8">
+          <div className="flex items-center justify-between mb-6">
+            <div>
+              <h1 className="text-4xl font-bold text-foreground mb-2">OpenQase Design System</h1>
+              <p className="text-lg text-muted-foreground">
+                Stark-inspired accessibility meets Material Design systemization
+              </p>
+            </div>
+            <Button
+              onClick={toggleTheme}
+              variant="outline"
+              className="flex items-center gap-2"
+            >
+              {isDark ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+              {isDark ? 'Light Mode' : 'Dark Mode'}
+            </Button>
+          </div>
+        </div>
       </div>
 
-      <div className="max-w-7xl mx-auto p-8">
-        {/* Header */}
-        <div className="mb-12">
-          <h1 
-            className="text-4xl font-bold mb-2"
-            style={{ color: palette['text-primary'] }}
-          >
-            OpenQase Design System
-          </h1>
-          <p 
-            className="text-lg"
-            style={{ color: palette['text-secondary'] }}
-          >
-            {mode === 'light' ? 'Light' : 'Dark'} Mode Color Palette - No pure {mode === 'light' ? 'white' : 'black'}
-          </p>
-        </div>
+      {/* Main Content */}
+      <div className="max-w-7xl mx-auto px-6 py-12 space-y-16">
+        
+        {/* Core Principles */}
+        <section>
+          <h2 className="text-3xl font-bold text-foreground mb-8">Core Principles</h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <Card className="shadow-md hover:shadow-lg transition-all">
+              <CardHeader>
+                <CardTitle className="text-xl">Accessibility First</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-muted-foreground">
+                  Pure black text on warm cream background. Minimum 7:1 contrast ratio. 
+                  Visible shadows for real elevation.
+                </p>
+              </CardContent>
+            </Card>
+            
+            <Card className="shadow-md hover:shadow-lg transition-all">
+              <CardHeader>
+                <CardTitle className="text-xl">Systematic Design</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-muted-foreground">
+                  Consistent shadows, borders, and spacing. Every card has both border 
+                  AND shadow for clear definition.
+                </p>
+              </CardContent>
+            </Card>
+            
+            <Card className="shadow-md hover:shadow-lg transition-all">
+              <CardHeader>
+                <CardTitle className="text-xl">Strategic Color</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-muted-foreground">
+                  Yellow accent used sparingly for CTAs only. Icons and numbers use 
+                  neutral colors with bold weights for emphasis.
+                </p>
+              </CardContent>
+            </Card>
+          </div>
+        </section>
 
-        {/* Color Showcase */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
-          {/* Background Colors */}
-          <div 
-            className="p-6 rounded-lg"
-            style={{ 
-              backgroundColor: palette['bg-surface'],
-              border: `1px solid ${palette['border-subtle']}`
-            }}
-          >
-            <h3 
-              className="font-semibold mb-4"
-              style={{ color: palette['text-primary'] }}
-            >
-              Backgrounds
-            </h3>
-            <div className="space-y-3">
-              {['bg-base', 'bg-surface', 'bg-elevated', 'bg-subtle', 'bg-muted'].map(key => (
-                <div key={key} className="flex items-center justify-between">
-                  <span style={{ color: palette['text-secondary'] }}>{key}</span>
-                  <div className="flex items-center gap-2">
-                    <div 
-                      className="w-12 h-6 rounded"
-                      style={{ 
-                        backgroundColor: palette[key],
-                        border: `1px solid ${palette['border-default']}`
-                      }}
-                    />
-                    <code 
-                      className="text-xs"
-                      style={{ color: palette['text-muted'] }}
-                    >
-                      {palette[key]}
-                    </code>
+        {/* Color Palette */}
+        <section>
+          <h2 className="text-3xl font-bold text-foreground mb-8">Color Palette</h2>
+          
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            {/* Background Colors */}
+            <Card className="shadow-md">
+              <CardHeader>
+                <CardTitle>Backgrounds</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="flex items-center justify-between p-3 rounded-lg border border-border">
+                  <span className="font-medium">Background</span>
+                  <div className="flex items-center gap-3">
+                    <div className="w-12 h-12 rounded-md bg-background border border-border" />
+                    <code className="text-sm text-muted-foreground">Warm cream</code>
                   </div>
                 </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Text Colors */}
-          <div 
-            className="p-6 rounded-lg"
-            style={{ 
-              backgroundColor: palette['bg-surface'],
-              border: `1px solid ${palette['border-subtle']}`
-            }}
-          >
-            <h3 
-              className="font-semibold mb-4"
-              style={{ color: palette['text-primary'] }}
-            >
-              Text Colors
-            </h3>
-            <div className="space-y-3">
-              {['text-primary', 'text-secondary', 'text-muted', 'text-disabled'].map(key => (
-                <div key={key}>
-                  <span style={{ color: palette[key] }}>{key}</span>
-                  <code 
-                    className="text-xs ml-2"
-                    style={{ color: palette['text-muted'] }}
-                  >
-                    {palette[key]}
-                  </code>
+                <div className="flex items-center justify-between p-3 rounded-lg border border-border">
+                  <span className="font-medium">Card</span>
+                  <div className="flex items-center gap-3">
+                    <div className="w-12 h-12 rounded-md bg-card border border-border shadow-sm" />
+                    <code className="text-sm text-muted-foreground">Pure white</code>
+                  </div>
                 </div>
-              ))}
+                <div className="flex items-center justify-between p-3 rounded-lg border border-border">
+                  <span className="font-medium">Muted</span>
+                  <div className="flex items-center gap-3">
+                    <div className="w-12 h-12 rounded-md bg-muted border border-border" />
+                    <code className="text-sm text-muted-foreground">Subtle gray</code>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Text Colors */}
+            <Card className="shadow-md">
+              <CardHeader>
+                <CardTitle>Typography</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="flex items-center justify-between p-3 rounded-lg border border-border">
+                  <span className="font-medium text-foreground">Primary Text</span>
+                  <code className="text-sm text-muted-foreground">Pure black</code>
+                </div>
+                <div className="flex items-center justify-between p-3 rounded-lg border border-border">
+                  <span className="font-medium text-muted-foreground">Secondary Text</span>
+                  <code className="text-sm text-muted-foreground">Dark gray</code>
+                </div>
+                <div className="flex items-center justify-between p-3 rounded-lg border border-border">
+                  <span className="font-medium text-primary">Accent (Yellow)</span>
+                  <code className="text-sm text-muted-foreground">CTAs only</code>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </section>
+
+        {/* Shadow System */}
+        <section>
+          <h2 className="text-3xl font-bold text-foreground mb-8">Elevation System</h2>
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+            <Card className="shadow-sm">
+              <CardContent className="pt-6">
+                <p className="font-medium mb-2">Shadow SM</p>
+                <p className="text-sm text-muted-foreground">Subtle cards</p>
+              </CardContent>
+            </Card>
+            <Card className="shadow-md">
+              <CardContent className="pt-6">
+                <p className="font-medium mb-2">Shadow MD</p>
+                <p className="text-sm text-muted-foreground">Default cards</p>
+              </CardContent>
+            </Card>
+            <Card className="shadow-lg">
+              <CardContent className="pt-6">
+                <p className="font-medium mb-2">Shadow LG</p>
+                <p className="text-sm text-muted-foreground">Hover state</p>
+              </CardContent>
+            </Card>
+            <Card className="shadow-xl">
+              <CardContent className="pt-6">
+                <p className="font-medium mb-2">Shadow XL</p>
+                <p className="text-sm text-muted-foreground">Modals/Overlays</p>
+              </CardContent>
+            </Card>
+          </div>
+        </section>
+
+        {/* Component Examples */}
+        <section>
+          <h2 className="text-3xl font-bold text-foreground mb-8">Component Library</h2>
+          
+          {/* Cards */}
+          <div className="mb-12">
+            <h3 className="text-2xl font-semibold text-foreground mb-6">Cards</h3>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {/* Stats Card */}
+              <Card className="shadow-sm hover:shadow-md transition-all">
+                <CardContent className="pt-6">
+                  <BookOpen className="w-6 h-6 text-muted-foreground mb-3" />
+                  <p className="text-3xl font-bold text-foreground mb-1">47</p>
+                  <p className="text-sm text-muted-foreground">Case Studies</p>
+                </CardContent>
+              </Card>
+              
+              {/* Content Card */}
+              <Card className="shadow-md hover:shadow-lg transition-all">
+                <CardHeader>
+                  <div className="flex gap-2 mb-2">
+                    <Badge variant="outline">1QBit</Badge>
+                    <Badge variant="outline">BMW</Badge>
+                  </div>
+                  <CardTitle className="text-lg">Automotive Optimization</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-muted-foreground text-sm mb-3">
+                    Quantum algorithms for supply chain optimization
+                  </p>
+                  <a href="#" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+                    Read case study →
+                  </a>
+                </CardContent>
+              </Card>
+              
+              {/* Action Card */}
+              <Card className="shadow-md hover:shadow-lg transition-all border-primary">
+                <CardHeader>
+                  <CardTitle className="text-lg">Get Started</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-muted-foreground text-sm mb-4">
+                    Explore quantum computing case studies
+                  </p>
+                  <Button className="w-full">
+                    Browse Cases
+                  </Button>
+                </CardContent>
+              </Card>
             </div>
           </div>
 
-          {/* Interactive Colors */}
-          <div 
-            className="p-6 rounded-lg"
-            style={{ 
-              backgroundColor: palette['bg-surface'],
-              border: `1px solid ${palette['border-subtle']}`
-            }}
-          >
-            <h3 
-              className="font-semibold mb-4"
-              style={{ color: palette['text-primary'] }}
-            >
-              Interactive Elements
-            </h3>
-            <div className="space-y-3">
-              <button
-                className="w-full px-4 py-2 rounded-md transition-colors font-medium"
-                style={{
-                  backgroundColor: palette['primary'],
-                  color: mode === 'light' ? '#000000' : '#000000', // Black text on yellow for both modes
-                }}
-                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = palette['primary-hover']}
-                onMouseLeave={(e) => e.currentTarget.style.backgroundColor = palette['primary']}
-              >
-                Get Started
-              </button>
-              <button
-                className="w-full px-4 py-2 rounded-md transition-all"
-                style={{
-                  backgroundColor: palette['bg-elevated'],
-                  color: palette['text-primary'],
-                  border: `1px solid ${palette['border-default']}`
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.backgroundColor = palette['bg-surface'];
-                  e.currentTarget.style.borderColor = palette['border-strong'];
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.backgroundColor = palette['bg-elevated'];
-                  e.currentTarget.style.borderColor = palette['border-default'];
-                }}
-              >
-                Learn More
-              </button>
+          {/* Buttons */}
+          <div className="mb-12">
+            <h3 className="text-2xl font-semibold text-foreground mb-6">Buttons</h3>
+            <div className="flex flex-wrap gap-4">
+              <Button>Primary Button</Button>
+              <Button variant="secondary">Secondary Button</Button>
+              <Button variant="outline">Outline Button</Button>
+              <Button variant="ghost">Ghost Button</Button>
+              <Button variant="link">Link Button</Button>
             </div>
           </div>
-        </div>
 
-        {/* Example Components */}
-        <div className="space-y-8">
-          {/* Case Study Card Example */}
-          <div>
-            <h2 
-              className="text-2xl font-bold mb-4"
-              style={{ color: palette['text-primary'] }}
-            >
-              Component Examples
-            </h2>
+          {/* Badges */}
+          <div className="mb-12">
+            <h3 className="text-2xl font-semibold text-foreground mb-6">Badges</h3>
+            <div className="flex flex-wrap gap-3">
+              <Badge>Default</Badge>
+              <Badge variant="outline">Outline</Badge>
+              <Badge variant="secondary">Secondary</Badge>
+              <Badge variant="destructive">Destructive</Badge>
+            </div>
+          </div>
+        </section>
+
+        {/* Icons & Usage */}
+        <section>
+          <h2 className="text-3xl font-bold text-foreground mb-8">Icon Usage</h2>
+          <Card className="shadow-md">
+            <CardContent className="pt-6">
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+                <div className="text-center">
+                  <BookOpen className="w-8 h-8 text-muted-foreground mx-auto mb-2" />
+                  <p className="text-sm font-medium">Default</p>
+                  <p className="text-xs text-muted-foreground">Gray icons</p>
+                </div>
+                <div className="text-center">
+                  <CircuitBoard className="w-8 h-8 text-foreground mx-auto mb-2" />
+                  <p className="text-sm font-medium">Active</p>
+                  <p className="text-xs text-muted-foreground">Black on hover</p>
+                </div>
+                <div className="text-center">
+                  <Building2 className="w-8 h-8 text-primary mx-auto mb-2" />
+                  <p className="text-sm font-medium">CTA Only</p>
+                  <p className="text-xs text-muted-foreground">Yellow sparingly</p>
+                </div>
+                <div className="text-center">
+                  <User className="w-8 h-8 text-muted-foreground/50 mx-auto mb-2" />
+                  <p className="text-sm font-medium">Disabled</p>
+                  <p className="text-xs text-muted-foreground">50% opacity</p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </section>
+
+        {/* Typography Scale */}
+        <section>
+          <h2 className="text-3xl font-bold text-foreground mb-8">Typography Scale</h2>
+          <Card className="shadow-md">
+            <CardContent className="pt-6 space-y-4">
+              <div className="border-b border-border pb-4">
+                <p className="text-5xl font-bold">Display (3rem)</p>
+              </div>
+              <div className="border-b border-border pb-4">
+                <p className="text-4xl font-bold">Heading 1 (2.25rem)</p>
+              </div>
+              <div className="border-b border-border pb-4">
+                <p className="text-3xl font-semibold">Heading 2 (1.875rem)</p>
+              </div>
+              <div className="border-b border-border pb-4">
+                <p className="text-2xl font-semibold">Heading 3 (1.5rem)</p>
+              </div>
+              <div className="border-b border-border pb-4">
+                <p className="text-xl font-medium">Heading 4 (1.25rem)</p>
+              </div>
+              <div className="border-b border-border pb-4">
+                <p className="text-lg">Body Large (1.125rem)</p>
+              </div>
+              <div className="border-b border-border pb-4">
+                <p className="text-base">Body Default (1rem)</p>
+              </div>
+              <div>
+                <p className="text-sm text-muted-foreground">Small Text (0.875rem)</p>
+              </div>
+            </CardContent>
+          </Card>
+        </section>
+
+        {/* Design Rules */}
+        <section>
+          <h2 className="text-3xl font-bold text-foreground mb-8">Design Rules</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <Card className="shadow-md border-green-500/20">
+              <CardHeader>
+                <CardTitle className="text-green-600">✓ Do</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ul className="space-y-2 text-sm text-muted-foreground">
+                  <li>• Use shadows AND borders on all cards</li>
+                  <li>• Apply yellow only to primary CTAs</li>
+                  <li>• Use bold text weight for emphasis</li>
+                  <li>• Maintain consistent spacing (4, 6, 8 grid)</li>
+                  <li>• Test contrast ratios (minimum 7:1)</li>
+                </ul>
+              </CardContent>
+            </Card>
             
-            {/* Card */}
-            <div 
-              className="rounded-lg p-6 mb-6"
-              style={{ 
-                backgroundColor: palette['bg-surface'],
-                border: `1px solid ${palette['border-subtle']}`,
-                boxShadow: `0 1px 3px ${palette['shadow']}`
-              }}
-            >
-              <div className="flex gap-2 mb-3">
-                <span 
-                  className="px-2 py-1 text-xs rounded"
-                  style={{
-                    backgroundColor: palette['primary-muted'],
-                    color: palette['primary']
-                  }}
-                >
-                  QuEra
-                </span>
-                <span 
-                  className="px-2 py-1 text-xs rounded"
-                  style={{
-                    backgroundColor: palette['bg-subtle'],
-                    color: palette['text-secondary']
-                  }}
-                >
-                  Pawsey Supercomputing
-                </span>
-              </div>
-              <h3 
-                className="text-xl font-bold mb-2"
-                style={{ color: palette['text-primary'] }}
-              >
-                QuEra and Pawsey conduct quantum-classical research
-              </h3>
-              <p 
-                className="mb-4"
-                style={{ color: palette['text-secondary'] }}
-              >
-                Partnering to advance methods and approaches to quantum-classical integration for advanced research.
-              </p>
-              <a 
-                href="#"
-                className="inline-flex items-center font-medium"
-                style={{ color: palette['primary'] }}
-              >
-                Read case study →
-              </a>
-            </div>
+            <Card className="shadow-md border-red-500/20">
+              <CardHeader>
+                <CardTitle className="text-red-600">✗ Don't</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ul className="space-y-2 text-sm text-muted-foreground">
+                  <li>• Don't use yellow for icons or numbers</li>
+                  <li>• Don't skip borders on cards</li>
+                  <li>• Don't use color alone for emphasis</li>
+                  <li>• Don't mix shadow levels randomly</li>
+                  <li>• Don't hard-code color values</li>
+                </ul>
+              </CardContent>
+            </Card>
           </div>
-
-          {/* Code Block Example */}
-          <div>
-            <h3 
-              className="text-xl font-bold mb-3"
-              style={{ color: palette['text-primary'] }}
-            >
-              Code Block
-            </h3>
-            <div 
-              className="rounded-lg p-4 font-mono text-sm"
-              style={{
-                backgroundColor: palette['code-bg'],
-                border: `1px solid ${palette['code-border']}`
-              }}
-            >
-              <div style={{ color: palette['text-muted'] }}>// Quantum algorithm example</div>
-              <div>
-                <span style={{ color: palette['primary'] }}>const</span>
-                <span style={{ color: palette['text-primary'] }}> algorithm = </span>
-                <span style={{ color: palette['success'] }}>'VQE'</span>
-                <span style={{ color: palette['text-primary'] }}>;</span>
-              </div>
-              <div>
-                <span style={{ color: palette['primary'] }}>const</span>
-                <span style={{ color: palette['text-primary'] }}> qubits = </span>
-                <span style={{ color: palette['warning'] }}>128</span>
-                <span style={{ color: palette['text-primary'] }}>;</span>
-              </div>
-            </div>
-          </div>
-
-          {/* Surface Elevation Example */}
-          <div>
-            <h3 
-              className="text-xl font-bold mb-3"
-              style={{ color: palette['text-primary'] }}
-            >
-              Surface Elevation Levels
-            </h3>
-            <div className="space-y-4">
-              {[
-                { level: 'Base', bg: 'bg-base' },
-                { level: 'Surface', bg: 'bg-surface' },
-                { level: 'Elevated', bg: 'bg-elevated' }
-              ].map((item) => (
-                <div 
-                  key={item.level}
-                  className="p-4 rounded-lg"
-                  style={{
-                    backgroundColor: palette[item.bg],
-                    border: `1px solid ${palette['border-subtle']}`,
-                    boxShadow: item.level === 'Elevated' ? `0 4px 12px ${palette['shadow']}` : undefined
-                  }}
-                >
-                  <span style={{ color: palette['text-primary'] }}>
-                    {item.level} - {palette[item.bg]}
-                  </span>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        {/* Color Values Display */}
-        <div className="mt-12 p-6 rounded-lg" style={{ backgroundColor: palette['bg-subtle'] }}>
-          <h3 
-            className="text-lg font-bold mb-4"
-            style={{ color: palette['text-primary'] }}
-          >
-            Key Design Principles
-          </h3>
-          <ul className="space-y-2" style={{ color: palette['text-secondary'] }}>
-            <li>• No pure white (#FFFFFF) or pure black (#000000)</li>
-            <li>• Light mode: Warm-tinted grays for a paper-like feel</li>
-            <li>• Dark mode: Cool-tinted blues for a technical feel</li>
-            <li>• Subtle borders in light mode, stronger in dark mode</li>
-            <li>• Shadows provide depth in light mode, elevation colors in dark mode</li>
-          </ul>
-        </div>
+        </section>
       </div>
     </div>
   );

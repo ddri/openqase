@@ -88,7 +88,7 @@ export default function NewsletterSignup() {
             <Button 
               type="submit"
               disabled={status === 'loading'}
-              className="w-full bg-primary hover:bg-primary/90 text-black font-medium disabled:opacity-50"
+              className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-medium disabled:opacity-50"
             >
               {status === 'loading' ? 'Subscribing...' : 'Subscribe to Updates'}
             </Button>

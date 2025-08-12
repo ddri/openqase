@@ -16,7 +16,7 @@ import {
   ExternalLink
 } from 'lucide-react';
 import { AutoSchema } from '@/components/AutoSchema';
-import GlobalSearch from '@/components/GlobalSearch';
+import SearchCard from '@/components/SearchCard';
 import NewsletterSignup from '@/components/NewsletterSignup';
 import { getBuildTimeContentList, fetchSearchData, getStaticContentList } from '@/lib/content-fetchers';
 import type { BlogPost } from '@/lib/types';
@@ -120,10 +120,7 @@ export default async function HomePage() {
             {/* Left Column - Search & Stats */}
             <div className="lg:col-span-2 space-y-8">
               {/* Search Bar */}
-              <div className="bg-card border border-border p-6 elevation-interactive hover:border-primary">
-                <h2 className="text-xl font-semibold mb-4 text-foreground">Search Case Studies</h2>
-                <GlobalSearch searchData={searchData} className="w-full" />
-              </div>
+              <SearchCard searchData={searchData} />
 
               {/* Stats Grid */}
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
@@ -184,7 +181,7 @@ export default async function HomePage() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {/* Algorithms */}
               <Link href="/paths/algorithm" className="group">
-                <div className="bg-card rounded-lg border border-border p-6 h-full shadow-sm hover:shadow-md transition-all">
+                <div className="bg-card rounded-lg border border-border p-6 h-full elevation-interactive hover:border-primary">
                   <CircuitBoard className="w-6 h-6 text-primary mb-3" />
                   <div className="flex items-center justify-between mb-2">
                     <h3 className="font-semibold text-foreground">Algorithms</h3>
@@ -196,7 +193,7 @@ export default async function HomePage() {
 
               {/* Industries */}
               <Link href="/paths/industry" className="group">
-                <div className="bg-card rounded-lg border border-border p-6 h-full shadow-sm hover:shadow-md transition-all">
+                <div className="bg-card rounded-lg border border-border p-6 h-full elevation-interactive hover:border-primary">
                   <Building2 className="w-6 h-6 text-primary mb-3" />
                   <div className="flex items-center justify-between mb-2">
                     <h3 className="font-semibold text-foreground">Industries</h3>
@@ -208,7 +205,7 @@ export default async function HomePage() {
 
               {/* Professional Perspectives */}
               <Link href="/paths/persona" className="group">
-                <div className="bg-card rounded-lg border border-border p-6 h-full shadow-sm hover:shadow-md transition-all">
+                <div className="bg-card rounded-lg border border-border p-6 h-full elevation-interactive hover:border-primary">
                   <User className="w-6 h-6 text-primary mb-3" />
                   <div className="flex items-center justify-between mb-2">
                     <h3 className="font-semibold text-foreground">Professional Roles</h3>
@@ -247,7 +244,7 @@ export default async function HomePage() {
                 {featuredCaseStudies.length > 0 ? (
                   featuredCaseStudies.map((caseStudy, index) => (
                     <Link key={caseStudy.id} href={`/case-study/${caseStudy.slug}`} className="block group">
-                      <div className="bg-card rounded-lg border border-border p-6 shadow-sm hover:shadow-md transition-all">
+                      <div className="bg-card rounded-lg border border-border p-6 elevation-interactive hover:border-primary">
                         {/* Partner Companies as tags */}
                         {((caseStudy.quantum_companies && caseStudy.quantum_companies.length > 0) || 
                           (caseStudy.partner_companies && caseStudy.partner_companies.length > 0)) && (
@@ -310,7 +307,7 @@ export default async function HomePage() {
                 {blogPosts.length > 0 ? (
                   blogPosts.map((blogPost, index) => (
                     <Link key={blogPost.id} href={`/blog/${blogPost.slug}`} className="block group">
-                      <div className="bg-card rounded-lg border border-border p-6 shadow-sm hover:shadow-md transition-all">
+                      <div className="bg-card rounded-lg border border-border p-6 elevation-interactive hover:border-primary">
                         {blogPost.tags && Array.isArray(blogPost.tags) && blogPost.tags.length > 0 && (
                           <div className="flex gap-2 mb-3">
                             {blogPost.tags.slice(0, 2).map((tag) => (
@@ -365,7 +362,7 @@ export default async function HomePage() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="bg-card rounded-lg border border-border p-6 shadow-sm hover:shadow-md transition-all">
+            <div className="bg-card rounded-lg border border-border p-6 elevation-interactive hover:border-primary">
               <Github className="w-6 h-6 text-primary mb-4" />
               <h3 className="font-semibold text-foreground mb-2">Open Source</h3>
               <p className="text-sm text-muted-foreground mb-4">
@@ -377,7 +374,7 @@ export default async function HomePage() {
               </Link>
             </div>
 
-            <div className="bg-card rounded-lg border border-border p-6 shadow-sm hover:shadow-md transition-all">
+            <div className="bg-card rounded-lg border border-border p-6 elevation-interactive hover:border-primary">
               <Users className="w-6 h-6 text-primary mb-4" />
               <h3 className="font-semibold text-foreground mb-2">Community Contributions</h3>
               <p className="text-sm text-muted-foreground mb-4">
@@ -388,7 +385,7 @@ export default async function HomePage() {
               </Link>
             </div>
 
-            <div className="bg-card rounded-lg border border-border p-6 shadow-sm hover:shadow-md transition-all">
+            <div className="bg-card rounded-lg border border-border p-6 elevation-interactive hover:border-primary">
               <Database className="w-6 h-6 text-primary mb-4" />
               <h3 className="font-semibold text-foreground mb-2">Free Access</h3>
               <p className="text-sm text-muted-foreground mb-4">

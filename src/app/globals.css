@@ -12,8 +12,8 @@
     --card-foreground: 240 10% 3.9%;
     --card-background: 0 0% 100% / 0.8;
     --card-border: 240 5.9% 90%; /* Subtle gray borders */
-    --card-hover-border: 48 100% 50%; /* Gold */
-    --card-hover-background: 48 100% 50% / 0.05;
+    --card-hover-border: 221 83% 53%; /* Stark blue */
+    --card-hover-background: 221 83% 53% / 0.05;
     
     --text-primary: 0 0% 0%;        /* Pure black like Stark */
     --text-secondary: 0 0% 30%;     /* Dark gray */
@@ -26,8 +26,8 @@
     --popover: 0 0% 100%;
     --popover-foreground: 240 10% 3.9%;
     
-    --primary: 48 100% 50%;      /* Golden yellow #ffd000 */
-    --primary-foreground: 0 0% 0%;
+    --primary: 221 83% 53%;      /* Stark blue for light mode #5E6AD2 */
+    --primary-foreground: 0 0% 100%;  /* White text on blue */
     
     --secondary: 30 10% 90%;     /* Warm gray */
     --secondary-foreground: 0 0% 0%;
@@ -35,8 +35,8 @@
     --muted: 30 10% 92%;         /* Warm muted */
     --muted-foreground: 0 0% 40%;
     
-    --accent: 45 93% 55%;        /* Slightly darker gold #f4d03f */
-    --accent-foreground: 0 0% 0%;
+    --accent: 221 83% 53%;        /* Stark blue accent for light mode */
+    --accent-foreground: 0 0% 100%;
     
     --accent-secondary: 220 70% 50%; /* Blue accent */
     --accent-secondary-foreground: 0 0% 100%;
@@ -46,7 +46,7 @@
     
     --border: 0 0% 88%;          /* Neutral gray border like Stark */
     --input: 30 10% 92%;
-    --ring: 48 100% 50%;
+    --ring: 221 83% 53%;         /* Stark blue ring for focus states */
     --radius: 0.25rem;
 
     /* Anthropic-inspired typography */
@@ -65,12 +65,12 @@
                      radial-gradient(at 80% 0%, hsla(45, 93%, 55%, 0.15) 0px, transparent 50%),
                      radial-gradient(at 0% 50%, hsla(340, 80%, 60%, 0.1) 0px, transparent 50%);
     
-    /* Accent Colors */
-    --gold-vivid: 48 100% 50%;      /* #ffd000 */
-    --gold-light: 45 93% 65%;       /* #f4d03f */
-    --blue-vivid: 220 83% 60%;      /* #3b82f6 */
+    /* Accent Colors - Light Mode uses Blue */
+    --gold-vivid: 221 83% 53%;      /* Stark blue for light mode */
+    --gold-light: 221 70% 60%;      /* Lighter blue for light mode */
+    --blue-vivid: 221 83% 53%;      /* Primary blue */
     --pink-vivid: 340 82% 52%;      /* #db2777 */
-    --yellow-sharp: 48 100% 50%;    /* #ffd000 - Sharp golden yellow */
+    --yellow-sharp: 221 83% 53%;    /* Stark blue for light mode */
     
     /* Shadow system for elevation - Actually visible like Stark */
     --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.08);

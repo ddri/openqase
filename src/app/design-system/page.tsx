@@ -40,7 +40,7 @@ export default function DesignSystemPage() {
             <div>
               <h1 className="text-4xl font-bold text-foreground mb-2">OpenQase Design System</h1>
               <p className="text-lg text-muted-foreground">
-                Stark-inspired accessibility meets Material Design systemization
+                Dual accent system: <span className="text-primary font-semibold">{isDark ? 'Yellow' : 'Blue'}</span> for {isDark ? 'Dark' : 'Light'} Mode
               </p>
             </div>
             <Button
@@ -58,6 +58,58 @@ export default function DesignSystemPage() {
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-6 py-12 space-y-16">
         
+        {/* Mode-Specific Accent Colors */}
+        <section>
+          <h2 className="text-3xl font-bold text-foreground mb-8">Mode-Specific Accent Colors</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
+            <Card className="shadow-md">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Sun className="w-5 h-5" />
+                  Light Mode - Stark Blue
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between p-3 rounded-lg bg-card border border-border">
+                    <span className="font-medium">Primary</span>
+                    <div className="flex items-center gap-3">
+                      <div className="w-12 h-12 rounded-md" style={{ backgroundColor: '#5E6AD2' }} />
+                      <code className="text-sm text-muted-foreground">#5E6AD2</code>
+                    </div>
+                  </div>
+                  <p className="text-sm text-muted-foreground">
+                    Inspired by Stark's accessibility platform. Provides excellent contrast (7:1) on light backgrounds.
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
+            
+            <Card className="shadow-md">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Moon className="w-5 h-5" />
+                  Dark Mode - Golden Yellow
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between p-3 rounded-lg bg-card border border-border">
+                    <span className="font-medium">Primary</span>
+                    <div className="flex items-center gap-3">
+                      <div className="w-12 h-12 rounded-md" style={{ backgroundColor: '#FFD000' }} />
+                      <code className="text-sm text-muted-foreground">#FFD000</code>
+                    </div>
+                  </div>
+                  <p className="text-sm text-muted-foreground">
+                    High visibility yellow for dark backgrounds. Creates energetic, modern feel with strong contrast.
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </section>
+
         {/* Core Principles */}
         <section>
           <h2 className="text-3xl font-bold text-foreground mb-8">Core Principles</h2>
@@ -92,8 +144,8 @@ export default function DesignSystemPage() {
               </CardHeader>
               <CardContent>
                 <p className="text-muted-foreground">
-                  Yellow accent used sparingly for CTAs only. Icons and numbers use 
-                  neutral colors with bold weights for emphasis.
+                  Accent color used sparingly for CTAs only. Blue in light mode, 
+                  yellow in dark mode. Icons use neutral colors.
                 </p>
               </CardContent>
             </Card>
@@ -150,8 +202,12 @@ export default function DesignSystemPage() {
                   <code className="text-sm text-muted-foreground">Dark gray</code>
                 </div>
                 <div className="flex items-center justify-between p-3 rounded-lg border border-border">
-                  <span className="font-medium text-primary">Accent (Yellow)</span>
-                  <code className="text-sm text-muted-foreground">CTAs only</code>
+                  <span className="font-medium text-primary">
+                    Accent ({isDark ? 'Yellow' : 'Blue'})
+                  </span>
+                  <code className="text-sm text-muted-foreground">
+                    {isDark ? '#FFD000' : '#5E6AD2'}
+                  </code>
                 </div>
               </CardContent>
             </Card>
@@ -252,6 +308,9 @@ export default function DesignSystemPage() {
               <Button variant="ghost">Ghost Button</Button>
               <Button variant="link">Link Button</Button>
             </div>
+            <p className="text-sm text-muted-foreground mt-4">
+              Primary button uses <span className="font-semibold">{isDark ? 'yellow' : 'blue'}</span> accent color in {isDark ? 'dark' : 'light'} mode
+            </p>
           </div>
 
           {/* Badges */}
@@ -263,6 +322,9 @@ export default function DesignSystemPage() {
               <Badge variant="secondary">Secondary</Badge>
               <Badge variant="destructive">Destructive</Badge>
             </div>
+            <p className="text-sm text-muted-foreground mt-4">
+              Default badge uses <span className="font-semibold">{isDark ? 'yellow' : 'blue'}</span> background in {isDark ? 'dark' : 'light'} mode
+            </p>
           </div>
         </section>
 
@@ -285,7 +347,7 @@ export default function DesignSystemPage() {
                 <div className="text-center">
                   <Building2 className="w-8 h-8 text-primary mx-auto mb-2" />
                   <p className="text-sm font-medium">CTA Only</p>
-                  <p className="text-xs text-muted-foreground">Yellow sparingly</p>
+                  <p className="text-xs text-muted-foreground">{isDark ? 'Yellow' : 'Blue'} sparingly</p>
                 </div>
                 <div className="text-center">
                   <User className="w-8 h-8 text-muted-foreground/50 mx-auto mb-2" />
@@ -341,7 +403,7 @@ export default function DesignSystemPage() {
               <CardContent>
                 <ul className="space-y-2 text-sm text-muted-foreground">
                   <li>• Use shadows AND borders on all cards</li>
-                  <li>• Apply yellow only to primary CTAs</li>
+                  <li>• Apply accent color only to primary CTAs</li>
                   <li>• Use bold text weight for emphasis</li>
                   <li>• Maintain consistent spacing (4, 6, 8 grid)</li>
                   <li>• Test contrast ratios (minimum 7:1)</li>
@@ -355,7 +417,7 @@ export default function DesignSystemPage() {
               </CardHeader>
               <CardContent>
                 <ul className="space-y-2 text-sm text-muted-foreground">
-                  <li>• Don't use yellow for icons or numbers</li>
+                  <li>• Don't use accent color for icons or numbers</li>
                   <li>• Don't skip borders on cards</li>
                   <li>• Don't use color alone for emphasis</li>
                   <li>• Don't mix shadow levels randomly</li>

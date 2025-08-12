@@ -1,12 +1,13 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import { Button } from '@/components/ui/button'
 
 export default function NewsletterSignup() {
   const [email, setEmail] = useState('')
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
   const [message, setMessage] = useState('')
+  const emailInputRef = useRef<HTMLInputElement>(null)
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -50,8 +51,15 @@ export default function NewsletterSignup() {
     }
   }
 
+  const handleCardClick = () => {
+    emailInputRef.current?.focus()
+  }
+
   return (
-    <div className="bg-card border border-border p-6 h-full flex flex-col justify-center hover:border-primary transition-colors">
+    <div 
+      className="bg-card border border-border p-6 h-full flex flex-col justify-center hover:border-primary transition-colors cursor-pointer"
+      onClick={handleCardClick}
+    >
       <h2 className="text-xl font-semibold mb-4 text-foreground">Stay Updated</h2>
       <div className="space-y-4">
         <p className="text-sm text-muted-foreground leading-relaxed mb-6">
@@ -64,7 +72,8 @@ export default function NewsletterSignup() {
               {message}
             </div>
             <Button 
-              onClick={() => {
+              onClick={(e) => {
+                e.stopPropagation()
                 setStatus('idle')
                 setMessage('')
               }}
@@ -77,6 +86,7 @@ export default function NewsletterSignup() {
         ) : (
           <form onSubmit={handleSubmit} className="space-y-3">
             <input 
+              ref={emailInputRef}
               type="email" 
               placeholder="Enter your email"
               value={email}
@@ -89,6 +99,7 @@ export default function NewsletterSignup() {
               type="submit"
               disabled={status === 'loading'}
               className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-medium disabled:opacity-50"
+              onClick={(e) => e.stopPropagation()}
             >
               {status === 'loading' ? 'Subscribing...' : 'Subscribe to Updates'}
             </Button>

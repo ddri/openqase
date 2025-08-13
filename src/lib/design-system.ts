@@ -6,6 +6,33 @@
  */
 
 export const designSystem = {
+  // Elevation System - Core hierarchy levels
+  elevation: {
+    sunken: -1,    // Sidebars, metadata, hero sections
+    base: 0,       // Page background
+    content: 1,    // Main reading area
+    raised: 2,     // Cards, highlighted content
+    overlay: 3,    // Modals, dropdowns
+  },
+  
+  // Surface colors for each elevation level
+  surfaces: {
+    light: {
+      sunken: '0 0% 95%',      // #f2f2f2 - Darker than base
+      base: '0 0% 98%',         // #fafafa - Page background
+      content: '0 0% 100%',     // #ffffff - Main content
+      raised: '0 0% 100%',      // #ffffff - Cards (use shadows)
+      overlay: '0 0% 100%',     // #ffffff - Modals
+    },
+    dark: {
+      sunken: '0 0% 7%',        // #121212 - Deeper than base
+      base: '0 0% 10%',         // #1a1a1a - Page background
+      content: '0 0% 13%',      // #212121 - Main content
+      raised: '0 0% 16%',       // #292929 - Cards
+      overlay: '0 0% 20%',      // #333333 - Modals
+    },
+  },
+  
   // Color Tokens
   colors: {
     // Base colors

@@ -23,7 +23,7 @@ export default function ProfessionalCaseStudyLayout({
   return (
     <main className="min-h-screen bg-background">
       {/* Header Section */}
-      <div className="bg-muted/20 border-b border-border/30">
+      <div className="surface-sunken border-b border-border">
         <div className="container-outer py-6">
           <Link
             href={backLinkHref}
@@ -51,7 +51,7 @@ export default function ProfessionalCaseStudyLayout({
         <div className="grid gap-8 lg:gap-12 lg:grid-cols-[1fr,300px]">
           {/* Article Content */}
           <article className="max-w-none">
-            <div className="prose prose-lg dark:prose-invert max-w-none prose-headings:font-bold prose-headings:tracking-tight prose-h1:text-3xl prose-h2:text-2xl prose-h3:text-xl prose-p:leading-relaxed prose-p:text-foreground/90">
+            <div className="surface-content rounded-lg p-8 prose prose-lg dark:prose-invert max-w-none prose-headings:font-bold prose-headings:tracking-tight prose-h1:text-3xl prose-h2:text-2xl prose-h3:text-xl prose-p:leading-relaxed prose-p:text-foreground/90">
               {children}
             </div>
           </article>
@@ -59,7 +59,7 @@ export default function ProfessionalCaseStudyLayout({
           {/* Professional Sidebar */}
           <aside className="space-y-6">
             {/* Quick Facts */}
-            <div className="bg-muted/40 rounded-lg p-6 border border-border/50">
+            <div className="surface-sunken rounded-lg p-6 border border-border">
               <h3 className="text-lg font-semibold mb-4 text-foreground">Quick Facts</h3>
               <div className="space-y-4">
                 {caseStudy.year && (
@@ -100,7 +100,7 @@ export default function ProfessionalCaseStudyLayout({
             </div>
 
             {/* Technical Details */}
-            <div className="bg-muted/40 rounded-lg p-6 border border-border/50">
+            <div className="surface-sunken rounded-lg p-6 border border-border">
               <h3 className="text-lg font-semibold mb-4 text-foreground">Technical Details</h3>
               <div className="space-y-4">
                 {caseStudy.quantum_hardware && caseStudy.quantum_hardware.length > 0 && (
@@ -135,7 +135,7 @@ export default function ProfessionalCaseStudyLayout({
             </div>
 
             {/* Categories */}
-            <div className="bg-muted/40 rounded-lg p-6 border border-border/50">
+            <div className="surface-sunken rounded-lg p-6 border border-border">
               <h3 className="text-lg font-semibold mb-4 text-foreground">Categories</h3>
               <div className="space-y-4">
                 <div>
@@ -223,7 +223,7 @@ export default function ProfessionalCaseStudyLayout({
 
             {/* Resource Links */}
             {caseStudy.resource_links && Array.isArray(caseStudy.resource_links) && caseStudy.resource_links.length > 0 && (
-              <div className="bg-muted/40 rounded-lg p-6 border border-border/50">
+              <div className="surface-sunken rounded-lg p-6 border border-border">
                 <h3 className="text-lg font-semibold mb-4 text-foreground flex items-center gap-2">
                   <ExternalLink className="h-4 w-4" />
                   Additional Resources

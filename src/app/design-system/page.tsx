@@ -152,6 +152,90 @@ export default function DesignSystemPage() {
           </div>
         </section>
 
+        {/* Elevation Hierarchy System */}
+        <section>
+          <h2 className="text-3xl font-bold text-foreground mb-8">Elevation Hierarchy</h2>
+          <p className="text-lg text-muted-foreground mb-8">
+            Systematic depth levels create proper visual hierarchy where content advances and chrome recedes.
+          </p>
+          
+          {/* Elevation Levels */}
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-12">
+            <div className="text-center">
+              <div className="h-24 rounded-lg border-2 border-dashed border-border bg-muted flex items-center justify-center mb-2">
+                <span className="text-xs font-bold">-1</span>
+              </div>
+              <p className="font-semibold text-sm">Sunken</p>
+              <p className="text-xs text-muted-foreground">Sidebars, metadata</p>
+            </div>
+            <div className="text-center">
+              <div className="h-24 rounded-lg border border-border bg-background flex items-center justify-center mb-2">
+                <span className="text-xs font-bold">0</span>
+              </div>
+              <p className="font-semibold text-sm">Base</p>
+              <p className="text-xs text-muted-foreground">Page background</p>
+            </div>
+            <div className="text-center">
+              <div className="h-24 rounded-lg border border-border bg-card shadow-sm flex items-center justify-center mb-2">
+                <span className="text-xs font-bold">1</span>
+              </div>
+              <p className="font-semibold text-sm">Content</p>
+              <p className="text-xs text-muted-foreground">Main reading area</p>
+            </div>
+            <div className="text-center">
+              <div className="h-24 rounded-lg border border-border bg-card shadow-md flex items-center justify-center mb-2">
+                <span className="text-xs font-bold">2</span>
+              </div>
+              <p className="font-semibold text-sm">Raised</p>
+              <p className="text-xs text-muted-foreground">Cards, highlights</p>
+            </div>
+            <div className="text-center">
+              <div className="h-24 rounded-lg border border-border bg-card shadow-xl flex items-center justify-center mb-2">
+                <span className="text-xs font-bold">3</span>
+              </div>
+              <p className="font-semibold text-sm">Overlay</p>
+              <p className="text-xs text-muted-foreground">Modals, dropdowns</p>
+            </div>
+          </div>
+
+          {/* Hierarchy Example */}
+          <Card className="shadow-md mb-12">
+            <CardHeader>
+              <CardTitle>Hierarchy in Practice</CardTitle>
+              <CardDescription>
+                How elevation creates focus on content while UI chrome recedes
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="bg-background p-4 rounded-lg">
+                {/* Mini layout demo */}
+                <div className="grid grid-cols-4 gap-4">
+                  <div className="col-span-1">
+                    <div className="bg-muted p-3 rounded border border-border h-32">
+                      <p className="text-xs font-medium mb-2">Sidebar</p>
+                      <p className="text-xs text-muted-foreground">Level -1: Sunken</p>
+                    </div>
+                  </div>
+                  <div className="col-span-3">
+                    <div className="bg-card p-4 rounded shadow-sm border border-border h-32">
+                      <p className="text-sm font-medium mb-2">Main Content</p>
+                      <p className="text-xs text-muted-foreground mb-3">Level 1: Elevated</p>
+                      <div className="grid grid-cols-2 gap-2">
+                        <div className="bg-card p-2 rounded shadow-md border border-border">
+                          <p className="text-xs">Card (Level 2)</p>
+                        </div>
+                        <div className="bg-card p-2 rounded shadow-md border border-border">
+                          <p className="text-xs">Card (Level 2)</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </section>
+
         {/* Color Palette */}
         <section>
           <h2 className="text-3xl font-bold text-foreground mb-8">Color Palette</h2>

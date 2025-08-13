@@ -102,16 +102,12 @@ export default async function HomePage() {
         <div className="max-w-7xl mx-auto px-4 py-16">
           {/* Header */}
           <div className="mb-12">
-            <div className="flex items-center gap-4 mb-6">
-              <div className="w-12 h-12 bg-primary rounded-sm flex items-center justify-center">
-                <span className="text-black font-bold text-xl">Q</span>
-              </div>
-              <h1 className="text-4xl md:text-5xl font-bold text-foreground tracking-tight">
-                OpenQase
-              </h1>
-            </div>
-            <p className="text-lg text-muted-foreground max-w-3xl">
-              Real Quantum Computing Case Studies — An open-source collection of quantum implementations from industry leaders
+            <h1 className="text-4xl md:text-6xl font-bold text-foreground tracking-tight mb-6">
+              Real-World Quantum Computing Implementations
+            </h1>
+            <p className="text-xl text-muted-foreground max-w-4xl leading-relaxed">
+              From BMW to Goldman Sachs — See how industry leaders deploy quantum computing 
+              to solve real business challenges. Open-source case studies with technical details and outcomes.
             </p>
           </div>
 

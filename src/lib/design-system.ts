@@ -8,10 +8,10 @@
 export const designSystem = {
   // Elevation System - Core hierarchy levels
   elevation: {
-    sunken: -1,    // Sidebars, metadata, hero sections
+    sunken: -1,    // Hero sections, page headers
     base: 0,       // Page background
-    content: 1,    // Main reading area
-    raised: 2,     // Cards, highlighted content
+    content: 1,    // Main content, sidebar cards
+    raised: 2,     // Highlighted cards, interactive elements
     overlay: 3,    // Modals, dropdowns
   },
   
@@ -207,9 +207,9 @@ export const designRules = {
   // Visual Hierarchy
   hierarchy: {
     1: 'Use shadows to indicate elevation and importance',
-    2: 'Primary content gets white cards with shadows',
-    3: 'Secondary content can use muted backgrounds',
-    4: 'Navigation and metadata use subtle treatments',
+    2: 'Primary content and sidebar cards get white backgrounds with shadows',
+    3: 'Hero sections and page headers use muted backgrounds to recede',
+    4: 'All cards should be elevated, not sunken below the page background',
   },
   
   // Color Usage

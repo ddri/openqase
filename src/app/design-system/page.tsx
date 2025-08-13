@@ -211,9 +211,9 @@ export default function DesignSystemPage() {
                 {/* Mini layout demo */}
                 <div className="grid grid-cols-4 gap-4">
                   <div className="col-span-1">
-                    <div className="bg-muted p-3 rounded border border-border h-32">
-                      <p className="text-xs font-medium mb-2">Sidebar</p>
-                      <p className="text-xs text-muted-foreground">Level -1: Sunken</p>
+                    <div className="bg-card p-3 rounded border border-border shadow-sm h-32">
+                      <p className="text-xs font-medium mb-2">Sidebar Cards</p>
+                      <p className="text-xs text-muted-foreground">Level 1: Elevated white cards</p>
                     </div>
                   </div>
                   <div className="col-span-3">

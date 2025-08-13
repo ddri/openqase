@@ -5,12 +5,12 @@
 @layer base {
   /* Light theme - Sophisticated & Modern */
   :root {
-    --background: 0 0% 98%;       /* #fafafa - Soft base, lighter than before */
+    --background: 0 0% 94%;       /* #f0f0f0 - More contrast with white cards */
     --foreground: 0 0% 0%;        /* Pure black text like Stark */
     
     /* Elevation System Surfaces */
-    --surface-sunken: 0 0% 97%;   /* #f7f7f7 - Very subtle recession */
-    --surface-base: 0 0% 98%;      /* #fafafa - Page background */
+    --surface-sunken: 0 0% 91%;   /* #e8e8e8 - More defined recession */
+    --surface-base: 0 0% 94%;      /* #f0f0f0 - Page background */
     --surface-content: 0 0% 100%;  /* #ffffff - Main content */
     --surface-raised: 0 0% 100%;   /* #ffffff - Cards (use shadows) */
     
@@ -22,8 +22,8 @@
     --card-hover-background: 221 83% 53% / 0.05;
     
     --text-primary: 0 0% 0%;        /* Pure black like Stark */
-    --text-secondary: 0 0% 30%;     /* Dark gray */
-    --text-tertiary: 0 0% 45%;      /* Medium gray */
+    --text-secondary: 0 0% 15%;     /* Even darker for strong readability */
+    --text-tertiary: 0 0% 30%;      /* Darker medium gray */
     
     --surface-primary: 0 0% 100%;    /* White */
     --surface-secondary: 30 10% 92%; /* Subtle warm gray */
@@ -38,8 +38,8 @@
     --secondary: 30 10% 90%;     /* Warm gray */
     --secondary-foreground: 0 0% 0%;
     
-    --muted: 0 0% 95%;           /* Use sunken surface */
-    --muted-foreground: 0 0% 40%;
+    --muted: 0 0% 91%;           /* Use sunken surface */
+    --muted-foreground: 0 0% 20%;  /* Even darker for strong contrast */
     
     --accent: 221 83% 53%;        /* Stark blue accent for light mode */
     --accent-foreground: 0 0% 100%;

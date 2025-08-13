@@ -24,6 +24,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Updated Card component to use proper shadow system (shadow-md default, shadow-lg on hover)
   - Removed opacity from border hover states for better visibility
   - Applied consistent semantic tokens across all 37 pages
+- **Visual Hierarchy Correction**: Fixed backwards elevation system
+  - Sidebar cards now properly elevated (white with shadows) instead of sunken
+  - Hero sections use muted backgrounds to recede appropriately
+  - Main content areas maintain proper elevation with white backgrounds
+  - All professional layout components updated for consistent hierarchy
 
 ### Changed
 

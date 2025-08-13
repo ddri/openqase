@@ -1,7 +1,7 @@
 'use client'
 
 import { useRef } from 'react'
-import GlobalSearch, { GlobalSearchRef } from '@/components/GlobalSearch'
+import LazyGlobalSearch, { LazyGlobalSearchRef } from '@/components/LazyGlobalSearch'
 import { SearchableItem } from '@/lib/content-fetchers'
 
 interface SearchCardProps {
@@ -9,7 +9,7 @@ interface SearchCardProps {
 }
 
 export default function SearchCard({ searchData }: SearchCardProps) {
-  const searchRef = useRef<GlobalSearchRef>(null)
+  const searchRef = useRef<LazyGlobalSearchRef>(null)
 
   const handleCardClick = () => {
     searchRef.current?.focus()
@@ -22,7 +22,7 @@ export default function SearchCard({ searchData }: SearchCardProps) {
     >
       <h2 className="text-xl font-semibold mb-4 text-foreground">Search Case Studies</h2>
       <div onClick={(e) => e.stopPropagation()}>
-        <GlobalSearch ref={searchRef} searchData={searchData} className="w-full" />
+        <LazyGlobalSearch ref={searchRef} searchData={searchData} className="w-full" />
       </div>
     </div>
   )

@@ -1,6 +1,14 @@
-# Unified Content Fetching System
+# Unified Content Fetching System (v0.5.0)
 
-OpenQase v0.4.0 introduces a unified content fetching system that standardizes data retrieval patterns across all content types while enabling static site generation for optimal performance.
+OpenQase v0.5.0 maintains and expands the unified content fetching system that standardizes data retrieval patterns across all content types while enabling static site generation for optimal performance.
+
+## What's new in v0.5.0
+
+- Blog post relationship support (`blog_post_relations`)
+- New helpers: `getRelatedContent`, `batchFetchContent`, `fetchSearchData`, `searchContent`
+- Clarified mixed-content filtering: relationships are de-nullified at runtime; published-only enforcement happens for main items/static params
+- Featured content workflows supported via standard filters
+- Soft delete system added (admin-only deletes with recovery)
 
 ## Overview
 
@@ -77,7 +85,7 @@ Generates static params for **published content only** to enable static site gen
 
 **Returns:** Array of `{ slug: string }` objects for published content
 
-**Behavior (v0.4.1 Update):**
+**Behavior (v0.5.0):**
 - Only returns slugs for `published: true` content
 - Prevents build warnings from unpublished content
 - Unpublished content can still be previewed via direct URLs (rendered dynamically)
@@ -108,7 +116,7 @@ The system automatically includes relationships for each content type:
 ### Case Studies
 ```typescript
 case_study_industry_relations(industries(id, name, slug))
-algorithm_case_study_relations(algorithms(id, name, slug, quantum_advantage, difficulty))
+algorithm_case_study_relations(algorithms(id, name, slug, quantum_advantage))
 case_study_persona_relations(personas(id, name, slug))
 ```
 
@@ -116,21 +124,31 @@ case_study_persona_relations(personas(id, name, slug))
 ```typescript
 algorithm_industry_relations(industries(id, name, slug))
 persona_algorithm_relations(personas(id, name, slug))
-algorithm_case_study_relations(case_studies(id, title, slug, description, published_at))
+algorithm_case_study_relations(case_studies(id, title, slug, description, published_at, published))
 ```
 
 ### Personas
 ```typescript
 persona_industry_relations(industries(id, name, slug))
-persona_algorithm_relations(algorithms(id, name, slug, difficulty))
-case_study_persona_relations(case_studies(id, title, slug, description, published_at))
+persona_algorithm_relations(algorithms(id, name, slug))
+case_study_persona_relations(case_studies(id, title, slug, description, published_at, published))
 ```
 
 ### Industries
 ```typescript
 algorithm_industry_relations(algorithms(id, name, slug, use_cases))
-case_study_industry_relations(case_studies(id, title, slug, description, published_at))
+case_study_industry_relations(case_studies(id, title, slug, description, published_at, published))
 persona_industry_relations(personas(id, name, slug))
+```
+
+### Blog Posts
+```typescript
+blog_post_relations!blog_post_relations_blog_post_id_fkey(
+  related_blog_post_id,
+  related_blog_posts:blog_posts!blog_post_relations_related_blog_post_id_fkey(
+    id, title, slug, description, published_at, author, category, tags
+  )
+)
 ```
 
 ## Performance Benefits
@@ -272,7 +290,7 @@ The system provides full TypeScript support with enriched types:
 type EnrichedAlgorithm = Database['public']['Tables']['algorithms']['Row'] & {
   algorithm_industry_relations?: { industries: { id: string; name: string; slug?: string | null } | null }[];
   persona_algorithm_relations?: { personas: { id: string; name: string; slug?: string | null } | null }[];
-  algorithm_case_study_relations?: { case_studies: { id: string; title: string; slug: string; description: string; published_at: string } | null }[];
+  algorithm_case_study_relations?: { case_studies: { id: string; title: string; slug: string; description: string; published_at: string; published: boolean } | null }[];
 };
 ```
 
@@ -285,7 +303,7 @@ The unified system enables a hybrid architecture:
 - **Admin CMS**: Dynamic API routes preserved for content management
 - **Build Process**: Clean builds without warnings from unpublished content
 
-## Mixed Content Handling (v0.4.1)
+## Mixed Content Handling (v0.5.0)
 
 **Critical Architecture Fix**: The system now handles mixed published/unpublished content gracefully.
 
@@ -296,17 +314,17 @@ Previously, the CMS would break when relationships contained unpublished content
 - Static generation failed completely when importing unpublished content
 
 ### Solution: Runtime Relationship Filtering
-The system now uses JavaScript filtering instead of database-level filtering for relationships:
+The system uses JavaScript filtering instead of database-level filtering for relationships. In v0.5.0 we remove null relationships and do not rely on nested `published` flags inside relationship payloads:
 
 ```typescript
-// ✅ NEW: Robust filtering that prevents crashes
+// ✅ Robust filtering that prevents crashes
 function filterRelationships(data: any, preview: boolean = false): any {
   const filterRelationArray = (relations: any[], nestedKey: string) => {
     return relations.filter(relation => {
       const nestedItem = relation[nestedKey];
       if (!nestedItem) return false; // Remove null relationships
       if (preview) return true; // Show all in preview mode
-      return nestedItem.published === true; // Filter by published status
+      return true; // Do not filter by nested published status at runtime
     });
   };
   
@@ -328,7 +346,7 @@ function filterRelationships(data: any, preview: boolean = false): any {
 - **Build Time**: Cleaner and faster - only builds pages for published content
 - **Database Load**: No runtime impact for published content
 
-### Publishing Workflow (v0.4.1)
+### Publishing Workflow (v0.5.0)
 1. **Draft Stage**: Content is unpublished, accessible via direct URL (dynamic rendering)
 2. **Review Stage**: Team can preview via direct URLs without build warnings
 3. **Publish Stage**: Content is published, static page generated on next build
@@ -345,14 +363,39 @@ The system is implemented in `src/lib/content-fetchers.ts` and provides:
 3. **Build-Time Safety**: Service role client prevents cookies context errors
 4. **Error Handling**: Comprehensive error handling and logging
 5. **Preview Support**: Optional preview mode for draft content
-6. **Mixed Content Resilience**: JavaScript filtering prevents null pointer crashes
+6. **Mixed Content Resilience**: JavaScript filtering prevents null pointer crashes (no nested published filtering)
+7. **Helper Utilities**: `getRelatedContent`, `batchFetchContent`, `fetchSearchData`, `searchContent`
+
+### Helper Utilities
+
+- `getRelatedContent<T>(sourceType, sourceId, targetType, options?)`: Fetch related entities via junction tables.
+  ```typescript
+  const relatedCaseStudies = await getRelatedContent('algorithms', algorithm.id, 'case_studies', { limit: 3 });
+  ```
+- `batchFetchContent<T>(contentTypes, options?)`: Fetch multiple content lists in parallel.
+  ```typescript
+  const { case_studies, blog_posts } = await batchFetchContent(['case_studies', 'blog_posts'], { limit: 2 });
+  ```
+- `fetchSearchData(options?)`: Returns search-optimized items for client-side search.
+- `searchContent<T>(contentTypes, searchTerm, options?)`: Simple multi-type search.
+
+### Featured Content
+
+Use `getStaticContentList` with filters to query featured items, e.g. homepage sections:
+```typescript
+const featuredCaseStudies = await getStaticContentList('case_studies', { filters: { featured: true }, limit: 2 });
+```
+
+### Soft Delete
+
+v0.5.0 adds a professional soft delete system (`deleted_at`, `deleted_by`) with admin-only operations and recovery. Public surfaces should not expose soft-deleted content. Admin/batch utilities may access soft-deleted records as needed per permissions.
 
 ## Future Enhancements
 
 The unified system provides a foundation for future improvements:
 
 - **Caching**: Redis-based caching for frequently accessed content
-- **Search**: Full-text search across all content types
+- **Enhanced Search**: Supabase full-text search for larger-scale content
 - **Batch Operations**: Efficient bulk content operations
 - **Content Validation**: Schema validation for content integrity
 - **API Versioning**: Versioned API endpoints for external integrations

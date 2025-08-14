@@ -1,6 +1,6 @@
 # OpenQase
 
-OpenQase is a curated collection of quantum computing business cases, with a cross-reference of the industries, algorithms, and personas that are most relevant to each. This GitHub repository features the underlying OpenQase CMS, but from scratch to serve the needs to the cross-referencing of these metadata relationships, and provided as open source for any teams looking to create their own such libraries. Note that the software is open source, but the case studies and other data are accessible via the website, the API, or (upcoming) MCP.
+OpenQase is a curated collection of quantum computing business cases, with a cross-reference of the industries, algorithms, and personas that are most relevant to each. This GitHub repository features the underlying OpenQase CMS, built from scratch to serve the needs to the cross-referencing of these metadata relationships, and provided as open source for any teams looking to create their own such libraries. Note that the software is open source, but the case studies and other data are accessible via the website, the API, or (upcoming) MCP.
 
 ## Overview
 
@@ -14,7 +14,7 @@ OpenQase provides:
 
 **OpenQase v0.5.0 delivers the requisite "blazing-fast" performance:**
 - **50-100ms page loads** (due to static renders)
-- **76 static pages** pre-generated at build time
+- **145+ static pages** pre-generated at build time
 - **Zero runtime database calls** for public content
 - **300x performance improvement** through hybrid architecture
 
@@ -161,8 +161,8 @@ The import system features:
 |--------|---------------|--------------|-------------|
 | Page Load Time | 30+ seconds | 50-100ms | **300x faster** |
 | Database Queries | 3-5 per page | 0 (static) | **100% reduction** |
-| Build Time | 2-3 minutes | 45 seconds | **60% faster** |
-| Static Pages | 0 | 76+ | **Full static generation** |
+| Build Time | 2-3 minutes | 23 seconds | **87% faster** |
+| Static Pages | 0 | 145+ | **Full static generation** |
 
 ## 🚀 Deployment
 
@@ -219,7 +219,7 @@ openqase/
     └── page-load-performance.js              # Page performance testing
 ```
 
-## 🔄 Migration Status
+## 🔄 Roadmap Status
 
 **✅ v0.5.0 Complete:**
 - Unified content fetching system
@@ -231,14 +231,20 @@ openqase/
 - Homepage redesign
 - Security hardening
 - 301 redirect management
+- Fixed critical Sentry errors (infinite recursion, module resolution)
+- Corrected visual hierarchy system with proper elevation
+- Improved accessibility with better contrast ratios
 
 **🔄 Next Phases:**
 
-### 🚀 Feature Development (High Impact)
+### 🚀 Feature Development 
+- Add Company pages (and link from the related content side boxes)
+- Add Software and Hardware pages (and link from the related content sideboxes)
 - Search functionality enhancement (basic implementation complete)
 
 ### 🛠️ Technical Debt & Infrastructure
 - **Advanced Caching with Redis** - Upgrade from in-memory rate limiting to Redis-based caching and session storage
+- **Database Function Security** - Add `SET search_path` to 9 SECURITY DEFINER functions to resolve Supabase linter warnings (low priority - functions are internal utilities)
 
 ### 📚 Documentation & Developer Experience  
 - **Authentication Documentation** - Document Supabase Auth patterns, RLS policies, and admin setup
@@ -246,7 +252,7 @@ openqase/
 - **Environment Variables Guide** - Comprehensive documentation of all environment variables
 - **Deployment Guide Expansion** - Document different deployment scenarios beyond Vercel
 
-### 📈 Growth & Scaling (Future)
+### 📈 Upcoming
 - **Enhanced Search System** - Upgrade to Supabase full-text search when content scales beyond current client-side search capabilities
   - *Current Status*: Client-side search works well for current content volume (~25 case studies, ~12 algorithms)
   - *Triggers for Implementation*: >50 case studies, user feedback about search quality, need to search inside content body
@@ -255,9 +261,7 @@ openqase/
   - *Type Safety*: Remove `as any` casts, add proper TypeScript generics for dynamic queries, improve Supabase type safety
   - *Testing Framework*: Add Jest/Vitest with unit tests, integration tests, and component testing  
   - *Implementation Trigger*: When adding multiple contributors or before major refactoring efforts
-  - *Effort*: High (1-2 weeks) - better suited for dedicated development cycles
-- **Multi-admin Support** - Add proper user roles and permissions when scaling beyond single admin
-- **Performance Monitoring Dashboard** - Build on existing performance tools for better insights
+- **Multi-admin Support** - Add additional user roles and permissions when scaling beyond single admin
 - **API Rate Limiting Improvements** - Scale rate limiting for production multi-server deployments
 
 ## Support
@@ -268,11 +272,6 @@ openqase/
 
 ---
 
-
-
-## Planned updates in upcoming releases
-
-**OpenQase v0.5.0** - Delivering quantum computing insights at quantum speed 
 
 **Note:** The following major version updates are available but require careful testing due to potential breaking changes:
 

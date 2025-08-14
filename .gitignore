@@ -103,6 +103,8 @@ backups/
 *.report.html
 lighthouse-*.html
 lighthouse-*.json
+lighthouse-reports/
+.lighthouseci/
 chromewebdata_*.html
 localhost_*.html
 

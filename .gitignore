@@ -122,3 +122,7 @@ scripts/test-*.json
 
 # Claude Code development guidelines (local only)
 CLAUDE.md
+
+# Cursor IDE configuration (may contain tokens)
+.cursor/
+src/.cursor/

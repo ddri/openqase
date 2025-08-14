@@ -6,8 +6,8 @@ This document catalogs all UI components in the OpenQase design system. Componen
 ## Design Foundation
 
 ### Themes
-- **Light** - Default clean theme with emerald accents
-- **Dark** - Dark mode with subtle graphite tones
+- **Light** - Default clean theme with warm cream backgrounds, yellow primary accents, and blue secondary accents
+- **Dark** - Dark mode with deep backgrounds and consistent accent colors
 
 ### Base Components (`src/components/ui/`)
 
@@ -280,16 +280,26 @@ This document catalogs all UI components in the OpenQase design system. Componen
 - All animations respect `prefers-reduced-motion`
 - Duration: 200ms for micro-interactions
 
-## Recent Improvements
-- ✅ Enhanced Card component with optional Framer Motion animations
-- ✅ Removed react-select dependency in favor of Radix UI Select
-- ✅ Added comprehensive component documentation
-- ✅ Improved bundle size by ~30KB while adding smooth animations
-- ✅ **NEW**: Added ContentCard variant system with grid/list layouts
-- ✅ **NEW**: Created ViewSwitcher component for content view toggling
-- ✅ **NEW**: Implemented localStorage-based view preference persistence
-- ✅ **NEW**: Extended view switcher across all content lists:
-  - CaseStudiesList with metadata display (year, company count)
-  - AlgorithmList with last updated metadata
-  - IndustryList with last updated metadata  
-  - PersonaList with last updated metadata
+## Design System Evolution
+
+### v0.5.0 Design System Updates
+- ✅ **Professional Visual Hierarchy**: Implemented proper elevation system with shadows and borders
+- ✅ **Accessibility-Focused Colors**: Improved contrast ratios (10:1+) with deep blue-black text
+- ✅ **Warm Background Palette**: Moved from stark white to warm cream for better eye comfort
+- ✅ **Strategic Color Usage**: Yellow reserved for primary CTAs, blue for secondary actions, gray for UI elements
+- ✅ **Consistent Shadow System**: Three-tier shadow progression (sm, md, lg) for visual depth
+- ✅ **Enhanced Card Components**: Proper elevation with white backgrounds and subtle shadows
+
+### Component Improvements
+- ✅ Enhanced Card component with optional animations and proper elevation
+- ✅ Added ContentCard variant system with grid/list layouts and metadata display
+- ✅ Created ViewSwitcher component for content view toggling with persistence
+- ✅ Implemented comprehensive error boundary system for better reliability
+- ✅ Extended view switcher across all content lists with appropriate metadata
+- ✅ Professional admin interface with auto-save and validation features
+
+### Performance & Bundle Optimization
+- ✅ Reduced bundle size through strategic dependency management
+- ✅ GPU-accelerated animations using CSS transforms
+- ✅ Tree-shakeable component architecture
+- ✅ Static generation for 145+ pages with zero runtime database queries

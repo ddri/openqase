@@ -103,6 +103,8 @@ backups/
 *.report.html
 lighthouse-*.html
 lighthouse-*.json
+lighthouse-reports/
+.lighthouseci/
 chromewebdata_*.html
 localhost_*.html
 
@@ -120,3 +122,7 @@ scripts/test-*.json
 
 # Claude Code development guidelines (local only)
 CLAUDE.md
+
+# Cursor IDE configuration (may contain tokens)
+.cursor/
+src/.cursor/

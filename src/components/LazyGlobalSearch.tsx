@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, Suspense, lazy } from 'react';
+import { useState, Suspense, lazy, forwardRef, useImperativeHandle } from 'react';
 import { Search } from 'lucide-react';
 import { SearchableItem } from '@/lib/content-fetchers';
 
@@ -8,7 +8,12 @@ import { SearchableItem } from '@/lib/content-fetchers';
 const GlobalSearch = lazy(() => import('./GlobalSearch'));
 
 interface LazyGlobalSearchProps {
+  searchData: SearchableItem[];
   className?: string;
+}
+
+export interface LazyGlobalSearchRef {
+  focus: () => void;
 }
 
 // Simple search input that shows before activation
@@ -47,46 +52,54 @@ function SearchLoading({ className }: { className?: string }) {
   );
 }
 
-export default function LazyGlobalSearch({ className }: LazyGlobalSearchProps) {
-  const [isSearchActive, setIsSearchActive] = useState(false);
-  const [searchData, setSearchData] = useState<SearchableItem[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
+const LazyGlobalSearch = forwardRef<LazyGlobalSearchRef, LazyGlobalSearchProps>(
+  ({ searchData, className }, ref) => {
+    const [isSearchActive, setIsSearchActive] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
 
-  const activateSearch = async () => {
-    if (isSearchActive) return;
-    
-    setIsLoading(true);
-    
-    try {
-      // Fetch search data from API endpoint
-      const response = await fetch('/api/search-data');
-      if (!response.ok) {
-        throw new Error('Failed to fetch search data');
+    // Expose focus method through ref
+    useImperativeHandle(ref, () => ({
+      focus: () => {
+        if (!isSearchActive) {
+          activateSearch();
+        }
       }
-      const data = await response.json();
-      setSearchData(data);
-      setIsSearchActive(true);
-    } catch (error) {
-      console.error('Failed to load search data:', error);
-    } finally {
-      setIsLoading(false);
+    }), [isSearchActive]);
+
+    const activateSearch = async () => {
+      if (isSearchActive) return;
+      
+      setIsLoading(true);
+      
+      try {
+        // Use the provided search data instead of fetching
+        setIsSearchActive(true);
+      } catch (error) {
+        console.error('Failed to activate search:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    // Show loading state
+    if (isLoading) {
+      return <SearchLoading className={className} />;
     }
-  };
 
-  // Show loading state
-  if (isLoading) {
-    return <SearchLoading className={className} />;
+    // Show placeholder until activated
+    if (!isSearchActive) {
+      return <SearchPlaceholder onActivate={activateSearch} className={className} />;
+    }
+
+    // Show full search component once activated
+    return (
+      <Suspense fallback={<SearchLoading className={className} />}>
+        <GlobalSearch searchData={searchData} className={className} />
+      </Suspense>
+    );
   }
+);
 
-  // Show placeholder until activated
-  if (!isSearchActive) {
-    return <SearchPlaceholder onActivate={activateSearch} className={className} />;
-  }
+LazyGlobalSearch.displayName = 'LazyGlobalSearch';
 
-  // Show full search component once activated
-  return (
-    <Suspense fallback={<SearchLoading className={className} />}>
-      <GlobalSearch searchData={searchData} className={className} />
-    </Suspense>
-  );
-}
+export default LazyGlobalSearch;

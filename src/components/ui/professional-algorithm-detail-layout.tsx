@@ -116,7 +116,7 @@ export default function ProfessionalAlgorithmDetailLayout({
           {/* Professional Sidebar */}
           <aside className="space-y-6">
             {/* Algorithm Properties */}
-            <div className="bg-muted/40 rounded-lg p-6 border border-border/50">
+            <div className="bg-card rounded-lg p-6 border border-border shadow-sm">
               <h3 className="text-lg font-semibold mb-4 text-foreground flex items-center gap-2">
                 <Cpu className="h-4 w-4" />
                 Algorithm Details
@@ -139,7 +139,7 @@ export default function ProfessionalAlgorithmDetailLayout({
 
             {/* Related Industries */}
             {algorithm.algorithm_industry_relations && algorithm.algorithm_industry_relations.length > 0 && (
-              <div className="bg-muted/40 rounded-lg p-6 border border-border/50">
+              <div className="bg-card rounded-lg p-6 border border-border shadow-sm">
                 <h3 className="text-lg font-semibold mb-4 text-foreground flex items-center gap-2">
                   <Building className="h-4 w-4" />
                   Related Industries
@@ -171,7 +171,7 @@ export default function ProfessionalAlgorithmDetailLayout({
 
             {/* Related Personas */}
             {algorithm.persona_algorithm_relations && algorithm.persona_algorithm_relations.length > 0 && (
-              <div className="bg-muted/40 rounded-lg p-6 border border-border/50">
+              <div className="bg-card rounded-lg p-6 border border-border shadow-sm">
                 <h3 className="text-lg font-semibold mb-4 text-foreground flex items-center gap-2">
                   <Users className="h-4 w-4" />
                   Target Roles

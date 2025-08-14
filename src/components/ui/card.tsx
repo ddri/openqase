@@ -33,8 +33,8 @@ type CardProps = StaticCardProps | AnimatedCardProps;
 
 const Card = React.forwardRef<HTMLDivElement, CardProps>(
   ({ className, fixedHeight = false, height = 210, animated = false, ...props }, ref) => {
-    const baseClassName = `relative rounded-lg border border-border bg-card shadow-sm 
-      transition-all duration-200 hover:shadow-md hover:border-primary/30
+    const baseClassName = `relative rounded-lg border border-border bg-card shadow-md 
+      transition-all duration-200 hover:shadow-lg hover:border-primary
       ${fixedHeight ? 'flex flex-col' : ''} ${className || ""}`;
     
     const style = fixedHeight ? { height: `${height}px` } : undefined;
@@ -47,7 +47,7 @@ const Card = React.forwardRef<HTMLDivElement, CardProps>(
           className={baseClassName}
           style={style}
           whileHover={{ 
-            y: -2,
+            y: -1,
             transition: { duration: 0.2, ease: "easeOut" }
           }}
           {...motionProps}

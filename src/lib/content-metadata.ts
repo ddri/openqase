@@ -117,5 +117,32 @@ export function getContentMetadata(
   item: any,
   viewMode: ViewMode
 ): Array<string | number> {
-  return useContentMetadata(contentType, item, viewMode);
+  const config = contentMetadataConfig[contentType];
+  
+  if (!config) {
+    console.warn(`No metadata configuration found for content type: ${contentType}`);
+    return [];
+  }
+  
+  // Only show metadata in list view (grid view shows no metadata by default)
+  if (viewMode !== 'list') {
+    return [];
+  }
+  
+  // Get the appropriate extractor (list for list view, fallback to list if grid not defined)
+  const extractor = config.list;
+  
+  if (!extractor) {
+    return [];
+  }
+  
+  try {
+    // Extract metadata and filter out null/undefined values
+    return extractor(item).filter((value): value is string | number => 
+      value !== null && value !== undefined
+    );
+  } catch (error) {
+    console.warn(`Error extracting metadata for ${contentType}:`, error);
+    return [];
+  }
 }

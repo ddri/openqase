@@ -1,6 +1,6 @@
 # Scripts Documentation
 
-OpenQase includes various utility scripts for development, administration, and data management.
+OpenQase includes various utility scripts for development, administration, and data management. The import system is highly experimental so this is for reference only for the brave at heart.
 
 ## Import System Scripts
 

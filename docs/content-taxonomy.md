@@ -1,139 +1,127 @@
-# Content Taxonomy
+# Content Taxonomy (v0.5.0)
 
-This document defines the categorization system for OpenQase learning path content, including badges and filters used across different content types.
+This document defines the categorization system used across OpenQase for badges and filters. In v0.5.0, the taxonomy covers Algorithms, Personas, and Industries.
 
-## Industries - Sector Classification
+Alignment with data model (v0.5.0)
+- Algorithms: use `use_cases` (string[]) and optionally surface `quantum_advantage` as a highlight
+- Personas: use `role` (string) and `industry` (string[]) associations
+- Industries: use `name` and optional `icon`; sectors are defined here for navigation and tagging
 
-Industries are categorized by business sector to help users find quantum computing applications relevant to their field.
+## Industries — Canonical Set and Sector Classification
 
-### Financial Services
-- Banking
-- Insurance
-- Investment Management
-- Credit & Lending
-- Fintech
+Canonical industries (v0.5.0):
 
-### Healthcare & Life Sciences
-- Pharmaceuticals
-- Biotechnology
-- Medical Devices
-- Healthcare Providers
-- Clinical Research
-
-### Technology & Communications
-- Telecommunications
-- Software & IT Services
-- Cybersecurity
-- Cloud Computing
-- Semiconductors
-
-### Energy & Utilities
-- Oil & Gas
-- Renewable Energy
-- Electric Utilities
-- Energy Storage
-- Smart Grid
-
-### Industrial & Manufacturing
-- Automotive
 - Aerospace
+- Agriculture
+- AI and Machine Learning
+- Automotive
 - Chemical Manufacturing
-- Supply Chain & Logistics
+- Climate and Environment
+- Cybersecurity
+- Defence
+- Education
+- Energy
+- Finance
+- Government and Public Sector
+- Healthcare
+- Logistics and Supply Chain
 - Materials Science
+- Pharmaceutical
+- Retail
+- Telecommunications
 
-### Public Sector
-- Government
-- Defense & Security
-- Transportation Infrastructure
-- Smart Cities
-- Education & Research
+Sectors (for grouping/search facets):
 
-### Consumer & Retail
-- Retail & E-commerce
-- Consumer Goods
-- Media & Entertainment
-- Gaming
-- Food & Beverage
+- Financial Services
+- Healthcare & Life Sciences
+- Technology & Communications
+- Energy & Utilities
+- Industrial & Manufacturing
+- Public Sector
+- Consumer & Retail
 
-## Personas - Expertise Classification
+## Personas — Expertise Classification
 
-Personas are categorized by professional expertise and role type to help users find content relevant to their position and responsibilities.
+Used to describe audience roles for learning paths and to filter content by professional background. Canonical list of personas (14):
 
-### Business Leadership
-- CEO
-- CTO
-- Chief Innovation Officer
-- Strategic Advisor
-- VP of Technology
-- Director of R&D
-
-### Technical Roles
+- Business Decision-Maker
+- Cybersecurity Specialist
+- Domain Expert
+- Financial Services Specialist
+- Government Representative
+- Investment Professional
+- Quantum Algorithm Developer
+- Quantum Chemist
+- Quantum Cloud and Platform Provider
+- Quantum Educator
+- Quantum Hardware Engineer
+- Quantum Solutions Provider
 - Software Engineer
-- Data Scientist
-- Quantum Researcher
-- Systems Architect
-- Machine Learning Engineer
-- Research Scientist
+- Systems Integration Engineer
 
-### Functional Expertise
-- Product Manager
-- Business Analyst
-- Operations Manager
-- Strategy Consultant
-- Technology Evangelist
-- Innovation Manager
 
-### Industry Specialists
-- Financial Analyst
-- Healthcare Professional
-- Defense Contractor
-- Energy Consultant
-- Manufacturing Engineer
-- Academic Researcher
+## Algorithms — Canonical Set and Use Case Classification
 
-## Algorithms - Use Case Classification
+Canonical algorithms (v0.5.0):
 
-Algorithms are categorized by their primary application domains and use cases to help users find quantum algorithms relevant to their problems.
+- Bernstein-Vazirani algorithm
+- Deutsch-Jozsa Algorithm
+- Grover's Algorithm
+- Harrow-Hassidim-Lloyd (HHL)
+- Quantum Amplitude Amplification (QAA)
+- Quantum Annealing (QA)
+- Quantum Approximate Optimization Algorithm (QAOA)
+- Quantum Boltzmann Machines
+- Quantum Counting Algorithm (QCA)
+- Quantum Error Correction (QEC)
+- Quantum Fourier Transform (QFT)
+- Quantum Gradient Descent (QGD)
+- Quantum K-Means Clustering
+- Quantum Phase Estimation (QPE)
+- Quantum Principal Component Analysis (QPCA)
+- Quantum Support Vector Machine (QSVM)
+- Quantum Walk Algorithm
+- Shor's Algorithm
+- Simon's Algorithm
+- Variational Quantum Eigensolver (VQE)
 
-### Optimization
-- Portfolio Optimization
-- Route Planning
-- Resource Allocation
-- Supply Chain Optimization
-- Scheduling
-- Parameter Tuning
+Use case classification (stored in `use_cases`):
 
-### Machine Learning
-- Classification
-- Clustering
-- Feature Selection
-- Pattern Recognition
-- Regression Analysis
-- Anomaly Detection
-
-### Security & Cryptography
-- Quantum Key Distribution
-- Secure Communication
-- Encryption
-- Digital Signatures
-- Authentication
-- Privacy Protection
-
-### Simulation & Modeling
-- Molecular Simulation
-- Financial Risk Modeling
-- Drug Discovery
-- Materials Science
-- Climate Modeling
-- Chemical Reactions
-
-### Search & Information
-- Database Search
-- Information Retrieval
-- Content Matching
-- Data Mining
-- Knowledge Discovery
-- Graph Search
+- Optimization
+  - Portfolio Optimization
+  - Route Planning
+  - Resource Allocation
+  - Supply Chain Optimization
+  - Scheduling
+  - Parameter Tuning
+- Machine Learning
+  - Classification
+  - Clustering
+  - Feature Selection
+  - Pattern Recognition
+  - Regression Analysis
+  - Anomaly Detection
+- Security & Cryptography
+  - Quantum Key Distribution
+  - Secure Communication
+  - Encryption
+  - Digital Signatures
+  - Authentication
+  - Privacy Protection
+- Simulation & Modeling
+  - Molecular Simulation
+  - Financial Risk Modeling
+  - Drug Discovery
+  - Materials Science
+  - Climate Modeling
+  - Chemical Reactions
+- Search & Information
+  - Database Search
+  - Information Retrieval
+  - Content Matching
+  - Data Mining
+  - Knowledge Discovery
+  - Graph Search
 
 ## Implementation Guidelines
 

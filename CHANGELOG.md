@@ -2,14 +2,32 @@
 
 All notable changes to this project will be documented in this file.
 
-The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
-and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
-
 ## [Unreleased]
 
-## [0.5.0] - 2025-01-11
+### Added
+
+### Fixed
+
+### Changed
+
+## [0.5.0] - 2025-08-13
 
 ### Added
+- **Complete Design System Documentation**: Created comprehensive design system page at `/design-system`
+  - Live component examples with actual Card components
+  - Interactive light/dark mode toggle
+  - Typography scale, color palette, and shadow system documentation
+  - Clear Do's and Don'ts guidelines
+- **Design System Architecture**: Created `/lib/design-system.ts` as single source of truth
+  - Centralized design tokens and component styles
+  - Documented design rules and principles
+  - Utility functions for consistent styling
+- **Improved Design System**: Implemented accessibility-focused color improvements
+  - Warmer Light Mode background for better visual comfort
+  - Deeper blue-black text for higher contrast (10:1+ ratio)
+  - Blue secondary accent color to complement yellow primary
+  - Shadow elevation system for visual hierarchy
+  - Card hover effects with elevation changes
 - **Complete Soft Delete System**: Implemented professional content deletion system across all content types
   - Added `deleted_at` and `deleted_by` columns to all content tables (case studies, blog posts, algorithms, industries, personas)
   - Created secure `soft_delete_content()` and `recover_content()` database functions with SQL injection protection
@@ -45,6 +63,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Production database updated with all new schema changes
   - Added performance indexes for featured content queries
   - Implemented secure database functions with proper permission grants
+- **Professional Design System Implementation**: Complete overhaul with cue from Material Design principles
+  - Background remains warm cream for comfort
+  - Shadow system strengthened for actual visible elevation
+  - All cards now have proper borders AND shadows for definition
+- **Strategic Accent Color Usage**: Fixed yellow overuse
+  - Icons changed from yellow to gray (professional look)
+  - Numbers changed from yellow to bold black (emphasis through weight)
+  - Links changed from yellow to gray with subtle hover states
+  - Yellow reserved only for primary CTAs and key interactions
+- **Improved Visual Hierarchy**: Systematic elevation and spacing
+  - Consistent shadow progression (sm, md, lg) indicates importance
+  - Increased section padding and grid gaps for breathing room
+  - Rounded corners on all cards for modern feel
+  - Removed unnecessary hover translations (elevation via shadow only)
 
 ### Security
 - **API Content Exposure**: Fixed critical vulnerability where unpublished content could be accessed via public API endpoints
@@ -73,10 +105,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Authentication Middleware**: Corrected authentication flow for production deployment
   - Removed development-only localhost bypasses
   - Ensured proper authentication requirements for all admin operations
+- **Critical Sentry Errors**: Fixed production errors affecting user experience
+  - Resolved infinite recursion in content metadata extraction (RangeError: Maximum call stack size exceeded)
+  - Fixed React Server Components module resolution error for GlobalSearch component
+  - Improved build performance and reduced homepage bundle size (4.57kB → 3.17kB)
+- **Design System Consistency**: Comprehensive audit and fixes across entire codebase
+  - Fixed hard-coded colors in NewsletterSignup and AlphaBanner components
+  - Updated Card component to use proper shadow system (shadow-md default, shadow-lg on hover)
+  - Removed opacity from border hover states for better visibility
+  - Applied consistent semantic tokens across all 145+ pages
+- **Visual Hierarchy Correction**: Fixed backwards elevation system
+  - Sidebar cards now properly elevated (white with shadows) instead of sunken
+  - Hero sections use muted backgrounds to recede appropriately
+  - Main content areas maintain proper elevation with white backgrounds
+  - All professional layout components updated for consistent hierarchy
 
 ### Removed
 - **Development Artifacts**: Cleaned up temporary files and development tools
-  - Removed DELETEPLAN.md and other temporary planning documents
   - Deleted migrations_backup folder with broken migration files
   - Cleaned up unused development scripts and temporary SQL files
 - **Redundant Homepage Sections**: Streamlined homepage content

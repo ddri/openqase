@@ -116,7 +116,7 @@ export default function ProfessionalPersonaDetailLayout({
           {/* Professional Sidebar */}
           <aside className="space-y-6">
             {/* Persona Profile */}
-            <div className="bg-muted/40 rounded-lg p-6 border border-border/50">
+            <div className="bg-card rounded-lg p-6 border border-border shadow-sm">
               <h3 className="text-lg font-semibold mb-4 text-foreground flex items-center gap-2">
                 <Users className="h-4 w-4" />
                 Professional Profile
@@ -139,7 +139,7 @@ export default function ProfessionalPersonaDetailLayout({
 
             {/* Related Industries */}
             {persona.persona_industry_relations && persona.persona_industry_relations.length > 0 && (
-              <div className="bg-muted/40 rounded-lg p-6 border border-border/50">
+              <div className="bg-card rounded-lg p-6 border border-border shadow-sm">
                 <h3 className="text-lg font-semibold mb-4 text-foreground flex items-center gap-2">
                   <Building className="h-4 w-4" />
                   Related Industries

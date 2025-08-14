@@ -20,7 +20,7 @@ export default function AlphaBanner() {
         </div>
         <button 
           onClick={() => setIsVisible(false)}
-          className="ml-4 p-1.5 hover:bg-white/20 rounded-sm opacity-90 hover:opacity-100 transition-all"
+          className="ml-4 p-1.5 hover:bg-primary-foreground/20 rounded-sm opacity-90 hover:opacity-100 transition-all"
           aria-label="Close alpha banner"
         >
           <X className="h-3.5 w-3.5" />

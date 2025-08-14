@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, forwardRef, useImperativeHandle } from 'react';
 import Link from 'next/link';
 import { Search, ArrowRight } from 'lucide-react';
 import { useGlobalSearch, GroupedSearchResults, SearchResult } from '@/hooks/useGlobalSearch';
@@ -10,6 +10,10 @@ import { cn } from '@/lib/utils';
 interface GlobalSearchProps {
   searchData: SearchableItem[];
   className?: string;
+}
+
+export interface GlobalSearchRef {
+  focus: () => void;
 }
 
 interface SearchResultItemProps {
@@ -124,7 +128,8 @@ function SearchResultGroup({ title, results, maxResults = 3, onSelect }: SearchR
 }
 
 // Main search component
-export default function GlobalSearch({ searchData, className }: GlobalSearchProps) {
+const GlobalSearch = forwardRef<GlobalSearchRef, GlobalSearchProps>(
+  ({ searchData, className }, ref) => {
   const {
     searchQuery,
     searchResults,
@@ -137,6 +142,13 @@ export default function GlobalSearch({ searchData, className }: GlobalSearchProp
 
   const searchRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+
+  // Expose focus method through ref
+  useImperativeHandle(ref, () => ({
+    focus: () => {
+      inputRef.current?.focus();
+    }
+  }), []);
 
   // Handle click outside to close search
   useEffect(() => {
@@ -239,4 +251,8 @@ export default function GlobalSearch({ searchData, className }: GlobalSearchProp
       )}
     </div>
   );
-}
+});
+
+GlobalSearch.displayName = 'GlobalSearch';
+
+export default GlobalSearch;

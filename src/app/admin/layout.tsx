@@ -6,7 +6,11 @@ import {
   Users,
   BookOpen,
   Settings,
-  PenTool
+  PenTool,
+  Cpu,
+  HardDrive,
+  Building2,
+  HandHeart
 } from 'lucide-react';
 
 export default function AdminLayout({
@@ -20,6 +24,10 @@ export default function AdminLayout({
     { href: '/admin/algorithms', label: 'Algorithms', icon: <BookOpen className="h-4 w-4" /> },
     { href: '/admin/industries', label: 'Industries', icon: <Briefcase className="h-4 w-4" /> },
     { href: '/admin/personas', label: 'Personas', icon: <Users className="h-4 w-4" /> },
+    { href: '/admin/quantum-software', label: 'Quantum Software', icon: <Cpu className="h-4 w-4" /> },
+    { href: '/admin/quantum-hardware', label: 'Quantum Hardware', icon: <HardDrive className="h-4 w-4" /> },
+    { href: '/admin/quantum-companies', label: 'Quantum Companies', icon: <Building2 className="h-4 w-4" /> },
+    { href: '/admin/partner-companies', label: 'Partner Companies', icon: <HandHeart className="h-4 w-4" /> },
     { href: '/admin/blog', label: 'Blog', icon: <PenTool className="h-4 w-4" /> },
     { href: '/admin/settings', label: 'Settings', icon: <Settings className="h-4 w-4" /> },
   ];

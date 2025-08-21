@@ -3,6 +3,55 @@ import { ArrowLeft, Users, Cpu, ExternalLink } from 'lucide-react';
 import Link from 'next/link';
 import { Badge } from '@/components/ui/badge';
 
+// Helper function to render clickable links or fallback to static badges
+// MIGRATION NOTE: This function handles both new relationship data and legacy string arrays
+// Legacy support (string[]) will be removed after production verification - see cleanup-legacy-fields-migration.sql
+function renderEntityLinks(
+  entities: Array<{ id: string; name: string; slug?: string | null }> | string[] | undefined,
+  basePath: string,
+  title: string
+) {
+  if (!entities || entities.length === 0) return null;
+
+  return (
+    <div>
+      <div className="text-sm text-muted-foreground mb-2">{title}</div>
+      <div className="flex flex-wrap gap-1.5">
+        {entities.map((entity, index) => {
+          // Handle new relationship format (preferred)
+          if (typeof entity === 'object' && entity.name) {
+            if (entity.slug) {
+              return (
+                <Link key={entity.id} href={`/paths/${basePath}/${entity.slug}`}>
+                  <Badge variant="outline" className="text-xs hover:bg-primary hover:text-primary-foreground transition-colors cursor-pointer">
+                    {entity.name}
+                  </Badge>
+                </Link>
+              );
+            } else {
+              return (
+                <Badge key={entity.id} variant="outline" className="text-xs">
+                  {entity.name}
+                </Badge>
+              );
+            }
+          }
+          // DEPRECATED: Handle legacy string format as fallback
+          // TODO: Remove this after legacy fields are dropped from database
+          else if (typeof entity === 'string') {
+            return (
+              <Badge key={`${title}-${index}`} variant="outline" className="text-xs">
+                {entity}
+              </Badge>
+            );
+          }
+          return null;
+        })}
+      </div>
+    </div>
+  );
+}
+
 interface ProfessionalCaseStudyLayoutProps {
   title: string;
   description?: string;
@@ -71,30 +120,16 @@ export default function ProfessionalCaseStudyLayout({
                   </div>
                 )}
 
-                {caseStudy.partner_companies && caseStudy.partner_companies.length > 0 && (
-                  <div>
-                    <div className="text-sm text-muted-foreground mb-2">Partner Companies</div>
-                    <div className="flex flex-wrap gap-1.5">
-                      {caseStudy.partner_companies.map((company: string) => (
-                        <Badge key={company} variant="outline" className="text-xs">
-                          {company}
-                        </Badge>
-                      ))}
-                    </div>
-                  </div>
+                {renderEntityLinks(
+                  caseStudy.case_study_partner_company_relations?.map((rel: any) => rel.partner_companies).filter(Boolean) || caseStudy.partner_companies,
+                  'partner-companies',
+                  'Partner Companies'
                 )}
 
-                {caseStudy.quantum_companies && caseStudy.quantum_companies.length > 0 && (
-                  <div>
-                    <div className="text-sm text-muted-foreground mb-2">Quantum Companies</div>
-                    <div className="flex flex-wrap gap-1.5">
-                      {caseStudy.quantum_companies.map((company: string) => (
-                        <Badge key={company} variant="outline" className="text-xs">
-                          {company}
-                        </Badge>
-                      ))}
-                    </div>
-                  </div>
+                {renderEntityLinks(
+                  caseStudy.case_study_quantum_company_relations?.map((rel: any) => rel.quantum_companies).filter(Boolean) || caseStudy.quantum_companies,
+                  'quantum-companies',
+                  'Quantum Companies'
                 )}
               </div>
             </div>
@@ -103,33 +138,50 @@ export default function ProfessionalCaseStudyLayout({
             <div className="bg-card rounded-lg p-6 border border-border shadow-sm">
               <h3 className="text-lg font-semibold mb-4 text-foreground">Technical Details</h3>
               <div className="space-y-4">
-                {caseStudy.quantum_hardware && caseStudy.quantum_hardware.length > 0 && (
-                  <div>
-                    <div className="text-sm text-muted-foreground mb-2 flex items-center gap-1">
-                      <Cpu className="h-3 w-3" />
-                      Quantum Hardware
-                    </div>
-                    <div className="flex flex-wrap gap-1.5">
-                      {caseStudy.quantum_hardware.map((hardware: string) => (
-                        <Badge key={hardware} variant="outline" className="text-xs">
-                          {hardware}
-                        </Badge>
-                      ))}
-                    </div>
+                <div>
+                  <div className="text-sm text-muted-foreground mb-2 flex items-center gap-1">
+                    <Cpu className="h-3 w-3" />
+                    Quantum Hardware
                   </div>
-                )}
+                  <div className="flex flex-wrap gap-1.5">
+                    {(() => {
+                      const hardwareEntities = caseStudy.case_study_quantum_hardware_relations?.map((rel: any) => rel.quantum_hardware).filter(Boolean) || caseStudy.quantum_hardware;
+                      if (!hardwareEntities || hardwareEntities.length === 0) return null;
+                      
+                      return hardwareEntities.map((entity: any, index: number) => {
+                        if (typeof entity === 'object' && entity.name) {
+                          if (entity.slug) {
+                            return (
+                              <Link key={entity.id} href={`/paths/quantum-hardware/${entity.slug}`}>
+                                <Badge variant="outline" className="text-xs hover:bg-primary hover:text-primary-foreground transition-colors cursor-pointer">
+                                  {entity.name}
+                                </Badge>
+                              </Link>
+                            );
+                          } else {
+                            return (
+                              <Badge key={entity.id} variant="outline" className="text-xs">
+                                {entity.name}
+                              </Badge>
+                            );
+                          }
+                        } else if (typeof entity === 'string') {
+                          return (
+                            <Badge key={`hardware-${index}`} variant="outline" className="text-xs">
+                              {entity}
+                            </Badge>
+                          );
+                        }
+                        return null;
+                      });
+                    })()}
+                  </div>
+                </div>
 
-                {caseStudy.quantum_software && caseStudy.quantum_software.length > 0 && (
-                  <div>
-                    <div className="text-sm text-muted-foreground mb-2">Quantum Software</div>
-                    <div className="flex flex-wrap gap-1.5">
-                      {caseStudy.quantum_software.map((software: string) => (
-                        <Badge key={software} variant="outline" className="text-xs">
-                          {software}
-                        </Badge>
-                      ))}
-                    </div>
-                  </div>
+                {renderEntityLinks(
+                  caseStudy.case_study_quantum_software_relations?.map((rel: any) => rel.quantum_software).filter(Boolean) || caseStudy.quantum_software,
+                  'quantum-software',
+                  'Quantum Software'
                 )}
               </div>
             </div>

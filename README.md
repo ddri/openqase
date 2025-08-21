@@ -87,6 +87,7 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 ## 📚 Documentation
 
 ### Core System
+- **[API & Relationships Architecture](./docs/api-relationships-architecture.md)** - How content types connect and enable discovery
 - **[Unified Content Fetching](./docs/unified-content-fetching.md)** - Complete API documentation
 - **[Data Fetching](./docs/data-fetching.md)** - Updated patterns and best practices
 - **[Quick Reference](./docs/v040-quick-reference.md)** - Developer quick start guide

@@ -6,7 +6,7 @@ import { Badge } from '@/components/ui/badge';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
-import { Users, Building2, Atom } from 'lucide-react';
+import { Users, Building2, Atom, Code, Cpu, Factory, Handshake } from 'lucide-react';
 
 export const metadata: Metadata = {
   title: 'Related Content | Find Quantum Computing Case Studies by Role & Industry - OpenQase',
@@ -33,6 +33,30 @@ export default async function LearningPathsPage() {
       description: "Learn specific quantum algorithms and their applications.",
       href: "/paths/algorithm",
       Icon: Atom
+    },
+    {
+      title: "Quantum Software",
+      description: "Explore quantum computing frameworks, libraries, and development tools.",
+      href: "/paths/quantum-software",
+      Icon: Code
+    },
+    {
+      title: "Quantum Hardware",
+      description: "Discover quantum processors, systems, and computing platforms.",
+      href: "/paths/quantum-hardware",
+      Icon: Cpu
+    },
+    {
+      title: "Quantum Companies",
+      description: "Learn about companies building quantum computing solutions.",
+      href: "/paths/quantum-companies",
+      Icon: Factory
+    },
+    {
+      title: "Partner Companies",
+      description: "Explore organizations collaborating on quantum initiatives.",
+      href: "/paths/partner-companies",
+      Icon: Handshake
     }
   ];
 

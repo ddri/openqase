@@ -4,8 +4,9 @@ import type { Database } from '@/types/supabase';
 import { Badge } from '@/components/ui/badge';
 import { processMarkdown } from '@/lib/markdown-server';
 import Link from 'next/link';
-import { ExternalLink, Github, FileText, Building2 } from 'lucide-react';
+import { ExternalLink, Github, FileText, Building2, Factory, Handshake } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { createServerSupabaseClient } from '@/lib/supabase-server';
 
 type EnrichedQuantumSoftware = Database['public']['Tables']['quantum_software']['Row'] & {
   case_study_quantum_software_relations?: { case_studies: { id: string; title: string; slug: string; description: string; published_at: string } | null }[];
@@ -17,8 +18,50 @@ interface QuantumSoftwarePageProps {
   }>;
 }
 
+// Helper functions to fetch related entities through case studies
+async function getRelatedQuantumCompanies(caseStudyIds: string[]) {
+  const supabase = await createServerSupabaseClient();
+  const { data } = await supabase
+    .from('case_study_quantum_company_relations')
+    .select('quantum_companies(id, name, slug)')
+    .in('case_study_id', caseStudyIds);
+  
+  return data?.map(rel => rel.quantum_companies).filter(Boolean) || [];
+}
+
+async function getRelatedPartnerCompanies(caseStudyIds: string[]) {
+  const supabase = await createServerSupabaseClient();
+  const { data } = await supabase
+    .from('case_study_partner_company_relations')
+    .select('partner_companies(id, name, slug)')
+    .in('case_study_id', caseStudyIds);
+  
+  return data?.map(rel => rel.partner_companies).filter(Boolean) || [];
+}
+
 export async function generateStaticParams() {
   return generateStaticParamsForContentType('quantum_software');
+}
+
+export async function generateMetadata({ params }: QuantumSoftwarePageProps) {
+  const resolvedParams = await params;
+  
+  const quantumSoftware = await getStaticContentWithRelationships<EnrichedQuantumSoftware>(
+    'quantum_software',
+    resolvedParams.slug
+  );
+  
+  if (!quantumSoftware) {
+    return {
+      title: 'Not Found',
+      description: 'The page you are looking for does not exist.',
+    };
+  }
+  
+  return {
+    title: `${quantumSoftware.name} - Quantum Software | OpenQase`,
+    description: quantumSoftware.description || `Learn about ${quantumSoftware.name}, a quantum software platform featured in OpenQase case studies.`,
+  };
 }
 
 export default async function QuantumSoftwareDetailPage({ params }: QuantumSoftwarePageProps) {
@@ -42,6 +85,17 @@ export default async function QuantumSoftwareDetailPage({ params }: QuantumSoftw
   const relatedCaseStudies = quantumSoftware.case_study_quantum_software_relations
     ?.map(relation => relation.case_studies)
     .filter((cs): cs is NonNullable<typeof cs> => cs !== null) || [];
+
+  // Get case study IDs for finding related companies
+  const caseStudyIds = relatedCaseStudies.map(cs => cs.id);
+
+  // Fetch related quantum companies through shared case studies
+  const relatedQuantumCompanies = caseStudyIds.length > 0 ? 
+    await getRelatedQuantumCompanies(caseStudyIds) : [];
+
+  // Fetch related partner companies through shared case studies
+  const relatedPartners = caseStudyIds.length > 0 ? 
+    await getRelatedPartnerCompanies(caseStudyIds) : [];
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-8">
@@ -155,38 +209,93 @@ export default async function QuantumSoftwareDetailPage({ params }: QuantumSoftw
         </Card>
       )}
 
+      {/* Related Companies */}
+      {(relatedQuantumCompanies.length > 0 || relatedPartners.length > 0) && (
+        <div className="space-y-8 mb-8">
+          {/* Related Quantum Companies */}
+          {relatedQuantumCompanies.length > 0 && (
+            <div>
+              <div className="flex items-center gap-2 mb-3">
+                <Factory className="h-5 w-5 text-primary" />
+                <h3 className="text-lg font-semibold">Quantum Companies</h3>
+              </div>
+              <p className="text-sm text-muted-foreground mb-4">
+                These quantum computing companies actively use {quantumSoftware.name} in their research, development, and commercial quantum applications.
+              </p>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                {relatedQuantumCompanies.map(company => (
+                  <Link 
+                    key={company.id} 
+                    href={`/paths/quantum-companies/${company.slug}`}
+                    className="block p-3 border rounded-lg hover:bg-accent transition-colors"
+                  >
+                    <div className="font-medium text-sm">{company.name}</div>
+                    <div className="text-xs text-muted-foreground mt-1">Quantum Computing Company</div>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Related Partner Companies */}
+          {relatedPartners.length > 0 && (
+            <div>
+              <div className="flex items-center gap-2 mb-3">
+                <Handshake className="h-5 w-5 text-primary" />
+                <h3 className="text-lg font-semibold">Partner Organizations</h3>
+              </div>
+              <p className="text-sm text-muted-foreground mb-4">
+                These partner organizations collaborate with quantum teams using {quantumSoftware.name} for joint research projects and enterprise quantum initiatives.
+              </p>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                {relatedPartners.map(partner => (
+                  <Link 
+                    key={partner.id} 
+                    href={`/paths/partner-companies/${partner.slug}`}
+                    className="block p-3 border rounded-lg hover:bg-accent transition-colors"
+                  >
+                    <div className="font-medium text-sm">{partner.name}</div>
+                    <div className="text-xs text-muted-foreground mt-1">Strategic Partner</div>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+
       {/* Related Case Studies */}
       {relatedCaseStudies.length > 0 && (
-        <Card>
-          <CardHeader>
-            <CardTitle>Related Case Studies</CardTitle>
-            <p className="text-sm text-muted-foreground">
-              Case studies featuring {quantumSoftware.name}
-            </p>
-          </CardHeader>
-          <CardContent>
-            <div className="grid gap-4">
-              {relatedCaseStudies.map(caseStudy => (
-                <div key={caseStudy.id} className="border rounded-lg p-4 hover:bg-accent transition-colors">
-                  <h3 className="font-semibold mb-2">
-                    <Link 
-                      href={`/case-study/${caseStudy.slug}`}
-                      className="hover:text-primary transition-colors"
-                    >
-                      {caseStudy.title}
-                    </Link>
-                  </h3>
-                  <p className="text-sm text-muted-foreground line-clamp-2">
-                    {caseStudy.description}
-                  </p>
-                  <div className="mt-2 text-xs text-muted-foreground">
-                    {new Date(caseStudy.published_at).toLocaleDateString()}
-                  </div>
+        <div>
+          <div className="flex items-center gap-2 mb-3">
+            <FileText className="h-5 w-5 text-primary" />
+            <h3 className="text-lg font-semibold">Related Case Studies</h3>
+          </div>
+          <p className="text-sm text-muted-foreground mb-4">
+            These case studies demonstrate real-world applications and implementations using {quantumSoftware.name} in quantum computing projects.
+          </p>
+          <div className="grid grid-cols-1 gap-3">
+            {relatedCaseStudies.map(caseStudy => (
+              <Link 
+                key={caseStudy.id} 
+                href={`/case-study/${caseStudy.slug}`}
+                className="block p-4 border rounded-lg hover:border-primary/50 transition-colors"
+              >
+                <div className="font-medium text-sm mb-2">{caseStudy.title}</div>
+                <p className="text-xs text-muted-foreground line-clamp-2 mb-2">
+                  {caseStudy.description}
+                </p>
+                <div className="text-xs text-muted-foreground">
+                  {new Date(caseStudy.published_at).toLocaleDateString('en-GB', {
+                    day: '2-digit',
+                    month: '2-digit', 
+                    year: 'numeric'
+                  })}
                 </div>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
+              </Link>
+            ))}
+          </div>
+        </div>
       )}
     </div>
   );

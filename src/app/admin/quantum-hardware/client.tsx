@@ -85,14 +85,6 @@ export function QuantumHardwareClient({ data }: QuantumHardwareClientProps) {
       ),
     },
     {
-      accessorKey: 'updated_at',
-      header: 'Last Updated',
-      cell: ({ row }) => {
-        const date = row.original.updated_at
-        return date ? new Date(date).toLocaleDateString() : 'N/A'
-      },
-    },
-    {
       id: 'actions',
       header: 'Actions',
       cell: ({ row }) => (

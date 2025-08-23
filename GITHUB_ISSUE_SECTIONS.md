@@ -23,8 +23,9 @@ Create four new content types with:
 - [x] **Phase 5**: Frontend updates - Convert badges to clickable links
 - [x] **Phase 6**: API updates - Content fetchers and relationships
 - [x] **Phase 6.5**: Technical Debt Resolution - API standardization and code cleanup
-- [ ] **Phase 7**: Testing - Data integrity, functionality, performance
-- [ ] **Phase 8**: Cleanup - Remove old fields after verification
+- [ ] **Phase 7**: Public Pages - Build user-facing list and detail pages  
+- [ ] **Phase 8**: Testing - Data integrity, functionality, performance
+- [ ] **Phase 9**: Cleanup - Remove old fields after verification
 
 ## Acceptance Criteria
 - [ ] All existing tags migrated without data loss
@@ -204,13 +205,239 @@ Before proceeding to testing, we need to address technical inconsistencies that 
 ### Recommendation
 **Go with Option A for API standardization** - the upfront investment will pay dividends in maintenance and feature additions. The other issues can use simpler solutions since they're lower impact.
 
+## Phase 7: Public Pages - Build User-Facing Discovery Experience
+
+### Overview
+Now that admin interfaces and content management are complete, we need to build the public-facing pages where users discover and browse the new content types. This includes both list pages and individual detail pages with dual layout options.
+
+### Requirements Summary
+1. **Related Content Navigation**: Add 4 new cards to `/related-content` page
+2. **List Pages**: Create browseable pages at `/paths/quantum-software`, `/paths/quantum-hardware`, etc.
+3. **Detail Pages**: Individual content pages showing descriptions and related case studies
+4. **Dual Layout System**: Grid view (discovery) and table view (efficiency) toggle
+
+### Technical Implementation Plan
+
+#### 7.1: Related Content Page Updates
+**File**: `/src/app/related-content/page.tsx`
+
+**Changes Needed:**
+- Add 4 new content type cards alongside existing Persona, Industry, Algorithm cards
+- Use consistent card design and icons
+- Link to new list pages (`/paths/quantum-software`, etc.)
+
+**Card Content:**
+- **Quantum Software**: "Explore quantum computing frameworks, libraries, and development tools"
+- **Quantum Hardware**: "Discover quantum processors, systems, and computing platforms" 
+- **Quantum Companies**: "Learn about companies building quantum computing solutions"
+- **Partner Companies**: "Explore organizations collaborating on quantum initiatives"
+
+#### 7.2: List Page Architecture
+**Files to Create:**
+- `/src/app/paths/quantum-software/page.tsx`
+- `/src/app/paths/quantum-hardware/page.tsx` 
+- `/src/app/paths/quantum-companies/page.tsx`
+- `/src/app/paths/partner-companies/page.tsx`
+
+**Dual Layout System:**
+```typescript
+// Shared components
+/src/components/content-list/
+├── layout-toggle.tsx          // Grid/Table view toggle
+├── grid-view.tsx             // Card-based discovery layout  
+├── table-view.tsx            // Dense tabular layout
+└── use-layout-preference.tsx // localStorage hook for user preference
+```
+
+**Layout Toggle Features:**
+- **Default**: Grid view (better for discovery)
+- **Persistence**: Save user preference in localStorage
+- **Responsive**: Force grid view on mobile (table too cramped)
+- **Icons**: Grid (⊞) and Table (≡) toggle buttons
+
+**Grid View Specifications:**
+- 3-column responsive layout (matches existing Industry/Persona pages)
+- Cards show: Name, description snippet, company/category, related case study count
+- Hover effects and clear CTAs to detail pages
+
+**Table View Specifications:**
+- Sortable columns: Name, Company/Category, Description (truncated), Case Studies
+- Search/filter functionality
+- Pagination for large datasets
+- Click-through to detail pages
+
+#### 7.3: Detail Page Architecture
+**Files to Create:**
+- `/src/app/paths/quantum-software/[slug]/page.tsx`
+- `/src/app/paths/quantum-hardware/[slug]/page.tsx`
+- `/src/app/paths/quantum-companies/[slug]/page.tsx` 
+- `/src/app/paths/partner-companies/[slug]/page.tsx`
+
+**Content Structure:**
+```typescript
+interface DetailPageData {
+  // Core content
+  name: string
+  description: string
+  website_url?: string
+  docs_url?: string
+  github_url?: string
+  
+  // Type-specific fields
+  category?: string          // quantum-software, quantum-companies
+  manufacturer?: string      // quantum-hardware
+  industry?: string         // partner-companies
+  
+  // Relationships
+  related_case_studies: CaseStudy[]
+}
+```
+
+**Page Layout:**
+1. **Hero Section**: Name, description, external links (website, docs, GitHub)
+2. **Details Section**: Category/manufacturer, technical details
+3. **Related Case Studies**: Grid of associated case studies with preview
+4. **Breadcrumb Navigation**: Related Content > Quantum Software > Item Name
+
+#### 7.4: Data Fetching Strategy
+**Approach**: Follow existing patterns from Industry/Persona/Algorithm pages
+
+**List Pages:**
+```typescript
+// Use existing getStaticContentList pattern
+const items = await getStaticContentList('quantum_software', { 
+  published: true,
+  include_relationships: ['case_studies'] 
+})
+```
+
+**Detail Pages:**
+```typescript  
+// Use existing getStaticContentWithRelationships pattern
+const item = await getStaticContentWithRelationships('quantum_software', slug, {
+  relationships: ['case_studies']
+})
+```
+
+#### 7.5: SEO and Performance
+**Static Generation:**
+- All list and detail pages use `generateStaticParams()` 
+- Build-time generation for performance
+- ISR support for content updates
+
+**Meta Data:**
+- Dynamic titles: "Quantum Software | OpenQase" / "Qiskit - Quantum Software | OpenQase"
+- Descriptions from content descriptions
+- OpenGraph tags for social sharing
+
+#### 7.6: Component Reusability
+**Shared Components:**
+- Leverage existing `ContentCard`, `RelatedCaseStudies` components where possible
+- Create `ContentDetailLayout` wrapper for consistent detail page structure
+- Extend `renderEntityLinks()` helper for external link rendering
+
+### Implementation Phases
+
+#### Phase 7A: Foundation (2-3 hours)
+1. Create dual layout components (`layout-toggle`, `grid-view`, `table-view`)
+2. Build layout preference hook with localStorage
+3. Update Related Content page with 4 new cards
+
+#### Phase 7B: List Pages (3-4 hours) 
+1. Implement all 4 list pages with dual layout system
+2. Add search/filter functionality for table view
+3. Test responsive behavior and mobile experience
+
+#### Phase 7C: Detail Pages (2-3 hours)
+1. Create all 4 detail page types with consistent layout
+2. Implement related case studies display
+3. Add external link functionality (website, docs, GitHub)
+
+#### Phase 7D: Polish & Testing (1-2 hours)
+1. SEO optimization and meta tags
+2. Performance testing and optimization
+3. Cross-browser testing
+4. Accessibility compliance
+
+### Success Criteria
+- [ ] Related Content page shows all 7 content type options
+- [ ] All 4 new list pages load with dual layout toggle working
+- [ ] Table view is sortable and searchable
+- [ ] Grid view matches design patterns of existing pages
+- [ ] Detail pages show content and related case studies correctly
+- [ ] External links (website, docs, GitHub) function properly
+- [ ] User layout preference persists between sessions
+- [ ] Pages are performant and SEO-optimized
+- [ ] Mobile experience is smooth (grid view only)
+
+### Total Time Estimate: 8-12 hours
+
+### Notes
+- Can iterate on advanced filtering/search features based on user feedback
+- Consider adding bulk import workflows for initial content population
+- May want to add content analytics to track popular items
+
 ## Questions to Resolve
 1. ~~Implement all four types at once or phase them?~~ ✓ Implemented together
 2. ~~Should these content types relate to each other?~~ ✓ They relate through case studies
 3. ~~How to handle "Not Applicable" cases?~~ ✓ Handled with special detection
 4. Need for bulk import functionality? (Future consideration)
 
+## ⚠️ CRITICAL TODO: Import Production Data
+
+**ISSUE**: Local database is empty - production data was never imported into local development environment.
+
+**IMMEDIATE ACTION REQUIRED**:
+
+### Step 1: Check Current Local Database State
+Access Supabase local UI at `http://localhost:54323` → SQL Editor, run:
+```sql
+SELECT 
+  'case_studies' as table_name, COUNT(*) as count
+FROM case_studies
+UNION ALL
+SELECT 
+  'algorithms' as table_name, COUNT(*) as count  
+FROM algorithms
+UNION ALL
+SELECT 
+  'quantum_software' as table_name, COUNT(*) as count
+FROM quantum_software
+UNION ALL
+SELECT 
+  'quantum_hardware' as table_name, COUNT(*) as count
+FROM quantum_hardware
+UNION ALL
+SELECT 
+  'quantum_companies' as table_name, COUNT(*) as count
+FROM quantum_companies
+UNION ALL
+SELECT 
+  'partner_companies' as table_name, COUNT(*) as count
+FROM partner_companies;
+```
+
+### Step 2: Export Production Data
+Connect to production Supabase and export data for each table:
+```sql
+-- Run these in PRODUCTION SQL editor and save results
+SELECT * FROM case_studies WHERE published = true ORDER BY id;
+SELECT * FROM algorithms WHERE published = true ORDER BY id;
+SELECT * FROM industries WHERE published = true ORDER BY id;
+SELECT * FROM personas WHERE published = true ORDER BY id;
+-- (Export existing content first, new tables will be empty in production)
+```
+
+### Step 3: Import Into Local
+Convert exported data to INSERT statements and run in local SQL editor.
+
+**STATUS**: 🔴 BLOCKING - All testing is invalid until production data is loaded
+
+---
+
 ## Testing & QA Instructions
+
+⚠️ **Prerequisites**: Complete production data import above before testing
 
 ### 1. Admin Interface Testing
 Test content management for all 4 new content types:
@@ -353,6 +580,105 @@ Ensure existing functionality still works:
 - [ ] No data loss (164 content items, 287 relationships preserved)
 - [ ] Performance acceptable (complex queries < 5ms)
 - [ ] User experience improved (interactive vs static content)
+
+## Company Page Design Enhancement
+
+### Overview
+While the basic company detail pages are functional, there's significant opportunity to enhance them into strategic intelligence tools that help users understand each company's role in the quantum ecosystem and discover relevant connections.
+
+### Current State
+Company detail pages currently show:
+- ✅ Basic company info (name, description, metadata badges)
+- ✅ External links (website, LinkedIn)
+- ✅ Related case studies
+- ✅ SEO optimization and responsive design
+
+### Enhancement Opportunities
+
+#### **Phase 1: Ecosystem Cross-References** (Recommended Next)
+**Goal**: Leverage existing relationship data without new database fields
+
+**Implementation**:
+- **Related Quantum Software**: Show software/frameworks this company uses or provides
+- **Related Quantum Hardware**: Display hardware platforms they work with or manufacture  
+- **Partner Relationships**: Highlight collaborations with other organizations
+- **Technology Stack Visualization**: Simple badges/chips showing their quantum tech ecosystem
+
+**Data Sources** (all existing):
+```sql
+-- Software relationships
+SELECT qs.* FROM quantum_software qs
+JOIN case_study_quantum_software_relations csr ON qs.id = csr.quantum_software_id  
+JOIN case_studies cs ON csr.case_study_id = cs.id
+WHERE cs.id IN (company's related case studies)
+
+-- Hardware relationships (similar pattern)
+-- Partner relationships (similar pattern)
+```
+
+**Benefits**:
+- ✅ No database schema changes required
+- ✅ Uses existing relationship data
+- ✅ Helps users discover technology connections
+- ✅ Shows ecosystem positioning
+
+#### **Phase 2: Enhanced Business Context** (Future)
+**Content Enhancements**:
+- **Quantum Focus Areas**: Primary applications/use cases in plain language
+- **Industry Positioning**: "Cloud provider", "Hardware manufacturer", "Software vendor", "Research partner"
+- **Market Role**: How they fit in the quantum value chain
+- **Timeline View**: Evolution through case studies (chronological)
+
+#### **Phase 3: Visual & Interactive Elements** (Future)
+**Advanced Features**:
+- Company logos/branding assets
+- Interactive technology stack diagram
+- Partner network visualization
+- Quantum application timeline
+- Comparison with similar companies
+
+### Technical Implementation Strategy
+
+#### **Phase 1 Database Queries**
+```typescript
+// In company detail page, fetch related technologies
+const relatedSoftware = await getRelatedQuantumSoftware(companyId)
+const relatedHardware = await getRelatedQuantumHardware(companyId)  
+const partnerCompanies = await getPartnerCompanies(companyId)
+```
+
+#### **UI Components Needed**
+- `<TechnologySection>` - Display related software/hardware with links
+- `<PartnerNetwork>` - Show collaboration relationships  
+- `<EcosystemBadges>` - Visual indicators of technology stack
+- `<RelationshipGrid>` - Unified display of all connections
+
+#### **Content Strategy**
+**For Company Descriptions** (using existing description field):
+- Focus on quantum-specific activities and positioning
+- Mention key technologies, partnerships, focus areas
+- Keep business context relevant to quantum computing journey
+- Use consistent tone and structure across all companies
+
+### Success Criteria
+**Phase 1**:
+- [ ] Users can discover which technologies a company uses
+- [ ] Cross-referencing works bidirectionally (company → tech, tech → company)
+- [ ] Partner relationships are visible and navigable
+- [ ] Page provides clear quantum ecosystem context
+
+**User Value**: Transform company pages from static profiles into quantum ecosystem navigation hubs
+
+### Time Estimate
+- **Phase 1**: 4-6 hours (leverage existing relationships)
+- **Phase 2**: 6-8 hours (enhanced content and context)
+- **Phase 3**: 12+ hours (visual/interactive features)
+
+### Implementation Notes
+- Start with quantum companies, then extend to partner companies
+- Ensure consistent patterns with existing detail page architecture
+- Consider mobile experience for complex relationship displays
+- Test performance with companies that have many relationships
 
 ## References
 - Detailed plan: `MORECONTENT.md`

@@ -8,8 +8,6 @@ import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { PublishButton } from '@/components/admin/PublishButton'
-import { ContentCompleteness } from '@/components/admin/ContentCompleteness'
-import { createContentValidationRules, calculateCompletionPercentage, validateFormValues } from '@/utils/form-validation'
 import { ArrowLeft, Save, Loader2 } from 'lucide-react'
 import { toast } from '@/components/ui/use-toast'
 import { saveQuantumSoftware, publishQuantumSoftware, unpublishQuantumSoftware } from './actions'
@@ -37,16 +35,6 @@ export function QuantumSoftwareForm({ quantumSoftware, caseStudies, isNew }: Qua
     pricing_model: quantumSoftware?.pricing_model || '',
     published: quantumSoftware?.published || false,
   })
-  // Validation rules
-  const validationRules = createContentValidationRules([
-    { field: 'name', required: true, label: 'Name' },
-    { field: 'slug', required: true, label: 'Slug' },
-    { field: 'description', required: true, label: 'Description', minLength: 50 },
-    { field: 'main_content', required: true, label: 'Main Content', minLength: 100 },
-    { field: 'vendor', required: true, label: 'Vendor' },
-  ])
-
-  const completionPercentage = calculateCompletionPercentage(values, validationRules)
 
 
   const handleChange = (field: string, value: any) => {

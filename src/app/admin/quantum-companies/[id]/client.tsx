@@ -8,8 +8,6 @@ import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { PublishButton } from '@/components/admin/PublishButton'
-import { ContentCompleteness } from '@/components/admin/ContentCompleteness'
-import { createContentValidationRules, calculateCompletionPercentage, validateFormValues } from '@/utils/form-validation'
 import { ArrowLeft, Save, Loader2 } from 'lucide-react'
 import { toast } from '@/components/ui/use-toast'
 import { saveQuantumCompany, publishQuantumCompany, unpublishQuantumCompany } from './actions'
@@ -39,16 +37,6 @@ export function QuantumCompanyForm({ quantumCompany, caseStudies, isNew }: Quant
     published: quantumCompany?.published || false,
   })
 
-  const validationRules = createContentValidationRules([
-    { field: 'name', required: true, label: 'Company Name' },
-    { field: 'slug', required: true, label: 'Slug' },
-    { field: 'description', required: true, label: 'Description', minLength: 50 },
-    { field: 'main_content', required: true, label: 'Main Content', minLength: 100 },
-    { field: 'company_type', required: true, label: 'Company Type' },
-    { field: 'headquarters', required: true, label: 'Headquarters' },
-  ])
-
-  const completionPercentage = calculateCompletionPercentage(values, validationRules)
 
   const handleChange = (field: string, value: any) => {
     setValues(prev => ({ ...prev, [field]: value }))
@@ -153,7 +141,11 @@ export function QuantumCompanyForm({ quantumCompany, caseStudies, isNew }: Quant
   }
   
   const validateContent = () => {
-    return validateFormValues(values, validationRules)
+    // Basic validation - check required fields
+    if (!values.name || !values.slug || !values.description) {
+      return false
+    }
+    return true
   }
 
   return (
@@ -180,7 +172,6 @@ export function QuantumCompanyForm({ quantumCompany, caseStudies, isNew }: Quant
             </div>
           </div>
           <div className="flex items-center gap-3">
-            <ContentCompleteness percentage={completionPercentage} />
             <PublishButton
               isPublished={values.published}
               onPublish={handlePublish}

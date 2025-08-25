@@ -4,9 +4,8 @@ import type { Database } from '@/types/supabase';
 import { Badge } from '@/components/ui/badge';
 import { processMarkdown } from '@/lib/markdown-server';
 import Link from 'next/link';
-import { ExternalLink, Github, FileText, Building2, Factory, Handshake, Cpu } from 'lucide-react';
+import { ExternalLink, Github, FileText, Building2 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { createServerSupabaseClient } from '@/lib/supabase-server';
 
 type EnrichedQuantumSoftware = Database['public']['Tables']['quantum_software']['Row'] & {
   case_study_quantum_software_relations?: { case_studies: { id: string; title: string; slug: string; description: string; published_at: string } | null }[];
@@ -16,37 +15,6 @@ interface QuantumSoftwarePageProps {
   params: Promise<{
     slug: string;
   }>;
-}
-
-// Helper functions to fetch related entities through case studies
-async function getRelatedQuantumCompanies(caseStudyIds: string[]) {
-  const supabase = await createServerSupabaseClient();
-  const { data } = await supabase
-    .from('case_study_quantum_company_relations')
-    .select('quantum_companies(id, name, slug)')
-    .in('case_study_id', caseStudyIds);
-  
-  return data?.map(rel => rel.quantum_companies).filter(Boolean) || [];
-}
-
-async function getRelatedPartnerCompanies(caseStudyIds: string[]) {
-  const supabase = await createServerSupabaseClient();
-  const { data } = await supabase
-    .from('case_study_partner_company_relations')
-    .select('partner_companies(id, name, slug)')
-    .in('case_study_id', caseStudyIds);
-  
-  return data?.map(rel => rel.partner_companies).filter(Boolean) || [];
-}
-
-async function getRelatedQuantumHardware(caseStudyIds: string[]) {
-  const supabase = await createServerSupabaseClient();
-  const { data } = await supabase
-    .from('case_study_quantum_hardware_relations')
-    .select('quantum_hardware(id, name, slug)')
-    .in('case_study_id', caseStudyIds);
-  
-  return data?.map(rel => rel.quantum_hardware).filter(Boolean) || [];
 }
 
 export async function generateStaticParams() {
@@ -95,21 +63,6 @@ export default async function QuantumSoftwareDetailPage({ params }: QuantumSoftw
   const relatedCaseStudies = quantumSoftware.case_study_quantum_software_relations
     ?.map(relation => relation.case_studies)
     .filter((cs): cs is NonNullable<typeof cs> => cs !== null) || [];
-
-  // Get case study IDs for finding related companies
-  const caseStudyIds = relatedCaseStudies.map(cs => cs.id);
-
-  // Fetch related quantum companies through shared case studies
-  const relatedQuantumCompanies = caseStudyIds.length > 0 ? 
-    await getRelatedQuantumCompanies(caseStudyIds) : [];
-
-  // Fetch related partner companies through shared case studies
-  const relatedPartners = caseStudyIds.length > 0 ? 
-    await getRelatedPartnerCompanies(caseStudyIds) : [];
-
-  // Fetch related quantum hardware through shared case studies
-  const relatedHardware = caseStudyIds.length > 0 ? 
-    await getRelatedQuantumHardware(caseStudyIds) : [];
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-8">
@@ -222,84 +175,6 @@ export default async function QuantumSoftwareDetailPage({ params }: QuantumSoftw
           </CardContent>
         </Card>
       )}
-
-      {/* Technology Ecosystem */}
-      <div className="space-y-8 mb-8">
-        {/* Related Quantum Hardware */}
-        {relatedHardware.length > 0 && (
-          <div>
-            <div className="flex items-center gap-2 mb-3">
-              <Cpu className="h-5 w-5 text-primary" />
-              <h3 className="text-lg font-semibold">Quantum Hardware & Systems</h3>
-            </div>
-            <p className="text-sm text-muted-foreground mb-4">
-              These quantum hardware platforms and systems are compatible with {quantumSoftware.name} and used in collaborative projects.
-            </p>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-              {relatedHardware.map(hardware => (
-                <Link 
-                  key={hardware.id} 
-                  href={`/paths/quantum-hardware/${hardware.slug}`}
-                  className="block p-3 border rounded-lg hover:border-primary/50 hover:shadow-sm transition-all"
-                >
-                  <div className="font-medium text-sm">{hardware.name}</div>
-                  <div className="text-xs text-muted-foreground mt-1">Quantum Hardware Platform</div>
-                </Link>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* Related Quantum Companies */}
-        {relatedQuantumCompanies.length > 0 && (
-          <div>
-            <div className="flex items-center gap-2 mb-3">
-              <Factory className="h-5 w-5 text-primary" />
-              <h3 className="text-lg font-semibold">Quantum Companies</h3>
-            </div>
-            <p className="text-sm text-muted-foreground mb-4">
-              These quantum computing companies actively use {quantumSoftware.name} in their research, development, and commercial quantum applications.
-            </p>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-              {relatedQuantumCompanies.map(company => (
-                <Link 
-                  key={company.id} 
-                  href={`/paths/quantum-companies/${company.slug}`}
-                  className="block p-3 border rounded-lg hover:border-primary/50 hover:shadow-sm transition-all"
-                >
-                  <div className="font-medium text-sm">{company.name}</div>
-                  <div className="text-xs text-muted-foreground mt-1">Quantum Computing Company</div>
-                </Link>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* Related Partner Companies */}
-        {relatedPartners.length > 0 && (
-          <div>
-            <div className="flex items-center gap-2 mb-3">
-              <Handshake className="h-5 w-5 text-primary" />
-              <h3 className="text-lg font-semibold">Partner Organizations</h3>
-            </div>
-            <p className="text-sm text-muted-foreground mb-4">
-              These partner organizations collaborate with quantum teams using {quantumSoftware.name} for joint research projects and enterprise quantum initiatives.
-            </p>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-              {relatedPartners.map(partner => (
-                <Link 
-                  key={partner.id} 
-                  href={`/paths/partner-companies/${partner.slug}`}
-                  className="block p-3 border rounded-lg hover:border-primary/50 hover:shadow-sm transition-all"
-                >
-                  <div className="font-medium text-sm">{partner.name}</div>
-                  <div className="text-xs text-muted-foreground mt-1">Strategic Partner</div>
-                </Link>
-              ))}
-            </div>
-          </div>
-        )}
-      </div>
 
       {/* Related Case Studies */}
       {relatedCaseStudies.length > 0 && (

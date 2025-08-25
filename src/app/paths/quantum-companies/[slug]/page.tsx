@@ -229,7 +229,7 @@ export default async function QuantumCompanyDetailPage({ params }: QuantumCompan
                 <Link 
                   key={software.id} 
                   href={`/paths/quantum-software/${software.slug}`}
-                  className="block p-3 border rounded-lg hover:bg-accent transition-colors"
+                  className="block p-3 border rounded-lg hover:border-primary/50 hover:shadow-sm transition-all"
                 >
                   <div className="font-medium text-sm">{software.name}</div>
                   <div className="text-xs text-muted-foreground mt-1">Quantum Software Platform</div>
@@ -254,7 +254,7 @@ export default async function QuantumCompanyDetailPage({ params }: QuantumCompan
                 <Link 
                   key={hardware.id} 
                   href={`/paths/quantum-hardware/${hardware.slug}`}
-                  className="block p-3 border rounded-lg hover:bg-accent transition-colors"
+                  className="block p-3 border rounded-lg hover:border-primary/50 hover:shadow-sm transition-all"
                 >
                   <div className="font-medium text-sm">{hardware.name}</div>
                   <div className="text-xs text-muted-foreground mt-1">Quantum Hardware Platform</div>
@@ -279,7 +279,7 @@ export default async function QuantumCompanyDetailPage({ params }: QuantumCompan
                 <Link 
                   key={partner.id} 
                   href={`/paths/partner-companies/${partner.slug}`}
-                  className="block p-3 border rounded-lg hover:bg-accent transition-colors"
+                  className="block p-3 border rounded-lg hover:border-primary/50 hover:shadow-sm transition-all"
                 >
                   <div className="font-medium text-sm">{partner.name}</div>
                   <div className="text-xs text-muted-foreground mt-1">Strategic Partner</div>
@@ -292,7 +292,7 @@ export default async function QuantumCompanyDetailPage({ params }: QuantumCompan
 
       {/* Related Case Studies */}
       {relatedCaseStudies.length > 0 && (
-        <div>
+        <div className="mb-8">
           <div className="flex items-center gap-2 mb-3">
             <FileText className="h-5 w-5 text-primary" />
             <h3 className="text-lg font-semibold">Related Case Studies</h3>
@@ -300,7 +300,7 @@ export default async function QuantumCompanyDetailPage({ params }: QuantumCompan
           <p className="text-sm text-muted-foreground mb-4">
             These case studies feature {quantumCompany.name} and showcase their quantum computing initiatives and collaborative research projects.
           </p>
-          <div className="grid grid-cols-1 gap-3">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             {relatedCaseStudies.map(caseStudy => (
               <Link 
                 key={caseStudy.id} 

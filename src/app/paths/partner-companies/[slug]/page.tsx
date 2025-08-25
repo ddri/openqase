@@ -4,7 +4,7 @@ import type { Database } from '@/types/supabase';
 import { Badge } from '@/components/ui/badge';
 import { processMarkdown } from '@/lib/markdown-server';
 import Link from 'next/link';
-import { ExternalLink, HandHeart, Users, MapPin, Building, Code, Cpu, Factory } from 'lucide-react';
+import { ExternalLink, HandHeart, Users, MapPin, Building, Code, Cpu, Factory, FileText } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { createServerSupabaseClient } from '@/lib/supabase-server';
 
@@ -235,7 +235,7 @@ export default async function PartnerCompanyDetailPage({ params }: PartnerCompan
                 <Link 
                   key={software.id} 
                   href={`/paths/quantum-software/${software.slug}`}
-                  className="block p-3 border rounded-lg hover:bg-accent transition-colors"
+                  className="block p-3 border rounded-lg hover:border-primary/50 hover:shadow-sm transition-all"
                 >
                   <div className="font-medium text-sm">{software.name}</div>
                   <div className="text-xs text-muted-foreground mt-1">Quantum Software Platform</div>
@@ -260,7 +260,7 @@ export default async function PartnerCompanyDetailPage({ params }: PartnerCompan
                 <Link 
                   key={hardware.id} 
                   href={`/paths/quantum-hardware/${hardware.slug}`}
-                  className="block p-3 border rounded-lg hover:bg-accent transition-colors"
+                  className="block p-3 border rounded-lg hover:border-primary/50 hover:shadow-sm transition-all"
                 >
                   <div className="font-medium text-sm">{hardware.name}</div>
                   <div className="text-xs text-muted-foreground mt-1">Quantum Hardware Platform</div>
@@ -285,7 +285,7 @@ export default async function PartnerCompanyDetailPage({ params }: PartnerCompan
                 <Link 
                   key={company.id} 
                   href={`/paths/quantum-companies/${company.slug}`}
-                  className="block p-3 border rounded-lg hover:bg-accent transition-colors"
+                  className="block p-3 border rounded-lg hover:border-primary/50 hover:shadow-sm transition-all"
                 >
                   <div className="font-medium text-sm">{company.name}</div>
                   <div className="text-xs text-muted-foreground mt-1">Quantum Computing Company</div>
@@ -298,7 +298,7 @@ export default async function PartnerCompanyDetailPage({ params }: PartnerCompan
 
       {/* Related Case Studies */}
       {relatedCaseStudies.length > 0 && (
-        <div>
+        <div className="mb-8">
           <div className="flex items-center gap-2 mb-3">
             <FileText className="h-5 w-5 text-primary" />
             <h3 className="text-lg font-semibold">Related Case Studies</h3>
@@ -306,7 +306,7 @@ export default async function PartnerCompanyDetailPage({ params }: PartnerCompan
           <p className="text-sm text-muted-foreground mb-4">
             These case studies highlight collaborative quantum computing projects and partnerships involving {partnerCompany.name}.
           </p>
-          <div className="grid grid-cols-1 gap-3">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             {relatedCaseStudies.map(caseStudy => (
               <Link 
                 key={caseStudy.id} 

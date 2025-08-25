@@ -680,6 +680,131 @@ const partnerCompanies = await getPartnerCompanies(companyId)
 - Consider mobile experience for complex relationship displays
 - Test performance with companies that have many relationships
 
+## Code Refactoring TODOs
+
+### Helper Function Consolidation
+**Status**: TODO - Lower Priority  
+**Added**: 2025-08-23
+
+**Issue**: Helper functions for fetching relationships are duplicated across all 4 detail pages (quantum-software, quantum-hardware, quantum-companies, partner-companies).
+
+**Duplicated Functions**:
+- `getRelatedQuantumSoftware()` - Fetches quantum software through case study relations
+- `getRelatedQuantumHardware()` - Fetches quantum hardware through case study relations
+- `getRelatedQuantumCompanies()` - Fetches quantum companies through case study relations
+- `getRelatedPartnerCompanies()` - Fetches partner companies through case study relations
+
+**Current Duplication**:
+- Each function appears in 3-4 different page files
+- Identical implementation across all instances
+- ~20 lines of code duplicated per function
+
+**Proposed Solution**:
+1. Create `/lib/relationship-queries.ts` with all shared helper functions
+2. Mark as server-only with `'use server'` directive  
+3. Import in each detail page as needed
+4. Consider TypeScript generics for better type safety
+5. Add proper return types and error handling
+
+**Example Structure**:
+```typescript
+// /lib/relationship-queries.ts
+'use server'
+
+export async function getRelatedQuantumSoftware(caseStudyIds: string[]) {
+  // Consolidated implementation
+}
+// ... other functions
+```
+
+**Benefits**:
+- Single source of truth for query logic
+- Easier maintenance and updates
+- Cleaner page components  
+- Better adherence to DRY principles
+- Centralized error handling
+
+**Note**: This is build-time optimization only (static generation), not a performance issue for users. Pages are pre-rendered at build time with all data included.
+
+### Direct Relationship Tracking
+**Status**: TODO - Important for Data Completeness  
+**Added**: 2025-08-23
+
+**Issue**: Current relationship discovery relies entirely on shared case studies. This misses direct relationships between technologies that exist independently of case studies.
+
+**Current Limitation**:
+- Relationships are discovered ONLY through case study co-occurrence
+- Example: To find software related to hardware, we find case studies mentioning both
+- This misses fundamental relationships like "IBM Qiskit is designed for IBM Quantum hardware"
+
+**Examples of Missing Relationships**:
+- **Vendor relationships**: Google Cirq → Google Sycamore (built specifically for)
+- **Direct integrations**: Amazon Braket → IonQ hardware (official support)
+- **Compatibility**: Qiskit → IBM Quantum Network hardware (designed for)
+- **Development**: Microsoft Q# → Azure Quantum hardware (same company)
+
+**Impact**:
+- Incomplete ecosystem view for users
+- New technologies with no case studies appear isolated
+- Users can't discover which technologies are designed to work together
+- Misleading gaps in the technology relationship graph
+
+**Proposed Solutions**:
+
+**Option A: Direct Relationship Tables** (Most flexible)
+```sql
+-- New junction tables with relationship types
+CREATE TABLE quantum_hardware_software_relations (
+  hardware_id UUID,
+  software_id UUID,
+  relationship_type TEXT -- 'compatible', 'optimized_for', 'requires', etc.
+);
+
+CREATE TABLE quantum_company_technology_relations (
+  company_id UUID,
+  technology_id UUID,
+  technology_type TEXT, -- 'software' or 'hardware'
+  relationship_type TEXT -- 'develops', 'maintains', 'supports', etc.
+);
+```
+
+**Option B: Add Relationship Fields** (Simpler to implement)
+```sql
+-- Add to existing tables
+ALTER TABLE quantum_software ADD COLUMN
+  compatible_hardware TEXT[], -- Array of hardware IDs
+  developed_by UUID, -- Company reference
+  requires_hardware TEXT[]; -- Required hardware
+
+ALTER TABLE quantum_hardware ADD COLUMN
+  compatible_software TEXT[], -- Array of software IDs
+  manufactured_by UUID, -- Company reference
+  supported_frameworks TEXT[]; -- Supported software
+```
+
+**Option C: Hybrid Approach** (Recommended)
+- Keep case study discovery for "proven in practice" relationships
+- Add direct relationship fields/tables for "designed for" relationships
+- Display both with different visual indicators:
+  - 🔗 "Designed for" (direct relationship)
+  - 📚 "Used together in case studies" (discovered relationship)
+
+**Implementation Considerations**:
+- Need admin interface to manage direct relationships
+- Should distinguish between relationship types in UI
+- Migration strategy for existing data
+- Validation to prevent circular relationships
+
+**User Value**:
+- Complete view of technology ecosystem
+- Discover compatible technologies before implementation
+- Understand vendor relationships and technology stacks
+- Make informed decisions about technology choices
+
+**Priority**: Medium-High - This significantly impacts the value of the Related Content feature
+
+---
+
 ## References
 - Detailed plan: `MORECONTENT.md`
 - Deployment guide: `DEPLOYMENT_CHECKLIST.md`

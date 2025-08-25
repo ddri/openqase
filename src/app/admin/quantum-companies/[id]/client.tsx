@@ -1,13 +1,18 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
-import { Switch } from '@/components/ui/switch'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { PublishButton } from '@/components/admin/PublishButton'
+import { ContentCompleteness } from '@/components/admin/ContentCompleteness'
+import { createContentValidationRules, calculateCompletionPercentage, validateFormValues } from '@/utils/form-validation'
+import { ArrowLeft, Save, Loader2 } from 'lucide-react'
+import { toast } from '@/components/ui/use-toast'
+import { saveQuantumCompany, publishQuantumCompany, unpublishQuantumCompany } from './actions'
 
 interface QuantumCompanyFormProps {
   quantumCompany: any
@@ -17,20 +22,33 @@ interface QuantumCompanyFormProps {
 
 export function QuantumCompanyForm({ quantumCompany, caseStudies, isNew }: QuantumCompanyFormProps) {
   const router = useRouter()
-  const [isSaving, setIsSaving] = useState(false)
+  const [isPending, startTransition] = useTransition()
   const [values, setValues] = useState({
+    id: isNew ? undefined : quantumCompany?.id,
     name: quantumCompany?.name || '',
     slug: quantumCompany?.slug || '',
     description: quantumCompany?.description || '',
     main_content: quantumCompany?.main_content || '',
     company_type: quantumCompany?.company_type || '',
-    founding_year: quantumCompany?.founding_year || '',
+    founded_year: quantumCompany?.founded_year || '',
     headquarters: quantumCompany?.headquarters || '',
-    funding_stage: quantumCompany?.funding_stage || '',
+    quantum_focus: quantumCompany?.quantum_focus || '',
+    employee_count: quantumCompany?.employee_count || '',
     website_url: quantumCompany?.website_url || '',
     linkedin_url: quantumCompany?.linkedin_url || '',
     published: quantumCompany?.published || false,
   })
+
+  const validationRules = createContentValidationRules([
+    { field: 'name', required: true, label: 'Company Name' },
+    { field: 'slug', required: true, label: 'Slug' },
+    { field: 'description', required: true, label: 'Description', minLength: 50 },
+    { field: 'main_content', required: true, label: 'Main Content', minLength: 100 },
+    { field: 'company_type', required: true, label: 'Company Type' },
+    { field: 'headquarters', required: true, label: 'Headquarters' },
+  ])
+
+  const completionPercentage = calculateCompletionPercentage(values, validationRules)
 
   const handleChange = (field: string, value: any) => {
     setValues(prev => ({ ...prev, [field]: value }))
@@ -46,53 +64,139 @@ export function QuantumCompanyForm({ quantumCompany, caseStudies, isNew }: Quant
   }
 
   const handleSave = async () => {
-    setIsSaving(true)
-    try {
-      const url = isNew 
-        ? '/api/quantum-companies'
-        : `/api/quantum-companies?id=${quantumCompany.id}`
-      
-      const response = await fetch(url, {
-        method: isNew ? 'POST' : 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(values)
-      })
-
-      if (response.ok) {
-        router.push('/admin/quantum-companies')
-        router.refresh()
-      } else {
-        console.error('Failed to save quantum company')
+    startTransition(async () => {
+      try {
+        const result = await saveQuantumCompany(values)
+        
+        if (isNew && result?.id) {
+          setValues(prev => ({ ...prev, id: result.id }))
+        }
+        
+        toast({
+          title: 'Saved',
+          description: 'Quantum company has been saved successfully',
+          duration: 3000,
+        })
+      } catch (error) {
+        console.error("Error in handleSave:", error)
+        
+        toast({
+          variant: 'destructive',
+          title: 'Error',
+          description: 'Failed to save quantum company',
+          duration: 5000,
+        })
       }
-    } catch (error) {
-      console.error('Error saving quantum company:', error)
-    } finally {
-      setIsSaving(false)
+    })
+  }
+  
+  const handlePublish = async () => {
+    if (!values.id) {
+      toast({
+        variant: 'destructive',
+        title: 'Error',
+        description: 'Cannot publish quantum company without saving first',
+        duration: 3000,
+      })
+      return
     }
+    
+    startTransition(async () => {
+      try {
+        await saveQuantumCompany(values)
+        await publishQuantumCompany(values.id!)
+        
+        setValues(prev => ({ ...prev, published: true }))
+        
+        toast({
+          title: 'Published',
+          description: 'Quantum company is now published and visible to users',
+          duration: 3000,
+        })
+      } catch (error) {
+        console.error("Error in handlePublish:", error)
+        
+        toast({
+          variant: 'destructive',
+          title: 'Error',
+          description: 'Failed to publish quantum company',
+          duration: 5000,
+        })
+      }
+    })
+  }
+  
+  const handleUnpublish = async () => {
+    if (!values.id) return
+    
+    startTransition(async () => {
+      try {
+        await unpublishQuantumCompany(values.id!)
+        setValues(prev => ({ ...prev, published: false }))
+        
+        toast({
+          title: 'Unpublished',
+          description: 'Quantum company is no longer visible to users',
+          duration: 3000,
+        })
+      } catch (error) {
+        console.error("Error in handleUnpublish:", error)
+        
+        toast({
+          variant: 'destructive',
+          title: 'Error',
+          description: 'Failed to unpublish quantum company',
+          duration: 5000,
+        })
+      }
+    })
+  }
+  
+  const validateContent = () => {
+    return validateFormValues(values, validationRules)
   }
 
   return (
-    <div className="container mx-auto py-6">
-      <div className="flex items-center justify-between mb-6">
-        <div>
-          <h1 className="text-2xl font-semibold text-gray-900">
-            {isNew ? 'Create' : 'Edit'} Quantum Company
-          </h1>
-          <p className="mt-1 text-sm text-gray-600">
-            {isNew ? 'Add a new quantum company to the database.' : 'Edit quantum company details.'}
-          </p>
-        </div>
-        <div className="flex items-center space-x-3">
-          <Button variant="outline" onClick={() => router.back()}>
-            Cancel
-          </Button>
-          <Button 
-            onClick={handleSave} 
-            disabled={isSaving}
-            className="bg-yellow-500 hover:bg-yellow-600 text-black"
-          >
-            {isSaving ? 'Saving...' : 'Save'}
-          </Button>
+    <div className="space-y-10 max-w-5xl mx-auto pb-24">
+      <div className="pt-6 mb-8 bg-background pb-4 border-b border-border">
+        <div className="flex justify-between items-start mb-6">
+          <div className="flex items-start gap-4">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => router.back()}
+              className="mt-1"
+            >
+              <ArrowLeft className="mr-2 h-4 w-4" />
+              Back
+            </Button>
+            <div>
+              <h1 className="text-3xl font-bold mb-2">
+                {isNew ? 'Create' : 'Edit'} Quantum Company
+              </h1>
+              <p className="text-muted-foreground">
+                {isNew ? 'Add a new quantum company to the database.' : 'Edit quantum company details.'}
+              </p>
+            </div>
+          </div>
+          <div className="flex items-center gap-3">
+            <ContentCompleteness percentage={completionPercentage} />
+            <PublishButton
+              isPublished={values.published}
+              onPublish={handlePublish}
+              onUnpublish={handleUnpublish}
+              validateContent={validateContent}
+              disabled={isPending}
+            />
+            <Button 
+              onClick={handleSave} 
+              disabled={isPending}
+              className="min-w-[80px]"
+            >
+              {isPending ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Save className="mr-2 h-4 w-4" />}
+              Save
+            </Button>
+          </div>
         </div>
       </div>
 
@@ -221,14 +325,6 @@ export function QuantumCompanyForm({ quantumCompany, caseStudies, isNew }: Quant
               />
             </div>
 
-            <div className="flex items-center space-x-2 pt-4 border-t border-border">
-              <Switch
-                id="published"
-                checked={values.published}
-                onCheckedChange={(checked) => handleChange('published', checked)}
-              />
-              <Label htmlFor="published" >Published</Label>
-            </div>
           </CardContent>
         </Card>
       </div>

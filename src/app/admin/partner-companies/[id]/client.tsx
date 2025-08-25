@@ -1,13 +1,18 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
-import { Switch } from '@/components/ui/switch'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { PublishButton } from '@/components/admin/PublishButton'
+import { ContentCompleteness } from '@/components/admin/ContentCompleteness'
+import { createContentValidationRules, calculateCompletionPercentage, validateFormValues } from '@/utils/form-validation'
+import { ArrowLeft, Save, Loader2 } from 'lucide-react'
+import { toast } from '@/components/ui/use-toast'
+import { savePartnerCompany, publishPartnerCompany, unpublishPartnerCompany } from './actions'
 
 interface PartnerCompanyFormProps {
   partnerCompany: any
@@ -17,8 +22,9 @@ interface PartnerCompanyFormProps {
 
 export function PartnerCompanyForm({ partnerCompany, caseStudies, isNew }: PartnerCompanyFormProps) {
   const router = useRouter()
-  const [isSaving, setIsSaving] = useState(false)
+  const [isPending, startTransition] = useTransition()
   const [values, setValues] = useState({
+    id: isNew ? undefined : partnerCompany?.id,
     name: partnerCompany?.name || '',
     slug: partnerCompany?.slug || '',
     description: partnerCompany?.description || '',
@@ -32,6 +38,18 @@ export function PartnerCompanyForm({ partnerCompany, caseStudies, isNew }: Partn
     linkedin_url: partnerCompany?.linkedin_url || '',
     published: partnerCompany?.published || false,
   })
+
+  // Validation rules for partner companies
+  const validationRules = createContentValidationRules([
+    { field: 'name', required: true, label: 'Company Name' },
+    { field: 'slug', required: true, label: 'Slug' },
+    { field: 'description', required: true, label: 'Description', minLength: 50 },
+    { field: 'main_content', required: true, label: 'Main Content', minLength: 100 },
+    { field: 'industry', required: true, label: 'Industry' },
+    { field: 'headquarters', required: true, label: 'Headquarters' },
+  ])
+
+  const completionPercentage = calculateCompletionPercentage(values, validationRules)
 
   const handleChange = (field: string, value: any) => {
     setValues(prev => ({ ...prev, [field]: value }))
@@ -47,52 +65,137 @@ export function PartnerCompanyForm({ partnerCompany, caseStudies, isNew }: Partn
   }
 
   const handleSave = async () => {
-    setIsSaving(true)
-    try {
-      const url = isNew 
-        ? '/api/partner-companies'
-        : `/api/partner-companies?id=${partnerCompany.id}`
-      
-      const response = await fetch(url, {
-        method: isNew ? 'POST' : 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(values)
-      })
-
-      if (response.ok) {
-        router.push('/admin/partner-companies')
-        router.refresh()
-      } else {
-        console.error('Failed to save partner company')
+    startTransition(async () => {
+      try {
+        const result = await savePartnerCompany(values)
+        
+        if (isNew && result?.id) {
+          setValues(prev => ({ ...prev, id: result.id }))
+        }
+        
+        toast({
+          title: 'Saved',
+          description: 'Partner company has been saved successfully',
+          duration: 3000,
+        })
+      } catch (error) {
+        console.error("Error in handleSave:", error)
+        
+        toast({
+          variant: 'destructive',
+          title: 'Error',
+          description: 'Failed to save partner company',
+          duration: 5000,
+        })
       }
-    } catch (error) {
-      console.error('Error saving partner company:', error)
-    } finally {
-      setIsSaving(false)
+    })
+  }
+  
+  const handlePublish = async () => {
+    if (!values.id) {
+      toast({
+        variant: 'destructive',
+        title: 'Error',
+        description: 'Cannot publish partner company without saving first',
+        duration: 3000,
+      })
+      return
     }
+    
+    startTransition(async () => {
+      try {
+        await savePartnerCompany(values)
+        await publishPartnerCompany(values.id!)
+        
+        setValues(prev => ({ ...prev, published: true }))
+        
+        toast({
+          title: 'Published',
+          description: 'Partner company is now published and visible to users',
+          duration: 3000,
+        })
+      } catch (error) {
+        console.error("Error in handlePublish:", error)
+        
+        toast({
+          variant: 'destructive',
+          title: 'Error',
+          description: 'Failed to publish partner company',
+          duration: 5000,
+        })
+      }
+    })
+  }
+  
+  const handleUnpublish = async () => {
+    if (!values.id) return
+    
+    startTransition(async () => {
+      try {
+        await unpublishPartnerCompany(values.id!)
+        setValues(prev => ({ ...prev, published: false }))
+        
+        toast({
+          title: 'Unpublished',
+          description: 'Partner company is no longer visible to users',
+          duration: 3000,
+        })
+      } catch (error) {
+        console.error("Error in handleUnpublish:", error)
+        
+        toast({
+          variant: 'destructive',
+          title: 'Error',
+          description: 'Failed to unpublish partner company',
+          duration: 5000,
+        })
+      }
+    })
+  }
+  
+  const validateContent = () => {
+    return validateFormValues(values, validationRules)
   }
 
   return (
     <div className="space-y-10 max-w-5xl mx-auto pb-24">
       <div className="pt-6 mb-8 bg-background pb-4 border-b border-border">
-        <div className="flex justify-between items-center mb-6">
-          <div>
-            <h1 className="text-3xl font-bold mb-2">
-              {isNew ? 'Create' : 'Edit'} Partner Company
-            </h1>
-            <p className="text-muted-foreground">
-              {isNew ? 'Add a new partner company to the database.' : 'Edit partner company details.'}
-            </p>
+        <div className="flex justify-between items-start mb-6">
+          <div className="flex items-start gap-4">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => router.back()}
+              className="mt-1"
+            >
+              <ArrowLeft className="mr-2 h-4 w-4" />
+              Back
+            </Button>
+            <div>
+              <h1 className="text-3xl font-bold mb-2">
+                {isNew ? 'Create' : 'Edit'} Partner Company
+              </h1>
+              <p className="text-muted-foreground">
+                {isNew ? 'Add a new partner company to the database.' : 'Edit partner company details.'}
+              </p>
+            </div>
           </div>
           <div className="flex items-center gap-3">
-            <Button variant="outline" onClick={() => router.back()}>
-              Cancel
-            </Button>
+            <ContentCompleteness percentage={completionPercentage} />
+            <PublishButton
+              isPublished={values.published}
+              onPublish={handlePublish}
+              onUnpublish={handleUnpublish}
+              validateContent={validateContent}
+              disabled={isPending}
+            />
             <Button 
               onClick={handleSave} 
-              disabled={isSaving}
+              disabled={isPending}
+              className="min-w-[80px]"
             >
-              {isSaving ? 'Saving...' : 'Save'}
+              {isPending ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Save className="mr-2 h-4 w-4" />}
+              Save
             </Button>
           </div>
         </div>
@@ -228,15 +331,6 @@ export function PartnerCompanyForm({ partnerCompany, caseStudies, isNew }: Partn
                 className="mt-1"
                 rows={8}
               />
-            </div>
-
-            <div className="flex items-center space-x-2 pt-4 border-t border-border">
-              <Switch
-                id="published"
-                checked={values.published}
-                onCheckedChange={(checked) => handleChange('published', checked)}
-              />
-              <Label htmlFor="published" >Published</Label>
             </div>
           </CardContent>
         </Card>

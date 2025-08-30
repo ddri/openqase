@@ -244,7 +244,7 @@ openqase/
 - Search functionality enhancement (basic implementation complete)
 
 ### 🛠️ Technical Debt & Infrastructure
-- **Advanced Caching with Redis** - Upgrade from in-memory rate limiting to Redis-based caching and session storage
+- **Advanced Caching with Redis** - Upgrade from in-memory rate limiting to Redis-based caching and session storage. This will be more relevant when we release the public API.
 - **Database Function Security** - Add `SET search_path` to 9 SECURITY DEFINER functions to resolve Supabase linter warnings (low priority - functions are internal utilities)
 
 ### 📚 Documentation & Developer Experience  

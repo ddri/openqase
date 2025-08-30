@@ -64,7 +64,7 @@ const RELATIONSHIP_MAPS: Record<ContentType, string> = {
  * Helper function to filter relationships and remove null/unpublished content
  * This prevents null pointer exceptions and handles mixed content gracefully
  */
-function filterRelationships(data: any, preview: boolean = false): any {
+function filterRelationships(data: any, contentType: ContentType, preview: boolean = false): any {
   if (!data) return data;
 
   // Helper to filter individual relationship arrays
@@ -85,15 +85,15 @@ function filterRelationships(data: any, preview: boolean = false): any {
   // Apply filtering based on content type
   const filtered = { ...data };
   
-  // Determine content type based on data properties
-  const isCaseStudy = data.hasOwnProperty('title') && data.hasOwnProperty('partner_companies');
-  const isAlgorithm = data.hasOwnProperty('quantum_advantage');
-  const isIndustry = data.hasOwnProperty('icon') && !data.hasOwnProperty('expertise');
-  const isPersona = data.hasOwnProperty('expertise');
-  const isQuantumSoftware = data.hasOwnProperty('vendor') && data.hasOwnProperty('programming_languages');
-  const isQuantumHardware = data.hasOwnProperty('manufacturer') && data.hasOwnProperty('qubit_count');
-  const isQuantumCompany = data.hasOwnProperty('founded_year') && data.hasOwnProperty('funding_stage');
-  const isPartnerCompany = data.hasOwnProperty('partnership_type') && data.hasOwnProperty('quantum_use_cases');
+  // Determine content type from explicit parameter
+  const isCaseStudy = contentType === 'case_studies';
+  const isAlgorithm = contentType === 'algorithms';
+  const isIndustry = contentType === 'industries';
+  const isPersona = contentType === 'personas';
+  const isQuantumSoftware = contentType === 'quantum_software';
+  const isQuantumHardware = contentType === 'quantum_hardware';
+  const isQuantumCompany = contentType === 'quantum_companies';
+  const isPartnerCompany = contentType === 'partner_companies';
   
   // Handle bidirectional junction tables based on context
   
@@ -236,7 +236,7 @@ export async function getStaticContentWithRelationships<T>(
   }
 
   // Filter relationships to handle mixed published/unpublished content
-  const filteredData = filterRelationships(data, options.preview);
+  const filteredData = filterRelationships(data, contentType, options.preview);
   
   return filteredData as T;
 }

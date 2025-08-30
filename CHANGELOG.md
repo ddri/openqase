@@ -28,6 +28,10 @@ All notable changes to this project will be documented in this file.
 - **Enhanced Case Study Experience**: Interactive content instead of static badges
   - Case study pages now show clickable links to content pages
   - Hover effects and visual feedback for better UX
+- **Quantum Ecosystem Cross-References**: Added ecosystem discovery to hardware and partner company pages
+  - Quantum Hardware pages now show compatible software, quantum companies, and partner organizations
+  - Partner Company pages now show quantum software they use, hardware they utilize, and quantum companies they partner with
+  - All ecosystem relationships are dynamically discovered through shared case studies
   - Related case studies shown on content detail pages
 - **Database Architecture**: Robust relationship system with performance optimization
   - Created bidirectional junction tables for all content relationships

@@ -9,13 +9,17 @@ import { Badge } from '@/components/ui/badge';
 function renderEntityLinks(
   entities: Array<{ id: string; name: string; slug?: string | null }> | string[] | undefined,
   basePath: string,
-  title: string
+  title: string,
+  icon?: React.ReactNode
 ) {
   if (!entities || entities.length === 0) return null;
 
   return (
     <div>
-      <div className="text-sm text-muted-foreground mb-2">{title}</div>
+      <div className="text-sm text-muted-foreground mb-2 flex items-center gap-1">
+        {icon}
+        {title}
+      </div>
       <div className="flex flex-wrap gap-1.5">
         {entities.map((entity, index) => {
           // Handle new relationship format (preferred)
@@ -138,45 +142,12 @@ export default function ProfessionalCaseStudyLayout({
             <div className="bg-card rounded-lg p-6 border border-border shadow-sm">
               <h3 className="text-lg font-semibold mb-4 text-foreground">Technical Details</h3>
               <div className="space-y-4">
-                <div>
-                  <div className="text-sm text-muted-foreground mb-2 flex items-center gap-1">
-                    <Cpu className="h-3 w-3" />
-                    Quantum Hardware
-                  </div>
-                  <div className="flex flex-wrap gap-1.5">
-                    {(() => {
-                      const hardwareEntities = caseStudy.case_study_quantum_hardware_relations?.map((rel: any) => rel.quantum_hardware).filter(Boolean) || caseStudy.quantum_hardware;
-                      if (!hardwareEntities || hardwareEntities.length === 0) return null;
-                      
-                      return hardwareEntities.map((entity: any, index: number) => {
-                        if (typeof entity === 'object' && entity.name) {
-                          if (entity.slug) {
-                            return (
-                              <Link key={entity.id} href={`/paths/quantum-hardware/${entity.slug}`}>
-                                <Badge variant="outline" className="text-xs hover:bg-primary hover:text-primary-foreground transition-colors cursor-pointer">
-                                  {entity.name}
-                                </Badge>
-                              </Link>
-                            );
-                          } else {
-                            return (
-                              <Badge key={entity.id} variant="outline" className="text-xs">
-                                {entity.name}
-                              </Badge>
-                            );
-                          }
-                        } else if (typeof entity === 'string') {
-                          return (
-                            <Badge key={`hardware-${index}`} variant="outline" className="text-xs">
-                              {entity}
-                            </Badge>
-                          );
-                        }
-                        return null;
-                      });
-                    })()}
-                  </div>
-                </div>
+                {renderEntityLinks(
+                  caseStudy.case_study_quantum_hardware_relations?.map((rel: any) => rel.quantum_hardware).filter(Boolean) || caseStudy.quantum_hardware,
+                  'quantum-hardware',
+                  'Quantum Hardware',
+                  <Cpu className="h-3 w-3" />
+                )}
 
                 {renderEntityLinks(
                   caseStudy.case_study_quantum_software_relations?.map((rel: any) => rel.quantum_software).filter(Boolean) || caseStudy.quantum_software,

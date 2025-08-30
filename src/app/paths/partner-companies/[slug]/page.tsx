@@ -4,7 +4,9 @@ import type { Database } from '@/types/supabase';
 import { Badge } from '@/components/ui/badge';
 import { processMarkdown } from '@/lib/markdown-server';
 import Link from 'next/link';
-import { ExternalLink, HandHeart, Users, MapPin, Building, FileText } from 'lucide-react';
+import { ExternalLink, HandHeart, Users, MapPin, Building, FileText, Building2, Cpu } from 'lucide-react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { getRelatedQuantumSoftware, getRelatedQuantumHardware, getRelatedQuantumCompanies } from '@/lib/relationship-queries';
 type EnrichedPartnerCompany = Database['public']['Tables']['partner_companies']['Row'] & {
   case_study_partner_company_relations?: { case_studies: { id: string; title: string; slug: string; description: string; published_at: string } | null }[];
 };
@@ -61,6 +63,16 @@ export default async function PartnerCompanyDetailPage({ params }: PartnerCompan
   const relatedCaseStudies = partnerCompany.case_study_partner_company_relations
     ?.map(relation => relation.case_studies)
     .filter((cs): cs is NonNullable<typeof cs> => cs !== null) || [];
+  
+  // Get case study IDs for ecosystem discovery
+  const caseStudyIds = relatedCaseStudies.map(cs => cs.id);
+  
+  // Fetch related ecosystem components through case studies
+  const [relatedSoftware, relatedHardware, quantumCompanies] = await Promise.all([
+    getRelatedQuantumSoftware(caseStudyIds),
+    getRelatedQuantumHardware(caseStudyIds),
+    getRelatedQuantumCompanies(caseStudyIds)
+  ]);
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-8">
@@ -166,6 +178,98 @@ export default async function PartnerCompanyDetailPage({ params }: PartnerCompan
             className="prose dark:prose-invert max-w-none prose-a:text-primary prose-a:hover:underline"
             dangerouslySetInnerHTML={{ __html: processedContent }}
           />
+        </div>
+      )}
+
+      {/* Ecosystem Cross-References */}
+      {(relatedSoftware.length > 0 || relatedHardware.length > 0 || quantumCompanies.length > 0) && (
+        <div className="mb-12">
+          <h2 className="text-2xl font-bold mb-6">Quantum Ecosystem</h2>
+          
+          {/* Quantum Software They Use */}
+          {relatedSoftware.length > 0 && (
+            <div className="mb-6">
+              <div className="flex items-center gap-2 mb-3">
+                <Building2 className="h-5 w-5 text-primary" />
+                <h3 className="text-lg font-semibold">Quantum Software</h3>
+              </div>
+              <p className="text-sm text-muted-foreground mb-3">
+                Quantum software platforms utilized by {partnerCompany.name} in their projects.
+              </p>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                {relatedSoftware.map(software => (
+                  <Link 
+                    key={software.id} 
+                    href={`/paths/quantum-software/${software.slug}`}
+                    className="block p-3 border rounded-lg hover:border-primary/50 transition-colors"
+                  >
+                    <div className="font-medium text-sm">{software.name}</div>
+                    {software.description && (
+                      <div className="text-xs text-muted-foreground mt-1 line-clamp-2">
+                        {software.description}
+                      </div>
+                    )}
+                  </Link>
+                ))}
+              </div>
+            </div>
+          )}
+          
+          {/* Quantum Hardware They Utilize */}
+          {relatedHardware.length > 0 && (
+            <div className="mb-6">
+              <div className="flex items-center gap-2 mb-3">
+                <Cpu className="h-5 w-5 text-primary" />
+                <h3 className="text-lg font-semibold">Quantum Hardware</h3>
+              </div>
+              <p className="text-sm text-muted-foreground mb-3">
+                Quantum hardware platforms accessed or utilized by {partnerCompany.name}.
+              </p>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                {relatedHardware.map(hardware => (
+                  <Link 
+                    key={hardware.id} 
+                    href={`/paths/quantum-hardware/${hardware.slug}`}
+                    className="block p-3 border rounded-lg hover:border-primary/50 transition-colors"
+                  >
+                    <div className="font-medium text-sm">{hardware.name}</div>
+                    {hardware.description && (
+                      <div className="text-xs text-muted-foreground mt-1 line-clamp-2">
+                        {hardware.description}
+                      </div>
+                    )}
+                  </Link>
+                ))}
+              </div>
+            </div>
+          )}
+          
+          {/* Quantum Companies They Partner With */}
+          {quantumCompanies.length > 0 && (
+            <div className="mb-6">
+              <div className="flex items-center gap-2 mb-3">
+                <HandHeart className="h-5 w-5 text-primary" />
+                <h3 className="text-lg font-semibold">Quantum Companies</h3>
+              </div>
+              <p className="text-sm text-muted-foreground mb-3">
+                Quantum companies that {partnerCompany.name} collaborates with in their quantum initiatives.
+              </p>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                {quantumCompanies.map(company => (
+                  <Link 
+                    key={company.id} 
+                    href={`/paths/quantum-companies/${company.slug}`}
+                    className="block p-3 border rounded-lg hover:border-primary/50 transition-colors"
+                  >
+                    <div className="font-medium text-sm">{company.name}</div>
+                    {company.company_type && (
+                      <div className="text-xs text-muted-foreground mt-1">{company.company_type}</div>
+                    )}
+                  </Link>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       )}
 

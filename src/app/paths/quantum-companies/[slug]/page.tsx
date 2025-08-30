@@ -4,7 +4,8 @@ import type { Database } from '@/types/supabase';
 import { Badge } from '@/components/ui/badge';
 import { processMarkdown } from '@/lib/markdown-server';
 import Link from 'next/link';
-import { ExternalLink, Building2, Users, MapPin, FileText } from 'lucide-react';
+import { ExternalLink, Building2, Users, MapPin, FileText, Cpu, Code, Briefcase } from 'lucide-react';
+import { getRelatedQuantumSoftware, getRelatedQuantumHardware, getRelatedPartnerCompanies } from '@/lib/relationship-queries';
 type EnrichedQuantumCompany = Database['public']['Tables']['quantum_companies']['Row'] & {
   case_study_quantum_company_relations?: { case_studies: { id: string; title: string; slug: string; description: string; published_at: string } | null }[];
 };
@@ -61,6 +62,16 @@ export default async function QuantumCompanyDetailPage({ params }: QuantumCompan
   const relatedCaseStudies = quantumCompany.case_study_quantum_company_relations
     ?.map(relation => relation.case_studies)
     .filter((cs): cs is NonNullable<typeof cs> => cs !== null) || [];
+  
+  // Get case study IDs for ecosystem discovery
+  const caseStudyIds = relatedCaseStudies.map(cs => cs.id);
+  
+  // Fetch related ecosystem components through case studies
+  const [relatedSoftware, relatedHardware, partnerCompanies] = await Promise.all([
+    getRelatedQuantumSoftware(caseStudyIds),
+    getRelatedQuantumHardware(caseStudyIds),
+    getRelatedPartnerCompanies(caseStudyIds)
+  ]);
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-8">
@@ -160,6 +171,88 @@ export default async function QuantumCompanyDetailPage({ params }: QuantumCompan
             className="prose dark:prose-invert max-w-none prose-a:text-primary prose-a:hover:underline"
             dangerouslySetInnerHTML={{ __html: processedContent }}
           />
+        </div>
+      )}
+
+      {/* Ecosystem Cross-References */}
+      {(relatedSoftware.length > 0 || relatedHardware.length > 0 || partnerCompanies.length > 0) && (
+        <div className="mb-12">
+          <h2 className="text-2xl font-bold mb-6">Quantum Ecosystem</h2>
+          
+          {/* Related Software */}
+          {relatedSoftware.length > 0 && (
+            <div className="mb-6">
+              <div className="flex items-center gap-2 mb-3">
+                <Code className="h-5 w-5 text-primary" />
+                <h3 className="text-lg font-semibold">Quantum Software</h3>
+              </div>
+              <p className="text-sm text-muted-foreground mb-3">
+                Software frameworks and tools used in {quantumCompany.name}'s quantum computing projects.
+              </p>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                {relatedSoftware.map(software => (
+                  <Link 
+                    key={software.id} 
+                    href={`/paths/quantum-software/${software.slug}`}
+                    className="block p-3 border rounded-lg hover:border-primary/50 transition-colors"
+                  >
+                    <div className="font-medium text-sm">{software.name}</div>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          )}
+          
+          {/* Related Hardware */}
+          {relatedHardware.length > 0 && (
+            <div className="mb-6">
+              <div className="flex items-center gap-2 mb-3">
+                <Cpu className="h-5 w-5 text-primary" />
+                <h3 className="text-lg font-semibold">Quantum Hardware</h3>
+              </div>
+              <p className="text-sm text-muted-foreground mb-3">
+                Hardware platforms and systems utilized in {quantumCompany.name}'s implementations.
+              </p>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                {relatedHardware.map(hardware => (
+                  <Link 
+                    key={hardware.id} 
+                    href={`/paths/quantum-hardware/${hardware.slug}`}
+                    className="block p-3 border rounded-lg hover:border-primary/50 transition-colors"
+                  >
+                    <div className="font-medium text-sm">{hardware.name}</div>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          )}
+          
+          {/* Partner Companies */}
+          {partnerCompanies.length > 0 && (
+            <div className="mb-6">
+              <div className="flex items-center gap-2 mb-3">
+                <Briefcase className="h-5 w-5 text-primary" />
+                <h3 className="text-lg font-semibold">Partner Organizations</h3>
+              </div>
+              <p className="text-sm text-muted-foreground mb-3">
+                Organizations collaborating with {quantumCompany.name} on quantum computing initiatives.
+              </p>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                {partnerCompanies.map(partner => (
+                  <Link 
+                    key={partner.id} 
+                    href={`/paths/partner-companies/${partner.slug}`}
+                    className="block p-3 border rounded-lg hover:border-primary/50 transition-colors"
+                  >
+                    <div className="font-medium text-sm">{partner.name}</div>
+                    {partner.industry && (
+                      <div className="text-xs text-muted-foreground mt-1">{partner.industry}</div>
+                    )}
+                  </Link>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       )}
 

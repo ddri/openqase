@@ -192,8 +192,8 @@ Before proceeding to testing, we need to address technical inconsistencies that 
 
 ### Success Criteria
 - [x] All APIs use consistent pattern (migrated all 4 content types to use content-management utilities)
-- [ ] No duplicate rendering logic in frontend
-- [ ] Content type detection is explicit and reliable
+- [x] No duplicate rendering logic in frontend (fixed renderEntityLinks duplication)
+- [x] Content type detection is explicit and reliable (added explicit contentType parameter)
 - [ ] All existing functionality still works
 - [ ] Code is more maintainable and clear
 
@@ -804,6 +804,74 @@ ALTER TABLE quantum_hardware ADD COLUMN
 **Priority**: Medium-High - This significantly impacts the value of the Related Content feature
 
 ---
+
+## Remaining Tasks (2025-08-29)
+
+### Quick Wins (30 mins each)
+- [x] **Apply ecosystem cross-references to Software/Hardware/Partner pages** - ✅ Completed 2025-08-29
+- [ ] **Clean up legacy database fields** - Remove old TEXT[] arrays from case_studies table
+
+### Medium Tasks (1-2 hours)
+- [ ] **Dual Layout System (Phase 7)** - Unify dual layout systems across all list pages
+  - **Current State**: Two different systems exist:
+    - Legacy (Case Studies, Algorithms, Personas, Industries): Grid/List view using `ViewSwitcher`
+    - New (Quantum Software/Hardware, Companies): Grid/Table view using `LayoutToggle`
+  - **Action Needed**: Migrate legacy pages to use the new Grid/Table system for consistency
+  - **Benefits**: Table view provides better data density, sortable columns, and professional feel
+- [ ] **Enhanced search functionality** - Add filtering by type, better relevance ranking, search suggestions
+
+### Larger Tasks (2-4 hours)  
+- [ ] **Direct Relationship Tracking** - Add ability to define relationships independent of case studies (e.g., "Qiskit is designed for IBM hardware")
+
+## Task: Apply Ecosystem Cross-References to All Content Types
+
+### Overview
+Extend the ecosystem cross-reference feature from quantum companies to all other content types (Quantum Software, Quantum Hardware, Partner Companies).
+
+### Implementation Plan
+
+#### 1. Quantum Software Pages (`/paths/quantum-software/[slug]`)
+**Show Related:**
+- Compatible Hardware (e.g., Qiskit → IBM Quantum hardware)
+- Quantum Companies (companies that develop/maintain the software)
+- Partner Companies (organizations using the software)
+
+#### 2. Quantum Hardware Pages (`/paths/quantum-hardware/[slug]`)
+**Show Related:**
+- Compatible Software (frameworks that support this hardware)
+- Quantum Companies (manufacturer and service providers)
+- Partner Companies (organizations using the hardware)
+
+#### 3. Partner Company Pages (`/paths/partner-companies/[slug]`)
+**Show Related:**
+- Quantum Software (tools they use)
+- Quantum Hardware (systems they utilize)
+- Quantum Companies (quantum partners they work with)
+
+### Technical Approach
+
+1. **Reuse existing helper functions** from `/lib/relationship-queries.ts`
+2. **Follow the pattern** established in quantum-companies page:
+   ```typescript
+   // Get case study IDs
+   const caseStudyIds = relatedCaseStudies.map(cs => cs.id);
+   
+   // Fetch related ecosystem components
+   const [relatedSoftware, relatedHardware, ...] = await Promise.all([
+     getRelatedQuantumSoftware(caseStudyIds),
+     getRelatedQuantumHardware(caseStudyIds),
+     ...
+   ]);
+   ```
+3. **Use consistent UI components** with appropriate icons (Code, Cpu, Building2, Briefcase)
+
+### Success Criteria
+- [ ] All 4 content types show ecosystem cross-references
+- [ ] Navigation between related content works bidirectionally
+- [ ] Performance remains fast (< 100ms page loads)
+- [ ] Mobile responsive design maintained
+
+### Estimated Time: 90 minutes (30 mins per content type)
 
 ## References
 - Detailed plan: `MORECONTENT.md`

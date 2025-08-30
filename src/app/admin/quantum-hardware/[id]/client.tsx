@@ -7,9 +7,12 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Switch } from '@/components/ui/switch'
 import { PublishButton } from '@/components/admin/PublishButton'
+import { ContentCompleteness } from '@/components/admin/ContentCompleteness'
 import { ArrowLeft, Save, Loader2 } from 'lucide-react'
 import { toast } from '@/components/ui/use-toast'
+import { createContentValidationRules, calculateCompletionPercentage, validateFormValues } from '@/utils/form-validation'
 import { saveQuantumHardware, publishQuantumHardware, unpublishQuantumHardware } from './actions'
 
 interface QuantumHardwareFormProps {
@@ -38,7 +41,8 @@ export function QuantumHardwareForm({ quantumHardware, caseStudies, isNew }: Qua
     published: quantumHardware?.published || false,
   })
 
-  const completionPercentage = calculateCompletionPercentage(values, validationRules)
+  const validationRules = createContentValidationRules('quantum_hardware')
+  const completionPercentage = calculateCompletionPercentage({ values, validationRules })
 
 
   const handleChange = (field: string, value: any) => {
@@ -144,7 +148,8 @@ export function QuantumHardwareForm({ quantumHardware, caseStudies, isNew }: Qua
   }
   
   const validateContent = () => {
-    return validateFormValues(values, validationRules)
+    const issues = validateFormValues({ values, validationRules })
+    return Object.keys(issues).length === 0 ? true : issues
   }
 
   return (

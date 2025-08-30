@@ -12,7 +12,7 @@ export type QuantumSoftware = Database['public']['Tables']['quantum_software']['
 
 export default async function QuantumSoftwarePage() {
   const quantumSoftware = await getStaticContentList('quantum_software') as QuantumSoftware[]
-  const publishedSoftware = quantumSoftware.filter(software => software.published)
+  const publishedSoftware = quantumSoftware.filter(software => software.published === true)
 
   return (
     <QuantumSoftwareClient 

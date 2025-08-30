@@ -102,6 +102,135 @@ The CMS follows a standardized pattern for managing content, exemplified by the 
 *   Handle cache revalidation (`revalidatePath`, `revalidateTag`).
 *   Handle redirects (`redirect`).
 
+### Form Validation & Content Completeness
+
+The CMS includes a comprehensive form validation system that serves two main purposes:
+
+1. **Content Completeness Tracking**: Shows administrators how "complete" their content is with a visual percentage indicator
+2. **Publish Validation**: Prevents publishing of incomplete content by blocking the publish button until all required fields are filled
+
+#### Validation System Components
+
+**File:** `/src/utils/form-validation.ts`
+
+- `createContentValidationRules()`: Defines validation rules for each content type
+- `calculateCompletionPercentage()`: Calculates completion percentage (0-100%)
+- `validateFormValues()`: Checks form values against validation rules
+- `validators`: Collection of common validation functions
+
+#### Content Type Validation Rules
+
+Each content type has specific required fields defined in the validation rules:
+
+```typescript
+// Example: Quantum Hardware validation rules
+case 'quantum_hardware':
+  return [
+    ...commonRules,  // name, slug, description (always required)
+    {
+      field: 'main_content',
+      tab: 'content',
+      label: 'Main content is required',
+      validator: validators.required
+    }
+  ];
+```
+
+**Common Required Fields** (for all content types):
+- `name` (or `title` for case studies/blog posts)
+- `slug` (must be URL-friendly)
+- `description`
+
+**Content-Specific Required Fields:**
+- **Algorithms**: `main_content`, `related_case_studies`
+- **Case Studies**: `main_content`, `year`, `algorithms`, `industries`
+- **Blog Posts**: `content`, `author`, `category`, `tags`
+- **Quantum Hardware**: `main_content`
+- **Quantum Software**: `main_content`
+- **Quantum Companies**: `main_content`
+- **Partner Companies**: `main_content`
+
+#### Customizing Required Fields
+
+To add or modify required fields for a content type:
+
+1. **Edit validation rules** in `/src/utils/form-validation.ts`:
+```typescript
+case 'quantum_hardware':
+  return [
+    ...commonRules,
+    {
+      field: 'manufacturer',        // Field name
+      tab: 'basic',                 // Tab for grouping errors
+      label: 'Manufacturer is required',  // Error message
+      validator: validators.required       // Validation function
+    },
+    {
+      field: 'qubit_count',
+      tab: 'technical',
+      label: 'Valid qubit count required',
+      validator: validators.and(validators.required, validators.isNumber)
+    }
+  ];
+```
+
+2. **Available validators:**
+```typescript
+validators.required          // Field must not be empty
+validators.isNumber         // Must be a valid number
+validators.isUrl           // Must be valid URL  
+validators.isEmail         // Must be valid email
+validators.minLength(10)   // Minimum 10 characters
+validators.maxLength(500)  // Maximum 500 characters
+validators.isSlug          // Valid URL slug format
+validators.and(...)        // All validators must pass
+validators.or(...)         // Any validator can pass
+```
+
+3. **Custom validators:**
+```typescript
+{
+  field: 'year',
+  validator: (value) => {
+    const num = Number(value);
+    return !isNaN(num) && num >= 1990 && num <= 2030;
+  }
+}
+```
+
+#### Implementation in Forms
+
+Admin forms use the validation system as follows:
+
+```typescript
+// In [id]/client.tsx
+import { createContentValidationRules, calculateCompletionPercentage, validateFormValues } from '@/utils/form-validation'
+
+// Setup validation
+const validationRules = createContentValidationRules('quantum_hardware')
+const completionPercentage = calculateCompletionPercentage({ values, validationRules })
+
+// Content completeness indicator
+<ContentCompleteness percentage={completionPercentage} />
+
+// Publish validation
+const validateContent = () => {
+  const issues = validateFormValues({ values, validationRules })
+  return Object.keys(issues).length === 0 ? true : issues
+}
+
+<PublishButton validateContent={validateContent} />
+```
+
+#### Validation Effects
+
+When validation rules are not met:
+- **Content Completeness**: Percentage drops below 100%
+- **Publish Button**: Becomes disabled with "Complete required fields" message
+- **Toast Notifications**: Show specific validation errors when publish is attempted
+
+The validation system ensures content quality and consistency across the platform while providing clear feedback to content creators.
+
 ### Relationship Handling (Standardized Approach)
 
 *   **Junction Tables:** All many-to-many relationships use dedicated junction tables (e.g., `content_type_a_content_type_b_relations`).

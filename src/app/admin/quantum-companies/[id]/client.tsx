@@ -29,6 +29,7 @@ export function QuantumCompanyForm({ quantumCompany, caseStudies, isNew }: Quant
     main_content: quantumCompany?.main_content || '',
     company_type: quantumCompany?.company_type || '',
     founded_year: quantumCompany?.founded_year || '',
+    funding_stage: quantumCompany?.funding_stage || '',
     headquarters: quantumCompany?.headquarters || '',
     quantum_focus: quantumCompany?.quantum_focus || '',
     employee_count: quantumCompany?.employee_count || '',
@@ -247,8 +248,8 @@ export function QuantumCompanyForm({ quantumCompany, caseStudies, isNew }: Quant
                 <Label htmlFor="founding_year" >Founding Year</Label>
                 <Input
                   id="founding_year"
-                  value={values.founding_year}
-                  onChange={(e) => handleChange('founding_year', e.target.value)}
+                  value={values.founded_year}
+                  onChange={(e) => handleChange('founded_year', e.target.value)}
                   placeholder="e.g., 2019"
                   className="mt-1"
                 />

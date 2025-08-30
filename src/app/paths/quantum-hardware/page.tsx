@@ -12,7 +12,7 @@ export type QuantumHardware = Database['public']['Tables']['quantum_hardware']['
 
 export default async function QuantumHardwarePage() {
   const quantumHardware = await getStaticContentList('quantum_hardware') as QuantumHardware[]
-  const publishedHardware = quantumHardware.filter(hardware => hardware.published)
+  const publishedHardware = quantumHardware.filter(hardware => hardware.published === true)
 
   return (
     <QuantumHardwareClient 

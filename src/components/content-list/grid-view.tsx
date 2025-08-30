@@ -10,7 +10,7 @@ interface BaseContentItem {
   name: string
   slug: string
   description?: string | null
-  published: boolean
+  published: boolean | null
   website_url?: string | null
   documentation_url?: string | null
   github_url?: string | null

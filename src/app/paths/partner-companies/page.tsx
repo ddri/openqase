@@ -12,7 +12,7 @@ export type PartnerCompany = Database['public']['Tables']['partner_companies']['
 
 export default async function PartnerCompaniesPage() {
   const partnerCompanies = await getStaticContentList('partner_companies') as PartnerCompany[]
-  const publishedCompanies = partnerCompanies.filter(company => company.published)
+  const publishedCompanies = partnerCompanies.filter(company => company.published === true)
 
   return (
     <PartnerCompaniesClient 

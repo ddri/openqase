@@ -21,7 +21,7 @@ export async function getRelatedQuantumSoftware(caseStudyIds: string[]) {
     return [];
   }
   
-  const softwareIds = [...new Set(relations.map(r => r.quantum_software_id))];
+  const softwareIds = [...new Set(relations.map(r => r.quantum_software_id).filter(id => id !== null))] as string[];
   
   // Then fetch the software details
   const { data, error } = await supabase
@@ -61,7 +61,7 @@ export async function getRelatedQuantumHardware(caseStudyIds: string[]) {
     return [];
   }
   
-  const hardwareIds = [...new Set(relations.map(r => r.quantum_hardware_id))];
+  const hardwareIds = [...new Set(relations.map(r => r.quantum_hardware_id).filter(id => id !== null))] as string[];
   
   // Then fetch the hardware details
   const { data, error } = await supabase
@@ -101,7 +101,7 @@ export async function getRelatedPartnerCompanies(caseStudyIds: string[]) {
     return [];
   }
   
-  const partnerIds = [...new Set(relations.map(r => r.partner_company_id))];
+  const partnerIds = [...new Set(relations.map(r => r.partner_company_id).filter(id => id !== null))] as string[];
   
   // Then fetch the partner details
   const { data, error } = await supabase
@@ -142,7 +142,7 @@ export async function getRelatedQuantumCompanies(caseStudyIds: string[]) {
     return [];
   }
   
-  const companyIds = [...new Set(relations.map(r => r.quantum_company_id))];
+  const companyIds = [...new Set(relations.map(r => r.quantum_company_id).filter(id => id !== null))] as string[];
   
   // Then fetch the company details
   const { data, error } = await supabase

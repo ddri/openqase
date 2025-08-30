@@ -12,7 +12,7 @@ export type QuantumCompany = Database['public']['Tables']['quantum_companies']['
 
 export default async function QuantumCompaniesPage() {
   const quantumCompanies = await getStaticContentList('quantum_companies') as QuantumCompany[]
-  const publishedCompanies = quantumCompanies.filter(company => company.published)
+  const publishedCompanies = quantumCompanies.filter(company => company.published === true)
 
   return (
     <QuantumCompaniesClient 

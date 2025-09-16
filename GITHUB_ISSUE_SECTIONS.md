@@ -805,23 +805,104 @@ ALTER TABLE quantum_hardware ADD COLUMN
 
 ---
 
+## CRITICAL: CMS Deletion System Not Working (2025-01-16)
+
+### Issue Summary
+Case studies (and all content types) don't disappear from admin lists after deletion. The soft delete system exists but admin pages don't filter deleted content.
+
+**Root Cause**: Admin pages query base tables without filtering `WHERE deleted_at IS NULL`
+
+**Current Status**: 
+- ✅ Soft delete functions work (`soft_delete_content`, `recover_content`)
+- ✅ Delete API endpoints work 
+- ❌ Admin pages show deleted content (don't filter by `deleted_at`)
+- ❌ No trash management UI
+- ❌ No recovery interface
+
+### Complete Solution Plan
+
+**Phase 1: Immediate Fix (1-2 hours)**
+```sql
+-- Create database views (run in Supabase SQL editor)
+CREATE VIEW admin_case_studies AS SELECT * FROM case_studies WHERE deleted_at IS NULL;
+CREATE VIEW admin_algorithms AS SELECT * FROM algorithms WHERE deleted_at IS NULL;
+CREATE VIEW admin_industries AS SELECT * FROM industries WHERE deleted_at IS NULL;
+CREATE VIEW admin_personas AS SELECT * FROM personas WHERE deleted_at IS NULL;
+CREATE VIEW admin_blog_posts AS SELECT * FROM blog_posts WHERE deleted_at IS NULL;
+
+-- Public views (for public pages)
+CREATE VIEW public_case_studies AS SELECT * FROM case_studies WHERE deleted_at IS NULL AND published = true;
+-- (repeat for other content types)
+
+-- Trash views (for future trash management)
+CREATE VIEW trash_case_studies AS SELECT *, EXTRACT(days FROM (NOW() - deleted_at)) as days_in_trash FROM case_studies WHERE deleted_at IS NOT NULL;
+-- (repeat for other content types)
+
+-- Grant permissions
+GRANT SELECT ON admin_case_studies, admin_algorithms, admin_industries, admin_personas, admin_blog_posts TO authenticated, service_role;
+```
+
+```typescript
+// Update admin pages to use views instead of base tables
+// Change: .from('case_studies') 
+// To: .from('admin_case_studies')
+```
+
+**Phase 2: Trash Management UI (4-6 hours)**
+- Add `/admin/trash` section with nav menu
+- List deleted content with restore/permanent delete options
+- Bulk recovery operations
+- Warning for items approaching 30-day limit
+
+**Phase 3: Enhanced Features (2-4 hours)**  
+- Automated cleanup (Supabase Edge Functions)
+- Admin notifications for expiring content
+- Audit trail improvements
+- Export deleted content backup
+
+**Files to Modify:**
+- `src/app/admin/*/page.tsx` - Update table queries to use views
+- `src/app/admin/layout.tsx` - Add trash navigation
+- Create: `src/app/admin/trash/**` - Trash management pages
+
+**Database SQL Provided Above** - Ready to run in Supabase
+
+### Priority: HIGH - Blocks normal content management workflow
+
+---
+
 ## Remaining Tasks (2025-08-29)
 
 ### Quick Wins (30 mins each)
 - [x] **Apply ecosystem cross-references to Software/Hardware/Partner pages** - ✅ Completed 2025-08-29
 - [ ] **Clean up legacy database fields** - Remove old TEXT[] arrays from case_studies table
+- [ ] **Fix CMS Deletion System** - Apply Phase 1 solution above
 
 ### Medium Tasks (1-2 hours)
 - [ ] **Dual Layout System (Phase 7)** - Unify dual layout systems across all list pages
   - **Current State**: Two different systems exist:
-    - Legacy (Case Studies, Algorithms, Personas, Industries): Grid/List view using `ViewSwitcher`
+    - Legacy (Case Studies, Algorithms, Personas, Industries): Grid/List view using `ViewSwitcher` (working well)
     - New (Quantum Software/Hardware, Companies): Grid/Table view using `LayoutToggle`
-  - **Action Needed**: Migrate legacy pages to use the new Grid/Table system for consistency
-  - **Benefits**: Table view provides better data density, sortable columns, and professional feel
+  - **Action Needed**: Consider migrating quantum pages to use Grid/List for consistency
+  - **Priority**: LOW - Current Grid/List system is actually good, not urgent to change
 - [ ] **Enhanced search functionality** - Add filtering by type, better relevance ranking, search suggestions
 
 ### Larger Tasks (2-4 hours)  
-- [ ] **Direct Relationship Tracking** - Add ability to define relationships independent of case studies (e.g., "Qiskit is designed for IBM hardware")
+- [ ] **Direct Relationship Tracking** - Add ability to define relationships independent of case studies
+  - **Current Limitation**: Relationships only discovered through case studies (if no case study mentions both, no connection shown)
+  - **Missing Relationships**:
+    - Vendor relationships (IBM→Qiskit, Google→Cirq)
+    - Official compatibility (Braket supports IonQ/Rigetti/D-Wave)
+    - Technology requirements (software that ONLY works with specific hardware)
+  - **Implementation Approach**:
+    - ADD new layer, don't replace existing relationships
+    - Separate tables (`hardware_software_compatibility`, etc.)
+    - Display both: 🔗 "Designed for" vs 📚 "Used in case studies"
+  - **User Benefits**:
+    - Complete ecosystem view (all connections, not just documented ones)
+    - Better planning (know compatibility before starting)
+    - Vendor clarity (understand ownership/maintenance)
+  - **Safety**: Additive only, never touches existing case study relationships
 
 ## Task: Apply Ecosystem Cross-References to All Content Types
 

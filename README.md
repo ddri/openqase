@@ -244,6 +244,7 @@ openqase/
 - Search functionality enhancement (basic implementation complete)
 
 ### 🛠️ Technical Debt & Infrastructure
+- **Content Language Checking Tool** - Complete database connection setup for the UK English language checking tool (`scripts/content-review.ts`). Tool is fully developed with LanguageTool API integration, quantum computing terms dictionary, US/UK spelling detection, and HTML/JSON reporting, but needs database connectivity troubleshooting to function.
 - **Advanced Caching with Redis** - Upgrade from in-memory rate limiting to Redis-based caching and session storage. This will be more relevant when we release the public API.
 - **Database Function Security** - Add `SET search_path` to 9 SECURITY DEFINER functions to resolve Supabase linter warnings (low priority - functions are internal utilities)
 

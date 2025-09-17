@@ -42,6 +42,41 @@ Update the CHANGELOG for these types of changes:
 2. Ensure code follows existing patterns and conventions
 3. Test changes don't break existing functionality
 
+## Git Safety Rules
+
+### CRITICAL: Never Use Blanket Add Commands
+**NEVER use these dangerous commands:**
+- `git add -A` or `git add --all` - Adds ALL files including untracked
+- `git add .` - Adds everything in current directory
+- `git add *` - Wildcard can grab unintended files
+
+**ALWAYS use explicit file additions:**
+```bash
+# Good - Add specific files only
+git add src/app/layout.tsx
+git add public/og-image.png
+
+# Good - Review changes before adding
+git status                    # Check what's staged/unstaged
+git diff                      # Review unstaged changes
+git diff --cached            # Review staged changes
+```
+
+### Safe Commit Process
+1. **Check status first**: Always run `git status` to see untracked files
+2. **Add files explicitly**: Only add files you've modified for the current task
+3. **Review staged changes**: Run `git diff --cached` before committing
+4. **Never commit untracked files** unless they're part of the current feature
+
+### Why This Matters
+Using `git add -A` can accidentally include:
+- Work-in-progress files from other branches
+- Broken or incomplete code
+- Debug files or temporary scripts
+- Files that can break production builds
+
+This has caused production build failures when untracked WIP files with TypeScript errors were accidentally committed.
+
 ## Content Management System (CMS) Guidelines
 
 ### Published Content Filtering

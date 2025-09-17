@@ -79,7 +79,7 @@ export const metadata: Metadata = {
     siteName: 'OpenQase',
     images: [
       {
-        url: '/og-image.svg',
+        url: '/og-image.png',
         width: 1200,
         height: 630,
         alt: 'OpenQase - Quantum Computing Business Cases',
@@ -90,7 +90,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Quantum Computing Business Applications | OpenQase',
     description: 'Real-world quantum computing case studies and learning paths for business decision-makers',
-    images: ['/og-image.svg'],
+    images: ['/og-image.png'],
     creator: '@openqase',
   },
   robots: {

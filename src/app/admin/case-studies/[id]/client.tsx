@@ -24,6 +24,10 @@ interface CaseStudyFormProps {
   algorithms: any[];
   industries: any[];
   personas: any[];
+  quantumSoftware: any[];
+  quantumHardware: any[];
+  quantumCompanies: any[];
+  partnerCompanies: any[];
   isNew: boolean;
 }
 
@@ -38,7 +42,7 @@ interface CaseStudyFormProps {
  * @param personas - Available personas for relationships
  * @param isNew - Whether this is a new case study
  */
-export function CaseStudyForm({ caseStudy, algorithms, industries, personas, isNew }: CaseStudyFormProps) {
+export function CaseStudyForm({ caseStudy, algorithms, industries, personas, quantumSoftware, quantumHardware, quantumCompanies, partnerCompanies, isNew }: CaseStudyFormProps) {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const [values, setValues] = useState({
@@ -47,10 +51,11 @@ export function CaseStudyForm({ caseStudy, algorithms, industries, personas, isN
     slug: isNew ? '' : caseStudy?.slug || '',
     description: isNew ? '' : caseStudy?.description || '',
     main_content: isNew ? '' : caseStudy?.main_content || '',
-    partner_companies: isNew ? [] : caseStudy?.partner_companies || [],
-    quantum_companies: isNew ? [] : caseStudy?.quantum_companies || [],
-    quantum_hardware: isNew ? [] : caseStudy?.quantum_hardware || [],
-    quantum_software: isNew ? [] : caseStudy?.quantum_software || [],
+    // New entity relationships
+    quantum_software: isNew ? [] : (caseStudy?.quantum_software || []),
+    quantum_hardware: isNew ? [] : (caseStudy?.quantum_hardware || []),
+    quantum_companies: isNew ? [] : (caseStudy?.quantum_companies || []),
+    partner_companies: isNew ? [] : (caseStudy?.partner_companies || []),
     algorithms: isNew ? [] : (caseStudy?.algorithms || []),
     industries: isNew ? [] : (caseStudy?.industries || []),
     personas: isNew ? [] : (caseStudy?.personas || []),
@@ -596,41 +601,45 @@ export function CaseStudyForm({ caseStudy, algorithms, industries, personas, isN
             <CardTitle>Technical Details</CardTitle>
           </CardHeader>
           <CardContent className="space-y-8 p-6 pt-0">
-            <div className="space-y-3">
-              <Label htmlFor="partner_companies">Partner Companies</Label>
-              <TagInput
-                tags={values.partner_companies}
-                onTagsChange={(newTags) => handleChange('partner_companies', newTags)}
-                placeholder="Add partner company..."
-              />
-            </div>
+            <RelationshipSelector
+              items={quantumSoftware}
+              selectedItems={values.quantum_software}
+              onChange={(selectedItems) => handleChange('quantum_software', selectedItems)}
+              itemLabelKey="name"
+              itemValueKey="id"
+              label="Quantum Software"
+              placeholder="Select quantum software..."
+            />
             
-            <div className="space-y-3">
-              <Label htmlFor="quantum_companies">Quantum Companies</Label>
-              <TagInput
-                tags={values.quantum_companies}
-                onTagsChange={(newTags) => handleChange('quantum_companies', newTags)}
-                placeholder="Add quantum company..."
-              />
-            </div>
+            <RelationshipSelector
+              items={quantumHardware}
+              selectedItems={values.quantum_hardware}
+              onChange={(selectedItems) => handleChange('quantum_hardware', selectedItems)}
+              itemLabelKey="name"
+              itemValueKey="id"
+              label="Quantum Hardware"
+              placeholder="Select quantum hardware..."
+            />
             
-            <div className="space-y-3">
-              <Label htmlFor="quantum_hardware">Quantum Hardware</Label>
-              <TagInput
-                tags={values.quantum_hardware}
-                onTagsChange={(newTags) => handleChange('quantum_hardware', newTags)}
-                placeholder="Add quantum hardware..."
-              />
-            </div>
+            <RelationshipSelector
+              items={quantumCompanies}
+              selectedItems={values.quantum_companies}
+              onChange={(selectedItems) => handleChange('quantum_companies', selectedItems)}
+              itemLabelKey="name"
+              itemValueKey="id"
+              label="Quantum Companies"
+              placeholder="Select quantum companies..."
+            />
             
-            <div className="space-y-3">
-              <Label htmlFor="quantum_software">Quantum Software</Label>
-              <TagInput
-                tags={values.quantum_software}
-                onTagsChange={(newTags) => handleChange('quantum_software', newTags)}
-                placeholder="Add quantum software..."
-              />
-            </div>
+            <RelationshipSelector
+              items={partnerCompanies}
+              selectedItems={values.partner_companies}
+              onChange={(selectedItems) => handleChange('partner_companies', selectedItems)}
+              itemLabelKey="name"
+              itemValueKey="id"
+              label="Partner Companies"
+              placeholder="Select partner companies..."
+            />
           </CardContent>
         </Card>
       </form>

@@ -27,10 +27,8 @@ export async function saveCaseStudy(values: CaseStudyFormData): Promise<{ caseSt
       slug: values.slug,
       description: values.description,
       main_content: values.main_content,
-      partner_companies: values.partner_companies,
-      quantum_companies: values.quantum_companies,
-      quantum_hardware: values.quantum_hardware,
-      quantum_software: values.quantum_software,
+      // Legacy fields removed - entities now managed separately
+      // partner_companies, quantum_companies, quantum_hardware, quantum_software
       published: values.published,
       featured: values.featured || false,
       academic_references: values.academic_references || null,
@@ -59,7 +57,15 @@ export async function saveCaseStudy(values: CaseStudyFormData): Promise<{ caseSt
     const relationshipStartTime = Date.now();
 
     // Step 1: Delete all existing relationships in parallel
-    const [industryDelResult, algorithmDelResult, personaDelResult] = await Promise.all([
+    const [
+      industryDelResult, 
+      algorithmDelResult, 
+      personaDelResult,
+      quantumSoftwareDelResult,
+      quantumHardwareDelResult,
+      quantumCompanyDelResult,
+      partnerCompanyDelResult
+    ] = await Promise.all([
       supabase
         .from('case_study_industry_relations')
         .delete()
@@ -70,6 +76,22 @@ export async function saveCaseStudy(values: CaseStudyFormData): Promise<{ caseSt
         .eq('case_study_id', data.id),
       supabase
         .from('case_study_persona_relations')
+        .delete()
+        .eq('case_study_id', data.id),
+      supabase
+        .from('case_study_quantum_software_relations')
+        .delete()
+        .eq('case_study_id', data.id),
+      supabase
+        .from('case_study_quantum_hardware_relations')
+        .delete()
+        .eq('case_study_id', data.id),
+      supabase
+        .from('case_study_quantum_company_relations')
+        .delete()
+        .eq('case_study_id', data.id),
+      supabase
+        .from('case_study_partner_company_relations')
         .delete()
         .eq('case_study_id', data.id)
     ]);
@@ -83,6 +105,18 @@ export async function saveCaseStudy(values: CaseStudyFormData): Promise<{ caseSt
     }
     if (personaDelResult.error) {
       console.error('[CASE_STUDY_SAVE] Error deleting persona relationships:', personaDelResult.error);
+    }
+    if (quantumSoftwareDelResult.error) {
+      console.error('[CASE_STUDY_SAVE] Error deleting quantum software relationships:', quantumSoftwareDelResult.error);
+    }
+    if (quantumHardwareDelResult.error) {
+      console.error('[CASE_STUDY_SAVE] Error deleting quantum hardware relationships:', quantumHardwareDelResult.error);
+    }
+    if (quantumCompanyDelResult.error) {
+      console.error('[CASE_STUDY_SAVE] Error deleting quantum company relationships:', quantumCompanyDelResult.error);
+    }
+    if (partnerCompanyDelResult.error) {
+      console.error('[CASE_STUDY_SAVE] Error deleting partner company relationships:', partnerCompanyDelResult.error);
     }
 
 
@@ -145,6 +179,55 @@ export async function saveCaseStudy(values: CaseStudyFormData): Promise<{ caseSt
       );
     }
 
+    // Add quantum entity relationships
+    if (values.quantum_software && values.quantum_software.length > 0) {
+      const quantumSoftwareRelations = values.quantum_software.map((softwareId: string) => ({
+        case_study_id: data.id,
+        quantum_software_id: softwareId
+      }));
+      insertPromises.push(
+        supabase
+          .from('case_study_quantum_software_relations')
+          .insert(quantumSoftwareRelations)
+      );
+    }
+    
+    if (values.quantum_hardware && values.quantum_hardware.length > 0) {
+      const quantumHardwareRelations = values.quantum_hardware.map((hardwareId: string) => ({
+        case_study_id: data.id,
+        quantum_hardware_id: hardwareId
+      }));
+      insertPromises.push(
+        supabase
+          .from('case_study_quantum_hardware_relations')
+          .insert(quantumHardwareRelations)
+      );
+    }
+    
+    if (values.quantum_companies && values.quantum_companies.length > 0) {
+      const quantumCompanyRelations = values.quantum_companies.map((companyId: string) => ({
+        case_study_id: data.id,
+        quantum_company_id: companyId
+      }));
+      insertPromises.push(
+        supabase
+          .from('case_study_quantum_company_relations')
+          .insert(quantumCompanyRelations)
+      );
+    }
+    
+    if (values.partner_companies && values.partner_companies.length > 0) {
+      const partnerCompanyRelations = values.partner_companies.map((companyId: string) => ({
+        case_study_id: data.id,
+        partner_company_id: companyId
+      }));
+      insertPromises.push(
+        supabase
+          .from('case_study_partner_company_relations')
+          .insert(partnerCompanyRelations)
+      );
+    }
+
     // Execute all inserts in parallel
     if (insertPromises.length > 0) {
       const insertResults = await Promise.all(insertPromises);
@@ -152,7 +235,11 @@ export async function saveCaseStudy(values: CaseStudyFormData): Promise<{ caseSt
       // Check for insert errors
       insertResults.forEach((result, index) => {
         if (result.error) {
-          const type = index === 0 ? 'industry' : index === 1 ? 'algorithm' : 'persona';
+          const relationTypes = [
+            'industry', 'algorithm', 'persona',
+            'quantum_software', 'quantum_hardware', 'quantum_company', 'partner_company'
+          ];
+          const type = relationTypes[index] || 'unknown';
           console.error(`[CASE_STUDY_SAVE] Error inserting ${type} relations:`, result.error);
         }
       });

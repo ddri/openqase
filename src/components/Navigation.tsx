@@ -82,19 +82,21 @@ export default function Navigation() {
               {mounted ? (
                 <Image
                   src={theme === 'dark' ? '/openqase-light.svg' : '/openqase-dark.svg'}
-                  alt="OpenQase Logo"
+                  alt="OpenQase - Quantum Computing Business Applications Platform"
                   className="h-8 w-auto"
                   width={32}
                   height={32}
+                  priority
                   suppressHydrationWarning
                 />
               ) : (
                 <Image
                   src='/openqase-light.svg'
-                  alt="OpenQase Logo"
+                  alt="OpenQase - Quantum Computing Business Applications Platform"
                   className="h-8 w-auto"
                   width={32}
                   height={32}
+                  priority
                   suppressHydrationWarning
                 />
               )}

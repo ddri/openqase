@@ -4,6 +4,32 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Future Enhancements (Backlog)
+- **RSS/Atom Feeds**: Implement content syndication when user demand justifies it
+  - Blog RSS feed at `/rss.xml`
+  - Case studies feed at `/case-studies/rss.xml` 
+  - Consider category-specific feeds for industries/personas
+- **JSON Feed API**: Modern alternative for enterprise integrations
+- **Webhook System**: Push notifications for new content
+
+## [Unreleased]
+
+### Added
+- **Enhanced SEO Schema Markup**: Comprehensive structured data implementation for better search visibility
+  - Enhanced case study schema with related entities, mentions, and comprehensive keywords
+  - Added schema for quantum ecosystem entities (companies, software, hardware, partners)
+  - Implemented breadcrumb schema across case studies, personas, and quantum entity pages
+  - Organization schema on homepage for site-wide authority
+  - FAQ schema for landing page to improve "People Also Ask" results
+  - Schema includes entity relationships and cross-references for knowledge graph
+  - Blog post schema with BlogPosting type for article-specific SEO
+  - WebSite schema with SearchAction for sitelinks search box in Google
+- **SEO Technical Optimizations**: Improved crawlability and indexing
+  - Added canonical URLs to all content pages to prevent duplicate content issues
+  - Enhanced image alt texts with descriptive content for accessibility and SEO
+  - Implemented priority loading for above-fold images and lazy loading for footer
+  - Added noindex directives to admin pages to prevent indexing of private content
+  
 ### Added
 - **API & Relationships Documentation**: Comprehensive guide explaining content connectivity architecture
   - Detailed explanation of bidirectional relationships and junction tables

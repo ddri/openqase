@@ -557,4 +557,5 @@ if (require.main === module) {
   main();
 }
 
-export { ContentReviewer, ContentReviewReport };
+export type { ContentReviewReport };
+export { ContentReviewer };

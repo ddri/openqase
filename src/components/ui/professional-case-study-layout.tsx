@@ -125,13 +125,13 @@ export default function ProfessionalCaseStudyLayout({
                 )}
 
                 {renderEntityLinks(
-                  caseStudy.case_study_partner_company_relations?.map((rel: any) => rel.partner_companies).filter(Boolean) || caseStudy.partner_companies,
+                  caseStudy.case_study_partner_company_relations?.map((rel: any) => rel.partner_companies).filter(Boolean),
                   'partner-companies',
                   'Partner Companies'
                 )}
 
                 {renderEntityLinks(
-                  caseStudy.case_study_quantum_company_relations?.map((rel: any) => rel.quantum_companies).filter(Boolean) || caseStudy.quantum_companies,
+                  caseStudy.case_study_quantum_company_relations?.map((rel: any) => rel.quantum_companies).filter(Boolean),
                   'quantum-companies',
                   'Quantum Companies'
                 )}
@@ -143,14 +143,14 @@ export default function ProfessionalCaseStudyLayout({
               <h3 className="text-lg font-semibold mb-4 text-foreground">Technical Details</h3>
               <div className="space-y-4">
                 {renderEntityLinks(
-                  caseStudy.case_study_quantum_hardware_relations?.map((rel: any) => rel.quantum_hardware).filter(Boolean) || caseStudy.quantum_hardware,
+                  caseStudy.case_study_quantum_hardware_relations?.map((rel: any) => rel.quantum_hardware).filter(Boolean),
                   'quantum-hardware',
                   'Quantum Hardware',
                   <Cpu className="h-3 w-3" />
                 )}
 
                 {renderEntityLinks(
-                  caseStudy.case_study_quantum_software_relations?.map((rel: any) => rel.quantum_software).filter(Boolean) || caseStudy.quantum_software,
+                  caseStudy.case_study_quantum_software_relations?.map((rel: any) => rel.quantum_software).filter(Boolean),
                   'quantum-software',
                   'Quantum Software'
                 )}

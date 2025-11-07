@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { Metadata } from 'next';
 import {
   LayoutDashboard,
   FileText,
@@ -12,6 +13,15 @@ import {
   Building2,
   HandHeart
 } from 'lucide-react';
+
+export const metadata: Metadata = {
+  robots: {
+    index: false,
+    follow: false,
+    noarchive: true,
+    nosnippet: true,
+  },
+};
 
 export default function AdminLayout({
   children,

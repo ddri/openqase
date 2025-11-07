@@ -49,8 +49,23 @@ export async function generateMetadata({ params }: CaseStudyPageProps) {
   }
 
   return {
-    title: caseStudy.title,
-    description: caseStudy.description || '',
+    title: `${caseStudy.title} | Quantum Computing Case Study - OpenQase`,
+    description: caseStudy.description || `Learn how quantum computing solved real business challenges in this case study. Explore practical applications and results from ${caseStudy.title}.`,
+    alternates: {
+      canonical: `/case-study/${resolvedParams.slug}`,
+    },
+    openGraph: {
+      title: caseStudy.title,
+      description: caseStudy.description || `Quantum computing case study: ${caseStudy.title}`,
+      type: 'article',
+      images: ['/og-image.svg'],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: caseStudy.title,
+      description: caseStudy.description || `Quantum computing case study: ${caseStudy.title}`,
+      images: ['/og-image.svg'],
+    },
   };
 }
 
@@ -90,6 +105,14 @@ export default async function CaseStudyPage({ params }: CaseStudyPageProps) {
     <>
       {/* Ghost-style automatic case study schema */}
       <AutoSchema type="case-study" data={caseStudy} />
+      <AutoSchema 
+        type="breadcrumb" 
+        breadcrumbs={[
+          { name: 'Home', url: '/' },
+          { name: 'Case Studies', url: '/case-study' },
+          { name: caseStudy.title, url: `/case-study/${caseStudy.slug}` }
+        ]} 
+      />
       
       <ProfessionalCaseStudyLayout
         title={caseStudy.title}

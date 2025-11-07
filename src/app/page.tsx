@@ -94,7 +94,9 @@ export default async function HomePage() {
 
   return (
     <div className="flex flex-col">
-      {/* Automatic FAQ schema for landing page */}
+      {/* Automatic schema markup for SEO */}
+      <AutoSchema type="organization" />
+      <AutoSchema type="website" />
       <AutoSchema type="faq" />
       
       {/* Modern Magazine-Style Hero Section */}
@@ -241,20 +243,7 @@ export default async function HomePage() {
                   featuredCaseStudies.map((caseStudy, index) => (
                     <Link key={caseStudy.id} href={`/case-study/${caseStudy.slug}`} className="block group">
                       <div className="bg-card rounded-lg border border-border p-6 elevation-interactive hover:border-primary">
-                        {/* Partner Companies as tags */}
-                        {((caseStudy.quantum_companies && caseStudy.quantum_companies.length > 0) || 
-                          (caseStudy.partner_companies && caseStudy.partner_companies.length > 0)) && (
-                          <div className="flex gap-2 mb-3">
-                            {/* Combine quantum and partner companies, take first 2 */}
-                            {[...(caseStudy.quantum_companies || []), ...(caseStudy.partner_companies || [])]
-                              .slice(0, 2)
-                              .map((company, idx) => (
-                                <span key={idx} className="px-2 py-1 bg-primary/10 text-primary text-xs font-medium">
-                                  {company}
-                                </span>
-                              ))}
-                          </div>
-                        )}
+                        {/* Legacy company tags removed - entities now managed separately */}
                         <h4 className="text-lg font-bold text-foreground mb-2 group-hover:text-primary transition-colors">
                           {caseStudy.title}
                         </h4>

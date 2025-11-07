@@ -6,6 +6,7 @@ import { processMarkdown } from '@/lib/markdown-server';
 import Link from 'next/link';
 import { ExternalLink, Building2, Users, MapPin, FileText, Cpu, Code, Briefcase } from 'lucide-react';
 import { getRelatedQuantumSoftware, getRelatedQuantumHardware, getRelatedPartnerCompanies } from '@/lib/relationship-queries';
+import { AutoSchema } from '@/components/AutoSchema';
 type EnrichedQuantumCompany = Database['public']['Tables']['quantum_companies']['Row'] & {
   case_study_quantum_company_relations?: { case_studies: { id: string; title: string; slug: string; description: string; published_at: string } | null }[];
 };
@@ -38,6 +39,9 @@ export async function generateMetadata({ params }: QuantumCompanyPageProps) {
   return {
     title: `${quantumCompany.name} - Quantum Companies | OpenQase`,
     description: quantumCompany.description || `Learn about ${quantumCompany.name}, a quantum computing company featured in OpenQase case studies.`,
+    alternates: {
+      canonical: `/paths/quantum-companies/${resolvedParams.slug}`,
+    },
   };
 }
 
@@ -74,8 +78,21 @@ export default async function QuantumCompanyDetailPage({ params }: QuantumCompan
   ]);
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-8">
-      {/* Header */}
+    <>
+      {/* Schema markup for SEO */}
+      <AutoSchema type="quantum-entity" data={quantumCompany} entityType="quantum-companies" />
+      <AutoSchema 
+        type="breadcrumb" 
+        breadcrumbs={[
+          { name: 'Home', url: '/' },
+          { name: 'Paths', url: '/paths' },
+          { name: 'Quantum Companies', url: '/paths/quantum-companies' },
+          { name: quantumCompany.name, url: `/paths/quantum-companies/${quantumCompany.slug}` }
+        ]} 
+      />
+      
+      <div className="max-w-4xl mx-auto px-4 py-8">
+        {/* Header */}
       <div className="mb-8">
         <div className="mb-4">
           <Link href="/paths/quantum-companies" className="text-sm text-muted-foreground hover:text-primary">
@@ -290,5 +307,6 @@ export default async function QuantumCompanyDetailPage({ params }: QuantumCompan
         </div>
       )}
     </div>
+    </>
   );
 }

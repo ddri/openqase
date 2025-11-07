@@ -55,6 +55,9 @@ export async function generateMetadata({ params }: PageParams) {
   return {
     title: persona.name,
     description: persona.description,
+    alternates: {
+      canonical: `/paths/persona/${resolvedParams.slug}`,
+    },
   };
 }
 
@@ -90,6 +93,15 @@ export default async function PersonaPage({ params }: PageParams) {
     <>
       {/* Ghost-style automatic course schema */}
       <AutoSchema type="course" data={persona} courseType="persona" />
+      <AutoSchema 
+        type="breadcrumb" 
+        breadcrumbs={[
+          { name: 'Home', url: '/' },
+          { name: 'Paths', url: '/paths' },
+          { name: 'Professional Roles', url: '/paths/persona' },
+          { name: persona.name, url: `/paths/persona/${persona.slug}` }
+        ]} 
+      />
       
       <ProfessionalPersonaDetailLayout
         title={persona.name}

@@ -6,17 +6,21 @@ import {
   getCaseStudySchema, 
   getCourseSchema, 
   getFAQSchema,
-  getBreadcrumbSchema 
+  getBreadcrumbSchema,
+  getQuantumEntitySchema,
+  getBlogPostSchema,
+  getWebSiteSchema 
 } from '@/lib/schema';
 
 interface AutoSchemaProps {
-  type: 'organization' | 'case-study' | 'course' | 'faq' | 'breadcrumb';
+  type: 'organization' | 'case-study' | 'course' | 'faq' | 'breadcrumb' | 'quantum-entity' | 'blog-post' | 'website';
   data?: any;
   courseType?: 'persona' | 'industry' | 'algorithm';
+  entityType?: 'quantum-companies' | 'partner-companies' | 'quantum-software' | 'quantum-hardware';
   breadcrumbs?: Array<{name: string, url: string}>;
 }
 
-export function AutoSchema({ type, data, courseType, breadcrumbs }: AutoSchemaProps) {
+export function AutoSchema({ type, data, courseType, entityType, breadcrumbs }: AutoSchemaProps) {
   let schema;
   
   switch (type) {
@@ -30,6 +34,17 @@ export function AutoSchema({ type, data, courseType, breadcrumbs }: AutoSchemaPr
     case 'course':
       if (!data || !courseType) return null;
       schema = getCourseSchema(data, courseType);
+      break;
+    case 'quantum-entity':
+      if (!data || !entityType) return null;
+      schema = getQuantumEntitySchema(data, entityType);
+      break;
+    case 'blog-post':
+      if (!data) return null;
+      schema = getBlogPostSchema(data);
+      break;
+    case 'website':
+      schema = getWebSiteSchema();
       break;
     case 'faq':
       schema = getFAQSchema();
@@ -58,6 +73,7 @@ interface MultiSchemaProps {
     type: AutoSchemaProps['type'];
     data?: any;
     courseType?: AutoSchemaProps['courseType'];
+    entityType?: AutoSchemaProps['entityType'];
     breadcrumbs?: AutoSchemaProps['breadcrumbs'];
   }>;
 }

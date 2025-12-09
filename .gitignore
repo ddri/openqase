@@ -117,6 +117,9 @@ scripts/test-*.json
 # Claude Code development guidelines (local only)
 CLAUDE.md
 
+# Design iteration backups
+*.css.backup
+
 # Cursor IDE configuration (may contain tokens)
 .cursor/
 src/.cursor/

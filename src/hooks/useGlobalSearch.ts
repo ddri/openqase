@@ -15,6 +15,10 @@ export interface GroupedSearchResults {
   industries: SearchResult[];
   personas: SearchResult[];
   blog_posts: SearchResult[];
+  quantum_software: SearchResult[];
+  quantum_hardware: SearchResult[];
+  quantum_companies: SearchResult[];
+  partner_companies: SearchResult[];
 }
 
 /**
@@ -78,7 +82,11 @@ export function useGlobalSearch(searchData: SearchableItem[]) {
         algorithms: [],
         industries: [],
         personas: [],
-        blog_posts: []
+        blog_posts: [],
+        quantum_software: [],
+        quantum_hardware: [],
+        quantum_companies: [],
+        partner_companies: []
       } as GroupedSearchResults;
     }
 
@@ -101,7 +109,11 @@ export function useGlobalSearch(searchData: SearchableItem[]) {
       algorithms: [],
       industries: [],
       personas: [],
-      blog_posts: []
+      blog_posts: [],
+      quantum_software: [],
+      quantum_hardware: [],
+      quantum_companies: [],
+      partner_companies: []
     };
 
     results.forEach(result => {

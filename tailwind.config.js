@@ -37,6 +37,10 @@ module.exports = {
 			primary: 'hsl(var(--surface-primary))',
 			secondary: 'hsl(var(--surface-secondary))',
 			tertiary: 'hsl(var(--surface-tertiary))',
+			sunken: 'hsl(var(--surface-sunken))',
+			base: 'hsl(var(--surface-base))',
+			content: 'hsl(var(--surface-content))',
+			raised: 'hsl(var(--surface-raised))',
 		  },
 		  primary: {
 			DEFAULT: 'hsl(var(--primary))',

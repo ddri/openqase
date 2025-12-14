@@ -5,7 +5,7 @@ import { PostgrestError } from '@supabase/supabase-js';
 /**
  * Content types supported by the CMS
  */
-export type ContentType = 'algorithms' | 'personas' | 'industries' | 'case_studies' | 'blog_posts';
+export type ContentType = 'algorithms' | 'personas' | 'industries' | 'case_studies' | 'blog_posts' | 'quantum_software' | 'quantum_hardware' | 'quantum_companies' | 'partner_companies';
 
 /**
  * Configuration for a relationship between content types
@@ -311,17 +311,18 @@ export async function deleteContentItem({
       .eq('id', id);
       
     // Step 3: Log the deletion for audit trail
-    if (!deleteError && deletedBy) {
-      await serviceClient
-        .from('deletion_audit_log')
-        .insert({
-          content_type: contentType,
-          content_id: id,
-          action: 'soft_delete',
-          performed_by: deletedBy,
-          performed_at: new Date().toISOString()
-        });
-    }
+    // TODO: Add deletion_audit_log table to database and types
+    // if (!deleteError && deletedBy) {
+    //   await serviceClient
+    //     .from('deletion_audit_log')
+    //     .insert({
+    //       content_type: contentType,
+    //       content_id: id,
+    //       action: 'soft_delete',
+    //       performed_by: deletedBy,
+    //       performed_at: new Date().toISOString()
+    //     });
+    // }
       
     return { success: !deleteError, error: deleteError };
   } catch (error) {
@@ -381,17 +382,18 @@ export async function recoverContentItem({
     }
     
     // Step 3: Log the recovery for audit trail
-    if (recoveredBy) {
-      await serviceClient
-        .from('deletion_audit_log')
-        .insert({
-          content_type: contentType,
-          content_id: id,
-          action: 'restore',
-          performed_by: recoveredBy,
-          performed_at: new Date().toISOString()
-        });
-    }
+    // TODO: Add deletion_audit_log table to database and types
+    // if (recoveredBy) {
+    //   await serviceClient
+    //     .from('deletion_audit_log')
+    //     .insert({
+    //       content_type: contentType,
+    //       content_id: id,
+    //       action: 'restore',
+    //       performed_by: recoveredBy,
+    //       performed_at: new Date().toISOString()
+    //     });
+    // }
     
     return { success: true, data };
   } catch (error) {
@@ -497,6 +499,38 @@ export const RELATIONSHIP_CONFIGS = {
       contentIdField: 'blog_post_id',
       relatedIdField: 'related_blog_post_id',
       relatedTable: 'blog_posts'
+    }
+  },
+  quantumSoftware: {
+    caseStudies: {
+      junctionTable: 'case_study_quantum_software_relations',
+      contentIdField: 'quantum_software_id',
+      relatedIdField: 'case_study_id',
+      relatedTable: 'case_studies'
+    }
+  },
+  quantumHardware: {
+    caseStudies: {
+      junctionTable: 'case_study_quantum_hardware_relations',
+      contentIdField: 'quantum_hardware_id',
+      relatedIdField: 'case_study_id',
+      relatedTable: 'case_studies'
+    }
+  },
+  quantumCompanies: {
+    caseStudies: {
+      junctionTable: 'case_study_quantum_company_relations',
+      contentIdField: 'quantum_company_id',
+      relatedIdField: 'case_study_id',
+      relatedTable: 'case_studies'
+    }
+  },
+  partnerCompanies: {
+    caseStudies: {
+      junctionTable: 'case_study_partner_company_relations',
+      contentIdField: 'partner_company_id',
+      relatedIdField: 'case_study_id',
+      relatedTable: 'case_studies'
     }
   }
 };

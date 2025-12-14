@@ -6,6 +6,7 @@ import { format } from 'date-fns';
 import { getStaticContentWithRelationships, generateStaticParamsForContentType } from '@/lib/content-fetchers';
 import { EnrichedBlogPost } from '@/lib/types';
 import { processMarkdown } from '@/lib/markdown-server';
+import { AutoSchema } from '@/components/AutoSchema';
 
 interface BlogPostPageProps {
   params: Promise<{
@@ -32,6 +33,9 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
   return {
     title: `${blogPost.title} - OpenQASE Blog`,
     description: blogPost.description || 'Blog post from OpenQASE',
+    alternates: {
+      canonical: `/blog/${resolvedParams.slug}`,
+    },
   };
 }
 
@@ -52,8 +56,20 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
     .filter(post => post && post.slug);
 
   return (
-    <main className="min-h-screen">
-      <div className="container-outer section-spacing">
+    <>
+      {/* Schema markup for SEO */}
+      <AutoSchema type="blog-post" data={blogPost} />
+      <AutoSchema 
+        type="breadcrumb" 
+        breadcrumbs={[
+          { name: 'Home', url: '/' },
+          { name: 'Blog', url: '/blog' },
+          { name: blogPost.title, url: `/blog/${blogPost.slug}` }
+        ]} 
+      />
+      
+      <main className="min-h-screen">
+        <div className="container-outer section-spacing">
         <div className="max-w-4xl mx-auto">
         {/* Breadcrumb */}
         <div className="mb-12">
@@ -126,5 +142,6 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
         </div>
       </div>
     </main>
+    </>
   );
 }

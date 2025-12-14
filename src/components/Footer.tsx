@@ -172,10 +172,11 @@ export default function Footer() {
           <div className="flex justify-center mb-6">
             <Image
               src={'/openqase-wordmark-sm2.svg'}
-              alt="openQase Wordmark"
+              alt="OpenQase - Quantum Computing Business Applications Platform"
               className="h-10 w-auto"
               width={120}
               height={40}
+              loading="lazy"
               suppressHydrationWarning
             />
           </div>

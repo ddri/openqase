@@ -211,10 +211,10 @@ export const validators = {
  * @param contentType - The type of content being validated
  * @returns An array of validation rules for the content type
  */
-export function createContentValidationRules(contentType: 'algorithm' | 'persona' | 'industry' | 'case_study' | 'blog_post'): ValidationRule[] {
+export function createContentValidationRules(contentType: 'algorithm' | 'persona' | 'industry' | 'case_study' | 'blog_post' | 'quantum_companies' | 'quantum_software' | 'quantum_hardware' | 'partner_companies'): ValidationRule[] {
   const commonRules: ValidationRule[] = [
     {
-      field: ['algorithm', 'persona', 'industry'].includes(contentType) ? 'name' : 'title',
+      field: ['algorithm', 'persona', 'industry', 'quantum_companies', 'quantum_software', 'quantum_hardware', 'partner_companies'].includes(contentType) ? 'name' : 'title',
       tab: 'basic',
       label: 'Name is required',
       validator: validators.required
@@ -335,6 +335,50 @@ export function createContentValidationRules(contentType: 'algorithm' | 'persona
           tab: 'classifications',
           label: 'Featured image is recommended',
           validator: validators.or(validators.required, () => true) // Optional but tracked
+        }
+      ];
+      
+    case 'quantum_companies':
+      return [
+        ...commonRules,
+        {
+          field: 'main_content',
+          tab: 'content',
+          label: 'Main content is required',
+          validator: validators.required
+        }
+      ];
+      
+    case 'quantum_software':
+      return [
+        ...commonRules,
+        {
+          field: 'main_content',
+          tab: 'content',
+          label: 'Main content is required',
+          validator: validators.required
+        }
+      ];
+      
+    case 'quantum_hardware':
+      return [
+        ...commonRules,
+        {
+          field: 'main_content',
+          tab: 'content',
+          label: 'Main content is required',
+          validator: validators.required
+        }
+      ];
+      
+    case 'partner_companies':
+      return [
+        ...commonRules,
+        {
+          field: 'main_content',
+          tab: 'content',
+          label: 'Main content is required',
+          validator: validators.required
         }
       ];
       

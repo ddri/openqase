@@ -39,54 +39,61 @@ OpenQase uses a **hybrid architecture** that combines:
 
 ## Getting Started
 
-1. **Clone the repository:**
+### Prerequisites
+- Node.js 18+
+- [Supabase CLI](https://supabase.com/docs/guides/cli) (for local development)
+- Docker (required by Supabase CLI)
+
+### Setup
+
+1. **Clone and install:**
 ```bash
 git clone https://github.com/ddri/openqase.git
 cd openqase
-```
-
-2. **Install dependencies:**
-```bash
 npm install
 ```
 
-3. **Set up environment variables:**
+2. **Set up environment variables:**
 ```bash
 cp .env.example .env.local
-# Add your Supabase credentials and Beehiiv API key for newsletter
 ```
+Edit `.env.local` with your Supabase credentials (get these from Supabase Dashboard → Settings → API).
 
-4. **Set up local database:**
+3. **Set up local database:**
 ```bash
-# Option A: Use the setup script (recommended)
-./scripts/setup-local.sh
-
-# Option B: Manual setup
+# Start local Supabase
 supabase start
-supabase db reset
+
+# Link to production project (get project ref from Supabase dashboard URL)
+supabase link --project-ref <your-project-ref>
+
+# Pull schema and data from production
+supabase db pull
 ```
 
-5. **Run the development server:**
+4. **Run the development server:**
 ```bash
 npm run dev
 ```
 
-6. **Set up admin access:**
+Open [http://localhost:3000](http://localhost:3000) to see the site.
+
+### Syncing with Production
+
+To update your local database with the latest production data:
 ```bash
-npm run setup-admin
-# Creates admin user for content management and soft delete features
+supabase db pull
 ```
 
-7. **Build for production:**
+### Build for Production
 ```bash
 npm run build
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
 ## 📚 Documentation
 
 ### Core System
+- **[API & Relationships Architecture](./docs/api-relationships-architecture.md)** - How content types connect and enable discovery
 - **[Unified Content Fetching](./docs/unified-content-fetching.md)** - Complete API documentation
 - **[Data Fetching](./docs/data-fetching.md)** - Updated patterns and best practices
 - **[Quick Reference](./docs/v040-quick-reference.md)** - Developer quick start guide
@@ -243,7 +250,8 @@ openqase/
 - Search functionality enhancement (basic implementation complete)
 
 ### 🛠️ Technical Debt & Infrastructure
-- **Advanced Caching with Redis** - Upgrade from in-memory rate limiting to Redis-based caching and session storage
+- **Content Language Checking Tool** - Complete database connection setup for the UK English language checking tool (`scripts/content-review.ts`). Tool is fully developed with LanguageTool API integration, quantum computing terms dictionary, US/UK spelling detection, and HTML/JSON reporting, but needs database connectivity troubleshooting to function.
+- **Advanced Caching with Redis** - Upgrade from in-memory rate limiting to Redis-based caching and session storage. This will be more relevant when we release the public API.
 - **Database Function Security** - Add `SET search_path` to 9 SECURITY DEFINER functions to resolve Supabase linter warnings (low priority - functions are internal utilities)
 
 ### 📚 Documentation & Developer Experience  

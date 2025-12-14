@@ -1,7 +1,7 @@
 import { createServerSupabaseClient, createServiceRoleSupabaseClient } from '@/lib/supabase-server';
 
 // Define content types
-export type ContentType = 'case_studies' | 'algorithms' | 'personas' | 'industries' | 'blog_posts';
+export type ContentType = 'case_studies' | 'algorithms' | 'personas' | 'industries' | 'blog_posts' | 'quantum_software' | 'quantum_hardware' | 'quantum_companies' | 'partner_companies';
 
 // Define relationship mapping for each content type
 const RELATIONSHIP_MAPS: Record<ContentType, string> = {
@@ -9,7 +9,11 @@ const RELATIONSHIP_MAPS: Record<ContentType, string> = {
     *,
     case_study_industry_relations(industries(id, name, slug)),
     algorithm_case_study_relations(algorithms(id, name, slug, quantum_advantage)),
-    case_study_persona_relations(personas(id, name, slug))
+    case_study_persona_relations(personas(id, name, slug)),
+    case_study_quantum_software_relations(quantum_software(id, name, slug)),
+    case_study_quantum_hardware_relations(quantum_hardware(id, name, slug)),
+    case_study_quantum_company_relations(quantum_companies(id, name, slug)),
+    case_study_partner_company_relations(partner_companies(id, name, slug))
   `,
   algorithms: `
     *,
@@ -37,6 +41,22 @@ const RELATIONSHIP_MAPS: Record<ContentType, string> = {
         id, title, slug, description, published_at, author, category, tags
       )
     )
+  `,
+  quantum_software: `
+    *,
+    case_study_quantum_software_relations(case_studies(id, title, slug, description, published_at, published))
+  `,
+  quantum_hardware: `
+    *,
+    case_study_quantum_hardware_relations(case_studies(id, title, slug, description, published_at, published))
+  `,
+  quantum_companies: `
+    *,
+    case_study_quantum_company_relations(case_studies(id, title, slug, description, published_at, published))
+  `,
+  partner_companies: `
+    *,
+    case_study_partner_company_relations(case_studies(id, title, slug, description, published_at, published))
   `
 };
 
@@ -44,7 +64,7 @@ const RELATIONSHIP_MAPS: Record<ContentType, string> = {
  * Helper function to filter relationships and remove null/unpublished content
  * This prevents null pointer exceptions and handles mixed content gracefully
  */
-function filterRelationships(data: any, preview: boolean = false): any {
+function filterRelationships(data: any, contentType: ContentType, preview: boolean = false): any {
   if (!data) return data;
 
   // Helper to filter individual relationship arrays
@@ -65,11 +85,15 @@ function filterRelationships(data: any, preview: boolean = false): any {
   // Apply filtering based on content type
   const filtered = { ...data };
   
-  // Determine content type based on data properties
-  const isCaseStudy = data.hasOwnProperty('title') && data.hasOwnProperty('partner_companies');
-  const isAlgorithm = data.hasOwnProperty('quantum_advantage');
-  const isIndustry = data.hasOwnProperty('icon') && !data.hasOwnProperty('expertise');
-  const isPersona = data.hasOwnProperty('expertise');
+  // Determine content type from explicit parameter
+  const isCaseStudy = contentType === 'case_studies';
+  const isAlgorithm = contentType === 'algorithms';
+  const isIndustry = contentType === 'industries';
+  const isPersona = contentType === 'personas';
+  const isQuantumSoftware = contentType === 'quantum_software';
+  const isQuantumHardware = contentType === 'quantum_hardware';
+  const isQuantumCompany = contentType === 'quantum_companies';
+  const isPartnerCompany = contentType === 'partner_companies';
   
   // Handle bidirectional junction tables based on context
   
@@ -138,6 +162,44 @@ function filterRelationships(data: any, preview: boolean = false): any {
     );
   }
 
+  // NEW CONTENT TYPE RELATIONSHIPS (added in migration):
+  
+  // case_study_quantum_software_relations (bidirectional)
+  if (filtered.case_study_quantum_software_relations) {
+    const nestedKey = isCaseStudy ? 'quantum_software' : 'case_studies';
+    filtered.case_study_quantum_software_relations = filterRelationArray(
+      filtered.case_study_quantum_software_relations,
+      nestedKey
+    );
+  }
+  
+  // case_study_quantum_hardware_relations (bidirectional)  
+  if (filtered.case_study_quantum_hardware_relations) {
+    const nestedKey = isCaseStudy ? 'quantum_hardware' : 'case_studies';
+    filtered.case_study_quantum_hardware_relations = filterRelationArray(
+      filtered.case_study_quantum_hardware_relations,
+      nestedKey
+    );
+  }
+  
+  // case_study_quantum_company_relations (bidirectional)
+  if (filtered.case_study_quantum_company_relations) {
+    const nestedKey = isCaseStudy ? 'quantum_companies' : 'case_studies';
+    filtered.case_study_quantum_company_relations = filterRelationArray(
+      filtered.case_study_quantum_company_relations,
+      nestedKey
+    );
+  }
+  
+  // case_study_partner_company_relations (bidirectional)
+  if (filtered.case_study_partner_company_relations) {
+    const nestedKey = isCaseStudy ? 'partner_companies' : 'case_studies';
+    filtered.case_study_partner_company_relations = filterRelationArray(
+      filtered.case_study_partner_company_relations,
+      nestedKey
+    );
+  }
+
   return filtered;
 }
 
@@ -174,7 +236,7 @@ export async function getStaticContentWithRelationships<T>(
   }
 
   // Filter relationships to handle mixed published/unpublished content
-  const filteredData = filterRelationships(data, options.preview);
+  const filteredData = filterRelationships(data, contentType, options.preview);
   
   return filteredData as T;
 }

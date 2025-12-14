@@ -54,7 +54,7 @@ export function TagInput({
 
   return (
     <Command className={cn("overflow-visible bg-transparent", className)}>
-      <div className="flex flex-wrap gap-1 rounded-md border px-3 py-2">
+      <div className="flex flex-wrap gap-1 rounded-md border-2 border-input bg-surface-sunken px-3 py-2 transition-colors focus-within:ring-2 focus-within:ring-ring">
         {tags.map((tag) => (
           <Badge key={tag} variant="secondary">
             {tag}

@@ -1,7 +1,7 @@
 import { Metadata } from 'next';
 import { createServerSupabaseClient } from '@/lib/supabase-server';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { FileText, BookOpen, Briefcase, Users, PenTool } from 'lucide-react';
+import { FileText, BookOpen, Briefcase, Users, PenTool, Cpu, Building2, Handshake, Rocket } from 'lucide-react';
 import Link from 'next/link';
 
 export const metadata: Metadata = {
@@ -12,19 +12,27 @@ export const metadata: Metadata = {
 export default async function AdminDashboard() {
   const supabase = await createServerSupabaseClient();
   
-  // Fetch counts for different content types
+  // Fetch counts for all content types
   const [
     caseStudiesResponse,
     algorithmsResponse,
     industriesResponse,
     personasResponse,
-    blogPostsResponse
+    blogPostsResponse,
+    quantumSoftwareResponse,
+    quantumHardwareResponse,
+    quantumCompaniesResponse,
+    partnerCompaniesResponse
   ] = await Promise.all([
     supabase.from('case_studies').select('id', { count: 'exact', head: true }),
     supabase.from('algorithms').select('id', { count: 'exact', head: true }),
     supabase.from('industries').select('id', { count: 'exact', head: true }),
     supabase.from('personas').select('id', { count: 'exact', head: true }),
-    supabase.from('blog_posts').select('id', { count: 'exact', head: true })
+    supabase.from('blog_posts').select('id', { count: 'exact', head: true }),
+    supabase.from('quantum_software').select('id', { count: 'exact', head: true }),
+    supabase.from('quantum_hardware').select('id', { count: 'exact', head: true }),
+    supabase.from('quantum_companies').select('id', { count: 'exact', head: true }),
+    supabase.from('partner_companies').select('id', { count: 'exact', head: true })
   ]);
 
   const contentCounts = {
@@ -32,7 +40,11 @@ export default async function AdminDashboard() {
     algorithms: algorithmsResponse.count || 0,
     industries: industriesResponse.count || 0,
     personas: personasResponse.count || 0,
-    blogPosts: blogPostsResponse.count || 0
+    blogPosts: blogPostsResponse.count || 0,
+    quantumSoftware: quantumSoftwareResponse.count || 0,
+    quantumHardware: quantumHardwareResponse.count || 0,
+    quantumCompanies: quantumCompaniesResponse.count || 0,
+    partnerCompanies: partnerCompaniesResponse.count || 0
   };
 
   const contentCards = [
@@ -65,6 +77,34 @@ export default async function AdminDashboard() {
       description: 'Manage user personas'
     },
     {
+      title: 'Quantum Software',
+      count: contentCounts.quantumSoftware,
+      icon: <Rocket className="h-8 w-8 text-cyan-500" />,
+      href: '/admin/quantum-software',
+      description: 'Manage quantum software platforms'
+    },
+    {
+      title: 'Quantum Hardware',
+      count: contentCounts.quantumHardware,
+      icon: <Cpu className="h-8 w-8 text-indigo-500" />,
+      href: '/admin/quantum-hardware',
+      description: 'Manage quantum hardware systems'
+    },
+    {
+      title: 'Quantum Companies',
+      count: contentCounts.quantumCompanies,
+      icon: <Building2 className="h-8 w-8 text-teal-500" />,
+      href: '/admin/quantum-companies',
+      description: 'Manage quantum companies'
+    },
+    {
+      title: 'Partner Companies',
+      count: contentCounts.partnerCompanies,
+      icon: <Handshake className="h-8 w-8 text-amber-500" />,
+      href: '/admin/partner-companies',
+      description: 'Manage partner organizations'
+    },
+    {
       title: 'Blog Posts',
       count: contentCounts.blogPosts,
       icon: <PenTool className="h-8 w-8 text-pink-500" />,
@@ -82,7 +122,7 @@ export default async function AdminDashboard() {
         </p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
         {contentCards.map((card) => (
           <Link href={card.href} key={card.title}>
             <Card className="hover:shadow-md transition-shadow cursor-pointer h-full">
@@ -118,6 +158,18 @@ export default async function AdminDashboard() {
               </Link>
               <Link href="/admin/personas/new" className="block text-blue-500 hover:underline">
                 New Persona
+              </Link>
+              <Link href="/admin/quantum-software/new" className="block text-blue-500 hover:underline">
+                New Quantum Software
+              </Link>
+              <Link href="/admin/quantum-hardware/new" className="block text-blue-500 hover:underline">
+                New Quantum Hardware
+              </Link>
+              <Link href="/admin/quantum-companies/new" className="block text-blue-500 hover:underline">
+                New Quantum Company
+              </Link>
+              <Link href="/admin/partner-companies/new" className="block text-blue-500 hover:underline">
+                New Partner Company
               </Link>
               <Link href="/admin/blog/new" className="block text-blue-500 hover:underline">
                 New Blog Post

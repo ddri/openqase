@@ -3,160 +3,182 @@
 @tailwind utilities;
 
 @layer base {
-  /* Light theme - Sophisticated & Modern */
+  /* Light theme - Clean & Warm (complements Hex Warm dark mode) */
   :root {
-    --background: 0 0% 94%;       /* #f0f0f0 - More contrast with white cards */
-    --foreground: 0 0% 0%;        /* Pure black text like Stark */
-    
+    --background: 30 20% 97%;      /* #faf9f7 - Warm off-white */
+    --foreground: 230 15% 15%;     /* #232830 - Warm dark, not pure black */
+
     /* Elevation System Surfaces */
-    --surface-sunken: 0 0% 91%;   /* #e8e8e8 - More defined recession */
-    --surface-base: 0 0% 94%;      /* #f0f0f0 - Page background */
+    --surface-sunken: 30 15% 94%;  /* #f2f0ed - Warm recession */
+    --surface-base: 30 20% 97%;    /* #faf9f7 - Page background */
     --surface-content: 0 0% 100%;  /* #ffffff - Main content */
-    --surface-raised: 0 0% 100%;   /* #ffffff - Cards (use shadows) */
-    
-    --card: 0 0% 100%;           /* Pure white cards */
-    --card-foreground: 240 10% 3.9%;
-    --card-background: 0 0% 100% / 0.8;
-    --card-border: 240 5.9% 90%; /* Subtle gray borders */
-    --card-hover-border: 221 83% 53%; /* Stark blue */
-    --card-hover-background: 221 83% 53% / 0.05;
-    
-    --text-primary: 0 0% 0%;        /* Pure black like Stark */
-    --text-secondary: 0 0% 15%;     /* Even darker for strong readability */
-    --text-tertiary: 0 0% 30%;      /* Darker medium gray */
-    
-    --surface-primary: 0 0% 100%;    /* White */
-    --surface-secondary: 30 10% 92%; /* Subtle warm gray */
-    --surface-tertiary: 30 8% 90%;   /* Slightly darker warm gray */
-    
+    --surface-raised: 0 0% 100%;   /* #ffffff - Cards */
+
+    --card: 0 0% 100%;             /* Pure white cards */
+    --card-foreground: 230 15% 15%;
+    --card-background: 0 0% 100% / 0.9;
+    --card-border: 30 10% 88%;     /* Warm gray border */
+    --card-hover-border: 25 55% 45%; /* Amber on hover */
+    --card-hover-background: 25 55% 45% / 0.05;
+
+    --text-primary: 230 15% 15%;   /* Warm dark */
+    --text-secondary: 230 10% 30%; /* Medium warm gray */
+    --text-tertiary: 230 8% 45%;   /* Light warm gray */
+
+    --surface-primary: 0 0% 100%;
+    --surface-secondary: 30 15% 96%;
+    --surface-tertiary: 30 12% 93%;
+
     --popover: 0 0% 100%;
-    --popover-foreground: 240 10% 3.9%;
-    
-    --primary: 221 83% 53%;      /* Stark blue for light mode #5E6AD2 */
-    --primary-foreground: 0 0% 100%;  /* White text on blue */
-    
-    --secondary: 30 10% 90%;     /* Warm gray */
-    --secondary-foreground: 0 0% 0%;
-    
-    --muted: 0 0% 91%;           /* Use sunken surface */
-    --muted-foreground: 0 0% 20%;  /* Even darker for strong contrast */
-    
-    --accent: 221 83% 53%;        /* Stark blue accent for light mode */
+    --popover-foreground: 230 15% 15%;
+
+    --primary: 25 55% 45%;          /* Deeper amber for light mode - good contrast */
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 30 10% 92%;
+    --secondary-foreground: 230 15% 15%;
+
+    --muted: 30 15% 94%;
+    --muted-foreground: 230 8% 40%;
+
+    --accent: 28 50% 48%;           /* Amber accent */
     --accent-foreground: 0 0% 100%;
-    
-    --accent-secondary: 220 70% 50%; /* Blue accent */
+
+    --accent-secondary: 270 40% 50%; /* Purple accent */
     --accent-secondary-foreground: 0 0% 100%;
-    
-    --destructive: 0 72% 51%;    /* Coral red */
+
+    --destructive: 0 65% 50%;
     --destructive-foreground: 0 0% 100%;
-    
-    --border: 0 0% 88%;          /* Neutral gray border like Stark */
-    --input: 30 10% 92%;
-    --ring: 221 83% 53%;         /* Stark blue ring for focus states */
+
+    --border: 30 10% 88%;
+    --input: 30 15% 94%;
+    --ring: 25 55% 45%;
     --radius: 0.25rem;
 
-    /* Anthropic-inspired typography */
+    /* Typography */
     --font-sans: var(--font-open-sans), system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     --font-heading: var(--font-montserrat), system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 
     --header-height: 4rem;
     --banner-height: 2.5rem;
-    
-    /* Modern Gradient System */
-    --gradient-primary: linear-gradient(135deg, #ffd000 0%, #f4d03f 100%);
-    --gradient-gold: linear-gradient(135deg, #ffd000 0%, #fbbf24 100%);
-    --gradient-warm: linear-gradient(135deg, #f59e0b 0%, #dc2626 100%);
-    --gradient-cool: linear-gradient(135deg, #3b82f6 0%, #ffd000 100%);
-    --gradient-mesh: radial-gradient(at 40% 20%, hsla(48, 100%, 50%, 0.15) 0px, transparent 50%),
-                     radial-gradient(at 80% 0%, hsla(45, 93%, 55%, 0.15) 0px, transparent 50%),
-                     radial-gradient(at 0% 50%, hsla(340, 80%, 60%, 0.1) 0px, transparent 50%);
-    
-    /* Accent Colors - Light Mode uses Blue */
-    --gold-vivid: 221 83% 53%;      /* Stark blue for light mode */
-    --gold-light: 221 70% 60%;      /* Lighter blue for light mode */
-    --blue-vivid: 221 83% 53%;      /* Primary blue */
-    --pink-vivid: 340 82% 52%;      /* #db2777 */
-    --yellow-sharp: 221 83% 53%;    /* Stark blue for light mode */
-    
-    /* Shadow system for elevation - Actually visible like Stark */
-    --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.08);
-    --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.12), 0 2px 4px rgba(0, 0, 0, 0.08);
-    --shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.15), 0 4px 8px rgba(0, 0, 0, 0.1);
-    --shadow-xl: 0 12px 24px rgba(0, 0, 0, 0.18), 0 6px 12px rgba(0, 0, 0, 0.12);
+
+    /* Warm Gradient System - amber theme */
+    --gradient-primary: linear-gradient(135deg, #b37a3d 0%, #a06930 100%);
+    --gradient-amber: linear-gradient(135deg, #b37a3d 0%, #956528 100%);
+    --gradient-warm: linear-gradient(135deg, #b37a3d 0%, #a08050 100%);
+    --gradient-cool: linear-gradient(135deg, #7a8fb8 0%, #b37a3d 100%);
+    --gradient-mesh: radial-gradient(at 40% 20%, hsla(30, 55%, 45%, 0.08) 0px, transparent 50%),
+                     radial-gradient(at 80% 0%, hsla(35, 45%, 50%, 0.06) 0px, transparent 50%),
+                     radial-gradient(at 0% 50%, hsla(25, 40%, 55%, 0.05) 0px, transparent 50%);
+
+    /* Accent colors - Warm amber palette (light mode) */
+    --amber-vivid: 25 55% 45%;
+    --amber-light: 28 50% 55%;
+    --amber-muted: 30 35% 50%;
+    --purple-vivid: 270 40% 50%;
+    --blue-soft: 220 35% 55%;
+
+    /* Legacy aliases */
+    --gold-vivid: 25 55% 45%;
+    --gold-light: 28 50% 55%;
+    --blue-vivid: 220 35% 55%;
+    --pink-vivid: 340 50% 60%;
+    --yellow-sharp: 25 55% 45%;
+
+    /* Shadow system - Subtle and warm */
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
+    --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.08), 0 2px 4px rgba(0, 0, 0, 0.04);
+    --shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.1), 0 4px 8px rgba(0, 0, 0, 0.06);
+    --shadow-xl: 0 12px 24px rgba(0, 0, 0, 0.12), 0 6px 12px rgba(0, 0, 0, 0.08);
+
+    /* Glow effects */
+    --glow-amber: 0 0 20px hsla(25, 55%, 45%, 0.1);
+    --glow-purple: 0 0 20px hsla(270, 40%, 50%, 0.08);
   }
 
-  /* Dark theme - Charcoal & Gold */
+  /* Dark theme - Hex Warm: Deep navy with rose accents */
   [data-theme='dark'] {
-    --background: 0 0% 10%;        /* #1a1a1a - Slightly darker base */
-    --foreground: 0 0% 95%;        /* Off-white */
-    
-    /* Elevation System Surfaces - Dark */
-    --surface-sunken: 0 0% 9%;     /* #171717 - Very subtle recession */
-    --surface-base: 0 0% 10%;      /* #1a1a1a - Page background */
-    --surface-content: 0 0% 12%;   /* #1f1f1f - Slightly elevated */
-    --surface-raised: 0 0% 14%;    /* #242424 - Cards elevated */
-    
-    --card: 0 0% 16%;              /* Use raised surface */
-    --card-foreground: 0 0% 98%;
-    --card-background: 0 0% 15% / 0.8;
-    --card-border: 0 0% 20%;       /* Subtle charcoal border */
-    --card-hover-border: 48 100% 60%; /* Bright gold */
-    --card-hover-background: 48 100% 60% / 0.1;
-    
-    --text-primary: 0 0% 98%;      /* Off-white */
-    --text-secondary: 0 0% 75%;    /* Light gray */
-    --text-tertiary: 0 0% 60%;     /* Medium gray */
-    
-    --surface-primary: 0 0% 15%;   /* Card color */
-    --surface-secondary: 0 0% 18%; /* Slightly lighter */
-    --surface-tertiary: 0 0% 22%;  /* Even lighter */
-    
-    --popover: 0 0% 15%;
-    --popover-foreground: 0 0% 98%;
-    
-    --primary: 48 100% 60%;        /* Bright gold #ffda00 */
-    --primary-foreground: 0 0% 0%;
-    
-    --secondary: 0 0% 20%;         /* Muted charcoal */
-    --secondary-foreground: 0 0% 98%;
-    
-    --muted: 0 0% 20%;
-    --muted-foreground: 0 0% 65%;
-    
-    --accent: 45 93% 65%;          /* Brighter gold #f4d03f */
-    --accent-foreground: 0 0% 0%;
-    
-    --accent-secondary: 220 80% 65%; /* Bright blue accent */
-    --accent-secondary-foreground: 0 0% 0%;
-    
-    --destructive: 350 80% 60%;    /* Soft red */
+    --background: 230 18% 8%;       /* #111318 - Warm deep navy */
+    --foreground: 0 0% 96%;         /* #f5f5f5 - Soft white */
+
+    /* Elevation System Surfaces - Warm navy progression */
+    --surface-sunken: 230 18% 6%;   /* #0d0f14 - Subtle recession */
+    --surface-base: 230 18% 8%;     /* #111318 - Page background */
+    --surface-content: 230 15% 11%; /* #171a21 - Slightly elevated */
+    --surface-raised: 230 12% 14%;  /* #1e2128 - Cards lifted */
+
+    --card: 230 10% 18%;            /* #282b33 - More visible card lift */
+    --card-foreground: 0 0% 96%;
+    --card-background: 230 10% 18% / 0.95;
+    --card-border: 260 10% 28%;     /* #413a4a - More visible border */
+    --card-hover-border: 30 45% 65%; /* Warm amber on hover */
+    --card-hover-background: 30 45% 65% / 0.08;
+
+    --text-primary: 0 0% 96%;       /* #f5f5f5 - Soft white */
+    --text-secondary: 0 8% 75%;     /* #c4bfbf - Warm light gray */
+    --text-tertiary: 0 6% 55%;      /* #918a8a - Warm medium gray */
+
+    --surface-primary: 230 10% 18%; /* Card color - matches --card */
+    --surface-secondary: 230 8% 22%; /* Slightly lighter */
+    --surface-tertiary: 230 6% 26%; /* Even lighter */
+
+    --popover: 230 12% 14%;
+    --popover-foreground: 0 0% 96%;
+
+    --primary: 30 45% 65%;           /* #d4a574 - Warm amber */
+    --primary-foreground: 230 18% 8%; /* Dark text on amber */
+
+    --secondary: 30 15% 22%;        /* #3d362e - Warm muted brown */
+    --secondary-foreground: 0 0% 96%;
+
+    --muted: 230 10% 18%;           /* Warm dark gray */
+    --muted-foreground: 30 8% 60%;  /* Warm medium gray */
+
+    --accent: 30 40% 62%;           /* #cca070 - Amber accent */
+    --accent-foreground: 230 18% 8%;
+
+    --accent-secondary: 270 50% 60%; /* Soft purple accent */
+    --accent-secondary-foreground: 0 0% 96%;
+
+    --destructive: 0 60% 60%;       /* Warm red */
     --destructive-foreground: 0 0% 98%;
-    
-    --border: 0 0% 20%;
-    --input: 0 0% 22%;
-    --ring: 48 100% 60%;
-    
-    /* Dark mode gradient adjustments */
-    --gradient-primary: linear-gradient(135deg, #ffda00 0%, #f4d03f 100%);
-    --gradient-gold: linear-gradient(135deg, #ffda00 0%, #fbbf24 100%);
-    --gradient-warm: linear-gradient(135deg, #fbbf24 0%, #f87171 100%);
-    --gradient-cool: linear-gradient(135deg, #60a5fa 0%, #ffda00 100%);
-    --gradient-mesh: radial-gradient(at 40% 20%, hsla(48, 100%, 60%, 0.15) 0px, transparent 50%),
-                     radial-gradient(at 80% 0%, hsla(45, 93%, 65%, 0.15) 0px, transparent 50%),
-                     radial-gradient(at 0% 50%, hsla(340, 80%, 70%, 0.1) 0px, transparent 50%);
-    
-    /* Dark mode accent colors */
-    --gold-vivid: 48 100% 60%;      /* #ffda00 */
-    --gold-light: 45 93% 75%;       /* #f8e71c */
-    --blue-vivid: 220 83% 70%;      /* #60a5fa */
-    --pink-vivid: 340 82% 65%;      /* #f472b6 */
-    --yellow-sharp: 48 100% 60%;    /* #ffda00 - Sharp golden yellow */
-    
-    /* Shadow system for elevation (darker for dark mode) */
-    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.25), 0 1px 2px rgba(0, 0, 0, 0.15);
-    --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.3), 0 2px 4px rgba(0, 0, 0, 0.2);
-    --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.35), 0 4px 6px rgba(0, 0, 0, 0.25);
-    --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.4), 0 10px 10px rgba(0, 0, 0, 0.3);
+
+    --border: 260 8% 28%;            /* More visible purple-tinted border */
+    --input: 230 10% 20%;
+    --ring: 30 45% 65%;              /* Amber ring for focus */
+
+    /* Warm gradient system */
+    --gradient-primary: linear-gradient(135deg, #d4a574 0%, #c49464 100%);
+    --gradient-amber: linear-gradient(135deg, #d4a574 0%, #b8905f 100%);
+    --gradient-warm: linear-gradient(135deg, #d4a574 0%, #c4a080 100%);
+    --gradient-cool: linear-gradient(135deg, #8b9dc3 0%, #d4a574 100%);
+    --gradient-mesh: radial-gradient(at 40% 20%, hsla(30, 45%, 65%, 0.08) 0px, transparent 50%),
+                     radial-gradient(at 80% 0%, hsla(35, 40%, 60%, 0.06) 0px, transparent 50%),
+                     radial-gradient(at 0% 50%, hsla(25, 35%, 60%, 0.05) 0px, transparent 50%);
+
+    /* Accent colors - Warm amber palette */
+    --amber-vivid: 30 45% 65%;      /* #d4a574 - Primary amber */
+    --amber-light: 30 40% 75%;      /* #dfc09a - Lighter amber */
+    --amber-muted: 30 25% 55%;      /* #a08a6e - Muted amber */
+    --purple-vivid: 270 40% 55%;    /* #8b6bab - Soft purple */
+    --blue-soft: 220 40% 65%;       /* #8ba3c9 - Soft blue */
+
+    /* Legacy aliases for compatibility */
+    --gold-vivid: 30 45% 65%;       /* Map to amber */
+    --gold-light: 30 40% 75%;
+    --blue-vivid: 220 40% 65%;
+    --pink-vivid: 340 50% 70%;
+    --yellow-sharp: 30 45% 65%;     /* Map to amber */
+
+    /* Shadow system - Subtle glows instead of heavy shadows */
+    --shadow-sm: 0 0 0 1px rgba(255, 255, 255, 0.04), 0 1px 2px rgba(0, 0, 0, 0.2);
+    --shadow-md: 0 0 0 1px rgba(255, 255, 255, 0.05), 0 2px 8px rgba(0, 0, 0, 0.25);
+    --shadow-lg: 0 0 0 1px rgba(255, 255, 255, 0.05), 0 4px 16px rgba(0, 0, 0, 0.3);
+    --shadow-xl: 0 0 0 1px rgba(255, 255, 255, 0.06), 0 8px 24px rgba(0, 0, 0, 0.35);
+
+    /* Glow effects for interactive elements */
+    --glow-amber: 0 0 20px hsla(30, 45%, 65%, 0.15);
+    --glow-purple: 0 0 20px hsla(270, 40%, 55%, 0.12);
   }
   
 
@@ -307,17 +329,40 @@
     box-shadow: var(--shadow-md);
   }
   
-  /* Dark mode adjustments */
+  /* Dark mode adjustments - Hex Warm style */
   [data-theme='dark'] .surface-sunken {
-    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.4);
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3);
   }
-  
+
   [data-theme='dark'] .surface-content {
-    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.05);
+    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.04);
   }
-  
+
   [data-theme='dark'] .surface-raised {
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.05), 0 2px 8px rgba(0, 0, 0, 0.2);
+  }
+
+  /* Noise texture overlay - Hex-inspired warmth */
+  .noise-texture {
+    position: relative;
+  }
+
+  .noise-texture::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+    background-size: 128px 128px;
+    opacity: 0.03;
+    pointer-events: none;
+    mix-blend-mode: overlay;
+    z-index: 1;
+  }
+
+  /* Ensure content sits above noise */
+  .noise-texture > * {
+    position: relative;
+    z-index: 2;
   }
 
   .card-hover {
@@ -476,26 +521,32 @@
     box-shadow: 0 0 30px hsla(var(--gold-vivid), 0.25);
   }
   
-  /* Yellow accent for hover states */
-  .yellow-accent-hover {
+  /* Rose accent for hover states */
+  .rose-accent-hover,
+  .yellow-accent-hover { /* Legacy alias */
     @apply transition-all duration-200;
   }
-  
+
+  .rose-accent-hover:hover,
   .yellow-accent-hover:hover {
-    @apply text-[hsl(var(--yellow-sharp))];
-    text-shadow: 0 0 20px hsla(var(--yellow-sharp), 0.5);
+    color: hsl(var(--primary));
+    text-shadow: 0 0 20px hsla(var(--primary), 0.3);
   }
-  
-  /* Yellow underline animation */
-  .yellow-underline {
+
+  /* Rose underline animation */
+  .rose-underline,
+  .yellow-underline { /* Legacy alias */
     @apply relative;
   }
-  
+
+  .rose-underline::after,
   .yellow-underline::after {
     content: '';
-    @apply absolute bottom-0 left-0 w-full h-[2px] bg-[hsl(var(--yellow-sharp))] transform scale-x-0 transition-transform duration-200 origin-left;
+    @apply absolute bottom-0 left-0 w-full h-[2px] transform scale-x-0 transition-transform duration-200 origin-left;
+    background-color: hsl(var(--primary));
   }
-  
+
+  .rose-underline:hover::after,
   .yellow-underline:hover::after {
     @apply scale-x-100;
   }
@@ -993,9 +1044,9 @@ nav a.active {
   font-weight: 500;
 }
 
-/* Nav link hover with yellow accent */
+/* Nav link hover with rose accent */
 nav a:not(.active):hover {
-  color: hsl(var(--yellow-sharp));
+  color: hsl(var(--primary));
   transition: color 0.2s ease;
 }
 

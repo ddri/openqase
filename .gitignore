@@ -61,14 +61,8 @@ next-env.d.ts
 .env.sentry-build-plugin
 
 # SECURITY: Database dumps and sensitive content
-local_data_dump.sql
-*_data_dump.sql
-current-schema.sql
-migration-verification.sql
-prod-data.sql
-prod-schema.sql
-prod-schema2.sql
-production_schema.sql
+*.sql
+!supabase/seed.sql
 
 # SECURITY: Local configuration and personal information
 supabase/functions/.env
@@ -122,6 +116,9 @@ scripts/test-*.json
 
 # Claude Code development guidelines (local only)
 CLAUDE.md
+
+# Design iteration backups
+*.css.backup
 
 # Cursor IDE configuration (may contain tokens)
 .cursor/

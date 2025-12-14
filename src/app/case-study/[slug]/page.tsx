@@ -12,11 +12,19 @@ import { AutoSchema } from '@/components/AutoSchema';
 // export const dynamic = 'force-dynamic'; // REMOVED - Restore default caching
 
 // Define a more accurate type for the case study data we expect after fetching relations
+// MIGRATION NOTE: This type includes both new relationship data and legacy TEXT[] fields
+// Legacy fields (quantum_software, quantum_hardware, etc.) are kept for backward compatibility
+// and will be removed after production verification - see cleanup-legacy-fields-migration.sql
 type EnrichedCaseStudy = Database['public']['Tables']['case_studies']['Row'] & {
   case_study_industry_relations?: { industries: { id: string; name: string; slug?: string | null } | null }[];
   algorithm_case_study_relations?: { algorithms: { id: string; name: string; slug?: string | null } | null }[];
   case_study_persona_relations?: { personas: { id: string; name: string; slug?: string | null } | null }[];
-  // quantum_software is assumed to be a direct TEXT[] field as previously discussed
+  // NEW CONTENT TYPE RELATIONSHIPS (preferred):
+  case_study_quantum_software_relations?: { quantum_software: { id: string; name: string; slug?: string | null } | null }[];
+  case_study_quantum_hardware_relations?: { quantum_hardware: { id: string; name: string; slug?: string | null } | null }[];
+  case_study_quantum_company_relations?: { quantum_companies: { id: string; name: string; slug?: string | null } | null }[];
+  case_study_partner_company_relations?: { partner_companies: { id: string; name: string; slug?: string | null } | null }[];
+  // DEPRECATED: Legacy TEXT[] fields are still in Database type but will be removed
 };
 
 interface CaseStudyPageProps {
@@ -41,8 +49,23 @@ export async function generateMetadata({ params }: CaseStudyPageProps) {
   }
 
   return {
-    title: caseStudy.title,
-    description: caseStudy.description || '',
+    title: `${caseStudy.title} | Quantum Computing Case Study - OpenQase`,
+    description: caseStudy.description || `Learn how quantum computing solved real business challenges in this case study. Explore practical applications and results from ${caseStudy.title}.`,
+    alternates: {
+      canonical: `/case-study/${resolvedParams.slug}`,
+    },
+    openGraph: {
+      title: caseStudy.title,
+      description: caseStudy.description || `Quantum computing case study: ${caseStudy.title}`,
+      type: 'article',
+      images: ['/og-image.svg'],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: caseStudy.title,
+      description: caseStudy.description || `Quantum computing case study: ${caseStudy.title}`,
+      images: ['/og-image.svg'],
+    },
   };
 }
 
@@ -82,6 +105,14 @@ export default async function CaseStudyPage({ params }: CaseStudyPageProps) {
     <>
       {/* Ghost-style automatic case study schema */}
       <AutoSchema type="case-study" data={caseStudy} />
+      <AutoSchema 
+        type="breadcrumb" 
+        breadcrumbs={[
+          { name: 'Home', url: '/' },
+          { name: 'Case Studies', url: '/case-study' },
+          { name: caseStudy.title, url: `/case-study/${caseStudy.slug}` }
+        ]} 
+      />
       
       <ProfessionalCaseStudyLayout
         title={caseStudy.title}

@@ -56,28 +56,28 @@ export default function NewsletterSignup() {
   }
 
   return (
-    <div 
-      className="bg-card border border-border p-6 h-full flex flex-col justify-center hover:border-primary transition-colors cursor-pointer"
-      onClick={handleCardClick}
-    >
-      <h2 className="text-xl font-semibold mb-4 text-foreground">Stay Updated</h2>
-      <div className="space-y-4">
-        <p className="text-sm text-muted-foreground leading-relaxed mb-6">
-          Get notified when new quantum computing case studies and industry insights are published. Join quantum professionals staying ahead of the curve.
+    <div>
+      <h2 className="text-xl font-semibold text-foreground mb-6">Stay Updated</h2>
+      <div
+        className="bg-card rounded-lg border border-border p-6 elevation-interactive hover:border-primary transition-colors cursor-pointer"
+        onClick={handleCardClick}
+      >
+        <p className="text-sm text-muted-foreground leading-relaxed mb-5">
+          Get notified when new quantum computing case studies and industry insights are published.
         </p>
-        
+
         {status === 'success' ? (
           <div className="space-y-3">
-            <div className="p-3 bg-green-50 border border-green-200 text-green-800 text-sm rounded">
+            <div className="p-3 bg-green-500/10 border border-green-500/20 text-green-400 text-sm rounded-lg">
               {message}
             </div>
-            <Button 
+            <Button
               onClick={(e) => {
                 e.stopPropagation()
                 setStatus('idle')
                 setMessage('')
               }}
-              variant="outline" 
+              variant="outline"
               className="w-full"
             >
               Subscribe another email
@@ -85,26 +85,26 @@ export default function NewsletterSignup() {
           </div>
         ) : (
           <form onSubmit={handleSubmit} className="space-y-3">
-            <input 
+            <input
               ref={emailInputRef}
-              type="email" 
+              type="email"
               placeholder="Enter your email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               disabled={status === 'loading'}
-              className="w-full px-3 py-2 bg-background border border-border text-foreground text-sm focus:border-primary focus:outline-none transition-colors disabled:opacity-50"
+              className="w-full px-3 py-2.5 bg-background border border-border rounded-lg text-foreground text-sm focus:border-primary focus:outline-none transition-colors disabled:opacity-50"
               required
             />
-            <Button 
+            <Button
               type="submit"
               disabled={status === 'loading'}
-              className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-medium disabled:opacity-50"
+              className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-medium disabled:opacity-50 rounded-lg"
               onClick={(e) => e.stopPropagation()}
             >
               {status === 'loading' ? 'Subscribing...' : 'Subscribe to Updates'}
             </Button>
             {status === 'error' && (
-              <div className="text-red-600 text-xs">
+              <div className="text-red-400 text-xs mt-2">
                 {message}
               </div>
             )}

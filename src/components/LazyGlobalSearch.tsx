@@ -19,16 +19,16 @@ export interface LazyGlobalSearchRef {
 // Simple search input that shows before activation
 function SearchPlaceholder({ onActivate, className }: { onActivate: () => void; className?: string }) {
   return (
-    <div className={`relative w-full max-w-2xl ${className}`}>
+    <div className={`relative w-full ${className}`}>
       <div className="relative">
-        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-5 h-5" />
+        <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-muted-foreground w-5 h-5" />
         <input
           type="text"
           placeholder="Search case studies, algorithms, companies..."
           onClick={onActivate}
           onFocus={onActivate}
           readOnly
-          className="w-full pl-10 pr-4 py-3 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors cursor-pointer"
+          className="w-full pl-12 pr-4 py-4 text-base bg-card border-2 border-border rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all cursor-pointer hover:border-primary/50 shadow-sm"
         />
       </div>
     </div>
@@ -38,14 +38,14 @@ function SearchPlaceholder({ onActivate, className }: { onActivate: () => void; 
 // Loading state while search component loads
 function SearchLoading({ className }: { className?: string }) {
   return (
-    <div className={`relative w-full max-w-2xl ${className}`}>
+    <div className={`relative w-full ${className}`}>
       <div className="relative">
-        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-5 h-5" />
+        <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-muted-foreground w-5 h-5" />
         <input
           type="text"
           placeholder="Loading search..."
           disabled
-          className="w-full pl-10 pr-4 py-3 border border-border rounded-lg bg-muted/50 cursor-wait"
+          className="w-full pl-12 pr-4 py-4 text-base bg-card border-2 border-border rounded-xl bg-muted/50 cursor-wait shadow-sm"
         />
       </div>
     </div>

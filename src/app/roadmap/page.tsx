@@ -183,7 +183,7 @@ export default function RoadmapPage() {
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <FeedbackButton />
                 <a 
-                  href="https://github.com/ddri/openqase" 
+                  href="https://github.com/openqase/openqase" 
                   target="_blank" 
                   rel="noopener noreferrer"
                   className="bg-background border border-border hover:bg-muted px-6 py-3 rounded-lg font-medium transition-colors"

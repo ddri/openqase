@@ -258,7 +258,7 @@ export default async function HomePage() {
               <h2 className="text-xl font-semibold text-foreground mb-6">Open Source & Community</h2>
               <div className="space-y-4">
                 <Link
-                  href="https://github.com/ddri/openqase"
+                  href="https://github.com/openqase/openqase"
                   className="flex items-center gap-4 bg-card rounded-lg border border-border px-5 py-4 elevation-interactive hover:border-primary group"
                 >
                   <Github className="w-5 h-5 text-primary flex-shrink-0" />

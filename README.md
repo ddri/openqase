@@ -48,7 +48,7 @@ OpenQase uses a **hybrid architecture** that combines:
 
 1. **Clone and install:**
 ```bash
-git clone https://github.com/ddri/openqase.git
+git clone https://github.com/openqase/openqase.git
 cd openqase
 npm install
 ```

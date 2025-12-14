@@ -115,7 +115,7 @@ export default async function HomePage() {
       href: "/paths/quantum-hardware"
     },
     {
-      title: "Quantum Co's",
+      title: "Companies",
       count: quantumCompanies.length,
       icon: <Factory className="w-4 h-4" />,
       href: "/paths/quantum-companies"
@@ -161,7 +161,7 @@ export default async function HomePage() {
                 <Link
                   key={stat.title}
                   href={stat.href}
-                  className="flex items-center justify-center gap-2 px-3 py-2 bg-card border border-border rounded-lg text-sm hover:border-primary hover:bg-primary/5 transition-colors group"
+                  className="flex items-center justify-center gap-2 px-3 py-2 bg-card border border-border rounded-lg text-sm hover:border-primary hover:bg-primary/5 transition-colors group whitespace-nowrap"
                 >
                   <span className="text-muted-foreground group-hover:text-primary">{stat.icon}</span>
                   <span className="font-medium text-primary">{stat.count}</span>

@@ -77,9 +77,6 @@ const nextConfig: NextConfig = {
     optimizePackageImports: ['lucide-react', '@radix-ui/react-icons'],
   },
   
-  eslint: {
-    ignoreDuringBuilds: true,  // Keep disabled until ESLint warnings are addressed
-  },
   pageExtensions: ['ts', 'tsx', 'js', 'jsx'],
   // Enable TypeScript checking during build
   typescript: {

@@ -1,10 +1,15 @@
 import { createClient } from '@supabase/supabase-js';
 
-// Use production Supabase with anon key (case studies are public)
-const PROD_URL = 'https://lsxpumoaowwzqzmypopd.supabase.co';
-const PROD_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxzeHB1bW9hb3d3enF6bXlwb3BkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQxMDY2NjEsImV4cCI6MjA1OTY4MjY2MX0.eLornQbRXQf3gQ2gyR__fP0THP5Q1evp0C5r0OjGjOc';
+// Use environment variables - defaults to local Supabase for development
+const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL || 'http://127.0.0.1:54321';
+const SUPABASE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
-const supabase = createClient(PROD_URL, PROD_ANON_KEY);
+if (!SUPABASE_KEY) {
+  console.error('Error: SUPABASE_SERVICE_ROLE_KEY or NEXT_PUBLIC_SUPABASE_ANON_KEY must be set');
+  process.exit(1);
+}
+
+const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
 async function auditCaseStudies() {
   // First, get one record to see schema

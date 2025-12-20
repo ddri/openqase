@@ -3,6 +3,11 @@
 -- Contains example data for open source contributors
 -- Replace with your own data for local development
 
+-- TEMPORARILY DISABLED - Real data will be restored from production backup
+-- Uncomment below if you need sample data for a fresh setup
+
+/* DISABLED FOR DATA RESTORE
+
 -- Example: Industries
 INSERT INTO industries (name, slug, description, icon, published) VALUES
 ('Quantum Computing', 'quantum-computing', 'Companies developing quantum computing hardware and software', '⚛️', true),
@@ -35,4 +40,6 @@ INSERT INTO blog_posts (title, slug, description, content, author, published) VA
 
 -- Note: This is example data for open source contributors
 -- For local development with real data, replace this file with your own content
--- The private-data/ folder contains production data that should not be committed 
+-- The private-data/ folder contains production data that should not be committed
+
+END OF DISABLED SECTION */

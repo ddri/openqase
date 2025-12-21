@@ -1,0 +1,33 @@
+import { NextRequest, NextResponse } from 'next/server'
+import { createServiceRoleSupabaseClient } from '@/lib/supabase'
+
+export async function POST(request: NextRequest) {
+  try {
+    const body = await request.json()
+    const { id, ids } = body
+
+    const supabase = await createServiceRoleSupabaseClient()
+
+    // Handle single or bulk restore
+    const idsToRestore = ids || (id ? [id] : [])
+
+    if (idsToRestore.length === 0) {
+      return NextResponse.json({ error: 'No IDs provided' }, { status: 400 })
+    }
+
+    const { error } = await supabase
+      .from('case_studies')
+      .update({ deleted_at: null })
+      .in('id', idsToRestore)
+
+    if (error) {
+      console.error('Restore error:', error)
+      return NextResponse.json({ error: error.message }, { status: 500 })
+    }
+
+    return NextResponse.json({ success: true, restored: idsToRestore.length })
+  } catch (error) {
+    console.error('Restore error:', error)
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
+  }
+}

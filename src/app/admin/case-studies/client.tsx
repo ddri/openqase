@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import Link from 'next/link'
-import { Plus, Search, Trash, CheckCircle, XCircle } from 'lucide-react'
+import { Plus, Search, Trash, Trash2, CheckCircle, XCircle } from 'lucide-react'
 import { DataTable } from '@/components/ui/data-table'
 import { ColumnDef } from '@tanstack/react-table'
 import { Checkbox } from '@/components/ui/checkbox'
@@ -256,6 +256,12 @@ export function CaseStudiesClient({ data }: CaseStudiesClientProps) {
           </p>
         </div>
         <div className="flex gap-2">
+          <Button variant="outline" asChild>
+            <Link href="/admin/case-studies/trash">
+              <Trash2 className="w-4 h-4 mr-2" />
+              Trash
+            </Link>
+          </Button>
           <Button asChild>
             <Link href="/admin/case-studies/new">
               <Plus className="w-4 h-4 mr-2" />

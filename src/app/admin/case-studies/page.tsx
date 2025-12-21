@@ -16,10 +16,11 @@ export default async function CaseStudiesPage() {
   try {
     const supabase = await createServiceRoleSupabaseClient();
     
-    // Direct table access - will show all content including deleted for now
+    // Fetch non-deleted case studies only (deleted items go to trash view)
     let { data: caseStudies, error } = await supabase
       .from('case_studies')
       .select('*')
+      .is('deleted_at', null)
       .order('title')
 
     if (error) {

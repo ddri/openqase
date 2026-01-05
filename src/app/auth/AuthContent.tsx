@@ -8,13 +8,14 @@ import { toast } from '@/components/ui/use-toast'
 import { Loader2 } from 'lucide-react'
 import { ErrorBoundary } from '@/components/ui/ErrorBoundary'
 import { createBrowserSupabaseClient } from '@/lib/supabase-browser'
+import { getSafeRedirectPath } from '@/lib/redirect-utils'
 import type { AuthChangeEvent, Session } from '@supabase/supabase-js'
 
 export function AuthContent({ redirectTo }: { redirectTo?: string }) {
   const searchParams = useSearchParams()
   const router = useRouter()
   const supabase = createBrowserSupabaseClient()
-  const redirectToParam = searchParams.get('redirectTo') || '/'
+  const redirectToParam = getSafeRedirectPath(searchParams.get('redirectTo'))
   const [isLoading, setIsLoading] = useState(true)
   const viewParam = searchParams.get('view')
 

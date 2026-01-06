@@ -63,6 +63,7 @@ next-env.d.ts
 # SECURITY: Database dumps and sensitive content
 *.sql
 !supabase/seed.sql
+!supabase/migrations/*.sql
 quantum_companies
 *_dump
 *.dump

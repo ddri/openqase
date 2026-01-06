@@ -30,6 +30,8 @@ Thank you for your interest in contributing to OpenQase! This guide will help yo
    # Edit .env.local with your Supabase credentials
    ```
 
+   See [Environment Variables Guide](./docs/environment-variables.md) for complete documentation of all configuration options.
+
 4. **Database Setup**
    ```bash
    npx supabase start
@@ -73,6 +75,8 @@ Thank you for your interest in contributing to OpenQase! This guide will help yo
    git add .
    git commit -m "feat: add new feature description"
    ```
+
+   Follow our [commit message conventions](#commit-message-format).
 
 4. **Push and Create PR**
    ```bash
@@ -247,11 +251,70 @@ npm run lint
 npx ts-node src/lib/supabase.test.ts
 ```
 
+## 📝 Commit Message Format
+
+We follow [Conventional Commits](https://www.conventionalcommits.org/) for clear and semantic commit history.
+
+### Format
+
+```
+<type>(<scope>): <subject>
+
+<body>
+
+<footer>
+```
+
+### Types
+
+- **feat**: New feature for the user
+- **fix**: Bug fix for the user
+- **docs**: Documentation only changes
+- **style**: Changes that don't affect code meaning (formatting, missing semicolons)
+- **refactor**: Code change that neither fixes a bug nor adds a feature
+- **perf**: Code change that improves performance
+- **test**: Adding missing tests or correcting existing tests
+- **chore**: Changes to build process or auxiliary tools
+- **ci**: Changes to CI configuration files and scripts
+
+### Examples
+
+```bash
+# Simple feature
+feat: add dark mode toggle to settings
+
+# Feature with scope
+feat(admin): add bulk delete for case studies
+
+# Bug fix with description
+fix: resolve infinite loop in relationship query
+
+Fixed an issue where circular relationships caused
+infinite recursion in the content fetcher.
+
+Closes #123
+
+# Breaking change
+feat!: migrate to new authentication system
+
+BREAKING CHANGE: All users must re-authenticate after this update.
+The old session tokens are no longer valid.
+```
+
+### Best Practices
+
+- **Use imperative mood**: "add" not "added" or "adds"
+- **Don't capitalize first letter**: "feat: add" not "feat: Add"
+- **No period at the end**: "feat: add feature" not "feat: add feature."
+- **Reference issues**: Use "Fixes #123", "Closes #456", "Refs #789"
+- **Keep subject under 72 characters**
+- **Provide context in body for complex changes**
+
 ## 🔍 Code Review Process
 
 ### Pull Request Guidelines
 
-1. **Title**: Use conventional commits format
+1. **Title**: Use conventional commits format (see above)
    - `feat: add new feature`
    - `fix: resolve bug issue`
    - `docs: update documentation`
@@ -287,17 +350,21 @@ npx ts-node src/lib/supabase.test.ts
 - **API changes**: Update API documentation
 - **Breaking changes**: Update migration guides
 - **Bug fixes**: Update troubleshooting guides
+- **Environment variables**: Update [environment-variables.md](./docs/environment-variables.md)
+- **Architecture changes**: Update architecture docs
 
 ### Documentation Structure
 
 ```
 docs/
-├── docs/
-│   ├── getting-started/    # Installation and setup
-│   ├── architecture/       # Technical architecture
-│   ├── backend/           # Supabase and API patterns
-│   ├── frontend/          # React and component patterns
-│   └── features/          # Feature-specific guides
+├── environment-variables.md   # Complete env var reference
+├── installation.md            # Setup and installation
+├── authentication.md          # Auth patterns and RLS
+├── unified-content-fetching.md # Content API system
+├── email-system.md           # Newsletter and email
+├── import-system.md          # Case study imports
+├── api-documentation.md      # REST API reference
+└── openqase-project-plan.md  # Vision and roadmap
 ```
 
 ### Writing Guidelines
@@ -306,19 +373,61 @@ docs/
 - **Code examples** - Include working examples
 - **Screenshots** - Visual guides for UI features
 - **Up-to-date** - Keep docs current with code
+- **Link related docs** - Cross-reference for easy navigation
+
+### Contributing to Documentation
+
+Documentation contributions are highly valued! To contribute:
+
+1. **Find gaps**: Look for missing or outdated information
+2. **Propose changes**: Open an issue or PR with your suggestions
+3. **Follow style**: Match the tone and format of existing docs
+4. **Test examples**: Ensure all code examples work
+5. **Update table of contents**: Keep navigation current
+
+## 🔒 Security Considerations
+
+### When Contributing
+
+- **Never commit secrets** - Check `.env.local` is git-ignored
+- **Review dependencies** - Check for known vulnerabilities before adding packages
+- **SQL injection** - Use parameterized queries, never string concatenation
+- **XSS prevention** - Sanitize user input, use React's built-in escaping
+- **RLS policies** - Verify Row Level Security is enabled for all tables
+- **Service role key** - Never expose `SUPABASE_SERVICE_ROLE_KEY` to browser
+
+### Reporting Security Issues
+
+If you discover a security vulnerability:
+
+1. **DO NOT** open a public issue
+2. **Email**: security@openqase.com (or create a private security advisory on GitHub)
+3. **Include**: Detailed description, steps to reproduce, potential impact
+4. **Wait**: Give us time to fix before public disclosure
+
+### Security Best Practices
+
+- **Input validation** - Always validate user input on server-side
+- **Authentication checks** - Verify auth on all admin routes
+- **Rate limiting** - Don't bypass rate limiters in production
+- **HTTPS only** - Ensure production uses HTTPS
+- **Environment isolation** - Separate dev/staging/prod credentials
 
 ## 🚨 Common Issues
 
 ### Development Setup
 
 **Issue**: Supabase connection errors
-**Solution**: Verify `.env.local` credentials and run `npx supabase start`
+**Solution**: Verify `.env.local` credentials and run `npx supabase start`. See [Environment Variables Guide](./docs/environment-variables.md).
 
 **Issue**: Type errors with database types
-**Solution**: Regenerate types with `npx supabase gen types`
+**Solution**: Regenerate types with `npx supabase gen types typescript --local > src/types/supabase.ts`
 
 **Issue**: Build failures
-**Solution**: Check for TypeScript errors and ESLint issues
+**Solution**: Check for TypeScript errors with `npm run build` and ESLint issues with `npm run lint`
+
+**Issue**: Missing environment variables
+**Solution**: Check [.env.example](./.env.example) and copy to `.env.local`. See [Environment Variables Guide](./docs/environment-variables.md).
 
 ### Database Issues
 
@@ -326,7 +435,10 @@ docs/
 **Solution**: Check migration syntax and run `npx supabase db reset`
 
 **Issue**: RLS policy errors
-**Solution**: Verify user permissions and policy configuration
+**Solution**: Verify user permissions and policy configuration. Check [authentication.md](./docs/authentication.md)
+
+**Issue**: "Column does not exist" errors
+**Solution**: Database schema is out of sync. Run `npx supabase db pull` to sync from production or `npx supabase db reset` for local.
 
 ## 📞 Getting Help
 

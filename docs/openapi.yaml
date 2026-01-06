@@ -1,0 +1,931 @@
+openapi: 3.0.3
+info:
+  title: OpenQase API
+  description: |
+    REST API for accessing quantum computing case studies, algorithms, industries, personas, and ecosystem data.
+
+    ## Authentication
+    Most GET requests are public. POST/PUT/DELETE requests require admin authentication via session cookies.
+
+    ## Rate Limiting
+    - Newsletter: 5 requests per 5 minutes
+    - General: 100 requests per 15 minutes
+
+    ## Documentation
+    - [Full API Reference](https://github.com/openqase/openqase/blob/main/docs/api-reference.md)
+    - [Environment Variables](https://github.com/openqase/openqase/blob/main/docs/environment-variables.md)
+  version: 0.5.0
+  contact:
+    name: OpenQase
+    url: https://openqase.com
+  license:
+    name: MIT
+    url: https://github.com/openqase/openqase/blob/main/LICENSE
+
+servers:
+  - url: https://openqase.com/api
+    description: Production server
+  - url: http://localhost:3000/api
+    description: Local development server
+
+tags:
+  - name: Case Studies
+    description: Quantum computing case studies
+  - name: Algorithms
+    description: Quantum algorithms
+  - name: Industries
+    description: Industry applications
+  - name: Personas
+    description: User personas and roles
+  - name: Ecosystem
+    description: Quantum computing ecosystem (companies, hardware, software)
+  - name: Newsletter
+    description: Newsletter subscriptions
+  - name: Search
+    description: Search functionality
+  - name: Admin
+    description: Admin operations (authentication required)
+
+paths:
+  /case-studies:
+    get:
+      tags:
+        - Case Studies
+      summary: List case studies
+      description: Get a paginated list of case studies with optional filtering
+      parameters:
+        - $ref: '#/components/parameters/Page'
+        - $ref: '#/components/parameters/PageSize'
+        - name: algorithm
+          in: query
+          description: Filter by algorithm name
+          schema:
+            type: string
+          example: VQE
+        - name: industry
+          in: query
+          description: Filter by industry slug
+          schema:
+            type: string
+          example: aerospace
+        - name: slug
+          in: query
+          description: Get single case study by slug
+          schema:
+            type: string
+          example: ibm-quantum-aerospace
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/CaseStudyList'
+                  - $ref: '#/components/schemas/CaseStudy'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+
+    post:
+      tags:
+        - Case Studies
+        - Admin
+      summary: Create or update case study
+      description: Create a new case study or update an existing one (admin only)
+      security:
+        - cookieAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CaseStudyInput'
+      responses:
+        '200':
+          description: Case study saved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+
+    delete:
+      tags:
+        - Case Studies
+        - Admin
+      summary: Soft delete case study
+      description: Soft delete a case study (can be restored later)
+      security:
+        - cookieAuth: []
+      parameters:
+        - name: id
+          in: query
+          required: true
+          description: Case study UUID
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Case study deleted successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  /case-studies/restore:
+    post:
+      tags:
+        - Case Studies
+        - Admin
+      summary: Restore deleted case study
+      description: Restore a soft-deleted case study
+      security:
+        - cookieAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - id
+              properties:
+                id:
+                  type: string
+                  format: uuid
+      responses:
+        '200':
+          description: Case study restored successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  /case-studies/permanent-delete:
+    delete:
+      tags:
+        - Case Studies
+        - Admin
+      summary: Permanently delete case study
+      description: Permanently delete a case study (irreversible)
+      security:
+        - cookieAuth: []
+      parameters:
+        - name: id
+          in: query
+          required: true
+          description: Case study UUID
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Case study permanently deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  /algorithms:
+    get:
+      tags:
+        - Algorithms
+      summary: List algorithms
+      description: Get a paginated list of quantum algorithms
+      parameters:
+        - $ref: '#/components/parameters/Page'
+        - $ref: '#/components/parameters/PageSize'
+        - $ref: '#/components/parameters/Slug'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AlgorithmList'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+    post:
+      tags:
+        - Algorithms
+        - Admin
+      summary: Create or update algorithm
+      security:
+        - cookieAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AlgorithmInput'
+      responses:
+        '200':
+          $ref: '#/components/responses/Success'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+
+    delete:
+      tags:
+        - Algorithms
+        - Admin
+      summary: Delete algorithm
+      security:
+        - cookieAuth: []
+      parameters:
+        - $ref: '#/components/parameters/IdParam'
+      responses:
+        '200':
+          $ref: '#/components/responses/Success'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  /industries:
+    get:
+      tags:
+        - Industries
+      summary: List industries
+      parameters:
+        - $ref: '#/components/parameters/Page'
+        - $ref: '#/components/parameters/PageSize'
+        - $ref: '#/components/parameters/Slug'
+      responses:
+        '200':
+          description: Successful response
+
+    post:
+      tags:
+        - Industries
+        - Admin
+      summary: Create or update industry
+      security:
+        - cookieAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ContentInput'
+      responses:
+        '200':
+          $ref: '#/components/responses/Success'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+    delete:
+      tags:
+        - Industries
+        - Admin
+      summary: Delete industry
+      security:
+        - cookieAuth: []
+      parameters:
+        - $ref: '#/components/parameters/IdParam'
+      responses:
+        '200':
+          $ref: '#/components/responses/Success'
+
+  /personas:
+    get:
+      tags:
+        - Personas
+      summary: List personas
+      parameters:
+        - $ref: '#/components/parameters/Page'
+        - $ref: '#/components/parameters/PageSize'
+        - $ref: '#/components/parameters/Slug'
+      responses:
+        '200':
+          description: Successful response
+
+    post:
+      tags:
+        - Personas
+        - Admin
+      summary: Create or update persona
+      security:
+        - cookieAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ContentInput'
+      responses:
+        '200':
+          $ref: '#/components/responses/Success'
+
+    delete:
+      tags:
+        - Personas
+        - Admin
+      summary: Delete persona
+      security:
+        - cookieAuth: []
+      parameters:
+        - $ref: '#/components/parameters/IdParam'
+      responses:
+        '200':
+          $ref: '#/components/responses/Success'
+
+  /quantum-companies:
+    get:
+      tags:
+        - Ecosystem
+      summary: List quantum companies
+      parameters:
+        - $ref: '#/components/parameters/Page'
+        - $ref: '#/components/parameters/PageSize'
+      responses:
+        '200':
+          description: List of quantum companies
+
+    post:
+      tags:
+        - Ecosystem
+        - Admin
+      summary: Create or update quantum company
+      security:
+        - cookieAuth: []
+      responses:
+        '200':
+          $ref: '#/components/responses/Success'
+
+    delete:
+      tags:
+        - Ecosystem
+        - Admin
+      summary: Delete quantum company
+      security:
+        - cookieAuth: []
+      parameters:
+        - $ref: '#/components/parameters/IdParam'
+      responses:
+        '200':
+          $ref: '#/components/responses/Success'
+
+  /partner-companies:
+    get:
+      tags:
+        - Ecosystem
+      summary: List partner companies
+      responses:
+        '200':
+          description: List of partner companies
+    post:
+      tags:
+        - Ecosystem
+        - Admin
+      security:
+        - cookieAuth: []
+      summary: Create or update partner company
+      responses:
+        '200':
+          $ref: '#/components/responses/Success'
+    delete:
+      tags:
+        - Ecosystem
+        - Admin
+      security:
+        - cookieAuth: []
+      summary: Delete partner company
+      responses:
+        '200':
+          $ref: '#/components/responses/Success'
+
+  /quantum-hardware:
+    get:
+      tags:
+        - Ecosystem
+      summary: List quantum hardware
+      responses:
+        '200':
+          description: List of quantum hardware
+    post:
+      tags:
+        - Ecosystem
+        - Admin
+      security:
+        - cookieAuth: []
+      summary: Create or update quantum hardware
+      responses:
+        '200':
+          $ref: '#/components/responses/Success'
+    delete:
+      tags:
+        - Ecosystem
+        - Admin
+      security:
+        - cookieAuth: []
+      summary: Delete quantum hardware
+      responses:
+        '200':
+          $ref: '#/components/responses/Success'
+
+  /quantum-software:
+    get:
+      tags:
+        - Ecosystem
+      summary: List quantum software
+      responses:
+        '200':
+          description: List of quantum software
+    post:
+      tags:
+        - Ecosystem
+        - Admin
+      security:
+        - cookieAuth: []
+      summary: Create or update quantum software
+      responses:
+        '200':
+          $ref: '#/components/responses/Success'
+    delete:
+      tags:
+        - Ecosystem
+        - Admin
+      security:
+        - cookieAuth: []
+      summary: Delete quantum software
+      responses:
+        '200':
+          $ref: '#/components/responses/Success'
+
+  /newsletter:
+    post:
+      tags:
+        - Newsletter
+      summary: Subscribe to newsletter
+      description: |
+        Subscribe to the OpenQase newsletter
+
+        Rate Limit: 5 requests per 5 minutes per IP address
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - email
+              properties:
+                email:
+                  type: string
+                  format: email
+                  example: user@example.com
+                source:
+                  type: string
+                  default: website
+                  example: homepage
+      responses:
+        '200':
+          description: Successfully subscribed
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Successfully subscribed to newsletter
+                  email:
+                    type: string
+                    example: user@example.com
+                  alreadySubscribed:
+                    type: boolean
+                    example: false
+          headers:
+            X-RateLimit-Limit:
+              schema:
+                type: integer
+              description: Rate limit maximum requests
+            X-RateLimit-Remaining:
+              schema:
+                type: integer
+              description: Remaining requests in current window
+        '400':
+          description: Invalid email address
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '429':
+          description: Rate limit exceeded
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Too many requests. Please try again later.
+                  retryAfter:
+                    type: integer
+                    example: 180
+          headers:
+            X-RateLimit-Limit:
+              schema:
+                type: integer
+            X-RateLimit-Remaining:
+              schema:
+                type: integer
+            Retry-After:
+              schema:
+                type: integer
+              description: Seconds until rate limit resets
+
+  /newsletter/subscription:
+    get:
+      tags:
+        - Newsletter
+      summary: Get subscription status
+      parameters:
+        - name: email
+          in: query
+          required: true
+          schema:
+            type: string
+            format: email
+      responses:
+        '200':
+          description: Subscription status
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  subscribed:
+                    type: boolean
+                  email:
+                    type: string
+
+  /search-data:
+    get:
+      tags:
+        - Search
+      summary: Get search index
+      description: Returns complete search index for client-side search functionality
+      responses:
+        '200':
+          description: Search index data
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  caseStudies:
+                    type: array
+                    items:
+                      type: object
+                  algorithms:
+                    type: array
+                    items:
+                      type: object
+                  industries:
+                    type: array
+                    items:
+                      type: object
+                  personas:
+                    type: array
+                    items:
+                      type: object
+
+  /preview:
+    get:
+      tags:
+        - Admin
+      summary: Enable preview mode
+      description: Enable Next.js preview mode to view unpublished content
+      parameters:
+        - name: secret
+          in: query
+          required: true
+          description: Preview secret from environment variable
+          schema:
+            type: string
+        - name: slug
+          in: query
+          required: true
+          description: Content slug to preview
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Preview mode enabled, redirects to content
+        '401':
+          description: Invalid preview secret
+
+components:
+  securitySchemes:
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: sb-access-token
+      description: Session cookie from Supabase Auth
+
+  parameters:
+    Page:
+      name: page
+      in: query
+      description: Page number (1-indexed)
+      schema:
+        type: integer
+        minimum: 1
+        default: 1
+
+    PageSize:
+      name: pageSize
+      in: query
+      description: Number of items per page
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 100
+        default: 10
+
+    Slug:
+      name: slug
+      in: query
+      description: Content slug
+      schema:
+        type: string
+
+    IdParam:
+      name: id
+      in: query
+      required: true
+      description: Content UUID
+      schema:
+        type: string
+        format: uuid
+
+  schemas:
+    CaseStudy:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        title:
+          type: string
+        slug:
+          type: string
+        description:
+          type: string
+        main_content:
+          type: string
+        year:
+          type: integer
+        published:
+          type: boolean
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        related_algorithms:
+          type: array
+          items:
+            $ref: '#/components/schemas/RelatedItem'
+        related_industries:
+          type: array
+          items:
+            $ref: '#/components/schemas/RelatedItem'
+        related_personas:
+          type: array
+          items:
+            $ref: '#/components/schemas/RelatedItem'
+
+    CaseStudyList:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/CaseStudy'
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+
+    CaseStudyInput:
+      type: object
+      required:
+        - title
+        - slug
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Optional for updates
+        title:
+          type: string
+        slug:
+          type: string
+        description:
+          type: string
+        main_content:
+          type: string
+        year:
+          type: integer
+        published:
+          type: boolean
+        algorithms:
+          type: array
+          items:
+            type: string
+            format: uuid
+        industries:
+          type: array
+          items:
+            type: string
+            format: uuid
+        personas:
+          type: array
+          items:
+            type: string
+            format: uuid
+
+    Algorithm:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        slug:
+          type: string
+        description:
+          type: string
+        main_content:
+          type: string
+        published:
+          type: boolean
+
+    AlgorithmList:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Algorithm'
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+
+    AlgorithmInput:
+      type: object
+      required:
+        - name
+        - slug
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        slug:
+          type: string
+        description:
+          type: string
+        main_content:
+          type: string
+        published:
+          type: boolean
+
+    ContentInput:
+      type: object
+      required:
+        - name
+        - slug
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        slug:
+          type: string
+        description:
+          type: string
+        main_content:
+          type: string
+        published:
+          type: boolean
+
+    RelatedItem:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        slug:
+          type: string
+
+    Pagination:
+      type: object
+      properties:
+        page:
+          type: integer
+        pageSize:
+          type: integer
+        totalItems:
+          type: integer
+        totalPages:
+          type: integer
+
+    SuccessResponse:
+      type: object
+      properties:
+        message:
+          type: string
+        data:
+          type: object
+
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+
+  responses:
+    Success:
+      description: Operation successful
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/SuccessResponse'
+
+    BadRequest:
+      description: Bad request - invalid parameters
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+
+    Unauthorized:
+      description: Authentication required
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            error: Authentication required
+
+    Forbidden:
+      description: Admin access required
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            error: Admin access required
+
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            error: Resource not found
+
+    ServerError:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            error: Internal server error

@@ -92,18 +92,28 @@ npm run build
 
 ## 📚 Documentation
 
-### Core System
-- **[API & Relationships Architecture](./docs/api-relationships-architecture.md)** - How content types connect and enable discovery
-- **[Unified Content Fetching](./docs/unified-content-fetching.md)** - Complete API documentation
-- **[Data Fetching](./docs/data-fetching.md)** - Updated patterns and best practices
-- **[Quick Reference](./docs/v040-quick-reference.md)** - Developer quick start guide
+### Getting Started
+- **[Installation Guide](./docs/installation.md)** - Complete setup and local development guide
+- **[Environment Variables](./docs/environment-variables.md)** - All configuration options explained
+- **[Contributing Guide](./CONTRIBUTING.md)** - How to contribute with commit conventions
 
-### Additional Resources
-- **[Release Notes](./docs/release-notes.md)** - Latest changes and improvements
-- **[Migration Guide](./docs/data-fetching.md#migration-status)** - Upgrading from legacy patterns
-- **[API Documentation](./docs/api-documentation.md)** - REST API reference
-- **[Scripts Documentation](./docs/import-system.md)** - Import system, admin utilities, and development tools
-- **[Email System](./docs/email-system.md)** - Dual email architecture with Beehiiv and Resend
+### API & Development
+- **[API Reference](./docs/api-reference.md)** - Complete REST API documentation (all 26 endpoints)
+- **[OpenAPI Specification](./docs/openapi.yaml)** - Swagger/Postman compatible specification
+- **[Unified Content Fetching](./docs/unified-content-fetching.md)** - Server-side content API system
+- **[API Architecture](./docs/api-architecture.md)** - Architectural patterns and best practices
+
+### Architecture & Features
+- **[API & Relationships Architecture](./docs/api-relationships-architecture.md)** - How content types connect
+- **[Email System](./docs/email-system.md)** - Beehiiv and Resend integration
+- **[Import System](./docs/import-system.md)** - Bulk content import tools
+- **[Admin CMS Guide](./docs/admin-cms-guide.md)** - Content management interface
+- **[Authentication](./docs/authentication.md)** - Auth patterns and RLS policies
+
+### Project Planning
+- **[Project Plan](./docs/openqase-project-plan.md)** - Vision, strategy, roadmap, and business model
+- **[Release Notes](./docs/release-notes.md)** - Version history and changes
+- **[Content Strategy](./docs/content-strategy.md)** - Content approach and guidelines
 
 ## 🔧 Content Management
 

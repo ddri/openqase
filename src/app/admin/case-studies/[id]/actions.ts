@@ -9,6 +9,10 @@ interface CaseStudyFormData extends Omit<TablesInsert<'case_studies'>, 'id'> {
   industries?: string[];
   algorithms?: string[];
   personas?: string[];
+  quantum_software?: string[];
+  quantum_hardware?: string[];
+  quantum_companies?: string[];
+  partner_companies?: string[];
 }
 
 export async function saveCaseStudy(values: CaseStudyFormData): Promise<{ caseStudy?: TablesInsert<'case_studies'>; success: boolean; error?: string }> {

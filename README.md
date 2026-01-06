@@ -226,66 +226,31 @@ openqase/
     └── page-load-performance.js              # Page performance testing
 ```
 
-## 🔄 Roadmap Status
+## 🔄 Roadmap
 
-**✅ v0.5.0 Complete:**
-- Unified content fetching system
-- Static generation for all major content types
-- Hybrid architecture implementation
-- Professional soft delete system
-- Featured content functionality
-- Newsletter integration
-- Homepage redesign
-- Security hardening
-- 301 redirect management
-- Fixed critical Sentry errors (infinite recursion, module resolution)
-- Corrected visual hierarchy system with proper elevation
-- Improved accessibility with better contrast ratios
+OpenQase is on track for a **v1.0.0 production release by July 1, 2026**, with monthly milestone releases.
 
-**🔄 Next Phases:**
+### Current Status
+- 📍 **You are here**: v0.5.0 (January 2026)
+- 🎯 **Next**: v0.6.0 - Content Quality & Cleanup (February 1, 2026)
+- 🚀 **Target**: v1.0.0 - Production Ready (July 1, 2026)
 
-### 🚀 Feature Development 
-- Add Company pages (and link from the related content side boxes)
-- Add Software and Hardware pages (and link from the related content sideboxes)
-- Search functionality enhancement (basic implementation complete)
+### Monthly Milestones
+- **v0.6.0** (Feb 1): Content quality, legacy cleanup, database fixes
+- **v0.7.0** (Mar 1): CMS enhancements, bulk import, newsletter, multi-admin
+- **v0.8.0** (Apr 1): Visualizations, LaTeX formulas, enhanced search
+- **v0.9.0** (May 1): Infrastructure scaling, Redis, performance optimization
+- **v1.0.0** (Jul 1): Testing, documentation, security audit, production ready
 
-### 🛠️ Technical Debt & Infrastructure
-- **Content Language Checking Tool** - Complete database connection setup for the UK English language checking tool (`scripts/content-review.ts`). Tool is fully developed with LanguageTool API integration, quantum computing terms dictionary, US/UK spelling detection, and HTML/JSON reporting, but needs database connectivity troubleshooting to function.
-- **Advanced Caching with Redis** - Upgrade from in-memory rate limiting to Redis-based caching and session storage. This will be more relevant when we release the public API.
-- **Database Function Security** - Add `SET search_path` to 9 SECURITY DEFINER functions to resolve Supabase linter warnings (low priority - functions are internal utilities)
+### Track Our Progress
+- 📊 [View Milestones](https://github.com/openqase/openqase/milestones) - Release planning and progress
+- 🎯 [View Issues](https://github.com/openqase/openqase/issues) - Detailed task tracking
+- 📋 [Project Plan](./docs/openqase-project-plan.md) - Vision, strategy, and roadmap
 
-### 📚 Documentation & Developer Experience  
-- **Authentication Documentation** - Document Supabase Auth patterns, RLS policies, and admin setup
-- **Troubleshooting Guide** - Common development issues and solutions (Supabase connection, build errors, etc.)
-- **Environment Variables Guide** - Comprehensive documentation of all environment variables
-- **Deployment Guide Expansion** - Document different deployment scenarios beyond Vercel
-
-### 📈 Upcoming
-- **Enhanced Search System** - Upgrade to Supabase full-text search when content scales beyond current client-side search capabilities
-  - *Current Status*: Client-side search works well for current content volume (~25 case studies, ~12 algorithms)
-  - *Triggers for Implementation*: >50 case studies, user feedback about search quality, need to search inside content body
-  - *Technical Approach*: PostgreSQL full-text search with `to_tsvector()` and `plainto_tsquery()` for better relevance, typo tolerance, and content body searching
-- **Type Safety & Testing Infrastructure** - Comprehensive improvements for development robustness
-  - *Type Safety*: Remove `as any` casts, add proper TypeScript generics for dynamic queries, improve Supabase type safety
-  - *Testing Framework*: Add Jest/Vitest with unit tests, integration tests, and component testing  
-  - *Implementation Trigger*: When adding multiple contributors or before major refactoring efforts
-- **Multi-admin Support** - Add additional user roles and permissions when scaling beyond single admin
-- **API Rate Limiting Improvements** - Scale rate limiting for production multi-server deployments
+For detailed project planning, user personas, business model, and strategic vision, see our comprehensive [**Project Plan**](./docs/openqase-project-plan.md).
 
 ## Support
 
 - **Documentation**: Comprehensive guides in `/docs/`
-- **Issues**: GitHub Issues for bug reports and feature requests
+- **Issues**: [GitHub Issues](https://github.com/openqase/openqase/issues) for bug reports and feature requests
 - **Performance**: Build logs and performance monitoring included
-
----
-
-
-**Note:** The following major version updates are available but require careful testing due to potential breaking changes:
-
-- **Tailwind CSS**: 3.4.17 → 4.1.11 (major CSS framework redesign)
-- **Zod**: 3.25.63 → 4.0.14 (validation library with breaking changes)
-- **Sentry**: 9.39.0 → 10.0.0 (monitoring service updates)
-- **Node.js Types**: 20.x → 24.x (latest Node.js support)
-
-These updates should be planned for a dedicated maintenance window with thorough testing.

@@ -30,14 +30,8 @@ function formatDate(dateString: string | null): string | null {
 export const contentMetadataConfig = {
   'case-studies': {
     list: (item: CaseStudy) => {
-      const companies = [
-        ...(item.quantum_companies || []),
-        ...(item.partner_companies || [])
-      ].filter(Boolean);
-      
       return [
-        item.year,
-        companies.length > 0 ? `${companies.length} ${companies.length === 1 ? 'company' : 'companies'}` : null
+        item.year
       ];
     }
   },

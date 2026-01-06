@@ -3,11 +3,9 @@ import { ArrowLeft, Users, Cpu, ExternalLink } from 'lucide-react';
 import Link from 'next/link';
 import { Badge } from '@/components/ui/badge';
 
-// Helper function to render clickable links or fallback to static badges
-// MIGRATION NOTE: This function handles both new relationship data and legacy string arrays
-// Legacy support (string[]) will be removed after production verification - see cleanup-legacy-fields-migration.sql
+// Helper function to render clickable links for related content
 function renderEntityLinks(
-  entities: Array<{ id: string; name: string; slug?: string | null }> | string[] | undefined,
+  entities: Array<{ id: string; name: string; slug?: string | null }> | undefined,
   basePath: string,
   title: string,
   icon?: React.ReactNode
@@ -21,35 +19,22 @@ function renderEntityLinks(
         {title}
       </div>
       <div className="flex flex-wrap gap-1.5">
-        {entities.map((entity, index) => {
-          // Handle new relationship format (preferred)
-          if (typeof entity === 'object' && entity.name) {
-            if (entity.slug) {
-              return (
-                <Link key={entity.id} href={`/paths/${basePath}/${entity.slug}`}>
-                  <Badge variant="outline" className="text-xs hover:bg-primary hover:text-primary-foreground transition-colors cursor-pointer">
-                    {entity.name}
-                  </Badge>
-                </Link>
-              );
-            } else {
-              return (
-                <Badge key={entity.id} variant="outline" className="text-xs">
+        {entities.map((entity) => {
+          if (entity.slug) {
+            return (
+              <Link key={entity.id} href={`/paths/${basePath}/${entity.slug}`}>
+                <Badge variant="outline" className="text-xs hover:bg-primary hover:text-primary-foreground transition-colors cursor-pointer">
                   {entity.name}
                 </Badge>
-              );
-            }
-          }
-          // DEPRECATED: Handle legacy string format as fallback
-          // TODO: Remove this after legacy fields are dropped from database
-          else if (typeof entity === 'string') {
+              </Link>
+            );
+          } else {
             return (
-              <Badge key={`${title}-${index}`} variant="outline" className="text-xs">
-                {entity}
+              <Badge key={entity.id} variant="outline" className="text-xs">
+                {entity.name}
               </Badge>
             );
           }
-          return null;
         })}
       </div>
     </div>

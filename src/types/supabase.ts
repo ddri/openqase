@@ -282,12 +282,8 @@ export type Database = {
           main_content: string | null
           original_qookie_id: string | null
           original_qookie_slug: string | null
-          partner_companies: string[] | null
           published: boolean | null
           published_at: string | null
-          quantum_companies: string[] | null
-          quantum_hardware: string[] | null
-          quantum_software: string[] | null
           resource_links: Json | null
           slug: string
           title: string
@@ -310,12 +306,8 @@ export type Database = {
           main_content?: string | null
           original_qookie_id?: string | null
           original_qookie_slug?: string | null
-          partner_companies?: string[] | null
           published?: boolean | null
           published_at?: string | null
-          quantum_companies?: string[] | null
-          quantum_hardware?: string[] | null
-          quantum_software?: string[] | null
           resource_links?: Json | null
           slug: string
           title: string
@@ -338,12 +330,8 @@ export type Database = {
           main_content?: string | null
           original_qookie_id?: string | null
           original_qookie_slug?: string | null
-          partner_companies?: string[] | null
           published?: boolean | null
           published_at?: string | null
-          quantum_companies?: string[] | null
-          quantum_hardware?: string[] | null
-          quantum_software?: string[] | null
           resource_links?: Json | null
           slug?: string
           title?: string
@@ -667,6 +655,39 @@ export type Database = {
           slug?: string
           ts_content?: unknown | null
           updated_at?: string | null
+        }
+        Relationships: []
+      }
+      legacy_tags_backup: {
+        Row: {
+          created_at: string | null
+          id: string | null
+          partner_companies: string[] | null
+          quantum_companies: string[] | null
+          quantum_hardware: string[] | null
+          quantum_software: string[] | null
+          slug: string | null
+          title: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string | null
+          partner_companies?: string[] | null
+          quantum_companies?: string[] | null
+          quantum_hardware?: string[] | null
+          quantum_software?: string[] | null
+          slug?: string | null
+          title?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string | null
+          partner_companies?: string[] | null
+          quantum_companies?: string[] | null
+          quantum_hardware?: string[] | null
+          quantum_software?: string[] | null
+          slug?: string | null
+          title?: string | null
         }
         Relationships: []
       }

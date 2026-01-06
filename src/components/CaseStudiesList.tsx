@@ -24,8 +24,7 @@ const CASE_STUDIES_SORT_OPTIONS = ['title-asc', 'title-desc', 'updated-asc', 'up
 export function CaseStudiesList({ caseStudies }: CaseStudiesListProps) {
   const [searchQuery, setSearchQuery] = useState('');
   const [yearFilter, setYearFilter] = useState<string>('all');
-  const [companyFilter, setCompanyFilter] = useState<string>('all');
-  
+
   // Use hooks for persistence
   const { viewMode, handleViewModeChange } = useViewSwitcher('case-studies-view-mode');
   const { sortBy, handleSortChange } = useSortPersistence('case-studies-sort', 'title-asc', CASE_STUDIES_SORT_OPTIONS);
@@ -41,16 +40,6 @@ export function CaseStudiesList({ caseStudies }: CaseStudiesListProps) {
     ).sort((a, b) => b - a); // Sort years descending
   }, [caseStudies]);
 
-  // Memoize unique companies for filter dropdown
-  const availableCompanies = useMemo(() => {
-    const allCompanies = caseStudies.flatMap(cs => [
-      ...(cs.quantum_companies || []),
-      ...(cs.partner_companies || [])
-    ]).filter(Boolean); // Remove null/undefined values
-    
-    return Array.from(new Set(allCompanies)).sort(); // Sort alphabetically
-  }, [caseStudies]);
-
   // Memoize expensive filtering and sorting operations
   const filteredCaseStudies = useMemo(() => {
     return caseStudies
@@ -59,34 +48,16 @@ export function CaseStudiesList({ caseStudies }: CaseStudiesListProps) {
       if (yearFilter !== 'all' && caseStudy.year !== parseInt(yearFilter)) {
         return false;
       }
-      
-      // Company filter
-      if (companyFilter !== 'all') {
-        const caseStudyCompanies = [
-          ...(caseStudy.quantum_companies || []),
-          ...(caseStudy.partner_companies || [])
-        ];
-        if (!caseStudyCompanies.includes(companyFilter)) {
-          return false;
-        }
-      }
-      
+
       // Search filter
       if (!searchQuery) return true;
-      
+
       const query = searchQuery.toLowerCase();
-      
-      // Check company names for search matches
-      const companyMatch = [
-        ...(caseStudy.quantum_companies || []),
-        ...(caseStudy.partner_companies || [])
-      ].some(company => company?.toLowerCase().includes(query));
-      
+
       return (
         caseStudy.title.toLowerCase().includes(query) ||
         (caseStudy.description?.toLowerCase().includes(query) || false) ||
-        (caseStudy.year?.toString().includes(query) || false) ||
-        companyMatch
+        (caseStudy.year?.toString().includes(query) || false)
       );
     })
     .sort((a, b) => {
@@ -117,7 +88,7 @@ export function CaseStudiesList({ caseStudies }: CaseStudiesListProps) {
           return a.title.localeCompare(b.title);
       }
     });
-  }, [caseStudies, yearFilter, companyFilter, searchQuery, sortBy]);
+  }, [caseStudies, yearFilter, searchQuery, sortBy]);
 
   // Memoize event handlers to prevent child re-renders
   const handleSearchChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
@@ -126,10 +97,6 @@ export function CaseStudiesList({ caseStudies }: CaseStudiesListProps) {
 
   const handleYearFilterChange = useCallback((value: string) => {
     setYearFilter(value);
-  }, []);
-
-  const handleCompanyFilterChange = useCallback((value: string) => {
-    setCompanyFilter(value);
   }, []);
 
   return (
@@ -171,25 +138,6 @@ export function CaseStudiesList({ caseStudies }: CaseStudiesListProps) {
           </div>
           
           <div className="w-full sm:w-[200px]">
-            <Label htmlFor="company-filter" className="text-sm font-medium mb-1.5 block">
-              Filter by company
-            </Label>
-            <Select value={companyFilter} onValueChange={handleCompanyFilterChange}>
-              <SelectTrigger id="company-filter" className="w-full">
-                <SelectValue placeholder="All companies" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All Companies</SelectItem>
-                {availableCompanies.map(company => (
-                  <SelectItem key={company} value={company}>
-                    {company}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-          
-          <div className="w-full sm:w-[200px]">
             <Label htmlFor="sort" className="text-sm font-medium mb-1.5 block">
               Sort by
             </Label>
@@ -224,22 +172,16 @@ export function CaseStudiesList({ caseStudies }: CaseStudiesListProps) {
         : "space-y-4"
       }>
         {filteredCaseStudies.map((caseStudy) => {
-          // Combine quantum and partner companies for badges
-          const companies = [
-            ...(caseStudy.quantum_companies || []),
-            ...(caseStudy.partner_companies || [])
-          ].filter(Boolean); // Remove any null/undefined values
-          
           // Get metadata using the new system
           const metadata = getContentMetadata('case-studies', caseStudy, viewMode);
-          
+
           return (
             <ContentCard
               key={caseStudy.id}
               variant={viewMode}
               title={caseStudy.title}
               description={caseStudy.description || ''}
-              badges={companies}
+              badges={[]}
               href={`/case-study/${caseStudy.slug}`}
               metadata={{
                 lastUpdated: metadata.join(' • ') || undefined

@@ -12,19 +12,14 @@ import { AutoSchema } from '@/components/AutoSchema';
 // export const dynamic = 'force-dynamic'; // REMOVED - Restore default caching
 
 // Define a more accurate type for the case study data we expect after fetching relations
-// MIGRATION NOTE: This type includes both new relationship data and legacy TEXT[] fields
-// Legacy fields (quantum_software, quantum_hardware, etc.) are kept for backward compatibility
-// and will be removed after production verification - see cleanup-legacy-fields-migration.sql
 type EnrichedCaseStudy = Database['public']['Tables']['case_studies']['Row'] & {
   case_study_industry_relations?: { industries: { id: string; name: string; slug?: string | null } | null }[];
   algorithm_case_study_relations?: { algorithms: { id: string; name: string; slug?: string | null } | null }[];
   case_study_persona_relations?: { personas: { id: string; name: string; slug?: string | null } | null }[];
-  // NEW CONTENT TYPE RELATIONSHIPS (preferred):
   case_study_quantum_software_relations?: { quantum_software: { id: string; name: string; slug?: string | null } | null }[];
   case_study_quantum_hardware_relations?: { quantum_hardware: { id: string; name: string; slug?: string | null } | null }[];
   case_study_quantum_company_relations?: { quantum_companies: { id: string; name: string; slug?: string | null } | null }[];
   case_study_partner_company_relations?: { partner_companies: { id: string; name: string; slug?: string | null } | null }[];
-  // DEPRECATED: Legacy TEXT[] fields are still in Database type but will be removed
 };
 
 interface CaseStudyPageProps {

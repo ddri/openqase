@@ -17,6 +17,8 @@ import { createContentValidationRules, calculateCompletionPercentage, validateFo
 import { ArrowLeft, Save, Loader2, Eye } from 'lucide-react';
 import { toast } from '@/components/ui/use-toast';
 import { saveCaseStudy, publishCaseStudy, unpublishCaseStudy } from './actions';
+import { validateContent as validateContentSpelling, type ContentIssue } from '@/lib/content-validation';
+import { ContentValidationWarnings } from '@/components/admin/ContentValidationWarnings';
 
 
 interface CaseStudyFormProps {
@@ -66,9 +68,18 @@ export function CaseStudyForm({ caseStudy, algorithms, industries, personas, qua
     year: isNew ? new Date().getFullYear() : caseStudy?.year || new Date().getFullYear(),
   });
   const [isDirty, setIsDirty] = useState(false);
-  
+  const [validationIssues, setValidationIssues] = useState<ContentIssue[]>([]);
 
-  
+  // Run validation whenever values change
+  useEffect(() => {
+    const issues = validateContentSpelling({
+      title: values.title,
+      description: values.description,
+      main_content: values.main_content,
+    });
+    setValidationIssues(issues);
+  }, [values.title, values.description, values.main_content]);
+
   // Validation rules for case studies
   const validationRules = createContentValidationRules('case_study');
   const completionPercentage = calculateCompletionPercentage({ values, validationRules });
@@ -393,9 +404,12 @@ export function CaseStudyForm({ caseStudy, algorithms, industries, personas, qua
           <ContentCompleteness percentage={completionPercentage} showLabel={false} />
         </div>
       </div>
-      
-      {/* No need for spacing div anymore */}
-      
+
+      {/* Content Validation Warnings */}
+      {validationIssues.length > 0 && (
+        <ContentValidationWarnings issues={validationIssues} />
+      )}
+
       <form onSubmit={handleSubmit} className="space-y-10">
         {/* Basic Info Section */}
         <Card className="shadow-sm">

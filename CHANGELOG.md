@@ -19,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Renamed api-documentation.md to api-architecture.md for clarity
 - Reorganized README.md documentation links for better discoverability
 - Moved planning documents to docs/archive/
+- Cleaned up TODO comments and created tracking issues (#129, #130, #131, #132)
 
 ### Fixed
 - Added \`SET search_path = ''\` to SECURITY DEFINER functions to prevent search_path attacks

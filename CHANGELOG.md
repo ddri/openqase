@@ -14,6 +14,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Enhanced CONTRIBUTING.md with commit conventions and security guidelines
 - Documentation archive folder for historical planning documents
 - Improved documentation index in docs/README.md
+- Built-in content validation system (replaces LanguageTool API)
+- Real-time UK English spelling validation in admin forms
+- Comprehensive authentication patterns documentation with troubleshooting guide
 
 ### Changed
 - Renamed api-documentation.md to api-architecture.md for clarity

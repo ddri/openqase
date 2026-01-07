@@ -20,6 +20,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Production-ready Redis-based rate limiting with Upstash support
 - Hybrid rate limiter with automatic fallback to in-memory for development
 - Comprehensive rate limiting documentation with usage patterns and troubleshooting
+- Production-ready Redis-based caching with Upstash support
+- Hybrid cache with LRU in-memory fallback for development
+- Cache-aside pattern, function wrapping, and batch operations support
+- Comprehensive caching documentation with usage patterns and best practices
 
 ### Changed
 - Renamed api-documentation.md to api-architecture.md for clarity

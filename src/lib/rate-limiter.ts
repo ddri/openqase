@@ -1,7 +1,9 @@
 /**
- * Simple in-memory rate limiter for API protection
- * For production, consider upgrading to Redis-based rate limiting
+ * Hybrid rate limiter with Redis support for production
+ * Falls back to in-memory rate limiting for development
  */
+
+import { redisRateLimiter } from './rate-limiter-redis';
 
 interface RateLimitEntry {
   requests: number;
@@ -20,13 +22,13 @@ class InMemoryRateLimiter {
   }
 
   /**
-   * Check if a request is allowed under rate limiting
+   * Check if a request is allowed under rate limiting (in-memory only)
    * @param identifier - Unique identifier (IP address, user ID, etc.)
    * @param limit - Maximum requests allowed
    * @param windowMs - Time window in milliseconds
    * @returns Object with allowed status and remaining requests
    */
-  checkLimit(
+  checkLimitSync(
     identifier: string,
     limit: number,
     windowMs: number
@@ -74,6 +76,41 @@ class InMemoryRateLimiter {
       remaining: limit - entry.requests,
       resetTime: entry.resetTime,
     };
+  }
+
+  /**
+   * Async check with Redis support (production-ready)
+   * Tries Redis first, falls back to in-memory on failure
+   * @param identifier - Unique identifier (IP address, user ID, etc.)
+   * @param limit - Maximum requests allowed
+   * @param windowMs - Time window in milliseconds
+   */
+  async checkLimit(
+    identifier: string,
+    limit: number,
+    windowMs: number
+  ): Promise<{
+    allowed: boolean;
+    remaining: number;
+    resetTime: number;
+    retryAfter?: number;
+  }> {
+    // Try Redis first if available
+    if (redisRateLimiter.isEnabled()) {
+      try {
+        const result = await redisRateLimiter.checkLimit(identifier, limit, windowMs);
+
+        // If Redis returned a valid result, use it
+        if (result.allowed !== undefined) {
+          return result;
+        }
+      } catch (error) {
+        console.warn('Redis rate limit check failed, falling back to in-memory:', error);
+      }
+    }
+
+    // Fall back to in-memory rate limiting
+    return this.checkLimitSync(identifier, limit, windowMs);
   }
 
   /**

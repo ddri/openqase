@@ -17,6 +17,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Built-in content validation system (replaces LanguageTool API)
 - Real-time UK English spelling validation in admin forms
 - Comprehensive authentication patterns documentation with troubleshooting guide
+- Production-ready Redis-based rate limiting with Upstash support
+- Hybrid rate limiter with automatic fallback to in-memory for development
+- Comprehensive rate limiting documentation with usage patterns and troubleshooting
 
 ### Changed
 - Renamed api-documentation.md to api-architecture.md for clarity

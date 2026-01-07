@@ -22,11 +22,11 @@ const unsubscribeSchema = z.object({
 export async function POST(request: Request) {
   try {
     // Apply rate limiting
-    const clientIP = request.headers.get('x-forwarded-for') || 
-                     request.headers.get('x-real-ip') || 
+    const clientIP = request.headers.get('x-forwarded-for') ||
+                     request.headers.get('x-real-ip') ||
                      'unknown'
-    
-    const rateLimitResult = rateLimiter.checkLimit(
+
+    const rateLimitResult = await rateLimiter.checkLimit(
       `newsletter:${clientIP}`,
       RATE_LIMITS.newsletter.limit,
       RATE_LIMITS.newsletter.windowMs

@@ -726,27 +726,16 @@ GET /api/preview?secret={secret}&slug={content-slug}
 
 ### Import System
 
-#### Get Import Mapping
+**Status:** Removed in v0.6.0
 
-```http
-GET /api/imports/{batchId}/mapping
+The admin UI for batch imports has been removed. For bulk imports, use the command-line script:
+```bash
+tsx scripts/import-case-studies-with-mapping.ts /path/to/json/files --commit
 ```
 
-**Authentication:** Required (Admin)
+See `docs/import-system.md` for detailed script documentation.
 
-**Description:** Get entity mapping for a batch import.
-
-**Response:** `200 OK`
-```json
-{
-  "batchId": "string",
-  "mapping": {
-    "algorithms": {...},
-    "industries": {...},
-    "personas": {...}
-  }
-}
-```
+**Note:** The import system will be redesigned and reimplemented in v0.7.0 with proper database migrations and improved workflow.
 
 ---
 

@@ -111,22 +111,23 @@ export class RedisCache {
 
     try {
       // Use SCAN to find keys matching pattern
-      let cursor = 0;
+      let cursor: number | string = 0;
       let deletedCount = 0;
 
       do {
-        const [newCursor, keys] = await this.redis.scan(cursor, {
+        const result: [number | string, string[]] = await this.redis.scan(cursor, {
           match: pattern,
           count: 100,
         });
 
+        const [newCursor, keys] = result;
         cursor = newCursor;
 
         if (keys && keys.length > 0) {
           await this.redis.del(...keys);
           deletedCount += keys.length;
         }
-      } while (cursor !== 0);
+      } while (cursor !== 0 && cursor !== '0');
 
       return deletedCount;
     } catch (error) {

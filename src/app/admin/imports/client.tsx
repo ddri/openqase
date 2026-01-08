@@ -11,6 +11,7 @@ import { Badge } from '@/components/ui/badge'
 import { ColumnDef } from '@tanstack/react-table'
 import { Upload, Eye, MoreVertical, FileText, Clock, CheckCircle, AlertCircle, XCircle } from 'lucide-react'
 import Link from 'next/link'
+import { createBrowserSupabaseClient } from '@/lib/supabase-browser'
 import type { ImportBatch } from './page'
 
 const getStatusIcon = (status: string) => {
@@ -76,10 +77,20 @@ function FileUploadDialog({ onUploadSuccess }: FileUploadDialogProps) {
     setUploadResult(null)
 
     try {
+      // Get authenticated user
+      const supabase = createBrowserSupabaseClient()
+      const { data: { user } } = await supabase.auth.getUser()
+
+      if (!user) {
+        setUploadResult({ error: 'You must be logged in to upload files' })
+        setIsUploading(false)
+        return
+      }
+
       const formData = new FormData()
       formData.append('file', file)
       formData.append('batchName', batchName)
-      formData.append('userId', 'admin') // TODO: Get actual user ID
+      formData.append('userId', user.id)
 
       const response = await fetch('/api/imports/qookie', {
         method: 'POST',

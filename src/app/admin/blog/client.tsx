@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
+import { StatusBadge } from '@/components/admin/StatusBadge';
 import { 
   Table, 
   TableBody, 
@@ -331,15 +332,7 @@ export function BlogPostsList({ initialBlogPosts }: BlogPostsListProps) {
                       {dateToShow ? new Date(dateToShow).toLocaleDateString() : '-'}
                     </TableCell>
                     <TableCell>
-                      {status === 'Published' && (
-                        <span className="inline-block px-2 py-1 rounded bg-orange-600 text-white text-xs font-semibold">Published</span>
-                      )}
-                      {status === 'Draft' && (
-                        <span className="inline-block px-2 py-1 rounded bg-muted text-foreground text-xs font-semibold border">Draft</span>
-                      )}
-                      {status === 'Scheduled' && (
-                        <span className="inline-block px-2 py-1 rounded bg-blue-600 text-white text-xs font-semibold">Scheduled</span>
-                      )}
+                      <StatusBadge status={status} />
                     </TableCell>
                     <TableCell className="text-right">
                       <DropdownMenu>

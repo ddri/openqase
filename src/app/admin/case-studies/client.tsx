@@ -8,6 +8,7 @@ import { Plus, Search, Trash, Trash2, CheckCircle, XCircle } from 'lucide-react'
 import { DataTable } from '@/components/ui/data-table'
 import { ColumnDef } from '@tanstack/react-table'
 import { Checkbox } from '@/components/ui/checkbox'
+import { StatusBadge } from '@/components/admin/StatusBadge'
 import { useState, useMemo } from 'react'
 import type { CaseStudy } from './page'
 
@@ -44,17 +45,7 @@ const createColumns = (
   {
     accessorKey: 'published',
     header: 'Status',
-    cell: ({ row }) => (
-      <div className="flex items-center">
-        <span className={`px-2 py-1 rounded-full text-xs ${
-          row.original.published 
-            ? 'bg-green-100 text-green-800' 
-            : 'bg-yellow-100 text-yellow-800'
-        }`}>
-          {row.original.published ? 'Published' : 'Draft'}
-        </span>
-      </div>
-    )
+    cell: ({ row }) => <StatusBadge status={row.original.published} />
   },
   {
     accessorKey: 'import_batch_name',

@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { Plus, Trash2, AlertCircle } from 'lucide-react'
 import { DataTable } from '@/components/ui/data-table'
 import { ColumnDef } from '@tanstack/react-table'
+import { StatusBadge } from '@/components/admin/StatusBadge'
 import type { QuantumHardware } from './page'
 import { useState, useEffect } from 'react'
 import {
@@ -74,15 +75,7 @@ export function QuantumHardwareClient({ data }: QuantumHardwareClientProps) {
     {
       accessorKey: 'published',
       header: 'Status',
-      cell: ({ row }) => (
-        <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-          row.original.published 
-            ? 'bg-green-100 text-green-800' 
-            : 'bg-yellow-100 text-yellow-800'
-        }`}>
-          {row.original.published ? 'Published' : 'Draft'}
-        </span>
-      ),
+      cell: ({ row }) => <StatusBadge status={row.original.published} />
     },
     {
       id: 'actions',

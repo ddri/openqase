@@ -75,7 +75,7 @@ export function QuantumCompaniesClient({ data }: QuantumCompaniesClientProps) {
     {
       accessorKey: 'published',
       header: 'Status',
-      cell: ({ row }) => <StatusBadge status={row.original.published} />
+      cell: ({ row }) => <StatusBadge status={row.original.published ?? false} />
     },
     {
       id: 'actions',

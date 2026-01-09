@@ -46,7 +46,7 @@ const createColumns = (
   {
     accessorKey: 'published',
     header: 'Status',
-    cell: ({ row }) => <StatusBadge status={row.original.published} />
+    cell: ({ row }) => <StatusBadge status={row.original.published ?? false} />
   },
   {
     accessorKey: 'import_batch_name',

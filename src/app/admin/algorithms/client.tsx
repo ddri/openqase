@@ -91,7 +91,7 @@ export function AlgorithmsClient({ data }: AlgorithmsClientProps) {
     {
       accessorKey: 'published',
       header: 'Status',
-      cell: ({ row }) => <StatusBadge status={row.original.published} />
+      cell: ({ row }) => <StatusBadge status={row.original.published ?? false} />
     },
     {
       accessorKey: 'actions',

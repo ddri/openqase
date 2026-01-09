@@ -1,67 +1,47 @@
 // src/components/ui/card.tsx
-"use client"
-
 import * as React from "react";
-import { motion } from "framer-motion";
+import { cva, type VariantProps } from "class-variance-authority";
+import { cn } from "@/lib/utils";
 
-interface BaseCardProps {
+const cardVariants = cva(
+  "relative rounded-lg border bg-card text-card-foreground transition-all duration-200",
+  {
+    variants: {
+      variant: {
+        default: "border-border shadow-md",
+        interactive: "border-border shadow-md hover:shadow-lg hover:border-primary hover:-translate-y-0.5",
+        elevated: "border-border shadow-lg",
+      },
+    },
+    defaultVariants: {
+      variant: "default",
+    },
+  }
+);
+
+export interface CardProps
+  extends React.HTMLAttributes<HTMLDivElement>,
+    VariantProps<typeof cardVariants> {
+  /** Fixed height mode for consistent card sizes */
   fixedHeight?: boolean;
+  /** Height in pixels when fixedHeight is true */
   height?: number;
-  className?: string;
 }
-
-interface StaticCardProps extends BaseCardProps, React.HTMLAttributes<HTMLDivElement> {
-  animated?: false;
-}
-
-// ARCHITECTURAL DECISION: Event Handler Exclusion for Motion Component Compatibility
-// ================================================================================
-// Framer Motion's event handlers have different signatures than standard HTML events:
-// - HTML onDrag: (event: DragEvent) => void  
-// - Motion onDrag: (event: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => void
-// - HTML onAnimationStart: (event: AnimationEvent) => void
-// - Motion onAnimationStart: (definition: AnimationDefinition) => void
-//
-// Solution: Exclude conflicting event props to prevent TypeScript errors while
-// maintaining all other HTML attributes (className, onClick, etc.)
-// This follows the industry standard pattern used by React-Aria, Emotion, and other libraries.
-interface AnimatedCardProps extends BaseCardProps, Omit<React.HTMLAttributes<HTMLDivElement>, 'onDrag' | 'onDragEnd' | 'onDragStart' | 'onAnimationStart' | 'onAnimationEnd'> {
-  animated: true;
-}
-
-type CardProps = StaticCardProps | AnimatedCardProps;
 
 const Card = React.forwardRef<HTMLDivElement, CardProps>(
-  ({ className, fixedHeight = false, height = 210, animated = false, ...props }, ref) => {
-    const baseClassName = `relative rounded-lg border border-border bg-card shadow-md 
-      transition-all duration-200 hover:shadow-lg hover:border-primary
-      ${fixedHeight ? 'flex flex-col' : ''} ${className || ""}`;
-    
+  ({ className, variant, fixedHeight = false, height = 210, ...props }, ref) => {
     const style = fixedHeight ? { height: `${height}px` } : undefined;
 
-    if (animated) {
-      const { animated: _, ...motionProps } = props as AnimatedCardProps;
-      return (
-        <motion.div
-          ref={ref}
-          className={baseClassName}
-          style={style}
-          whileHover={{ 
-            y: -1,
-            transition: { duration: 0.2, ease: "easeOut" }
-          }}
-          {...motionProps}
-        />
-      );
-    }
-
-    const { animated: _, ...divProps } = props as StaticCardProps;
     return (
       <div
         ref={ref}
-        className={baseClassName}
+        className={cn(
+          cardVariants({ variant }),
+          fixedHeight && "flex flex-col",
+          className
+        )}
         style={style}
-        {...divProps}
+        {...props}
       />
     );
   }
@@ -77,9 +57,7 @@ const CardHeader = React.forwardRef<HTMLDivElement, CardHeaderProps>(
   ({ className, flexGrow = false, ...props }, ref) => (
     <div
       ref={ref}
-      className={`flex flex-col space-y-1.5 p-6 ${
-        flexGrow ? 'flex-grow' : ''
-      } ${className || ""}`}
+      className={cn("flex flex-col space-y-1.5 p-6", flexGrow && "flex-grow", className)}
       {...props}
     />
   )
@@ -92,7 +70,7 @@ const CardTitle = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <h3
     ref={ref}
-    className={`text-2xl font-semibold leading-none tracking-tight ${className || ""}`}
+    className={cn("text-2xl font-semibold leading-none tracking-tight", className)}
     {...props}
   />
 ));
@@ -104,7 +82,7 @@ const CardDescription = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <p
     ref={ref}
-    className={`text-[var(--muted-foreground)] text-sm ${className || ""}`}
+    className={cn("text-muted-foreground text-sm", className)}
     {...props}
   />
 ));
@@ -114,7 +92,7 @@ const CardContent = React.forwardRef<
   HTMLDivElement,
   React.HTMLAttributes<HTMLDivElement>
 >(({ className, ...props }, ref) => (
-  <div ref={ref} className={`p-6 pt-0 ${className || ""}`} {...props} />
+  <div ref={ref} className={cn("p-6 pt-0", className)} {...props} />
 ));
 CardContent.displayName = "CardContent";
 
@@ -124,7 +102,7 @@ const CardFooter = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <div
     ref={ref}
-    className={`flex items-center p-6 pt-0 ${className || ""}`}
+    className={cn("flex items-center p-6 pt-0", className)}
     {...props}
   />
 ));

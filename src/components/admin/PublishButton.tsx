@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Loader2, CheckCircle2, XCircle } from 'lucide-react';
+import { CheckCircle2, XCircle } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { ValidationModal } from './ValidationModal';
 import { ValidationIssues } from '@/utils/form-validation';
@@ -91,33 +91,17 @@ export function PublishButton({
         variant={isPublished ? "default" : "outline"}
         size={size}
         className={cn(
-          isPublished ? "bg-green-600 hover:bg-green-700 text-white" : "",
+          isPublished && "bg-green-600 hover:bg-green-700 dark:bg-green-700 dark:hover:bg-green-600",
           "min-w-[100px]",
           className
         )}
         onClick={handleClick}
-        disabled={disabled || isLoading}
+        disabled={disabled}
+        loading={isLoading}
+        loadingText={isPublished ? 'Unpublishing...' : 'Publishing...'}
+        leftIcon={isPublished ? <CheckCircle2 className="h-4 w-4" /> : <XCircle className="h-4 w-4" />}
       >
-        {isLoading ? (
-          <>
-            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-            {isPublished ? 'Unpublishing...' : 'Publishing...'}
-          </>
-        ) : (
-          <>
-            {isPublished ? (
-              <>
-                <CheckCircle2 className="mr-2 h-4 w-4" />
-                Published
-              </>
-            ) : (
-              <>
-                <XCircle className="mr-2 h-4 w-4" />
-                Publish
-              </>
-            )}
-          </>
-        )}
+        {isPublished ? 'Published' : 'Publish'}
       </Button>
       
       <ValidationModal

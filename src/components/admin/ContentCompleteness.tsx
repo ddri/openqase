@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { cn } from '@/lib/utils';
+import { getProgressColors } from '@/lib/design-tokens';
 
 interface ContentCompletenessProps {
   percentage: number;
@@ -28,13 +29,9 @@ export function ContentCompleteness({
 }: ContentCompletenessProps) {
   // Ensure percentage is between 0 and 100
   const validPercentage = Math.max(0, Math.min(100, percentage));
-  
-  // Determine color based on percentage
-  const getColor = () => {
-    if (validPercentage < 30) return 'bg-red-500';
-    if (validPercentage < 70) return 'bg-yellow-500';
-    return 'bg-green-500';
-  };
+
+  // Get color from design tokens based on percentage
+  const colors = getProgressColors(validPercentage);
   
   // Determine size classes
   const getSizeClasses = () => {
@@ -63,7 +60,7 @@ export function ContentCompleteness({
       )}
       <div className={cn('w-full bg-muted rounded-full overflow-hidden', getSizeClasses())}>
         <div
-          className={cn('h-full rounded-full transition-all duration-300', getColor())}
+          className={cn('h-full rounded-full transition-all duration-300', colors.fill)}
           style={{ width: `${validPercentage}%` }}
           role="progressbar"
           aria-valuenow={validPercentage}

@@ -9,6 +9,7 @@ import { DataTable } from '@/components/ui/data-table'
 import { ColumnDef } from '@tanstack/react-table'
 import { Checkbox } from '@/components/ui/checkbox'
 import { StatusBadge } from '@/components/admin/StatusBadge'
+import { BulkOperationBar } from '@/components/admin/BulkOperationBar'
 import { useState, useMemo } from 'react'
 import type { CaseStudy } from './page'
 
@@ -302,44 +303,14 @@ export function CaseStudiesClient({ data }: CaseStudiesClientProps) {
       </div>
 
       {/* Bulk Operations Bar */}
-      {selectedItems.size > 0 && (
-        <div className="mb-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
-          <div className="flex items-center justify-between">
-            <span className="text-sm text-blue-700">
-              {selectedItems.size} item{selectedItems.size !== 1 ? 's' : ''} selected
-            </span>
-            <div className="flex gap-2">
-              <Button
-                size="sm"
-                variant="outline"
-                onClick={() => handleBulkOperation('publish')}
-                disabled={isLoading}
-              >
-                <CheckCircle className="w-4 h-4 mr-1" />
-                Publish
-              </Button>
-              <Button
-                size="sm"
-                variant="outline"
-                onClick={() => handleBulkOperation('unpublish')}
-                disabled={isLoading}
-              >
-                <XCircle className="w-4 h-4 mr-1" />
-                Unpublish
-              </Button>
-              <Button
-                size="sm"
-                variant="destructive"
-                onClick={() => handleBulkOperation('delete')}
-                disabled={isLoading}
-              >
-                <Trash className="w-4 h-4 mr-1" />
-                Delete
-              </Button>
-            </div>
-          </div>
-        </div>
-      )}
+      <BulkOperationBar
+        selectedCount={selectedItems.size}
+        onPublish={() => handleBulkOperation('publish')}
+        onUnpublish={() => handleBulkOperation('unpublish')}
+        onDelete={() => handleBulkOperation('delete')}
+        onClearSelection={() => setSelectedItems(new Set())}
+        isLoading={isLoading}
+      />
 
       <div className="bg-card rounded-lg border">
         <DataTable 

@@ -6,6 +6,7 @@ import { ArrowLeft, RotateCcw, Trash2 } from 'lucide-react'
 import { DataTable } from '@/components/ui/data-table'
 import { ColumnDef } from '@tanstack/react-table'
 import { Checkbox } from '@/components/ui/checkbox'
+import { BulkOperationBar } from '@/components/admin/BulkOperationBar'
 import { useState } from 'react'
 import type { CaseStudy } from './page'
 
@@ -247,35 +248,13 @@ export function TrashClient({ data }: TrashClientProps) {
       </div>
 
       {/* Bulk Operations Bar */}
-      {selectedItems.size > 0 && (
-        <div className="mb-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
-          <div className="flex items-center justify-between">
-            <span className="text-sm text-blue-700">
-              {selectedItems.size} item{selectedItems.size !== 1 ? 's' : ''} selected
-            </span>
-            <div className="flex gap-2">
-              <Button
-                size="sm"
-                variant="outline"
-                onClick={handleBulkRestore}
-                disabled={isLoading}
-              >
-                <RotateCcw className="w-4 h-4 mr-1" />
-                Restore Selected
-              </Button>
-              <Button
-                size="sm"
-                variant="destructive"
-                onClick={handleBulkPermanentDelete}
-                disabled={isLoading}
-              >
-                <Trash2 className="w-4 h-4 mr-1" />
-                Delete Forever
-              </Button>
-            </div>
-          </div>
-        </div>
-      )}
+      <BulkOperationBar
+        selectedCount={selectedItems.size}
+        onRestore={handleBulkRestore}
+        onPermanentDelete={handleBulkPermanentDelete}
+        onClearSelection={() => setSelectedItems(new Set())}
+        isLoading={isLoading}
+      />
 
       {data.length === 0 ? (
         <div className="text-center py-12 bg-card rounded-lg border">

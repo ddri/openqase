@@ -1,71 +1,104 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <!-- Background gradient -->
+  <!-- Background gradient - Deep navy to slightly lighter navy (brand dark theme) -->
   <defs>
     <linearGradient id="bg-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#0f172a;stop-opacity:1" />
-      <stop offset="100%" style="stop-color:#1e293b;stop-opacity:1" />
+      <stop offset="0%" style="stop-color:#0d0f14;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#111318;stop-opacity:1" />
     </linearGradient>
-    <!-- Quantum dots pattern -->
+
+    <!-- Warm amber gradient for accents -->
+    <linearGradient id="amber-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#dfc09a;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#d4a574;stop-opacity:1" />
+    </linearGradient>
+
+    <!-- Quantum dots pattern - warm amber -->
     <pattern id="dots" x="0" y="0" width="60" height="60" patternUnits="userSpaceOnUse">
-      <circle cx="30" cy="30" r="2" fill="#3b82f6" opacity="0.3"/>
+      <circle cx="30" cy="30" r="2" fill="#d4a574" opacity="0.2"/>
     </pattern>
+
+    <!-- Radial glow effect -->
+    <radialGradient id="glow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#d4a574;stop-opacity:0.15" />
+      <stop offset="100%" style="stop-color:#d4a574;stop-opacity:0" />
+    </radialGradient>
   </defs>
-  
+
   <!-- Background -->
   <rect width="1200" height="630" fill="url(#bg-gradient)"/>
-  
+
+  <!-- Radial glow overlay -->
+  <ellipse cx="900" cy="250" rx="400" ry="400" fill="url(#glow)"/>
+
   <!-- Dot pattern overlay -->
-  <rect width="1200" height="630" fill="url(#dots)" opacity="0.5"/>
-  
-  <!-- Abstract quantum circuit lines -->
-  <g opacity="0.1">
-    <line x1="0" y1="150" x2="1200" y2="150" stroke="#3b82f6" stroke-width="1"/>
-    <line x1="0" y1="315" x2="1200" y2="315" stroke="#3b82f6" stroke-width="1"/>
-    <line x1="0" y1="480" x2="1200" y2="480" stroke="#3b82f6" stroke-width="1"/>
-    <line x1="300" y1="0" x2="300" y2="630" stroke="#3b82f6" stroke-width="1"/>
-    <line x1="600" y1="0" x2="600" y2="630" stroke="#3b82f6" stroke-width="1"/>
-    <line x1="900" y1="0" x2="900" y2="630" stroke="#3b82f6" stroke-width="1"/>
+  <rect width="1200" height="630" fill="url(#dots)" opacity="0.4"/>
+
+  <!-- Abstract quantum circuit lines - warm amber theme -->
+  <g opacity="0.15">
+    <line x1="0" y1="150" x2="1200" y2="150" stroke="#d4a574" stroke-width="1"/>
+    <line x1="0" y1="315" x2="1200" y2="315" stroke="#d4a574" stroke-width="1"/>
+    <line x1="0" y1="480" x2="1200" y2="480" stroke="#d4a574" stroke-width="1"/>
+    <line x1="300" y1="0" x2="300" y2="630" stroke="#d4a574" stroke-width="1"/>
+    <line x1="600" y1="0" x2="600" y2="630" stroke="#d4a574" stroke-width="1"/>
+    <line x1="900" y1="0" x2="900" y2="630" stroke="#d4a574" stroke-width="1"/>
   </g>
-  
+
   <!-- Logo and branding -->
-  <g transform="translate(100, 200)">
-    <!-- OpenQase text -->
-    <text x="0" y="0" font-family="Arial, sans-serif" font-size="72" font-weight="bold" fill="#ffffff">
+  <g transform="translate(80, 180)">
+    <!-- OpenQase text with gradient -->
+    <text x="0" y="0" font-family="Montserrat, Arial, sans-serif" font-size="84" font-weight="bold" fill="url(#amber-gradient)">
       OpenQase
     </text>
-    
-    <!-- Tagline -->
-    <text x="0" y="60" font-family="Arial, sans-serif" font-size="32" fill="#94a3b8">
+
+    <!-- Tagline - warm light text -->
+    <text x="0" y="70" font-family="Open Sans, Arial, sans-serif" font-size="36" fill="#c4bfbf">
       Quantum Computing Business Cases
     </text>
-    
-    <!-- Subtext -->
-    <text x="0" y="120" font-family="Arial, sans-serif" font-size="24" fill="#64748b">
+
+    <!-- Subtext - warm medium gray -->
+    <text x="0" y="140" font-family="Open Sans, Arial, sans-serif" font-size="26" fill="#918a8a">
       Real-world applications and case studies
     </text>
-    <text x="0" y="150" font-family="Arial, sans-serif" font-size="24" fill="#64748b">
+    <text x="0" y="175" font-family="Open Sans, Arial, sans-serif" font-size="26" fill="#918a8a">
       from leading quantum computing initiatives
     </text>
   </g>
-  
-  <!-- Quantum-inspired decorative elements -->
-  <g opacity="0.6">
-    <!-- Quantum nodes -->
-    <circle cx="950" cy="200" r="8" fill="#3b82f6"/>
-    <circle cx="1000" cy="250" r="8" fill="#3b82f6"/>
-    <circle cx="1050" cy="200" r="8" fill="#3b82f6"/>
-    <circle cx="1000" cy="150" r="8" fill="#3b82f6"/>
-    
-    <!-- Connecting lines -->
-    <line x1="950" y1="200" x2="1000" y2="250" stroke="#3b82f6" stroke-width="2"/>
-    <line x1="1000" y1="250" x2="1050" y2="200" stroke="#3b82f6" stroke-width="2"/>
-    <line x1="1050" y1="200" x2="1000" y2="150" stroke="#3b82f6" stroke-width="2"/>
-    <line x1="1000" y1="150" x2="950" y2="200" stroke="#3b82f6" stroke-width="2"/>
+
+  <!-- Quantum-inspired decorative elements - warm amber -->
+  <g opacity="0.7">
+    <!-- Larger quantum circuit representation -->
+    <circle cx="950" cy="200" r="10" fill="#d4a574"/>
+    <circle cx="1010" cy="260" r="10" fill="#dfc09a"/>
+    <circle cx="1070" cy="200" r="10" fill="#d4a574"/>
+    <circle cx="1010" cy="140" r="10" fill="#dfc09a"/>
+
+    <!-- Connecting lines with glow -->
+    <line x1="950" y1="200" x2="1010" y2="260" stroke="url(#amber-gradient)" stroke-width="3" opacity="0.8"/>
+    <line x1="1010" y1="260" x2="1070" y2="200" stroke="url(#amber-gradient)" stroke-width="3" opacity="0.8"/>
+    <line x1="1070" y1="200" x2="1010" y2="140" stroke="url(#amber-gradient)" stroke-width="3" opacity="0.8"/>
+    <line x1="1010" y1="140" x2="950" y2="200" stroke="url(#amber-gradient)" stroke-width="3" opacity="0.8"/>
+
+    <!-- Additional decorative nodes -->
+    <circle cx="890" cy="250" r="6" fill="#d4a574" opacity="0.6"/>
+    <circle cx="1130" cy="150" r="6" fill="#dfc09a" opacity="0.6"/>
+    <circle cx="1010" cy="90" r="6" fill="#d4a574" opacity="0.6"/>
   </g>
-  
-  <!-- Website URL -->
-  <text x="100" y="550" font-family="Arial, sans-serif" font-size="20" fill="#64748b">
-    www.openqase.com
+
+  <!-- Subtle decorative elements in bottom left -->
+  <g opacity="0.3">
+    <circle cx="120" cy="500" r="4" fill="#d4a574"/>
+    <circle cx="150" cy="520" r="4" fill="#dfc09a"/>
+    <circle cx="180" cy="500" r="4" fill="#d4a574"/>
+    <line x1="120" y1="500" x2="150" y2="520" stroke="#d4a574" stroke-width="2"/>
+    <line x1="150" y1="520" x2="180" y2="500" stroke="#d4a574" stroke-width="2"/>
+  </g>
+
+  <!-- Website URL - warm gray -->
+  <text x="80" y="560" font-family="Open Sans, Arial, sans-serif" font-size="22" fill="#918a8a">
+    openqase.com
   </text>
+
+  <!-- Subtle accent line -->
+  <rect x="80" y="575" width="120" height="2" fill="url(#amber-gradient)" opacity="0.6"/>
 </svg>

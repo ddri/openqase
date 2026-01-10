@@ -18,6 +18,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog'
+import { AdminListFilters } from '@/components/admin/AdminListFilters'
 
 interface QuantumSoftwareClientProps {
   data: QuantumSoftware[]
@@ -25,10 +26,11 @@ interface QuantumSoftwareClientProps {
 
 export function QuantumSoftwareClient({ data }: QuantumSoftwareClientProps) {
   const [quantumSoftware, setQuantumSoftware] = useState<QuantumSoftware[]>(data)
+  const [filteredQuantumSoftware, setFilteredQuantumSoftware] = useState<QuantumSoftware[]>(data)
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
   const [softwareToDelete, setSoftwareToDelete] = useState<QuantumSoftware | null>(null)
   const [isDeleting, setIsDeleting] = useState(false)
-  
+
   useEffect(() => {
     setQuantumSoftware(data);
   }, [data]);
@@ -119,8 +121,27 @@ export function QuantumSoftwareClient({ data }: QuantumSoftwareClientProps) {
         </div>
       </div>
 
+      <AdminListFilters
+        data={quantumSoftware}
+        searchPlaceholder="Search quantum software..."
+        searchKeys={['name', 'vendor']}
+        filters={[
+          {
+            key: 'published',
+            label: 'Status',
+            options: [
+              { label: 'All Status', value: 'all' },
+              { label: 'Published', value: true },
+              { label: 'Draft', value: false },
+            ],
+          },
+        ]}
+        onFilteredDataChange={setFilteredQuantumSoftware}
+        showResultCount
+      />
+
       <div className="bg-card rounded-lg border">
-        <DataTable columns={columns} data={quantumSoftware} />
+        <DataTable columns={columns} data={filteredQuantumSoftware} />
       </div>
 
       <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>

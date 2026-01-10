@@ -18,6 +18,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog'
+import { AdminListFilters } from '@/components/admin/AdminListFilters'
 
 interface PartnerCompaniesClientProps {
   data: PartnerCompany[]
@@ -25,10 +26,11 @@ interface PartnerCompaniesClientProps {
 
 export function PartnerCompaniesClient({ data }: PartnerCompaniesClientProps) {
   const [partnerCompanies, setPartnerCompanies] = useState<PartnerCompany[]>(data)
+  const [filteredPartnerCompanies, setFilteredPartnerCompanies] = useState<PartnerCompany[]>(data)
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
   const [companyToDelete, setCompanyToDelete] = useState<PartnerCompany | null>(null)
   const [isDeleting, setIsDeleting] = useState(false)
-  
+
   useEffect(() => {
     setPartnerCompanies(data);
   }, [data]);
@@ -119,8 +121,27 @@ export function PartnerCompaniesClient({ data }: PartnerCompaniesClientProps) {
         </div>
       </div>
 
+      <AdminListFilters
+        data={partnerCompanies}
+        searchPlaceholder="Search partner companies..."
+        searchKeys={['name', 'industry']}
+        filters={[
+          {
+            key: 'published',
+            label: 'Status',
+            options: [
+              { label: 'All Status', value: 'all' },
+              { label: 'Published', value: true },
+              { label: 'Draft', value: false },
+            ],
+          },
+        ]}
+        onFilteredDataChange={setFilteredPartnerCompanies}
+        showResultCount
+      />
+
       <div className="bg-card rounded-lg border">
-        <DataTable columns={columns} data={partnerCompanies} />
+        <DataTable columns={columns} data={filteredPartnerCompanies} />
       </div>
 
       <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>

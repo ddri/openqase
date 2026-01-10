@@ -18,6 +18,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog'
+import { AdminListFilters } from '@/components/admin/AdminListFilters'
 
 interface QuantumCompaniesClientProps {
   data: QuantumCompany[]
@@ -25,10 +26,11 @@ interface QuantumCompaniesClientProps {
 
 export function QuantumCompaniesClient({ data }: QuantumCompaniesClientProps) {
   const [quantumCompanies, setQuantumCompanies] = useState<QuantumCompany[]>(data)
+  const [filteredQuantumCompanies, setFilteredQuantumCompanies] = useState<QuantumCompany[]>(data)
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
   const [companyToDelete, setCompanyToDelete] = useState<QuantumCompany | null>(null)
   const [isDeleting, setIsDeleting] = useState(false)
-  
+
   useEffect(() => {
     setQuantumCompanies(data);
   }, [data]);
@@ -119,8 +121,27 @@ export function QuantumCompaniesClient({ data }: QuantumCompaniesClientProps) {
         </div>
       </div>
 
+      <AdminListFilters
+        data={quantumCompanies}
+        searchPlaceholder="Search quantum companies..."
+        searchKeys={['name', 'description']}
+        filters={[
+          {
+            key: 'published',
+            label: 'Status',
+            options: [
+              { label: 'All Status', value: 'all' },
+              { label: 'Published', value: true },
+              { label: 'Draft', value: false },
+            ],
+          },
+        ]}
+        onFilteredDataChange={setFilteredQuantumCompanies}
+        showResultCount
+      />
+
       <div className="bg-card rounded-lg border">
-        <DataTable columns={columns} data={quantumCompanies} />
+        <DataTable columns={columns} data={filteredQuantumCompanies} />
       </div>
 
       <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>

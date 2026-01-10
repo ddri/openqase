@@ -4,24 +4,23 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { StatusBadge } from '@/components/admin/StatusBadge';
-import { 
-  Table, 
-  TableBody, 
-  TableCell, 
-  TableHead, 
-  TableHeader, 
-  TableRow 
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow
 } from '@/components/ui/table';
-import { 
-  DropdownMenu, 
-  DropdownMenuContent, 
-  DropdownMenuItem, 
-  DropdownMenuTrigger 
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu';
-import { 
+import {
   AlertDialog,
   AlertDialogAction,
   AlertDialogCancel,
@@ -32,19 +31,19 @@ import {
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
 import { useToast } from '@/components/ui/use-toast';
-import { 
-  Plus, 
-  MoreHorizontal, 
-  Pencil, 
-  Trash2, 
-  Eye, 
-  EyeOff, 
-  Star, 
+import {
+  Plus,
+  MoreHorizontal,
+  Pencil,
+  Trash2,
+  Eye,
+  EyeOff,
+  Star,
   StarOff,
-  Search,
   ArrowUpDown
 } from 'lucide-react';
 import { Tables } from '@/types/supabase';
+import { AdminListFilters } from '@/components/admin/AdminListFilters';
 
 interface BlogPostsListProps {
   initialBlogPosts: Tables<'blog_posts'>[];
@@ -54,20 +53,12 @@ export function BlogPostsList({ initialBlogPosts }: BlogPostsListProps) {
   const router = useRouter();
   const { toast } = useToast();
   const [blogPosts, setBlogPosts] = useState(initialBlogPosts);
-  const [searchTerm, setSearchTerm] = useState('');
+  const [filteredBlogPosts, setFilteredBlogPosts] = useState(initialBlogPosts);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [blogPostToDelete, setBlogPostToDelete] = useState<Tables<'blog_posts'> | null>(null);
   const [sortField, setSortField] = useState<string>('updated_at');
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('desc');
-  
-  // Filter blog posts based on search term
-  const filteredBlogPosts = blogPosts.filter(post => 
-    post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    post.description?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    post.category?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    post.tags?.some((tag: string) => tag.toLowerCase().includes(searchTerm.toLowerCase()))
-  );
-  
+
   // Sort blog posts
   const sortedBlogPosts = [...filteredBlogPosts].sort((a, b) => {
     // Sort by published_at (desc), then created_at (desc)
@@ -222,20 +213,26 @@ export function BlogPostsList({ initialBlogPosts }: BlogPostsListProps) {
           Add New
         </Button>
       </div>
-      
-      <div className="flex items-center">
-        <div className="relative flex-1">
-          <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-          <Input
-            type="search"
-            placeholder="Search blog posts..."
-            className="pl-8"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
-        </div>
-      </div>
-      
+
+      <AdminListFilters
+        data={blogPosts}
+        searchPlaceholder="Search blog posts..."
+        searchKeys={['title', 'description', 'category']}
+        filters={[
+          {
+            key: 'published',
+            label: 'Status',
+            options: [
+              { label: 'All Status', value: 'all' },
+              { label: 'Published', value: true },
+              { label: 'Draft', value: false },
+            ],
+          },
+        ]}
+        onFilteredDataChange={setFilteredBlogPosts}
+        showResultCount
+      />
+
       <div className="rounded-md border">
         <Table>
           <TableHeader>
@@ -277,7 +274,7 @@ export function BlogPostsList({ initialBlogPosts }: BlogPostsListProps) {
             {sortedBlogPosts.length === 0 ? (
               <TableRow>
                 <TableCell colSpan={7} className="text-center py-8 text-muted-foreground">
-                  {searchTerm ? 'No blog posts found matching your search' : 'No blog posts found'}
+                  {filteredBlogPosts.length < blogPosts.length ? 'No blog posts found matching your filters' : 'No blog posts found'}
                 </TableCell>
               </TableRow>
             ) : (

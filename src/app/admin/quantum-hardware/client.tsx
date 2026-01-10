@@ -18,6 +18,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog'
+import { AdminListFilters } from '@/components/admin/AdminListFilters'
 
 interface QuantumHardwareClientProps {
   data: QuantumHardware[]
@@ -25,10 +26,11 @@ interface QuantumHardwareClientProps {
 
 export function QuantumHardwareClient({ data }: QuantumHardwareClientProps) {
   const [quantumHardware, setQuantumHardware] = useState<QuantumHardware[]>(data)
+  const [filteredQuantumHardware, setFilteredQuantumHardware] = useState<QuantumHardware[]>(data)
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
   const [hardwareToDelete, setHardwareToDelete] = useState<QuantumHardware | null>(null)
   const [isDeleting, setIsDeleting] = useState(false)
-  
+
   useEffect(() => {
     setQuantumHardware(data);
   }, [data]);
@@ -119,8 +121,27 @@ export function QuantumHardwareClient({ data }: QuantumHardwareClientProps) {
         </div>
       </div>
 
+      <AdminListFilters
+        data={quantumHardware}
+        searchPlaceholder="Search quantum hardware..."
+        searchKeys={['name', 'vendor']}
+        filters={[
+          {
+            key: 'published',
+            label: 'Status',
+            options: [
+              { label: 'All Status', value: 'all' },
+              { label: 'Published', value: true },
+              { label: 'Draft', value: false },
+            ],
+          },
+        ]}
+        onFilteredDataChange={setFilteredQuantumHardware}
+        showResultCount
+      />
+
       <div className="bg-card rounded-lg border">
-        <DataTable columns={columns} data={quantumHardware} />
+        <DataTable columns={columns} data={filteredQuantumHardware} />
       </div>
 
       <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>

@@ -6,6 +6,7 @@ import { Plus, Trash2, AlertCircle } from 'lucide-react'
 import { DataTable } from '@/components/ui/data-table'
 import { ColumnDef } from '@tanstack/react-table'
 import { StatusBadge } from '@/components/admin/StatusBadge'
+import { AdminListFilters } from '@/components/admin/AdminListFilters'
 import type { Algorithm } from './page'
 import { useState, useEffect } from 'react'
 import {
@@ -25,14 +26,16 @@ interface AlgorithmsClientProps {
 
 export function AlgorithmsClient({ data }: AlgorithmsClientProps) {
   const [algorithms, setAlgorithms] = useState<Algorithm[]>(data)
+  const [filteredAlgorithms, setFilteredAlgorithms] = useState<Algorithm[]>(data)
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
   const [algorithmToDelete, setAlgorithmToDelete] = useState<Algorithm | null>(null)
   const [isDeleting, setIsDeleting] = useState(false)
-  
+
   // Refresh data when component mounts or when returning to this page
   useEffect(() => {
     // Update state with the latest data from props
     setAlgorithms(data);
+    setFilteredAlgorithms(data);
   }, [data]);
 
   const handleDelete = async (algorithm: Algorithm) => {
@@ -133,11 +136,29 @@ export function AlgorithmsClient({ data }: AlgorithmsClientProps) {
         </Button>
       </div>
 
+      <AdminListFilters
+        data={algorithms}
+        searchPlaceholder="Search algorithms..."
+        searchKeys={['name', 'description']}
+        filters={[
+          {
+            key: 'published',
+            label: 'Status',
+            options: [
+              { label: 'All Status', value: 'all' },
+              { label: 'Published', value: true },
+              { label: 'Draft', value: false },
+            ],
+          },
+        ]}
+        onFilteredDataChange={setFilteredAlgorithms}
+        showResultCount
+      />
+
       <div className="bg-card rounded-lg border">
         <DataTable
           columns={columns}
-          data={algorithms}
-          searchKey="name"
+          data={filteredAlgorithms}
         />
       </div>
 

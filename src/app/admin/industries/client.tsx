@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { Plus, Trash2, AlertCircle } from 'lucide-react'
 import { DataTable } from '@/components/ui/data-table'
 import { ColumnDef } from '@tanstack/react-table'
+import { AdminListFilters } from '@/components/admin/AdminListFilters'
 import type { Industry } from './page'
 import { useState } from 'react'
 import {
@@ -24,6 +25,7 @@ interface IndustriesClientProps {
 
 export function IndustriesClient({ data }: IndustriesClientProps) {
   const [industries, setIndustries] = useState<Industry[]>(data)
+  const [filteredIndustries, setFilteredIndustries] = useState<Industry[]>(data)
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
   const [industryToDelete, setIndustryToDelete] = useState<Industry | null>(null)
   const [isDeleting, setIsDeleting] = useState(false)
@@ -121,11 +123,18 @@ export function IndustriesClient({ data }: IndustriesClientProps) {
         </Button>
       </div>
 
+      <AdminListFilters
+        data={industries}
+        searchPlaceholder="Search industries..."
+        searchKeys={['name', 'description']}
+        onFilteredDataChange={setFilteredIndustries}
+        showResultCount
+      />
+
       <div className="bg-card rounded-lg border">
-        <DataTable 
-          columns={columns} 
-          data={industries} 
-          searchKey="name"
+        <DataTable
+          columns={columns}
+          data={filteredIndustries}
         />
       </div>
 

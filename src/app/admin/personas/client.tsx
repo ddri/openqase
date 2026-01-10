@@ -17,6 +17,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog'
+import { AdminListFilters } from '@/components/admin/AdminListFilters'
 
 interface PersonasClientProps {
   data: Persona[]
@@ -24,6 +25,7 @@ interface PersonasClientProps {
 
 export function PersonasClient({ data }: PersonasClientProps) {
   const [personas, setPersonas] = useState<Persona[]>(data)
+  const [filteredPersonas, setFilteredPersonas] = useState<Persona[]>(data)
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
   const [personaToDelete, setPersonaToDelete] = useState<Persona | null>(null)
   const [isDeleting, setIsDeleting] = useState(false)
@@ -132,11 +134,29 @@ export function PersonasClient({ data }: PersonasClientProps) {
         </Button>
       </div>
 
+      <AdminListFilters
+        data={personas}
+        searchPlaceholder="Search personas..."
+        searchKeys={['name', 'description']}
+        filters={[
+          {
+            key: 'published',
+            label: 'Status',
+            options: [
+              { label: 'All Status', value: 'all' },
+              { label: 'Published', value: true },
+              { label: 'Draft', value: false },
+            ],
+          },
+        ]}
+        onFilteredDataChange={setFilteredPersonas}
+        showResultCount
+      />
+
       <div className="bg-card rounded-lg border">
-        <DataTable 
-          columns={columns} 
-          data={personas} 
-          searchKey="name"
+        <DataTable
+          columns={columns}
+          data={filteredPersonas}
         />
       </div>
 

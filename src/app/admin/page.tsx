@@ -1,7 +1,6 @@
 import { Metadata } from 'next';
 import { createServerSupabaseClient } from '@/lib/supabase-server';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { IconContainer } from '@/components/ui/icon-container';
 import { FileText, BookOpen, Briefcase, Users, PenTool, Cpu, Building2, Handshake, Rocket } from 'lucide-react';
 import Link from 'next/link';
 
@@ -52,63 +51,63 @@ export default async function AdminDashboard() {
     {
       title: 'Case Studies',
       count: contentCounts.caseStudies,
-      icon: <IconContainer category="caseStudy" size="lg"><FileText className="h-full w-full" /></IconContainer>,
+      icon: <FileText className="h-8 w-8 text-blue-500" />,
       href: '/admin/case-studies',
       description: 'Manage case studies and success stories'
     },
     {
       title: 'Algorithms',
       count: contentCounts.algorithms,
-      icon: <IconContainer category="algorithm" size="lg"><BookOpen className="h-full w-full" /></IconContainer>,
+      icon: <BookOpen className="h-8 w-8 text-purple-500" />,
       href: '/admin/algorithms',
       description: 'Manage quantum algorithm descriptions'
     },
     {
       title: 'Industries',
       count: contentCounts.industries,
-      icon: <IconContainer category="industry" size="lg"><Briefcase className="h-full w-full" /></IconContainer>,
+      icon: <Briefcase className="h-8 w-8 text-green-500" />,
       href: '/admin/industries',
       description: 'Manage industry categories'
     },
     {
       title: 'Personas',
       count: contentCounts.personas,
-      icon: <IconContainer category="persona" size="lg"><Users className="h-full w-full" /></IconContainer>,
+      icon: <Users className="h-8 w-8 text-orange-500" />,
       href: '/admin/personas',
       description: 'Manage user personas'
     },
     {
       title: 'Quantum Software',
       count: contentCounts.quantumSoftware,
-      icon: <IconContainer category="quantumSoftware" size="lg"><Rocket className="h-full w-full" /></IconContainer>,
+      icon: <Rocket className="h-8 w-8 text-cyan-500" />,
       href: '/admin/quantum-software',
       description: 'Manage quantum software platforms'
     },
     {
       title: 'Quantum Hardware',
       count: contentCounts.quantumHardware,
-      icon: <IconContainer category="quantumHardware" size="lg"><Cpu className="h-full w-full" /></IconContainer>,
+      icon: <Cpu className="h-8 w-8 text-indigo-500" />,
       href: '/admin/quantum-hardware',
       description: 'Manage quantum hardware systems'
     },
     {
       title: 'Quantum Companies',
       count: contentCounts.quantumCompanies,
-      icon: <IconContainer category="quantumCompany" size="lg"><Building2 className="h-full w-full" /></IconContainer>,
+      icon: <Building2 className="h-8 w-8 text-teal-500" />,
       href: '/admin/quantum-companies',
       description: 'Manage quantum companies'
     },
     {
       title: 'Partner Companies',
       count: contentCounts.partnerCompanies,
-      icon: <IconContainer category="partnerCompany" size="lg"><Handshake className="h-full w-full" /></IconContainer>,
+      icon: <Handshake className="h-8 w-8 text-amber-500" />,
       href: '/admin/partner-companies',
       description: 'Manage partner organizations'
     },
     {
       title: 'Blog Posts',
       count: contentCounts.blogPosts,
-      icon: <IconContainer category="blog" size="lg"><PenTool className="h-full w-full" /></IconContainer>,
+      icon: <PenTool className="h-8 w-8 text-pink-500" />,
       href: '/admin/blog',
       description: 'Manage blog posts and articles'
     }

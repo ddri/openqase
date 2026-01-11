@@ -17,6 +17,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog'
+import { AdminListFilters } from '@/components/admin/AdminListFilters'
 
 interface AlgorithmsClientProps {
   data: Algorithm[]
@@ -24,6 +25,7 @@ interface AlgorithmsClientProps {
 
 export function AlgorithmsClient({ data }: AlgorithmsClientProps) {
   const [algorithms, setAlgorithms] = useState<Algorithm[]>(data)
+  const [filteredAlgorithms, setFilteredAlgorithms] = useState<Algorithm[]>(data)
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
   const [algorithmToDelete, setAlgorithmToDelete] = useState<Algorithm | null>(null)
   const [isDeleting, setIsDeleting] = useState(false)
@@ -142,12 +144,27 @@ export function AlgorithmsClient({ data }: AlgorithmsClientProps) {
         </Button>
       </div>
 
+      <AdminListFilters
+        data={algorithms}
+        searchPlaceholder="Search algorithms..."
+        searchKeys={['name', 'description']}
+        filters={[
+          {
+            key: 'published',
+            label: 'Status',
+            options: [
+              { value: 'all', label: 'All Status' },
+              { value: 'true', label: 'Published' },
+              { value: 'false', label: 'Draft' },
+            ],
+          },
+        ]}
+        onFilteredDataChange={setFilteredAlgorithms}
+        itemName="algorithms"
+      />
+
       <div className="bg-card rounded-lg border">
-        <DataTable
-          columns={columns}
-          data={algorithms}
-          searchKey="name"
-        />
+        <DataTable columns={columns} data={filteredAlgorithms} />
       </div>
 
       <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>

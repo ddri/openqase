@@ -6,7 +6,7 @@ import { Plus, Trash2, AlertCircle } from 'lucide-react'
 import { DataTable } from '@/components/ui/data-table'
 import { ColumnDef } from '@tanstack/react-table'
 import type { Algorithm } from './page'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -25,16 +25,38 @@ interface AlgorithmsClientProps {
 
 export function AlgorithmsClient({ data }: AlgorithmsClientProps) {
   const [algorithms, setAlgorithms] = useState<Algorithm[]>(data)
-  const [filteredAlgorithms, setFilteredAlgorithms] = useState<Algorithm[]>(data)
+  const [searchQuery, setSearchQuery] = useState('')
+  const [statusFilter, setStatusFilter] = useState('all')
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
   const [algorithmToDelete, setAlgorithmToDelete] = useState<Algorithm | null>(null)
   const [isDeleting, setIsDeleting] = useState(false)
-  
+
   // Refresh data when component mounts or when returning to this page
   useEffect(() => {
     // Update state with the latest data from props
     setAlgorithms(data);
   }, [data]);
+
+  // Filtering logic in parent
+  const filteredAlgorithms = useMemo(() => {
+    return algorithms.filter(item => {
+      // Search logic
+      if (searchQuery) {
+        const query = searchQuery.toLowerCase()
+        const matchesSearch =
+          (item.name || '').toLowerCase().includes(query) ||
+          (item.description || '').toLowerCase().includes(query)
+        if (!matchesSearch) return false
+      }
+
+      // Status filter logic
+      if (statusFilter !== 'all') {
+        if (String(item.published) !== statusFilter) return false
+      }
+
+      return true
+    })
+  }, [algorithms, searchQuery, statusFilter])
 
   const handleDelete = async (algorithm: Algorithm) => {
     setAlgorithmToDelete(algorithm)
@@ -145,13 +167,15 @@ export function AlgorithmsClient({ data }: AlgorithmsClientProps) {
       </div>
 
       <AdminListFilters
-        data={algorithms}
+        searchQuery={searchQuery}
+        onSearchChange={setSearchQuery}
         searchPlaceholder="Search algorithms..."
-        searchKeys={['name', 'description']}
         filters={[
           {
             key: 'published',
             label: 'Status',
+            value: statusFilter,
+            onChange: setStatusFilter,
             options: [
               { value: 'all', label: 'All Status' },
               { value: 'true', label: 'Published' },
@@ -159,7 +183,8 @@ export function AlgorithmsClient({ data }: AlgorithmsClientProps) {
             ],
           },
         ]}
-        onFilteredDataChange={setFilteredAlgorithms}
+        resultCount={filteredAlgorithms.length}
+        totalCount={algorithms.length}
         itemName="algorithms"
       />
 

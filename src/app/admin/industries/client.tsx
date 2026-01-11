@@ -6,7 +6,7 @@ import { Plus, Trash2, AlertCircle } from 'lucide-react'
 import { DataTable } from '@/components/ui/data-table'
 import { ColumnDef } from '@tanstack/react-table'
 import type { Industry } from './page'
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -25,10 +25,32 @@ interface IndustriesClientProps {
 
 export function IndustriesClient({ data }: IndustriesClientProps) {
   const [industries, setIndustries] = useState<Industry[]>(data)
-  const [filteredIndustries, setFilteredIndustries] = useState<Industry[]>(data)
+  const [searchQuery, setSearchQuery] = useState('')
+  const [statusFilter, setStatusFilter] = useState('all')
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
   const [industryToDelete, setIndustryToDelete] = useState<Industry | null>(null)
   const [isDeleting, setIsDeleting] = useState(false)
+
+  // Filtering logic in parent
+  const filteredIndustries = useMemo(() => {
+    return industries.filter(item => {
+      // Search logic
+      if (searchQuery) {
+        const query = searchQuery.toLowerCase()
+        const matchesSearch =
+          (item.name || '').toLowerCase().includes(query) ||
+          (item.description || '').toLowerCase().includes(query)
+        if (!matchesSearch) return false
+      }
+
+      // Status filter logic
+      if (statusFilter !== 'all') {
+        if (String(item.published) !== statusFilter) return false
+      }
+
+      return true
+    })
+  }, [industries, searchQuery, statusFilter])
 
   const handleDelete = async (industry: Industry) => {
     setIndustryToDelete(industry)
@@ -124,13 +146,15 @@ export function IndustriesClient({ data }: IndustriesClientProps) {
       </div>
 
       <AdminListFilters
-        data={industries}
+        searchQuery={searchQuery}
+        onSearchChange={setSearchQuery}
         searchPlaceholder="Search industries..."
-        searchKeys={['name', 'description']}
         filters={[
           {
             key: 'published',
             label: 'Status',
+            value: statusFilter,
+            onChange: setStatusFilter,
             options: [
               { value: 'all', label: 'All Status' },
               { value: 'true', label: 'Published' },
@@ -138,7 +162,8 @@ export function IndustriesClient({ data }: IndustriesClientProps) {
             ],
           },
         ]}
-        onFilteredDataChange={setFilteredIndustries}
+        resultCount={filteredIndustries.length}
+        totalCount={industries.length}
         itemName="industries"
       />
 

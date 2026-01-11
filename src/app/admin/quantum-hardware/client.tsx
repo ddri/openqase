@@ -6,7 +6,7 @@ import { Plus, Trash2, AlertCircle } from 'lucide-react'
 import { DataTable } from '@/components/ui/data-table'
 import { ColumnDef } from '@tanstack/react-table'
 import type { QuantumHardware } from './page'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -17,6 +17,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog'
+import { AdminListFilters } from '@/components/admin/AdminListFilters'
 
 interface QuantumHardwareClientProps {
   data: QuantumHardware[]
@@ -24,13 +25,36 @@ interface QuantumHardwareClientProps {
 
 export function QuantumHardwareClient({ data }: QuantumHardwareClientProps) {
   const [quantumHardware, setQuantumHardware] = useState<QuantumHardware[]>(data)
+  const [searchQuery, setSearchQuery] = useState('')
+  const [statusFilter, setStatusFilter] = useState('all')
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
   const [hardwareToDelete, setHardwareToDelete] = useState<QuantumHardware | null>(null)
   const [isDeleting, setIsDeleting] = useState(false)
-  
+
   useEffect(() => {
     setQuantumHardware(data);
   }, [data]);
+
+  // Filtering logic in parent
+  const filteredHardware = useMemo(() => {
+    return quantumHardware.filter(item => {
+      // Search logic
+      if (searchQuery) {
+        const query = searchQuery.toLowerCase()
+        const matchesSearch =
+          (item.name || '').toLowerCase().includes(query) ||
+          (item.description || '').toLowerCase().includes(query)
+        if (!matchesSearch) return false
+      }
+
+      // Status filter logic
+      if (statusFilter !== 'all') {
+        if (String(item.published) !== statusFilter) return false
+      }
+
+      return true
+    })
+  }, [quantumHardware, searchQuery, statusFilter])
 
   const handleDelete = async (hardware: QuantumHardware) => {
     setHardwareToDelete(hardware)
@@ -126,8 +150,30 @@ export function QuantumHardwareClient({ data }: QuantumHardwareClientProps) {
         </div>
       </div>
 
+      <AdminListFilters
+        searchQuery={searchQuery}
+        onSearchChange={setSearchQuery}
+        searchPlaceholder="Search quantum hardware..."
+        filters={[
+          {
+            key: 'published',
+            label: 'Status',
+            value: statusFilter,
+            onChange: setStatusFilter,
+            options: [
+              { value: 'all', label: 'All Status' },
+              { value: 'true', label: 'Published' },
+              { value: 'false', label: 'Draft' },
+            ],
+          },
+        ]}
+        resultCount={filteredHardware.length}
+        totalCount={quantumHardware.length}
+        itemName="quantum hardware"
+      />
+
       <div className="bg-card rounded-lg border">
-        <DataTable columns={columns} data={quantumHardware} />
+        <DataTable columns={columns} data={filteredHardware} />
       </div>
 
       <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>

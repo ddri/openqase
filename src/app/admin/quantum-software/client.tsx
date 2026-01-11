@@ -6,7 +6,7 @@ import { Plus, Trash2, AlertCircle } from 'lucide-react'
 import { DataTable } from '@/components/ui/data-table'
 import { ColumnDef } from '@tanstack/react-table'
 import type { QuantumSoftware } from './page'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -17,6 +17,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog'
+import { AdminListFilters } from '@/components/admin/AdminListFilters'
 
 interface QuantumSoftwareClientProps {
   data: QuantumSoftware[]
@@ -24,13 +25,36 @@ interface QuantumSoftwareClientProps {
 
 export function QuantumSoftwareClient({ data }: QuantumSoftwareClientProps) {
   const [quantumSoftware, setQuantumSoftware] = useState<QuantumSoftware[]>(data)
+  const [searchQuery, setSearchQuery] = useState('')
+  const [statusFilter, setStatusFilter] = useState('all')
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
   const [softwareToDelete, setSoftwareToDelete] = useState<QuantumSoftware | null>(null)
   const [isDeleting, setIsDeleting] = useState(false)
-  
+
   useEffect(() => {
     setQuantumSoftware(data);
   }, [data]);
+
+  // Filtering logic in parent
+  const filteredSoftware = useMemo(() => {
+    return quantumSoftware.filter(item => {
+      // Search logic
+      if (searchQuery) {
+        const query = searchQuery.toLowerCase()
+        const matchesSearch =
+          (item.name || '').toLowerCase().includes(query) ||
+          (item.description || '').toLowerCase().includes(query)
+        if (!matchesSearch) return false
+      }
+
+      // Status filter logic
+      if (statusFilter !== 'all') {
+        if (String(item.published) !== statusFilter) return false
+      }
+
+      return true
+    })
+  }, [quantumSoftware, searchQuery, statusFilter])
 
   const handleDelete = async (software: QuantumSoftware) => {
     setSoftwareToDelete(software)
@@ -126,8 +150,30 @@ export function QuantumSoftwareClient({ data }: QuantumSoftwareClientProps) {
         </div>
       </div>
 
+      <AdminListFilters
+        searchQuery={searchQuery}
+        onSearchChange={setSearchQuery}
+        searchPlaceholder="Search quantum software..."
+        filters={[
+          {
+            key: 'published',
+            label: 'Status',
+            value: statusFilter,
+            onChange: setStatusFilter,
+            options: [
+              { value: 'all', label: 'All Status' },
+              { value: 'true', label: 'Published' },
+              { value: 'false', label: 'Draft' },
+            ],
+          },
+        ]}
+        resultCount={filteredSoftware.length}
+        totalCount={quantumSoftware.length}
+        itemName="quantum software"
+      />
+
       <div className="bg-card rounded-lg border">
-        <DataTable columns={columns} data={quantumSoftware} />
+        <DataTable columns={columns} data={filteredSoftware} />
       </div>
 
       <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>

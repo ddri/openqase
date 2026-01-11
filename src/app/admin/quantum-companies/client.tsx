@@ -6,7 +6,7 @@ import { Plus, Trash2, AlertCircle } from 'lucide-react'
 import { DataTable } from '@/components/ui/data-table'
 import { ColumnDef } from '@tanstack/react-table'
 import type { QuantumCompany } from './page'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -17,6 +17,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog'
+import { AdminListFilters } from '@/components/admin/AdminListFilters'
 
 interface QuantumCompaniesClientProps {
   data: QuantumCompany[]
@@ -24,13 +25,36 @@ interface QuantumCompaniesClientProps {
 
 export function QuantumCompaniesClient({ data }: QuantumCompaniesClientProps) {
   const [quantumCompanies, setQuantumCompanies] = useState<QuantumCompany[]>(data)
+  const [searchQuery, setSearchQuery] = useState('')
+  const [statusFilter, setStatusFilter] = useState('all')
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
   const [companyToDelete, setCompanyToDelete] = useState<QuantumCompany | null>(null)
   const [isDeleting, setIsDeleting] = useState(false)
-  
+
   useEffect(() => {
     setQuantumCompanies(data);
   }, [data]);
+
+  // Filtering logic in parent
+  const filteredCompanies = useMemo(() => {
+    return quantumCompanies.filter(item => {
+      // Search logic
+      if (searchQuery) {
+        const query = searchQuery.toLowerCase()
+        const matchesSearch =
+          (item.name || '').toLowerCase().includes(query) ||
+          (item.description || '').toLowerCase().includes(query)
+        if (!matchesSearch) return false
+      }
+
+      // Status filter logic
+      if (statusFilter !== 'all') {
+        if (String(item.published) !== statusFilter) return false
+      }
+
+      return true
+    })
+  }, [quantumCompanies, searchQuery, statusFilter])
 
   const handleDelete = async (company: QuantumCompany) => {
     setCompanyToDelete(company)
@@ -126,8 +150,30 @@ export function QuantumCompaniesClient({ data }: QuantumCompaniesClientProps) {
         </div>
       </div>
 
+      <AdminListFilters
+        searchQuery={searchQuery}
+        onSearchChange={setSearchQuery}
+        searchPlaceholder="Search quantum companies..."
+        filters={[
+          {
+            key: 'published',
+            label: 'Status',
+            value: statusFilter,
+            onChange: setStatusFilter,
+            options: [
+              { value: 'all', label: 'All Status' },
+              { value: 'true', label: 'Published' },
+              { value: 'false', label: 'Draft' },
+            ],
+          },
+        ]}
+        resultCount={filteredCompanies.length}
+        totalCount={quantumCompanies.length}
+        itemName="quantum companies"
+      />
+
       <div className="bg-card rounded-lg border">
-        <DataTable columns={columns} data={quantumCompanies} />
+        <DataTable columns={columns} data={filteredCompanies} />
       </div>
 
       <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>

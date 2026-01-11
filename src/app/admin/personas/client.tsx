@@ -6,7 +6,7 @@ import { Plus, Trash2, AlertCircle } from 'lucide-react'
 import { DataTable } from '@/components/ui/data-table'
 import { ColumnDef } from '@tanstack/react-table'
 import type { Persona } from './page'
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -17,6 +17,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog'
+import { AdminListFilters } from '@/components/admin/AdminListFilters'
 
 interface PersonasClientProps {
   data: Persona[]
@@ -24,9 +25,32 @@ interface PersonasClientProps {
 
 export function PersonasClient({ data }: PersonasClientProps) {
   const [personas, setPersonas] = useState<Persona[]>(data)
+  const [searchQuery, setSearchQuery] = useState('')
+  const [statusFilter, setStatusFilter] = useState('all')
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
   const [personaToDelete, setPersonaToDelete] = useState<Persona | null>(null)
   const [isDeleting, setIsDeleting] = useState(false)
+
+  // Filtering logic in parent
+  const filteredPersonas = useMemo(() => {
+    return personas.filter(item => {
+      // Search logic
+      if (searchQuery) {
+        const query = searchQuery.toLowerCase()
+        const matchesSearch =
+          (item.name || '').toLowerCase().includes(query) ||
+          (item.description || '').toLowerCase().includes(query)
+        if (!matchesSearch) return false
+      }
+
+      // Status filter logic
+      if (statusFilter !== 'all') {
+        if (String(item.published) !== statusFilter) return false
+      }
+
+      return true
+    })
+  }, [personas, searchQuery, statusFilter])
 
   const handleDelete = async (persona: Persona) => {
     setPersonaToDelete(persona)
@@ -132,12 +156,30 @@ export function PersonasClient({ data }: PersonasClientProps) {
         </Button>
       </div>
 
+      <AdminListFilters
+        searchQuery={searchQuery}
+        onSearchChange={setSearchQuery}
+        searchPlaceholder="Search personas..."
+        filters={[
+          {
+            key: 'published',
+            label: 'Status',
+            value: statusFilter,
+            onChange: setStatusFilter,
+            options: [
+              { value: 'all', label: 'All Status' },
+              { value: 'true', label: 'Published' },
+              { value: 'false', label: 'Draft' },
+            ],
+          },
+        ]}
+        resultCount={filteredPersonas.length}
+        totalCount={personas.length}
+        itemName="personas"
+      />
+
       <div className="bg-card rounded-lg border">
-        <DataTable 
-          columns={columns} 
-          data={personas} 
-          searchKey="name"
-        />
+        <DataTable columns={columns} data={filteredPersonas} />
       </div>
 
       <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
